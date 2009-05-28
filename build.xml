@@ -5,7 +5,7 @@
 <!-- ** @author Dave Thomas                                  ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="mdrtb14" default="package-module">
+<project name="mdrtb_1.4" default="package-module">
 		
 	<!-- *********************************************************** -->
 	<!-- **                     TARGETS                           ** -->
