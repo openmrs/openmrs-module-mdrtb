@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqldiff PUBLIC "-//OpenMRS//DTD OpenMRS SQL Diff Config 1.0//EN" "http://resources.openmrs.org/doctype/sqldiff-1.0.dtd">
+
+<sqldiff version="1.0">
+	<help>
+		USE:
+			The diffs are ordered by datamodel version number.
+			The script can be run in a top down fashion and is
+			expected to not fail or overwrite old data
+		
+		EXPECT:
+			- "use business-database-name;" was called prior to
+			   calling this script
+	</help>
+	
+	<diff>
+		<version>1.0</version>
+		<author>Dave Thomas</author>
+		<date>Aug 8th 2008</date>
+		<description>
+		</description>
+		<sql>
+
+
+			CREATE TABLE IF NOT EXISTS `order_extension` (
+			  `order_extension_id` int(11) NOT NULL auto_increment,
+			  `order_id` int(11) NOT NULL,
+			  `value` varchar(50) NOT NULL default '',
+			  `creator` int(11) NOT NULL default '0',
+			  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+			  `voided` tinyint(1) NOT NULL default '0',
+			  `voided_by` int(11) default NULL,
+			  `date_voided` datetime default NULL,
+			  `void_reason` varchar(255) default NULL,
+			  PRIMARY KEY  (`order_extension_id`),
+			  KEY `user_who_created_ext` (`creator`),
+			  KEY `user_who_retired_ext` (`voided_by`),
+			  KEY `retired_status` (`voided`),
+			  CONSTRAINT `user_who_created_extension` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `user_who_voided_extension` FOREIGN KEY (`voided_by`) REFERENCES `users` (`user_id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+			
+
+		</sql>
+	</diff>
+	
+</sqldiff>
