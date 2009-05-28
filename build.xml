@@ -5,7 +5,7 @@
 <!-- ** @author Ben Wolfe                                   ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="mdrtb" default="package-module">
+<project name="mdrtb_1.3" default="package-module">
 		
 	<!-- *********************************************************** -->
 	<!-- **                     TARGETS                           ** -->
