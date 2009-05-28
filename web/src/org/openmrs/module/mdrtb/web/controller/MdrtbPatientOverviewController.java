@@ -315,11 +315,15 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             
                             List<MdrtbRegimenSuggestion> suggestions =  MdrtbRegimenUtils.getMdrtbRegimenSuggestions();
                             for (MdrtbRegimenSuggestion mrs : suggestions){
+                                String newRegimenType = getMessageSourceAccessor().getMessage(mrs.getRegimenType(), new Locale("en", "US"));
+                                if (newRegimenType == null || newRegimenType.contains("."))
+                                    mrs.setRegimenType("");
+                                else
+                                    mrs.setRegimenType(newRegimenType);
                                 if (mrs.getCodeName().equals(newDrugConceptParam)){
-                                    List<DrugOrder> newDOs = MdrtbRegimenUtils.regimenSuggestionToDrugOrders(mrs, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj, endDateObj);                         
+                                    List<DrugOrder> newDOs = MdrtbRegimenUtils.regimenSuggestionToDrugOrders(mrs, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj, endDateObj);     
                                     MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, mrs.getRegimenType(), Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
                                     break;
-                                    
                                 } 
                             }
                             

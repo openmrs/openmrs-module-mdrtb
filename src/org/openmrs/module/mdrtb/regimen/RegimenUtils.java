@@ -29,18 +29,18 @@ public class RegimenUtils {
             //2.  if DrugOrder, for all DrugOrders: 
                 //a.  if new start is before old start 
                     //NEW ORDER HAS STOP DATE -- create the older as is, and make adjustments:
-                    //1.  if new end is before or equal to old start (create the new order)  (OUTCOME2)
-                    //2.  if new end is after old start and ( before old end or old end is infinite) 
-                       //if order is different, adjust the start date of the old order to the end date of the new (create the new order) (OUTCOME3)
-                       //if order is same void old order(doesn't matter if old order has infinite stop date or not) (create the new order) (OUTCOME4)
-                    //3. if end date is greater than or equal to old end -- void old order   (create the new order)  (OUTCOME5)
+                        //1.  if new end is before or equal to old start (create the new order)  (OUTCOME2)
+                        //2.  if new end is after old start and ( before old end or old end is infinite) 
+                           //if order is different, adjust the start date of the old order to the end date of the new (create the new order) (OUTCOME3)
+                           //if order is same void old order(doesn't matter if old order has infinite stop date or not) (create the new order) (OUTCOME4)
+                        //3. if end date is greater than or equal to old end -- void old order   (create the new order)  (OUTCOME5)
                     //NEW ORDER DOESN'T HAVE STOP DATE
-                    //4. orders are different
-                         //set end date of new to beginning of old and stop iterating over existing drug orders time sequence (create the new order, modified) (OUTCOME6)
-                    //5. orders are the same
-                        //delete the old order (create the new order) (OUTCOME7)
+                        //4. orders are different
+                             //set end date of new to beginning of old and stop iterating over existing drug orders time sequence (create the new order, modified) (OUTCOME6)
+                        //5. orders are the same
+                            //delete the old order (create the new order) (OUTCOME7)
                 //b. if start is the same 
-                            // void existing (create the new order) (OUTCOME8)
+                    // void existing (create the new order) (OUTCOME8)
             
                 //c.  if start is after existing start
                     //1. if order is after old drug end  (create the new order) (OUTCOME9)
@@ -62,7 +62,6 @@ public class RegimenUtils {
         }    
          
         if (!anyRegimens(regAfterDate)) {
-            System.out.println("no regimens after date");
             if (regOnDate == null || regOnDate.getComponents().isEmpty()) {
                 //case:  there is no existing regimen on the regimen start date, and there are no new regimens after this date
                 // go ahead and create the regimen:
@@ -94,12 +93,12 @@ public class RegimenUtils {
                             
                             if (!before.getDrugOrder().getDiscontinued() && regimenComponentIsTheSameAsDrugOrderExcludingDates(before.getDrugOrder(), newOrder)){
                                 alreadyExists = true;
-                                //set end date, just in case...
                                 before.getDrugOrder().setDiscontinuedDate(newOrder.getDiscontinuedDate());
                                 before.getDrugOrder().setAutoExpireDate(newOrder.getAutoExpireDate());
                                 before.getDrugOrder().setPrn(newOrder.getPrn());
                                 before.getDrugOrder().setInstructions(newOrder.getInstructions());
                                 os.saveOrder(before.getDrugOrder());
+                                newOrder.setOrderId(before.getDrugOrder().getOrderId());
                                 break;
                             }
                         }
@@ -109,73 +108,58 @@ public class RegimenUtils {
                 }
             }
         } else { //there is a regimen change after the new drug order start date
-            
-            System.out.println("regimens found after date");
             for (DrugOrder newOrder : drugOrders) {
                   boolean saveOrder = false;
                   boolean merged = false;
-                  history = getRegimenHistory(patient);//can't hurt
-                  List<DrugOrder> existingDrugOrders = getDrugOrdersInOrderByDrugOrConcept(history, newOrder);
-
-//                          //TODO:  turn this off when satisfied:
-//                          for (DrugOrder before : existingDrugOrders){
-//                              System.out.println("previous drug order start date:  in order?  " + before.getStartDate());
-//                          }
-                                  
-                  if (existingDrugOrders.size() == 0){//1.
+                  history = getRegimenHistory(patient);
+                  List<DrugOrder> existingDrugOrders = getDrugOrdersInOrderByDrugOrConcept(history, newOrder);                                  
+                  if (existingDrugOrders.size() == 0){
                           saveOrder = setSaveOrder(merged); //(OUTCOME1)
-                  } else { //2.
+                  } else { 
                         for (DrugOrder before : existingDrugOrders){ 
-                            if (newOrder.getStartDate().before(before.getStartDate())){ //a
+                            if (newOrder.getStartDate().before(before.getStartDate())){ 
                                     if (newOrder.getDiscontinuedDate() != null){
                                         if (newOrder.getDiscontinuedDate().before(before.getStartDate()) || newOrder.getDiscontinuedDate().equals(before.getStartDate())){
                                             saveOrder = setSaveOrder(merged);//(OUTCOME2)
                                         } else if (newOrder.getDiscontinuedDate().after(before.getStartDate()) && (before.getDiscontinuedDate() == null || newOrder.getDiscontinuedDate().before(before.getDiscontinuedDate()))){
                                             if (!regimenComponentIsTheSameAsDrugOrderExcludingDates(before, newOrder)){
-                                                //if order is different, adjust the start date of the old order to the end date of the new (create the new order)
                                                 //(OUTCOME3)
                                                 before.setStartDate(newOrder.getDiscontinuedDate());
                                                 os.saveOrder(before);
                                                 saveOrder = setSaveOrder(merged);
                                             } else {
-                                                //if order is same void old order(doesn't matter if old order has infinite stop date or not) (create the new order)
                                                 //(OUTCOME4)    
                                                 os.voidOrder(before, "overwritten");
                                                 saveOrder = setSaveOrder(merged);
                                             }   
                                         } else if (before.getDiscontinuedDate() != null && (newOrder.getDiscontinuedDate().after(before.getDiscontinuedDate()) || newOrder.getDiscontinuedDate().equals(before.getDiscontinuedDate()))){
-                                                //if end date is greater than or equal to old end -- void old order   (create the new order)
                                                 //(OUTCOME5)
                                                 os.voidOrder(before, "overwritten");
                                                 saveOrder = setSaveOrder(merged);
                                         }
                                     } else {//new order has infinite end date
                                         if (!regimenComponentIsTheSameAsDrugOrderExcludingDates(before, newOrder)){
-                                          //set end date of new to beginning of old and stop iterating over existing drug orders time sequence (create the new order, modified)
                                           //(OUTCOME6)
                                                 newOrder.setDiscontinuedDate(before.getStartDate());
                                                 saveOrder = setSaveOrder(merged);
                                                 break;
                                         } else {
-                                          //delete the old order (create the new order)
                                           //(OUTCOME7)
                                             os.voidOrder(before, "overwritten");
                                             saveOrder = setSaveOrder(merged);
                                         }
                                     }         
                             } else if (newOrder.getStartDate().equals(before.getStartDate())){ //b
-                                //if drug orders are not EXACTLY the same, void existing (create the new order)
                                 //(OUTCOME8)
                                 os.voidOrder(before, "overwritten");
                                 saveOrder = setSaveOrder(merged);
                             } else { //c -- start date is after or equal to old end date
                                 if (before.getDiscontinuedDate() != null && newOrder.getStartDate().after(before.getDiscontinuedDate()))//1
-                                  //(OUTCOME9)
+                                    //(OUTCOME9)
                                     saveOrder = setSaveOrder(merged);
                                     
                                 if (before.getDiscontinuedDate() == null || newOrder.getStartDate().before(before.getDiscontinuedDate()) || newOrder.getStartDate().equals(before.getDiscontinuedDate())){//2
                                     if (regimenComponentIsTheSameAsDrugOrderExcludingDates(before, newOrder)){
-                                      //if orders are the same update the old order with the new, taking the new end date value (Do not create new order)
                                       //(OUTCOME10)  
                                         before.setDiscontinuedDate(newOrder.getDiscontinuedDate());
                                         before.setAutoExpireDate(newOrder.getAutoExpireDate());
@@ -183,9 +167,9 @@ public class RegimenUtils {
                                         before.setInstructions(newOrder.getInstructions());
                                         os.saveOrder(before);
                                         saveOrder = false;
+                                        newOrder.setOrderId(before.getOrderId());
                                         merged = true;
                                     } else {
-                                      //if orders are different adjust the old to end to new start date (create the new order)
                                       //(OUTCOME11)  
                                         before.setDiscontinuedDate(newOrder.getStartDate());
                                         os.saveOrder(before);

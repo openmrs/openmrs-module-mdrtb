@@ -24,6 +24,7 @@ import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.OrderExtensionService;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.util.OpenmrsConstants;
+import org.springframework.web.servlet.mvc.SimpleFormController;
 
 public class MdrtbRegimenUtils {
 
@@ -188,10 +189,7 @@ public class MdrtbRegimenUtils {
     
     public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, String regimenType, Patient p, Date effectiveDate){
            OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
-           
-           //TODO:  the next line sucks:
-           Concept reasonForChange = MdrtbUtil.getDiscontinueReasons().get(0);     
-           
+           Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
            OrderService os = Context.getOrderService();
                for (DrugOrder doTmp:newDOs){
@@ -199,10 +197,19 @@ public class MdrtbRegimenUtils {
                    if (doTmp.getOrderId() != null){
                        order = os.getOrder(doTmp.getOrderId());
                    }
-                   if (order != null && oes.getOrderExtension(doTmp, false) == null){
-                       OrderExtension oe = new OrderExtension(doTmp, regimenType);
+                   if (order != null){ 
+                       OrderExtension oe = new OrderExtension(order, regimenType);
+                       List<OrderExtension> extensions = oes.getOrderExtension(order, false);
+                       if (extensions.size() != 0){    
+                           for (OrderExtension extension:extensions){
+                               extension.setVoided(true);
+                               extension.setVoidedBy(Context.getAuthenticatedUser());
+                               extension.setVoidReason("overwritten");
+                               oes.saveOrderExtension(extension);
+                           }
+                       }
                        oes.saveOrderExtension(oe);
-                   }
+                   }    
                }        
     }
     

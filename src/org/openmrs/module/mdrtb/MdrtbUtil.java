@@ -81,6 +81,18 @@ public class MdrtbUtil {
         return discontinueRes;
     }
     
+
+    public static Concept getDefaultDiscontinueReason(){
+        List<Concept> cList = getDiscontinueReasons();
+        String defaultGPValue = Context.getAdministrationService().getGlobalProperty("mdrtb.default_discontinue_drug_order_reason");
+        for (Concept c : cList){
+            if (c.getName(new Locale("en", "US")) != null && c.getName(new Locale("en", "US")).getName().equals(defaultGPValue)){
+                return c;
+            }
+        }
+        throw new RuntimeException("global property default_discontinue_drug_order_reason not set to a concept that I can find.  Concept must be a concept answer of global property discontinue_drug_order_reasons.");
+    }
+    
     
 
 }
