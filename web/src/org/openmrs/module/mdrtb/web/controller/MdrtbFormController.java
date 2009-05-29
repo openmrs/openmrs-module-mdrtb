@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.mdrtb.web.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,18 +125,18 @@ public class MdrtbFormController extends SimpleFormController {
         return "";
     }
 
-    private String getPersonURL(String personId, String personType, String viewType, HttpServletRequest request) throws ServletException {
-        if ("patient".equals(personType)) {
-
-            if ("shortEdit".equals(viewType))
-                return request.getContextPath() + PATIENT_SHORT_EDIT_URL + getParametersForURL(personId, personType);
-        }
+    private String getPersonURL(String personId, String personType, String viewType, HttpServletRequest request)
+    throws ServletException, UnsupportedEncodingException {
+        
+        if ("shortEdit".equals(viewType))
+        return request.getContextPath() + PATIENT_SHORT_EDIT_URL + getParametersForURL(personId, personType);
 
         throw new ServletException("Undefined personType/viewType combo: " + personType + "/" + viewType);
+    
     }
-    private String getParametersForURL(String personId, String personType) {
+    private String getParametersForURL(String personId, String personType) throws UnsupportedEncodingException {
         if ("".equals(personId))
-            return "?addName=" + name + "&addBirthdate=" + birthdate + "&addAge=" + age + "&addGender=" + gender;
+            return "?addName=" + URLEncoder.encode(name, "UTF-8") + "&addBirthdate=" + birthdate + "&addAge=" + age + "&addGender=" + gender;
         else {
             if ("patient".equals(personType))
                 return "?patientId=" + personId;
@@ -142,16 +144,6 @@ public class MdrtbFormController extends SimpleFormController {
                 return "?userId=" + personId;
         }
         return "";
-    }
-    private void getParametersFromRequest(HttpServletRequest request) {
-        name = ServletRequestUtils.getStringParameter(request, "addName", "");
-        birthdate = ServletRequestUtils.getStringParameter(request, "addBirthdate", "");
-        age = ServletRequestUtils.getStringParameter(request, "addAge", "");
-        gender = ServletRequestUtils.getStringParameter(request, "addGender", "");
-        
-        personType = ServletRequestUtils.getStringParameter(request, "personType", "patient");
-        personId = ServletRequestUtils.getStringParameter(request, "personId", "");
-        viewType = ServletRequestUtils.getStringParameter(request, "viewType", "");
     }
 	    
 }
