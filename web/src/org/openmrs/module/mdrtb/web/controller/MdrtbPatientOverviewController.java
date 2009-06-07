@@ -137,7 +137,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 }
             } catch (Exception ex) {
                 throw new RuntimeException(
-                        "The global property mdrtb.first_line_drugs did not return a valid concept name");
+                        "The global property mdrtb.first_line_drugs did not return a valid concept name; check your global property, or maybe you need to rebuild concept words?");
             }
             map.put("firstLineDrugs", firstLineDrugs);
             map.put("firstLineConcepts", mdrtbDrugs);

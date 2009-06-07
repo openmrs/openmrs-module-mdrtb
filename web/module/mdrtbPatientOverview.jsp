@@ -381,7 +381,7 @@
 						stringForBlankCells=" "
 						programWorkflowStatesToNotShow="NOT CONVERTED|NONE|STILL ON TREATMENT|ON TREATMENT"
 						programNameReplacementString="${progString}"
-						scanty="scanty"
+						scanty="SCANTY"
 						/>
 		</c:if>	<br>
 		</div>

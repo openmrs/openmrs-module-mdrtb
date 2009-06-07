@@ -216,7 +216,7 @@
 			<tr>
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
-					<spring:bind path="obj.smears[${rowCount}].smearResult.valueDatetime">
+					<spring:bind path="obj.smears[${rowCount}].smearResult.obsDatetime">
 						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}"  onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 							<span class="error">${status.errorMessage}</span>
@@ -410,7 +410,7 @@
 								<tr>
 									<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 									<td>
-										<spring:bind path="obj.cultures[${rowCount}].cultureResult.valueDatetime">
+										<spring:bind path="obj.cultures[${rowCount}].cultureResult.obsDatetime">
 										<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
 											<c:if test="${status.errorMessage != ''}">
 													<span class="error">${status.errorMessage}</span>

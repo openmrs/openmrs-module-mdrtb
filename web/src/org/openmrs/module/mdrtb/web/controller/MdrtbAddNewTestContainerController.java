@@ -183,7 +183,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                         
                         //sputum collection date, a result, and num colonies/bacilli are the required elements
                         if (mso.getSmearResult().getValueCoded() != null 
-                                && mso.getSmearResult().getValueDatetime() != null){
+                                && mso.getSmearResult().getObsDatetime() != null){
    
                                 Obs parentObs = mso.getSmearParentObs();
                                 parentObs.setObsDatetime(new Date());
@@ -202,21 +202,22 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                     enc.setLocation(loc);
                                 }
                                 if (enc.getEncounterDatetime() == null)
-                                    enc.setEncounterDatetime(mso.getSmearResult().getValueDatetime());
+                                    enc.setEncounterDatetime(mso.getSmearResult().getObsDatetime());
                               
                                 
                                 //encounter and obs datetime stuff:
                                 Date obsDate = new Date();
-                                if (mso.getSmearResult().getValueDatetime() != null)
-                                    obsDate = mso.getSmearResult().getValueDatetime();
+                                if (mso.getSmearResult().getObsDatetime() != null)
+                                    obsDate = mso.getSmearResult().getObsDatetime();
                                 parentObs.setObsDatetime(obsDate);
 
                                 Obs smearResult = mso.getSmearResult();
                                 if (enc.getEncounterDatetime() == null)
-                                    enc.setEncounterDatetime(smearResult.getValueDatetime());
+                                    enc.setEncounterDatetime(smearResult.getObsDatetime());
                                 smearResult.setLocation(parentObs.getLocation());
                                 smearResult.setEncounter(enc);
-                                    smearResult.setObsDatetime(smearResult.getValueDatetime());
+                                    //TODO:HERE -- obs Datetime should get set by jsp
+                                    //smearResult.setObsDatetime(smearResult.getValueDatetime());
                                 parentObs.addGroupMember(smearResult);
                                 
                                 if (smearResult.getValueCoded() != null && smearResult.getValueCoded().getConceptId().intValue() == mu.getConceptScanty().getConceptId().intValue()){
@@ -286,7 +287,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 
                         }
                         if (mco.getCultureResult().getValueCoded() != null 
-                                && mco.getCultureResult().getValueDatetime() != null){
+                                && mco.getCultureResult().getObsDatetime() != null){
                             
                             Obs parentObs = mco.getCultureParentObs();
                             
@@ -302,17 +303,18 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 enc.setLocation(loc);
                             }
                             if (enc.getEncounterDatetime() == null)
-                                enc.setEncounterDatetime(mco.getCultureResult().getValueDatetime());
+                                enc.setEncounterDatetime(mco.getCultureResult().getObsDatetime());
                      
                             
                           //encounter and obs datetime stuff:
                             Date obsDate = new Date();
-                            if (mco.getCultureResult().getValueDatetime() != null)
-                                obsDate = mco.getCultureResult().getValueDatetime();
+                            if (mco.getCultureResult().getObsDatetime() != null)
+                                obsDate = mco.getCultureResult().getObsDatetime();
                             parentObs.setObsDatetime(obsDate);
                             
                           //now, add the child obs to the parent if their answers are not null:
                             Obs cultureResult = mco.getCultureResult();
+                           
                             if (enc.getEncounterDatetime() == null)
                                 enc.setEncounterDatetime(cultureResult.getValueDatetime());
                             cultureResult.setLocation(parentObs.getLocation());
@@ -716,9 +718,9 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             Concept red =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_red"), new Locale("en", "US"));
             Concept yellow =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_yellow"), new Locale("en", "US"));
             Concept green =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_green"), new Locale("en", "US"));         
-            map.put("red", red.getName(Context.getLocale()).getName());
-            map.put("yellow", yellow.getName(Context.getLocale()).getName());
-            map.put("green", green.getName(Context.getLocale()).getName());
+            map.put("red", red.getBestName(Context.getLocale()).getName());
+            map.put("yellow", yellow.getBestName(Context.getLocale()).getName());
+            map.put("green", green.getBestName(Context.getLocale()).getName());
             
             //HACK:
             //MdrtbUtil.getMDRTBConceptByName(STR_DST_COMPLETE, new Locale("en", "US"))
@@ -842,7 +844,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 List<ConceptWord> cw = cs.getConceptWords(drugName, MdrtbUtil.getLocalesFromDB(), false, null, null, null, null, null, null, null);
                 for (ConceptWord c : cw) {
                     Concept concept = c.getConcept();
-                    ConceptName cn = concept.getName(new Locale("en"));
+                    ConceptName cn = concept.getBestName(new Locale("en"));
                     if (cn.getName().equals(drugName))
                         concepts.add(cn.getConcept());
                 }

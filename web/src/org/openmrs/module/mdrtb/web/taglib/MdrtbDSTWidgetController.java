@@ -108,7 +108,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
            
             Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
             if (c != null)
-                obsGroupConcepts.add(c.getName(locUS).getName());
+                obsGroupConcepts.add(c.getBestName(locUS).getName());
         }
         
         if (this.toDate == null)
@@ -118,11 +118,11 @@ public class MdrtbDSTWidgetController extends TagSupport {
         
         for (Obs ob : observations) {
             if (ob.isObsGrouping()
-                    && ob.getConcept().getName(locUS).getName().equals(this.obsGroupConceptDST)) {
+                    && ob.getConcept().getBestName(locUS).getName().equals(this.obsGroupConceptDST)) {
                 Set<Obs> tmpSet = ob.getGroupMembers();
                 boolean dateAdded = false;
                 for (Obs oTmp : tmpSet) {
-                    if (this.doesSetContainSubString(oTmp.getConcept().getName(locUS).getName(), obsGroupConcepts) 
+                    if (this.doesSetContainSubString(oTmp.getConcept().getBestName(locUS).getName(), obsGroupConcepts) 
                             && oTmp.isObsGrouping()
                             && oTmp.getObsDatetime().getTime() >= fromDate.getTime()
                             && oTmp.getObsDatetime().getTime() <= toDate.getTime()
@@ -215,7 +215,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 Integer colIndexCount = 0;
                 
                 //create the row header for each test
-                ret.append("<tr><Th><b>"+ test.getConcept().getName(loc) .getShortestName() + "</b></th>");
+                ret.append("<tr><Th><b>"+ test.getConcept().getBestShortName(Context.getLocale()) + "</b></th>");
 
                 Set<Obs> usedObsThisRow = new HashSet<Obs>();
                 for (int k = 0; k <dates.size(); k++){
@@ -237,16 +237,16 @@ public class MdrtbDSTWidgetController extends TagSupport {
                                                 if (o.getValueCoded()!= null && o.getValueCoded().equals(test.getConcept()) && !usedObs.contains(o) && !o.isVoided()) {
                                                     
 
-                                                    if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), greenSet))
+                                                    if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), greenSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetGreen'  ");
-                                                    else if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), redSet))
+                                                    else if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), redSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetRed'  ");
-                                                    else if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), yellowSet))
+                                                    else if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), yellowSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetYellow'  ");
                                                     else 
                                                         ret = ret.insert(ret.length() -1,  " class='widgetDefault'  ");
                                                     //HERE
-                                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getName(loc).getShortestName() + getConcentrationStringForDSTResultObj(o) + "</a>");
+                                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getBestShortName(loc).getName() + getConcentrationStringForDSTResultObj(o) + "</a>");
                                                     usedObs.add(o);
                                                     emptyCellTest = false;
                                                     testTmp = true;
@@ -272,9 +272,9 @@ public class MdrtbDSTWidgetController extends TagSupport {
                                 ret.append("<td rowspan='"
                                         + tests.size() + "' class='widgetHeaderRows'>");
                                 
-                                ret.append(os.getConcept().getName(loc).getShortestName());
+                                ret.append(os.getConcept().getBestShortName(loc).getName());
                                 if (os.getValueCoded()!= null)
-                                    ret.append(" " + os.getValueCoded().getName(loc).getShortestName());
+                                    ret.append(" " + os.getValueCoded().getBestShortName(loc).getName());
                                 usedObs.add(os);
                                 
                                 
@@ -489,7 +489,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
             Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
             if (c != null) {
                 //if (tests.contains(c.getName(loc)) == false)  //we need to support multiples
-                    tests.add(c.getName(loc));
+                    tests.add(c.getBestName(loc));
             }
         }
         return tests;

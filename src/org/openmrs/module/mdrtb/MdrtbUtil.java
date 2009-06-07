@@ -18,15 +18,14 @@ public class MdrtbUtil {
         Concept ret = null;
         List<Locale> locales = new ArrayList<Locale>();
         locales.add(loc);
-        
         //first, if there's an exact match in the passed-in locale, that's what we want
-        List<ConceptWord> conceptWords = Context.getConceptService().findConcepts(conceptString, locales, false, null, null, null, null);
-            for (ConceptWord cw : conceptWords){
-                Concept cTmp = cw.getConcept();
-                if (cTmp.getName(loc).getName().equals(conceptString.trim())){
-                    return cTmp;
-                }   
-            }
+        List<ConceptWord> conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+        for (ConceptWord cw : conceptWords){
+            Concept cTmp = cw.getConcept();
+            if (cTmp.getName(loc).getName().equals(conceptString.trim())){
+                return cTmp;
+            }   
+        }
         //second, check all other locales if still null 
         if (ret == null){
             
@@ -34,15 +33,15 @@ public class MdrtbUtil {
             locales = getLocalesFromDB();
             
             //first, if there's an exact match in the passed-in locale, that's what we want
-            conceptWords = Context.getConceptService().findConcepts(conceptString, locales, false, null, null, null, null);
-                for (ConceptWord cw : conceptWords){
-                    Concept cTmp = cw.getConcept();
-                    for (Locale localTmp :locales){
-                        if (cTmp.getName(localTmp).getName().equals(conceptString.trim())){
-                            return cTmp;
-                        }   
-                    }
+            conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+            for (ConceptWord cw : conceptWords){
+                Concept cTmp = cw.getConcept();
+                for (Locale localTmp :locales){
+                    if (cTmp.getName(localTmp).getName().equals(conceptString.trim())){
+                        return cTmp;
+                    }   
                 }
+            }
             
         }
         return ret;

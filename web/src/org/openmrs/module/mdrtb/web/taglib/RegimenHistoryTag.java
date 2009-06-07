@@ -94,7 +94,7 @@ public class RegimenHistoryTag extends TagSupport {
             ret += "<table class='" + cssClass + "'><tbody>";
             ret += "<tr><th>" + this.drugTitleString + ":</th>";
             for (Concept drugConcept : drugConcepts){
-                ret += "<th>" + drugConcept.getName().getShortName() + "</th>";
+                ret += "<th>" + drugConcept.getBestShortName(Context.getLocale()).getName() + "</th>";
             }
             ret += "<td><b>" + this.getDurationTitleString() + "</b></td></tr>";
             boolean isEvenRow = false;
@@ -141,7 +141,7 @@ public class RegimenHistoryTag extends TagSupport {
                    ret+= "class='evenRow'";
                    isEvenRow = true;
                }    
-               ret += " ><td><b>" + drugConcept.getName().getShortName() + "</b></td>";
+               ret += " ><td><b>" + drugConcept.getBestShortName(Context.getLocale()).getName() + "</b></td>";
                for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
                        Regimen reg = e.getValue();
                        ret += "<td>";
