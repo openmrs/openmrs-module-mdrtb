@@ -20,10 +20,14 @@
 	
 	<require_version>1.4.2.00</require_version>
 
-	<require_modules>
-   		<require_module>org.openmrs.module.birt</require_module>
-   		<require_module>org.openmrs.module.formentry</require_module>
-	</require_modules>
+	<!--  
+	
+		<require_modules>
+	   		<require_module>org.openmrs.module.birt</require_module>
+	   		<require_module>org.openmrs.module.formentry</require_module>
+		</require_modules>
+		
+	-->
 	
 	<extension>
 		<point>org.openmrs.admin.list</point>

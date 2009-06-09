@@ -226,7 +226,25 @@
 				}
 			}
 		}
-		//TODO: DATE VALIDATION
+
+				//TODO: STANDARDIZED EMPIRIC VALIDATION
+		var dateList = "";
+		var hiddenRowCount = document.getElementById("numberOfNewOrders"); 
+		for (var i = 0; i <= hiddenRowCount.value; i++){
+			var startDateId = "startDate_" + i;
+			var regimenTypeId = "regimenType_" + i;
+			var startDateField = document.getElementById(startDateId);
+			var regTypeField = document.getElementById(regimenTypeId);
+			if (startDateField != null && regTypeField != null && regTypeField.value != "") {
+				if (dateList.indexOf(startDateField.value) >= 0 && dateList.indexOf(startDateField.value + regTypeField.value) == -1){
+					alert("<spring:message code='mdrtb.contradictoryStEmpInd' />");
+					return false;
+				} else {
+					dateList += "~" + startDateField.value + regTypeField.value;
+				}	
+			}
+		}
+		
 		return true;
 	}
 	
@@ -286,20 +304,19 @@
 		var perWeek = document.getElementById("perWeek_" + rowNum);
 		var instructions = document.getElementById("instructions_" + rowNum);
 		var regimenType = document.getElementById("regimenType_" + rowNum);
-		
-				$j(rowNum).attr("disabled", "disabled"); 
-				
-				$j(dose).attr("disabled", "disabled"); 
-				
-				$j(units).attr("disabled", "disabled"); 
-				
-				$j(perDay).attr("disabled", "disabled"); 
-				
-				$j(perWeek).attr("disabled", "disabled"); 
-				
-				$j(instructions).attr("disabled", "disabled"); 
-				
-				$j(regimenType).attr("disabled", "disabled"); 
+		$j(rowNum).attr("disabled", "disabled"); 
+		$j(rowNum).val("");
+		$j(dose).attr("disabled", "disabled"); 	
+		$j(dose).val("");
+		$j(units).attr("disabled", "disabled"); 
+		$j(units).val("");
+		$j(perDay).attr("disabled", "disabled"); 
+		$j(perDay).val("");
+		$j(perWeek).attr("disabled", "disabled"); 
+		$j(instructions).attr("disabled", "disabled");
+		$j(instructions).val("");
+		$j(regimenType).attr("disabled", "disabled"); 
+		$j(regimenType).val("");
 	}
 	
 	function enableNewDrugFields(item){
@@ -310,20 +327,13 @@
 		var perWeek = document.getElementById("perWeek_" + rowNum);
 		var instructions = document.getElementById("instructions_" + rowNum);
 		var regimenType = document.getElementById("regimenType_" + rowNum);
-		
-				$j(rowNum).removeAttr("disabled");  
-				
-				$j(dose).removeAttr("disabled"); 
-				
-				$j(units).removeAttr("disabled");  
-				
-				$j(perDay).removeAttr("disabled");  
-				
-				$j(perWeek).removeAttr("disabled");  
-				
-				$j(instructions).removeAttr("disabled");  
-				
-				$j(regimenType).removeAttr("disabled");  
+		$j(rowNum).removeAttr("disabled");  
+		$j(dose).removeAttr("disabled"); 		
+		$j(units).removeAttr("disabled");  
+		$j(perDay).removeAttr("disabled");  
+		$j(perWeek).removeAttr("disabled");  
+		$j(instructions).removeAttr("disabled");  
+		$j(regimenType).removeAttr("disabled");  
 	}
 	
 	
@@ -642,10 +652,10 @@
 				<td style="text-align:center;" >
 					<select name="regimenType_" id="regimenType_">
 						<option value=""></option>
-						<option value="standardized"><spring:message code="mdrtb.standardized" /></option>
-						<option value="empiric"><spring:message code="mdrtb.empiric" /></option>
-						<option value="individualized"><spring:message code="mdrtb.individualized" /></option>
-					</select>
+						<option value="${standardized}"><spring:message code="mdrtb.standardized" /></option>
+						<option value="${empiric}"><spring:message code="mdrtb.empiric" /></option>
+						<option value="${individualized}"><spring:message code="mdrtb.individualized" /></option>
+					</select> 
 				</td>
 				
 				<td><a href="#" onClick="javascript:remove(this.parentNode.parentNode)"><spring:message code="mdrtb.cancellowercase" /></a></td>

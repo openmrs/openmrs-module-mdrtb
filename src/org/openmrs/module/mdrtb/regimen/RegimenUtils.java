@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
@@ -16,6 +18,8 @@ import org.openmrs.util.OpenmrsUtil;
 
 public class RegimenUtils {
 
+    protected final Log log = LogFactory.getLog(getClass());
+    
     public static RegimenHistory getRegimenHistory(Patient patient) {
         return new RegimenHistory(Context.getOrderService().getDrugOrdersByPatient(patient));
     }

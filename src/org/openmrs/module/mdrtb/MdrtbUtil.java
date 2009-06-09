@@ -12,6 +12,9 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
+import org.openmrs.Encounter;
+import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 
 public class MdrtbUtil {
@@ -98,6 +101,23 @@ public class MdrtbUtil {
             }
         }
         throw new RuntimeException("global property default_discontinue_drug_order_reason not set to a concept that I can find.  Concept must be a concept answer of global property discontinue_drug_order_reasons.");
+    }
+    //TODO:  this is total crap:
+    public static Location getDefaultLocation(Patient p){
+        Location loc = null;
+        List<Encounter> encList = Context.getEncounterService().getEncountersByPatient(p);
+        if (!encList.isEmpty()){
+            return encList.get(encList.size()-1).getLocation();
+        }
+        List<Location> locList = Context.getLocationService().getAllLocations(false);
+        if (!locList.isEmpty())
+            return locList.get(0);
+        locList = Context.getLocationService().getAllLocations(true);
+        if (!locList.isEmpty())
+            return locList.get(0);
+        if (loc == null)
+            throw new RuntimeException("Unable to provide default location.  Does openmrs have any locations configured??");
+        return loc;
     }
     
     

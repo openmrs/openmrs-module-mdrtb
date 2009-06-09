@@ -13,10 +13,13 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
+import org.openmrs.Obs;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.util.OpenmrsConstants;
@@ -183,10 +186,65 @@ public class MdrtbRegimenUtils {
     }
     
     public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, String regimenType, Patient p, Date effectiveDate){
-           //OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
            Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
+           
+           ObsService os = Context.getObsService();
+           
+           
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
+
+           if (regimenType != null && !regimenType.equals("")){
+               Integer regTypeInt = null;
+               try{
+                   regTypeInt = Integer.valueOf(regimenType);
+               } catch (Exception ex){
+                   System.out.println("error in mdrtb regimen utils: " + regTypeInt + " can't be converted to an integer.");
+               }
+               if (regTypeInt != null) {
+                   MdrtbFactory mu = new MdrtbFactory();
+                   Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
+                   List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
+                   for (Obs oTmp : oList){
+                      if (oTmp.getObsDatetime().equals(effectiveDate) && !oTmp.getValueCoded().getConceptId().equals(regTypeInt)){
+                          oTmp.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
+                          os.saveObs(oTmp, "changing st/emp/ind for regimen");
+                      } else if (oTmp.getObsDatetime().equals(effectiveDate)){
+                          Obs o = new Obs();
+                          o.setConcept(mu.getConceptCurrentRegimenType());
+                          o.setCreator(Context.getAuthenticatedUser());
+                          o.setDateCreated(new Date());
+                          o.setObsDatetime(effectiveDate);
+                          o.setLocation(MdrtbUtil.getDefaultLocation(p));
+                          o.setPerson(p);
+                          o.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
+                          o.setVoided(false);
+                      }
+                      
+                      
+                          
+                   }
+               }
+           }
+           
     }
-    
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

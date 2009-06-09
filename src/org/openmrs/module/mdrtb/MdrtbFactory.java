@@ -142,6 +142,9 @@ public class MdrtbFactory {
 
     
     private String STR_CURRENT_TREATMENT_TYPE;
+    private String STR_STANDARDIZED;
+    private String STR_EMPIRIC;
+    private String STR_INDIVIDUALIZED;
     
     
     public MdrtbFactory(){readXML();};
@@ -421,13 +424,38 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_CURRENT_TREATMENT_TYPE");
             node = nodeList.item(0);
             this.STR_CURRENT_TREATMENT_TYPE = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_STANDARDIZED");
+            node = nodeList.item(0);
+            this.STR_STANDARDIZED = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_EMPIRIC");
+            node = nodeList.item(0);
+            this.STR_EMPIRIC = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_INDIVIDUALIZED");
+            node = nodeList.item(0);
+            this.STR_INDIVIDUALIZED = node.getFirstChild().getNodeValue();
             
         } catch (Exception ex){
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
         }
     }
     
+    public Concept getConceptStandardized(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_STANDARDIZED, new Locale("en", "US"));
+        return ret;
+    }
     
+    public Concept getConceptEmpiric(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_EMPIRIC, new Locale("en", "US"));
+        return ret;
+    }
+    
+    public Concept getConceptIndividualized(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_INDIVIDUALIZED, new Locale("en", "US"));
+        return ret;
+    }
     
     public Concept getConceptCurrentRegimenType(){
         Concept ret = null;
@@ -2280,6 +2308,18 @@ public class MdrtbFactory {
 
     public String getSTR_CURRENT_TREATMENT_TYPE() {
         return STR_CURRENT_TREATMENT_TYPE;
+    }
+
+    public String getSTR_STANDARDIZED() {
+        return STR_STANDARDIZED;
+    }
+
+    public String getSTR_EMPIRIC() {
+        return STR_EMPIRIC;
+    }
+
+    public String getSTR_INDIVIDUALIZED() {
+        return STR_INDIVIDUALIZED;
     }
 
 }

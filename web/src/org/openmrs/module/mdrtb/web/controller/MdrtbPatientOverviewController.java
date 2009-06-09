@@ -105,7 +105,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 }
             }
             map.put("mdrtbForms", mdrtbForms);
-            
+ 
 //            List<Drug> tbDrugs = new ArrayList<Drug>();
 //            try {
 //                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en")));
@@ -119,8 +119,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 //            }
 //            map.put("tbDrugs", tbDrugs);
             
-            
-            //standard regimens:
             
             List<MdrtbRegimenSuggestion> suggestions =  MdrtbRegimenUtils.getMdrtbRegimenSuggestions();
             map.put("standardRegimens", suggestions);
@@ -218,6 +216,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("cultureStates", mu.getStatesCultureStatus());
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
+            map.put("standardized", mu.getConceptStandardized());
+            map.put("empiric", mu.getConceptEmpiric());
+            map.put("individualized", mu.getConceptIndividualized());
             
             //more
             Concept drugUse = mu.getConceptPatientClassDrugUse();
@@ -390,11 +391,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     List<DrugOrder> newDOs = new ArrayList<DrugOrder>();
                                     newDOs.add(newDO);
                                     MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, request.getParameter(extension), Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
-                                        
-                                        String extensionVal = request.getParameter(extension);
-                                        if (extensionVal != null && !extensionVal.equals("")){
-                                            //TODO: a given drug order has an extension val
-                                        }
                                         
                                 } 
                             } 
