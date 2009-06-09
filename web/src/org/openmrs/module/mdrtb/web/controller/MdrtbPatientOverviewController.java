@@ -55,8 +55,6 @@ import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.OrderExtension;
-import org.openmrs.module.mdrtb.OrderExtensionService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.util.OpenmrsConstants;
@@ -110,7 +108,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             
 //            List<Drug> tbDrugs = new ArrayList<Drug>();
 //            try {
-//                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en", "US")));
+//                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en")));
 //                for (Concept c : mdrtbDrugs) {
 //                    List<Drug> drugs = cs.getDrugsByConcept(c);
 //                    tbDrugs.addAll(drugs);
@@ -130,7 +128,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> firstLineDrugs = new ArrayList<Drug>();
             List<Concept> mdrtbDrugs = new ArrayList<Concept>();
             try {
-                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en", "US")));
+                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en")));
                 for (Concept c : mdrtbDrugs) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     firstLineDrugs.addAll(drugs);
@@ -145,7 +143,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> injectibleDrugs = new ArrayList<Drug>();
             List<Concept> mdrtbDrugConceptsInj = new ArrayList<Concept>();
             try {
-                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en", "US")));
+                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en")));
                 for (Concept c : mdrtbDrugConceptsInj) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     injectibleDrugs.addAll(drugs);
@@ -160,7 +158,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> quinolones = new ArrayList<Drug>();
             List<Concept> mdrtbDrugQ = new ArrayList<Concept>();
             try {
-                mdrtbDrugQ = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en", "US")));
+                Concept quinolonesConcept = MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en"));
+                mdrtbDrugQ = cs.getConceptsByConceptSet(quinolonesConcept);
                 for (Concept c : mdrtbDrugQ) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     quinolones.addAll(drugs);
@@ -176,7 +175,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Concept> mdrtbDrugConceptsSecondLine = new ArrayList<Concept>();
             try {
                 
-                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en", "US")));
+                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en")));
                 for (Concept c : mdrtbDrugConceptsSecondLine) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     secondLineDrugs.addAll(drugs);
@@ -193,7 +192,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Concept> otherDrugConcepts = new ArrayList<Concept>();
            
             
-            //NOTE:  getConceptByName no longer used in module... 
             /*try{
                 otherDrugConcepts = Context.getConceptService().getConceptsByConceptSet(Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_other_second_line")));
                 for (Concept c : otherDrugConcepts) {
@@ -249,6 +247,10 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("drugUnits", drugUnits);
             map.put("concentrationConceptId", mu.getConceptConcentration().getConceptId().intValue());
 
+            Concept c = mu.getConceptCurrentRegimenType();
+            map.put("stEmpInd", c);
+            map.put("stEmpIndAnswers", c.getAnswers(false));
+            
             mu = null;
         }
         return map;
@@ -283,7 +285,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 String instructionsRoot = "instructions_";
                 String orderExtensionRoot = "regimenType_";
                 
-                OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
                     
                     for (int i = 1; i <= numberOfNewOrders; i++){
                         String newDrugSelectConcept = newDrugRoot+i;
@@ -315,7 +316,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             
                             List<MdrtbRegimenSuggestion> suggestions =  MdrtbRegimenUtils.getMdrtbRegimenSuggestions();
                             for (MdrtbRegimenSuggestion mrs : suggestions){
-                                String newRegimenType = getMessageSourceAccessor().getMessage(mrs.getRegimenType(), new Locale("en", "US"));
+                                String newRegimenType = getMessageSourceAccessor().getMessage(mrs.getRegimenType(), new Locale("en"));
                                 if (newRegimenType == null || newRegimenType.contains("."))
                                     mrs.setRegimenType("");
                                 else
@@ -390,11 +391,10 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     newDOs.add(newDO);
                                     MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, request.getParameter(extension), Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
                                         
-//                                        String extensionVal = request.getParameter(extension);
-//                                        if (extensionVal != null && !extensionVal.equals("")){
-//                                            OrderExtension oe = new OrderExtension(newDO, extensionVal);
-//                                            oes.saveOrderExtension(oe);
-//                                        }
+                                        String extensionVal = request.getParameter(extension);
+                                        if (extensionVal != null && !extensionVal.equals("")){
+                                            //TODO: a given drug order has an extension val
+                                        }
                                         
                                 } 
                             } 
@@ -1647,18 +1647,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         mp.setCurrentDrugOrders(currentDrugOrders);
                         mp.setCompletedDrugOrders(discontinuedDrugOrders);
                         mp.setFutureDrugOrders(futureDrugOrders);
-                        
-                        //empiric or individualized
-                        OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
-                        for (Order o : drugOrderList){
-                            List<OrderExtension> oe = oes.getOrderExtension(o, false);
-                            if (oe != null && oe.size() > 0){
-                                OrderExtension oeTmp = oe.get(oe.size() -1);
-                                mp.addToOE(oeTmp.getOrder().getOrderId(), oeTmp.getValue());
-                            }
-                            
-                        }
-                        
+
                     }
 
                     
@@ -1933,7 +1922,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                if (oList != null && oList.size() > 0){
                                    for (Obs o:oList){
                                        for (Obs oInner : o.getGroupMembers()){
-                                           oInner.getConcept().getName().getName();
                                            if (oInner.getConcept().getConceptId() == mu.getConceptSimpleTBResult().getConceptId() && (mcp.getTestResult() == null || mcp.getTestResult().getObsDatetime().getTime() <= oInner.getObsDatetime().getTime())){
                                                mcp.setTestResult(oInner);
                                            }    

@@ -17,7 +17,6 @@ import java.util.Date;
 
 import org.openmrs.Order;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.formentry.FormEntryService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 
@@ -123,28 +122,5 @@ public class AdminListExtensionTest extends BaseModuleContextSensitiveTest {
 //   
 //	}
 	
-	public void testStuff() throws Exception {
-	    this.authenticate();
-	    
-	    Order o = new Order();
-	    o.setConcept(Context.getConceptService().getConcept(1));
-	    o.setCreator(Context.getAuthenticatedUser());
-	    o.setDateCreated(new Date());
-	    o.setDiscontinued(false);
-	    o.setOrderer(Context.getAuthenticatedUser());
-	    o.setOrderType(Context.getOrderService().getOrderType(1));
-	    o.setPatient(Context.getPatientService().getPatient(9401));
-	    o.setVoided(false);
-	    
-	    Context.getOrderService().saveOrder(o);
-	    
-	    System.out.println("OrderId" + o.getOrderId());
-	    
-	    OrderExtension oe = new OrderExtension(o, "test");
-	    OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
-	    oes.saveOrderExtension(oe);
-	    System.out.println("test  " + oe.getOrderExtensionId());
-        
-	}
 	
 }

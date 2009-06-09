@@ -226,11 +226,11 @@
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
 			&nbsp;
-			<a href="/openmrs/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;&nbsp;
+			<a href="/openmrs/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
+			<a href="/openmrs/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
+			<a href="/openmrs/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
 		</openmrs:hasPrivilege>
-			 | &nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
+			 | &nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
 
 							<input type="text" name="nextscheduledvisit" id="nextscheduledvisit" value='<c:if test="${!empty obj.nextScheduledVisit}"><openmrs:formatDate date="${obj.nextScheduledVisit.valueDatetime}" format="${dateFormat}"/></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()" onchange="javascript:showNextVisitDiv(this)"/>
 							<span id="nextVisitDivnextscheduledvisit" class="displayOff">
@@ -238,7 +238,7 @@
 								<input type='hidden' id='patientId' name='patientId' value='${obj.patient.patientId}'>
 							</span><span id="nextVisitMessage" style="vertical-align:bottom;color:red;font-size:80%;"></span>
 
-		</div>	
+	</div>	
 	<script type="text/javascript">
 		function showMoreIdentifiers() {
 			if (identifierElement.style.display == '') {

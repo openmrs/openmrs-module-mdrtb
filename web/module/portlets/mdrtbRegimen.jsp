@@ -367,15 +367,6 @@
 				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	
 
 	<Br>
-	<span style="position:relative;left:2%;"><a href="javascript:addOrderRow();" style="font-size:120%;"><spring:message code="mdrtb.addanewdrugorder" /></a></span>
-<br><Br>
-<form method="post" onsubmit="javascript:return validateForm();">
-	<table class="regTable" id="regTableNew">
-	<tbody id="newOrdersTBody">
-	</tbody>
-	</table>
-	
-				<!-- this can be put back into mdrtbRegimen, under the HEREDSTWARNING comment -->
 		<c:if test="${!empty obj.resistanceDrugConcepts}">
 			<c:if test="${!empty obj.currentDrugOrders}">
 				<c:set var="errorTitleShown" scope="page" value="0" /> 
@@ -393,10 +384,19 @@
 					</c:forEach>
 				</span>
 			</c:if>	
+			<Br><Br>
 		</c:if>
 		
-	
-	<div style="width:100%; text-align:right;"><span id="submitSpan" style="position:relative; right:10%;"></span><br></div>
+	<span style="position:relative;left:2%;"><a href="javascript:addOrderRow();" style="font-size:120%;"><spring:message code="mdrtb.addanewdrugorder" /></a></span>
+<br><Br>
+<form method="post" onsubmit="javascript:return validateForm();">
+
+	<table class="regTable" id="regTableNew">
+	<tbody id="newOrdersTBody">
+	</tbody>
+	</table>
+			<div style="width:100%; text-align:right;"><span id="submitSpan" style="position:relative; right:10%;"></span><br></div>
+
 	<br>
 	<!-- active orders -->
 	<b><spring:message code="mdrtb.activeorders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" />
@@ -412,471 +412,99 @@
 			<div id="noCurrentOrders"></div>
 		</c:if>
 	<table class="regTable" id="regTableOpen">
-	<tbody id="openOrdersTBody">
-			<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrders}">
-					<th><spring:message code="mdrtb.drugincaps" /></th><Th><spring:message code="mdrtb.doseperunits" /></Th><th><spring:message code="mdrtb.frequency" /></th><th><spring:message code="mdrtb.startdate" /></th><th><spring:message code="mdrtb.durationindays" /></th><th><spring:message code="mdrtb.scheduledstopdate" /></th><th><spring:message code="mdrtb.instructions" /></th>
-					<th><spring:message code="mdrtb.type" /></th>
-					<th></th>
-			</c:if>
-		<c:set var="shownOrders" scope="page" value="^" /> 	
-		<c:forEach items="${firstLineDrugs}" var="firstLineDrug">	
+		<tbody id="openOrdersTBody">
+				<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrders}">
+						<th><spring:message code="mdrtb.drugincaps" /></th><Th><spring:message code="mdrtb.doseperunits" /></Th><th><spring:message code="mdrtb.frequency" /></th><th><spring:message code="mdrtb.startdate" /></th><th><spring:message code="mdrtb.durationindays" /></th><th><spring:message code="mdrtb.scheduledstopdate" /></th><th><spring:message code="mdrtb.instructions" /></th>
+						<th></th>
+				</c:if>	
+
 			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
+				<!--  set color -->
+				<c:set value="5" var="colorCode"/>
+				<c:forEach items="${firstLineDrugs}" var="firstLineDrug">	
+					<c:if test="${ firstLineDrug.concept.name == order.concept.name || firstLineDrug.name == order.drug.name}">
+						<c:set value="1" var="colorCode"/>
+					</c:if>
+				</c:forEach>	
+				<c:forEach items="${injectibleDrugs}" var="injectibleDrug">	
+					<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name || injectibleDrug.name == order.drug.name}">
+						<c:set value="2" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				<c:forEach items="${quinolones}" var="quinolone">
+					<c:if test="${quinolone.concept.name.name == order.concept.name.name || quinolone.name == order.drug.name}">
+						<c:set value="3" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				<c:forEach items="${secondLineDrugs}" var="secondLineDrug">	
+					<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name || secondLineDrug.name == order.drug.name}">
+						<c:set value="4" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+			
+				<tr id="tr_${order.orderId}">
 				<c:if test="${!empty order.drug}">
-					<c:if test="${firstLineDrug.name == order.drug.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">1</div>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${firstLineDrug.concept.name == order.concept.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">1</div>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>	
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${firstLineDrug.name == order.drug.name}"> 
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">1</div><span style="color:red">*</span>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${firstLineDrug.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">1</div><span style="color:red">*</span>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>	
+					<td ><div style="display:none">${colorCode}</div>${order.drug.name}</td>
 				</c:if>
+				<c:if test="${empty order.drug}">
+					<td ><div style="display:none">${colorCode}</div>${order.concept.name.name}</td>
+				</c:if>
+				<td >${order.dose} ${order.units}</td>
+				<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
+				<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
+				<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
+				<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
+				<td >${order.instructions}</td>
+				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+				</tr>
 			</c:forEach>
-		</c:forEach>
-		<c:forEach items="${injectibleDrugs}" var="injectibleDrug">	
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${injectibleDrug.name == order.drug.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">2</div>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-						<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-							<tr id="tr_${order.orderId}">
-							<td ><div style="display:none">2</div>${order.concept.name.name}</td>
-							<td >${order.dose} ${order.units}</td>
-							<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-							<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-							<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-							<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-							<td >${order.instructions}</td>
-							<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-							<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-							</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />	
-						</c:if>
-					</c:if>	
-			</c:forEach>	
+			
 			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
+				<!--  set color -->
+				<c:set value="5" var="colorCode"/>
+				<c:forEach items="${firstLineDrugs}" var="firstLineDrug">	
+					<c:if test="${ firstLineDrug.concept.name == order.concept.name || firstLineDrug.name == order.drug.name}">
+						<c:set value="1" var="colorCode"/>
+					</c:if>
+				</c:forEach>	
+				<c:forEach items="${injectibleDrugs}" var="injectibleDrug">	
+					<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name || injectibleDrug.name == order.drug.name}">
+						<c:set value="2" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				<c:forEach items="${quinolones}" var="quinolone">
+					<c:if test="${quinolone.concept.name.name == order.concept.name.name || quinolone.name == order.drug.name}">
+						<c:set value="3" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				<c:forEach items="${secondLineDrugs}" var="secondLineDrug">	
+					<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name || secondLineDrug.name == order.drug.name}">
+						<c:set value="4" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				
+				<tr id="tr_${order.orderId}">
 				<c:if test="${!empty order.drug}">
-					<c:if test="${injectibleDrug.name == order.drug.name}"> 
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">2</div><span style="color:red">*</span>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
+					<td ><div style="display:none">${colorCode}</div><span style="color:red">*</span>${order.drug.name}</td>
+				</c:if>
+				<c:if test="${empty order.drug}">
+					<td ><div style="display:none">${colorCode}</div><span style="color:red">*</span>${order.concept.name.name}</td>
+				</c:if>
+				<td >${order.dose} ${order.units}</td>
+				<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
+				<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
+				<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
+				<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
+				<td >${order.instructions}</td>
+				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+				</tr>
 			</c:forEach>
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">2</div><span style="color:red">*</span>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>
-		</c:forEach>
-		<c:forEach items="${quinolones}" var="quinolone">	
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${quinolone.name == order.drug.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">3</div>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">3</div>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>	
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${quinolone.name == order.drug.name}"> 
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">3</div><span style="color:red">*</span>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">3</div><span style="color:red">*</span>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>
-		</c:forEach>
-		<c:forEach items="${secondLineDrugs}" var="secondLineDrug">	
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${secondLineDrug.name == order.drug.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">4</div>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">4</div>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>		
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:if test="${secondLineDrug.name == order.drug.name}"> 
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">4</div><span style="color:red">*</span>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-				</c:if>	
-			</c:forEach>
-			<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name}">
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">4</div><span style="color:red">*</span>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>	
-			</c:forEach>
-		</c:forEach>
-		<!-- the non-tb drugs in the patient's regimen -->
-		<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-			<c:if test="${!empty order.drug}">
-				<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.name == order.drug.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">5</div>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-			</c:if>		
-		</c:forEach>
-		<c:forEach items="${obj.currentDrugOrders}" var="order" varStatus="varStatus">
-			<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-				<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.concept.name.name == order.concept.name.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">5</div>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>		
-		</c:forEach>
-		<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-			<c:if test="${!empty order.drug}">
-				<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.name == order.drug.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">5</div><span style="color:red">*</span>${order.drug.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-					</c:if>
-			</c:if>		
-		</c:forEach>
-		<c:forEach items="${obj.futureDrugOrders}" var="order" varStatus="varStatus">
-			<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-				<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-				<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.concept.name.name == order.concept.name.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-						<td ><div style="display:none">5</div><span style="color:red">*</span>${order.concept.name.name}</td>
-						<td >${order.dose} ${order.units}</td>
-						<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-						<td ><span style="color:red">*</span><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-						<td style='text-align:center'><mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
-						<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
-						<td >${order.instructions}</td>
-						<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-						<td ><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat}) <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-					</c:if>
-				</c:if>		
-		</c:forEach>
+			
 		</tbody>
 	</table>
 	<div>
 		<c:if test="${!empty obj.futureDrugOrders}">
-		<div style="display:inline;color:red;position:relative;left:20%">*<span style="color:black"> = future order</span></div>
+			<div style="display:inline;color:red;position:relative;left:20%">*<span style="color:black"> = future order</span></div>
 		</c:if>
 	</div>
 	<br><br>
@@ -890,333 +518,62 @@
 		<div id="completedRegimensNoRowsMessageDiv"></div>
 	</c:if>
 	<table class="regTable" id="regTableClosed">
-	<tbody id="closedOrdersTBody">
-		<c:if test="${!empty obj.completedDrugOrders}">
-					<th><spring:message code="mdrtb.drugincaps" /></th><Th><spring:message code="mdrtb.doseperunits" /></Th><th><spring:message code="mdrtb.frequency" /></th><th><spring:message code="mdrtb.startdate" /></th><th><spring:message code="mdrtb.durationindays" /></th><th><spring:message code="mdrtb.enddate" /></th><th><spring:message code="mdrtb.reasonforclosure" /></th>
-					<th><spring:message code="mdrtb.type" /></th>
-					<th></th>
-		</c:if>
-			<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
+		<tbody id="closedOrdersTBody">
+			<c:if test="${!empty obj.completedDrugOrders}">
+						<th><spring:message code="mdrtb.drugincaps" /></th><Th><spring:message code="mdrtb.doseperunits" /></Th><th><spring:message code="mdrtb.frequency" /></th><th><spring:message code="mdrtb.startdate" /></th><th><spring:message code="mdrtb.durationindays" /></th><th><spring:message code="mdrtb.enddate" /></th><th><spring:message code="mdrtb.reasonforclosure" /></th>
+						<th></th>
+			</c:if>
+				
 				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:if test="${!empty order.drug}">
-						 <c:if test="${firstLineDrug.name == order.drug.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">1</div>${order.drug.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-						</c:if>
-					</c:if>	
-				</c:forEach>
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-						 <c:if test="${firstLineDrug.concept.name.name == order.concept.name.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">1</div>${order.concept.name.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-								<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-						</c:if>
-					</c:if>	
-				</c:forEach>
-			</c:forEach>
-			<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:if test="${!empty order.drug}">
-						 <c:if test="${injectibleDrug.name == order.drug.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">2</div>${order.drug.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-						</c:if>
-					</c:if>	
-				</c:forEach>
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-						 <c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">2</div>${order.concept.name.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-								<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-						</c:if>
-					</c:if>	
-				</c:forEach>
-			</c:forEach>
-			<c:forEach items="${quinolones}" var="quinolone">
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:if test="${!empty order.drug}">
-						 <c:if test="${quinolone.name == order.drug.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">3</div>${order.drug.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-						</c:if>
-					</c:if>	
-				</c:forEach>
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-						 <c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">3</div>${order.concept.name.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-								<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-						</c:if>
-					</c:if>	
-				</c:forEach>
-			</c:forEach>	
-			<c:forEach items="${secondLineDrugs}" var="secondLineDrugs">
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:if test="${!empty order.drug}">
-						 <c:if test="${secondLineDrugs.name == order.drug.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">4</div>${order.drug.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-						</c:if>
-					</c:if>	
-				</c:forEach>
-				<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-					<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-						 <c:if test="${secondLineDrugs.concept.name.name == order.concept.name.name}">
-								<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">4</div>${order.concept.name.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${!empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-								</tr>
-								<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
-						</c:if>
-					</c:if>	
-				</c:forEach>
-			</c:forEach>
-			<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-				<c:if test="${!empty order.drug}">
-					<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.name == order.drug.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.name == order.drug.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">5</div>${order.drug.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
+						<!--  set color -->
+				<c:set value="5" var="colorCode"/>
+				<c:forEach items="${firstLineDrugs}" var="firstLineDrug">	
+					<c:if test="${ firstLineDrug.concept.name == order.concept.name || firstLineDrug.name == order.drug.name}">
+						<c:set value="1" var="colorCode"/>
 					</c:if>
-			</c:if>		
-		</c:forEach>
-		<c:forEach items="${obj.completedDrugOrders}" var="order" varStatus="varStatus">
-				<c:set var="orderCode" scope="page" value='${order.orderId}${order.concept.name.name}'/>
-					<c:if test="${empty order.drug && !fn:contains(shownOrders, orderCode)}">
-					<c:set var="used" scope="page" value="0" />
-					<c:forEach items="${firstLineDrugs}" var="firstLineDrug">
-						<c:if test="${firstLineDrug.concept.name.name == order.concept.name.name}"> 
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${injectibleDrugs}" var="injectibleDrug">
-						<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${quinolones}" var="quinolone">
-						<c:if test="${quinolone.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:forEach items="${secondLineDrugs}" var="secondLineDrug">
-						<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name}">
-							<c:set var="used" scope="page" value="1" />
-						</c:if>
-					</c:forEach>
-					<c:if test='${used == "0"}'>
-						<tr id="tr_${order.orderId}">
-									<td ><div style="display:none">5</div>${order.concept.name.name}</td>
-									<td >${order.dose} ${order.units}</td>
-									<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
-									<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
-									<td style='text-align:center'>
-									<c:if test="${!empty order.discontinuedDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
-									</c:if>
-									<c:if test="${empty order.discontinuedDate}">
-										<c:if test="${empty order.autoExpireDate}">
-										<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
-										</c:if>
-									</c:if>
-									</td>
-									<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
-									<td >${order.discontinuedReason.name.name}</td>	
-									<td valign='center'><c:forEach items="${obj.oes}" var="oes"><c:if test="${oes.key == order.orderId}"><c:if test='${oes.value == "standardized"}'><spring:message code="mdrtb.standardized" /></c:if><c:if test='${oes.value == "empiric"}'><spring:message code="mdrtb.empiric" /></c:if><c:if test='${oes.value == "individualized"}'><spring:message code="mdrtb.individualized" /></c:if></c:if></c:forEach></td>
-									<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
-						</tr>
-						<c:set var="shownOrders" scope="page" value='${shownOrders},${order.orderId}${order.concept.name.name}' />
+				</c:forEach>	
+				<c:forEach items="${injectibleDrugs}" var="injectibleDrug">	
+					<c:if test="${injectibleDrug.concept.name.name == order.concept.name.name || injectibleDrug.name == order.drug.name}">
+						<c:set value="2" var="colorCode"/>
 					</c:if>
-				</c:if>		
-		</c:forEach>
-	</tbody>
+				</c:forEach>
+				<c:forEach items="${quinolones}" var="quinolone">
+					<c:if test="${quinolone.concept.name.name == order.concept.name.name || quinolone.name == order.drug.name}">
+						<c:set value="3" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+				<c:forEach items="${secondLineDrugs}" var="secondLineDrug">	
+					<c:if test="${secondLineDrug.concept.name.name == order.concept.name.name || secondLineDrug.name == order.drug.name}">
+						<c:set value="4" var="colorCode"/>
+					</c:if>
+				</c:forEach>
+							<tr id="tr_${order.orderId}">
+								<c:if test="${!empty order.drug}">
+									<td ><div style="display:none">${colorCode}</div>${order.drug.name}</td>
+								</c:if>
+								<c:if test="${empty order.drug}">
+									<td ><div style="display:none">${colorCode}</div>${order.concept.name.name}</td>
+								</c:if>
+								<td >${order.dose} ${order.units}</td>
+								<td >${fn:replace( fn:replace(order.frequency, "<spring:message code='mdrtb.bysevendaysperweek' />", "")," x ", " x<Br>")}</td>
+								<td ><openmrs:formatDate date="${order.startDate}" format="${dateFormat}" /></td>
+								<td style='text-align:center'>
+								<c:if test="${!empty order.discontinuedDate}">
+									<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.discontinuedDate}" format="D" />
+								</c:if>
+								<c:if test="${empty order.discontinuedDate}">
+									<c:if test="${!empty order.autoExpireDate}">
+									<mdrtbPortlets:dateDiff fromDate="${order.startDate}" toDate="${order.autoExpireDate}" format="D" />
+									</c:if>
+								</c:if>
+								</td>
+								<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
+								<td >${order.discontinuedReason.name.name}</td>	
+								<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+							</tr>
+				</c:forEach>
+				
+		</tbody>
 	</table>
 	<div id="newRowTemplateDisplayDiv" style="display:none">
 		<table id="newRowTemplateTable">

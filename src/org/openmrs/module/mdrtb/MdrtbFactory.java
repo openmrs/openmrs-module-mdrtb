@@ -27,7 +27,6 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.AdministrationService;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProgramWorkflowService;
@@ -140,10 +139,9 @@ public class MdrtbFactory {
     private String STR_SUSPECTED_MDR_TUBERCULOSIS;
     
     //DST results
+
     
-    private String STR_RESISTANT;
-    private String STR_SUSCEPTIBLE;
-    private String STR_INTERMEDIATE;
+    private String STR_CURRENT_TREATMENT_TYPE;
     
     
     public MdrtbFactory(){readXML();};
@@ -351,7 +349,6 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_EXTRAPULMONARY_LOCATION");
             node = nodeList.item(0);
             this.STR_EXTRAPULMONARY_LOCATION = node.getFirstChild().getNodeValue();          
-
             nodeList = concepts.getElementsByTagName("STR_HIV_STATUS");
             node = nodeList.item(0);
             this.STR_HIV_STATUS = node.getFirstChild().getNodeValue();
@@ -366,8 +363,7 @@ public class MdrtbFactory {
             this.STR_ALLERGY_COMMENT = node.getFirstChild().getNodeValue();
             nodeList = concepts.getElementsByTagName("STR_TREATMENT_PLAN_COMMENT");
             node = nodeList.item(0);
-            this.STR_TREATMENT_PLAN_COMMENT = node.getFirstChild().getNodeValue();
-            
+            this.STR_TREATMENT_PLAN_COMMENT = node.getFirstChild().getNodeValue();           
             nodeList = concepts.getElementsByTagName("STR_PREV_TREATMENT_DURATION_IN_MONTHS");
             node = nodeList.item(0);
             this.STR_PREV_TREATMENT_DURATION_IN_MONTHS = node.getFirstChild().getNodeValue();
@@ -386,19 +382,15 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_TRANSFERRED_FROM");
             node = nodeList.item(0);
             this.STR_TRANSFERRED_FROM = node.getFirstChild().getNodeValue();
-            
-
             nodeList = concepts.getElementsByTagName("STR_PHONE_NUMBER");
             node = nodeList.item(0);
             this.STR_PHONE_NUMBER = node.getFirstChild().getNodeValue();
-            
             nodeList = concepts.getElementsByTagName("STR_ON_ANTIRETROVIRALS");
             node = nodeList.item(0);
             this.STR_ON_ANTIRETROVIRALS = node.getFirstChild().getNodeValue();
             nodeList = concepts.getElementsByTagName("STR_NEXT_VISIT");
             node = nodeList.item(0);
             this.STR_NEXT_VISIT = node.getFirstChild().getNodeValue();
-            
             nodeList = concepts.getElementsByTagName("STR_PATIENT_CONTACT_TEST_RESULT_PARENT");
             node = nodeList.item(0);
             this.STR_PATIENT_CONTACT_TEST_RESULT_PARENT = node.getFirstChild().getNodeValue();
@@ -411,36 +403,24 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_PATIENT_CONTACT_KNOWN_MDR_CASE");
             node = nodeList.item(0);
             this.STR_PATIENT_CONTACT_KNOWN_MDR_CASE = node.getFirstChild().getNodeValue();
-
             nodeList = concepts.getElementsByTagName("STR_SUSPECTED_MDR_TUBERCULOSIS");
             node = nodeList.item(0);
             this.STR_SUSPECTED_MDR_TUBERCULOSIS = node.getFirstChild().getNodeValue();
-            
             nodeList = concepts.getElementsByTagName("STR_SMEAR_CONVERSION");
             node = nodeList.item(0);
             this.STR_SMEAR_CONVERSION = node.getFirstChild().getNodeValue();
             nodeList = concepts.getElementsByTagName("STR_SMEAR_RECONVERSION");
             node = nodeList.item(0);
             this.STR_SMEAR_RECONVERSION = node.getFirstChild().getNodeValue();
-            
-            nodeList = concepts.getElementsByTagName("STR_RESISTANT");
-            node = nodeList.item(0);
-            this.STR_RESISTANT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_SUSCEPTIBLE");
-            node = nodeList.item(0);
-            this.STR_SUSCEPTIBLE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_INTERMEDIATE");
-            node = nodeList.item(0);
-            this.STR_INTERMEDIATE = node.getFirstChild().getNodeValue();
-
             nodeList = concepts.getElementsByTagName("STR_SCANTY");
             node = nodeList.item(0);
             this.STR_SCANTY = node.getFirstChild().getNodeValue();
-            
             nodeList = concepts.getElementsByTagName("STR_OTHER_MYCOBACTERIA_NONCODED");
             node = nodeList.item(0);
             this.STR_OTHER_MYCOBACTERIA_NONCODED = node.getFirstChild().getNodeValue();
-            
+            nodeList = concepts.getElementsByTagName("STR_CURRENT_TREATMENT_TYPE");
+            node = nodeList.item(0);
+            this.STR_CURRENT_TREATMENT_TYPE = node.getFirstChild().getNodeValue();
             
         } catch (Exception ex){
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
@@ -448,32 +428,18 @@ public class MdrtbFactory {
     }
     
     
+    
+    public Concept getConceptCurrentRegimenType(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"));
+        return ret;
+    }
+    
     public Concept getConceptScanty(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_SCANTY, new Locale("en", "US"));
         return ret;
     }
-    
-    
-    public Concept getConceptResistant(){
-        Concept ret = null;
-
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_RESISTANT, new Locale("en", "US"));
-        return ret;
-    }
-    public Concept getConceptIntermediate(){
-        Concept ret = null;
-        
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_INTERMEDIATE, new Locale("en", "US"));
-        return ret;
-    }
-    public Concept getConceptSusceptible(){
-        Concept ret = null;
-
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SUSCEPTIBLE, new Locale("en", "US"));
-        return ret;
-    }
-    //////
     
     public Concept getConceptOtherMycobacteriaNonCoded(){
         Concept ret = null;
@@ -695,6 +661,7 @@ public class MdrtbFactory {
         ret = MdrtbUtil.getMDRTBConceptByName(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"));
         return ret;
     }
+    
     
     /**
      * Gets a map of all DSTs for a patient (the Obs is the parentObs) and sputumCollectionDate
@@ -2302,18 +2269,6 @@ public class MdrtbFactory {
     public String getSTR_SUSPECTED_MDR_TUBERCULOSIS() {
         return STR_SUSPECTED_MDR_TUBERCULOSIS;
     }
-    
-    public String getSTR_RESISTANT() {
-        return STR_RESISTANT;
-    }
-
-    public String getSTR_SUSCEPTIBLE() {
-        return STR_SUSCEPTIBLE;
-    }
-
-    public String getSTR_INTERMEDIATE() {
-        return STR_INTERMEDIATE;
-    }
 
     public String getSTR_SCANTY() {
         return STR_SCANTY;
@@ -2323,13 +2278,10 @@ public class MdrtbFactory {
         return STR_OTHER_MYCOBACTERIA_NONCODED;
     }
 
+    public String getSTR_CURRENT_TREATMENT_TYPE() {
+        return STR_CURRENT_TREATMENT_TYPE;
+    }
 
-    
-
-     
-
-
-    
 }
 
 

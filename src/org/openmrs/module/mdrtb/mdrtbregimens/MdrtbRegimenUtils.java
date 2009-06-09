@@ -13,18 +13,13 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
-import org.openmrs.Order;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.OrderExtension;
-import org.openmrs.module.mdrtb.OrderExtensionService;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.util.OpenmrsConstants;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 
 public class MdrtbRegimenUtils {
 
@@ -188,29 +183,9 @@ public class MdrtbRegimenUtils {
     }
     
     public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, String regimenType, Patient p, Date effectiveDate){
-           OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
+           //OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
            Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
-           OrderService os = Context.getOrderService();
-               for (DrugOrder doTmp:newDOs){
-                   Order order = null;
-                   if (doTmp.getOrderId() != null){
-                       order = os.getOrder(doTmp.getOrderId());
-                   }
-                   if (order != null){ 
-                       OrderExtension oe = new OrderExtension(order, regimenType);
-                       List<OrderExtension> extensions = oes.getOrderExtension(order, false);
-                       if (extensions.size() != 0){    
-                           for (OrderExtension extension:extensions){
-                               extension.setVoided(true);
-                               extension.setVoidedBy(Context.getAuthenticatedUser());
-                               extension.setVoidReason("overwritten");
-                               oes.saveOrderExtension(extension);
-                           }
-                       }
-                       oes.saveOrderExtension(oe);
-                   }    
-               }        
     }
     
     

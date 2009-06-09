@@ -127,8 +127,8 @@
             strSimple += $j(this).siblings(".simple_popup_info").html();
             strSimple += "<Br><Br><table class='popupTable'><tr>";
             if (showSubmit == true)
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:clearOrder()'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
+            strSimple += "<td nowrap ><p class='simple_close' nowrap>[ x ] <a href='#' onmouseup='javascript:clearOrder()'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
+            strSimple += "<td nowrap><p class='simple_close' nowrap>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
             strSimple += "<Br></div></div>";
             $j("body").append(strSimple);
             viewport.init(".simple_popup_div");

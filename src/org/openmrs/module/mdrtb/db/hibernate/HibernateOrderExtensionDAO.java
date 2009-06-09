@@ -8,12 +8,10 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
 import org.openmrs.Order;
-import org.openmrs.api.OrderService.ORDER_STATUS;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.HibernateOrderDAO;
 import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.OrderExtensionDAO;
-import org.openmrs.api.context.Context;
 
 public class HibernateOrderExtensionDAO implements OrderExtensionDAO {
 

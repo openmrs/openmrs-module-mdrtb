@@ -6,14 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.api.context.Context;
 
 public class MdrtbUtil {
-
     
+    protected final Log log = LogFactory.getLog(getClass());
+
     public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
         Concept ret = null;
         List<Locale> locales = new ArrayList<Locale>();
@@ -22,9 +26,11 @@ public class MdrtbUtil {
         List<ConceptWord> conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
         for (ConceptWord cw : conceptWords){
             Concept cTmp = cw.getConcept();
-            if (cTmp.getName(loc).getName().equals(conceptString.trim())){
-                return cTmp;
-            }   
+            for (ConceptName cns : cTmp.getNames(loc)){
+                if (cns.getName().trim().equals(conceptString.trim())){
+                    return cTmp;
+                }  
+            }
         }
         //second, check all other locales if still null 
         if (ret == null){
@@ -37,9 +43,11 @@ public class MdrtbUtil {
             for (ConceptWord cw : conceptWords){
                 Concept cTmp = cw.getConcept();
                 for (Locale localTmp :locales){
-                    if (cTmp.getName(localTmp).getName().equals(conceptString.trim())){
-                        return cTmp;
-                    }   
+                    for (ConceptName cns : cTmp.getNames(localTmp)){
+                        if (cns.getName().trim().equals(conceptString.trim())){
+                            return cTmp;
+                        }  
+                    }  
                 }
             }
             
@@ -85,7 +93,7 @@ public class MdrtbUtil {
         List<Concept> cList = getDiscontinueReasons();
         String defaultGPValue = Context.getAdministrationService().getGlobalProperty("mdrtb.default_discontinue_drug_order_reason");
         for (Concept c : cList){
-            if (c.getName(new Locale("en", "US")) != null && c.getName(new Locale("en", "US")).getName().equals(defaultGPValue)){
+            if (c.getBestName(new Locale("en", "US")) != null && c.getBestName(new Locale("en", "US")).getName().equals(defaultGPValue)){
                 return c;
             }
         }
