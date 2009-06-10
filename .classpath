@@ -17,19 +17,19 @@
 	<classpathentry kind="lib" path="lib-common/simple-xml-1.7.2.jar"/>
 	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.3.0.09.4361.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-test.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/mail/mail.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/jta/jta.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/dom4j/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/commons-collections/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/mysql-connector-java/mysql-connector-java-3.1.10-bin.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/cglib/cglib-2.1_3.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/c3p0/c3p0-0.9.1.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/ehcache/ehcache-1.2.4.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/hl7api/hapi-0.5.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/antlr/antlr_2.7.6.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/asm/asm.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/jakarta-log4j/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="/openmrs-trunk/lib/xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/mail/mail.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/jta/jta.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/dom4j/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/commons-collections/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/mysql-connector-java/mysql-connector-java-3.1.10-bin.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/cglib/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/c3p0/c3p0-0.9.1.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/ehcache/ehcache-1.2.4.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/hl7api/hapi-0.5.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/antlr/antlr_2.7.6.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/asm/asm.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/jakarta-log4j/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/xerces/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib-common/dbunit-2.2.jar"/>
 	<classpathentry kind="lib" path="/BirtReportModule/lib/chartengineapi.jar"/>
 	<classpathentry kind="lib" path="/BirtReportModule/lib/commons-cli-1.0.jar"/>
