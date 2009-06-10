@@ -331,26 +331,10 @@
 			<openmrs:portlet url="mdrtbStatus" id="mdrtbStatus" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</div>
 		
-		<div  style="display:inline" id="searchTab_formEntry_content"><bR>
-			<table class="portletTable" style="font-size:80%;">
-				
-				<tr><td><b><spring:message
-						code="mdrtb.availablemdrtbforms" /></b></td></tr>
-				<c:if test="${!empty mdrtbForms}">
-						
-					<c:forEach items="${mdrtbForms}" var="form" varStatus="varStatus">
-						<c:set var="rowClass" scope="page">
-							<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
-						</c:set>
-						<Tr><td class="${rowClass}"><a href='/openmrs/moduleServlet/formentry/formDownload?target=formentry&patientId=${obj.patient.patientId}&formId=${form.formId}'>${form.name}</a></td></Tr>
-					</c:forEach>
-					
-				</c:if>
-				<c:if test="${empty mdrtbForms}">
-					<tr><td style="text-align:center;"><i><spring:message code="mdrtb.none" /></i></td></tr>
-				</c:if>
-			</table><br>
-		</div>
+		
+			<div  style="display:inline" id="searchTab_formEntry_content"><bR>
+				<openmrs:portlet url="mdrtbFormsListPortlet" id="mdrtbFormsListPortlet" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+			</div>
 		
 		
 		<div  style="display:inline" id="searchTab_patientRegimen_content"><bR>
