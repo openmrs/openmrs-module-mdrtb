@@ -2,8 +2,7 @@
 				
 			<c:if test="${!empty mdrtbForms}">
 				<table class="portletTable" style="font-size:80%;">
-					
-					<tr><td><!--<b><spring:message code="mdrtb.availablemdrtbforms" /></b>--></td></tr>
+				
 					
 							
 						<c:forEach items="${mdrtbForms}" var="form" varStatus="varStatus">
