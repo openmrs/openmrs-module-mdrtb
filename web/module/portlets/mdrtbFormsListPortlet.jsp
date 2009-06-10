@@ -1,4 +1,4 @@
-	<%@ include file="/WEB-INF/template/include.jsp" %>
+			<%@ include file="/WEB-INF/template/include.jsp" %>
 				
 			<c:if test="${!empty mdrtbForms}">
 				<table class="portletTable" style="font-size:80%;">

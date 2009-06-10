@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.taglib;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -16,6 +17,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
@@ -35,8 +37,72 @@ public class RegimenHistoryTag extends TagSupport {
     private String cssClass;
     private String graphicResourcePath;
     private boolean invert = true;
+    private List<Obs> stEmpIndObs = new ArrayList<Obs>();
+    private Integer standardizedId;
+    private Integer empiricId;
+    private Integer individualizedId;
+    private String typeString;
+    private String stString;
+    private String empString;
+    private String indString;
     
     
+    public String getTypeString() {
+        return typeString;
+    }
+
+    public void setTypeString(String typeString) {
+        this.typeString = typeString;
+    }
+
+    public String getStString() {
+        return stString;
+    }
+
+    public void setStString(String stString) {
+        this.stString = stString;
+    }
+
+    public String getEmpString() {
+        return empString;
+    }
+
+    public void setEmpString(String empString) {
+        this.empString = empString;
+    }
+
+    public String getIndString() {
+        return indString;
+    }
+
+    public void setIndString(String indString) {
+        this.indString = indString;
+    }
+
+    public Integer getStandardizedId() {
+        return standardizedId;
+    }
+
+    public void setStandardizedId(Integer standardizedId) {
+        this.standardizedId = standardizedId;
+    }
+
+    public Integer getEmpiricId() {
+        return empiricId;
+    }
+
+    public void setEmpiricId(Integer empiricId) {
+        this.empiricId = empiricId;
+    }
+
+    public Integer getIndividualizedId() {
+        return individualizedId;
+    }
+
+    public void setIndividualizedId(Integer individualizedId) {
+        this.individualizedId = individualizedId;
+    }
+
     public Integer getPatientId() {
         return patientId;
     }
@@ -90,13 +156,13 @@ public class RegimenHistoryTag extends TagSupport {
             if (doesRegimenHaveAGenericInDrugConceptSet(reg,drugConcepts))
                     allDates.put(reg.getStartDate(), reg);  
         }
-        if (invert){
+        if (invert){//time goes down
             ret += "<table class='" + cssClass + "'><tbody>";
             ret += "<tr><th>" + this.drugTitleString + ":</th>";
             for (Concept drugConcept : drugConcepts){
                 ret += "<th>" + drugConcept.getBestShortName(Context.getLocale()).getName() + "</th>";
             }
-            ret += "<td><b>" + this.getDurationTitleString() + "</b></td></tr>";
+            ret += "<td><b>" + this.getDurationTitleString() + "</b></td><td><b>" + this.getTypeString() + "</b></td></tr>";
             boolean isEvenRow = false;
             for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
                 ret += "<tr ";
@@ -118,12 +184,13 @@ public class RegimenHistoryTag extends TagSupport {
                       ret +="</td>";
                 }
                 if (e.getValue() != null && e.getValue().getDurationInDays() != null)
-                    ret += "<td><b>" + e.getValue().getDurationInDays().toString() + "</b></td></tr>";
+                    ret += "<td><b>" + e.getValue().getDurationInDays().toString() + "</b></td>";
                 else
-                    ret += "<td>" + " " + "</td></tr>";
+                    ret += "<td>" + " " + "</td>";
+                ret += "<td>" + addStEmpIndMarker(allDates, e.getKey()) + "</td></tr>";
             }
             ret += "</tbody></table>";
-        } else {  
+        } else {  //time goes horizontal
           ret += "<table class='" + cssClass + "'><tbody>";
           ret += "<tr><th>" + this.drugTitleString + "</th>";
           for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
@@ -166,6 +233,17 @@ public class RegimenHistoryTag extends TagSupport {
               else
                   ret += "<td>" + " " + "</td>";
           }
+          ret += "</tr>";
+          ret += "<tr ";
+          if (isEvenRow){
+              ret+= "class='oddRow'";
+          } else {
+              ret+= "class='evenRow'";
+          } 
+          ret +=    " ><td><b>" + this.getTypeString() + "</b></td>";
+          for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
+              ret += "<td>" + addStEmpIndMarker(allDates, e.getKey()) + "</td>";
+          }
           ret += "</tr></tbody></table>";    
         }    
         
@@ -187,6 +265,12 @@ public class RegimenHistoryTag extends TagSupport {
         drugTitleString = null;
         durationTitleString = null;
         cssClass = null;
+        stEmpIndObs = null;
+        graphicResourcePath = null;
+        typeString = null;
+        stString = null;
+        empString = null;
+        indString = null;
         return EVAL_PAGE;
      }
      
@@ -252,6 +336,62 @@ public class RegimenHistoryTag extends TagSupport {
 
     public void setInvert(boolean invert) {
         this.invert = invert;
+    }
+
+    public List<Obs> getStEmpIndObs() {
+        return stEmpIndObs;
+    }
+
+    public void setStEmpIndObs(List<Obs> stEmpIndObs) {
+        this.stEmpIndObs = stEmpIndObs;
+    }
+
+    private String addStEmpIndMarker(Map<Date, Regimen> allDates, Date thisRegimenDate){
+        String ret = "<b>";
+        if (stEmpIndObs != null){
+            for (Obs oTmp: stEmpIndObs){
+                if (isDateInRegimenPeriod(allDates, thisRegimenDate, oTmp.getObsDatetime())){
+
+                        if (oTmp.getValueCoded() != null){
+                            if (oTmp.getValueCoded().getConceptId().intValue() == this.standardizedId.intValue())
+                                ret += this.stString;
+                            if (oTmp.getValueCoded().getConceptId().intValue() == this.empiricId.intValue())
+                                ret += this.empString;
+                            if (oTmp.getValueCoded().getConceptId().intValue() == this.individualizedId.intValue())
+                                ret += this.indString;
+                        }
+                        if (thisRegimenDate.getTime() != oTmp.getObsDatetime().getTime()){
+                            SimpleDateFormat sdf = Context.getDateFormat();
+                            ret += " (" + sdf.format(oTmp.getObsDatetime()) + ")";
+                        } 
+                }
+            }
+        }
+        ret += "</b>";
+        return ret;
+    }
+    
+    
+    private boolean isDateInRegimenPeriod(Map<Date, Regimen> allDates, Date thisRegimenDate, Date obsDate){
+        boolean ret = false;
+        boolean stopIteratingNextTime = false;
+        int size = allDates.size() - 1;
+        int counter = 0;
+        for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
+            if (ret == true && obsDate.getTime() < e.getKey().getTime()){
+                return true;
+            } else if (stopIteratingNextTime){
+                break;
+            }
+            if (thisRegimenDate.getTime() == e.getKey().getTime() && obsDate.getTime() >= thisRegimenDate.getTime()){
+                ret = true;
+                stopIteratingNextTime = true;
+                if (counter == size) //if there are no more regimen changes
+                    return true;
+            }    
+            counter++;
+        }
+        return false;
     }
     
     

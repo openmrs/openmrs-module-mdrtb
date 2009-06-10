@@ -387,15 +387,27 @@
 
 	<spring:message code="mdrtb.durationindays" var="durationindays" />
 	<spring:message code="mdrtb.drug" var="drugTitle" />
+	<spring:message code="mdrtb.type" var="typeTitle" />
+	<spring:message code="mdrtb.standardizedShort" var="standardizedTitle" />
+	<spring:message code="mdrtb.empiricShort" var="empiricTitle" />
+	<spring:message code="mdrtb.individualizedShort" var="indivTitle" />
 	<openmrs:globalProperty key="mdrtb.DST_drug_list" var="dstDrugList"/>
-	<mdrtbPortlets:regimenHistory patientId="${obj.patient.patientId}" 
+	<mdrtbPortlets:regimenHistory 
+				typeString = "${typeTitle}"
+				stString = "${standardizedTitle}"
+				empString = "${empiricTitle}"
+				indString = "${indivTitle}"
+				standardizedId = "${standardized.conceptId}"
+    			empiricId = "${empiric.conceptId}"
+    			individualizedId = "${individualized.conceptId}"
+				stEmpIndObs="${obj.stEmpIndObs}"
+				patientId="${obj.patient.patientId}" 
 				drugTitleString="${drugTitle}" 
 				durationTitleString="${durationindays}" 
 				drugConceptList="${dstDrugList}|AMOXICILLIN AND CLAVULANIC ACID"
 				cssClass="widgetOut"
 				invert="true"
 				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	
-
 	<Br>
 	<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrers || !empty obj.completedDrugOrders}">
 		<span style="position:relative;left:2%;">	

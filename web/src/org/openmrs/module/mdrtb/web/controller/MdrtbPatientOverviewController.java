@@ -1932,6 +1932,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                    //resistant to these drugs concept list
                    
                    mp.setResistanceDrugConcepts(mu.getResistantToDrugConcepts(patient));
+                   c = mu.getConceptCurrentRegimenType();
+                   mp.setStEmpIndObs(os.getObservationsByPersonAndConcept(patient, c));
                    mu = null;
                 } catch (Exception ex){log.warn("formBackingObject passed invalid patientId", ex);}
                 

@@ -69,9 +69,17 @@ public class MdrtbPatient {
     private List<MdrtbContactPerson> contacts;
     private Map<Integer, String> oes = new HashMap<Integer, String>();
     private List<Concept> resistanceDrugConcepts = new ArrayList<Concept>();
+    private List<Obs> stEmpIndObs = new ArrayList<Obs>();
+    
+    
 
+    public List<Obs> getStEmpIndObs() {
+        return stEmpIndObs;
+    }
 
-
+    public void setStEmpIndObs(List<Obs> stEmpIndObs) {
+        this.stEmpIndObs = stEmpIndObs;
+    }
 
     public List<Concept> getResistanceDrugConcepts() {
         return resistanceDrugConcepts;
