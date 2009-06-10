@@ -192,7 +192,6 @@ public class MdrtbRegimenUtils {
            
            
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
-
            if (regimenType != null && !regimenType.equals("")){
                Integer regTypeInt = null;
                try{
@@ -204,25 +203,27 @@ public class MdrtbRegimenUtils {
                    MdrtbFactory mu = new MdrtbFactory();
                    Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
                    List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
+                   boolean needNewObs = true;
                    for (Obs oTmp : oList){
                       if (oTmp.getObsDatetime().equals(effectiveDate) && !oTmp.getValueCoded().getConceptId().equals(regTypeInt)){
                           oTmp.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
-                          os.saveObs(oTmp, "changing st/emp/ind for regimen");
-                      } else if (oTmp.getObsDatetime().equals(effectiveDate)){
-                          Obs o = new Obs();
-                          o.setConcept(mu.getConceptCurrentRegimenType());
-                          o.setCreator(Context.getAuthenticatedUser());
-                          o.setDateCreated(new Date());
-                          o.setObsDatetime(effectiveDate);
-                          o.setLocation(MdrtbUtil.getDefaultLocation(p));
-                          o.setPerson(p);
-                          o.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
-                          o.setVoided(false);
-                      }
-                      
-                      
-                          
+                          os.saveObs(oTmp, "");
+                          needNewObs = false;
+                      }    
                    }
+                   if (needNewObs){
+                       Obs o = new Obs();
+                       o.setConcept(mu.getConceptCurrentRegimenType());
+                       o.setCreator(Context.getAuthenticatedUser());
+                       o.setDateCreated(new Date());
+                       o.setObsDatetime(effectiveDate);
+                       o.setLocation(MdrtbUtil.getDefaultLocation(p));
+                       o.setPerson(p);
+                       o.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
+                       o.setVoided(false);
+                       os.saveObs(o, "");
+                   }
+                   
                }
            }
            

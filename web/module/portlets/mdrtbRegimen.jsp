@@ -365,19 +365,7 @@
 <div style="font-size:70%">
 		
 <bR>
-	<spring:message code="mdrtb.durationindays" var="durationindays" />
-	<spring:message code="mdrtb.drug" var="drugTitle" />
-	<openmrs:globalProperty key="mdrtb.DST_drug_list" var="dstDrugList"/>
-	<mdrtbPortlets:regimenHistory patientId="${obj.patient.patientId}" 
-				drugTitleString="${drugTitle}" 
-				durationTitleString="${durationindays}" 
-				drugConceptList="${dstDrugList}|AMOXICILLIN AND CLAVULANIC ACID"
-				cssClass="widgetOut"
-				invert="true"
-				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	
-
-	<Br>
-		<c:if test="${!empty obj.resistanceDrugConcepts}">
+	<c:if test="${!empty obj.resistanceDrugConcepts}">
 			<c:if test="${!empty obj.currentDrugOrders}">
 				<c:set var="errorTitleShown" scope="page" value="0" /> 
 					<c:forEach items="${obj.resistanceDrugConcepts}" var="resDrugs" varStatus="varStatus">
@@ -396,9 +384,28 @@
 			</c:if>	
 			<Br><Br>
 		</c:if>
+
+	<spring:message code="mdrtb.durationindays" var="durationindays" />
+	<spring:message code="mdrtb.drug" var="drugTitle" />
+	<openmrs:globalProperty key="mdrtb.DST_drug_list" var="dstDrugList"/>
+	<mdrtbPortlets:regimenHistory patientId="${obj.patient.patientId}" 
+				drugTitleString="${drugTitle}" 
+				durationTitleString="${durationindays}" 
+				drugConceptList="${dstDrugList}|AMOXICILLIN AND CLAVULANIC ACID"
+				cssClass="widgetOut"
+				invert="true"
+				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	
+
+	<Br>
+	<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrers || !empty obj.completedDrugOrders}">
+		<span style="position:relative;left:2%;">	
+			<openmrs:portlet url="mdrtbCurrentRegimenType" id="mdrtbCurrentRegimenType" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+		</span>	
+	</c:if>	
+	<br><Br>	
 		
 	<span style="position:relative;left:2%;"><a href="javascript:addOrderRow();" style="font-size:120%;"><spring:message code="mdrtb.addanewdrugorder" /></a></span>
-<br><Br>
+	<br><Br>
 <form method="post" onsubmit="javascript:return validateForm();">
 
 	<table class="regTable" id="regTableNew">
@@ -628,14 +635,14 @@
 				<select name="drugSelect_" id="drugSelect_" class="displayOff	"><option value=""><spring:message code="mdrtb.selectadrugfromtheformulary" /></option></select>
 				</td>
 				<td >
-					<input type="text" value="" id="dose_" name="dose_" style="width:40px">/<select name="units_" id="units_"><option value=""></option>
+					<input type="text" value="" id="dose_" name="dose_" style="width:40px" autocomplete="off">/<select name="units_" id="units_"><option value=""></option>
 									<c:forEach items="${drugUnits}" var="unit">
 										<option value="${unit}">${unit}</option>
 									</c:forEach>
 									</select>
 				</td>
 				<td nowrap>
-					<input type="text" value="" name="perDay_" id="perDay_" style="width:40px"><spring:message code="mdrtb.perday" /> <bR><select name="perWeek_" id="perWeek_" style="width:40px">
+					<input type="text" value="" name="perDay_" id="perDay_" style="width:40px" autocomplete="off"><spring:message code="mdrtb.perday" /> <bR><select name="perWeek_" id="perWeek_" style="width:40px">
 					<option value='1'>1</option>
 					<option value='2'>2</option>
 					<option value='3'>3</option>
@@ -658,7 +665,7 @@
 					</select> 
 				</td>
 				
-				<td><a href="#" onClick="javascript:remove(this.parentNode.parentNode)"><spring:message code="mdrtb.cancellowercase" /></a></td>
+				<td><a href="#" onClick="javascript:remove(this.parentNode.parentNode); return false;"><spring:message code="mdrtb.cancellowercase" /></a></td>
 			</tr>
 		</table>
 	</div>

@@ -355,6 +355,10 @@
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbNextVisit"/>
 				<include method="setNextVisitDate"/>
 			</create>
+			<create creator="new" javascript="MdrtbCurrentRegimenTypeService">
+				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbCurrentRegimenTypeService"/>
+				<include method="setCurrentRegimenTypeOnDate"/>
+			</create>
 			<create creator="new" javascript="MdrtbContactsDWRService">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbContactsDWRService"/>
 				<include method="updateAddress"/>

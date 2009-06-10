@@ -2,7 +2,6 @@ package org.openmrs.module.mdrtb.web.dwr;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import org.apache.commons.logging.Log;

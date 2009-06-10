@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1612,19 +1613,13 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     mp.setPatient(patient);
                     Person person = Context.getPersonService().getPerson(patient.getPatientId());
                     List<Obs> obs = Context.getObsService().getObservationsByPerson(person);
-                    for (Obs o:obs){
-                        mp.addObs(o);
-                    }
-                   
-                    
+                    mp.setObs(new LinkedHashSet<Obs>(obs));
                     mp.setGivenName(person.getGivenName());
                     mp.setMiddleName(person.getMiddleName());
                     mp.setFamilyName(person.getFamilyName());
                     mp.setFamilyNameTwo(person.getPersonName().getFamilyName2());
                     
                     List<Order> orders = Context.getOrderService().getOrdersByPatient(patient);
-                    
-                    
                     mp.setOrders(orders);
                     
                     if (Context.hasPrivilege(OpenmrsConstants.PRIV_VIEW_ORDERS)) {
