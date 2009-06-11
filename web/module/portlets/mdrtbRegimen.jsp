@@ -409,7 +409,7 @@
 				invert="true"
 				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	
 	<Br>
-	<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrers || !empty obj.completedDrugOrders}">
+	<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrders || !empty obj.completedDrugOrders}">
 		<span style="position:relative;left:2%;">	
 			<openmrs:portlet url="mdrtbCurrentRegimenType" id="mdrtbCurrentRegimenType" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</span>	
