@@ -215,11 +215,14 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                    MdrtbFactory mu = new MdrtbFactory();
                    boolean update = false;
                    PatientProgram pp = moo.getPatientProgram();
-                   ProgramWorkflow pw = pp.getProgram().getWorkflowByName(mu.getSTR_TREATMENT_OUTCOME_PARENT());
-                   PatientState ps = pp.getCurrentState(pw);
+                   
                    if (outcomeWorkflowStateId != null){
+                       ProgramWorkflow pw = pp.getProgram().getWorkflowByName(mu.getSTR_TREATMENT_OUTCOME_PARENT());
+                       PatientState ps = pp.getCurrentState(pw);
                        ProgramWorkflowState pxws = pw.getState(outcomeWorkflowStateId);
-                       if (ps == null || !ps.getState().equals(pxws) || (ps.getState().equals(pxws) && outcomeDate != null && outcomeDate.getTime() != ps.getStartDate().getTime())){
+                       if (ps == null 
+                               || ps.getState().getProgramWorkflowStateId().intValue() != pxws.getProgramWorkflowStateId().intValue()
+                               || (ps.getState().equals(pxws) && outcomeDate != null && outcomeDate.getTime() != ps.getStartDate().getTime())){
                            if (outcomeDate == null){
                                mu.transitionToStateNoErrorChecking(pp, pxws, new Date());
                                update = true;
@@ -232,16 +235,21 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                    }
                    
                    //patient status
-                   ProgramWorkflow pwTwo = pp.getProgram().getWorkflowByName(mu.getSTR_TUBERCULOSIS_PATIENT_STATUS_PARENT());
-                   PatientState psTwo = pp.getCurrentState(pwTwo);
+                  
                    if (stateWorkflowStateId != null){
+                       ProgramWorkflow pwTwo = pp.getProgram().getWorkflowByName(mu.getSTR_TUBERCULOSIS_PATIENT_STATUS_PARENT());
+                       PatientState psTwo = pp.getCurrentState(pwTwo);
                        ProgramWorkflowState pxwsTwo = pwTwo.getState(stateWorkflowStateId);
-                       if (psTwo == null || !psTwo.getState().equals(pxwsTwo) || (psTwo.getState().equals(pxwsTwo) && stateDate != null && stateDate.getTime() != psTwo.getStartDate().getTime())){
-                           if (stateDate == null)
+                       if (psTwo == null 
+                               || psTwo.getState().getProgramWorkflowStateId().intValue() != pxwsTwo.getProgramWorkflowStateId().intValue()
+                               || (psTwo.getState().equals(pxwsTwo) && outcomeDate != null && outcomeDate.getTime() != psTwo.getStartDate().getTime())){
+                           if (stateDate == null){
                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
-                           else
+                               update = true;
+                           } else {
                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, stateDate); 
                                update = true;
+                           }    
                        }
                    }
                    if (programEndDate != null){
@@ -307,7 +315,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
            Collection<Program> cp = new HashSet<Program>();
            ObsService os = Context.getObsService();
            cp.add(program);
-           Cohort c = Context.getPatientSetService().getPatientsInProgram(program, new Date(0), new Date());
+           Cohort c = Context.getPatientSetService().getPatientsInProgram(program, null, null);
            List<PatientProgram> ppList = progS.getPatientPrograms(c, cp);
            for (PatientProgram pp : ppList){
                MdrtbOverviewObj moo = new MdrtbOverviewObj(pp);
@@ -354,18 +362,36 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                //outcome
                Set<ProgramWorkflowState> pwsSet = mu.getStatesOutcomes();
                Set<PatientState> psSet = pp.getStates();
-               for (PatientState ps : psSet){
-                   if (pwsSet.contains(ps.getState()) && ps.getEndDate() == null && !ps.getVoided()){
-                       moo.setOutcome(ps);
-                   }         
+
+               boolean foundTmp = false;
+               for (ProgramWorkflowState pws:  pwsSet){
+                   for (PatientState ps : psSet){
+                          if (ps.getEndDate() == null && !ps.getVoided()
+                                  && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
+                           moo.setOutcome(ps);
+                           foundTmp = true;
+                           break;
+                           
+                       }
+                   }     
+                   if (foundTmp)
+                       break;
                }
                //status
                pwsSet = mu.getStatesPatientStatus();
-               psSet = pp.getStates();
-               for (PatientState ps : psSet){
-                   if (pwsSet.contains(ps.getState()) && ps.getEndDate() == null && !ps.getVoided()){
-                       moo.setStatus(ps);
-                   }         
+               foundTmp = false;
+               for (ProgramWorkflowState pws:  pwsSet){
+                   for (PatientState ps : psSet){
+                          if (ps.getEndDate() == null && !ps.getVoided()
+                                  && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
+                           moo.setStatus(ps);
+                           foundTmp = true;
+                           break;
+                           
+                       }
+                   }     
+                   if (foundTmp)
+                       break;
                }
                //treatment start date
                Concept tsdConcept = mu.getConceptTreatmentStartDate();

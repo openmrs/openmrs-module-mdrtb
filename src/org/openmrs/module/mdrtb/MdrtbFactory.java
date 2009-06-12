@@ -1597,9 +1597,7 @@ public class MdrtbFactory {
         for (PatientState lastState : lastStates){
         
             
-            if (lastState != null 
-                    && lastState.getState().getProgramWorkflow().getProgramWorkflowId() == programWorkflowState.getProgramWorkflow().getProgramWorkflowId()
-                    && !lastState.getVoided()) {
+            if (lastState != null  && lastState.getState().getProgramWorkflow().getProgramWorkflowId().intValue() == programWorkflowState.getProgramWorkflow().getProgramWorkflowId().intValue() && !lastState.getVoided()) {
                 
                     lastState.setEndDate(onDate);
                 //if nonsensical: void

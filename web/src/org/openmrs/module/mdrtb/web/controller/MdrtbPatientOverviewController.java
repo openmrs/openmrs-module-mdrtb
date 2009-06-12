@@ -502,7 +502,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                 mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
                             else
                                 mu.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate); 
-                                update = true;
+                            update = true;
                         }
                     }
                     

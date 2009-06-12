@@ -12,7 +12,7 @@
 </script>
 
 <br>
-<form method="post">
+<form method="post" style="font-size:85%">
 <b>Patient Cleaning</b><br><Br>
 <table class="portletTable" style="font-size:80%;">
 	<tr>
@@ -29,7 +29,7 @@
 		<td width="500px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</td>
 		<td width="500px">|</td>
 	</tr>
-	<c:forEach items="${obj}" var="moo" varStatus="rowCount">
+	<c:forEach items="${obj}" var="moo" varStatus="varStatus">
 			<c:set var="rowClass" scope="page">
 				<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 			</c:set>
@@ -43,20 +43,20 @@
 			<td>${moo.familyName}
 			</td>
 			<Td>
-				<select name="healthCenter_${rowCount.index}" id="healthCenter_${rowCount.index}">
+				<select name="healthCenter_${varStatus.index}" id="healthCenter_${varStatus.index}">
 					<option value=""></option>
 					<c:forEach items="${locations}" var="location" varStatus="locCount">
 						<option value="${location.locationId}"
 							<c:if test="${moo.healthCenter.value == location.locationId}">SELECTED</c:if>
-						>${location}</option>y
+						>${location}</option>
 					</c:forEach>
 				</select>
 			</Td>
 			<td>
-				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.patientProgram.dateCompleted}" format="${dateFormat}" />' id="patientProgramEndDate_${rowCount.index}" name="patientProgramEndDate_${rowCount.index}" onMouseDown="$(this).date_input()" class="dateType">
+				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.patientProgram.dateCompleted}" format="${dateFormat}" />' id="patientProgramEndDate_${varStatus.index}" name="patientProgramEndDate_${varStatus.index}" onMouseDown="$(this).date_input()" class="dateType">
 			</td>
 			<td>
-				<select name="outcome_${rowCount.index}" id="outcome_${rowCount.index}">
+				<select name="outcome_${varStatus.index}" id="outcome_${varStatus.index}">
 					<option value=""></option>
 					<c:forEach items="${outcomeStates}" var="outcome" varStatus="stateCount">
 						<option value="${outcome.programWorkflowStateId}"
@@ -64,10 +64,10 @@
 						>${outcome.concept.name}</option>
 					</c:forEach>
 				</select><br>
-				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.outcome.startDate}" format="${dateFormat}" />' id="outcomeStartDate_${rowCount.index}" name="outcomeStartDate_${rowCount.index}" onMouseDown="$(this).date_input()" class="dateType">
+				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.outcome.startDate}" format="${dateFormat}" />' id="outcomeStartDate_${varStatus.index}" name="outcomeStartDate_${varStatus.index}" onMouseDown="$(this).date_input()" class="dateType">
 			</td>
 			<td>
-				<select name="state_${rowCount.index}" id="state_${rowCount.index}">
+				<select name="state_${varStatus.index}" id="state_${varStatus.index}">
 					<option value=""></option>
 					<c:forEach items="${patientStates}" var="state" varStatus="stateCount">
 						<option value="${state.programWorkflowStateId}"
@@ -75,13 +75,13 @@
 						>${state.concept.name}</option>
 					</c:forEach>
 				</select><br>
-				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.status.startDate}" format="${dateFormat}" />' id="stateStartDate_${rowCount.index}" name="stateStartDate_${rowCount.index}" onMouseDown="$(this).date_input()" class="dateType">
+				<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.status.startDate}" format="${dateFormat}" />' id="stateStartDate_${varStatus.index}" name="stateStartDate_${varStatus.index}" onMouseDown="$(this).date_input()" class="dateType">
 			</td>
 			<td>
-					<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.treatmentStartDate.valueDatetime}" format="${dateFormat}" />' id="treatmentStartDate_${rowCount.index}" name="treatmentStartDate_${rowCount.index}" onMouseDown="$(this).date_input()" class="dateType">
+					<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.treatmentStartDate.valueDatetime}" format="${dateFormat}" />' id="treatmentStartDate_${varStatus.index}" name="treatmentStartDate_${varStatus.index}" onMouseDown="$(this).date_input()" class="dateType">
 			</td>
 			<td>
-					<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.treatmentStopDate.valueDatetime}" format="${dateFormat}" />'  id="treatmentEndDate_${rowCount.index}" name="treatmentEndDate_${rowCount.index}" onMouseDown="$(this).date_input()" class="dateType">
+					<input type="text" style="width:100px" value='<openmrs:formatDate date="${moo.treatmentStopDate.valueDatetime}" format="${dateFormat}" />'  id="treatmentEndDate_${varStatus.index}" name="treatmentEndDate_${varStatus.index}" onMouseDown="$(this).date_input()" class="dateType">
 			</td>
 			<td width="500px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</td>
 			<td width="500px">|</td>
