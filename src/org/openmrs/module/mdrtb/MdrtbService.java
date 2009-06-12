@@ -2,13 +2,14 @@ package org.openmrs.module.mdrtb;
 
 import java.util.List;
 
+import org.openmrs.Concept;
 import org.openmrs.Order;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface OrderExtensionService extends OpenmrsService {
+public interface MdrtbService extends OpenmrsService {
     
     public List<OrderExtension> getOrderExtension(Order o, boolean includeVoided) throws APIException;
     
@@ -18,5 +19,6 @@ public interface OrderExtensionService extends OpenmrsService {
     
     public  OrderExtension voidOrderExtension(OrderExtension oe) throws APIException;
 
+    public List<Concept> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException ;
 
 }

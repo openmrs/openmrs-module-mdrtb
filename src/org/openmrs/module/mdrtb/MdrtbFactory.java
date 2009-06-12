@@ -41,112 +41,187 @@ public class MdrtbFactory {
     protected final Log log = LogFactory.getLog(getClass());
     
     private String STR_TB_SMEAR_RESULT;
+    private Concept smearResult;
     private String STR_TB_SAMPLE_SOURCE;
+    private Concept sampleSource;
     private String STR_BACILLI;
+    private Concept bacilli;
     private String STR_RESULT_DATE;
+    private Concept resultDate;
     private String STR_DATE_RECEIVED;
+    private Concept dateRecieved;
     private String STR_TB_SMEAR_MICROSCOPY_METHOD;
+    private Concept smearMicroscopyMethod;
     private String STR_TB_CULTURE_RESULT;
+    private Concept cultureResult;
     private String STR_COLONIES;
+    private Concept Colonies;
     private String STR_CULTURE_START_DATE;
+    private Concept cultureStartDate;
     private String STR_TB_CULTURE_METHOD;
+    private Concept cultureMethod;
     private String STR_TYPE_OF_ORGANISM;
+    private Concept typeOfOrganism;
     private String STR_TYPE_OF_ORGANISM_NON_CODED;
+    private Concept typeOfOrganismNonCoded;
     private String STR_DST_COMPLETE;
+    private Concept dstComplete;
     private String STR_DST_METHOD;
+    private Concept dstMethod;
     private String STR_DIRECT_INDIRECT;
+    private Concept directIndirect;
     private String STR_COLONIES_IN_CONTROL;
+    private Concept coloniesInControl;
     private String STR_CONCENTRATION;
-    //ObsGroup concepts
+    private Concept Concentration;
     private String STR_DST_PARENT;
+    private Concept dstParent;
     private String STR_DST_RESULT_PARENT;
+    private Concept dstResultParent;
     private String STR_CULTURE_PARENT;
+    private Concept cultureParent;
     private String STR_SMEAR_PARENT;
+    private Concept smearParent;
     private String STR_SPUTUM_COLLECTION_DATE;
-    //Program Workflows
+    private Concept sputumCollectionDate;
     private String STR_TREATMENT_OUTCOME_PARENT;
+    private Concept treatmentOutcomeParent;
     private String STR_CURED;
+    private Concept cured;
     private String STR_FAILED;
+    private Concept failed;
     private String STR_DEFAULTED;
+    private Concept defaulted;
     private String STR_DIED;
+    private Concept died;
     private String STR_TRANSFERRED_OUT;
+    private Concept transferredOut;
     private String STR_STILL_ON_TREATMENT;
+    private Concept stillOnTreatment;
     private String STR_CULTURE_STATUS_PARENT;
+    private Concept cultureStatusParent;
     private String STR_NOT_CONVERTED;
-    private  String STR_CONVERTED; 
+    private Concept notConverted;
+    private  String STR_CONVERTED;
+    private Concept converted;
     private  String STR_RECONVERTED;
+    private Concept reconverted;
     private  String STR_NONE;
+    private Concept none;
     private String  STR_TUBERCULOSIS_PATIENT_STATUS_PARENT;
+    private Concept tuberculosisPatientStatuParent;
     private  String STR_ON_TREATMENT;
+    private Concept onTreatment;
     private String  STR_SUSPENDED;
+    private Concept suspended;
     private  String STR_WAITING_FOR_TREATMENT;
+    private Concept waitingForTreatment;
     private  String STR_TREATMENT_COMPLETE;
+    private Concept treatmentComplete;
     private  String STR_CULTURE_CONVERSION;
+    private Concept cultureConversion;
     private  String STR_CULTURE_RECONVERSION;
-    
+    private Concept cultureReconversion;
     private  String STR_SMEAR_CONVERSION;
+    private Concept smearConversion;
     private  String STR_SMEAR_RECONVERSION;
-    
+    private Concept smearReconversion;
     private String STR_TREATMENT_START_DATE;
+    private Concept treatmentStartDate;
     private String STR_PREVIOUS_DRUG_USE_PARENT;
+    private Concept previousDrugUseParent;
     private String STR_NEW_MDRTB_PATIENT;
+    private Concept newMdrtbPatient;
     private String STR_PREVIOUSLY_TREATED_WITH_FIRST_LINE;
+    private Concept previouslyTreatedWithFirstLine;
     private String STR_PREVIOUSLY_TREATED_WITH_SECOND_LINE;
+    private Concept previouslyTreatedWithSecondLine;
     private String STR_PREVIOUS_TREATMENT_RESULT_PARENT;
+    private Concept previousTreatmentResultParent;
     private String STR_RELAPSE;
+    private Concept relapse;
     private String STR_TREATMENT_AFTER_DEFAULT;
+    private Concept treatmentAfterDefault;
     private String STR_TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT;
+    private Concept treatmentAfterFailureOfFirstTreatment;
     private String STR_TREATMENT_AFTER_FAILURE_OF_RE_TREATMENT;
+    private Concept treatmentAfterFailureOfReTreatment;
     private String STR_TRANSFER_IN;
+    private Concept transferIn;
     private String STR_OTHER_MDR_STATE;
+    private Concept otherMdrtbState;
     private String STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT;
+    private Concept tuberculosisCaseClassificationParent;
     private String STR_TUBERCULOSIS;
+    private Concept tuberculosis;
     private String STR_MDR_TUBERCULOSIS;
+    private Concept mdrTuberculosis;
     private String STR_XDR_TUBERCULOSIS;
+    private Concept xdrTuberculosis;
     private String STR_PULMONARY;
+    private Concept pulmonary;
     private String STR_EXTRAPULMONARY;
+    private Concept extrapulmonary;
     private String STR_EXTRAPULMONARY_LOCATION;
+    private Concept extrapulmonaryLocation;
     private String STR_OTHER_MYCOBACTERIA_NONCODED;
-
-
+    private Concept otherMycobacteriaNoncoded;
     private String   STR_HIV_STATUS;
+    private Concept hivStatus;
     private String   STR_CD4_COUNT;
+    private Concept cd4Count;
     private String   STR_CD4_PERCENT;
+    private Concept cd4percent;
     private String   STR_ALLERGY_COMMENT;
+    private Concept allergyComment;
     private String   STR_TREATMENT_PLAN_COMMENT;
-    
-    //previous treatment concepts
+    private Concept treatmentPlanComment;
     private String STR_PREV_TREATMENT_DURATION_IN_MONTHS;
+    private Concept prevTreatmentDurationInMonths;
     private String STR_PREV_REGISTRATION_NUM;
+    private Concept prevRegistrationNum;
     private String STR_PREV_TREATMENT_CENTER;
+    private Concept prevTreatmentCenter;
     private String STR_REFERRED_BY;
+    private Concept referredBy;
     private String STR_TRANSFERRED_TO;
+    private Concept transferredTo;
     private String STR_TRANSFERRED_FROM;
-    
+    private Concept transferredFrom;
     private String STR_ON_ANTIRETROVIRALS;
+    private Concept onAntiretrovirals;
     private String STR_NEXT_VISIT;
-    
+    private Concept nextVisit;
     private String STR_SCANTY;
-   
-    
-    //CONTACTS MANAGEMENT  
-    
+    private Concept scanty;
     private String STR_PATIENT_CONTACT_TEST_RESULT_PARENT;
+    private Concept patientContactTestResultParent;
     private String STR_SIMPLE_TB_TEST_RESULT;
-    private String STR_SIMPLE_TB_TEST_TYPE;  
+    private Concept simpleTbTestResult;
+    private String STR_SIMPLE_TB_TEST_TYPE;
+    private Concept simpleTbTestType;
     private String STR_PHONE_NUMBER;
+    private Concept phoneNumer;
     private String STR_PATIENT_CONTACT_KNOWN_MDR_CASE;
+    private Concept patientContactKnownMdrCase;
     private String STR_SUSPECTED_MDR_TUBERCULOSIS;
-    
-    //DST results
-
-    
+    private Concept suspectedMdrtTuberculosis;
     private String STR_CURRENT_TREATMENT_TYPE;
+    private Concept currentTreatmentType;
     private String STR_STANDARDIZED;
+    private Concept standardized;
     private String STR_EMPIRIC;
+    private Concept empiric;
     private String STR_INDIVIDUALIZED;
+    private Concept individualized;
+    private String STR_TREATMENT_STOP_DATE;
+    private Concept treatmentStopDate;
     
     
+    public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
+        STR_TREATMENT_STOP_DATE = str_treatment_stop_date;
+    }
+
     public MdrtbFactory(){readXML();};
     
     private void readXML(){
@@ -170,7 +245,7 @@ public class MdrtbFactory {
         Element concepts = doc.getDocumentElement();
         
             
-        
+       
             NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
             Node node = nodeList.item(0);
             this.STR_TB_SMEAR_RESULT= node.getFirstChild().getNodeValue();  
@@ -433,10 +508,19 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_INDIVIDUALIZED");
             node = nodeList.item(0);
             this.STR_INDIVIDUALIZED = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_TREATMENT_STOP_DATE");
+            node = nodeList.item(0);
+            this.STR_TREATMENT_STOP_DATE = node.getFirstChild().getNodeValue();
+            
             
         } catch (Exception ex){
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
         }
+    }
+    public Concept getConceptTreatmentStopDate(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"));
+        return ret;
     }
     
     public Concept getConceptStandardized(){

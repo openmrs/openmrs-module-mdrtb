@@ -16,6 +16,7 @@
             	<prop key="module/@MODULE_ID@/mdrtbAddNewTestContainer.form">MdrtbAddNewTestContainer</prop>
             	<prop key="module/@MODULE_ID@/mdrtbAddPatientForm.form">MdrtbAddPatientFormController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbEditTestContainer.form">MdrtbEditTestContainerController</prop>
+            	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
 	    	</props>
 		</property>
     </bean>
@@ -62,16 +63,21 @@
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
 		<property name="successView"><value>mdrtbTSAdmin.list</value></property>
     </bean> 
+    <bean id="MdrtbPatientStatusAdmin" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientStatusAdminController">
+		<property name="commandName"><value>obj</value></property>
+		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
+		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
+    </bean> 
     <bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.module.mdrtb.OrderExtensionService</value> <!-- service interface name -->
+				<value>org.openmrs.module.mdrtb.MdrtbService</value> <!-- service interface name -->
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.module.mdrtb.impl.OrderExtensionServiceImpl">
-							<property name="orderExtensionDAO">
-								<bean class="org.openmrs.module.mdrtb.db.hibernate.HibernateOrderExtensionDAO">
+						<bean class="org.openmrs.module.mdrtb.impl.MdrtbServiceImpl">
+							<property name="mdrtbDAO">
+								<bean class="org.openmrs.module.mdrtb.db.hibernate.HibernateMdrtbDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
 								</bean>
 							</property>	

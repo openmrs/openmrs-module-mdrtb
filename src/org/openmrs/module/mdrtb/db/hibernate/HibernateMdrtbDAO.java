@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.db.hibernate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -7,13 +8,14 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
+import org.openmrs.Concept;
 import org.openmrs.Order;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.HibernateOrderDAO;
 import org.openmrs.module.mdrtb.OrderExtension;
-import org.openmrs.module.mdrtb.db.OrderExtensionDAO;
+import org.openmrs.module.mdrtb.db.MdrtbDAO;
 
-public class HibernateOrderExtensionDAO implements OrderExtensionDAO {
+public class HibernateMdrtbDAO implements MdrtbDAO {
 
     protected static final Log log = LogFactory.getLog(HibernateOrderDAO.class);
     
@@ -52,6 +54,15 @@ public class HibernateOrderExtensionDAO implements OrderExtensionDAO {
         return oe;
     }
     
-    
+    @SuppressWarnings("unchecked")
+    public List<Concept> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws DAOException {
+        List<Concept> ret = new ArrayList<Concept>();
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(org.openmrs.Concept.class);
+        crit.add(Expression.in("name", nameList));
+        crit.add(Expression.eq("locale", "en"));
+        crit.add(Expression.eq("voided", false));
+        ret = crit.list();
+        return ret;
+    }
     
 }

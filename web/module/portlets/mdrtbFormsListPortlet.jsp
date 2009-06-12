@@ -47,10 +47,10 @@
 									<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 								</c:set>
 						<tr class="${rowClass}">
-							<td class="${rowClass}"><a href="/openmrs/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW">${enc.form.name}</a></td>
-							<td class="${rowClass}"> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
-							<td class="${rowClass}">${enc.provider}</td>
-							<td class="${rowClass}">${enc.location}</td>
+							<td class="${rowClass}" nowrap><a href="/openmrs/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW">${enc.form.name}</a></td>
+							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
+							<td class="${rowClass}" nowrap>${enc.provider}</td>
+							<td class="${rowClass}" nowrap>${enc.location}</td>
 						</tr>
 					</c:forEach>
 				</table>

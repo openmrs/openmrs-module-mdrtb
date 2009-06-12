@@ -4,23 +4,22 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.Order;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
-import org.openmrs.api.db.DAOException;
-import org.openmrs.api.db.OrderDAO;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.OrderExtension;
-import org.openmrs.module.mdrtb.OrderExtensionService;
-import org.openmrs.module.mdrtb.db.OrderExtensionDAO;
+import org.openmrs.module.mdrtb.db.MdrtbDAO;
 
-public class OrderExtensionServiceImpl  extends BaseOpenmrsService implements OrderExtensionService {
+public class MdrtbServiceImpl  extends BaseOpenmrsService implements MdrtbService {
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    protected OrderExtensionDAO dao;
+    protected MdrtbDAO dao;
     
-    public void setOrderExtensionDAO(OrderExtensionDAO dao) {
+    public void setMdrtbDAO(MdrtbDAO dao) {
         this.dao = dao;
     }
     
@@ -45,5 +44,9 @@ public class OrderExtensionServiceImpl  extends BaseOpenmrsService implements Or
         oe.setVoidedBy(Context.getAuthenticatedUser());
         saveOrderExtension(oe);
         return oe;
+    }
+    
+    public List<Concept> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException {
+        return dao.getMdrtbConceptsByEnglishNameList(nameList);
     }
 }
