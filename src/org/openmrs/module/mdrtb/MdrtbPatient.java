@@ -1,6 +1,8 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
@@ -21,7 +24,6 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.User;
 
 public class MdrtbPatient {
-    
     
     private Patient patient;
     private PatientIdentifier patientIdentifier;
@@ -70,8 +72,16 @@ public class MdrtbPatient {
     private Map<Integer, String> oes = new HashMap<Integer, String>();
     private List<Concept> resistanceDrugConcepts = new ArrayList<Concept>();
     private List<Obs> stEmpIndObs = new ArrayList<Obs>();
+    private List<Encounter> htmlEncList = new ArrayList<Encounter>();
     
-    
+
+    public List<Encounter> getHtmlEncList() {
+        return htmlEncList;
+    }
+
+    public void setHtmlEncList(List<Encounter> htmlEncList) {
+        this.htmlEncList = htmlEncList;
+    }
 
     public List<Obs> getStEmpIndObs() {
         return stEmpIndObs;
@@ -485,6 +495,18 @@ public class MdrtbPatient {
         this.treatmentSupporterPhone = treatmentSupporterPhone;
     }
 
-
+    public void addEncounterToHtmlEncList(Encounter enc){
+        if (this.htmlEncList == null)
+            this.htmlEncList = new ArrayList<Encounter>();
+        this.htmlEncList.add(enc);
+    }
+    
+    public void sortHtmlEncListByEncounterDatetime(){
+        Collections.sort(this.htmlEncList, new Comparator<Encounter>() {
+            public int compare(Encounter u1, Encounter u2) {
+                return u1.getEncounterDatetime().compareTo(u2.getEncounterDatetime());
+            }
+        });
+    }
        
 }

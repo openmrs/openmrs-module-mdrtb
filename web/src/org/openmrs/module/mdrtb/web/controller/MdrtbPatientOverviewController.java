@@ -97,16 +97,22 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             String formsList = as.getGlobalProperty("mdrtb.mdrtb_forms_list");
             List<Form> forms = fs.getAllForms();
             List<Form> mdrtbForms = new ArrayList<Form>();
-            for (StringTokenizer st = new StringTokenizer(formsList, "|"); st
-                    .hasMoreTokens();) {
+            List<Form> htmlForms = new ArrayList<Form>();
+            for (StringTokenizer st = new StringTokenizer(formsList, "|"); st.hasMoreTokens();) {
                 String formName = st.nextToken().trim();
+                
                 for (Form form : forms) {
                     if (formName.equals(form.getName().trim()))
                         mdrtbForms.add(form);
+                    if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim()))
+                        htmlForms.add(form);
                 }
             }
+            map.put("htmlForms", htmlForms);
             map.put("mdrtbForms", mdrtbForms);
- 
+            
+           
+            
 //            List<Drug> tbDrugs = new ArrayList<Drug>();
 //            try {
 //                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en")));
@@ -1648,6 +1654,27 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                        mp.setLocation(enc.getLocation());
                        mp.setProvider(enc.getProvider());
                     }
+                    //HTML forms support:
+                    AdministrationService as = Context.getAdministrationService();
+                    FormService fs = Context.getFormService();
+                    List<Form> forms = fs.getAllForms();
+                    String formsList = as.getGlobalProperty("mdrtb.mdrtb_forms_list");
+                    for (StringTokenizer st = new StringTokenizer(formsList, "|"); st.hasMoreTokens();) {
+                     String formName = st.nextToken().trim();
+                        for (Form form : forms) {
+                            if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim())){
+                                for (Encounter encTmp : encs){
+                                    if (encTmp.getForm() != null && encTmp.getForm().getFormId().intValue() == form.getFormId().intValue())
+                                        mp.getHtmlEncList().add(encTmp);
+                                }
+                            }
+                                           
+
+                        }
+
+                    }
+                    mp.sortHtmlEncListByEncounterDatetime();
+                    
                     
                     ObsService os = Context.getObsService();    
                     MdrtbFactory mu = new MdrtbFactory(); 

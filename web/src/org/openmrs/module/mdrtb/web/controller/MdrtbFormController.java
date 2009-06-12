@@ -33,7 +33,6 @@ import org.openmrs.module.birt.BirtReportService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -64,22 +63,28 @@ public class MdrtbFormController extends SimpleFormController {
         
         Map<String,Object> map = new HashMap<String,Object>();
         if (Context.isAuthenticated()){
-            BirtReportService reportService = (BirtReportService) Context.getService(BirtReportService.class);
-            String str = Context.getAdministrationService().getGlobalProperty("mdrtb.birt_report_list");
-            List<BirtReport> brList = new ArrayList<BirtReport>();
-            List<BirtReport> allReports = reportService.getReports();
-            for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens(); ) {
-                String s = st.nextToken().trim();
-                for (BirtReport br:allReports){       
-                    if (br.getName().equals(s))
-                    brList.add(br);
-                }
-            }
             
+            try { 
+                BirtReportService reportService = (BirtReportService) Context.getService(BirtReportService.class);
+                String str = Context.getAdministrationService().getGlobalProperty("mdrtb.birt_report_list");
+                List<BirtReport> brList = new ArrayList<BirtReport>();
+                List<BirtReport> allReports = reportService.getReports();
+                for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens(); ) {
+                    String s = st.nextToken().trim();
+                    for (BirtReport br:allReports){       
+                        if (br.getName().equals(s))
+                        brList.add(br);
+                    }
+                }
+                if (str.equals(""))
+                    brList = reportService.getReports();
+                map.put("reports", brList); 
+            } catch (Exception ex){
+                log.error("Unable to setup birt reports in reference data in MdrtbFormController." + ex);
+                map.put("reports", new ArrayList<String>());
+            }
             //if blank string was passed in:
-            if (str.equals(""))
-                brList = reportService.getReports();
-            map.put("reports", brList);  
+             
             String httpBase = request.getRequestURL().toString();
             String httpURI = request.getRequestURI();
             map.put("httpRoot", httpBase.replaceAll(httpURI,"") );
