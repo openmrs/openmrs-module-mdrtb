@@ -31,38 +31,6 @@
 	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/jakarta-log4j/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.4.x/lib/xerces/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib-common/dbunit-2.2.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/chartengineapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/commons-cli-1.0.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/coreapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/dataadapterapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/dteapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/engineapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/flute.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/js.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/modelapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/scriptapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/org.eclipse.emf.common_2.2.1.v200702131851.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/org.eclipse.emf.ecore_2.2.2.v200702131851.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/org.eclipse.emf.ecore.xmi_2.2.2.v200702131851.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/org.w3c.css.sac_1.3.0.v200706111724.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/axis.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/axis-ant.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/jaxrpc.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/saaj.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/viewservlets.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/wsdl4j-1.5.1.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/commons-io-1.1.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/junit-3.8.1.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/velocity-1.4.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib-common/hibernate325.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/com.ibm.icu_3.6.1.v20070906.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/modelodaapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/odadesignapi.jar"/>
-	<classpathentry kind="lib" path="/BirtReportModule/lib/org.apache.commons.codec_1.3.0.v200706111738.jar"/>
 	<classpathentry kind="lib" path="lib-common/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs-api-1.4.2.01.8057.jar"/>
 	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.4.2.01.8057.jar"/>
