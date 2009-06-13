@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Order;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -46,7 +46,7 @@ public class MdrtbServiceImpl  extends BaseOpenmrsService implements MdrtbServic
         return oe;
     }
     
-    public List<Concept> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException {
+    public List<ConceptName> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException {
         return dao.getMdrtbConceptsByEnglishNameList(nameList);
     }
 }

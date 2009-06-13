@@ -58,6 +58,30 @@ public class MdrtbUtil {
         return ret;
     }
     
+    /*
+     * faster method to be used by MdrtbFactory
+     */
+    public static Concept getMDRTBConceptByName(String conceptString, Locale loc, List<ConceptName> cnList){
+        Concept ret = null;
+        //first, if there's an exact match in the passed-in locale, that's what we want
+             for (ConceptName cns : cnList){
+                if (cns.getName().trim().equals(conceptString.trim()) && cns.getLocale().equals(loc)){
+                    return cns.getConcept();
+                }  
+            }
+        //second, check all other locales if still null 
+        if (ret == null){
+            
+            //first, if there's an exact match in the passed-in locale, that's what we want
+                    for (ConceptName cns : cnList){
+                        if (cns.getName().trim().equals(conceptString.trim())){
+                            return cns.getConcept();
+                        }  
+                    }  
+        }
+        return ret;
+    }
+    
     public static List<Locale> getLocalesFromDB(){
         List<Locale> locales = new ArrayList<Locale>();
         List<List<Object>> rows = Context.getAdministrationService().executeSQL("select distinct locale from concept_word", true);

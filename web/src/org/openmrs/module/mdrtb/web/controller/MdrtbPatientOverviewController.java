@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
@@ -1610,15 +1612,28 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         if (Context.isAuthenticated()){
             MdrtbPatient mp = new MdrtbPatient();
             String patientId = request.getParameter("patientId");
-            PatientService patientService = Context.getPatientService();
             if (patientId != null){
-                
+                PatientService patientService = Context.getPatientService();
+                ObsService os = Context.getObsService();    
+                MdrtbFactory mu = new MdrtbFactory(); 
                 try{
                     Patient patient = patientService.getPatient(Integer.valueOf(patientId));
                     patient.getIdentifiers();
                     mp.setPatient(patient);
                     Person person = Context.getPersonService().getPerson(patient.getPatientId());
-                    List<Obs> obs = Context.getObsService().getObservationsByPerson(person);
+                    
+                    List<ConceptName> cnList = mu.getXmlConceptNameList();
+                    Set<Concept> cSetTmp = new HashSet<Concept>();
+                    for (ConceptName cn:cnList){
+                        cSetTmp.add(cn.getConcept());
+                    }
+                    List<Concept> cListForObs = new ArrayList<Concept>(cSetTmp);
+                    ArrayList<Person> pList = new ArrayList<Person>();
+                    pList.add(person);
+                    
+                    List<Obs> obs = os.getObservations(pList, null, cListForObs, null, null, null, null, null, null, null, null, false);
+                    
+                    
                     mp.setObs(new LinkedHashSet<Obs>(obs));
                     mp.setGivenName(person.getGivenName());
                     mp.setMiddleName(person.getMiddleName());
@@ -1676,8 +1691,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     mp.sortHtmlEncListByEncounterDatetime();
                     
                     
-                    ObsService os = Context.getObsService();    
-                    MdrtbFactory mu = new MdrtbFactory(); 
+                    
                     Concept cultureConversionConcept = mu.getConceptCultureConverstion();
                     
                     if (cultureConversionConcept.getConceptId() != null){
@@ -1718,6 +1732,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             mp.setPatientProgram(pp);
                             break;
                         }    
+                    }
+                    if (mp.getPatientProgram() == null && pps.size() > 0){
+                        mp.setPatientProgram(pps.get(pps.size()-1));
                     }
                     
                     if (mp.getPatientProgram() != null){

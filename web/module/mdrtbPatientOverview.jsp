@@ -550,6 +550,9 @@
 			<c:if test='${view == "CONTACTS"}'>
 				changeSearchTab('searchTab_contacts');
 			</c:if>
+			<c:if test='${view == "FORM"}'>
+				changeSearchTab('searchTab_formEntry');
+			</c:if>
 		</c:if>
 			setHeights();
 </script>

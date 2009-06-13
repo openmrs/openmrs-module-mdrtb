@@ -25,7 +25,7 @@
 								<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 							</c:set>
 								
-								<Tr><td class="${rowClass}"><a href='/openmrs/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}'>${form.name}</a></td></Tr>
+								<Tr><td class="${rowClass}"><a href='/openmrs/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=/openmrs/module/mdrtb/mdrtbPatientOverview.form&returnUrlParameters=view:FORM'$>${form.name} </a></td></Tr>
 
 						
 						</c:forEach>

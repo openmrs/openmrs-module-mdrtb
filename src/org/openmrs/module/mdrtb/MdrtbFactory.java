@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
@@ -41,182 +42,186 @@ public class MdrtbFactory {
     protected final Log log = LogFactory.getLog(getClass());
     
     private String STR_TB_SMEAR_RESULT;
-    private Concept smearResult;
+
     private String STR_TB_SAMPLE_SOURCE;
-    private Concept sampleSource;
+
     private String STR_BACILLI;
-    private Concept bacilli;
+
     private String STR_RESULT_DATE;
-    private Concept resultDate;
+
     private String STR_DATE_RECEIVED;
-    private Concept dateRecieved;
+
     private String STR_TB_SMEAR_MICROSCOPY_METHOD;
-    private Concept smearMicroscopyMethod;
+ 
     private String STR_TB_CULTURE_RESULT;
-    private Concept cultureResult;
+
     private String STR_COLONIES;
-    private Concept Colonies;
+
     private String STR_CULTURE_START_DATE;
-    private Concept cultureStartDate;
+  
     private String STR_TB_CULTURE_METHOD;
-    private Concept cultureMethod;
+
     private String STR_TYPE_OF_ORGANISM;
-    private Concept typeOfOrganism;
+
     private String STR_TYPE_OF_ORGANISM_NON_CODED;
-    private Concept typeOfOrganismNonCoded;
+
     private String STR_DST_COMPLETE;
-    private Concept dstComplete;
+
     private String STR_DST_METHOD;
-    private Concept dstMethod;
+
     private String STR_DIRECT_INDIRECT;
-    private Concept directIndirect;
+
     private String STR_COLONIES_IN_CONTROL;
-    private Concept coloniesInControl;
+
     private String STR_CONCENTRATION;
-    private Concept Concentration;
+
     private String STR_DST_PARENT;
-    private Concept dstParent;
+
     private String STR_DST_RESULT_PARENT;
-    private Concept dstResultParent;
+
     private String STR_CULTURE_PARENT;
-    private Concept cultureParent;
+
     private String STR_SMEAR_PARENT;
-    private Concept smearParent;
+
     private String STR_SPUTUM_COLLECTION_DATE;
-    private Concept sputumCollectionDate;
+
     private String STR_TREATMENT_OUTCOME_PARENT;
-    private Concept treatmentOutcomeParent;
+
     private String STR_CURED;
-    private Concept cured;
+
     private String STR_FAILED;
-    private Concept failed;
+
     private String STR_DEFAULTED;
-    private Concept defaulted;
+
     private String STR_DIED;
-    private Concept died;
+
     private String STR_TRANSFERRED_OUT;
-    private Concept transferredOut;
+ 
     private String STR_STILL_ON_TREATMENT;
-    private Concept stillOnTreatment;
+  
     private String STR_CULTURE_STATUS_PARENT;
-    private Concept cultureStatusParent;
+ 
     private String STR_NOT_CONVERTED;
-    private Concept notConverted;
+ 
     private  String STR_CONVERTED;
-    private Concept converted;
+
     private  String STR_RECONVERTED;
-    private Concept reconverted;
+  
     private  String STR_NONE;
-    private Concept none;
+ 
     private String  STR_TUBERCULOSIS_PATIENT_STATUS_PARENT;
-    private Concept tuberculosisPatientStatuParent;
+
     private  String STR_ON_TREATMENT;
-    private Concept onTreatment;
+
     private String  STR_SUSPENDED;
-    private Concept suspended;
+
     private  String STR_WAITING_FOR_TREATMENT;
-    private Concept waitingForTreatment;
+  
     private  String STR_TREATMENT_COMPLETE;
-    private Concept treatmentComplete;
+ 
     private  String STR_CULTURE_CONVERSION;
-    private Concept cultureConversion;
+
     private  String STR_CULTURE_RECONVERSION;
-    private Concept cultureReconversion;
+
     private  String STR_SMEAR_CONVERSION;
-    private Concept smearConversion;
+
     private  String STR_SMEAR_RECONVERSION;
-    private Concept smearReconversion;
+
     private String STR_TREATMENT_START_DATE;
-    private Concept treatmentStartDate;
+
     private String STR_PREVIOUS_DRUG_USE_PARENT;
-    private Concept previousDrugUseParent;
+
     private String STR_NEW_MDRTB_PATIENT;
-    private Concept newMdrtbPatient;
+
     private String STR_PREVIOUSLY_TREATED_WITH_FIRST_LINE;
-    private Concept previouslyTreatedWithFirstLine;
+
     private String STR_PREVIOUSLY_TREATED_WITH_SECOND_LINE;
-    private Concept previouslyTreatedWithSecondLine;
+ 
     private String STR_PREVIOUS_TREATMENT_RESULT_PARENT;
-    private Concept previousTreatmentResultParent;
+
     private String STR_RELAPSE;
-    private Concept relapse;
+
     private String STR_TREATMENT_AFTER_DEFAULT;
-    private Concept treatmentAfterDefault;
+
     private String STR_TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT;
-    private Concept treatmentAfterFailureOfFirstTreatment;
+
     private String STR_TREATMENT_AFTER_FAILURE_OF_RE_TREATMENT;
-    private Concept treatmentAfterFailureOfReTreatment;
+
     private String STR_TRANSFER_IN;
-    private Concept transferIn;
+
     private String STR_OTHER_MDR_STATE;
-    private Concept otherMdrtbState;
+
     private String STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT;
-    private Concept tuberculosisCaseClassificationParent;
+
     private String STR_TUBERCULOSIS;
-    private Concept tuberculosis;
-    private String STR_MDR_TUBERCULOSIS;
-    private Concept mdrTuberculosis;
-    private String STR_XDR_TUBERCULOSIS;
-    private Concept xdrTuberculosis;
-    private String STR_PULMONARY;
-    private Concept pulmonary;
-    private String STR_EXTRAPULMONARY;
-    private Concept extrapulmonary;
-    private String STR_EXTRAPULMONARY_LOCATION;
-    private Concept extrapulmonaryLocation;
-    private String STR_OTHER_MYCOBACTERIA_NONCODED;
-    private Concept otherMycobacteriaNoncoded;
-    private String   STR_HIV_STATUS;
-    private Concept hivStatus;
-    private String   STR_CD4_COUNT;
-    private Concept cd4Count;
-    private String   STR_CD4_PERCENT;
-    private Concept cd4percent;
-    private String   STR_ALLERGY_COMMENT;
-    private Concept allergyComment;
-    private String   STR_TREATMENT_PLAN_COMMENT;
-    private Concept treatmentPlanComment;
-    private String STR_PREV_TREATMENT_DURATION_IN_MONTHS;
-    private Concept prevTreatmentDurationInMonths;
-    private String STR_PREV_REGISTRATION_NUM;
-    private Concept prevRegistrationNum;
-    private String STR_PREV_TREATMENT_CENTER;
-    private Concept prevTreatmentCenter;
-    private String STR_REFERRED_BY;
-    private Concept referredBy;
-    private String STR_TRANSFERRED_TO;
-    private Concept transferredTo;
-    private String STR_TRANSFERRED_FROM;
-    private Concept transferredFrom;
-    private String STR_ON_ANTIRETROVIRALS;
-    private Concept onAntiretrovirals;
-    private String STR_NEXT_VISIT;
-    private Concept nextVisit;
-    private String STR_SCANTY;
-    private Concept scanty;
-    private String STR_PATIENT_CONTACT_TEST_RESULT_PARENT;
-    private Concept patientContactTestResultParent;
-    private String STR_SIMPLE_TB_TEST_RESULT;
-    private Concept simpleTbTestResult;
-    private String STR_SIMPLE_TB_TEST_TYPE;
-    private Concept simpleTbTestType;
-    private String STR_PHONE_NUMBER;
-    private Concept phoneNumer;
-    private String STR_PATIENT_CONTACT_KNOWN_MDR_CASE;
-    private Concept patientContactKnownMdrCase;
-    private String STR_SUSPECTED_MDR_TUBERCULOSIS;
-    private Concept suspectedMdrtTuberculosis;
-    private String STR_CURRENT_TREATMENT_TYPE;
-    private Concept currentTreatmentType;
-    private String STR_STANDARDIZED;
-    private Concept standardized;
-    private String STR_EMPIRIC;
-    private Concept empiric;
-    private String STR_INDIVIDUALIZED;
-    private Concept individualized;
-    private String STR_TREATMENT_STOP_DATE;
-    private Concept treatmentStopDate;
     
+    private String STR_MDR_TUBERCULOSIS;
+    
+    private String STR_XDR_TUBERCULOSIS;
+
+    private String STR_PULMONARY;
+
+    private String STR_EXTRAPULMONARY;
+
+    private String STR_EXTRAPULMONARY_LOCATION;
+
+    private String STR_OTHER_MYCOBACTERIA_NONCODED;
+ 
+    private String   STR_HIV_STATUS;
+
+    private String   STR_CD4_COUNT;
+ 
+    private String   STR_CD4_PERCENT;
+
+    private String   STR_ALLERGY_COMMENT;
+ 
+    private String   STR_TREATMENT_PLAN_COMMENT;
+
+    private String STR_PREV_TREATMENT_DURATION_IN_MONTHS;
+
+    private String STR_PREV_REGISTRATION_NUM;
+
+    private String STR_PREV_TREATMENT_CENTER;
+
+    private String STR_REFERRED_BY;
+
+    private String STR_TRANSFERRED_TO;
+
+    private String STR_TRANSFERRED_FROM;
+
+    private String STR_ON_ANTIRETROVIRALS;
+
+    private String STR_NEXT_VISIT;
+
+    private String STR_SCANTY;
+
+    private String STR_PATIENT_CONTACT_TEST_RESULT_PARENT;
+
+    private String STR_SIMPLE_TB_TEST_RESULT;
+
+    private String STR_SIMPLE_TB_TEST_TYPE;
+
+    private String STR_PHONE_NUMBER;
+
+    private String STR_PATIENT_CONTACT_KNOWN_MDR_CASE;
+
+    private String STR_SUSPECTED_MDR_TUBERCULOSIS;
+
+    private String STR_CURRENT_TREATMENT_TYPE;
+
+    private String STR_STANDARDIZED;
+
+    private String STR_EMPIRIC;
+
+    private String STR_INDIVIDUALIZED;
+
+    private String STR_TREATMENT_STOP_DATE;
+
+    private String STR_DST_RESULT;
+    private String STR_SUSCEPTIBLE;
+    private String STR_INTERMEDIATE;
+    private String STR_RESISTANT;
+    private List<ConceptName> xmlConceptNameList = new ArrayList<ConceptName>();
     
     public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
         STR_TREATMENT_STOP_DATE = str_treatment_stop_date;
@@ -511,7 +516,121 @@ public class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_TREATMENT_STOP_DATE");
             node = nodeList.item(0);
             this.STR_TREATMENT_STOP_DATE = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_RESISTANT");
+            node = nodeList.item(0);
+            this.STR_RESISTANT = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_SUSCEPTIBLE");
+            node = nodeList.item(0);
+            this.STR_SUSCEPTIBLE = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_INTERMEDIATE");
+            node = nodeList.item(0);
+            this.STR_INTERMEDIATE = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_DST_RESULT");
+            node = nodeList.item(0);
+            this.STR_DST_RESULT = node.getFirstChild().getNodeValue();
             
+            //pre-set concepts
+            
+            String[] allXMLNodes = {STR_TB_SAMPLE_SOURCE, 
+                    STR_RESULT_DATE, 
+                    STR_DATE_RECEIVED, 
+                    STR_CULTURE_START_DATE,
+                    STR_TYPE_OF_ORGANISM_NON_CODED, 
+                    STR_TYPE_OF_ORGANISM, 
+                    STR_COLONIES, 
+                    STR_SMEAR_PARENT, 
+                    STR_TB_SMEAR_RESULT, 
+                    STR_BACILLI, 
+                    STR_TB_SMEAR_MICROSCOPY_METHOD, 
+                    STR_CULTURE_PARENT, 
+                    STR_TB_CULTURE_RESULT, 
+                    STR_TB_CULTURE_METHOD, 
+                    STR_SCANTY, 
+                    STR_DST_PARENT, 
+                    STR_DST_COMPLETE, 
+                    STR_DST_METHOD, 
+                    STR_DST_RESULT, 
+                    STR_DIRECT_INDIRECT, 
+                    STR_SPUTUM_COLLECTION_DATE, 
+                    STR_COLONIES_IN_CONTROL, 
+                    STR_DST_RESULT_PARENT,
+                    STR_RESISTANT, 
+                    STR_SUSCEPTIBLE, 
+                    STR_INTERMEDIATE, 
+                    STR_CONCENTRATION, 
+                    STR_TREATMENT_OUTCOME_PARENT, 
+                    STR_CURED, 
+                    STR_TREATMENT_COMPLETE, 
+                    STR_FAILED, 
+                    STR_DEFAULTED, 
+                    STR_DIED, 
+                    STR_TRANSFERRED_OUT, 
+                    STR_STILL_ON_TREATMENT, 
+                    STR_CULTURE_STATUS_PARENT, 
+                    STR_NOT_CONVERTED, 
+                    STR_CONVERTED, 
+                    STR_RECONVERTED, 
+                    STR_NONE, 
+                    STR_TUBERCULOSIS_PATIENT_STATUS_PARENT, 
+                    STR_ON_TREATMENT, 
+                    STR_SUSPENDED, 
+                    STR_WAITING_FOR_TREATMENT, 
+                    STR_TREATMENT_COMPLETE, 
+                    STR_CULTURE_CONVERSION, 
+                    STR_CULTURE_RECONVERSION, 
+                    STR_SMEAR_CONVERSION, 
+                    STR_SMEAR_RECONVERSION, 
+                    STR_PREVIOUS_DRUG_USE_PARENT, 
+                    STR_NEW_MDRTB_PATIENT, 
+                    STR_PREVIOUSLY_TREATED_WITH_FIRST_LINE, 
+                    STR_PREVIOUSLY_TREATED_WITH_SECOND_LINE, 
+                    STR_PREVIOUS_TREATMENT_RESULT_PARENT, 
+                    STR_RELAPSE, 
+                    STR_TREATMENT_AFTER_DEFAULT, 
+                    STR_TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT, 
+                    STR_TREATMENT_AFTER_FAILURE_OF_RE_TREATMENT, 
+                    STR_TRANSFER_IN, 
+                    STR_OTHER_MDR_STATE, 
+                    STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, 
+                    STR_TUBERCULOSIS, 
+                    STR_MDR_TUBERCULOSIS, 
+                    STR_XDR_TUBERCULOSIS, 
+                    STR_SUSPECTED_MDR_TUBERCULOSIS, 
+                    STR_HIV_STATUS,STR_CD4_COUNT, 
+                    STR_CD4_PERCENT, 
+                    STR_ON_ANTIRETROVIRALS, 
+                    STR_TREATMENT_START_DATE, 
+                    STR_PULMONARY, 
+                    STR_EXTRAPULMONARY, 
+                    STR_EXTRAPULMONARY_LOCATION, 
+                    STR_ALLERGY_COMMENT, 
+                    STR_TREATMENT_PLAN_COMMENT, 
+                    STR_NEXT_VISIT, 
+                    STR_PHONE_NUMBER, 
+                    STR_OTHER_MYCOBACTERIA_NONCODED, 
+                    STR_PREV_TREATMENT_DURATION_IN_MONTHS, 
+                    STR_PREV_REGISTRATION_NUM, 
+                    STR_PREV_TREATMENT_CENTER, 
+                    STR_REFERRED_BY, 
+                    STR_TRANSFERRED_TO,
+                    STR_TRANSFERRED_FROM, 
+                    STR_PATIENT_CONTACT_TEST_RESULT_PARENT, 
+                    STR_SIMPLE_TB_TEST_RESULT,
+                    STR_SIMPLE_TB_TEST_TYPE,
+                    STR_PATIENT_CONTACT_KNOWN_MDR_CASE, 
+                    STR_CURRENT_TREATMENT_TYPE, 
+                    STR_STANDARDIZED,
+                    STR_EMPIRIC, 
+                    STR_INDIVIDUALIZED, 
+                    STR_TREATMENT_STOP_DATE};
+            
+            List<String> stList = new ArrayList<String>();
+            for (int i = 0; i < allXMLNodes.length; i++){
+                stList.add(allXMLNodes[i]);
+            }
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            xmlConceptNameList = ms.getMdrtbConceptsByEnglishNameList(stList);
+
             
         } catch (Exception ex){
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
@@ -519,171 +638,171 @@ public class MdrtbFactory {
     }
     public Concept getConceptTreatmentStopDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptStandardized(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_STANDARDIZED, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_STANDARDIZED, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptEmpiric(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_EMPIRIC, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_EMPIRIC, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptIndividualized(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_INDIVIDUALIZED, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_INDIVIDUALIZED, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptCurrentRegimenType(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptScanty(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SCANTY, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SCANTY, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptOtherMycobacteriaNonCoded(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_OTHER_MYCOBACTERIA_NONCODED, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_OTHER_MYCOBACTERIA_NONCODED, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptDSTParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_DST_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_DST_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptCultureParent(){
         Concept ret = null;
-        ret =  MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_PARENT, new Locale("en", "US"));
+        ret =  MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptCultureResult(){
         Concept ret = null;
-        ret =  MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"));
+        ret =  MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSmearResult(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSmearParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptCultureConverstion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_CONVERSION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_CONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptCultureReconversion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_RECONVERSION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_RECONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSmearConverstion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_CONVERSION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_CONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSmearReconversion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_RECONVERSION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_RECONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
        
     public Concept getConceptTreatmentStartDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_START_DATE, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_START_DATE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
 
     
     public Concept getConceptConcentration(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     
     public Concept getConceptPatientClassDrugUse(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptPatientClassPrevTreatment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_TREATMENT_RESULT_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_TREATMENT_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptTBCaseClassification(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptPulmonary(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PULMONARY, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PULMONARY, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptExtraPulmonary(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptExtraPulmonaryLocation(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY_LOCATION, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY_LOCATION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
  
     public Concept getConceptHIVStatus(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_HIV_STATUS, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_HIV_STATUS, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptCD4(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_COUNT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_COUNT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptContactTestResultParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_TEST_RESULT_PARENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_TEST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSimpleTBResult(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_RESULT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSimpleTBTestType(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_TYPE, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_TYPE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
       
@@ -698,79 +817,79 @@ public class MdrtbFactory {
 
     public Concept getConceptNextVisit(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_NEXT_VISIT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_NEXT_VISIT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptOnART(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_ON_ANTIRETROVIRALS, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_ON_ANTIRETROVIRALS, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptPhoneNumber(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PHONE_NUMBER, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PHONE_NUMBER, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptKnownMDRCase(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_KNOWN_MDR_CASE, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_KNOWN_MDR_CASE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
 
     public Concept getConceptCD4Percent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_PERCENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_PERCENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
    
     public Concept getConceptTreatmentPlanComment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_PLAN_COMMENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_PLAN_COMMENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptAllergyComment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_ALLERGY_COMMENT, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_ALLERGY_COMMENT, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
 
     public Concept getConceptPrevDuration(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptPrevRegNum(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_REGISTRATION_NUM, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_REGISTRATION_NUM, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptPrevTreatmentCenter(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_CENTER, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_CENTER, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptPrevReferredBy(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_REFERRED_BY, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_REFERRED_BY, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptTransferredTo(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_TO, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_TO, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     public Concept getConceptTransferredFrom(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_FROM, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_FROM, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
     public Concept getConceptSuspectedMDR(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"));
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
@@ -879,7 +998,7 @@ public class MdrtbFactory {
     public Date getSputumCollectionDateDST(Obs obs){
         Date date = null;
         for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"));
+            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptNameList);
             if (o.getConcept().equals(sputumCollectionConcept)){
                 date = o.getValueDatetime();
                 break;
@@ -899,7 +1018,7 @@ public class MdrtbFactory {
     public Date getSputumCollectionDateCulture(Obs obs){
         Date date = null;
         for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"));
+            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
             if (o.getConcept().equals(sputumCollectionConcept)){
                 date = o.getValueDatetime();
                 break;
@@ -918,7 +1037,7 @@ public class MdrtbFactory {
     public Date getSputumCollectionDateSmear(Obs obs){
         Date date = null;
         for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"));
+            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
             if (o.getConcept().equals(sputumCollectionConcept)){
                 date = o.getValueDatetime();
                 break;
@@ -1278,7 +1397,7 @@ public class MdrtbFactory {
                 if (o.getConcept().equals(cc)){
                     
                     for (PatientState ps : pp.getStates()){
-                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_CONVERTED, new Locale("en", "US")))){
+                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
                             pp = this.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
                             pws.savePatientProgram(pp);
                             break;
@@ -1288,7 +1407,7 @@ public class MdrtbFactory {
                 } else {
                     
                     for (PatientState ps : pp.getStates()){
-                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_RECONVERTED, new Locale("en", "US")))){
+                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
                             pp = this.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
                             pws.savePatientProgram(pp);
                             break;
@@ -2402,6 +2521,14 @@ public class MdrtbFactory {
 
     public String getSTR_INDIVIDUALIZED() {
         return STR_INDIVIDUALIZED;
+    }
+
+    public List<ConceptName> getXmlConceptNameList() {
+        return xmlConceptNameList;
+    }
+
+    public void setXmlConceptNameList(List<ConceptName> xmlConceptNameList) {
+        this.xmlConceptNameList = xmlConceptNameList;
     }
 
 }

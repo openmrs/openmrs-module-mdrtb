@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
-import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Order;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.HibernateOrderDAO;
@@ -55,11 +55,10 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
     }
     
     @SuppressWarnings("unchecked")
-    public List<Concept> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws DAOException {
-        List<Concept> ret = new ArrayList<Concept>();
-        Criteria crit = sessionFactory.getCurrentSession().createCriteria(org.openmrs.Concept.class);
+    public List<ConceptName> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws DAOException {
+        List<ConceptName> ret = new ArrayList<ConceptName>();
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(org.openmrs.ConceptName.class);
         crit.add(Expression.in("name", nameList));
-        crit.add(Expression.eq("locale", "en"));
         crit.add(Expression.eq("voided", false));
         ret = crit.list();
         return ret;

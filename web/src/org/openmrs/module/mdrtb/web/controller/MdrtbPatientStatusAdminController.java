@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -40,6 +41,7 @@ import org.openmrs.propertyeditor.ConceptDatatypeEditor;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonAttributeEditor;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -185,11 +187,6 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                        locationId = Integer.valueOf(locationString);
                    } catch (Exception ex){}
                    
-
-
-
-                    
-                   
                    //health center
                    
                    Patient patient = moo.getPatient();
@@ -286,10 +283,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                        }
                        os.saveObs(tstopObs, "");
                    }
-                   
-                   
-                   
-                    
+
                     i ++;
                 }
                 
@@ -311,122 +305,137 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
        if (Context.isAuthenticated()){
            MdrtbFactory mu = new MdrtbFactory();
            Program program = mu.getMDRTBProgram();
+           Concept tstopdConcept = mu.getConceptTreatmentStopDate();
            ProgramWorkflowService progS = Context.getProgramWorkflowService();
+           PersonAttributeType pat = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
            Collection<Program> cp = new HashSet<Program>();
+           Concept tsdConcept = mu.getConceptTreatmentStartDate();
            ObsService os = Context.getObsService();
            cp.add(program);
-           Cohort c = Context.getPatientSetService().getPatientsInProgram(program, null, null);
-           List<PatientProgram> ppList = progS.getPatientPrograms(c, cp);
-           for (PatientProgram pp : ppList){
-               MdrtbOverviewObj moo = new MdrtbOverviewObj(pp);
-             //health center
-               PersonAttributeType pat = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
-               for (PersonAttribute pa: pp.getPatient().getAttributes()){
-                   if (pa.getAttributeType().equals(pat)){
-                       moo.setHealthCenter(pa);
-                       break;
-                   }    
-               } 
-               if (moo.getHealthCenter() == null){
-                   PersonAttribute paNew = new PersonAttribute();
-                   paNew.setAttributeType(pat);
-                   paNew.setCreator(Context.getAuthenticatedUser());
-                   paNew.setDateCreated(new Date());
-                   paNew.setPerson(pp.getPatient());
-                   paNew.setVoided(false);
-                   moo.setHealthCenter(paNew);
+           String piList = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_identifier_type");
+           List<Program> progList = new ArrayList<Program>();
+           progList.add(program);
+           List<Patient> pList = Context.getPatientService().getAllPatients();
+           Collections.sort(pList, new Comparator<Patient>() {
+               public int compare(Patient u1, Patient u2) {
+                   if (u1.getFamilyName() == null)
+                       return -1;
+                   if (u2.getFamilyName() == null)
+                       return 1;
+                   return u1.getFamilyName().toUpperCase().compareTo(u2.getFamilyName().toUpperCase());
                }
-               
-               
-               moo.setGivenName(pp.getPatient().getGivenName());
-               moo.setMiddleName(pp.getPatient().getMiddleName());
-               moo.setFamilyName(pp.getPatient().getFamilyName());
-               //patient identifier
-               String piList = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_identifier_type");
-               Set<PatientIdentifier> identifiers = pp.getPatient().getIdentifiers();
-               boolean found = false;
-               for (PatientIdentifier pi : identifiers){
-                   if (pi.getIdentifierType().getName().equals(piList)){
-                       moo.setPatientIdentifier(pi);
-                       found = true;
-                       break;
+           });
+           for (Patient p : pList){
+               List<PatientProgram> ppList = progS.getPatientPrograms(p, program, null, null, null, null, false);
+               if (ppList.size() > 0){
+                   PatientProgram pp = ppList.get(ppList.size()-1);
+                   MdrtbOverviewObj moo = new MdrtbOverviewObj(pp);
+                   for (PersonAttribute pa: pp.getPatient().getAttributes()){
+                       if (pa.getAttributeType().equals(pat)){
+                           moo.setHealthCenter(pa);
+                           break;
+                       }    
+                   } 
+                   if (moo.getHealthCenter() == null){
+                       PersonAttribute paNew = new PersonAttribute();
+                       paNew.setAttributeType(pat);
+                       paNew.setCreator(Context.getAuthenticatedUser());
+                       paNew.setDateCreated(new Date());
+                       paNew.setPerson(pp.getPatient());
+                       paNew.setVoided(false);
+                       moo.setHealthCenter(paNew);
                    }
-               }
-               if (!found && identifiers.size() > 0){
+                   
+                   
+                   moo.setGivenName(pp.getPatient().getGivenName());
+                   moo.setMiddleName(pp.getPatient().getMiddleName());
+                   moo.setFamilyName(pp.getPatient().getFamilyName());
+                   //patient identifier
+                   Set<PatientIdentifier> identifiers = pp.getPatient().getIdentifiers();
+                   boolean found = false;
                    for (PatientIdentifier pi : identifiers){
-                       moo.setPatientIdentifier(pi);
-                       break;
+                       if (pi.getIdentifierType().getName().equals(piList)){
+                           moo.setPatientIdentifier(pi);
+                           found = true;
+                           break;
+                       }
                    }
-               } 
-               
-               //outcome
-               Set<ProgramWorkflowState> pwsSet = mu.getStatesOutcomes();
-               Set<PatientState> psSet = pp.getStates();
-
-               boolean foundTmp = false;
-               for (ProgramWorkflowState pws:  pwsSet){
-                   for (PatientState ps : psSet){
-                          if (ps.getEndDate() == null && !ps.getVoided()
-                                  && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
-                           moo.setOutcome(ps);
-                           foundTmp = true;
+                   if (!found && identifiers.size() > 0){
+                       for (PatientIdentifier pi : identifiers){
+                           moo.setPatientIdentifier(pi);
                            break;
-                           
                        }
-                   }     
-                   if (foundTmp)
-                       break;
-               }
-               //status
-               pwsSet = mu.getStatesPatientStatus();
-               foundTmp = false;
-               for (ProgramWorkflowState pws:  pwsSet){
-                   for (PatientState ps : psSet){
-                          if (ps.getEndDate() == null && !ps.getVoided()
-                                  && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
-                           moo.setStatus(ps);
-                           foundTmp = true;
+                   } 
+                   
+                   //outcome
+                   Set<ProgramWorkflowState> pwsSet = mu.getStatesOutcomes();
+                   Set<PatientState> psSet = pp.getStates();
+    
+                   boolean foundTmp = false;
+                   for (ProgramWorkflowState pws:  pwsSet){
+                       for (PatientState ps : psSet){
+                              if (ps.getEndDate() == null && !ps.getVoided()
+                                      && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
+                               moo.setOutcome(ps);
+                               foundTmp = true;
+                               break;
+                               
+                           }
+                       }     
+                       if (foundTmp)
                            break;
-                           
-                       }
-                   }     
-                   if (foundTmp)
-                       break;
-               }
-               //treatment start date
-               Concept tsdConcept = mu.getConceptTreatmentStartDate();
-               List<Obs> oList = os.getObservationsByPersonAndConcept(pp.getPatient(), tsdConcept);
-               if (oList.size() > 0){
-                   moo.setTreatmentStartDate(oList.get(oList.size() -1));
-               } else {
-                   //needs location
-                   Obs o = new Obs();
-                   o.setConcept(tsdConcept);
-                   o.setCreator(Context.getAuthenticatedUser());
-                   o.setDateCreated(new Date());
-                   o.setObsDatetime(new Date());
-                   o.setPerson(pp.getPatient());
-                   o.setVoided(false);
-                   moo.setTreatmentStartDate(o);
-               }
-               //treatment stop date
-               //copy treatment start date
-               Concept tstopdConcept = mu.getConceptTreatmentStopDate();
-               oList = os.getObservationsByPersonAndConcept(pp.getPatient(), tstopdConcept);
-               if (oList.size() > 0){
-                   moo.setTreatmentStopDate(oList.get(oList.size() -1));
-               } else {
-                   //needs location
-                   Obs o = new Obs();
-                   o.setConcept(tstopdConcept);
-                   o.setCreator(Context.getAuthenticatedUser());
-                   o.setDateCreated(new Date());
-                   o.setObsDatetime(new Date());
-                   o.setPerson(pp.getPatient());
-                   o.setVoided(false);
-                   moo.setTreatmentStopDate(o);
-               }
-               ret.add(moo);
+                   }
+                   //status
+                   pwsSet = mu.getStatesPatientStatus();
+                   foundTmp = false;
+                   for (ProgramWorkflowState pws:  pwsSet){
+                       for (PatientState ps : psSet){
+                              if (ps.getEndDate() == null && !ps.getVoided()
+                                      && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
+                               moo.setStatus(ps);
+                               foundTmp = true;
+                               break;
+                               
+                           }
+                       }     
+                       if (foundTmp)
+                           break;
+                   }
+                   //treatment start date
+                   
+                   List<Obs> oList = os.getObservationsByPersonAndConcept(pp.getPatient(), tsdConcept);
+                   if (oList.size() > 0){
+                       moo.setTreatmentStartDate(oList.get(oList.size() -1));
+                   } else {
+                       //needs location
+                       Obs o = new Obs();
+                       o.setConcept(tsdConcept);
+                       o.setCreator(Context.getAuthenticatedUser());
+                       o.setDateCreated(new Date());
+                       o.setObsDatetime(new Date());
+                       o.setPerson(pp.getPatient());
+                       o.setVoided(false);
+                       moo.setTreatmentStartDate(o);
+                   }
+                   //treatment stop date
+                   //copy treatment start date
+                   
+                   oList = os.getObservationsByPersonAndConcept(pp.getPatient(), tstopdConcept);
+                   if (oList.size() > 0){
+                       moo.setTreatmentStopDate(oList.get(oList.size() -1));
+                   } else {
+                       //needs location
+                       Obs o = new Obs();
+                       o.setConcept(tstopdConcept);
+                       o.setCreator(Context.getAuthenticatedUser());
+                       o.setDateCreated(new Date());
+                       o.setObsDatetime(new Date());
+                       o.setPerson(pp.getPatient());
+                       o.setVoided(false);
+                       moo.setTreatmentStopDate(o);
+                   }
+                   ret.add(moo);
+               }     
            }
        } 
        return ret;
