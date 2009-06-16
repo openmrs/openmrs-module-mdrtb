@@ -76,8 +76,8 @@ public class MdrtbFormController extends SimpleFormController {
                         brList.add(br);
                     }
                 }
-                if (str.equals(""))
-                    brList = reportService.getReports();
+//                if (str.equals(""))
+//                    brList = reportService.getReports();
                 map.put("reports", brList); 
             } catch (Exception ex){
                 log.error("Unable to setup birt reports in reference data in MdrtbFormController." + ex);

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.type.IdentifierType;
 import org.openmrs.Attributable;
 import org.openmrs.Concept;
 import org.openmrs.Location;
