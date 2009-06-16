@@ -183,24 +183,22 @@
 </script>
 
 <style>
-	th { text-align: left } 
+	th { text-align: left;
+	     font-size:93% } 
 	th.headerCell {
 		border-top: 1px lightgray solid; 
 		xborder-right: 1px lightgray solid;
-		font-size:95%;
 	}
 	td.inputCell {
 		border-top: 1px lightgray solid;
-		font-size:95%;
 		}
 		td.inputCell th {
 			font-weight: normal;
-			font-size:95%;
 		}
 	.lastCell {
-		font-size:95%;
 		border-bottom: 1px lightgray solid;
 	}
+	td { font-size:93%;}
 </style>
 
 <openmrs:globalProperty key="use_patient_attribute.tribe" defaultValue="false" var="showTribe"/>
@@ -215,7 +213,7 @@
 </spring:hasBindErrors>
 
 <form method="post" onSubmit="removeHiddenRows()">
-	<c:if test="${patient.patientId == null}"><h2><spring:message code="Patient.create"/></h2></c:if>
+	<c:if test="${patient.patientId == null}"><h3><spring:message code="Patient.create"/></h3></c:if>
 
 
 	
@@ -237,7 +235,7 @@
 	</tr>
 	<Tr>
 		<th class="headerCell"><spring:message code="mdrtb.enrollpatientinmdrtbprogram" /></th>
-		<Td class="inputCell"><input type="text" value=""  name="programEnrollmentDate" id="newProgramEnrollmentDate" style="width:90px" onmousedown="javascript:$(this).date_input()"></Td>
+		<Td class="inputCell" ><input type="text" value=""  name="programEnrollmentDate" id="newProgramEnrollmentDate" style="width:90px" onmousedown="javascript:$(this).date_input();"></Td>
 	</Tr>
 	<tr>
 		<th class="headerCell"><spring:message code="PatientIdentifier.title.endUser"/></th>
