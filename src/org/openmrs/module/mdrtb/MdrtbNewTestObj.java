@@ -55,16 +55,21 @@ public class MdrtbNewTestObj {
      * @param STR_DST_PARENT
      * @param STR_DST_RESULT_PARENT
      */
-    public MdrtbNewTestObj(Patient patient, User user){
+    public MdrtbNewTestObj(Patient patient, User user, String view){
         
         String numNewTests = as.getGlobalProperty("mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once");
         try{
             Integer maxNum = Integer.valueOf(numNewTests);
             for (int i = 0; i < maxNum; i++){
                 MdrtbFactory mu = new MdrtbFactory();
-                this.smears.add(new MdrtbSmearObj(patient, user, mu));
-                this.cultures.add(new MdrtbCultureObj( patient, user, mu));
-                this.dsts.add(new MdrtbDSTObj(patient, user, mu));
+                
+                if (view.equals("DST")){
+                    this.dsts.add(new MdrtbDSTObj(patient, user, mu));
+                } else {
+                    this.smears.add(new MdrtbSmearObj(patient, user, mu));
+                    this.cultures.add(new MdrtbCultureObj( patient, user, mu));
+                }
+                
             }
         } catch (Exception ex){
             throw new RuntimeException("Unable to convert global property mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once into an integer, or loading child Obs failed.");

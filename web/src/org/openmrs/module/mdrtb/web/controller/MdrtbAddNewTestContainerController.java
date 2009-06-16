@@ -1,10 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,8 +15,6 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,10 +56,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 public class MdrtbAddNewTestContainerController extends SimpleFormController  {
@@ -631,7 +622,10 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 try {
                     int id = Integer.valueOf(patientId);
                     patient = ps.getPatient(id);
-                    mnto = new MdrtbNewTestObj(patient,user);
+                    String view = "";
+                    if (request.getParameter("action") != null)
+                        view = request.getParameter("action");
+                    mnto = new MdrtbNewTestObj(patient,user, view);
                     mnto.setPatient(patient);
 //                    Calendar cal = Calendar.getInstance();
 //                    cal.setTime(new Date());
