@@ -67,29 +67,6 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
     
-    private String STR_TB_SMEAR_RESULT = "";
-    private String STR_TB_SAMPLE_SOURCE = "";
-    private String STR_BACILLI = "";
-    private String STR_RESULT_DATE = "";
-    private String STR_DATE_RECEIVED = "";
-    private String STR_TB_SMEAR_MICROSCOPY_METHOD = "";
-    private String STR_TB_CULTURE_RESULT = "";
-    private String STR_COLONIES = "";
-    private String STR_CULTURE_START_DATE = "";
-    private String STR_TB_CULTURE_METHOD = "";
-    private String STR_TYPE_OF_ORGANISM = "";
-    private String STR_TYPE_OF_ORGANISM_NON_CODED = "";
-    private String STR_DST_COMPLETE= "";
-    private String STR_DST_METHOD= "";
-    private String STR_DIRECT_INDIRECT= "";
-    private String STR_COLONIES_IN_CONTROL= "";
-    private String STR_CONCENTRATION = "";
-    //ObsGroup concepts
-    private String STR_DST_PARENT = "";
-    private String STR_DST_RESULT_PARENT = "";
-    private String STR_CULTURE_PARENT = "";
-    private String STR_SMEAR_PARENT = "";
-    private String STR_SPUTUM_COLLECTION_DATE = "";
     
     
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -849,6 +826,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
 
         
         if (Context.isAuthenticated()) {
+            MdrtbFactory mu = new MdrtbFactory();
             String obsGroupId = request.getParameter("ObsGroupId");
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
             Obs parentObs = new Obs();
@@ -868,8 +846,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 mnto.getEncounters().add(encs);
             }
             // find out what we're editing:
-            this.readXML(request);
-            if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(STR_DST_PARENT) && !parentObs.isVoided()) {
+
+            if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_PARENT()) && !parentObs.isVoided()) {
                 // DST
                 MdrtbDSTObj mdo = new MdrtbDSTObj();
                 mdo.setDstParentObs(parentObs);
@@ -897,29 +875,29 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 Set<MdrtbDSTResultObj> alreadyShownResults = new HashSet<MdrtbDSTResultObj>();
                 
                 for (Obs o : levelTwoObs){
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_COLONIES_IN_CONTROL)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES_IN_CONTROL())&& !o.getVoided())
                         mdo.setColoniesInControl(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DIRECT_INDIRECT)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DIRECT_INDIRECT())&& !o.getVoided())
                         mdo.setDirectOrIndirect(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DST_COMPLETE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_COMPLETE())&& !o.getVoided())
                         mdo.setDrugSensitivityTestComplete(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DATE_RECEIVED)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DATE_RECEIVED())&& !o.getVoided())
                         mdo.setDstDateReceived(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DST_METHOD)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_METHOD())&& !o.getVoided())
                         mdo.setDstMethod(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_RESULT_DATE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_RESULT_DATE())&& !o.getVoided())
                         mdo.setDstResultsDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_CULTURE_START_DATE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_START_DATE())&& !o.getVoided())
                         mdo.setDstStartDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_SAMPLE_SOURCE) && !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE()) && !o.getVoided())
                         mdo.setSource(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_SPUTUM_COLLECTION_DATE) && !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_SPUTUM_COLLECTION_DATE()) && !o.getVoided())
                         mdo.setSputumCollectionDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TYPE_OF_ORGANISM) && !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM()) && !o.getVoided())
                         mdo.setTypeOfOrganism(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TYPE_OF_ORGANISM_NON_CODED) && !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED()) && !o.getVoided())
                         mdo.setTypeOfOrganismNonCoded(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DST_RESULT_PARENT) && !o.getVoided()){
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_RESULT_PARENT()) && !o.getVoided()){
                        
                        
                         MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
@@ -929,9 +907,9 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         
                         for (Obs oInner : thirdLevelObs){
                             
-                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(STR_COLONIES)&& !o.getVoided())
+                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES())&& !o.getVoided())
                                 mdro.setColonies(oInner);
-                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(STR_CONCENTRATION)&& !o.getVoided())
+                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CONCENTRATION())&& !o.getVoided())
                                 mdro.setConcentration(oInner);
                             
                             //if in concept list, add obs 
@@ -949,7 +927,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         
                         if (mdro.getColonies().getObsId() == null){
                             Obs colonies = new Obs();
-                            colonies.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"))); 
+                            colonies.setConcept( mu.getConceptColonies()); 
                             colonies.setVoided(false);
                             colonies.setDateCreated(new Date());
                             colonies.setPerson(patient);
@@ -960,7 +938,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         }
                         if (mdro.getConcentration().getObsId() == null){
                             Obs conc = new Obs();
-                            conc.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US"))); 
+                            conc.setConcept(  mu.getConceptConcentration()); 
                             conc.setVoided(false);
                             conc.setDateCreated(new Date());
                             conc.setPerson(patient);
@@ -979,7 +957,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (mdo.getColoniesInControl().getObsId() == null){
                     Obs cc = new Obs();
-                    cc.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_COLONIES_IN_CONTROL, new Locale("en", "US"))); 
+                    cc.setConcept( mu.getConceptColoniesInControl()); 
                     cc.setVoided(false);
                     cc.setDateCreated(new Date());
                     cc.setPerson(patient);
@@ -990,7 +968,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (mdo.getDirectOrIndirect().getObsId() == null){
                     Obs dInd = new Obs();
-                    dInd.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_DIRECT_INDIRECT, new Locale("en", "US"))); 
+                    dInd.setConcept(   mu.getConceptDirectIndirect()); 
                     dInd.setVoided(false);
                     dInd.setDateCreated(new Date());
                     dInd.setPerson(patient);
@@ -1001,7 +979,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (mdo.getDrugSensitivityTestComplete().getObsId() == null){
                     Obs dC = new Obs();
-                    dC.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_DST_COMPLETE, new Locale("en", "US"))); 
+                    dC.setConcept(   mu.getConceptDSTComplete()); 
                     dC.setVoided(false);
                     dC.setDateCreated(new Date());
                     dC.setPerson(patient);
@@ -1012,7 +990,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (mdo.getDstDateReceived().getObsId() == null){
                     Obs dR = new Obs();
-                    dR.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US"))); 
+                    dR.setConcept(   mu.getConceptDateReceived()); 
                     dR.setVoided(false);
                     dR.setDateCreated(new Date());
                     dR.setPerson(patient);
@@ -1023,7 +1001,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (mdo.getDstMethod().getObsId() == null){
                     Obs method = new Obs();
-                    method.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_DST_METHOD, new Locale("en", "US"))); 
+                    method.setConcept(   mu.getConceptDSTMethod()); 
                     method.setVoided(false);
                     method.setDateCreated(new Date());
                     method.setPerson(patient);
@@ -1035,7 +1013,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getDstResultsDate().getObsId() == null){
                     Obs dRD = new Obs();
                  
-                    dRD.setConcept(   MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US"))); 
+                    dRD.setConcept(  mu.getConceptResultDate()); 
                     dRD.setVoided(false);
                     dRD.setDateCreated(new Date());
                     dRD.setPerson(patient);
@@ -1047,7 +1025,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getDstStartDate().getObsId() == null){
                     Obs dSD = new Obs();
                     
-                    dSD.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US"))); 
+                    dSD.setConcept(mu.getConceptCultureStartDate()); 
                     dSD.setVoided(false);
                     dSD.setDateCreated(new Date());
                     dSD.setPerson(patient);
@@ -1059,7 +1037,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getSource().getObsId() == null){
                     Obs source = new Obs();
                     
-                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US"))); 
+                    source.setConcept(mu.getConceptSampleSource()); 
                     source.setVoided(false);
                     source.setDateCreated(new Date());
                     source.setPerson(patient);
@@ -1071,7 +1049,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getSputumCollectionDate().getObsId() == null){
                     Obs sCD = new Obs();
                     
-                    sCD.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"))); 
+                    sCD.setConcept(mu.getConceptSputumCollectionDate()); 
                     sCD.setVoided(false);
                     sCD.setDateCreated(new Date());
                     sCD.setPerson(patient);
@@ -1083,7 +1061,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getTypeOfOrganism().getObsId() == null){
                     Obs type = new Obs();
                     
-                    type.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US"))); 
+                    type.setConcept(mu.getConceptTypeOfOrganism()); 
                     type.setVoided(false);
                     type.setDateCreated(new Date());
                     type.setPerson(patient);
@@ -1095,7 +1073,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mdo.getTypeOfOrganismNonCoded().getObsId() == null){
                     Obs typeOther = new Obs();
                     
-                    typeOther.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"))); 
+                    typeOther.setConcept(mu.getConceptTypeOfOrganismNonCoded()); 
                     typeOther.setVoided(false);
                     typeOther.setDateCreated(new Date());
                     typeOther.setPerson(patient);
@@ -1122,14 +1100,14 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         concentration.setDateCreated(new Date());
                         concentration.setVoided(false);
                         
-                        concentration.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US")));
+                        concentration.setConcept(mu.getConceptConcentration());
                         concentration.setCreator(user);
                         concentration.setPerson(patient);
                         mdro.setConcentration(concentration);
                         
                         Obs colonies = new Obs();
                         
-                        colonies.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"))); 
+                        colonies.setConcept(mu.getConceptColonies()); 
                         colonies.setVoided(false);
                         colonies.setDateCreated(new Date());
                         colonies.setCreator(user);
@@ -1138,7 +1116,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         
                         Obs dstResultParentObs = new Obs();
                         
-                        dstResultParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_RESULT_PARENT, new Locale("en", "US")));
+                        dstResultParentObs.setConcept(mu.getConceptDSTResultParent());
                         dstResultParentObs.setVoided(false);
                         dstResultParentObs.setDateCreated(new Date());
                         dstResultParentObs.setCreator(user);
@@ -1166,30 +1144,30 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 mdo.setDstResults(newOrderList);
                 
                 mnto.addDST(mdo);
-            } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(STR_SMEAR_PARENT) && !parentObs.getVoided()) {
+            } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_SMEAR_PARENT()) && !parentObs.getVoided()) {
                 // SMEAR
                 MdrtbSmearObj mso = new MdrtbSmearObj();
                 mso.setSmearParentObs(parentObs);
                 for (Obs o : levelTwoObs){
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_BACILLI)&& !o.getVoided()){
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_BACILLI())&& !o.getVoided()){
                         mso.setBacilli(o);
                     }    
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DATE_RECEIVED)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DATE_RECEIVED())&& !o.getVoided())
                         mso.setSmearDateReceived(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_SMEAR_MICROSCOPY_METHOD)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SMEAR_MICROSCOPY_METHOD())&& !o.getVoided())
                         mso.setSmearMethod(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_SMEAR_RESULT)&& !o.getVoided()){
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SMEAR_RESULT())&& !o.getVoided()){
                         mso.setSmearResult(o);
                     }
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_RESULT_DATE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_RESULT_DATE())&& !o.getVoided())
                         mso.setSmearResultDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_SAMPLE_SOURCE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE())&& !o.getVoided())
                         mso.setSource(o); 
                 }
                 if (mso.getBacilli().getObsId() == null){
                     Obs bacilli = new Obs();
                     
-                    bacilli.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_BACILLI, new Locale("en", "US"))); 
+                    bacilli.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_BACILLI(), new Locale("en", "US"))); 
                     bacilli.setVoided(false);
                     bacilli.setDateCreated(new Date());
                     bacilli.setPerson(patient);
@@ -1201,7 +1179,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mso.getSmearDateReceived().getObsId() == null){
                     Obs sDR = new Obs();
                     
-                    sDR.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US"))); 
+                    sDR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_DATE_RECEIVED(), new Locale("en", "US"))); 
                     sDR.setVoided(false);
                     sDR.setDateCreated(new Date());
                     sDR.setPerson(patient);
@@ -1213,7 +1191,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mso.getSmearMethod().getObsId() == null){
                     Obs sMeth = new Obs();
                     
-                    sMeth.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US"))); 
+                    sMeth.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SMEAR_MICROSCOPY_METHOD(), new Locale("en", "US"))); 
                     sMeth.setVoided(false);
                     sMeth.setDateCreated(new Date());
                     sMeth.setPerson(patient);
@@ -1225,7 +1203,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mso.getSmearResult().getObsId() == null){
                     Obs sRes = new Obs();
                     
-                    sRes.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"))); 
+                    sRes.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SMEAR_RESULT(), new Locale("en", "US"))); 
                     sRes.setVoided(false);
                     sRes.setDateCreated(new Date());
                     sRes.setPerson(patient);
@@ -1237,7 +1215,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mso.getSmearResultDate().getObsId() == null){
                     Obs sResDate = new Obs();
                     
-                    sResDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US"))); 
+                    sResDate.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_RESULT_DATE(), new Locale("en", "US"))); 
                     sResDate.setVoided(false);
                     sResDate.setDateCreated(new Date());
                     sResDate.setPerson(patient);
@@ -1249,7 +1227,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mso.getSource().getObsId() == null){
                     Obs source = new Obs();
                     
-                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US"))); 
+                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SAMPLE_SOURCE(), new Locale("en", "US"))); 
                     source.setVoided(false);
                     source.setDateCreated(new Date());
                     source.setPerson(patient);
@@ -1260,34 +1238,34 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 mnto.addSmear(mso);
                 
-            } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(STR_CULTURE_PARENT)&& !parentObs.getVoided()) {
+            } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_PARENT())&& !parentObs.getVoided()) {
                 // CULTURE
                 MdrtbCultureObj mco = new MdrtbCultureObj();
                 mco.setCultureParentObs(parentObs);
                 for (Obs o : levelTwoObs){
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_SAMPLE_SOURCE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE())&& !o.getVoided())
                         mco.setSource(o); 
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_COLONIES)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES())&& !o.getVoided())
                         mco.setColonies(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_DATE_RECEIVED)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DATE_RECEIVED())&& !o.getVoided())
                         mco.setCultureDateReceived(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_CULTURE_METHOD)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_CULTURE_METHOD())&& !o.getVoided())
                         mco.setCultureMethod(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TB_CULTURE_RESULT)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_CULTURE_RESULT())&& !o.getVoided())
                         mco.setCultureResult(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_RESULT_DATE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_RESULT_DATE())&& !o.getVoided())
                         mco.setCultureResultsDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_CULTURE_START_DATE)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_START_DATE())&& !o.getVoided())
                         mco.setCultureStartDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TYPE_OF_ORGANISM)&& !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM())&& !o.getVoided())
                         mco.setTypeOfOrganism(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(STR_TYPE_OF_ORGANISM_NON_CODED) && !o.getVoided())
+                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED()) && !o.getVoided())
                         mco.setTypeOfOrganismNonCoded(o);
                 }
                 if (mco.getColonies().getObsId() == null){
                     Obs colonies = new Obs();
                     
-                    colonies.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"))); 
+                    colonies.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_COLONIES(), new Locale("en", "US"))); 
                     colonies.setVoided(false);
                     colonies.setDateCreated(new Date());
                     colonies.setPerson(patient);
@@ -1299,7 +1277,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getCultureDateReceived().getObsId() == null){
                     Obs dR = new Obs();
                     
-                    dR.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US"))); 
+                    dR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_DATE_RECEIVED(), new Locale("en", "US"))); 
                     dR.setVoided(false);
                     dR.setDateCreated(new Date());
                     dR.setPerson(patient);
@@ -1311,7 +1289,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getCultureMethod().getObsId() == null){
                     Obs method = new Obs();
                     
-                    method.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_METHOD, new Locale("en", "US"))); 
+                    method.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_CULTURE_METHOD(), new Locale("en", "US"))); 
                     method.setVoided(false);
                     method.setDateCreated(new Date());
                     method.setPerson(patient);
@@ -1323,7 +1301,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getCultureResult().getObsId() == null){
                     Obs cR = new Obs();
                     
-                    cR.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"))); 
+                    cR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_CULTURE_RESULT(), new Locale("en", "US"))); 
                     cR.setVoided(false);
                     cR.setDateCreated(new Date());
                     cR.setPerson(patient);
@@ -1335,7 +1313,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getCultureResultsDate().getObsId() == null){
                     Obs cRD = new Obs();
                     
-                    cRD.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US"))); 
+                    cRD.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_RESULT_DATE(), new Locale("en", "US"))); 
                     cRD.setVoided(false);
                     cRD.setDateCreated(new Date());
                     cRD.setPerson(patient);
@@ -1347,7 +1325,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getCultureStartDate().getObsId() == null){
                     Obs sD = new Obs();
                     
-                    sD.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US"))); 
+                    sD.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_CULTURE_START_DATE(), new Locale("en", "US"))); 
                     sD.setVoided(false);
                     sD.setDateCreated(new Date());
                     sD.setPerson(patient);
@@ -1359,7 +1337,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getSource().getObsId() == null){
                     Obs source = new Obs();
                     
-                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US"))); 
+                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SAMPLE_SOURCE(), new Locale("en", "US"))); 
                     source.setVoided(false);
                     source.setDateCreated(new Date());
                     source.setPerson(patient);
@@ -1371,7 +1349,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getTypeOfOrganism().getObsId() == null){
                     Obs tO = new Obs();
                     
-                    tO.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US"))); 
+                    tO.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TYPE_OF_ORGANISM(), new Locale("en", "US"))); 
                     tO.setVoided(false);
                     tO.setDateCreated(new Date());
                     tO.setPerson(patient);
@@ -1383,7 +1361,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 if (mco.getTypeOfOrganismNonCoded().getObsId() == null){
                     Obs tON = new Obs();
                  
-                    tON.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"))); 
+                    tON.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED(), new Locale("en", "US"))); 
                     tON.setVoided(false);
                     tON.setDateCreated(new Date());
                     tON.setPerson(patient);
@@ -1538,95 +1516,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
     }
     
     
-    private void readXML(HttpServletRequest request){
-      //String httpBase = Context.getAdministrationService().getGlobalProperty("formentry.infopath_server_url");
-        String httpBase = "http://localhost";
-        if (httpBase.indexOf("/openmrs") > 0)
-        httpBase = httpBase.substring(0, httpBase.indexOf("/openmrs"));
-        String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-                if (!XMLlocation.substring(10).contains(":"))
-                XMLlocation = httpBase + Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port") + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-        try{  
-            
-        URL xmlURL = new URL(XMLlocation);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        log.info("xmlURL is set to " + xmlURL.toString());
-        InputStream in = xmlURL.openStream();
-        Document doc = db.parse(in);
-        in.close();
-        doc.getDocumentElement().normalize();
-        Element concepts = doc.getDocumentElement();
-            NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
-            Node node = nodeList.item(0);
-            this.STR_TB_SMEAR_RESULT= node.getFirstChild().getNodeValue();  
-            nodeList = concepts.getElementsByTagName("STR_TB_SAMPLE_SOURCE");
-            node = nodeList.item(0);
-            this.STR_TB_SAMPLE_SOURCE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_BACILLI");
-            node = nodeList.item(0);
-            this.STR_BACILLI = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_RESULT_DATE");
-            node = nodeList.item(0);
-            this.STR_RESULT_DATE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DATE_RECEIVED");
-            node = nodeList.item(0);
-            this.STR_DATE_RECEIVED = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_MICROSCOPY_METHOD");
-            node = nodeList.item(0);
-            this.STR_TB_SMEAR_MICROSCOPY_METHOD  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_CULTURE_RESULT");
-            node = nodeList.item(0);
-            this.STR_TB_CULTURE_RESULT  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_COLONIES");
-            node = nodeList.item(0);
-            this.STR_COLONIES  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CULTURE_START_DATE");
-            node = nodeList.item(0);
-            this.STR_CULTURE_START_DATE  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_CULTURE_METHOD");
-            node = nodeList.item(0);
-            this.STR_TB_CULTURE_METHOD  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TYPE_OF_ORGANISM");
-            node = nodeList.item(0);
-            this.STR_TYPE_OF_ORGANISM  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TYPE_OF_ORGANISM_NON_CODED");
-            node = nodeList.item(0);
-            this.STR_TYPE_OF_ORGANISM_NON_CODED  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_COMPLETE");
-            node = nodeList.item(0);
-            this.STR_DST_COMPLETE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_METHOD");
-            node = nodeList.item(0);
-            this.STR_DST_METHOD = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DIRECT_INDIRECT");
-            node = nodeList.item(0);
-            this.STR_DIRECT_INDIRECT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_COLONIES_IN_CONTROL");
-            node = nodeList.item(0);
-            this.STR_COLONIES_IN_CONTROL = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CONCENTRATION");
-            node = nodeList.item(0);
-            this.STR_CONCENTRATION = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_SPUTUM_COLLECTION_DATE");
-            node = nodeList.item(0);
-            this.STR_SPUTUM_COLLECTION_DATE = node.getFirstChild().getNodeValue();    
-            nodeList = concepts.getElementsByTagName("STR_DST_PARENT");
-            node = nodeList.item(0);
-            this.STR_DST_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_RESULT_PARENT");
-            node = nodeList.item(0);
-            this.STR_DST_RESULT_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_SMEAR_PARENT");
-            node = nodeList.item(0);
-            this.STR_SMEAR_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CULTURE_PARENT");
-            node = nodeList.item(0);
-            this.STR_CULTURE_PARENT = node.getFirstChild().getNodeValue();
-        } catch (Exception ex){
-            log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
-        }
-    }
+   
     
     private Encounter cloneEncounter(Encounter src){
         Encounter enc = new Encounter();

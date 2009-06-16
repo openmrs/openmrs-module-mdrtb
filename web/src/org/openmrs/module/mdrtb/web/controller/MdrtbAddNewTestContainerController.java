@@ -71,29 +71,6 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
 
     protected final Log log = LogFactory.getLog(getClass());
     
-    private String STR_TB_SMEAR_RESULT = "";
-    private String STR_TB_SAMPLE_SOURCE = "";
-    private String STR_BACILLI = "";
-    private String STR_RESULT_DATE = "";
-    private String STR_DATE_RECEIVED = "";
-    private String STR_TB_SMEAR_MICROSCOPY_METHOD = "";
-    private String STR_TB_CULTURE_RESULT = "";
-    private String STR_COLONIES = "";
-    private String STR_CULTURE_START_DATE = "";
-    private String STR_TB_CULTURE_METHOD = "";
-    private String STR_TYPE_OF_ORGANISM = "";
-    private String STR_TYPE_OF_ORGANISM_NON_CODED = "";
-    private String STR_DST_COMPLETE= "";
-    private String STR_DST_METHOD= "";
-    private String STR_DIRECT_INDIRECT= "";
-    private String STR_COLONIES_IN_CONTROL= "";
-    private String STR_CONCENTRATION = "";
-    //ObsGroup concepts
-    private String STR_DST_PARENT = "";
-    private String STR_DST_RESULT_PARENT = "";
-    private String STR_CULTURE_PARENT = "";
-    private String STR_SMEAR_PARENT = "";
-    private String STR_SPUTUM_COLLECTION_DATE = "";
     
  
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -644,7 +621,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
      
         if (Context.isAuthenticated()) {
-            this.readXML(request);
+ 
             User user = Context.getAuthenticatedUser();
             Patient patient = new Patient();
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
@@ -654,34 +631,11 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 try {
                     int id = Integer.valueOf(patientId);
                     patient = ps.getPatient(id);
-                    mnto = new MdrtbNewTestObj(STR_TB_SMEAR_RESULT, 
-                            STR_TB_SAMPLE_SOURCE, 
-                            STR_BACILLI,
-                            STR_RESULT_DATE, 
-                            STR_DATE_RECEIVED, 
-                            STR_TB_SMEAR_MICROSCOPY_METHOD,
-                            STR_TB_CULTURE_RESULT, 
-                            STR_COLONIES, 
-                            STR_CULTURE_START_DATE, 
-                            STR_TB_CULTURE_METHOD, 
-                            STR_TYPE_OF_ORGANISM, 
-                            STR_TYPE_OF_ORGANISM_NON_CODED,
-                            STR_DST_COMPLETE, 
-                            STR_DST_METHOD, 
-                            STR_DIRECT_INDIRECT, 
-                            STR_COLONIES_IN_CONTROL,
-                            STR_CONCENTRATION,
-                            STR_SMEAR_PARENT,
-                            STR_CULTURE_PARENT,
-                            STR_DST_PARENT,
-                            STR_DST_RESULT_PARENT,
-                            STR_SPUTUM_COLLECTION_DATE,
-                            patient,
-                            user);
+                    mnto = new MdrtbNewTestObj(patient,user);
                     mnto.setPatient(patient);
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(new Date());
-                    cal.add(Calendar.MONTH, -6);
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.setTime(new Date());
+//                    cal.add(Calendar.MONTH, -6);
                     //TODO: limit to last X months?
                     List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(patient);
                     mnto.setEncounters(encSet);
@@ -717,7 +671,9 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             
             Concept red =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_red"), new Locale("en", "US"));
             Concept yellow =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_yellow"), new Locale("en", "US"));
-            Concept green =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_green"), new Locale("en", "US"));         
+            Concept green =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_green"), new Locale("en", "US"));  
+            
+            
             map.put("red", red.getBestName(Context.getLocale()).getName());
             map.put("yellow", yellow.getBestName(Context.getLocale()).getName());
             map.put("green", green.getBestName(Context.getLocale()).getName());
@@ -962,97 +918,6 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         return cultureRes;
     }
 
-     
-    
-    private void readXML(HttpServletRequest request){
-        //String httpBase = Context.getAdministrationService().getGlobalProperty("formentry.infopath_server_url");
-        String httpBase = "http://localhost";
-        if (httpBase.indexOf("/openmrs") > 0)
-        httpBase = httpBase.substring(0, httpBase.indexOf("/openmrs"));
-        String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-                if (!XMLlocation.substring(10).contains(":"))
-                XMLlocation = httpBase + Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port") + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-        try{ 
-            
-        URL xmlURL = new URL(XMLlocation);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        log.info("xmlURL is set to " + xmlURL.toString());
-        InputStream in = xmlURL.openStream();
-        Document doc = db.parse(in);
-        in.close();
-        doc.getDocumentElement().normalize();
-        Element concepts = doc.getDocumentElement();
-            NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
-            Node node = nodeList.item(0);
-            this.STR_TB_SMEAR_RESULT= node.getFirstChild().getNodeValue();  
-            nodeList = concepts.getElementsByTagName("STR_TB_SAMPLE_SOURCE");
-            node = nodeList.item(0);
-            this.STR_TB_SAMPLE_SOURCE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_BACILLI");
-            node = nodeList.item(0);
-            this.STR_BACILLI = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_RESULT_DATE");
-            node = nodeList.item(0);
-            this.STR_RESULT_DATE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DATE_RECEIVED");
-            node = nodeList.item(0);
-            this.STR_DATE_RECEIVED = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_MICROSCOPY_METHOD");
-            node = nodeList.item(0);
-            this.STR_TB_SMEAR_MICROSCOPY_METHOD  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_CULTURE_RESULT");
-            node = nodeList.item(0);
-            this.STR_TB_CULTURE_RESULT  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_COLONIES");
-            node = nodeList.item(0);
-            this.STR_COLONIES  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CULTURE_START_DATE");
-            node = nodeList.item(0);
-            this.STR_CULTURE_START_DATE  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TB_CULTURE_METHOD");
-            node = nodeList.item(0);
-            this.STR_TB_CULTURE_METHOD  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TYPE_OF_ORGANISM");
-            node = nodeList.item(0);
-            this.STR_TYPE_OF_ORGANISM  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_TYPE_OF_ORGANISM_NON_CODED");
-            node = nodeList.item(0);
-            this.STR_TYPE_OF_ORGANISM_NON_CODED  = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_COMPLETE");
-            node = nodeList.item(0);
-            this.STR_DST_COMPLETE = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_METHOD");
-            node = nodeList.item(0);
-            this.STR_DST_METHOD = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DIRECT_INDIRECT");
-            node = nodeList.item(0);
-            this.STR_DIRECT_INDIRECT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_COLONIES_IN_CONTROL");
-            node = nodeList.item(0);
-            this.STR_COLONIES_IN_CONTROL = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CONCENTRATION");
-            node = nodeList.item(0);
-            this.STR_CONCENTRATION = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_SPUTUM_COLLECTION_DATE");
-            node = nodeList.item(0);
-            this.STR_SPUTUM_COLLECTION_DATE = node.getFirstChild().getNodeValue();    
-            nodeList = concepts.getElementsByTagName("STR_DST_PARENT");
-            node = nodeList.item(0);
-            this.STR_DST_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_DST_RESULT_PARENT");
-            node = nodeList.item(0);
-            this.STR_DST_RESULT_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_SMEAR_PARENT");
-            node = nodeList.item(0);
-            this.STR_SMEAR_PARENT = node.getFirstChild().getNodeValue();
-            nodeList = concepts.getElementsByTagName("STR_CULTURE_PARENT");
-            node = nodeList.item(0);
-            this.STR_CULTURE_PARENT = node.getFirstChild().getNodeValue();
-        } catch (Exception ex){
-            log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
-        }
-    }
     
     private Encounter cloneEncounter(Encounter src){
         Encounter enc = new Encounter();

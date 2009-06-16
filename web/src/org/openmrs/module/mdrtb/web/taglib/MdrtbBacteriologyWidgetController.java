@@ -26,6 +26,7 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbBacteriologyWidgetController extends TagSupport {
@@ -139,7 +140,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
 
     public int doStartTag() {
 
-        
+    
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");

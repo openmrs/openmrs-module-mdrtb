@@ -1,16 +1,12 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Date;
-import java.util.Locale;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.Person;
 import org.openmrs.User;
-import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 
 
 /**
@@ -23,7 +19,6 @@ public class MdrtbDSTResultObj {
     private Obs drug = new Obs();
     private Obs dstResultParentObs = new Obs();
     
-    private ConceptService cs = Context.getConceptService();
     
     public MdrtbDSTResultObj(){}
     
@@ -36,7 +31,7 @@ public class MdrtbDSTResultObj {
      * @param STR_CONCENTRATION
      * @param STR_COLONIES
      */
-    public MdrtbDSTResultObj(Concept drugConcept,String STR_CONCENTRATION, String STR_COLONIES, String STR_DST_RESULT_PARENT, Patient patient, User user){
+    public MdrtbDSTResultObj(Concept drugConcept,Patient patient, User user, MdrtbFactory mu){
        
         
 
@@ -48,17 +43,17 @@ public class MdrtbDSTResultObj {
         concentration.setDateCreated(new Date());
         concentration.setVoided(false);
         
-        concentration.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US")));
+        concentration.setConcept(mu.getConceptConcentration());
         concentration.setCreator(user);
         concentration.setPerson(patient);
        
-        colonies.setConcept( MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"))); 
+        colonies.setConcept( mu.getConceptColonies()); 
         colonies.setVoided(false);
         colonies.setDateCreated(new Date());
         colonies.setCreator(user);
         colonies.setPerson(patient);
 
-        dstResultParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_RESULT_PARENT, new Locale("en", "US")));
+        dstResultParentObs.setConcept(mu.getConceptDSTResultParent());
         dstResultParentObs.setVoided(false);
         dstResultParentObs.setDateCreated(new Date());
         dstResultParentObs.setCreator(user);

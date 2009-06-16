@@ -1,13 +1,10 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Date;
-import java.util.Locale;
 
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.User;
-import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 
 /**
  * A class representing a smear result.  Contains all Obs for all observations containined in a smear result.
@@ -22,7 +19,6 @@ public class MdrtbSmearObj {
     private Obs smearMethod = new Obs();
     private Obs smearParentObs = new Obs();
     
-    private ConceptService cs = Context.getConceptService();
   
     public MdrtbSmearObj() {}
     
@@ -36,57 +32,50 @@ public class MdrtbSmearObj {
      * @param STR_DATE_RECEIVED
      * @param STR_TB_SMEAR_MICROSCOPY_METHOD
      */
-    public MdrtbSmearObj(String STR_TB_SMEAR_RESULT,
-                        String STR_TB_SAMPLE_SOURCE,
-                        String STR_BACILLI,
-                        String STR_RESULT_DATE,
-                        String STR_DATE_RECEIVED,
-                        String STR_TB_SMEAR_MICROSCOPY_METHOD,
-                        String STR_SMEAR_PARENT, Patient patient, User user){
-        
- 
-        this.smearResult.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"))); 
+    public MdrtbSmearObj(Patient patient, User user, MdrtbFactory mu){
+
+        this.smearResult.setConcept(mu.getConceptSmearResult()); 
         this.smearResult.setVoided(false);
         this.smearResult.setDateCreated(new Date());
         this.smearResult.setPerson(patient);
         this.smearResult.setCreator(user);
         
-        this.source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US"))); 
+        this.source.setConcept(mu.getConceptSampleSource() ); 
         this.source.setVoided(false);
         this.source.setDateCreated(new Date());
         this.source.setPerson(patient);
         this.source.setCreator(user);
         
-        this.bacilli.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_BACILLI, new Locale("en", "US"))); 
+        this.bacilli.setConcept(mu.getConceptBacilli()); 
         this.bacilli.setVoided(false);
         this.bacilli.setDateCreated(new Date());
         this.bacilli.setPerson(patient);
         this.bacilli.setCreator(user);
 
-        this.smearResultDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US"))); 
+        this.smearResultDate.setConcept(mu.getConceptResultDate()); 
         this.smearResultDate.setVoided(false);
         this.smearResultDate.setDateCreated(new Date());
         this.smearResultDate.setPerson(patient);
         this.smearResultDate.setCreator(user);
         
-       
-        this.smearDateReceived.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US")));
+        //STR_DATE_RECEIVED
+        this.smearDateReceived.setConcept(mu.getConceptDateReceived());
         this.smearDateReceived.setVoided(false);
         this.smearDateReceived.setDateCreated(new Date());
         this.smearDateReceived.setPerson(patient);
         this.smearDateReceived.setCreator(user);
         
-       
-        this.smearMethod.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US")));
+        //STR_TB_SMEAR_MICROSCOPY_METHOD
+        this.smearMethod.setConcept(mu.getConceptSmearMicroscopyMethod());
         this.smearMethod.setVoided(false);
         this.smearMethod.setDateCreated(new Date());
         this.smearMethod.setPerson(patient);
         this.smearMethod.setCreator(user);
         this.smearParentObs.setVoided(false);
         this.smearParentObs.setDateCreated(new Date());
-        
-        
-        this.smearParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_PARENT, new Locale("en", "US")));
+    
+        //STR_SMEAR_PARENT
+        this.smearParentObs.setConcept(mu.getConceptSmearParent());
         this.smearParentObs.setPerson(patient);
         this.smearParentObs.setCreator(user);
     }

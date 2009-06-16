@@ -636,9 +636,58 @@ public class MdrtbFactory {
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
         }
     }
+    
+    
+    
+    public Concept getConceptSmearMicroscopyMethod(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptResultDate(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_RESULT_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptBacilli(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_BACILLI, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptSampleSource(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TB_SAMPLE_SOURCE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
     public Concept getConceptTreatmentStopDate(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptDSTComplete(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_COMPLETE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptDSTMethod(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    //STR_SPUTUM_COLLECTION_DATE
+    public Concept getConceptSputumCollectionDate(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptDirectIndirect(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DIRECT_INDIRECT, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptColoniesInControl(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_COLONIES_IN_CONTROL, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     
@@ -702,6 +751,22 @@ public class MdrtbFactory {
         return ret;
     }
     
+    public Concept getConceptColonies(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+
+    public Concept getConceptCultureStartDate(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptCultureMethod(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
     public Concept getConceptSmearParent(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
@@ -729,6 +794,28 @@ public class MdrtbFactory {
     public Concept getConceptSmearReconversion(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_RECONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    //STR_TYPE_OF_ORGANISM
+    public Concept getConceptTypeOfOrganism(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptTypeOfOrganismNonCoded(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    //STR_DST_RESULT_PARENT
+    public Concept getConceptDSTResultParent(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptDateReceived(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
        

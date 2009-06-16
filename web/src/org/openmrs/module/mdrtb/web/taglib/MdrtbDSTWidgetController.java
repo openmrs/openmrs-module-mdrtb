@@ -22,6 +22,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbDSTWidgetController extends TagSupport {
@@ -64,7 +65,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
     
     
     public int doStartTag() {
-
+        MdrtbFactory mu = new MdrtbFactory();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");
@@ -106,7 +107,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
            
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
+            Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu.getXmlConceptNameList());
             if (c != null)
                 obsGroupConcepts.add(c.getBestName(locUS).getName());
         }
@@ -146,7 +147,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
         for (StringTokenizer st = new StringTokenizer(this.concepts, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c =  MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"), mu.getXmlConceptNameList());
             if (c != null) {
                 for (Obs obx : observations) {
                     if (obx.getConcept().equals(c) && !obx.getVoided()){
