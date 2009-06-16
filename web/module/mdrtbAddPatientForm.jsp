@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <style><%@ include file="resources/date_input.css"%></style>
+<style><%@ include file="resources/mdrtb.css"%></style>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/date_input.js'></script>
@@ -185,15 +186,19 @@
 	th { text-align: left } 
 	th.headerCell {
 		border-top: 1px lightgray solid; 
-		xborder-right: 1px lightgray solid
+		xborder-right: 1px lightgray solid;
+		font-size:95%;
 	}
 	td.inputCell {
 		border-top: 1px lightgray solid;
+		font-size:95%;
 		}
 		td.inputCell th {
 			font-weight: normal;
+			font-size:95%;
 		}
 	.lastCell {
+		font-size:95%;
 		border-bottom: 1px lightgray solid;
 	}
 </style>
@@ -230,6 +235,10 @@
 			</table>
 		</td>
 	</tr>
+	<Tr>
+		<th class="headerCell"><spring:message code="mdrtb.enrollpatientinmdrtbprogram" /></th>
+		<Td class="inputCell"><input type="text" value=""  name="programEnrollmentDate" id="newProgramEnrollmentDate" style="width:90px" onmousedown="javascript:$(this).date_input()"></Td>
+	</Tr>
 	<tr>
 		<th class="headerCell"><spring:message code="PatientIdentifier.title.endUser"/></th>
 		<td class="inputCell">
@@ -248,7 +257,7 @@
 						</td>
 						<td valign="top">
 							<select name="identifierType" onclick="identifierOrTypeChanged(this)">
-							<openmrs:globalProperty key="mdrtb.patient_identifier_type_list" var="filterList"/>
+								<openmrs:globalProperty key="mdrtb.patient_identifier_type_list" var="filterList"/>
 								<mdrtb:forEachRecord name="patientIdentifierType" filterList="${filterList}">
 									<option value="${record.patientIdentifierTypeId}">
 										${record.name}

@@ -68,6 +68,9 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
                                     pitsOut.add(p);
                             }
                         }
+                        
+                        if (pitsOut.size() == 0)
+                            pitsOut = pits;
                        
                     }
                     }catch (Exception e){

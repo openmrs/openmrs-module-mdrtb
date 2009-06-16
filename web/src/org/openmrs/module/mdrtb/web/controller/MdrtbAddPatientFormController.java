@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +52,8 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbPatient;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
@@ -454,7 +457,16 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             Patient newPatient = null;
             try {
                 newPatient = ps.savePatient(patient);
-              //enroll patient in program; attach to encounter, if possible. 
+                MdrtbFactory mu = new MdrtbFactory();
+                //enroll in program
+                String enrollmentDateString = request.getParameter("programEnrollmentDate");
+                try {
+                    SimpleDateFormat sdf = Context.getDateFormat();
+                    mu.enrollPatientInMDRTBProgram(newPatient, sdf.parse(enrollmentDateString));
+                } catch (Exception ex){
+                    log.warn("Failed to enroll patient in mdrtb program", ex);
+                }     
+                mu = null;
                
             } catch ( InvalidIdentifierFormatException iife ) {
                 log.error(iife);
