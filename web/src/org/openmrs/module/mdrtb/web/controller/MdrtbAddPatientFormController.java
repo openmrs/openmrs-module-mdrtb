@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.type.IdentifierType;
+import org.openmrs.Attributable;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -37,6 +38,7 @@ import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
 import org.openmrs.Tribe;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.DuplicateIdentifierException;
 import org.openmrs.api.EncounterService;
@@ -47,6 +49,7 @@ import org.openmrs.api.InvalidIdentifierFormatException;
 import org.openmrs.api.PatientIdentifierException;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.propertyeditor.ConceptEditor;
@@ -54,6 +57,7 @@ import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
 import org.openmrs.propertyeditor.TribeEditor;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.web.WebConstants;
 import org.openmrs.web.controller.patient.ShortPatientModel;
 import org.openmrs.web.controller.user.UserFormController;
@@ -411,12 +415,41 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 patient.setCauseOfDeath(null);
             }
             
-            // look for person attributes in the request and save to person
-            for (PersonAttributeType type : personService.getPersonAttributeTypes("patient", "viewing")) {
-                String value = request.getParameter(type.getPersonAttributeTypeId().toString());
-                if (value != null)
-                patient.addAttribute(new PersonAttribute(type, value));
-            }
+			// look for person attributes in the request and save to patient
+			for (PersonAttributeType type : personService.getPersonAttributeTypes(PERSON_TYPE.PATIENT,
+			    ATTR_VIEW_TYPE.VIEWING)) {
+				String paramName = type.getPersonAttributeTypeId().toString();
+				String value = request.getParameter(paramName);
+				
+				// if there is an error displaying the attribute, the value will be null
+				if (value != null) {
+					PersonAttribute attribute = new PersonAttribute(type, value);
+					try {
+						Object hydratedObject = attribute.getHydratedObject();
+						if (hydratedObject == null || "".equals(hydratedObject.toString())) {
+							// if null is returned, the value should be blanked out
+							attribute.setValue("");
+						} else if (hydratedObject instanceof Attributable) {
+							attribute.setValue(((Attributable) hydratedObject).serialize());
+						} else if (!hydratedObject.getClass().getName().equals(type.getFormat()))
+							// if the classes doesn't match the format, the hydration failed somehow
+							// TODO change the PersonAttribute.getHydratedObject() to not swallow all errors?
+							throw new APIException();
+					}
+					catch (APIException e) {
+						errors.rejectValue("attributeMap[" + type.getName() + "]", "Invalid value for " + type.getName()
+						        + ": '" + value + "'");
+						log
+						        .warn("Got an invalid value: " + value + " while setting personAttributeType id #"
+						                + paramName, e);
+						
+						// setting the value to empty so that the user can reset the value to something else
+						attribute.setValue("");
+						
+					}
+					patient.addAttribute(attribute);
+				}
+			}
             
             // save or add the patient
             Patient newPatient = null;

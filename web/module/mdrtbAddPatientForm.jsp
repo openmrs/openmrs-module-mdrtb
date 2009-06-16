@@ -359,6 +359,19 @@
 		</td>
 	</tr>
 	
+	<openmrs:forEachDisplayAttributeType personType="patient" displayType="viewing" var="attrType">
+		<tr>
+			<th class="headerCell"><spring:message code="PersonAttributeType.${fn:replace(attrType.name, ' ', '')}" text="${attrType.name}"/></th>
+			<td class="inputCell">
+				<openmrs:fieldGen 
+					type="${attrType.format}" 
+					formFieldName="${attrType.personAttributeTypeId}" 
+					val="${patient.attributeMap[attrType.name].hydratedObject}" 
+					parameters="optionHeader=[blank]|showAnswers=${attrType.foreignKey}" />
+			</td>
+		</tr>
+	</openmrs:forEachDisplayAttributeType>
+	
 	</table>
 	
 	<input type="hidden" name="patientId" value="${param.patientId}" />
