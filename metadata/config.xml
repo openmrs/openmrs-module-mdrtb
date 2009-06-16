@@ -42,6 +42,11 @@
 		<class>@MODULE_PACKAGE@.extension.html.MdrtbGutterItem</class>
 	</extension>
 	
+	<extension>
+		<point>org.openmrs.navigation.homepage</point>
+		<class>@MODULE_PACKAGE@.extension.html.RedirectSomeRolesFromOpenmrsHomepage</class>
+	</extension>
+	
 	
 	<!-- AOP
 	<advice>
@@ -65,6 +70,14 @@
 		<defaultValue>MDR-TB PROGRAM</defaultValue>
 		<description>
 			MDR-TB program name.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.roles_to_redirect_from_openmrs_homepage</property>
+		<defaultValue></defaultValue>
+		<description>
+			Comma-separated list of role names. Any user in a role listed here will not be able to see the regular OpenMRS homepage.
+			That will redirect them to the MDR-TB homepage instead.
 		</description>
 	</globalProperty>
 	<globalProperty>
