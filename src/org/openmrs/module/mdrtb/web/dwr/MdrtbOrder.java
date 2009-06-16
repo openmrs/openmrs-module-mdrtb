@@ -40,8 +40,14 @@ public class MdrtbOrder {
                if (discDate == null)
                    return false;
                Order o = Context.getOrderService().getOrder(orderId);
-               if (o != null && discDate.after(o.getStartDate()))
+               if (o != null && discDate.after(o.getStartDate())){
+                   if (discDate.after(new Date()))
+                       o.setAutoExpireDate(discDate);
                    Context.getOrderService().discontinueOrder(o, discontinueConcept , discDate);
+
+                       
+               }
+                   
                else
                    return false;
         } catch (Exception ex){
