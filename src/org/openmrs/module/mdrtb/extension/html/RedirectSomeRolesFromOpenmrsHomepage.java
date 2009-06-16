@@ -38,7 +38,7 @@ public class RedirectSomeRolesFromOpenmrsHomepage extends Extension {
         try {
             String roleNamesToRedirect = Context.getAdministrationService().getGlobalProperty(MdrtbConstants.ROLES_TO_REDIRECT_GLOBAL_PROPERTY);
             if (!StringUtils.hasText(roleNamesToRedirect)) {
-                return "";
+                return "<BR><BR><BR><Br><center><br><BR><image ><img src='/openmrs/images/openmrs_logo_large.gif' alt='OpenMRS'><center>";
             }
             String[] temp = roleNamesToRedirect.split(",");
             Set<String> set = new HashSet<String>(Arrays.asList(temp));
@@ -50,7 +50,7 @@ public class RedirectSomeRolesFromOpenmrsHomepage extends Extension {
         } finally {
             Context.removeProxyPrivilege(OpenmrsConstants.PRIV_VIEW_GLOBAL_PROPERTIES);
         }
-        return "";        
+        return "<BR><BR><BR><Br><center><br><BR><image ><img src='/openmrs/images/openmrs_logo_large.gif' alt='OpenMRS'><center>";        
     }
 
 }
