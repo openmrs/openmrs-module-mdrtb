@@ -56,6 +56,7 @@
 		
 		<!--  Compile module java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source">
+			<compilerarg line="-target 1.5" />
 			<src path="src/" />
 			<include name="**/*.java" />
 		</javac>
@@ -63,6 +64,7 @@
 		<!--  Compile module web java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source">
 			<compilerarg line="-g" />
+			<compilerarg line="-target 1.5" />
 			<src path="web/src/" />
 			<include name="**/*.java" />
 		</javac>
