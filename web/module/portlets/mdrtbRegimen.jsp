@@ -12,17 +12,21 @@
  
  	function clearOrder(){
  		if (action == 1){ 
- 			if (reasonTmp != null && reasonTmp != "" && stopDateTmp != null && stopDateTmp != ""){
- 				MdrtbOrder.discontinueOrder(orderIdTmp, stopDateTmp, reasonTmp ,function(ret){
-							if (!ret)
-								alert('<spring:message code="mdrtb.DWRunabletodiscontinueorder" />');
-							else
-								window.location="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
-						});
- 				
- 			} else {
- 				alert('<spring:message code="mdrtb.youmustfilloutallfieldstodiscontinue" />');
- 			}
+ 			if (orderDateTmp >= stopDateTmp){
+				alert('<spring:message code="mdrtb.orderenddatebeforestopdate" />');
+			} else {
+	 			if (reasonTmp != null && reasonTmp != "" && stopDateTmp != null && stopDateTmp != ""){
+	 				MdrtbOrder.discontinueOrder(orderIdTmp, stopDateTmp, reasonTmp ,function(ret){
+								if (!ret)
+									alert('<spring:message code="mdrtb.DWRunabletodiscontinueorder" />');
+								else
+									window.location="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
+							});
+	 				
+	 			} else {
+	 				alert('<spring:message code="mdrtb.youmustfilloutallfieldstodiscontinue" />');
+	 			}
+			}
  		} else {
 		 		if (reasonTmp != null && reasonTmp != ""){
 		 			var trToDelete = document.getElementById("tr_"+orderIdTmp);
@@ -42,33 +46,39 @@
  		orderIdTmp = "";
  		stopDateTmp = "";
  		action = "";
+ 		orderDateTmp = "";
  		showSubmit = true;
  	}
  	
  	
- 	function setStopDate(orderId, date){
+ 	function setStopDate(orderId, date, orderDate){
  		stopDateTmp = date;
 		orderIdTmp = orderId;
+		orderDateTmp = orderDate;
 		action = 1;
  	}
- 	function setStopReason(orderId, reason){
+ 	function setStopReason(orderId, reason, orderDate){
  		reasonTmp = reason;
 		orderIdTmp = orderId;
+		orderDateTmp = orderDate;
 		action = 1;
  	}
  	
- 	function deleteOrder(orderId,reason,obj){
+ 	function deleteOrder(orderId, reason, orderDate, obj){
 		reasonTmp = reason;
 		orderIdTmp = orderId;
+		orderDateTmp = orderDate;
 		action = 0;
  	} 
- 	function setAction(orderId){
+ 	function setAction(orderId, orderDate){
  		action=1;
  		orderIdTmp = orderId;
+ 		orderDateTmp = orderDate;
  	}
  	   
  	var reasonTmp = "";
  	var orderIdTmp = "";
+ 	var orderDateTmp = "";
  	var closeDateTmp = "";
  	var action = "";  
  	var newRowsToBeAdded = 0;
@@ -484,7 +494,7 @@
 				<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
 				<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
 				<td >${order.instructions}</td>
-				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId}, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"  onChange="javascript:setStopDate(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />',this)"></span></p></td>
 				</tr>
 			</c:forEach>
 			
@@ -525,7 +535,7 @@
 				<td style='text-align:center'> <mdrtbPortlets:dateDiff fromDate="${order.startDate}" format="D" /></td>
 				<td ><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></td>
 				<td >${order.instructions}</td>
-				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId})"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value)"  onChange="javascript:setStopDate(${order.orderId},this.value)"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value)"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+				<td><p><a href="#" class="simple_popup" onmouseup="javascript:setAction(${order.orderId}, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><spring:message code="mdrtb.discontinue" /></a><span class="simple_popup_info"><spring:message code="mdrtb.discontinueddate" /> <Br>(${dateFormat})  <input type="textbox" value=""  onmousedown="javascript:$j(this).date_input()" onblur="javascript:setStopDate(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"  onChange="javascript:setStopDate(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><br><spring:message code="mdrtb.discontinuedreason" /> <select onblur="javascript:setStopReason(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />')"><option value=""></option><c:forEach items="${discontinueReasons}" var="reason"><option value="${reason.conceptId}">${reason.name.name}</option></c:forEach></select></span></p><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />',this)"></span></p></td>
 				</tr>
 			</c:forEach>
 			
@@ -598,7 +608,7 @@
 								</td>
 								<td ><c:if test="${!empty order.discontinuedDate}"><openmrs:formatDate date="${order.discontinuedDate}" format="${dateFormat}" /></c:if><c:if test="${empty order.discontinuedDate}"><openmrs:formatDate date="${order.autoExpireDate}" format="${dateFormat}" /></c:if></td>
 								<td >${order.discontinuedReason.name.name}</td>	
-								<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, this)"></span></p></td>
+								<td ><p><a href="#" class="simple_popup"><spring:message code="mdrtb.deletelowercase" /></a><span class="simple_popup_info"><spring:message code="mdrtb.pleasegiveareasonfordeletingthisrecord" /><br><br><input type="text" value="" onblur="javascript:deleteOrder(${order.orderId},this.value, '<openmrs:formatDate date="${order.startDate}" format="${dateFormat}" />',this)"></span></p></td>
 							</tr>
 				</c:forEach>
 				
