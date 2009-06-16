@@ -537,7 +537,7 @@
 		</c:if>
 	</div>
 	<br><br>
-	<b>Completed Orders</b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" /> 
+	<b><spring:message code="mdrtb.completedorders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" /> 
 	<br><br>
 	<!-- completed orders -->
 	<c:if test="${empty obj.completedDrugOrders}">
