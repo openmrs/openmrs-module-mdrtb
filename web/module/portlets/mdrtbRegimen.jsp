@@ -230,7 +230,7 @@
 							
 					}
 				}
-				if (startDate != null && discontinueDate != null){
+				if (startDate != null && discontinueDate != null && discontinueDate != ""){
 						if (startDate >= discontinueDate){
 							alert("<spring:message code="mdrtb.startDateLaterThanEndDate" />");
 							return false;
