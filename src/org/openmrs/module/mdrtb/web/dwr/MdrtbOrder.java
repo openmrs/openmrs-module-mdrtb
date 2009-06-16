@@ -34,12 +34,16 @@ public class MdrtbOrder {
                    discontinueConcept = MdrtbUtil.getMDRTBConceptByName("OTHER NON-CODED", new Locale("en", "US"));
                if (discontinueConcept == null)
                    return false;
-               Date discDate = new Date();
+               Date discDate = null;
                SimpleDateFormat sdf = Context.getDateFormat();
                discDate = sdf.parse(discontinueDate);
                if (discDate == null)
                    return false;
-           Context.getOrderService().discontinueOrder(Context.getOrderService().getOrder(orderId), discontinueConcept , discDate);
+               Order o = Context.getOrderService().getOrder(orderId);
+               if (o != null && discDate.after(o.getStartDate()))
+                   Context.getOrderService().discontinueOrder(o, discontinueConcept , discDate);
+               else
+                   return false;
         } catch (Exception ex){
             return false;
         }
