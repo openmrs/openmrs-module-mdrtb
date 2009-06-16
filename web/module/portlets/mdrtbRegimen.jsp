@@ -195,20 +195,21 @@
 				var rowToValidate = $j(newRows)[i];
 				var tdsToValidate = $j(rowToValidate).children();
 				var isStandardRegimen = false;
+				var startDate = null;
+				var discontinueDate = null;
 				for (var j = 0; j < tdsToValidate.length-1; j++){
 					var tdToValidate = tdsToValidate[j];
 					var controls = $j(tdToValidate).children();
-					var startDate = null;
-					var discontinueDate = null;
+					
 					for (var k = 0; k < controls.length; k++){
 						var control = controls[k];
 						if (k == 0 && control.id.indexOf("newDrug") > -1){
 							if (isNumeric(control.value) == false)
 								isStandardRegimen = true;
 						}
-						if (control.name.indexOf("stopDate_") < 0)
+						if (control.name.indexOf("stopDate_") >= 0)
 							discontinueDate = control.value;
-						if 	(control.name.indexOf("startDate_") < 0)
+						if 	(control.name.indexOf("startDate_") >= 0)
 							startDate = control.value;
 						if (isStandardRegimen == false){
 							if (control.type != "checkbox" && control.type != "textarea" && control.name.indexOf("stopDate_") < 0 && control.name.indexOf("regimenType_") < 0 && control.name.indexOf("drugSelect_") < 0){
@@ -226,13 +227,14 @@
 							 }	
 							}
 						}
-						
+							
 					}
-					if (startDate != null && discontinueDate != null){
-						if (startDate > discontinueDate){
+				}
+				if (startDate != null && discontinueDate != null){
+						if (startDate >= discontinueDate){
 							alert("<spring:message code="mdrtb.startDateLaterThanEndDate" />");
+							return false;
 						}
-					}
 				}
 			}
 		}
