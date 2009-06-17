@@ -28,13 +28,6 @@
 		<a href="?${qs}&amp;lang=${loc}">${locDisplayName}</a>
 	</c:if>
 </c:forEach> </span> 
-
-<!--  
-<span id="buildDate"><spring:message
-	code="peru_fitness_study.lastmodulebuild" />: ${dateString}</span> <span
-	id="buildDate"><spring:message code="peru_fitness_study.version" />:
-alpha</span> 
--->
 <span id="databaseVersion">Database Version:
 ${databaseVersion}</span> 
 
