@@ -4,10 +4,11 @@
 <openmrs:globalProperty key="use_patient_attribute.healthCenter" var="useHealthCenter"/>
 <openmrs:globalProperty key="use_patient_attribute.mothersName" var="useMothersName"/>
 <openmrs:globalProperty key="use_patient_attribute.tribe" var="useTribe"/>
+<openmrs:globalProperty key="mdrtb.findPatientNumResults" var="numResults" defaultValue="5"/>
 <script type="text/javascript">
 		var classTmp = "";
 		var from = 0;
-		var jumps = 5; //this many patients at a time
+		var jumps = ${numResults}; //this many patients at a time
 		var to = jumps-1;
 		var retSize = 0;
 		var headerShown = 0;
@@ -30,6 +31,9 @@
 	   						savedRet = ret; 
 	   						retSize = ret.length;
 	   						drawTable(savedRet);});
+   						}
+   						else {
+   	   						$j('#results').hide();
    						}
    			});	
  		});
@@ -396,11 +400,22 @@ function useMdrtbLoadingMessage(message) {
 	</script>
 
 <c:if test="${model.authenticatedUser != null}">
+	<openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/index.htm" />
 
-
-			<openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/index.htm" />
-
-			
+	<c:choose>
+		<c:when test="${model.size=='mini'}">
+			<span id="findPatient">
+				<spring:message code="Patient.find"/><input type="text" value="" id="searchBox" name="searchBox">
+				<div id="results" style="position:absolute; z-index:1000; border:2px solid black; background-color:#CCCCCC; ${model.resultStyle}">
+					<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
+						<thead id="resTableHeader" class="resTableHeader"/>	
+						<tbody class="resTableBody" id="resTableBody" style="vertical-align: center"/>
+						<tfoot id="resTableFooter" class="resTableFooter"/>	
+					</table>
+				</div>
+			</span>
+		</c:when>
+		<c:otherwise>
 			<div id="findPatient">
 				
 				<b class="boxHeader"><spring:message code="Patient.find" /></b>
@@ -417,7 +432,8 @@ function useMdrtbLoadingMessage(message) {
 					</div>
 				</div>
 			</div>
-			
+		</c:otherwise>
+	</c:choose>
 
 </c:if>
 <script>

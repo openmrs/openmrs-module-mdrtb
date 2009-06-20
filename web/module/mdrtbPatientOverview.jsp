@@ -281,9 +281,14 @@
 	}
     
 </script>
+
+<span style="text-align:right;">
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=/openmrs/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+</span>
+<div style="padding:2px;"></div>
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
 <!-- <openmrs:portlet url="mdrtbHeaderBox" id="mdrtbHeaderBox" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>-->
-<br><br>		
+<br><br>
 		
 		
 <div id="R01SearchTabs">
