@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbFindPatient.js'></script>
-<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
+<c:if test="${model.size != 'mini'}">
+	<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
+</c:if>
 <openmrs:globalProperty key="use_patient_attribute.healthCenter" var="useHealthCenter"/>
 <openmrs:globalProperty key="use_patient_attribute.mothersName" var="useMothersName"/>
 <openmrs:globalProperty key="use_patient_attribute.tribe" var="useTribe"/>
