@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +15,9 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.context.Context;
 
 public class MdrtbUtil {
@@ -144,6 +147,28 @@ public class MdrtbUtil {
         return loc;
     }
     
-    
+    public static String getMdrtbPatientIdentifier(Patient p){
+        String ret = "";
+        String piList = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_identifier_type");    
+        Set<PatientIdentifier> identifiers = p.getIdentifiers();
+        for (PatientIdentifier pi : identifiers){
+            if (pi.getIdentifierType().getName().equals(piList)){
+                return pi.getIdentifier();
+            }
+        }
+        if (identifiers.size() > 0){
+            for (PatientIdentifier pi : identifiers){
+                return pi.getIdentifier();
+            }
+        } 
+        return ret;
+    }
 
+    public static Obs getMostRecentObs(Integer conceptId, Patient p){
+        Concept c = Context.getConceptService().getConcept(conceptId);
+        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, c);
+        if (oList.size() > 0)
+            return oList.get(oList.size()-1);
+        return null;
+    }
 }

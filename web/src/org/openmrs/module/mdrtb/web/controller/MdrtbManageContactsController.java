@@ -76,7 +76,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
                 Integer patientId = Integer.valueOf(patientIdString);
                 MessageSourceAccessor msa = this.getMessageSourceAccessor();
                 if (action != null && msa.getMessage("mdrtb.save").equals(action)) {
-                    MdrtbFactory mu = new MdrtbFactory();
+                    MdrtbFactory mu = MdrtbFactory.getInstance();
 
                    
                     SimpleDateFormat sdf = Context.getDateFormat();
@@ -408,7 +408,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
             mp.setPatient(Context.getPatientService().getPatient(Integer.valueOf(patientIdString)));
             String rtString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_relationship_type");
             RelationshipType rt = ps.getRelationshipTypeByName(rtString);
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             Program program = mu.getMDRTBProgram();
             for (Relationship contact:ps.getRelationshipsByPerson(mp.getPatient())){   
                 //bi-directional:
@@ -589,7 +589,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
     protected Map referenceData(HttpServletRequest request, Object obj, Errors errs) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             PatientService ps = Context.getPatientService();
             AdministrationService as =  Context.getAdministrationService();
             map.put("tbResultConceptId", mu.getConceptSimpleTBResult().getConceptId());

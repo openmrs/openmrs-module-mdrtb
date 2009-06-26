@@ -65,7 +65,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
     
     
     public int doStartTag() {
-        MdrtbFactory mu = new MdrtbFactory();
+        MdrtbFactory mu = MdrtbFactory.getInstance();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");

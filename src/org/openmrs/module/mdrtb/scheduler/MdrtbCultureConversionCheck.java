@@ -15,7 +15,7 @@ public class MdrtbCultureConversionCheck extends AbstractTask {
         if (!Context.isAuthenticated())  
             authenticate();
   
-        MdrtbFactory mu = new MdrtbFactory();
+        MdrtbFactory mu = MdrtbFactory.getInstance();
         mu.createCultureConversionsAllPatients();
         Context.closeSession();
     }

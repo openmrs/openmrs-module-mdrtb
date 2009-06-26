@@ -174,7 +174,7 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
        
        if (Context.isAuthenticated()){
            MdrtbTreatmentSupporter p = new MdrtbTreatmentSupporter();
-           MdrtbFactory mu = new MdrtbFactory();
+           MdrtbFactory mu = MdrtbFactory.getInstance();
            Concept phoneConcept = mu.getConceptPhoneNumber();
            ObsService os = Context.getObsService();
            String personId = request.getParameter("personId");

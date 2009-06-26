@@ -99,7 +99,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                     + msa.getMessage("mdrtb.september")+ "','"+ msa.getMessage("mdrtb.october")+ "','"+ msa.getMessage("mdrtb.november")+ "','"+ msa.getMessage("mdrtb.december")+ "','"+ msa.getMessage("mdrtb.jan")+ "','"+ msa.getMessage("mdrtb.feb")+ "','"+ msa.getMessage("mdrtb.mar")+ "','"+ msa.getMessage("mdrtb.ap")+ "','"+ msa.getMessage("mdrtb.may")+ "','"
                     + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
             
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
             map.put("locations", Context.getLocationService().getAllLocations());
@@ -208,7 +208,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                    }
                    
                    
-                   MdrtbFactory mu = new MdrtbFactory();
+                   MdrtbFactory mu = MdrtbFactory.getInstance();
                    boolean update = false;
                    PatientProgram pp = moo.getPatientProgram();
                    
@@ -302,7 +302,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
        List<MdrtbOverviewObj> ret = new ArrayList<MdrtbOverviewObj>();
        if (Context.isAuthenticated()){
-           MdrtbFactory mu = new MdrtbFactory();
+           MdrtbFactory mu = MdrtbFactory.getInstance();
            Program program = mu.getMDRTBProgram();
            Concept tstopdConcept = mu.getConceptTreatmentStopDate();
            ProgramWorkflowService progS = Context.getProgramWorkflowService();

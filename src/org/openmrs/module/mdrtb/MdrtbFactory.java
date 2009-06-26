@@ -38,6 +38,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class MdrtbFactory {
+    
+    private static MdrtbFactory instance = null;
 
     protected final Log log = LogFactory.getLog(getClass());
     
@@ -218,16 +220,27 @@ public class MdrtbFactory {
     private String STR_TREATMENT_STOP_DATE;
 
     private String STR_DST_RESULT;
+    
     private String STR_SUSCEPTIBLE;
+    
     private String STR_INTERMEDIATE;
+    
     private String STR_RESISTANT;
+    
     private List<ConceptName> xmlConceptNameList = new ArrayList<ConceptName>();
     
     public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
         STR_TREATMENT_STOP_DATE = str_treatment_stop_date;
     }
 
-    public MdrtbFactory(){readXML();};
+    private MdrtbFactory(){readXML();};
+    
+    public static MdrtbFactory getInstance() {
+        if (instance == null){
+            instance = new MdrtbFactory(); 
+        }
+        return instance;
+    }
     
     private void readXML(){
         //String httpBase = Context.getAdministrationService().getGlobalProperty("formentry.infopath_server_url");

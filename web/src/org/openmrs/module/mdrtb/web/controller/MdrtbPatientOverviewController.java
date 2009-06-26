@@ -221,7 +221,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("dateFormat", dateFormat);
             
             //workflow states:
-            MdrtbFactory mu = new MdrtbFactory(); 
+            MdrtbFactory mu = MdrtbFactory.getInstance(); 
             map.put("cultureStates", mu.getStatesCultureStatus());
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
@@ -462,7 +462,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 }
                 
             MdrtbPatient mp = (MdrtbPatient) object;
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             ProgramWorkflowService pws = Context.getProgramWorkflowService();
             ConceptService cs = Context.getConceptService();
             ObsService os = Context.getObsService();
@@ -1579,7 +1579,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         }   
         
         if (action != null && msa.getMessage("mdrtb.enroll").equals(action)){
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             MdrtbPatient mp = (MdrtbPatient) object;
             String enrollmentDateString = request.getParameter("programEnrollmentDate");
             try {
@@ -1615,7 +1615,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             if (patientId != null){
                 PatientService patientService = Context.getPatientService();
                 ObsService os = Context.getObsService();    
-                MdrtbFactory mu = new MdrtbFactory(); 
+                MdrtbFactory mu = MdrtbFactory.getInstance();
                 try{
                     Patient patient = patientService.getPatient(Integer.valueOf(patientId));
                     patient.getIdentifiers();
@@ -1736,7 +1736,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     if (mp.getPatientProgram() == null && pps.size() > 0){
                         mp.setPatientProgram(pps.get(pps.size()-1));
                     }
-                    
                     if (mp.getPatientProgram() != null){
                         Set<ProgramWorkflowState> pwsSet = mu.getStatesCultureStatus();
                         Set<PatientState> psSet = mp.getPatientProgram().getStates();

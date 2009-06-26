@@ -457,7 +457,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             Patient newPatient = null;
             try {
                 newPatient = ps.savePatient(patient);
-                MdrtbFactory mu = new MdrtbFactory();
+                MdrtbFactory mu = MdrtbFactory.getInstance();
                 //enroll in program
                 String enrollmentDateString = request.getParameter("programEnrollmentDate");
                 try {

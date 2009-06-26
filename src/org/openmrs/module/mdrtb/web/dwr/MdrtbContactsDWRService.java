@@ -69,7 +69,7 @@ public class MdrtbContactsDWRService {
                 }
             }
             
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             ObsService os = Context.getObsService();
             List<Obs> oListPhone = os.getObservationsByPersonAndConcept(contact, mu.getConceptPhoneNumber());
                if (oListPhone.size() > 0){
@@ -183,7 +183,7 @@ public class MdrtbContactsDWRService {
             
               //newKnownMDRString
                 if (popupKnownMDRVal != null){
-                    MdrtbFactory mu = new MdrtbFactory();
+                    MdrtbFactory mu = MdrtbFactory.getInstance();
                     ObsService os = Context.getObsService();
                     Concept cKnown = mu.getConceptKnownMDRCase();
                     List<Obs> oList = os.getObservationsByPersonAndConcept(contact, cKnown);
@@ -230,7 +230,7 @@ public class MdrtbContactsDWRService {
             person.addAddress(pa);
             person = Context.getPersonService().savePerson(person);
             
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             
             Obs o = new Obs();
             o.setConcept(mu.getConceptPhoneNumber());

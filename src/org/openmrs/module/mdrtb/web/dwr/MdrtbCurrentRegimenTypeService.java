@@ -34,7 +34,7 @@ public class MdrtbCurrentRegimenTypeService {
                     System.out.println("error in mdrtb regimen utils: " + regTypeInt + " can't be converted to an integer.");
                 }
                 if (regTypeInt != null) {
-                    MdrtbFactory mu = new MdrtbFactory();
+                    MdrtbFactory mu = MdrtbFactory.getInstance();
                     Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
                     boolean needNewObs = true;

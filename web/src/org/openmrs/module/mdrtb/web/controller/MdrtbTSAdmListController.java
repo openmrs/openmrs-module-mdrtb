@@ -146,7 +146,7 @@ public class MdrtbTSAdmListController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
         List<MdrtbTreatmentSupporter> ret = new ArrayList<MdrtbTreatmentSupporter>();
         if (Context.isAuthenticated()){
-                MdrtbFactory mu = new MdrtbFactory();
+                MdrtbFactory mu = MdrtbFactory.getInstance();
                 Concept phoneConcept = mu.getConceptPhoneNumber();
                 String treatSupAttributeTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_person_attribute_type");
                 PersonService ps = Context.getPersonService();

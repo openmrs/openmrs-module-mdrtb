@@ -139,7 +139,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             
         
                 if (msa.getMessage("mdrtb.savebacteriology").equals(action)) {
-                    MdrtbFactory mu = new MdrtbFactory();
+                    MdrtbFactory mu = MdrtbFactory.getInstance();
                     if (enc.getEncounterType() == null)
                         enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
                     if (enc.getEncounterType() == null)
@@ -591,7 +591,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 es.saveEncounter(encTmp);
             }
             if (mdrTest){
-                MdrtbFactory mu = new MdrtbFactory();
+                MdrtbFactory mu = MdrtbFactory.getInstance();
                 mu.fixCultureConversions(patient);
                 mu = null;
             }
@@ -674,7 +674,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             
             //HACK:
             //MdrtbUtil.getMDRTBConceptByName(STR_DST_COMPLETE, new Locale("en", "US"))
-            MdrtbFactory mu = new MdrtbFactory();
+            MdrtbFactory mu = MdrtbFactory.getInstance();
             Concept nonCodedConcept = mu.getConceptOtherMycobacteriaNonCoded();
             if (nonCodedConcept != null)
                 map.put("OtherNonCodedId", nonCodedConcept.getConceptId());

@@ -17,7 +17,7 @@ public class MdrtbNextVisit {
     
     public boolean setNextVisitDate(String newDate, int patientId, int locationId){
         Date ret = new Date();
-        MdrtbFactory mu = new MdrtbFactory();
+        MdrtbFactory mu = MdrtbFactory.getInstance();
         
         Concept nextVisitConcept = mu.getConceptNextVisit();
         Person p = Context.getPersonService().getPerson(patientId);

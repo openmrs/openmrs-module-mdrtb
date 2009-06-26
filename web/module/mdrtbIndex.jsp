@@ -5,6 +5,7 @@
 <h2><table><tr><td><img src="/openmrs/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" /></td></tr></table></h2>
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/findPatient.htm" />
 <spring:message var="pageTitle" code="findPatient.title" scope="page"/>
+<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <br />
 <table class="indexTable">
 	<tr>
