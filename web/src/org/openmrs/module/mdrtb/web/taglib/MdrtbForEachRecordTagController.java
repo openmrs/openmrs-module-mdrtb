@@ -1,6 +1,8 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,7 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.PatientService;
@@ -28,6 +31,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.springframework.util.StringUtils;
 
 
 public class MdrtbForEachRecordTagController extends BodyTagSupport {
@@ -160,6 +164,28 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
         else if (name.equals("role")) {
             List<Role> ret = Context.getUserService().getAllRoles();
             records = ret.iterator();
+        }
+        else if (name.equals("user")) {
+        	List<User> users = new ArrayList<User>();
+        	if (StringUtils.hasText(filterList)) {
+        		for (StringTokenizer st = new StringTokenizer(filterList, "|"); st.hasMoreTokens(); ) {
+        			String r = st.nextToken();
+        			Role role = Context.getUserService().getRole(r);
+        			if (role == null) {
+        				throw new IllegalArgumentException("An invalid role of " + r + " was specified.");
+        			}
+        			users.addAll(Context.getUserService().getUsersByRole(role));
+        		}
+        	}
+        	else {
+        		users.addAll(Context.getUserService().getAllUsers());
+        	}
+        	Collections.sort(users, new Comparator<User>() {
+    			public int compare(User u1, User u2) {
+    				return u1.getPersonName().compareTo(u2.getPersonName());
+    			}
+    		});
+    		records = users.iterator();
         }
         else if (name.equals("conceptSet")) {
             if (conceptSet == null)

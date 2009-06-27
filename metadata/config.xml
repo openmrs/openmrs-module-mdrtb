@@ -349,7 +349,16 @@
 		<defaultValue>intermediate|INTERMEDIATE|MODÉRÉE</defaultValue>
 		<description>Sets list of concept name strings that should be displayed in yellow in bacteriology and dst widget.</description>
 	</globalProperty>
-	
+	<globalProperty>
+		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
+		<defaultValue></defaultValue>
+		<description>This should be the name of the encounter type that you want to use for encounters wrapping specimen collections.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.lab_test_order_type</property>
+		<defaultValue></defaultValue>
+		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
+	</globalProperty>
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">

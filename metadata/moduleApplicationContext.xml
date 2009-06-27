@@ -17,6 +17,8 @@
             	<prop key="module/@MODULE_ID@/mdrtbAddPatientForm.form">MdrtbAddPatientFormController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbEditTestContainer.form">MdrtbEditTestContainerController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
+            	<prop key="module/@MODULE_ID@/mdrtbSpecimenRegistration.form">MdrtbSpecimenRegistrationController</prop>
+            	<prop key="module/@MODULE_ID@/mdrtbSpecimenTracking.form">MdrtbSpecimenTrackingController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -25,7 +27,7 @@
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbManageContacts</value></property>
 		<property name="successView"><value>mdrtbPatientOverview.form</value></property>
-    </bean>
+    </bean>     
     <bean id="MdrtbFormController" class="@MODULE_PACKAGE@.web.controller.MdrtbFormController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
@@ -68,6 +70,16 @@
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
 		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
     </bean> 
+	<bean id="MdrtbSpecimenRegistrationController" class="@MODULE_PACKAGE@.web.controller.MdrtbSpecimenRegistrationController">
+		<property name="commandName"><value>obj</value></property>
+		<property name="formView"><value>/module/@MODULE_ID@/mdrtbSpecimenRegistration</value></property>
+		<property name="successView"><value>mdrtbSpecimenTracking.form</value></property>
+    </bean>
+	<bean id="MdrtbSpecimenTrackingController" class="@MODULE_PACKAGE@.web.controller.MdrtbSpecimenTrackingController">
+		<property name="commandName"><value>obj</value></property>
+		<property name="formView"><value>/module/@MODULE_ID@/mdrtbSpecimenTracking</value></property>
+		<property name="successView"><value>mdrtbSpecimenTracking.form</value></property>
+    </bean>
     <bean parent="serviceContext">
 		<property name="moduleService">
 			<list>

@@ -12,6 +12,7 @@
 		var retSize = 0;
 		var headerShown = 0;
 		var savedRet = new Array();
+		var mappedRet = new Array();
 		var showLoading = 0;
 		var $j = jQuery.noConflict();		
 		$j(document).ready(function(){
@@ -60,7 +61,16 @@
 	}
 	
 	function selectPatient(input){
-		window.location='/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=STATUS';
+		<c:choose>
+			<c:when test="${not empty model.callback}">
+				${model.callback}(mappedRet[input]);
+				$j('#results').css('display','none');
+	   			$j('#searchBox').val('');
+	   		</c:when>
+	   		<c:otherwise>
+	   			window.location='/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=STATUS';
+	   		</c:otherwise>
+	   	</c:choose>
 	}
 	function mouseOver(input){
 		classTmp = this.className;
@@ -127,12 +137,14 @@
 	
 	function drawTable(ret){
    						DWRUtil.removeAllRows('resTableBody');
+   						mappedRet = new Array();
    						var count = from+1;
    						var cellFuncs = [
    								// the cell counter
 								function(patient) {
 									if (patient.patientId != null && patient.patientId != "NaN"){
 									var patientIdDiv='<div style="display:none" id="patientIdDiv">'+patient.patientId+'</div>';
+									mappedRet[patient.patientId]=patient;
 									return patientIdDiv + count++;
 									}
 								},
@@ -404,7 +416,11 @@ function useMdrtbLoadingMessage(message) {
 	<c:choose>
 		<c:when test="${model.size=='mini'}">
 			<span id="findPatient">
-				<spring:message code="Patient.find"/><input type="text" value="" id="searchBox" name="searchBox">
+				<c:choose>
+					<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
+					<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
+				</c:choose>
+				<input type="text" value="" id="searchBox" name="searchBox">
 				<div id="results" style="position:absolute; z-index:1000; border:2px solid black; background-color:#CCCCCC; ${model.resultStyle}">
 					<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
 						<thead id="resTableHeader" class="resTableHeader"/>	
@@ -420,7 +436,11 @@ function useMdrtbLoadingMessage(message) {
 				<b class="boxHeader"><spring:message code="Patient.find" /></b>
 				<div class="box" style="padding: 15px 15px 15px 15px;">
 					
-					<spring:message code="Patient.find"/><input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">   &nbsp;&nbsp;<input type="checkbox" id="includeRetired" unchecked><spring:message code="mdrtb.includeretired"/><br>
+					<c:choose>
+						<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
+						<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
+					</c:choose>
+					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">   &nbsp;&nbsp;<input type="checkbox" id="includeRetired" unchecked><spring:message code="mdrtb.includeretired"/><br>
 
 					<div id="results">
 						<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">

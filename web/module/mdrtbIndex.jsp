@@ -65,7 +65,23 @@
 					</div>
 				</openmrs:hasPrivilege>
 			</openmrs:extensionPoint>
+			
+			<openmrs:globalProperty key="mdrtb.enable_specimen_tracking" var="enableSpecimenTracking"/>
+
 			<table class="indexInner" style="border-collapse:collapse;">
+			
+				<c:if test="${enableSpecimenTracking == 'true'}">
+					<tr class="${rowClass}"><Td>
+						<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbSpecimenRegistration.form">
+							<spring:message code="mdrtb.specimenRegistrationLink"/>
+						</a>
+						<br/>
+						<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbSpecimenTracking.form">
+							<spring:message code="mdrtb.specimenTrackingLink"/>
+						</a>
+					</td></tr>
+				</c:if>
+				
 				<Tr><Td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewreports"/>&nbsp;&nbsp;</b></Td></tr>
 				<c:forEach var="report" items="${reports}" varStatus="varStatus">
 					<c:set var="rowClass" scope="page">
