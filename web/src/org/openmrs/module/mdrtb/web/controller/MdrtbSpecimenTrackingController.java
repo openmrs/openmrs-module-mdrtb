@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
+import org.openmrs.Order;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -68,9 +71,17 @@ public class MdrtbSpecimenTrackingController extends SimpleFormController {
 		
 		List<Encounter> encounters = new ArrayList<Encounter>();
     	String encounterTypeName = Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type");
+    	Concept dstConcept = MdrtbFactory.getInstance().getConceptDSTParent();
     	try {
     		List<EncounterType> ec = Arrays.asList(Context.getEncounterService().getEncounterType(encounterTypeName));
-    		encounters.addAll(Context.getEncounterService().getEncounters(null, null, null, null, null, ec, false));
+    		List<Encounter> encs = Context.getEncounterService().getEncounters(null, null, null, null, null, ec, false);
+    		for (Encounter e : encs) {
+    			for (Order o : e.getOrders()) {
+    				if (o.getConcept() != null && o.getConcept().getConceptId().equals(dstConcept.getConceptId())) {
+    					encounters.add(e);
+    				}
+    			}
+    		}
     	}
     	catch (Exception e) {
     		log.warn("You have configured an invalid encounter type in mdrtb.specimen_collection_encounter_type");
