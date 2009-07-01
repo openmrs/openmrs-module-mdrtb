@@ -334,8 +334,6 @@
 <div id="content" style="border-top: 1px grey solid; border-top: none; padding: 4px 5px 2px 10px;">
 		
 		<div  style="display:inline" id="searchTab_status_content"><bR>
-			<openmrs:portlet url="mdrtbPatientSummary" id="mdrtbPatientSummary" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
-			<br>
 			<openmrs:portlet url="mdrtbStatus" id="mdrtbStatus" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</div>
 		
