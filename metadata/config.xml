@@ -359,6 +359,13 @@
 		<defaultValue></defaultValue>
 		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.urlResourceRoot</property>
+		<defaultValue>https://mdrtbmodule.pih-emr.org</defaultValue>
+		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
+	</globalProperty>
+	
+	
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">

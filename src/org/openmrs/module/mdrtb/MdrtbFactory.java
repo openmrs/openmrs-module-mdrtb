@@ -243,15 +243,11 @@ public class MdrtbFactory {
     }
     
     private void readXML(){
-        //String httpBase = Context.getAdministrationService().getGlobalProperty("formentry.infopath_server_url");
-        String httpBase = "http://localhost";
-        if (httpBase.indexOf("/openmrs") > 0)
-        httpBase = httpBase.substring(0, httpBase.indexOf("/openmrs"));
+        String httpBase = Context.getAdministrationService().getGlobalProperty("mdrtb.urlResourceRoot");
         String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-                if (!XMLlocation.substring(10).contains(":"))
-                XMLlocation = httpBase + Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port") + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
+                
         try{ 
-            
+
         URL xmlURL = new URL(XMLlocation);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -786,7 +782,7 @@ public class MdrtbFactory {
         return ret;
     }
     
-    public Concept getConceptCultureConverstion(){
+    public Concept getConceptCultureConversion(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_CONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
@@ -1260,7 +1256,7 @@ public class MdrtbFactory {
         
         Date ret = null;
         Map<Obs,Date> map = this.getCultures(p);
-        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptCultureConverstion());      
+        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptCultureConversion());      
         Concept cCulture = this.getConceptCultureResult();
         
         if (oList != null){
@@ -1355,7 +1351,7 @@ public class MdrtbFactory {
             this.cleanCultureStatusObs(p);
             Date date = null;
             Map<Obs, Date> map = this.getCultures(p);
-            Concept ccConcept = this.getConceptCultureConverstion();
+            Concept ccConcept = this.getConceptCultureConversion();
             Concept rcConcept = this.getConceptCultureReconversion();
             if (map != null && map.size() > 2)
                 date = this.getCultureConversionDate(p);
@@ -1470,7 +1466,7 @@ public class MdrtbFactory {
         //the patient must be enrolled in the mdrtb program for this to run:
         if (programs.size() > 0){
             
-            Concept cc = this.getConceptCultureConverstion();
+            Concept cc = this.getConceptCultureConversion();
             Concept rc = this.getConceptCultureReconversion();
             ProgramWorkflowService pws = Context.getProgramWorkflowService();
             
@@ -1611,7 +1607,7 @@ public class MdrtbFactory {
      */
     public void cleanCultureStatusObs(Patient p){
         ObsService os = Context.getObsService();
-        Concept ccConcept = this.getConceptCultureConverstion();
+        Concept ccConcept = this.getConceptCultureConversion();
         Concept rcConcept = this.getConceptCultureReconversion();
         Map<Obs, Date> map = this.getCultures(p);
         

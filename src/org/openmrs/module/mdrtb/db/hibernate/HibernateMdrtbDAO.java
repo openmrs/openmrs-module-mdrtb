@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.db.hibernate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -8,7 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.Order;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.HibernateOrderDAO;
@@ -61,6 +64,21 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
         crit.add(Expression.in("name", nameList));
         crit.add(Expression.eq("voided", false));
         ret = crit.list();
+        //TODO:  fix this -- it SUCKS!!!!
+        for (ConceptName cnTmp : ret){
+          Collection<ConceptAnswer> cas = cnTmp.getConcept().getAnswers();
+          if (cas != null){
+              for (ConceptAnswer ca : cas){
+                  Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                  for (ConceptName cn:cnsTmp){
+                      Collection<ConceptNameTag> tags = cn.getTags();
+                      for (ConceptNameTag cnTag:tags){
+                          cnTag.getTag();
+                      }
+                  } 
+              }
+          }
+        } 
         return ret;
     }
     

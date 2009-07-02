@@ -234,6 +234,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             Concept prevTreat = mu.getConceptPatientClassPrevTreatment();
             Concept tbCaseClass = mu.getConceptTBCaseClassification();
             Concept hivResultStatus = mu.getConceptHIVStatus();
+            
             map.put("prevDrugUse",drugUse.getAnswers());
             map.put("prevTreatment", prevTreat.getAnswers());
             map.put("tbCaseClass",tbCaseClass.getAnswers());
@@ -1692,7 +1693,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     
                     
                     
-                    Concept cultureConversionConcept = mu.getConceptCultureConverstion();
+                    Concept cultureConversionConcept = mu.getConceptCultureConversion();
                     
                     if (cultureConversionConcept.getConceptId() != null){
                         List<Obs> oList = os.getObservationsByPersonAndConcept(patient, cultureConversionConcept); 

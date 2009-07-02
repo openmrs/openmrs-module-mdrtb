@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
@@ -34,6 +35,18 @@ public class MdrtbUtil {
             Concept cTmp = cw.getConcept();
             for (ConceptName cns : cTmp.getNames(loc)){
                 if (cns.getName().trim().equals(conceptString.trim())){
+                    Collection<ConceptAnswer> cas = cTmp.getAnswers();
+                    if (cas != null){
+                        for (ConceptAnswer ca : cas){
+                            Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                            for (ConceptName cn:cnsTmp){
+                                Collection<ConceptNameTag> tags = cn.getTags();
+                                for (ConceptNameTag cnTag:tags){
+                                    cnTag.getTag();
+                                }
+                            } 
+                        }
+                    }
                     return cTmp;
                 }  
             }
@@ -51,6 +64,18 @@ public class MdrtbUtil {
                 for (Locale localTmp :locales){
                     for (ConceptName cns : cTmp.getNames(localTmp)){
                         if (cns.getName().trim().equals(conceptString.trim())){
+                            Collection<ConceptAnswer> cas = cTmp.getAnswers();
+                            if (cas != null){
+                                for (ConceptAnswer ca : cas){
+                                    Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                                    for (ConceptName cn:cnsTmp){
+                                        Collection<ConceptNameTag> tags = cn.getTags();
+                                        for (ConceptNameTag cnTag:tags){
+                                            cnTag.getTag();
+                                        }
+                                    } 
+                                }
+                            }
                             return cTmp;
                         }  
                     }  
@@ -69,6 +94,18 @@ public class MdrtbUtil {
         //first, if there's an exact match in the passed-in locale, that's what we want
              for (ConceptName cns : cnList){
                 if (cns.getName().trim().equals(conceptString.trim()) && cns.getLocale().equals(loc)){
+                    Collection<ConceptAnswer> cas = cns.getConcept().getAnswers();
+                    if (cas != null){
+                        for (ConceptAnswer ca : cas){
+                            Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                            for (ConceptName cn:cnsTmp){
+                                Collection<ConceptNameTag> tags = cn.getTags();
+                                for (ConceptNameTag cnTag:tags){
+                                    cnTag.getTag();
+                                }
+                            }    
+                        }
+                    }
                     return cns.getConcept();
                 }  
             }
@@ -78,6 +115,18 @@ public class MdrtbUtil {
             //first, if there's an exact match in the passed-in locale, that's what we want
                     for (ConceptName cns : cnList){
                         if (cns.getName().trim().equals(conceptString.trim())){
+                            Collection<ConceptAnswer> cas = cns.getConcept().getAnswers();
+                            if (cas != null){
+                                for (ConceptAnswer ca : cas){
+                                    Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                                    for (ConceptName cn:cnsTmp){
+                                        Collection<ConceptNameTag> tags = cn.getTags();
+                                        for (ConceptNameTag cnTag:tags){
+                                            cnTag.getTag();
+                                        }
+                                    }
+                                }
+                            }
                             return cns.getConcept();
                         }  
                     }  

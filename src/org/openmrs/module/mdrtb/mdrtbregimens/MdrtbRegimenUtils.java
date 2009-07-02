@@ -32,13 +32,9 @@ public class MdrtbRegimenUtils {
             List<MdrtbRegimenSuggestion> ret = new ArrayList<MdrtbRegimenSuggestion>();
             
             
-            String httpBase = "http://localhost";
-            if (httpBase.indexOf("/openmrs") > 0)
-                httpBase = httpBase.substring(0, httpBase.indexOf("/openmrs"));
+            String httpBase = Context.getAdministrationService().getGlobalProperty("mdrtb.urlResourceRoot");
             String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
-            if (!XMLlocation.substring(10).contains(":"))
-                XMLlocation = httpBase + Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port") + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
-            
+                
             try{ 
                 
                 URL xmlURL = new URL(XMLlocation);
