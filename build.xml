@@ -56,6 +56,7 @@
 		
 		<!--  Compile module java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source">
+			<compilerarg line="-g" />
 			<compilerarg line="-target 1.5" />
 			<src path="src/" />
 			<include name="**/*.java" />
@@ -114,6 +115,13 @@
 				<fileset dir="dist" includes="**/*" />
 			</copy>
 		</target>
+	
+	<target name="deploy-web-darius" depends="package-module" description="Deploy-web for Darius">
+			<property environment="env"/>
+			<copy todir="/home/djazayeri/apache-tomcat-6.0.16/webapps/openmrs/WEB-INF/view/module/${module.id}">
+				<fileset dir="web/module" includes="**/*" />
+			</copy>
+	</target>
 	
 	<target name="package-jar" depends="package-module" description="Packages class files into jar file to be included in other projects">
 		<!-- Create distributable jar file -->
