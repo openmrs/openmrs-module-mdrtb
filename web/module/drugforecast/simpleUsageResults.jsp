@@ -49,7 +49,7 @@
 			<td><small>${row.drug.concept.name} ${row.drug.doseStrength} ${row.drug.units} ${row.drug.dosageForm}</small></td>
 			<td align="right"><b>${row.totalUsage}</b></td>
 			<td align="right">${row.dailyUsage}</td>
-			<td align="center">$<input class="priceBox" id="price_of_${status.count}" type="text" size="5" onChange="calculateCosts()"/></td>
+			<td align="center">x $<input class="priceBox" id="price_of_${status.count}" type="text" size="5" onChange="calculateCosts()"/> =</td>
 			<td align="right">$<span class="costBox" id="cost_of_${status.count}"/></td>
 		</tr>
 	</c:forEach>
