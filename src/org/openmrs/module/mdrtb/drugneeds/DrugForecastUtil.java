@@ -6,8 +6,12 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
@@ -27,8 +31,46 @@ public class DrugForecastUtil {
     static Date endOfTime;
     static {
         Calendar cal = new GregorianCalendar();
-        cal.set(Calendar.YEAR, 2999);
+        cal.set(Calendar.YEAR, 3999);
         endOfTime = cal.getTime();
+    }
+    
+    public static Map<Drug, Integer> countPatientsTakingDrugs(Cohort cohort, Concept drugSet, Date onDate) {
+        Map<Drug, Set<Integer>> temp = new HashMap<Drug, Set<Integer>>();
+        for (DrugOrder o : getDrugOrders(cohort, drugSet, onDate, onDate)) {
+            if (o.getDrug() != null) {
+                addToSet(temp, o.getDrug(), o.getPatient().getPatientId());
+            }
+        }
+        final Locale loc = Context.getLocale();
+        Map<Drug, Integer> ret = new TreeMap<Drug, Integer>(new Comparator<Drug>() {
+            public int compare(Drug left, Drug right) {
+                return left.getName().compareTo(right.getName());
+            }
+        });
+        for (Map.Entry<Drug, Set<Integer>> e : temp.entrySet()) {
+            ret.put(e.getKey(), e.getValue().size());
+        }
+        return ret;
+    }
+    
+    public static Map<Concept, Integer> countPatientsTakingGenericDrugs(Cohort cohort, Concept drugSet, Date onDate) {
+        Map<Concept, Set<Integer>> temp = new HashMap<Concept, Set<Integer>>();
+        for (DrugOrder o : getDrugOrders(cohort, drugSet, onDate, onDate)) {
+            if (o.getConcept() != null) {
+                addToSet(temp, o.getConcept(), o.getPatient().getPatientId());
+            }
+        }
+        final Locale loc = Context.getLocale();
+        Map<Concept, Integer> ret = new TreeMap<Concept, Integer>(new Comparator<Concept>() {
+            public int compare(Concept left, Concept right) {
+                return left.getBestName(loc).getName().compareTo(right.getBestName(loc).getName());
+            }
+        });
+        for (Map.Entry<Concept, Set<Integer>> e : temp.entrySet()) {
+            ret.put(e.getKey(), e.getValue().size());
+        }
+        return ret;
     }
     
     public static Map<Drug, Double> simpleDrugNeedsCalculation(Cohort cohort, Concept drugSet, Date fromDate, Date toDate) {
@@ -47,6 +89,12 @@ public class DrugForecastUtil {
     }
 
     private static Collection<DrugOrder> getDrugOrders(Cohort cohort, Concept drugSet, Date fromDate, Date toDate) {
+        if (fromDate.compareTo(toDate) == 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fromDate);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            toDate = cal.getTime();
+        }
         List<DrugOrder> ret = new ArrayList<DrugOrder>();
         for (Collection<DrugOrder> orders : Context.getPatientSetService().getDrugOrders(cohort, drugSet).values()) {
             for (DrugOrder o : orders) {
@@ -92,6 +140,15 @@ public class DrugForecastUtil {
             map.put(key, amount);
         else
             map.put(key, i + amount);
+    }
+    
+    public static <T> void addToSet(Map<T, Set<Integer>> map, T key, Integer value) {
+        Set<Integer> s = map.get(key);
+        if (s == null) {
+            s = new HashSet<Integer>();
+            map.put(key, s);
+        }
+        s.add(value);
     }
 
     public static int daysOfOverlap(DrugOrder o, Date startDate, Date endDate) {

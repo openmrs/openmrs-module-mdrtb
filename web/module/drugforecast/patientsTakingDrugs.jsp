@@ -4,7 +4,7 @@
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
 <form method="post">
-	<h2>Drug Usage Calculation</h2>
+	<h2>Count Patients Taking Drugs</h2>
 	
 	<br/>
 	
@@ -24,18 +24,26 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right">From date:</td>
-			<td><input name="fromDate" type="text" size="10" onClick="showCalendar(this)"/></td>
+			<td align="right">On date:</td>
+			<td><input name="onDate" type="text" size="10" onClick="showCalendar(this)"/></td>
 		</tr>
+<%--
 		<tr>
-			<td align="right">To date:</td>
-			<td><input name="toDate" type="text" size="10" onClick="showCalendar(this)"/></td>
+			<td align="right">Method:</td>
+			<td>
+				<input type="radio" name="method" value="generic" checked="true"/>Generics
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="method" value="drug"/>Drug formulations
+			</td>
 		</tr>
+--%>
 		<tr>
 			<td align="right"></td>
 			<td>&nbsp;<br/><input type="submit" value="Calculate"/></td>
 		</tr>
-	</table>	
+	</table>
+
+<input type="hidden" name="method" value="drug"/>	
 
 </form>
 

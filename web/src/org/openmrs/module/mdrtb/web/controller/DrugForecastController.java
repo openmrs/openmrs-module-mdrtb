@@ -94,5 +94,46 @@ public class DrugForecastController {
         model.put("usage", data);
         return "/module/mdrtb/drugforecast/simpleUsageResults";
     }
+
     
+    @RequestMapping(method=RequestMethod.GET, value="/module/mdrtb/drugforecast/patientsTakingDrugs")
+    public void showCountPatientsOnDrugsOptions(ModelMap model) {
+        Cohort cohort = Context.getPatientSetService().getAllPatients();
+        cohort.setDescription("All patients in system");
+        List<Concept> drugSets = new ArrayList<Concept>();
+        {
+            Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
+            tb.getConceptSets();
+            drugSets.add(tb);
+        }
+        model.addAttribute(cohort);
+        model.addAttribute("drugSets", drugSets);
+    }
+    
+    
+    @RequestMapping(method=RequestMethod.POST, value="/module/mdrtb/drugforecast/patientsTakingDrugs")
+    public String doCountPatientsOnDrugs(
+            @ModelAttribute Cohort cohort,
+            @RequestParam("method") String method,
+            @RequestParam("drugSet") Concept drugSet,
+            @RequestParam(value="onDate", required=false) Date onDate,
+            ModelMap model) {
+
+        if (onDate == null)
+            onDate = new Date();
+
+        model.put("drugSet", drugSet);
+        model.put("onDate", onDate);
+        model.put("method", method);
+
+        if (method.equals("drug")) {
+            Map<Drug, Integer> data = DrugForecastUtil.countPatientsTakingDrugs(cohort, drugSet, onDate);
+            model.put("patientsTaking", data);
+        } else { // generic
+            Map<Concept, Integer> data = DrugForecastUtil.countPatientsTakingGenericDrugs(cohort, drugSet, onDate);
+            model.put("patientsTaking", data);
+        }
+        
+        return "/module/mdrtb/drugforecast/patientsTakingDrugsResults";
+    }
 }

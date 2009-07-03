@@ -17,7 +17,7 @@
 <table width="100%">
 	<tr>
 		<td bgcolor="#e0e0ff">
-			Simple Drug Usage Calculation for
+			Drug Usage Calculation for
 			<b><openmrs:format concept="${drugSet}"/></b>
 			for
 			<b>${cohort.description}</b>
@@ -38,8 +38,8 @@
 <table class="resultsTable" cellspacing="0" cellpadding="2">
 	<tr>
 		<th colspan="2">Medication</th>
-		<th>Total Quantity<br/>Required</th>
 		<th>Average<br/>Daily Usage</th>
+		<th>Total Quantity<br/>Required</th>
 		<th>Price<br/>per unit</th>
 		<th>Cost for<br/>this drug</th>
 	</tr>
@@ -47,8 +47,8 @@
 		<tr>
 			<td><b>${row.drug.name}</b></td>
 			<td><small>${row.drug.concept.name} ${row.drug.doseStrength} ${row.drug.units} ${row.drug.dosageForm}</small></td>
-			<td align="right"><b>${row.totalUsage}</b></td>
 			<td align="right">${row.dailyUsage}</td>
+			<td align="right"><b>${row.totalUsage}</b></td>
 			<td align="center">x $<input class="priceBox" id="price_of_${status.count}" type="text" size="5" onChange="calculateCosts()"/> =</td>
 			<td align="right">$<span class="costBox" id="cost_of_${status.count}"/></td>
 		</tr>
