@@ -104,7 +104,7 @@
 				<c:if test='${reportDef != ""}'>		
 					<Tr><Td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></Td></tr>
 					<tr class="oddRow"><td><a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a></td></tr>
-					<tr class="evenRow"><td><a href="/openmrs/module/drugrequirements/simpleDrugNeeds.form?calculationMethod=genericDrugs&cohortDefinition=${reportDef}%3Aorg.openmrs.reporting.PatientSearch"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a></td></tr>
+					<%-- <tr class="evenRow"><td><a href="/openmrs/module/drugrequirements/simpleDrugNeeds.form?calculationMethod=genericDrugs&cohortDefinition=${reportDef}%3Aorg.openmrs.reporting.PatientSearch"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a></td></tr> --%>
 				</c:if>
 			
 			</table>
