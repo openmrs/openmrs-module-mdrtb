@@ -38,7 +38,7 @@
    			});	
  		});
 	
-	function addRowEvents(){
+	function addRowEventsFindPatient(){
 		var tbody = document.getElementById('resTableBody');
 		var trs = tbody.getElementsByTagName("tr");
 		for(i = 0; i < trs.length; i++){
@@ -300,7 +300,7 @@
   								 $j('table.resTable tbody tr:even').addClass('evenRow');
    								 $j('table.resTable tbody tr').attr('onmouseover','javascript:mouseOver(this);refresh(this);');
    								 $j('table.resTable tbody tr').attr('onmouseout','javascript:mouseOut(this); refresh(this);');
-   								 addRowEvents();
+   								 addRowEventsFindPatient();
    								 fixHeader();
    								 $j('#results').css('display','');		
    								} 					
