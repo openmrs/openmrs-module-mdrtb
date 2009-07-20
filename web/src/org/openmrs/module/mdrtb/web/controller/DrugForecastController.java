@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.drugneeds.DrugForecastUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -41,7 +43,7 @@ public class DrugForecastController {
         cohort.setDescription("All patients in system");
         List<Concept> drugSets = new ArrayList<Concept>();
         {
-            Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
+            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"));
             tb.getConceptSets();
             drugSets.add(tb);
         }
@@ -102,7 +104,7 @@ public class DrugForecastController {
         cohort.setDescription("All patients in system");
         List<Concept> drugSets = new ArrayList<Concept>();
         {
-            Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
+            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"));
             tb.getConceptSets();
             drugSets.add(tb);
         }

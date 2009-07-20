@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
@@ -108,8 +109,17 @@ public class MdrtbDSTWidgetController extends TagSupport {
             String tmp = st.nextToken().trim();
            
             Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu.getXmlConceptNameList());
-            if (c != null)
+            if (c != null){
+                Collection<ConceptName> cnsTmp = c.getNames();
+                for (ConceptName cn:cnsTmp){
+                    Collection<ConceptNameTag> tags = cn.getTags();
+                    for (ConceptNameTag cnTag:tags){
+                        cnTag.getTag();
+                    }
+                }
                 obsGroupConcepts.add(c.getBestName(locUS).getName());
+                
+            }    
         }
         
         if (this.toDate == null)

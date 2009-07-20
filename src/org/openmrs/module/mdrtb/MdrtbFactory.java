@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class MdrtbFactory {
+public final class MdrtbFactory {
     
     private static MdrtbFactory instance = null;
 
@@ -235,11 +235,12 @@ public class MdrtbFactory {
 
     private MdrtbFactory(){readXML();};
     
-    public static MdrtbFactory getInstance() {
-        if (instance == null){
-            instance = new MdrtbFactory(); 
-        }
-        return instance;
+    private static class MdrtbFactoryHolder {
+        private static MdrtbFactory uniqueInstance = new MdrtbFactory();
+    }
+    
+    public static final MdrtbFactory getInstance() {
+        return MdrtbFactoryHolder.uniqueInstance;
     }
     
     private void readXML(){
@@ -2625,8 +2626,7 @@ public class MdrtbFactory {
 
     public void setXmlConceptNameList(List<ConceptName> xmlConceptNameList) {
         this.xmlConceptNameList = xmlConceptNameList;
-    }
-
+    } 
 }
 
 
