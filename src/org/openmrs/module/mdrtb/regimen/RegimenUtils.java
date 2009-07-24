@@ -283,6 +283,44 @@ public class RegimenUtils {
         else 
             return false;
     }
+    
+    public static String getCurrentRegimenAsString(Patient p, String sepparator, boolean includeDosages){
+        if (sepparator == null)
+            sepparator = "";
+        String ret = "";
+        RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
+        if (rh != null){
+            Regimen r = rh.getRegimen(new Date());
+            if (r != null && r.getComponents()!= null){
+                int total = r.getComponents().size();
+                int count = 1;
+                for (RegimenComponent rc : r.getComponents()){
+                    if (rc.getDrug() == null)
+                        ret += rc.getGeneric().getBestName(Context.getLocale());
+                    else
+                        ret += rc.getDrug().getName();
+                    if (includeDosages)
+                        ret += " (" + rc.getDrugOrder().getDose() + " " + rc.getDrugOrder().getUnits()+ " " + rc.getDrugOrder().getFrequency() + ")";
+                    if (count != total )
+                        ret += sepparator;
+                    count ++;
+                }
+            }   
+        }
+        return ret;
+    }
+    
+    public static Regimen getCurrentRegimen(Patient p){
+        Regimen ret = null;
+        RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
+        if (rh != null){
+            Regimen r = rh.getRegimen(new Date());
+            if (r != null){
+               return r;
+            }   
+        }
+        return ret;
+    }
 }
 
 

@@ -14,7 +14,7 @@
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
            
     <bean id="MdrtbMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    	<property name="order"><value>14</value></property>
+    	<property name="order"><value>71</value></property>
     	<property name="mappings">
             <props>
            		<prop key="module/@MODULE_ID@/mdrtbTSAdmin.list">MdrtbAdmiList</prop> 		

@@ -106,7 +106,9 @@ public class MdrtbUtil {
                             }    
                         }
                     }
-                    return cns.getConcept();
+                    Concept cRet = cns.getConcept();
+                    cRet = Context.getConceptService().getConcept(cRet.getConceptId());
+                    return cRet;
                 }  
             }
         //second, check all other locales if still null 
@@ -127,7 +129,9 @@ public class MdrtbUtil {
                                     }
                                 }
                             }
-                            return cns.getConcept();
+                            Concept cRet = cns.getConcept();
+                            cRet = Context.getConceptService().getConcept(cRet.getConceptId());
+                            return cRet;
                         }  
                     }  
         }

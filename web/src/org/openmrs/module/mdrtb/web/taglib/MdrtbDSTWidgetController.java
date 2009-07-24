@@ -110,6 +110,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
            
             Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu.getXmlConceptNameList());
             if (c != null){
+                c = Context.getConceptService().getConcept(c.getConceptId());
                 Collection<ConceptName> cnsTmp = c.getNames();
                 for (ConceptName cn:cnsTmp){
                     Collection<ConceptNameTag> tags = cn.getTags();
@@ -158,7 +159,9 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
             Concept c =  MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"), mu.getXmlConceptNameList());
+            
             if (c != null) {
+                c = Context.getConceptService().getConcept(c.getConceptId());
                 for (Obs obx : observations) {
                     if (obx.getConcept().equals(c) && !obx.getVoided()){
                         if (obx.getValueDatetime() != null){
@@ -500,7 +503,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
             Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
             if (c != null) {
                 //if (tests.contains(c.getName(loc)) == false)  //we need to support multiples
-                    tests.add(c.getBestName(loc));
+                tests.add(c.getBestName(loc));
             }
         }
         return tests;

@@ -176,8 +176,9 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
             String tmp = st.nextToken().trim();
        
             Concept c = MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
-            if (c != null)
+            if (c != null){
                 obsGroupConcepts.add(c.getBestName(locUS).getName());
+            }    
         }
 
         if (this.toDate == null)
