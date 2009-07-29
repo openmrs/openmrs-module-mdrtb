@@ -92,7 +92,6 @@ public class Regimen {
     }
 
     public boolean isActive(Date date) {
-        System.out.println("Regimen test " + startDate + " " + date);
         return OpenmrsUtil.compareWithNullAsEarliest(startDate, date) <= 0
                 && OpenmrsUtil.compareWithNullAsLatest(date, endDate) < 0;
     }
