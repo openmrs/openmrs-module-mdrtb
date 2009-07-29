@@ -39,6 +39,7 @@ import org.openmrs.module.mdrtb.MdrtbDSTObj;
 import org.openmrs.module.mdrtb.MdrtbDSTResultObj;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbNewTestObj;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbSmearObj;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
@@ -657,7 +658,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             AdministrationService as = Context.getAdministrationService();
             ConceptService cs = Context.getConceptService();
             
-            map.put("testNames", this.getDSTTests(as, cs));
+            map.put("testNames", MdrtbUtil.getDstDrugList(false));
             map.put("dstResults", this.getDSTRes(as, cs));  
             map.put("organismTypes", this.getOrganismTypes(as, cs));
             map.put("smearResults", this.getSmearRes(as, cs));
@@ -773,35 +774,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         return map;
     }
 
-    private List<Concept> getDSTTests(AdministrationService as,
-            ConceptService cs) {
-        String testList = as.getGlobalProperty("mdrtb.DST_drug_list");
-        List<Concept> concepts = new ArrayList<Concept>();
-        
-        
-        Concept dstTestConcept = MdrtbUtil.getMDRTBConceptByName(testList, new Locale("en", "US"));
-        if (dstTestConcept != null && dstTestConcept.isSet()) {
-            Collection<ConceptAnswer> cas = dstTestConcept.getAnswers(false);
-            for (ConceptAnswer c : cas) {
-                concepts.add(c.getAnswerConcept());
-            }
-        } else if (dstTestConcept != null) {
-            concepts.add(dstTestConcept);
-        } else if (dstTestConcept == null) {
-            for (StringTokenizer st = new StringTokenizer(testList, "|"); st
-                    .hasMoreTokens();) {
-                String drugName = st.nextToken().trim();
-                List<ConceptWord> cw = cs.getConceptWords(drugName, MdrtbUtil.getLocalesFromDB(), false, null, null, null, null, null, null, null);
-                for (ConceptWord c : cw) {
-                    Concept concept = c.getConcept();
-                    ConceptName cn = concept.getBestName(new Locale("en"));
-                    if (cn.getName().equals(drugName))
-                        concepts.add(cn.getConcept());
-                }
-            }
-        }
-        return concepts;
-    }
+
     
     private List<Concept> getOrganismTypes(AdministrationService as, ConceptService cs){
         List<Concept> res = new ArrayList<Concept>();

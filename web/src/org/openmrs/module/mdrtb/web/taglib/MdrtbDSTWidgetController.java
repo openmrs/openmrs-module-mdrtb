@@ -24,6 +24,7 @@ import org.openmrs.ConceptNameTag;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbDSTWidgetController extends TagSupport {
@@ -495,18 +496,12 @@ public class MdrtbDSTWidgetController extends TagSupport {
     }
     private List<ConceptName> getColumnHeaderConceptNames(String nameList,
             Locale loc) {
-        List<ConceptName> tests = new ArrayList<ConceptName>();
-        for (StringTokenizer st = new StringTokenizer(nameList, "|"); st
-                .hasMoreTokens();) {
-            String conceptString = st.nextToken().trim();
-
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
-            if (c != null) {
-                //if (tests.contains(c.getName(loc)) == false)  //we need to support multiples
-                tests.add(c.getBestName(loc));
-            }
+        List<Concept>  cList = MdrtbUtil.getDstDrugList(false); 
+        List<ConceptName> ret = new ArrayList<ConceptName>();
+        for (Concept c : cList){
+            ret.add(c.getBestShortName(new Locale("en_US")));
         }
-        return tests;
+       return  ret;
     }
 
 

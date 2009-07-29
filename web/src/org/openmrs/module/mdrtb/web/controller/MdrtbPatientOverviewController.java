@@ -485,11 +485,11 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         ProgramWorkflowState pxws = pw.getState(Integer.valueOf(outcomeStateVal));
                         if (ps == null || !ps.getState().equals(pxws) || (ps.getState().equals(pxws) && outcomeStateDate != null && outcomeStateDate.getTime() != ps.getStartDate().getTime())){
                             if (outcomeStateDate == null){
-                                mu.transitionToStateNoErrorChecking(pp, pxws, new Date());
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, new Date());
                                 update = true;
                                 
                             } else {
-                                mu.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);  
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);  
                                 update = true;
                             }
                         }
@@ -502,9 +502,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         ProgramWorkflowState pxwsTwo = pwTwo.getState(Integer.valueOf(patientStateVal));
                         if (psTwo == null || !psTwo.getState().equals(pxwsTwo) || (psTwo.getState().equals(pxwsTwo) && patientStateDate != null && patientStateDate.getTime() != psTwo.getStartDate().getTime())){
                             if (patientStateDate == null)
-                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
                             else
-                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate); 
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate); 
                             update = true;
                         }
                     }
@@ -1974,8 +1974,21 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                    }
                    
                    //resistant to these drugs concept list
+                 
+                   String redSt = as.getGlobalProperty("mdrtb.dst_color_coding_red");
+                   String yellowSt = as.getGlobalProperty("mdrtb.dst_color_coding_yellow");
+                   Concept red =  MdrtbUtil.getMDRTBConceptByName(redSt, new Locale("en", "US"));
+                   Concept yellow =  MdrtbUtil.getMDRTBConceptByName(yellowSt, new Locale("en", "US"));
+                   List<Concept> resistantConcepts = new ArrayList<Concept>();
+                   resistantConcepts.add(red);
+                   resistantConcepts.add(yellow);
+                   //getResistantToDrugConcepts(Date minDate, Concept dstParent, Concept dstResultParent, List<Concept> dstDrugList, List<Concept> positiveConcepts, Patient patient, boolean considerOnlyLatestDst)
                    
-                   mp.setResistanceDrugConcepts(mu.getResistantToDrugConcepts(patient));
+                   Date dateTmp = new Date(0);
+                   if (mp.getPatientProgram()!= null)
+                       dateTmp = mp.getPatientProgram().getDateEnrolled();
+                   mp.setResistanceDrugConcepts(MdrtbUtil.getResistantToDrugConcepts(dateTmp, mu.getConceptDSTParent(), mu.getConceptDSTResultParent(), MdrtbUtil.getDstDrugList(true), resistantConcepts, patient, false));
+                   
                    c = mu.getConceptCurrentRegimenType();
                    mp.setStEmpIndObs(os.getObservationsByPersonAndConcept(patient, c));
                    mu = null;

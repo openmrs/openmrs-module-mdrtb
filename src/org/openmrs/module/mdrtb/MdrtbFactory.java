@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -639,7 +638,7 @@ public final class MdrtbFactory {
                 stList.add(allXMLNodes[i]);
             }
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            xmlConceptNameList = ms.getMdrtbConceptsByEnglishNameList(stList);
+            xmlConceptNameList = ms.getMdrtbConceptNamesByNameList(stList, false, new Locale("en"));
 
             
         } catch (Exception ex){
@@ -682,6 +681,11 @@ public final class MdrtbFactory {
     public Concept getConceptDSTMethod(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptNone(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_NONE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
     //STR_SPUTUM_COLLECTION_DATE
@@ -990,305 +994,6 @@ public final class MdrtbFactory {
         return ret;
     }
     
-    
-    /**
-     * Gets a map of all DSTs for a patient (the Obs is the parentObs) and sputumCollectionDate
-     * 
-     * @param patient
-     * @return
-     */
-    public Map<Obs, Date> getDSTs(Patient patient){
-        Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
-        Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
-        Concept parentConcept = getConceptDSTParent();
-        List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
-        List<Date> dates = new ArrayList<Date>();
-        if (obsList != null){
-            for (Obs o:obsList){
-                map.put(o, getSputumCollectionDateDST(o));
-                dates.add(getSputumCollectionDateDST(o));
-            }
-        }
-
-        Collections.sort(dates);
-        for (Date d:dates){
-            for (Map.Entry<Obs, Date> ent : map.entrySet()) {
-                if (d.getTime() == ent.getValue().getTime())
-                    ret.put(ent.getKey(), ent.getValue());
-            }
-        }
-        return ret;
-    }
-    
-    /**
-     * 
-     * Get cultures ordered by 
-     * 
-     * @param patient
-     * @return
-     */
-      public Map<Obs, Date> getSmears(Patient patient){
-          Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
-          Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
-          Concept parentConcept = getConceptSmearParent();
-          List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
-          List<Date> dates = new ArrayList<Date>();
-          if (obsList != null){
-              for (Obs o:obsList){
-                  Date dateTmp = getSputumCollectionDateSmear(o);
-                  if (dateTmp != null){
-                      map.put(o, dateTmp);
-                      dates.add(dateTmp);
-                  }
-              }
-          }
-          if (dates.size() > 0)
-          Collections.sort(dates);
-          for (Date d:dates){
-              for (Map.Entry<Obs, Date> ent : map.entrySet()) {
-                  if (d.getTime() == ent.getValue().getTime())
-                      ret.put(ent.getKey(), ent.getValue());
-              }
-          }
-          return ret;
-      }
-      
-  /**
-   * 
-   * Get cultures ordered by 
-   * 
-   * @param patient
-   * @return
-   */
-    public Map<Obs, Date> getCultures(Patient patient){
-        Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
-        Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
-        Concept parentConcept = getConceptCultureParent();
-        List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
-        List<Date> dates = new ArrayList<Date>();
-        if (obsList != null){
-            for (Obs o:obsList){
-                Date dateTmp = getSputumCollectionDateCulture(o);
-                if (dateTmp != null){
-                    map.put(o, dateTmp);
-                    dates.add(dateTmp);
-                }
-            }
-        }
-        Collections.sort(dates);
-        for (Date d:dates){
-            for (Map.Entry<Obs, Date> ent : map.entrySet()) {
-                if (d.getTime() == ent.getValue().getTime())
-                    ret.put(ent.getKey(), ent.getValue());
-            }
-        }
-        return ret;
-    }
-    
-    /**
-     * 
-     * Returns the sputumCollectionDate out of a DST
-     * 
-     * @param obs
-     * @return
-     */
-    public Date getSputumCollectionDateDST(Obs obs){
-        Date date = null;
-        for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptNameList);
-            if (o.getConcept().equals(sputumCollectionConcept)){
-                date = o.getValueDatetime();
-                break;
-            }    
-        }  
-        return date;
-    }
-    
-    
-    /**
-     * 
-     * Returns the sputumCollectionDate out of a DST
-     * 
-     * @param obs
-     * @return
-     */
-    public Date getSputumCollectionDateCulture(Obs obs){
-        Date date = null;
-        for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
-            if (o.getConcept().equals(sputumCollectionConcept)){
-                date = o.getValueDatetime();
-                break;
-            }    
-        }  
-        return date;
-    }
-    
-    /**
-     * 
-     * Returns the sputumCollectionDate out of a DST
-     * 
-     * @param obs
-     * @return
-     */
-    public Date getSputumCollectionDateSmear(Obs obs){
-        Date date = null;
-        for (Obs o : obs.getGroupMembers()){
-            Concept sputumCollectionConcept = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
-            if (o.getConcept().equals(sputumCollectionConcept)){
-                date = o.getValueDatetime();
-                break;
-            }    
-        }  
-        return date;
-    }
-    
-    /**
-     * 
-     * Tests to see if a culture is negative
-     * Note:  THIS WORKS FOR BOTH SMEARS AND CULTURES -- JUST PASS IN THE RESULT CONCEPT FOR EITHER IN 2ND ARG.
-     * 
-     * @param parentObs
-     * @return
-     */
-    public boolean isNegativeBacteriology(Obs parentObs, Concept cResultConcept){
-
-        String positiveConcepts = Context.getAdministrationService().getGlobalProperty("mdrtb.positive_culture_concepts");
-        List<Concept> cList = new ArrayList<Concept>();
-        for (StringTokenizer st = new StringTokenizer(positiveConcepts, "|"); st.hasMoreTokens(); ) {
-            String s = st.nextToken().trim();
-            Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
-            if (c != null)
-                cList.add(c);
-        }
-        //now, unpack parent obs:
-        boolean negResult = true;
-        for (Obs o : parentObs.getGroupMembers()){
-            if (o.getConcept().equals(cResultConcept) && o.getValueCoded() != null && cList.contains(o.getValueCoded()) && !o.isVoided()){
-                negResult = false;
-                break; 
-            }
-            if (!negResult)
-                break;
-        }    
-        return negResult;
-    }
-
-    /**
-     * 
-     * Gets culture conversion date for a patient
-     * 
-     * @param p
-     * @return
-     */
-    public Date getCultureConversionDate(Patient p){
-        Date ret = null;
-
-        Map<Obs,Date> map = this.getCultures(p);
-        Set<Obs> ObsSet = map.keySet();
-        List<Obs> obsList = new ArrayList<Obs>();
-        Concept cCulture = this.getConceptCultureResult();
-        for (Obs obs:ObsSet)
-            obsList.add(obs);
-        //ensure that there is an original positive bacteriology;  if not, how can there be conversion?:
-        int posOfOriginalPositiveBac = -1;
-        for (int i = 0; i < obsList.size(); i++){
-            Obs oTmp = obsList.get(i);
-            if (!this.isNegativeBacteriology(oTmp, cCulture)){
-                posOfOriginalPositiveBac = i;
-                break;
-            }
-        }
-        if (obsList.size() > this.lookupConversionNumberConsecutive() && posOfOriginalPositiveBac >= 0){
-            for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
-                Obs o = obsList.get(i);
-                Date date = map.get(o);
-                if (this.isNegativeBacteriology(o, cCulture)){
-                    // if this culture is negative:
-                      int k = i - 1;
-                      Calendar calcutoff = Calendar.getInstance();
-                      calcutoff.setTime(date);
-
-                      calcutoff.add(Calendar.DAY_OF_MONTH, - (this.lookupConversionInterval()*this.lookupConversionNumberConsecutive()));  //60 days = defaulted
-                      
-                      Calendar calThirty = Calendar.getInstance();
-                      calThirty.setTime(date);
-                      calThirty.add(Calendar.DAY_OF_MONTH, - (this.lookupConversionInterval()));
-                      Date testDate = date;
-                    int numConsecutive = 1;  
-                    try {
-                        while (k > 0 && testDate.after(calcutoff.getTime())) {
-                            Obs oInner = obsList.get(k);
-                            Date dateInner = map.get(oInner);
-                          
-                            
-                            if (!this.isNegativeBacteriology(oInner,cCulture))
-                                    break;
-                            else {
-                                numConsecutive++; //number of consecutive negatives is now 2
-                                if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
-                                    Obs oPrev = obsList.get(k-1);
-                                    if (!this.isNegativeBacteriology(oPrev, cCulture) && numConsecutive >= this.lookupConversionNumberConsecutive()){
-                                        ret = dateInner;
-                                        break;   
-                                    }
-                                }
-                            }
-                            testDate = dateInner;
-                            k--;
-                        }
-                    } catch (Exception ex) {}
-                } 
-                if (ret != null)
-                    break;
-            }
-        }
-        return ret;
-    }
-    
-    //TODO  write a class that cleans up culture conversion obs;
-        
-        
-    
-    /**
-     * returns a reconversion date, and cleans up false culture conversions
-     */
-     public Date getReconversionDate(Patient p){
-        
-        Date ret = null;
-        Map<Obs,Date> map = this.getCultures(p);
-        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptCultureConversion());      
-        Concept cCulture = this.getConceptCultureResult();
-        
-        if (oList != null){
-            //for the last culture conversion:
-            for (int i = oList.size()-1; i >= 0 ; i--){
-                Obs o = oList.get(i);
-                boolean startLooking = false;
-                //for all culture results (asc):
-                for (Map.Entry<Obs,Date> ent : map.entrySet()){
-                    if (!startLooking && ent.getValue().after(o.getValueDatetime()))
-                        startLooking = true;
-                    if (startLooking && !this.isNegativeBacteriology(ent.getKey(), cCulture)){
-                        Calendar ccCal = Calendar.getInstance();                
-                        ccCal.setTime(o.getValueDatetime());
-                        ccCal.add(Calendar.DAY_OF_MONTH, (this.lookupConversionInterval() - 1));
-                        if (ent.getValue().after(ccCal.getTime())){
-                        //if more than 30 day difference from culture conversion date,a positive culture is reconversion
-                           return ent.getValue();
-                        } else {
-                            // if less than 30 days, there was no culture conversion.
-                           Context.getObsService().voidObs(o, "Voided by reconversion date routine -- positive culture within 30 days of conversion obs");
-                           return null;
-                        }
-                    }  
-                }
-            } 
-        }
-        return ret;
-    }
-    
-    
     /**
      * 
      * Returns the mdrtb program name from global properties
@@ -1318,973 +1023,6 @@ public final class MdrtbFactory {
         return  pw.getSortedStates();
     }
 
-    
-    /**
-     * 
-     * This is a scheduler routine for all patients;
-     *
-     */
-    public void createCultureConversionsAllPatients(){
-        PatientService ps = Context.getPatientService();
-        ObsService os = Context.getObsService();
-        
-        List<Concept> cList = new ArrayList<Concept>();
-        cList.add(this.getConceptCultureParent());
-        List<Obs> oListTmp = os.getObservations(null, null, cList, null, null, null, null, null, null, null, null, false);
-        List<Patient> pList = new ArrayList<Patient>();
-        for (Obs o:oListTmp){
-            if (!pList.contains(ps.getPatient(o.getPerson().getPersonId())))
-                pList.add(ps.getPatient(o.getPerson().getPersonId()));
-        }
-        for(Patient p : pList){
-            fixCultureConversions(p);
-        }
-    }
-    
-    /**
-     * 
-     * Creates a culture conversion, reconversion, and cleans false obs for a patient;
-     * 
-     * @param p
-     */
-    public void fixCultureConversions(Patient p){
-        ObsService os = Context.getObsService();
-            this.cleanCultureStatusObs(p);
-            Date date = null;
-            Map<Obs, Date> map = this.getCultures(p);
-            Concept ccConcept = this.getConceptCultureConversion();
-            Concept rcConcept = this.getConceptCultureReconversion();
-            if (map != null && map.size() > 2)
-                date = this.getCultureConversionDate(p);
-            if (date != null){
-                
-              //test if the obs is already created:
-                if (ccConcept != null){
-                    List<Obs> oList = os.getObservationsByPersonAndConcept(p, ccConcept);
-                    boolean createObsTest = true;
-                    if (oList != null){
-                        for (Obs o:oList){
-                            if (o.getValueDatetime().equals(date)){
-                                createObsTest = false;
-                                break;
-                            }    
-                        }
-                    }
-                    if (createObsTest){
-                        for (Map.Entry<Obs,Date> e : map.entrySet()) {
-                            Date dateInner = e.getValue();
-                            if (dateInner.getTime() == date.getTime()){
-                                //TODO:  
-                                Obs oTmp = new Obs();
-                                oTmp.setConcept(ccConcept);
-                                oTmp.setCreator(Context.getAuthenticatedUser());
-                                oTmp.setDateCreated(new Date());
-                                oTmp.setEncounter(e.getKey().getEncounter());
-                                oTmp.setLocation(e.getKey().getLocation());
-                                oTmp.setObsDatetime(e.getKey().getObsDatetime());
-                                oTmp.setPerson(p);
-                                oTmp.setValueDatetime(date);
-                                oTmp.setVoided(false);
-                                
-                                try {
-                                log.info("Creating culture conversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
-                                oTmp = os.saveObs(oTmp, "");
-                                } catch (Exception ex){
-                                log.warn("Failed to create culture conversion Obs for patient", ex);
-                                }
-                                break;
-                            }    
-                        }
-                     
-                    }
-                }
-            }
-            //culture reconversion:
-            date = null;
-            if (map != null && map.size() > 2)
-                date = this.getReconversionDate(p);
-            if (date != null){
-                if (rcConcept != null){
-                    //test if the obs is already created:
-                    List<Obs> oList = os.getObservationsByPersonAndConcept(p, rcConcept);
-                    boolean createObsTest = true;
-                    if (oList != null){
-                        for (Obs o:oList){
-                            if (o.getValueDatetime().equals(date)){
-                                createObsTest = false;
-                                break;
-                            }    
-                        }
-                    }
-                    
-                    if (createObsTest){
-                        for (Map.Entry<Obs,Date> e : map.entrySet()) {
-                            Date dateInner = e.getValue();
-                            if (dateInner.getTime() == date.getTime()){ 
-                                Obs oTmp = new Obs();
-                                oTmp.setConcept(rcConcept);
-                                oTmp.setCreator(Context.getAuthenticatedUser());
-                                oTmp.setDateCreated(new Date());
-                                oTmp.setEncounter(e.getKey().getEncounter());
-                                oTmp.setLocation(e.getKey().getLocation());
-                                oTmp.setObsDatetime(date);
-                                oTmp.setPerson(p);
-                                oTmp.setValueDatetime(date);
-                                oTmp.setVoided(false);
-                                
-                                try {
-                                    log.info("Creating culture reconversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
-                                    oTmp = os.saveObs(oTmp, "");
-                                } catch (Exception ex){
-                                    log.warn("Failed to create reculture conversion Obs for patient", ex);
-                                }
-                                break;
-                            }    
-                        }
-                   
-                    }
-                }
-            }    
-          this.syncCultureStatus(p, os);
-              //call smear cleaning here:
-          this.fixSmearConversions(p);
-    }
-    
-   
-    
-    /**
-     * 
-     * Sync the patient state for culture status with the culture conversion obs.
-     * 
-     * @param p
-     * @param os
-     * @param program
-     */
-    public void syncCultureStatus(Patient p, ObsService os){
-        Program program = this.getMDRTBProgram();
-        List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(p, program, null, null, null, null, false);
-        Concept cCulture = this.getConceptCultureResult();
-        //the patient must be enrolled in the mdrtb program for this to run:
-        if (programs.size() > 0){
-            
-            Concept cc = this.getConceptCultureConversion();
-            Concept rc = this.getConceptCultureReconversion();
-            ProgramWorkflowService pws = Context.getProgramWorkflowService();
-            
-          //get the latest patientprogram:
-            PatientProgram pp = programs.get(programs.size()-1);
-            Set<ProgramWorkflowState> possibleStates = this.getStatesCultureStatus();
-            
-            //get all cc and rc obs
-            List<Obs> ccs = os.getObservationsByPersonAndConcept(p, cc);
-            List<Obs> rcs = os.getObservationsByPersonAndConcept(p, rc);
-            Obs o = null;
-            
-            if (ccs != null && ccs.size() > 0){
-                o = ccs.get(0);
-                ccs.addAll(rcs);
-                for (Obs oTmp:ccs){
-                    if (o.getValueDatetime().getTime() < oTmp.getValueDatetime().getTime())
-                        o = oTmp;
-                }
-            }
-            
-            if (o != null){
-                //this is the winning obs; change pp state accordingly, if necessary.
-                if (o.getConcept().equals(cc)){
-                    
-                    for (PatientState ps : pp.getStates()){
-                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
-                            pp = this.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
-                            pws.savePatientProgram(pp);
-                            break;
-                        }
-                    }
-                    
-                } else {
-                    
-                    for (PatientState ps : pp.getStates()){
-                        if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
-                            pp = this.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
-                            pws.savePatientProgram(pp);
-                            break;
-                        }
-                    }
-
-                }
-                
-            } else {
-
-                Program mdrtbProgram = this.getMDRTBProgram();
-
-                Map<Obs, Date> cultureObs = this.getCultures(p);
-                
-                for (PatientProgram ppTmp:programs){
-                    Set<PatientState> pss = ppTmp.getStates();
-                    boolean found = false;
-                    if (pss != null){
-                        for (PatientState ps : pss){
-                            if (ps.getState().getProgramWorkflow().getConcept().getConceptId() == mdrtbProgram.getWorkflowByName(this.STR_CULTURE_STATUS_PARENT).getConcept().getConceptId()){
-                                found = true;
-                               
-                                break;
-                                
-                            }    
-                         }
-                    }
-
-                        //figure out if there are any cultures in the current program:
-                        List<Obs> relevantCultures = new ArrayList<Obs>();
-                        boolean allCulturesAreNegative = true;
-                        for (Map.Entry<Obs, Date> e : cultureObs.entrySet()) {
-                            
-                            Date startDate = ppTmp.getDateEnrolled();
-                            Date endDate = ppTmp.getDateCompleted();
-                            if (endDate == null)
-                                    endDate = new Date();
-                            
-                            Calendar startCal = Calendar.getInstance();
-                            Calendar endCal = Calendar.getInstance();
-                            startCal.setTime(startDate);
-                            endCal.setTime(endDate);
-                            startCal.add(Calendar.MONTH, -2);
-                            endCal.add(Calendar.MONTH, 3);
-                            
-                            endDate = endCal.getTime();
-                            startDate = startCal.getTime();
-                            if (e.getValue().before(endDate) && e.getValue().after(startDate)){
-                                relevantCultures.add(e.getKey());
-                                if (!this.isNegativeBacteriology(e.getKey(), cCulture))
-                                    allCulturesAreNegative = false;
-                            }    
-                        }
-                        
-                        
-                        if (relevantCultures.size() == 0 || !found || allCulturesAreNegative == true){
-                             try {
-                                Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
-                                    for (ProgramWorkflow pwTmp:pw){
-                                   
-                                        if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
-                                         
-                                            ppTmp = this.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled());
-                                            break;
-                                        }  
-                                    }
-                                    ppTmp = pws.savePatientProgram(ppTmp);
-                                } catch (Exception ex){
-                                    log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
-                                }
-                           
-                        
-                        }  else {
-                            try {
-                                Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
-                                    for (ProgramWorkflow pwTmp:pw){
-                                    
-                                        if (pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()) != null){
-                                       
-                                            ppTmp = this.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()), ppTmp.getDateEnrolled());
-                                            break;
-                                        }  
-                                    }
-                                    ppTmp = pws.savePatientProgram(ppTmp);
-                                } catch (Exception ex){
-                                    log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
-                                }
-                            
-                        }
-                }
-                
-            }
-        }
-    }
-    
-    /**
-     * 
-     * Cleans out culture conversion and culture reconversion obs that no longer have cultures that match by date and result
-     * 
-     * @param p
-     */
-    public void cleanCultureStatusObs(Patient p){
-        ObsService os = Context.getObsService();
-        Concept ccConcept = this.getConceptCultureConversion();
-        Concept rcConcept = this.getConceptCultureReconversion();
-        Map<Obs, Date> map = this.getCultures(p);
-        
-        List<Obs> ccObs = os.getObservationsByPersonAndConcept(p, ccConcept);
-        List<Obs> rcObs = os.getObservationsByPersonAndConcept(p, rcConcept);
-        
-        //we need functions here that re-evaluate each existing cc obs:
-        if (ccObs != null){
-            for (Obs o : ccObs){
-                if (!isObsValidCultureconversion(o, p, map))
-                 os.voidObs(o, "no longer a valid culture conversion");   
-            }
-        }
-        map = this.getCultures(p);
-        if (rcObs != null){
-            for (Obs o : rcObs){
-                if (!isValidReconversion(o, p, map, ccObs))
-                os.voidObs(o, "no longer a valid culture reconversion");
-            }
-        }  
-    }
-    
-    /**
-     * 
-     * Enroll a patient in the mdrtb program
-     * 
-     * @param p  Patient
-     */
-    public void enrollPatientInMDRTBProgram(Patient p, Date dateEnrolled) {
-        Program prog = this.getMDRTBProgram();
-        ProgramWorkflowService pws = Context.getProgramWorkflowService();
-        PatientProgram pp = new PatientProgram();
-        pp.setCreator(Context.getAuthenticatedUser());
-        pp.setDateEnrolled(dateEnrolled);
-        pp.setPatient(p);
-        pp.setProgram(prog);
-        pp.setVoided(false);
-        
-        try{
-            pp = pws.savePatientProgram(pp);   
-            try {
-            Set<ProgramWorkflow> pw = pp.getProgram().getWorkflows();
-                for (ProgramWorkflow pwTmp:pw){
-                    if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
-                        pp.transitionToState(pwTmp.getStateByName(this.getSTR_NONE()), dateEnrolled);
-                        break;
-                    }
-                        
-                }
-                pp = pws.savePatientProgram(pp);
-            } catch (Exception ex){
-                log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
-            }
-
-        } catch (Exception ex) {
-            log.warn("Unable to enroll patient in mdrtb program", ex);
-        }
-    }
-    
-
-    
-    /**
-     * 
-     * tests to see if 
-     * 
-     * @param o the obs to test
-     * @param p the patient
-     * @param map the results of this.getCultures(patient)
-     * @return
-     */
-    public boolean isObsValidCultureconversion(Obs o, Patient p, Map<Obs,Date> map){
-        //map is all cultures
-        int numberNeededInARow = this.lookupConversionNumberConsecutive();
-        boolean ret = false;
-        Concept cCulture = this.getConceptCultureResult();
-        List<Obs> obsList = new ArrayList<Obs>();      
-        for (Obs obs:map.keySet())
-            obsList.add(obs);
-        
-            //make sure there is still an original positive culture
-            int posOfOriginalPositiveBac = -1;
-                for (int i = 0; i < obsList.size(); i++){
-                    Obs oTmp = obsList.get(i);
-                    if (!this.isNegativeBacteriology(oTmp, cCulture)){
-                        posOfOriginalPositiveBac = i;
-                        //if the conversion date is before the first positive culture -- return false
-                        if (o.getObsDatetime().before(oTmp.getObsDatetime()))
-                            return false;
-                        break;
-                    }
-                }
-             //if there are no positives   
-             if (posOfOriginalPositiveBac == -1)
-                 return false;
-        
-        //obsList = all culture obs
-        if (obsList.size() > numberNeededInARow + 1){
-            //get the culture obs that corresponds to the ccObs
-            Obs ccObs = null;
-            int pos = 0;
-            for (Obs otmp : obsList){
-                if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
-                    ccObs = otmp;
-                    break;
-                }
-                pos ++;
-            }
-            if (ccObs == null || !this.isNegativeBacteriology(ccObs, cCulture) || pos == 0 || this.isNegativeBacteriology(obsList.get(pos -1) , cCulture) || pos + 1 >= obsList.size()){
-                return false;
-            }
-            //check if next X are negative (redundant, but quick)
-            for (int k = 1; k < numberNeededInARow;k++){
-                if (!this.isNegativeBacteriology(obsList.get(pos+k), cCulture))
-                    return false;
-            }     
-            //now test the next 30 days:
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(map.get(ccObs));
-            cal.add(Calendar.DAY_OF_MONTH, this.lookupConversionInterval());
-            int count = 1;
-            for (Obs oTmp : obsList){
-                if (map.get(oTmp).after(map.get(ccObs))){
-                    count++;
-                    if (map.get(oTmp).before(cal.getTime()) && !this.isNegativeBacteriology(oTmp, cCulture)){
-                        return false;
-                    }
-                    else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && this.isNegativeBacteriology(oTmp, cCulture) && count >= numberNeededInARow){
-                        return true;
-                    }
-                    else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !this.isNegativeBacteriology(oTmp, cCulture)){
-                        return false;
-                    }
-                }
-            }  
-        } else
-            return false;
-        return ret;
-    }
-    
-    /**
-     * 
-     * Tests if an obs is a valid reconversion obs; assumes culture conversions have already been cleaned.
-     * 
-     * @param o the obs to test
-     * @param p patient
-     * @param map the results of this.getCultures(patient)
-     * @param ccObs a list of all culture conversion obs
-     * @return
-     */
-    public boolean isValidReconversion(Obs o, Patient p, Map<Obs,Date> map, List<Obs> ccObs){
-        boolean ret = false;
-        Concept cCulture = this.getConceptCultureResult();
-        if (ccObs == null || ccObs.size() == 0)
-                return false;
-        Set<Obs> ObsSet = map.keySet();
-        List<Obs> obsList = new ArrayList<Obs>();      
-        for (Obs obs:ObsSet)
-            obsList.add(obs);
-        //obsList = all culture obs, and use the map values to get sputum collection dates.
-        if (obsList.size() > 3){
-            
-            Obs rcObs = null;
-            int pos = 0;
-            for (Obs otmp : obsList){
-                if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
-                    rcObs = otmp;
-                    break;
-                }
-                pos ++;
-            }
-            if (rcObs == null || this.isNegativeBacteriology(rcObs, cCulture) || pos < 3 || !this.isNegativeBacteriology(obsList.get(pos -1), cCulture))
-                return false;
-
-            //get previous cultureconversionObs, and see if its valid.
-            for (int k = pos-1; k >= 0 ; k -- ){
-                Obs obsPrevious = obsList.get(k);
-                if (!this.isNegativeBacteriology(obsPrevious, cCulture))
-                    return false;
-                if (ccObs.contains(obsPrevious) && this.isObsValidCultureconversion(o, p, map)){
-                    ret = true;
-                    break;
-                }
-            }
-        }    
-        return ret;
-    }
-
-
-    
-    /**
-     * 
-     * Utility method used to transition to a state, ignoring usual state change rules.
-     * 
-     * @param pp
-     * @param programWorkflowState
-     * @param onDate
-     */
-    public PatientProgram  transitionToStateNoErrorChecking(PatientProgram pp, ProgramWorkflowState programWorkflowState, Date onDate) {
-
-        Set<PatientState> lastStates = pp.getStates();
-
-        for (PatientState lastState : lastStates){
-        
-            
-            if (lastState != null  && lastState.getState().getProgramWorkflow().getProgramWorkflowId().intValue() == programWorkflowState.getProgramWorkflow().getProgramWorkflowId().intValue() && !lastState.getVoided()) {
-                
-                    lastState.setEndDate(onDate);
-                //if nonsensical: void
-                if (lastState.getEndDate().getTime() <= lastState.getStartDate().getTime()){
-                    lastState.setEndDate(onDate);
-                    lastState.setDateVoided(new Date());
-                    lastState.setVoided(true);
-                    lastState.setVoidedBy(Context.getAuthenticatedUser());
-                    lastState.setVoidReason("program states were edited such that this state observation was no longer valid"); 
-                }
-            }  
-        }
-        
-
-        
-        PatientState newState = new PatientState();
-        newState.setPatientProgram(pp);
-        newState.setState(programWorkflowState);
-        newState.setStartDate(onDate);
-        pp.getStates().add(newState);
-        return pp;
-    }
-    
-    /**
-     * 
-     * Gets culture conversion date for a patient
-     * 
-     * @param p
-     * @return
-     */
-    public Date getSmearConversionDate(Patient p){
-        Date ret = null;
-
-        Map<Obs,Date> map = this.getSmears(p);
-        Set<Obs> ObsSet = map.keySet();
-        List<Obs> obsList = new ArrayList<Obs>();
-        Concept cSmear = this.getConceptSmearResult();
-        for (Obs obs:ObsSet)
-            obsList.add(obs);
-        //ensure that there is an original positive bacteriology;  if not, how can there be conversion?:
-        int posOfOriginalPositiveBac = -1;
-        for (int i = 0; i < obsList.size(); i++){
-            Obs oTmp = obsList.get(i);
-            if (!this.isNegativeBacteriology(oTmp, cSmear)){
-                posOfOriginalPositiveBac = i;
-                break;
-            }
-        }
-        if (obsList.size() > this.lookupConversionNumberConsecutive() && posOfOriginalPositiveBac >= 0){
-            for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
-                Obs o = obsList.get(i);
-                Date date = map.get(o);
-                if (this.isNegativeBacteriology(o, cSmear)){
-                    // if this smear is negative:
-                      int k = i - 1;
-                      Calendar calcutoff = Calendar.getInstance();
-                      calcutoff.setTime(date);
-                      
-                      //NOTE: this is a little lazy.  Ideally, we'd make sure that the interval between any set of 
-                      // negative cultures that result in a culture conversion is < 60 days.
-                      //However, the logic below is a decent approximation -- sequences that could break this signal a very badly run TB program...
-                      //patients should probably just be marked as default by hand, anyway.
-                      
-                      calcutoff.add(Calendar.DAY_OF_MONTH, - (this.lookupConversionInterval()*this.lookupConversionNumberConsecutive()));  //60 days = defaulted
-                      
-                      Calendar calThirty = Calendar.getInstance();
-                      calThirty.setTime(date);
-                      calThirty.add(Calendar.DAY_OF_MONTH, - (this.lookupConversionInterval()));
-                      Date testDate = date;
-                    int numConsecutive = 1;  
-                    try {
-                        while (k > 0 && testDate.after(calcutoff.getTime())) {
-                            Obs oInner = obsList.get(k);
-                            Date dateInner = map.get(oInner);
-                          
-                            
-                            if (!this.isNegativeBacteriology(oInner,cSmear))
-                                    break;
-                            else {
-                                numConsecutive++; //number of consecutive negatives is now 2
-                                if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
-                                    Obs oPrev = obsList.get(k-1);
-                                    if (!this.isNegativeBacteriology(oPrev, cSmear) && numConsecutive >= this.lookupConversionNumberConsecutive()){
-                                        ret = dateInner;
-                                        break;   
-                                    }
-                                }
-                            }
-                            testDate = dateInner;
-                            k--;
-                        }
-                    } catch (Exception ex) {}
-                } 
-                if (ret != null)
-                    break;
-            }
-        }
-        return ret;
-    }
-    
-    /**
-     * returns a reconversion date, and cleans up false smear conversions
-     */
-     public Date getSmearReconversionDate(Patient p){
-        
-        Date ret = null;
-        Map<Obs,Date> map = this.getSmears(p);
-        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptSmearConverstion());      
-        Concept cSmear = this.getConceptSmearResult();
-        
-        if (oList != null){
-            for (int i = oList.size()-1; i >=0 ; i--){
-                Obs o = oList.get(i);
-                boolean startLooking = false;
-                for (Map.Entry<Obs,Date> ent : map.entrySet()){
-                    if (!startLooking && ent.getValue().after(o.getValueDatetime()))
-                        startLooking = true;
-                    if (startLooking && !this.isNegativeBacteriology(ent.getKey(), cSmear)){
-                        Calendar ccCal = Calendar.getInstance();                
-                        ccCal.setTime(o.getValueDatetime());
-                     
-                        ccCal.add(Calendar.DAY_OF_MONTH, (this.lookupConversionInterval() - 1));
-                        if (ent.getValue().after(ccCal.getTime())){
-                        //if more than 30 day difference from smear conversion date,a positive smear is reconversion
-                           return ent.getValue();
-                        } else {
-                            // if less than 30 days, there was no smear conversion.
-                           Context.getObsService().voidObs(o, "Voided by reconversion date routine -- positive smear within 30 days of conversion obs");
-                           return null;
-                        }
-                    }  
-                }
-            } 
-        }
-        return ret;
-    }
-     
-     /**
-      * 
-      * Cleans out smear conversion and smear reconversion obs that no longer have smears that match by date and result
-      * 
-      * @param p
-      */
-     public void cleanSmearStatusObs(Patient p){
-         ObsService os = Context.getObsService();
-         Concept ccConcept = this.getConceptSmearConverstion();
-         Concept rcConcept = this.getConceptSmearReconversion();
-         Map<Obs, Date> map = this.getSmears(p);
-         
-         List<Obs> ccObs = os.getObservationsByPersonAndConcept(p, ccConcept);
-         List<Obs> rcObs = os.getObservationsByPersonAndConcept(p, rcConcept);
-         
-         //we need functions here that re-evaluate each existing cc obs:
-         if (ccObs != null){
-             for (Obs o : ccObs){
-                 if (!isObsValidSmearconversion(o, p, map))
-                  os.voidObs(o, "no longer a valid smear conversion");   
-             }
-         }
-         map = this.getSmears(p);
-         if (rcObs != null){
-             for (Obs o : rcObs){
-                 if (!isValidSmearReconversion(o, p, map, ccObs))
-                 os.voidObs(o, "no longer a valid smear reconversion");
-             }
-         }  
-     }
-     
-     
-     /**
-      * 
-      * tests to see if 
-      * 
-      * @param o the obs to test
-      * @param p the patient
-      * @param map the results of this.getSmears(patient)
-      * @return
-      */
-     public boolean isObsValidSmearconversion(Obs o, Patient p, Map<Obs,Date> map){
-       //map is all smears
-         int numberNeededInARow = this.lookupConversionNumberConsecutive();
-         boolean ret = false;
-         Concept cSmear = this.getConceptSmearResult();
-         List<Obs> obsList = new ArrayList<Obs>();      
-         for (Obs obs:map.keySet())
-             obsList.add(obs);
-         
-             //make sure there is still an original positive smear
-             int posOfOriginalPositiveBac = -1;
-                 for (int i = 0; i < obsList.size(); i++){
-                     Obs oTmp = obsList.get(i);
-                     if (!this.isNegativeBacteriology(oTmp, cSmear)){
-                         posOfOriginalPositiveBac = i;
-                         //if the conversion date is before the first positive smear -- return false
-                         if (o.getObsDatetime().before(oTmp.getObsDatetime()))
-                             return false;
-                         break;
-                     }
-                 }
-              //if there are no positives   
-              if (posOfOriginalPositiveBac == -1)
-                  return false;
-         
-         //obsList = all smear obs
-         if (obsList.size() > numberNeededInARow + 1){
-             //get the smear obs that corresponds to the ccObs
-             Obs ccObs = null;
-             int pos = 0;
-             for (Obs otmp : obsList){
-                 if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
-                     ccObs = otmp;
-                     break;
-                 }
-                 pos ++;
-             }
-             if (ccObs == null || !this.isNegativeBacteriology(ccObs, cSmear) || pos == 0 || this.isNegativeBacteriology(obsList.get(pos -1) , cSmear) || pos + 1 >= obsList.size()){
-                 return false;
-             }
-             //check if next X are negative (redundant, but quick)
-             for (int k = 1; k < numberNeededInARow;k++){
-                 if (!this.isNegativeBacteriology(obsList.get(pos+k), cSmear))
-                     return false;
-             }     
-             //now test the next 30 days:
-             Calendar cal = Calendar.getInstance();
-             cal.setTime(map.get(ccObs));
-             cal.add(Calendar.DAY_OF_MONTH, this.lookupConversionInterval());
-             int count = 1;
-             for (Obs oTmp : obsList){
-                 if (map.get(oTmp).after(map.get(ccObs))){
-                     count++;
-                     if (map.get(oTmp).before(cal.getTime()) && !this.isNegativeBacteriology(oTmp, cSmear)){
-                         return false;
-                     }
-                     else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && this.isNegativeBacteriology(oTmp, cSmear) && count >= numberNeededInARow){
-                         return true;
-                     }
-                     else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !this.isNegativeBacteriology(oTmp, cSmear)){
-                         return false;
-                     }
-                 }
-             }  
-         } else
-             return false;
-         return ret;
-     }
-     
-     
-     /**
-      * 
-      * Tests if an obs is a valid reconversion obs; assumes smear conversions have already been cleaned.
-      * 
-      * @param o the obs to test
-      * @param p patient
-      * @param map the results of this.getSmears(patient)
-      * @param ccObs a list of all smear conversion obs
-      * @return
-      */
-     public boolean isValidSmearReconversion(Obs o, Patient p, Map<Obs,Date> map, List<Obs> ccObs){
-         boolean ret = false;
-         Concept cSmear = this.getConceptSmearResult();
-         if (ccObs == null || ccObs.size() == 0)
-                 return false;
-         Set<Obs> ObsSet = map.keySet();
-         List<Obs> obsList = new ArrayList<Obs>();      
-         for (Obs obs:ObsSet)
-             obsList.add(obs);
-         //obsList = all smear obs, and use the map values to get sputum collection dates.
-         if (obsList.size() > 3){
-             
-             Obs rcObs = null;
-             int pos = 0;
-             for (Obs otmp : obsList){
-                 if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
-                     rcObs = otmp;
-                     break;
-                 }
-                 pos ++;
-             }
-             if (rcObs == null || this.isNegativeBacteriology(rcObs, cSmear) || pos < 3 || !this.isNegativeBacteriology(obsList.get(pos -1), cSmear))
-                 return false;
-
-             //get previous smear, and see if its valid.
-             for (int k = pos-1; k >= 0 ; k -- ){
-                 Obs obsPrevious = obsList.get(k);
-                 if (!this.isNegativeBacteriology(obsPrevious, cSmear))
-                     return false;
-                 if (ccObs.contains(obsPrevious) && this.isObsValidSmearconversion(o, p, map)){
-                     ret = true;
-                     break;
-                 }
-             }
-         }    
-         return ret;
-     }
-     
-     
-     /**
-      * 
-      * Creates a smear conversion, reconversion, and cleans false obs for a patient;
-      * 
-      * @param p
-      */
-     public void fixSmearConversions(Patient p){
-         ObsService os = Context.getObsService();
-             this.cleanSmearStatusObs(p);
-             Date date = null;
-             Map<Obs, Date> map = this.getSmears(p);
-             Concept ccConcept = this.getConceptSmearConverstion();
-                 if (ccConcept == null)
-                     throw new RuntimeException("Smear Conversion Concept not loaded");
-             Concept rcConcept = this.getConceptSmearReconversion();
-                 if (rcConcept == null)
-                     throw new RuntimeException("Smear Re - Conversion Concept not loaded");
-             if (map != null && map.size() > 2){
-                 date = this.getSmearConversionDate(p);
-             }    
-             if (date != null){
-                 
-               //test if the obs is already created:
-                 if (ccConcept != null){
-                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, ccConcept);
-                     boolean createObsTest = true;
-                     if (oList != null){
-                         for (Obs o:oList){
-                             if (o.getValueDatetime().equals(date)){
-                                 createObsTest = false;
-                                 break;
-                             }    
-                         }
-                     }
-                     if (createObsTest){
-                         for (Map.Entry<Obs,Date> e : map.entrySet()) {
-                             Date dateInner = e.getValue();
-                             if (dateInner.getTime() == date.getTime()){
-                                 //TODO:  
-                                 Obs oTmp = new Obs();
-                                 oTmp.setConcept(ccConcept);
-                                 oTmp.setCreator(Context.getAuthenticatedUser());
-                                 oTmp.setDateCreated(new Date());
-                                 oTmp.setEncounter(e.getKey().getEncounter());
-                                 oTmp.setLocation(e.getKey().getLocation());
-                                 oTmp.setObsDatetime(e.getKey().getObsDatetime());
-                                 oTmp.setPerson(p);
-                                 oTmp.setValueDatetime(date);
-                                 oTmp.setVoided(false);
-                                 
-                                 try {
-                                 log.info("Creating smear conversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
-                                 oTmp = os.saveObs(oTmp, "");
-                                 } catch (Exception ex){
-                                 log.warn("Failed to create smear conversion Obs for patient", ex);
-                                 }
-                                 break;
-                             }    
-                         }
-                      
-                     }
-                 }
-             }
-             //smear reconversion:
-             date = null;
-             if (map != null && map.size() > 2)
-                 date = this.getSmearReconversionDate(p);
-             if (date != null){
-                 if (rcConcept != null){
-                     //test if the obs is already created:
-                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, rcConcept);
-                     boolean createObsTest = true;
-                     if (oList != null){
-                         for (Obs o:oList){
-                             if (o.getValueDatetime().equals(date)){
-                                 createObsTest = false;
-                                 break;
-                             }    
-                         }
-                     }
-                     
-                     if (createObsTest){
-                         for (Map.Entry<Obs,Date> e : map.entrySet()) {
-                             Date dateInner = e.getValue();
-                             if (dateInner.getTime() == date.getTime()){ 
-                                 Obs oTmp = new Obs();
-                                 oTmp.setConcept(rcConcept);
-                                 oTmp.setCreator(Context.getAuthenticatedUser());
-                                 oTmp.setDateCreated(new Date());
-                                 oTmp.setEncounter(e.getKey().getEncounter());
-                                 oTmp.setLocation(e.getKey().getLocation());
-                                 oTmp.setObsDatetime(date);
-                                 oTmp.setPerson(p);
-                                 oTmp.setValueDatetime(date);
-                                 oTmp.setVoided(false);
-                                 
-                                 try {
-                                     log.info("Creating smear reconversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
-                                     oTmp = os.saveObs(oTmp, "");
-                                 } catch (Exception ex){
-                                     log.warn("Failed to create smear reconversion Obs for patient", ex);
-                                 }
-                                 break;
-                             }    
-                         }
-                    
-                     }
-                 }
-             }    
-           
-     }
-     
-     public List<Obs> getPositiveDSTResultObs(Patient patient){
-         List<Obs> ret = new ArrayList<Obs>();
-            //HERE -- we need those global properties
-             //lookup getObsByPersonAndConcept
-             AdministrationService as = Context.getAdministrationService();
-             ObsService os = Context.getObsService();
-             String redSt = as.getGlobalProperty("mdrtb.dst_color_coding_red");
-             String yellowSt = as.getGlobalProperty("mdrtb.dst_color_coding_yellow");
-             
-            
-             Concept red =  MdrtbUtil.getMDRTBConceptByName(redSt, new Locale("en", "US"));
-             Concept yellow =  MdrtbUtil.getMDRTBConceptByName(yellowSt, new Locale("en", "US"));
-             
-             List<Obs> oList = os.getObservationsByPersonAndConcept(patient, red);
-             if (oList != null && oList.size() > 0)
-                 ret.addAll(oList);
-             
-             oList = os.getObservationsByPersonAndConcept(patient, yellow);
-             if (oList != null && oList.size() > 0)
-                 ret.addAll(oList);
-         
-         
-         return ret;
-     }
-     
-     //TODO: this is incomplete.  Need to getPositiveDSTResultObs only for latest DST.
-     public List<Concept> getResistantToDrugConcepts(Patient patient){
-         List<Concept> ret = new ArrayList<Concept>();
-            List<Obs> dstRes = this.getPositiveDSTResultObs(patient);
-            for (Obs o: dstRes){
-                if (!ret.contains(o.getValueCoded())){
-                    ret.add(o.getValueCoded());
-                }
-            }
-         return ret;
-     }
-     
-    public int lookupConversionInterval(){
-        int ret = 30;
-        String intervalString = Context.getAdministrationService().getGlobalProperty("mdrtb.conversion_definition_interval");
-        try{
-            ret = Integer.valueOf(intervalString.trim()).intValue();
-        } catch (Exception ex){
-            log.error("mdrtb.conversion_definition_interval is not set correctly, and the value can't be parsed to an integer.  Defaulting to WHO definition of 30", ex);
-        }
-        return ret;
-    }
-    
-    public int lookupConversionNumberConsecutive(){
-        int ret = 2;
-        String intervalString = Context.getAdministrationService().getGlobalProperty("mdrtb.conversion_definition_number");
-        try{
-            ret = Integer.valueOf(intervalString.trim()).intValue();
-            if (ret < 2 )
-                throw new RuntimeException("mdrtb.conversion_definition_number is not set to a valid number of consecutive bacteriologies.  Must be 2 or more.");
-        } catch (Exception ex){
-            log.error("mdrtb.conversion_definition_number is not set correctly, and the value can't be parsed to an integer.  Defaulting to WHO definition of 2", ex);
-        }
-        return ret;
-    }
-    
-    
     public String getSTR_TB_SMEAR_RESULT() {
         return STR_TB_SMEAR_RESULT;
     }
@@ -2627,6 +1365,1144 @@ public final class MdrtbFactory {
     public void setXmlConceptNameList(List<ConceptName> xmlConceptNameList) {
         this.xmlConceptNameList = xmlConceptNameList;
     } 
+    
+    
+    /**
+     * Gets a map of all DSTs for a patient (the Obs is the parentObs) and sputumCollectionDate
+     * 
+     * @param patient
+     * @return
+     */
+    public Map<Obs, Date> getDSTs(Patient patient){
+        Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
+        Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
+        Concept parentConcept = getConceptDSTParent();
+        List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
+        List<Date> dates = new ArrayList<Date>();
+        if (obsList != null){
+            for (Obs o:obsList){
+                map.put(o, getSputumCollectionDateDST(o));
+                dates.add(getSputumCollectionDateDST(o));
+            }
+        }
+
+        Collections.sort(dates);
+        for (Date d:dates){
+            for (Map.Entry<Obs, Date> ent : map.entrySet()) {
+                if (d.getTime() == ent.getValue().getTime())
+                    ret.put(ent.getKey(), ent.getValue());
+            }
+        }
+        return ret;
+    }
+    
+    /**
+     * 
+     * Get cultures ordered by 
+     * 
+     * @param patient
+     * @return
+     */
+      public Map<Obs, Date> getSmears(Patient patient){
+          Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
+          Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
+          Concept parentConcept = getConceptSmearParent();
+          List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
+          List<Date> dates = new ArrayList<Date>();
+          if (obsList != null){
+              for (Obs o:obsList){
+                  Date dateTmp = getSputumCollectionDateSmear(o);
+                  if (dateTmp != null){
+                      map.put(o, dateTmp);
+                      dates.add(dateTmp);
+                  }
+              }
+          }
+          if (dates.size() > 0)
+          Collections.sort(dates);
+          for (Date d:dates){
+              for (Map.Entry<Obs, Date> ent : map.entrySet()) {
+                  if (d.getTime() == ent.getValue().getTime())
+                      ret.put(ent.getKey(), ent.getValue());
+              }
+          }
+          return ret;
+      }
+      
+  /**
+   * 
+   * Get cultures ordered by 
+   * 
+   * @param patient
+   * @return
+   */
+    public Map<Obs, Date> getCultures(Patient patient){
+        Map<Obs, Date> map = new LinkedHashMap<Obs,Date>();
+        Map<Obs, Date> ret = new LinkedHashMap<Obs,Date>();
+        Concept parentConcept = getConceptCultureParent();
+        List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(patient, parentConcept);
+        List<Date> dates = new ArrayList<Date>();
+        if (obsList != null){
+            for (Obs o:obsList){
+                Date dateTmp = getSputumCollectionDateCulture(o);
+                if (dateTmp != null){
+                    map.put(o, dateTmp);
+                    dates.add(dateTmp);
+                }
+            }
+        }
+        Collections.sort(dates);
+        for (Date d:dates){
+            for (Map.Entry<Obs, Date> ent : map.entrySet()) {
+                if (d.getTime() == ent.getValue().getTime())
+                    ret.put(ent.getKey(), ent.getValue());
+            }
+        }
+        return ret;
+    }
+    
+    /**
+     * 
+     * Returns the sputumCollectionDate out of a DST
+     * 
+     * @param obs
+     * @return
+     */
+    public Date getSputumCollectionDateDST(Obs obs){
+        Date date = null;
+        for (Obs o : obs.getGroupMembers()){
+            Concept sputumCollectionConcept = this.getConceptSputumCollectionDate();
+            if (o.getConcept().equals(sputumCollectionConcept)){
+                date = o.getValueDatetime();
+                break;
+            }    
+        }  
+        return date;
+    }
+    
+    
+    /**
+     * 
+     * Returns the sputumCollectionDate out of a DST
+     * 
+     * @param obs
+     * @return
+     */
+    public Date getSputumCollectionDateCulture(Obs obs){
+        Date date = null;
+        for (Obs o : obs.getGroupMembers()){
+            Concept sputumCollectionConcept = this.getConceptCultureResult();
+            if (o.getConcept().equals(sputumCollectionConcept)){
+                date = o.getValueDatetime();
+                break;
+            }    
+        }  
+        return date;
+    }
+    
+    /**
+     * 
+     * Returns the sputumCollectionDate out of a DST
+     * 
+     * @param obs
+     * @return
+     */
+    public Date getSputumCollectionDateSmear(Obs obs){
+        Date date = null;
+        for (Obs o : obs.getGroupMembers()){
+            Concept sputumCollectionConcept = this.getConceptSmearResult();
+            if (o.getConcept().equals(sputumCollectionConcept)){
+                date = o.getValueDatetime();
+                break;
+            }    
+        }  
+        return date;
+    }
+    
+
+
+    /**
+     * 
+     * Gets culture conversion date for a patient
+     * 
+     * @param p
+     * @return
+     */
+    public Date getCultureConversionDate(Patient p){
+        Date ret = null;
+
+        Map<Obs,Date> map = this.getCultures(p);
+        Set<Obs> ObsSet = map.keySet();
+        List<Obs> obsList = new ArrayList<Obs>();
+        Concept cCulture = this.getConceptCultureResult();
+        for (Obs obs:ObsSet)
+            obsList.add(obs);
+        //ensure that there is an original positive bacteriology;  if not, how can there be conversion?:
+        int posOfOriginalPositiveBac = -1;
+        for (int i = 0; i < obsList.size(); i++){
+            Obs oTmp = obsList.get(i);
+            if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                posOfOriginalPositiveBac = i;
+                break;
+            }
+        }
+        if (obsList.size() > MdrtbUtil.lookupConversionNumberConsecutive() && posOfOriginalPositiveBac >= 0){
+            for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
+                Obs o = obsList.get(i);
+                Date date = map.get(o);
+                if (MdrtbUtil.isNegativeBacteriology(o, cCulture)){
+                    // if this culture is negative:
+                      int k = i - 1;
+                      Calendar calcutoff = Calendar.getInstance();
+                      calcutoff.setTime(date);
+
+                      calcutoff.add(Calendar.DAY_OF_MONTH, - (MdrtbUtil.lookupConversionInterval()*MdrtbUtil.lookupConversionNumberConsecutive()));  //60 days = defaulted
+                      
+                      Calendar calThirty = Calendar.getInstance();
+                      calThirty.setTime(date);
+                      calThirty.add(Calendar.DAY_OF_MONTH, - (MdrtbUtil.lookupConversionInterval()));
+                      Date testDate = date;
+                    int numConsecutive = 1;  
+                    try {
+                        while (k > 0 && testDate.after(calcutoff.getTime())) {
+                            Obs oInner = obsList.get(k);
+                            Date dateInner = map.get(oInner);
+                          
+                            
+                            if (!MdrtbUtil.isNegativeBacteriology(oInner,cCulture))
+                                    break;
+                            else {
+                                numConsecutive++; //number of consecutive negatives is now 2
+                                if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
+                                    Obs oPrev = obsList.get(k-1);
+                                    if (!MdrtbUtil.isNegativeBacteriology(oPrev, cCulture) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
+                                        ret = dateInner;
+                                        break;   
+                                    }
+                                }
+                            }
+                            testDate = dateInner;
+                            k--;
+                        }
+                    } catch (Exception ex) {}
+                } 
+                if (ret != null)
+                    break;
+            }
+        }
+        return ret;
+    }
+    
+    //TODO  write a class that cleans up culture conversion obs;
+        
+        
+    
+    /**
+     * returns a reconversion date, and cleans up false culture conversions
+     */
+     public Date getReconversionDate(Patient p){
+        
+        Date ret = null;
+        Map<Obs,Date> map = this.getCultures(p);
+        List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptCultureConversion());      
+        Concept cCulture = this.getConceptCultureResult();
+        
+        if (oList != null){
+            //for the last culture conversion:
+            for (int i = oList.size()-1; i >= 0 ; i--){
+                Obs o = oList.get(i);
+                boolean startLooking = false;
+                //for all culture results (asc):
+                for (Map.Entry<Obs,Date> ent : map.entrySet()){
+                    if (!startLooking && ent.getValue().after(o.getValueDatetime()))
+                        startLooking = true;
+                    if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cCulture)){
+                        Calendar ccCal = Calendar.getInstance();                
+                        ccCal.setTime(o.getValueDatetime());
+                        ccCal.add(Calendar.DAY_OF_MONTH, (MdrtbUtil.lookupConversionInterval() - 1));
+                        if (ent.getValue().after(ccCal.getTime())){
+                        //if more than 30 day difference from culture conversion date,a positive culture is reconversion
+                           return ent.getValue();
+                        } else {
+                            // if less than 30 days, there was no culture conversion.
+                           Context.getObsService().voidObs(o, "Voided by reconversion date routine -- positive culture within 30 days of conversion obs");
+                           return null;
+                        }
+                    }  
+                }
+            } 
+        }
+        return ret;
+    }
+    
+
+     /**
+      * 
+      * This is a scheduler routine for all patients;
+      *
+      */
+     public void createCultureConversionsAllPatients(){
+         PatientService ps = Context.getPatientService();
+         ObsService os = Context.getObsService();
+         
+         List<Concept> cList = new ArrayList<Concept>();
+         cList.add(this.getConceptCultureParent());
+         List<Obs> oListTmp = os.getObservations(null, null, cList, null, null, null, null, null, null, null, null, false);
+         List<Patient> pList = new ArrayList<Patient>();
+         for (Obs o:oListTmp){
+             if (!pList.contains(ps.getPatient(o.getPerson().getPersonId())))
+                 pList.add(ps.getPatient(o.getPerson().getPersonId()));
+         }
+         for(Patient p : pList){
+             fixCultureConversions(p);
+         }
+     }
+     
+     /**
+      * 
+      * Creates a culture conversion, reconversion, and cleans false obs for a patient;
+      * 
+      * @param p
+      */
+     public void fixCultureConversions(Patient p){
+         ObsService os = Context.getObsService();
+             this.cleanCultureStatusObs(p);
+             Date date = null;
+             Map<Obs, Date> map = this.getCultures(p);
+             Concept ccConcept = this.getConceptCultureConversion();
+             Concept rcConcept = this.getConceptCultureReconversion();
+             if (map != null && map.size() > 2)
+                 date = this.getCultureConversionDate(p);
+             if (date != null){
+                 
+               //test if the obs is already created:
+                 if (ccConcept != null){
+                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, ccConcept);
+                     boolean createObsTest = true;
+                     if (oList != null){
+                         for (Obs o:oList){
+                             if (o.getValueDatetime().equals(date)){
+                                 createObsTest = false;
+                                 break;
+                             }    
+                         }
+                     }
+                     if (createObsTest){
+                         for (Map.Entry<Obs,Date> e : map.entrySet()) {
+                             Date dateInner = e.getValue();
+                             if (dateInner.getTime() == date.getTime()){
+                                 //TODO:  
+                                 Obs oTmp = new Obs();
+                                 oTmp.setConcept(ccConcept);
+                                 oTmp.setCreator(Context.getAuthenticatedUser());
+                                 oTmp.setDateCreated(new Date());
+                                 oTmp.setEncounter(e.getKey().getEncounter());
+                                 oTmp.setLocation(e.getKey().getLocation());
+                                 oTmp.setObsDatetime(e.getKey().getObsDatetime());
+                                 oTmp.setPerson(p);
+                                 oTmp.setValueDatetime(date);
+                                 oTmp.setVoided(false);
+                                 
+                                 try {
+                                 log.info("Creating culture conversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
+                                 oTmp = os.saveObs(oTmp, "");
+                                 } catch (Exception ex){
+                                 log.warn("Failed to create culture conversion Obs for patient", ex);
+                                 }
+                                 break;
+                             }    
+                         }
+                      
+                     }
+                 }
+             }
+             //culture reconversion:
+             date = null;
+             if (map != null && map.size() > 2)
+                 date = this.getReconversionDate(p);
+             if (date != null){
+                 if (rcConcept != null){
+                     //test if the obs is already created:
+                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, rcConcept);
+                     boolean createObsTest = true;
+                     if (oList != null){
+                         for (Obs o:oList){
+                             if (o.getValueDatetime().equals(date)){
+                                 createObsTest = false;
+                                 break;
+                             }    
+                         }
+                     }
+                     
+                     if (createObsTest){
+                         for (Map.Entry<Obs,Date> e : map.entrySet()) {
+                             Date dateInner = e.getValue();
+                             if (dateInner.getTime() == date.getTime()){ 
+                                 Obs oTmp = new Obs();
+                                 oTmp.setConcept(rcConcept);
+                                 oTmp.setCreator(Context.getAuthenticatedUser());
+                                 oTmp.setDateCreated(new Date());
+                                 oTmp.setEncounter(e.getKey().getEncounter());
+                                 oTmp.setLocation(e.getKey().getLocation());
+                                 oTmp.setObsDatetime(date);
+                                 oTmp.setPerson(p);
+                                 oTmp.setValueDatetime(date);
+                                 oTmp.setVoided(false);
+                                 
+                                 try {
+                                     log.info("Creating culture reconversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
+                                     oTmp = os.saveObs(oTmp, "");
+                                 } catch (Exception ex){
+                                     log.warn("Failed to create reculture conversion Obs for patient", ex);
+                                 }
+                                 break;
+                             }    
+                         }
+                    
+                     }
+                 }
+             }    
+           this.syncCultureStatus(p, os);
+               //call smear cleaning here:
+           this.fixSmearConversions(p);
+     }
+     
+    
+     
+     /**
+      * 
+      * Sync the patient state for culture status with the culture conversion obs.
+      * 
+      * @param p
+      * @param os
+      * @param program
+      */
+     public void syncCultureStatus(Patient p, ObsService os){
+         Program program = this.getMDRTBProgram();
+         List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(p, program, null, null, null, null, false);
+         Concept cCulture = this.getConceptCultureResult();
+         //the patient must be enrolled in the mdrtb program for this to run:
+         if (programs.size() > 0){
+             
+             Concept cc = this.getConceptCultureConversion();
+             Concept rc = this.getConceptCultureReconversion();
+             ProgramWorkflowService pws = Context.getProgramWorkflowService();
+             
+           //get the latest patientprogram:
+             PatientProgram pp = programs.get(programs.size()-1);
+             Set<ProgramWorkflowState> possibleStates = this.getStatesCultureStatus();
+             
+             //get all cc and rc obs
+             List<Obs> ccs = os.getObservationsByPersonAndConcept(p, cc);
+             List<Obs> rcs = os.getObservationsByPersonAndConcept(p, rc);
+             Obs o = null;
+             
+             if (ccs != null && ccs.size() > 0){
+                 o = ccs.get(0);
+                 ccs.addAll(rcs);
+                 for (Obs oTmp:ccs){
+                     if (o.getValueDatetime().getTime() < oTmp.getValueDatetime().getTime())
+                         o = oTmp;
+                 }
+             }
+             
+             if (o != null){
+                 //this is the winning obs; change pp state accordingly, if necessary.
+                 if (o.getConcept().equals(cc)){
+                     
+                     for (PatientState ps : pp.getStates()){
+                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
+                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
+                             pws.savePatientProgram(pp);
+                             break;
+                         }
+                     }
+                     
+                 } else {
+                     
+                     for (PatientState ps : pp.getStates()){
+                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
+                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
+                             pws.savePatientProgram(pp);
+                             break;
+                         }
+                     }
+
+                 }
+                 
+             } else {
+
+                 Program mdrtbProgram = this.getMDRTBProgram();
+
+                 Map<Obs, Date> cultureObs = this.getCultures(p);
+                 
+                 for (PatientProgram ppTmp:programs){
+                     Set<PatientState> pss = ppTmp.getStates();
+                     boolean found = false;
+                     if (pss != null){
+                         for (PatientState ps : pss){
+                             if (ps.getState().getProgramWorkflow().getConcept().getConceptId() == mdrtbProgram.getWorkflowByName(this.STR_CULTURE_STATUS_PARENT).getConcept().getConceptId()){
+                                 found = true;
+                                
+                                 break;
+                                 
+                             }    
+                          }
+                     }
+
+                         //figure out if there are any cultures in the current program:
+                         List<Obs> relevantCultures = new ArrayList<Obs>();
+                         boolean allCulturesAreNegative = true;
+                         for (Map.Entry<Obs, Date> e : cultureObs.entrySet()) {
+                             
+                             Date startDate = ppTmp.getDateEnrolled();
+                             Date endDate = ppTmp.getDateCompleted();
+                             if (endDate == null)
+                                     endDate = new Date();
+                             
+                             Calendar startCal = Calendar.getInstance();
+                             Calendar endCal = Calendar.getInstance();
+                             startCal.setTime(startDate);
+                             endCal.setTime(endDate);
+                             startCal.add(Calendar.MONTH, -2);
+                             endCal.add(Calendar.MONTH, 3);
+                             
+                             endDate = endCal.getTime();
+                             startDate = startCal.getTime();
+                             if (e.getValue().before(endDate) && e.getValue().after(startDate)){
+                                 relevantCultures.add(e.getKey());
+                                 if (!MdrtbUtil.isNegativeBacteriology(e.getKey(), cCulture))
+                                     allCulturesAreNegative = false;
+                             }    
+                         }
+                         
+                         
+                         if (relevantCultures.size() == 0 || !found || allCulturesAreNegative == true){
+                              try {
+                                 Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
+                                     for (ProgramWorkflow pwTmp:pw){
+                                    
+                                         if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
+                                          
+                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled());
+                                             break;
+                                         }  
+                                     }
+                                     ppTmp = pws.savePatientProgram(ppTmp);
+                                 } catch (Exception ex){
+                                     log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
+                                 }
+                            
+                         
+                         }  else {
+                             try {
+                                 Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
+                                     for (ProgramWorkflow pwTmp:pw){
+                                     
+                                         if (pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()) != null){
+                                        
+                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()), ppTmp.getDateEnrolled());
+                                             break;
+                                         }  
+                                     }
+                                     ppTmp = pws.savePatientProgram(ppTmp);
+                                 } catch (Exception ex){
+                                     log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
+                                 }
+                             
+                         }
+                 }
+                 
+             }
+         }
+     }
+     
+     /**
+      * 
+      * Cleans out culture conversion and culture reconversion obs that no longer have cultures that match by date and result
+      * 
+      * @param p
+      */
+     public void cleanCultureStatusObs(Patient p){
+         ObsService os = Context.getObsService();
+         Concept ccConcept = this.getConceptCultureConversion();
+         Concept rcConcept = this.getConceptCultureReconversion();
+         Map<Obs, Date> map = this.getCultures(p);
+         
+         List<Obs> ccObs = os.getObservationsByPersonAndConcept(p, ccConcept);
+         List<Obs> rcObs = os.getObservationsByPersonAndConcept(p, rcConcept);
+         
+         //we need functions here that re-evaluate each existing cc obs:
+         if (ccObs != null){
+             for (Obs o : ccObs){
+                 if (!isObsValidCultureconversion(o, p, map))
+                  os.voidObs(o, "no longer a valid culture conversion");   
+             }
+         }
+         map = this.getCultures(p);
+         if (rcObs != null){
+             for (Obs o : rcObs){
+                 if (!isValidReconversion(o, p, map, ccObs))
+                 os.voidObs(o, "no longer a valid culture reconversion");
+             }
+         }  
+     }
+     
+     /**
+      * 
+      * Enroll a patient in the mdrtb program
+      * 
+      * @param p  Patient
+      */
+     public void enrollPatientInMDRTBProgram(Patient p, Date dateEnrolled) {
+         Program prog = this.getMDRTBProgram();
+         ProgramWorkflowService pws = Context.getProgramWorkflowService();
+         PatientProgram pp = new PatientProgram();
+         pp.setCreator(Context.getAuthenticatedUser());
+         pp.setDateEnrolled(dateEnrolled);
+         pp.setPatient(p);
+         pp.setProgram(prog);
+         pp.setVoided(false);
+         
+         try{
+             pp = pws.savePatientProgram(pp);   
+             try {
+             Set<ProgramWorkflow> pw = pp.getProgram().getWorkflows();
+                 for (ProgramWorkflow pwTmp:pw){
+                     if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
+                         pp.transitionToState(pwTmp.getStateByName(this.getSTR_NONE()), dateEnrolled);
+                         break;
+                     }
+                         
+                 }
+                 pp = pws.savePatientProgram(pp);
+             } catch (Exception ex){
+                 log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
+             }
+
+         } catch (Exception ex) {
+             log.warn("Unable to enroll patient in mdrtb program", ex);
+         }
+     }
+     
+
+     
+     /**
+      * 
+      * tests to see if 
+      * 
+      * @param o the obs to test
+      * @param p the patient
+      * @param map the results of this.getCultures(patient)
+      * @return
+      */
+     public boolean isObsValidCultureconversion(Obs o, Patient p, Map<Obs,Date> map){
+         //map is all cultures
+         int numberNeededInARow = MdrtbUtil.lookupConversionNumberConsecutive();
+         boolean ret = false;
+         Concept cCulture = this.getConceptCultureResult();
+         List<Obs> obsList = new ArrayList<Obs>();      
+         for (Obs obs:map.keySet())
+             obsList.add(obs);
+         
+             //make sure there is still an original positive culture
+             int posOfOriginalPositiveBac = -1;
+                 for (int i = 0; i < obsList.size(); i++){
+                     Obs oTmp = obsList.get(i);
+                     if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                         posOfOriginalPositiveBac = i;
+                         //if the conversion date is before the first positive culture -- return false
+                         if (o.getObsDatetime().before(oTmp.getObsDatetime()))
+                             return false;
+                         break;
+                     }
+                 }
+              //if there are no positives   
+              if (posOfOriginalPositiveBac == -1)
+                  return false;
+         
+         //obsList = all culture obs
+         if (obsList.size() > numberNeededInARow + 1){
+             //get the culture obs that corresponds to the ccObs
+             Obs ccObs = null;
+             int pos = 0;
+             for (Obs otmp : obsList){
+                 if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
+                     ccObs = otmp;
+                     break;
+                 }
+                 pos ++;
+             }
+             if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cCulture) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cCulture) || pos + 1 >= obsList.size()){
+                 return false;
+             }
+             //check if next X are negative (redundant, but quick)
+             for (int k = 1; k < numberNeededInARow;k++){
+                 if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cCulture))
+                     return false;
+             }     
+             //now test the next 30 days:
+             Calendar cal = Calendar.getInstance();
+             cal.setTime(map.get(ccObs));
+             cal.add(Calendar.DAY_OF_MONTH, MdrtbUtil.lookupConversionInterval());
+             int count = 1;
+             for (Obs oTmp : obsList){
+                 if (map.get(oTmp).after(map.get(ccObs))){
+                     count++;
+                     if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                         return false;
+                     }
+                     else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cCulture) && count >= numberNeededInARow){
+                         return true;
+                     }
+                     else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                         return false;
+                     }
+                 }
+             }  
+         } else
+             return false;
+         return ret;
+     }
+     
+     /**
+      * 
+      * Tests if an obs is a valid reconversion obs; assumes culture conversions have already been cleaned.
+      * 
+      * @param o the obs to test
+      * @param p patient
+      * @param map the results of this.getCultures(patient)
+      * @param ccObs a list of all culture conversion obs
+      * @return
+      */
+     public boolean isValidReconversion(Obs o, Patient p, Map<Obs,Date> map, List<Obs> ccObs){
+         boolean ret = false;
+         Concept cCulture = this.getConceptCultureResult();
+         if (ccObs == null || ccObs.size() == 0)
+                 return false;
+         Set<Obs> ObsSet = map.keySet();
+         List<Obs> obsList = new ArrayList<Obs>();      
+         for (Obs obs:ObsSet)
+             obsList.add(obs);
+         //obsList = all culture obs, and use the map values to get sputum collection dates.
+         if (obsList.size() > 3){
+             
+             Obs rcObs = null;
+             int pos = 0;
+             for (Obs otmp : obsList){
+                 if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
+                     rcObs = otmp;
+                     break;
+                 }
+                 pos ++;
+             }
+             if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cCulture) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cCulture))
+                 return false;
+
+             //get previous cultureconversionObs, and see if its valid.
+             for (int k = pos-1; k >= 0 ; k -- ){
+                 Obs obsPrevious = obsList.get(k);
+                 if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cCulture))
+                     return false;
+                 if (ccObs.contains(obsPrevious) && this.isObsValidCultureconversion(o, p, map)){
+                     ret = true;
+                     break;
+                 }
+             }
+         }    
+         return ret;
+     }
+
+
+     
+
+     
+     /**
+      * 
+      * Gets culture conversion date for a patient
+      * 
+      * @param p
+      * @return
+      */
+     public Date getSmearConversionDate(Patient p){
+         Date ret = null;
+
+         Map<Obs,Date> map = this.getSmears(p);
+         Set<Obs> ObsSet = map.keySet();
+         List<Obs> obsList = new ArrayList<Obs>();
+         Concept cSmear = this.getConceptSmearResult();
+         for (Obs obs:ObsSet)
+             obsList.add(obs);
+         //ensure that there is an original positive bacteriology;  if not, how can there be conversion?:
+         int posOfOriginalPositiveBac = -1;
+         for (int i = 0; i < obsList.size(); i++){
+             Obs oTmp = obsList.get(i);
+             if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                 posOfOriginalPositiveBac = i;
+                 break;
+             }
+         }
+         if (obsList.size() > MdrtbUtil.lookupConversionNumberConsecutive() && posOfOriginalPositiveBac >= 0){
+             for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
+                 Obs o = obsList.get(i);
+                 Date date = map.get(o);
+                 if (MdrtbUtil.isNegativeBacteriology(o, cSmear)){
+                     // if this smear is negative:
+                       int k = i - 1;
+                       Calendar calcutoff = Calendar.getInstance();
+                       calcutoff.setTime(date);
+                       
+                       //NOTE: this is a little lazy.  Ideally, we'd make sure that the interval between any set of 
+                       // negative cultures that result in a culture conversion is < 60 days.
+                       //However, the logic below is a decent approximation -- sequences that could break this signal a very badly run TB program...
+                       //patients should probably just be marked as default by hand, anyway.
+                       
+                       calcutoff.add(Calendar.DAY_OF_MONTH, - (MdrtbUtil.lookupConversionInterval()*MdrtbUtil.lookupConversionNumberConsecutive()));  //60 days = defaulted
+                       
+                       Calendar calThirty = Calendar.getInstance();
+                       calThirty.setTime(date);
+                       calThirty.add(Calendar.DAY_OF_MONTH, - (MdrtbUtil.lookupConversionInterval()));
+                       Date testDate = date;
+                     int numConsecutive = 1;  
+                     try {
+                         while (k > 0 && testDate.after(calcutoff.getTime())) {
+                             Obs oInner = obsList.get(k);
+                             Date dateInner = map.get(oInner);
+                           
+                             
+                             if (!MdrtbUtil.isNegativeBacteriology(oInner,cSmear))
+                                     break;
+                             else {
+                                 numConsecutive++; //number of consecutive negatives is now 2
+                                 if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
+                                     Obs oPrev = obsList.get(k-1);
+                                     if (!MdrtbUtil.isNegativeBacteriology(oPrev, cSmear) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
+                                         ret = dateInner;
+                                         break;   
+                                     }
+                                 }
+                             }
+                             testDate = dateInner;
+                             k--;
+                         }
+                     } catch (Exception ex) {}
+                 } 
+                 if (ret != null)
+                     break;
+             }
+         }
+         return ret;
+     }
+     
+     /**
+      * returns a reconversion date, and cleans up false smear conversions
+      */
+      public Date getSmearReconversionDate(Patient p){
+         
+         Date ret = null;
+         Map<Obs,Date> map = this.getSmears(p);
+         List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptSmearConverstion());      
+         Concept cSmear = this.getConceptSmearResult();
+         
+         if (oList != null){
+             for (int i = oList.size()-1; i >=0 ; i--){
+                 Obs o = oList.get(i);
+                 boolean startLooking = false;
+                 for (Map.Entry<Obs,Date> ent : map.entrySet()){
+                     if (!startLooking && ent.getValue().after(o.getValueDatetime()))
+                         startLooking = true;
+                     if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cSmear)){
+                         Calendar ccCal = Calendar.getInstance();                
+                         ccCal.setTime(o.getValueDatetime());
+                      
+                         ccCal.add(Calendar.DAY_OF_MONTH, (MdrtbUtil.lookupConversionInterval() - 1));
+                         if (ent.getValue().after(ccCal.getTime())){
+                         //if more than 30 day difference from smear conversion date,a positive smear is reconversion
+                            return ent.getValue();
+                         } else {
+                             // if less than 30 days, there was no smear conversion.
+                            Context.getObsService().voidObs(o, "Voided by reconversion date routine -- positive smear within 30 days of conversion obs");
+                            return null;
+                         }
+                     }  
+                 }
+             } 
+         }
+         return ret;
+     }
+      
+      /**
+       * 
+       * Cleans out smear conversion and smear reconversion obs that no longer have smears that match by date and result
+       * 
+       * @param p
+       */
+      public void cleanSmearStatusObs(Patient p){
+          ObsService os = Context.getObsService();
+          Concept ccConcept = this.getConceptSmearConverstion();
+          Concept rcConcept = this.getConceptSmearReconversion();
+          Map<Obs, Date> map = this.getSmears(p);
+          
+          List<Obs> ccObs = os.getObservationsByPersonAndConcept(p, ccConcept);
+          List<Obs> rcObs = os.getObservationsByPersonAndConcept(p, rcConcept);
+          
+          //we need functions here that re-evaluate each existing cc obs:
+          if (ccObs != null){
+              for (Obs o : ccObs){
+                  if (!isObsValidSmearconversion(o, p, map))
+                   os.voidObs(o, "no longer a valid smear conversion");   
+              }
+          }
+          map = this.getSmears(p);
+          if (rcObs != null){
+              for (Obs o : rcObs){
+                  if (!isValidSmearReconversion(o, p, map, ccObs))
+                  os.voidObs(o, "no longer a valid smear reconversion");
+              }
+          }  
+      }
+      
+      
+      /**
+       * 
+       * tests to see if 
+       * 
+       * @param o the obs to test
+       * @param p the patient
+       * @param map the results of this.getSmears(patient)
+       * @return
+       */
+      public boolean isObsValidSmearconversion(Obs o, Patient p, Map<Obs,Date> map){
+        //map is all smears
+          int numberNeededInARow = MdrtbUtil.lookupConversionNumberConsecutive();
+          boolean ret = false;
+          Concept cSmear = this.getConceptSmearResult();
+          List<Obs> obsList = new ArrayList<Obs>();      
+          for (Obs obs:map.keySet())
+              obsList.add(obs);
+          
+              //make sure there is still an original positive smear
+              int posOfOriginalPositiveBac = -1;
+                  for (int i = 0; i < obsList.size(); i++){
+                      Obs oTmp = obsList.get(i);
+                      if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                          posOfOriginalPositiveBac = i;
+                          //if the conversion date is before the first positive smear -- return false
+                          if (o.getObsDatetime().before(oTmp.getObsDatetime()))
+                              return false;
+                          break;
+                      }
+                  }
+               //if there are no positives   
+               if (posOfOriginalPositiveBac == -1)
+                   return false;
+          
+          //obsList = all smear obs
+          if (obsList.size() > numberNeededInARow + 1){
+              //get the smear obs that corresponds to the ccObs
+              Obs ccObs = null;
+              int pos = 0;
+              for (Obs otmp : obsList){
+                  if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
+                      ccObs = otmp;
+                      break;
+                  }
+                  pos ++;
+              }
+              if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cSmear) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cSmear) || pos + 1 >= obsList.size()){
+                  return false;
+              }
+              //check if next X are negative (redundant, but quick)
+              for (int k = 1; k < numberNeededInARow;k++){
+                  if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cSmear))
+                      return false;
+              }     
+              //now test the next 30 days:
+              Calendar cal = Calendar.getInstance();
+              cal.setTime(map.get(ccObs));
+              cal.add(Calendar.DAY_OF_MONTH, MdrtbUtil.lookupConversionInterval());
+              int count = 1;
+              for (Obs oTmp : obsList){
+                  if (map.get(oTmp).after(map.get(ccObs))){
+                      count++;
+                      if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                          return false;
+                      }
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cSmear) && count >= numberNeededInARow){
+                          return true;
+                      }
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                          return false;
+                      }
+                  }
+              }  
+          } else
+              return false;
+          return ret;
+      }
+      
+      
+      /**
+       * 
+       * Tests if an obs is a valid reconversion obs; assumes smear conversions have already been cleaned.
+       * 
+       * @param o the obs to test
+       * @param p patient
+       * @param map the results of this.getSmears(patient)
+       * @param ccObs a list of all smear conversion obs
+       * @return
+       */
+      public boolean isValidSmearReconversion(Obs o, Patient p, Map<Obs,Date> map, List<Obs> ccObs){
+          boolean ret = false;
+          Concept cSmear = this.getConceptSmearResult();
+          if (ccObs == null || ccObs.size() == 0)
+                  return false;
+          Set<Obs> ObsSet = map.keySet();
+          List<Obs> obsList = new ArrayList<Obs>();      
+          for (Obs obs:ObsSet)
+              obsList.add(obs);
+          //obsList = all smear obs, and use the map values to get sputum collection dates.
+          if (obsList.size() > 3){
+              
+              Obs rcObs = null;
+              int pos = 0;
+              for (Obs otmp : obsList){
+                  if (map.get(otmp).getTime() == o.getValueDatetime().getTime()){
+                      rcObs = otmp;
+                      break;
+                  }
+                  pos ++;
+              }
+              if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cSmear) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cSmear))
+                  return false;
+
+              //get previous smear, and see if its valid.
+              for (int k = pos-1; k >= 0 ; k -- ){
+                  Obs obsPrevious = obsList.get(k);
+                  if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cSmear))
+                      return false;
+                  if (ccObs.contains(obsPrevious) && this.isObsValidSmearconversion(o, p, map)){
+                      ret = true;
+                      break;
+                  }
+              }
+          }    
+          return ret;
+      }
+      
+      
+      /**
+       * 
+       * Creates a smear conversion, reconversion, and cleans false obs for a patient;
+       * 
+       * @param p
+       */
+      public void fixSmearConversions(Patient p){
+          ObsService os = Context.getObsService();
+              this.cleanSmearStatusObs(p);
+              Date date = null;
+              Map<Obs, Date> map = this.getSmears(p);
+              Concept ccConcept = this.getConceptSmearConverstion();
+                  if (ccConcept == null)
+                      throw new RuntimeException("Smear Conversion Concept not loaded");
+              Concept rcConcept = this.getConceptSmearReconversion();
+                  if (rcConcept == null)
+                      throw new RuntimeException("Smear Re - Conversion Concept not loaded");
+              if (map != null && map.size() > 2){
+                  date = this.getSmearConversionDate(p);
+              }    
+              if (date != null){
+                  
+                //test if the obs is already created:
+                  if (ccConcept != null){
+                      List<Obs> oList = os.getObservationsByPersonAndConcept(p, ccConcept);
+                      boolean createObsTest = true;
+                      if (oList != null){
+                          for (Obs o:oList){
+                              if (o.getValueDatetime().equals(date)){
+                                  createObsTest = false;
+                                  break;
+                              }    
+                          }
+                      }
+                      if (createObsTest){
+                          for (Map.Entry<Obs,Date> e : map.entrySet()) {
+                              Date dateInner = e.getValue();
+                              if (dateInner.getTime() == date.getTime()){
+                                  //TODO:  
+                                  Obs oTmp = new Obs();
+                                  oTmp.setConcept(ccConcept);
+                                  oTmp.setCreator(Context.getAuthenticatedUser());
+                                  oTmp.setDateCreated(new Date());
+                                  oTmp.setEncounter(e.getKey().getEncounter());
+                                  oTmp.setLocation(e.getKey().getLocation());
+                                  oTmp.setObsDatetime(e.getKey().getObsDatetime());
+                                  oTmp.setPerson(p);
+                                  oTmp.setValueDatetime(date);
+                                  oTmp.setVoided(false);
+                                  
+                                  try {
+                                  log.info("Creating smear conversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
+                                  oTmp = os.saveObs(oTmp, "");
+                                  } catch (Exception ex){
+                                  log.warn("Failed to create smear conversion Obs for patient", ex);
+                                  }
+                                  break;
+                              }    
+                          }
+                       
+                      }
+                  }
+              }
+              //smear reconversion:
+              date = null;
+              if (map != null && map.size() > 2)
+                  date = this.getSmearReconversionDate(p);
+              if (date != null){
+                  if (rcConcept != null){
+                      //test if the obs is already created:
+                      List<Obs> oList = os.getObservationsByPersonAndConcept(p, rcConcept);
+                      boolean createObsTest = true;
+                      if (oList != null){
+                          for (Obs o:oList){
+                              if (o.getValueDatetime().equals(date)){
+                                  createObsTest = false;
+                                  break;
+                              }    
+                          }
+                      }
+                      
+                      if (createObsTest){
+                          for (Map.Entry<Obs,Date> e : map.entrySet()) {
+                              Date dateInner = e.getValue();
+                              if (dateInner.getTime() == date.getTime()){ 
+                                  Obs oTmp = new Obs();
+                                  oTmp.setConcept(rcConcept);
+                                  oTmp.setCreator(Context.getAuthenticatedUser());
+                                  oTmp.setDateCreated(new Date());
+                                  oTmp.setEncounter(e.getKey().getEncounter());
+                                  oTmp.setLocation(e.getKey().getLocation());
+                                  oTmp.setObsDatetime(date);
+                                  oTmp.setPerson(p);
+                                  oTmp.setValueDatetime(date);
+                                  oTmp.setVoided(false);
+                                  
+                                  try {
+                                      log.info("Creating smear reconversion Obs for patient " + p.getPatientId() + " for date " + oTmp.getValueDatetime());
+                                      oTmp = os.saveObs(oTmp, "");
+                                  } catch (Exception ex){
+                                      log.warn("Failed to create smear reconversion Obs for patient", ex);
+                                  }
+                                  break;
+                              }    
+                          }
+                     
+                      }
+                  }
+              }    
+            
+      }
+    
 }
 
 

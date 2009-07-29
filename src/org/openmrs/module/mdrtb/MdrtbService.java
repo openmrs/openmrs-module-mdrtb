@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.openmrs.ConceptName;
 import org.openmrs.Order;
@@ -19,6 +20,6 @@ public interface MdrtbService extends OpenmrsService {
     
     public  OrderExtension voidOrderExtension(OrderExtension oe) throws APIException;
 
-    public List<ConceptName> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException ;
-
+    public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws APIException ;
+    
 }

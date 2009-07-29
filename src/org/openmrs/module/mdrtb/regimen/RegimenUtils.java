@@ -284,13 +284,11 @@ public class RegimenUtils {
             return false;
     }
     
-    public static String getCurrentRegimenAsString(Patient p, String sepparator, boolean includeDosages){
+    public static String getRegimenAsString(Date regDate, Patient p, String sepparator, boolean includeDosages){
         if (sepparator == null)
             sepparator = "";
         String ret = "";
-        RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
-        if (rh != null){
-            Regimen r = rh.getRegimen(new Date());
+            Regimen r = getRegimenOnDate(p, regDate);
             if (r != null && r.getComponents()!= null){
                 int total = r.getComponents().size();
                 int count = 1;
@@ -306,15 +304,14 @@ public class RegimenUtils {
                     count ++;
                 }
             }   
-        }
         return ret;
     }
     
-    public static Regimen getCurrentRegimen(Patient p){
+    public static Regimen getRegimenOnDate(Patient p, Date regDate){
         Regimen ret = null;
         RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
         if (rh != null){
-            Regimen r = rh.getRegimen(new Date());
+            Regimen r = rh.getRegimen(regDate);
             if (r != null){
                return r;
             }   

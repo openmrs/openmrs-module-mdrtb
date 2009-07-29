@@ -1,7 +1,5 @@
 package org.openmrs.module.mdrtb.web.controller;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +15,6 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +38,7 @@ import org.openmrs.module.mdrtb.MdrtbDSTObj;
 import org.openmrs.module.mdrtb.MdrtbDSTResultObj;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbNewTestObj;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbSmearObj;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
@@ -58,10 +55,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class MdrtbEditTestContainerController extends SimpleFormController{
     /** Logger for this class and subclasses */
@@ -116,6 +109,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             map.put("green", green.getBestName(Context.getLocale()).getName());
             
             MdrtbFactory mu = MdrtbFactory.getInstance();
+            map.put("none", mu.getConceptNone());
             Concept nonCodedConcept = mu.getConceptOtherMycobacteriaNonCoded();
             
             if (nonCodedConcept != null)
@@ -679,7 +673,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             
                             
                             for (MdrtbDSTResultObj res: dstResObs){
-                                if (res.getDrug().getConcept() != null){
+                                if (res.getDrug().getConcept() != null && !res.getDrug().getConcept().getConceptId().equals(mu.getConceptNone().getConceptId())){
                                     
                                     Obs dstParentResultObs = res.getDstResultParentObs();
                                     dstParentResultObs.setLocation(parentObs.getLocation());
@@ -710,7 +704,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                        concentration.setObsDatetime(obsDate);
                                        dstParentResultObs.addGroupMember(concentration);
                                    }
-                                } else if (res.getDrug().getConcept() == null && res.getDrug().getObsId() != null){
+                                } else if (res.getDrug().getConcept() != null && res.getDrug().getConcept().getConceptId().equals(mu.getConceptNone().getConceptId()) && res.getDrug().getObsId() != null){
                                     Obs dstParentResultObs = res.getDstResultParentObs();
                                     dstParentResultObs.setVoided(true);
                                     dstParentResultObs.setVoidedBy(Context.getAuthenticatedUser());
@@ -719,13 +713,16 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                     
                                     Obs drug = res.getDrug();
                                     if (drug.getObsId() != null){
+                                        Integer tmp = drug.getObsId();
+                                        //HERE
                                         //TODO: ooof. the following 5 lines suck:  we need to use sessions.getCurrentSession.evict(drug) to get at the saved value
-                                        Concept concept =    MdrtbUtil.getMDRTBConceptByName("UNKNOWN", new Locale("en", "US"));
-                                        if (concept == null)
-                                            concept =    MdrtbUtil.getMDRTBConceptByName("NONE", new Locale("en", "US"));
-                                        if (concept == null)
-                                            throw new RuntimeException("Please create a generic concept called either UNKNOWN or NONE");
-                                        drug.setConcept(concept);
+//                                        Concept concept  =    MdrtbUtil.getMDRTBConceptByName("UNKNOWN", new Locale("en"));
+//                                        if (concept == null)
+//                                            concept =    MdrtbUtil.getMDRTBConceptByName("NONE", new Locale("en"));
+//                                        if (concept == null)
+//                                            throw new RuntimeException("Please create a generic concept called either UNKNOWN or NONE");
+//                                        drug.setConcept(concept);
+
                                         drug.setVoided(true);
                                         drug.setVoidedBy(Context.getAuthenticatedUser());
                                         drug.setVoidReason("DST test nulled");
@@ -851,27 +848,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 // DST
                 MdrtbDSTObj mdo = new MdrtbDSTObj();
                 mdo.setDstParentObs(parentObs);
-                String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
-                List<Concept> existingDrugObs = new ArrayList<Concept>();
-                List<Concept> drugConceptList = new ArrayList<Concept>();
-                try {
-                    Concept c =    MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"));
-                    if (c != null && c.isSet()){
-                       drugConceptList = cs.getConceptsByConceptSet(c);
-                    } else if (c != null){
-                       drugConceptList.add(c);
-                    } else if (c == null){
-                        for (StringTokenizer st = new StringTokenizer(drugList, "|"); st.hasMoreTokens(); ) {
-                            String s = st.nextToken().trim();
-                            Concept cChildren =    MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
-                            if (cChildren != null)
-                                drugConceptList.add(cChildren);
-                        }
-                    }
-                    
-                } catch (Exception ex){
-                    throw new RuntimeException("Unable to load drug concepts for DST tests.  Check your global properties values for 'mdrtb.DST_drug_list'.");
-                }
+                List<Concept> drugConceptList = MdrtbUtil.getDstDrugList(false);
+                
                 Set<MdrtbDSTResultObj> alreadyShownResults = new HashSet<MdrtbDSTResultObj>();
                 
                 for (Obs o : levelTwoObs){
@@ -913,16 +891,13 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 mdro.setConcentration(oInner);
                             
                             //if in concept list, add obs 
-                            boolean conceptFound = false;
                             for (Concept drugConcept : drugConceptList){
-                                if (drugConcept.equals(oInner.getValueCoded())){
-                                    conceptFound = true;
-                                    existingDrugObs.add(oInner.getValueCoded());
+                                if (oInner.getValueCoded() != null && drugConcept.getConceptId().equals(oInner.getValueCoded().getConceptId())){
+                                    mdro.setDrug(oInner);
                                     break;
                                 }
                             }
-                            if (conceptFound)
-                                mdro.setDrug(oInner);  
+                                  
                         }
                         
                         if (mdro.getColonies().getObsId() == null){
@@ -1082,8 +1057,9 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     typeOther.setObsDatetime(parentObs.getObsDatetime());
                     mdo.setTypeOfOrganismNonCoded(typeOther);
                 }
+                
                 //lastly, add DST result obj for all non-used drugs:
-                for (Concept c :drugConceptList){
+                for (Concept c : drugConceptList){
                     //HERE
                     if (!mdoHasBeenCreatedForConcept(drugConceptList, c, mdo)){
                         MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
@@ -1539,7 +1515,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         }
     }
     
-    private boolean mdoHasBeenCreatedForConcept(List<Concept>drugConceptList, Concept c, MdrtbDSTObj mdo){
+    private boolean mdoHasBeenCreatedForConcept(List<Concept> drugConceptList, Concept c, MdrtbDSTObj mdo){
         int neededCount = 0;
         for (Concept cTmp : drugConceptList)
             if (cTmp.getConceptId().intValue() == c.getConceptId().intValue())

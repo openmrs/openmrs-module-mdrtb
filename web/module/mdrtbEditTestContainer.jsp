@@ -881,7 +881,7 @@
 					<option value=""><spring:message code="mdrtb.pleasechoosearesult" /></option>
 					</c:if>
 					<c:if test='${status.value != ""}'>
-					<option value=""><spring:message code="mdrtb.removethistest" /></option>
+					<option value="${none}"><spring:message code="mdrtb.removethistest" /></option>
 					</c:if>
 							<c:forEach items="${dstResults}" var="dstresult">					
 									<option value="${dstresult}"

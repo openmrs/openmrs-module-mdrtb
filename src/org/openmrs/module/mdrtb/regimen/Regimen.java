@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.Drug;
+import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsUtil;
 
 public class Regimen {
@@ -32,7 +33,7 @@ public class Regimen {
     public String toString() {
         StringBuilder ret = new StringBuilder();
         for (Concept g : getUniqueGenerics())
-            ret.append(g.getName()).append(", ");
+            ret.append(g.getBestName(Context.getLocale())).append(", ");
         ret.append(" from " + startDate);
         if (endDate != null) {
             ret.append(" to " + endDate);
@@ -91,8 +92,9 @@ public class Regimen {
     }
 
     public boolean isActive(Date date) {
+        System.out.println("Regimen test " + startDate + " " + date);
         return OpenmrsUtil.compareWithNullAsEarliest(startDate, date) <= 0
-                && OpenmrsUtil.compareWithNullAsLatest(date, endDate) <= 0;
+                && OpenmrsUtil.compareWithNullAsLatest(date, endDate) < 0;
     }
 
     public boolean containsDrug(Drug drug) {

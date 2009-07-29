@@ -2,13 +2,17 @@ package org.openmrs.module.mdrtb.db.hibernate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;
+import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
@@ -58,13 +62,15 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
     }
     
     @SuppressWarnings("unchecked")
-    public List<ConceptName> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws DAOException {
+    public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws DAOException {
         List<ConceptName> ret = new ArrayList<ConceptName>();
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(org.openmrs.ConceptName.class);
         crit.add(Expression.in("name", nameList));
         crit.add(Expression.eq("voided", false));
+        if (loc != null)
+            crit.add(Expression.eq("locale", loc.getLanguage()));
         ret = crit.list();
-        //TODO:  fix this -- it SUCKS!!!!
+        //TODO:  fix this -- it SUCKS!!!!  (this is for hydration)
         for (ConceptName cnTmp : ret){
           Collection<ConceptAnswer> cas = cnTmp.getConcept().getAnswers();
           if (cas != null){
@@ -79,6 +85,18 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
               }
           }
         } 
+        
+        if (removeDuplicates){
+            Map<Concept, ConceptName> retNoDups = new LinkedHashMap<Concept, ConceptName>();
+            ArrayList<ConceptName> newRet = new ArrayList<ConceptName>();
+            for (ConceptName cnTmp : ret){
+                if (!retNoDups.containsKey(cnTmp.getConcept()))
+                    retNoDups.put(cnTmp.getConcept(), cnTmp);
+            }
+            newRet.addAll(retNoDups.values());
+            return newRet;
+        }
+        
         return ret;
     }
     

@@ -35,6 +35,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbOverviewObj;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;
 import org.openmrs.propertyeditor.ConceptDatatypeEditor;
@@ -220,11 +221,11 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                                || ps.getState().getProgramWorkflowStateId().intValue() != pxws.getProgramWorkflowStateId().intValue()
                                || (ps.getState().equals(pxws) && outcomeDate != null && outcomeDate.getTime() != ps.getStartDate().getTime())){
                            if (outcomeDate == null){
-                               mu.transitionToStateNoErrorChecking(pp, pxws, new Date());
+                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, new Date());
                                update = true;
                                
                            } else {
-                               mu.transitionToStateNoErrorChecking(pp, pxws, outcomeDate);  
+                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeDate);  
                                update = true;
                            }
                        }
@@ -240,10 +241,10 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                                || psTwo.getState().getProgramWorkflowStateId().intValue() != pxwsTwo.getProgramWorkflowStateId().intValue()
                                || (psTwo.getState().equals(pxwsTwo) && outcomeDate != null && outcomeDate.getTime() != psTwo.getStartDate().getTime())){
                            if (stateDate == null){
-                               mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
+                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
                                update = true;
                            } else {
-                               mu.transitionToStateNoErrorChecking(pp, pxwsTwo, stateDate); 
+                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, stateDate); 
                                update = true;
                            }    
                        }

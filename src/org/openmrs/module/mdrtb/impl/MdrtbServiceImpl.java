@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.impl;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,7 +47,8 @@ public class MdrtbServiceImpl  extends BaseOpenmrsService implements MdrtbServic
         return oe;
     }
     
-    public List<ConceptName> getMdrtbConceptsByEnglishNameList(List<String> nameList)  throws APIException {
-        return dao.getMdrtbConceptsByEnglishNameList(nameList);
+    public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws APIException {
+        return dao.getMdrtbConceptNamesByNameList(nameList, removeDuplicates, loc);
     }
+    
 }
