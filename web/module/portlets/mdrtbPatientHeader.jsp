@@ -41,7 +41,7 @@
 				</c:if>
 				<c:if test="${not empty model.patient.attributeMap['Health Center']}">
 					<td id="patientHeaderHealthCenter">
-						<spring:message code="PersonAttributeType.HealthCenter"/>:
+						<spring:message code="mdrtb.healthcenter"/>:
 						<b>${model.patient.attributeMap['Health Center'].hydratedObject}</b>
 					</td>
 				</c:if>

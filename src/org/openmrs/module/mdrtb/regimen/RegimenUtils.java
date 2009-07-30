@@ -294,7 +294,7 @@ public class RegimenUtils {
                 int count = 1;
                 for (RegimenComponent rc : r.getComponents()){
                     if (rc.getDrug() == null)
-                        ret += rc.getGeneric().getBestName(Context.getLocale());
+                        ret += rc.getGeneric().getBestShortName(Context.getLocale());
                     else
                         ret += rc.getDrug().getName();
                     if (includeDosages)

@@ -362,7 +362,7 @@
 	<globalProperty>
 		<property>@MODULE_ID@.urlResourceRoot</property>
 		<defaultValue>https://mdrtbmodule.pih-emr.org</defaultValue>
-		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
+		<description>The root tomcat URL of your server.</description>
 	</globalProperty>
 	
 	

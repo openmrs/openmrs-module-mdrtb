@@ -226,6 +226,20 @@ public final class MdrtbFactory {
     
     private String STR_RESISTANT;
     
+    private String STR_ADVERSE_EFFECT_CONSTRUCT;
+    
+    private String STR_ADVERSE_EFFECT_MEDICATION;
+    
+    private String STR_ADVERSE_EFFECT_MEDICATION_NON_CODED;
+    
+    private String STR_ADVERSE_EFFECT;
+    
+    private String STR_ADVERSE_EFFECT_NON_CODED;
+    
+    private String STR_ADVERSE_EFFECT_DATE;
+    
+    private String STR_ADVERSE_EFFECT_ACTION_TAKEN;
+
     private List<ConceptName> xmlConceptNameList = new ArrayList<ConceptName>();
     
     public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
@@ -537,6 +551,27 @@ public final class MdrtbFactory {
             nodeList = concepts.getElementsByTagName("STR_DST_RESULT");
             node = nodeList.item(0);
             this.STR_DST_RESULT = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_CONSTRUCT");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_CONSTRUCT = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_MEDICATION");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_MEDICATION = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_MEDICATION_NON_CODED");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_MEDICATION_NON_CODED = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_NON_CODED");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_NON_CODED = node.getFirstChild().getNodeValue();  
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_DATE");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_DATE = node.getFirstChild().getNodeValue();
+            nodeList = concepts.getElementsByTagName("STR_ADVERSE_EFFECT_ACTION_TAKEN");
+            node = nodeList.item(0);
+            this.STR_ADVERSE_EFFECT_ACTION_TAKEN = node.getFirstChild().getNodeValue();
             
             //pre-set concepts
             
@@ -631,7 +666,15 @@ public final class MdrtbFactory {
                     STR_STANDARDIZED,
                     STR_EMPIRIC, 
                     STR_INDIVIDUALIZED, 
-                    STR_TREATMENT_STOP_DATE};
+                    STR_TREATMENT_STOP_DATE,
+                    STR_ADVERSE_EFFECT_CONSTRUCT,
+                    STR_ADVERSE_EFFECT_MEDICATION,
+                    STR_ADVERSE_EFFECT_MEDICATION_NON_CODED,
+                    STR_ADVERSE_EFFECT,
+                    STR_ADVERSE_EFFECT_NON_CODED,
+                    STR_ADVERSE_EFFECT_DATE,
+                    STR_ADVERSE_EFFECT_ACTION_TAKEN};
+
             
             List<String> stList = new ArrayList<String>();
             for (int i = 0; i < allXMLNodes.length; i++){
@@ -639,14 +682,47 @@ public final class MdrtbFactory {
             }
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             xmlConceptNameList = ms.getMdrtbConceptNamesByNameList(stList, false, new Locale("en"));
-
             
         } catch (Exception ex){
             log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
         }
     }
     
-    
+    public Concept getConceptAdverseEffectConstruct(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_CONSTRUCT, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffectMedication(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_MEDICATION, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffectMedicationNonCoded(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_MEDICATION_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffect(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffectNonCoded(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffectDate(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
+    public Concept getConceptAdverseEffectActionTaken(){
+        Concept ret = null;
+        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_ACTION_TAKEN, new Locale("en", "US"), this.xmlConceptNameList);
+        return ret;
+    }
     
     public Concept getConceptSmearMicroscopyMethod(){
         Concept ret = null;
@@ -688,7 +764,7 @@ public final class MdrtbFactory {
         ret = MdrtbUtil.getMDRTBConceptByName(this.STR_NONE, new Locale("en", "US"), this.xmlConceptNameList);
         return ret;
     }
-    //STR_SPUTUM_COLLECTION_DATE
+
     public Concept getConceptSputumCollectionDate(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(this.STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptNameList);
@@ -846,7 +922,6 @@ public final class MdrtbFactory {
         return ret;
     }
     
-    
     public Concept getConceptPatientClassDrugUse(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
@@ -907,15 +982,6 @@ public final class MdrtbFactory {
         return ret;
     }
       
-    public String getSTR_ON_ANTIRETROVIRALS() {
-        return STR_ON_ANTIRETROVIRALS;
-    }
-
-    public String getSTR_NEXT_VISIT() {
-        return STR_NEXT_VISIT;
-    }
-
-
     public Concept getConceptNextVisit(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_NEXT_VISIT, new Locale("en", "US"), this.xmlConceptNameList);
@@ -956,7 +1022,6 @@ public final class MdrtbFactory {
         return ret;
     }
     
-
     public Concept getConceptPrevDuration(){
         Concept ret = null;
         ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"), this.xmlConceptNameList);
@@ -1023,6 +1088,14 @@ public final class MdrtbFactory {
         return  pw.getSortedStates();
     }
 
+    public String getSTR_ON_ANTIRETROVIRALS() {
+        return STR_ON_ANTIRETROVIRALS;
+    }
+
+    public String getSTR_NEXT_VISIT() {
+        return STR_NEXT_VISIT;
+    }
+    
     public String getSTR_TB_SMEAR_RESULT() {
         return STR_TB_SMEAR_RESULT;
     }
@@ -1365,6 +1438,62 @@ public final class MdrtbFactory {
     public void setXmlConceptNameList(List<ConceptName> xmlConceptNameList) {
         this.xmlConceptNameList = xmlConceptNameList;
     } 
+    
+    public String getSTR_SMEAR_CONVERSION() {
+        return STR_SMEAR_CONVERSION;
+    }
+
+    public String getSTR_SMEAR_RECONVERSION() {
+        return STR_SMEAR_RECONVERSION;
+    }
+
+    public String getSTR_TREATMENT_STOP_DATE() {
+        return STR_TREATMENT_STOP_DATE;
+    }
+
+    public String getSTR_DST_RESULT() {
+        return STR_DST_RESULT;
+    }
+
+    public String getSTR_SUSCEPTIBLE() {
+        return STR_SUSCEPTIBLE;
+    }
+
+    public String getSTR_INTERMEDIATE() {
+        return STR_INTERMEDIATE;
+    }
+
+    public String getSTR_RESISTANT() {
+        return STR_RESISTANT;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_CONSTRUCT() {
+        return STR_ADVERSE_EFFECT_CONSTRUCT;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_MEDICATION() {
+        return STR_ADVERSE_EFFECT_MEDICATION;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_MEDICATION_NON_CODED() {
+        return STR_ADVERSE_EFFECT_MEDICATION_NON_CODED;
+    }
+
+    public String getSTR_ADVERSE_EFFECT() {
+        return STR_ADVERSE_EFFECT;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_NON_CODED() {
+        return STR_ADVERSE_EFFECT_NON_CODED;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_DATE() {
+        return STR_ADVERSE_EFFECT_DATE;
+    }
+
+    public String getSTR_ADVERSE_EFFECT_ACTION_TAKEN() {
+        return STR_ADVERSE_EFFECT_ACTION_TAKEN;
+    }
     
     
     /**
