@@ -763,7 +763,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
               
                 } 
                 if (msa.getMessage("mdrtb.delete").equals(action)) {
-                    Obs parentObs = new Obs();
+                    Obs parentObs = null;
                     if (retType.equals("smears")){
                         MdrtbSmearObj mso = mnto.getSmears().get(0);
                         parentObs = mso.getSmearParentObs();
@@ -780,9 +780,12 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         parentObs = dst.getDstParentObs();
                         returnView = "DST";
                     }    
-                    if (parentObs.getObsId() != null && parentObs.isObsGrouping()){
-                    Context.getObsService().voidObs(parentObs, "DST deleted");
-                    saveTest = true;
+                    if (parentObs != null && parentObs.getObsId() != null && parentObs.isObsGrouping()){
+                        Integer parentObsId = parentObs.getObsId();
+                        Context.evictFromSession(parentObs);
+                        parentObs = Context.getObsService().getObs(parentObsId);
+                        Context.getObsService().voidObs(parentObs, "parent obs deleted");
+                        saveTest = true;
                     }
                     
                 }
@@ -797,8 +800,6 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             if (saveTest){
                     es.saveEncounter(enc);
                     for (Encounter oldEnc: encsToDelete){
-                        
-                        
                         Context.getEncounterService().saveEncounter(oldEnc);
                         if (oldEnc.getAllObs() == null || oldEnc.getAllObs().size() == 0){
                             Context.getEncounterService().voidEncounter(oldEnc, "no obs so worthless...");
