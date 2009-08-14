@@ -391,12 +391,14 @@
 			</tr>
 			<tr>
 				<td><spring:message code="mdrtb.comment" /></td>
+				<td>
 				<spring:bind path="obj.smears[${rowCount}].smearResult.comment">
-				<td><textarea name='${status.expression}' id='commentSmear'>${status.value}</textarea></td>
+				<textarea name='${status.expression}' id='commentSmear'>${status.value}</textarea>
 				<c:if test="${status.errorMessage != ''}">
 								<span class="error">${status.errorMessage}</span>
 					</c:if>
 				</spring:bind>
+				</td>
 			</tr>	
 		</table>
 						</td></Tr>
@@ -931,7 +933,7 @@
 		<c:if test="${fn:length(obj.dsts) > 0}">
 		<c:set var="retType" scope="page" value="dsts" />
 		</c:if>
-		<input type="hidden" name="retType" value="${retType}" />
+		<input type="hidden" name="retType" value='${retType}'/>
 		<input type="submit"  name="submit"    value='<spring:message code="mdrtb.save" />'>
 		&nbsp;<input type="submit"  name="submit"  value='<spring:message code="mdrtb.cancel" />'>
 		&nbsp;<input type="submit" name="submit"  value='<spring:message code="mdrtb.delete" />'>
