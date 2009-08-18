@@ -14,10 +14,10 @@ import org.openmrs.User;
  */
 public class MdrtbDSTResultObj {
 
-    private Obs colonies = new Obs();
-    private Obs concentration = new Obs();
-    private Obs drug = new Obs();
-    private Obs dstResultParentObs = new Obs();
+    private Obs colonies;
+    private Obs concentration;
+    private Obs drug;
+    private Obs dstResultParentObs;
     
     
     public MdrtbDSTResultObj(){}
@@ -33,7 +33,10 @@ public class MdrtbDSTResultObj {
      */
     public MdrtbDSTResultObj(Concept drugConcept,Patient patient, User user, MdrtbFactory mu){
        
-        
+        drug = new Obs();
+        concentration = new Obs();
+        colonies = new Obs();
+        dstResultParentObs = new Obs();
 
         drug.setDateCreated(new Date());
         drug.setVoided(false);

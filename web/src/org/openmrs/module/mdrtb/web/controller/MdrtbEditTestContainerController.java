@@ -278,7 +278,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
                         if (enc.getEncounterType() == null)
                             throw new RuntimeException("EncounterType is null.  Make sure that your global properties for MDRTB encounter types are valid.");
-
+                        
                         }
                         
                      
@@ -320,6 +320,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 }
                                 if (enc.getEncounterDatetime() == null)
                                     enc.setEncounterDatetime(mso.getSmearResult().getObsDatetime());
+                                
                                 saveTest = true;
                                 
                                 //encounter and obs datetime stuff:
@@ -329,11 +330,11 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 parentObs.setObsDatetime(obsDate);
 
                                 Obs smearResult = mso.getSmearResult();
+                                smearResult.setValueDatetime(smearResult.getObsDatetime());
                                 if (enc.getEncounterDatetime() == null)
                                     enc.setEncounterDatetime(smearResult.getValueDatetime());
                                 smearResult.setLocation(parentObs.getLocation());
                                 smearResult.setEncounter(enc);
-                                smearResult.setObsDatetime(obsDate);
                                 parentObs.addGroupMember(smearResult);
                                 
                                
@@ -389,8 +390,10 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 }
 
                         }
+                        
                         if (mco.getCultureResult() != null && mco.getCultureResult().getValueCoded() != null 
-                                && mco.getCultureResult().getValueDatetime() != null){
+                                && mco.getCultureResult().getObsDatetime() != null){
+                            
                             
                             Obs parentObs = mco.getCultureParentObs();
                             Encounter oldEnc = parentObs.getEncounter();
@@ -427,14 +430,13 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             if (mco.getCultureResult().getObsDatetime() != null)
                                 obsDate = mco.getCultureResult().getObsDatetime();
                             parentObs.setObsDatetime(obsDate);
-                            
                           //now, add the child obs to the parent if their answers are not null:
                             Obs cultureResult = mco.getCultureResult();
+                            cultureResult.setValueDatetime(cultureResult.getObsDatetime());
                             if (enc.getEncounterDatetime() == null)
                                 enc.setEncounterDatetime(cultureResult.getValueDatetime());
                             cultureResult.setLocation(parentObs.getLocation());
                             cultureResult.setEncounter(enc);
-                            cultureResult.setObsDatetime(obsDate);
                             parentObs.addGroupMember(cultureResult);
                            
                             
@@ -798,6 +800,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         returnView = "DST";  
                 }
             if (saveTest){
+                
                     es.saveEncounter(enc);
                     for (Encounter oldEnc: encsToDelete){
                         Context.getEncounterService().saveEncounter(oldEnc);
@@ -893,7 +896,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             
                             //if in concept list, add obs 
                             for (Concept drugConcept : drugConceptList){
-                                if (oInner.getValueCoded() != null && drugConcept.getConceptId().equals(oInner.getValueCoded().getConceptId())){
+                                if (oInner.getValueCoded() != null && drugConcept.getConceptId().intValue() == oInner.getValueCoded().getConceptId().intValue()){
                                     mdro.setDrug(oInner);
                                     break;
                                 }
@@ -901,7 +904,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                   
                         }
                         
-                        if (mdro.getColonies().getObsId() == null){
+                        if (mdro.getColonies() == null){
                             Obs colonies = new Obs();
                             colonies.setConcept( mu.getConceptColonies()); 
                             colonies.setVoided(false);
@@ -912,7 +915,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             colonies.setObsDatetime(parentObs.getObsDatetime());
                             mdro.setColonies(colonies);
                         }
-                        if (mdro.getConcentration().getObsId() == null){
+                        if (mdro.getConcentration() == null){
                             Obs conc = new Obs();
                             conc.setConcept(  mu.getConceptConcentration()); 
                             conc.setVoided(false);
@@ -924,11 +927,13 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             mdro.setConcentration(conc);
                         }
                         
-                        if (!alreadyShownResults.contains(mdro)){
+                        if (mdro.getDrug() != null && !alreadyShownResults.contains(mdro)){
                             mdro.setDstResultParentObs(o);
                             mdo.getDstResults().add(mdro);
                             alreadyShownResults.add(mdro);
-                        }    
+                        }  else {
+                            log.error("HERE's a dst parent with some children but no attached drug obs:" + o.getObsId());
+                        }
                     }    
                 }
                 if (mdo.getColoniesInControl().getObsId() == null){
@@ -1112,6 +1117,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 List<MdrtbDSTResultObj> newOrderList = new ArrayList<MdrtbDSTResultObj>();
                 for (Concept drugConcept:drugConceptList){
                     for (MdrtbDSTResultObj oToOrder : mdo.getDstResults()){
+                        
                         if (oToOrder.getDrug().getValueCoded().equals(drugConcept) && !used.contains(oToOrder)){
                             newOrderList.add(oToOrder);
                             used.add(oToOrder);

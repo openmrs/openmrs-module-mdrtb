@@ -181,6 +181,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.setObsDatetime(obsDate);
 
                                 Obs smearResult = mso.getSmearResult();
+                                smearResult.setValueDatetime(smearResult.getObsDatetime());
                                 if (enc.getEncounterDatetime() == null)
                                     enc.setEncounterDatetime(smearResult.getObsDatetime());
                                 smearResult.setLocation(parentObs.getLocation());
@@ -283,7 +284,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             
                           //now, add the child obs to the parent if their answers are not null:
                             Obs cultureResult = mco.getCultureResult();
-                           
+                            cultureResult.setValueDatetime(cultureResult.getObsDatetime());
                             if (enc.getEncounterDatetime() == null)
                                 enc.setEncounterDatetime(cultureResult.getValueDatetime());
                             cultureResult.setLocation(parentObs.getLocation());

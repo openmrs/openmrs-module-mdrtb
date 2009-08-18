@@ -217,7 +217,7 @@
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
 					<spring:bind path="obj.smears[${rowCount}].smearResult.obsDatetime">
-						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}"  onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateSmear" name="${status.expression}"  onMouseDown="$(this).date_input()" class="sputumCollection"/>&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 							<span class="error">${status.errorMessage}</span>
 						</c:if>
@@ -413,7 +413,7 @@
 									<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 									<td>
 										<spring:bind path="obj.cultures[${rowCount}].cultureResult.obsDatetime">
-										<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+										<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateCulture" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection"/>&nbsp;&nbsp;(${dateFormat})
 											<c:if test="${status.errorMessage != ''}">
 													<span class="error">${status.errorMessage}</span>
 											</c:if>
@@ -654,7 +654,7 @@
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
 					<spring:bind path="obj.dsts[${rowCount}].sputumCollectionDate.valueDatetime">
-					<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+					<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateDST" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 								<span class="error">${status.errorMessage}</span>
 						</c:if>
@@ -925,19 +925,20 @@
 		<br>
 		<c:set var="retType" scope="page" value="none" />
 		<c:if test="${fn:length(obj.smears) > 0}">
-		<c:set var="retType" scope="page" value="smears" />
+			<c:set var="retType" scope="page" value="smears" />
 		</c:if>
 		<c:if test="${fn:length(obj.cultures) > 0}">
-		<c:set var="retType" scope="page" value="cultures" />
+			<c:set var="retType" scope="page" value="cultures" />
 		</c:if>
 		<c:if test="${fn:length(obj.dsts) > 0}">
-		<c:set var="retType" scope="page" value="dsts" />
+			<c:set var="retType" scope="page" value="dsts" />
 		</c:if>
-		<input type="hidden" name="retType" value='${retType}'/>
+		
 		<input type="submit"  name="submit"    value='<spring:message code="mdrtb.save" />'>
 		&nbsp;<input type="submit"  name="submit"  value='<spring:message code="mdrtb.cancel" />'>
 		&nbsp;<input type="submit" name="submit"  value='<spring:message code="mdrtb.delete" />'>
 </div>
+<input type="hidden" name="retType" value='${retType}'/>
 </form>	
 	<script>
 		showTrIfScanty();
