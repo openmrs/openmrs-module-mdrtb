@@ -34,5 +34,6 @@
 	<classpathentry kind="lib" path="lib-common/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs-api-1.4.2.01.8057.jar"/>
 	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.4.2.01.8057.jar"/>
+	<classpathentry kind="lib" path="web/module/resources"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -31,6 +30,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -256,24 +256,17 @@ public final class MdrtbFactory {
         return MdrtbFactoryHolder.uniqueInstance;
     }
     
-    private void readXML(){
-        String httpBase = Context.getAdministrationService().getGlobalProperty("mdrtb.urlResourceRoot");
-        String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-                
-        try{ 
+    private void readXML(){ 
+        try { 
+	        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbConcepts.xml");
+	        Document doc = db.parse(in);
+	        in.close();
+	        log.warn("Loaded MDR Concepts from xml...");
+	        doc.getDocumentElement().normalize();
+	        Element concepts = doc.getDocumentElement();
 
-        URL xmlURL = new URL(XMLlocation);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        log.debug("xmlURL is set to " + xmlURL.toString());
-        InputStream in = xmlURL.openStream();
-        Document doc = db.parse(in);
-        in.close();
-        doc.getDocumentElement().normalize();
-        Element concepts = doc.getDocumentElement();
-        
-            
-       
             NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
             Node node = nodeList.item(0);
             this.STR_TB_SMEAR_RESULT= node.getFirstChild().getNodeValue();  

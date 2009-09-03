@@ -54,6 +54,10 @@
 			<fileset dir="src/" excludes="**/*.java" />
 		</copy>
 		
+		<copy todir="build">
+			<fileset dir="web/module/resources" includes="**/*.xml" />
+		</copy>
+		
 		<!--  Compile module java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source,vars">
 			<compilerarg line="-g" />

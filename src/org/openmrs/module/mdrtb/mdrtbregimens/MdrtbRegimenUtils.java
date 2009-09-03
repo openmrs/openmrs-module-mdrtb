@@ -1,6 +1,6 @@
 package org.openmrs.module.mdrtb.mdrtbregimens;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -22,24 +22,22 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
 
 public class MdrtbRegimenUtils {
 
-    protected final Log log = LogFactory.getLog(getClass());
+    protected static final Log log = LogFactory.getLog(MdrtbRegimenUtils.class);
     
     public  static List<MdrtbRegimenSuggestion> getMdrtbRegimenSuggestions(){
             List<MdrtbRegimenSuggestion> ret = new ArrayList<MdrtbRegimenSuggestion>();
-            
-            
-            String httpBase = Context.getAdministrationService().getGlobalProperty("mdrtb.urlResourceRoot");
-            String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
-                
-            try{ 
-                
-                URL xmlURL = new URL(XMLlocation);
-                SAXReader reader = new SAXReader();
-                Document xmlDoc = reader.read(xmlURL);
+              
+            try {
+            	SAXReader reader = new SAXReader();
+            	InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbRegimenSuggestionTemplate.xml");
+                Document xmlDoc = reader.read(in);
+                in.close();
+                log.warn("Loaded Regimen Suggestions from xml...");
                 Element list = xmlDoc.getRootElement();
                 ConceptService cs = Context.getConceptService();
                 for(Iterator i = list.elements().iterator(); i.hasNext();){
