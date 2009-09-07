@@ -248,12 +248,13 @@ public final class MdrtbFactory {
 
     private MdrtbFactory(){readXML();};
     
-    private static class MdrtbFactoryHolder {
-        private static MdrtbFactory uniqueInstance = new MdrtbFactory();
-    }
-    
+    private static MdrtbFactory uniqueInstance;
+
     public static final MdrtbFactory getInstance() {
-        return MdrtbFactoryHolder.uniqueInstance;
+    	if (uniqueInstance == null) {
+    		uniqueInstance = new MdrtbFactory();
+    	}
+        return uniqueInstance;
     }
     
     private void readXML(){ 
