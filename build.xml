@@ -5,7 +5,28 @@
 <!-- ** @author Dave Thomas                                  ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="mdrtb_1.4" default="package-module">
+<project name="mdrtb-1.5.x" default="package-module">
+	
+	<property environment="env"/>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../openmrs-1.5.x/lib/ant-contrib/ant-contrib-1.0b2.jar"/>
+	
+	<available file="${env.OPENMRS_BUILD_PROPERTIES_FILE}" property="env.file.exists"/>
+	<available file="${user.home}/Application Data/OpenMRS/OPENMRS-build.properties" property="appdata.file.exists"/>
+	<available file="${user.home}/.OpenMRS/OPENMRS-build.properties" property="unix.file.exists"/>
+	<if>
+		<equals arg1="${env.file.exists}" arg2="true" />
+		<then><property file="${env.OPENMRS_BUILD_PROPERTIES_FILE}"/></then>
+		<elseif>
+			<equals arg1="${appdata.file.exists}" arg2="true" />
+			<then><property file="${user.home}/Application Data/OpenMRS/OPENMRS-build.properties"/></then>
+		</elseif>
+		<elseif>
+			<equals arg1="${unix.file.exists}" arg2="true" />
+			<then><property file="${user.home}/.OpenMRS/OPENMRS-build.properties"/></then>
+		</elseif>
+		<else><echo message="WARNING: No build properties found"/></else>
+	</if>
 		
 	<!-- *********************************************************** -->
 	<!-- **                     TARGETS                           ** -->
@@ -35,6 +56,12 @@
 				<include name="**/*.jar"/>
 			</fileset>
 			<fileset dir="lib-common">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="../openmrs-1.5.x/lib">
+				<include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="../openmrs-1.5.x/dist">
 				<include name="**/*.jar"/>
 			</fileset>
 		</path>
@@ -109,24 +136,6 @@
 		</jar>
 	</target>
 	
-	<target name="deploy-web-dave" depends="package-module">
-			<property environment="env" />
-			<copy todir="C:/Application Data/OpenMRS/modules">
-				<fileset dir="dist" includes="**/*" />
-			</copy>
-			<copy
-				todir="C:/Documents and Settings/dthomas/Application Data/OpenMRS/modules">
-				<fileset dir="dist" includes="**/*" />
-			</copy>
-		</target>
-	
-	<target name="deploy-web-darius" depends="package-module" description="Deploy-web for Darius">
-			<property environment="env"/>
-			<copy todir="/home/djazayeri/apache-tomcat-6.0.16/webapps/openmrs/WEB-INF/view/module/${module.id}">
-				<fileset dir="web/module" includes="**/*" />
-			</copy>
-	</target>
-	
 	<target name="package-jar" depends="package-module" description="Packages class files into jar file to be included in other projects">
 		<!-- Create distributable jar file -->
 		<jar destfile="dist/${module.id}-${module.version}.jar">
@@ -137,28 +146,10 @@
 		</jar>
 	</target>
 	
-	<target name="update-jsps">
-		<property environment="env" />
-		<copy
-			todir="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/openmrs/WEB-INF/view/module/mdrtb">
-			<fileset dir="web/module" includes="*.jsp" />
+	<target name="deploy-web" depends="package-module" description="Copy web files to webapp">
+		<copy todir="${tomcat.home}/webapps/openmrs/WEB-INF/view/module/${module.id}">
+			<fileset dir="web/module" includes="**/*" />
 		</copy>
-		<copy
-			todir="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/openmrs/WEB-INF/view/module/mdrtb/resources">
-			<fileset dir="web/module/resources" includes="*" />
-		</copy>
-		<copy
-			todir="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/openmrs/WEB-INF/view/module/mdrtb/portlets">
-			<fileset dir="web/module/portlets" includes="*" />
-		</copy>
-		<copy
-					todir="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/openmrs/WEB-INF/view/module/mdrtb/portlets/taglibs">
-					<fileset dir="web/module/portlets/taglibs" includes="*" />
-				</copy>
-		<copy
-					todir="C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/openmrs/WEB-INF/view/module/mdrtb/taglibs">
-					<fileset dir="web/module/taglibs" includes="*" />
-				</copy>
 	</target>
 
 </project>
