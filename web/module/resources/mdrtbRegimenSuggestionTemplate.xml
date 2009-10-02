@@ -45,7 +45,7 @@
 			<drugSuggestion>
 				<conceptId>745</conceptId>
 				<drugId></drugId> 
-				<dose>300</dose> 
+				<dose>200</dose> 
 				<units>mg</units> 
 				<frequency>2/day x 7 days/week</frequency> 
 				<instructions></instructions> 

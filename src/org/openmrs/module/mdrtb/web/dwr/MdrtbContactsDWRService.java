@@ -24,6 +24,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 
 public class MdrtbContactsDWRService {
     
@@ -69,7 +70,8 @@ public class MdrtbContactsDWRService {
                 }
             }
             
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             ObsService os = Context.getObsService();
             List<Obs> oListPhone = os.getObservationsByPersonAndConcept(contact, mu.getConceptPhoneNumber());
                if (oListPhone.size() > 0){
@@ -183,7 +185,8 @@ public class MdrtbContactsDWRService {
             
               //newKnownMDRString
                 if (popupKnownMDRVal != null){
-                    MdrtbFactory mu = MdrtbFactory.getInstance();
+                    MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                    MdrtbFactory mu = ms.getMdrtbFactory();
                     ObsService os = Context.getObsService();
                     Concept cKnown = mu.getConceptKnownMDRCase();
                     List<Obs> oList = os.getObservationsByPersonAndConcept(contact, cKnown);
@@ -230,7 +233,8 @@ public class MdrtbContactsDWRService {
             person.addAddress(pa);
             person = Context.getPersonService().savePerson(person);
             
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             
             Obs o = new Obs();
             o.setConcept(mu.getConceptPhoneNumber());

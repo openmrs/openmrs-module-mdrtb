@@ -21,6 +21,7 @@ import org.openmrs.Patient;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -100,8 +101,9 @@ public class MdrtbSpecimenRegistrationController extends SimpleFormController {
         		log.error("Error parsing patientIds for submission." + e);
         		throw new IllegalArgumentException("One or more of the entered patients is invalid.");
         	}
-        	
-        	Concept dstConcept = MdrtbFactory.getInstance().getConceptDSTParent();
+        	MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
+        	Concept dstConcept = mu.getConceptDSTParent();
     		
         	// Create encounters for each patient
         	for (Patient p : patients) {

@@ -67,7 +67,8 @@ public class MdrtbDSTWidgetController extends TagSupport {
     
     
     public int doStartTag() {
-        MdrtbFactory mu = MdrtbFactory.getInstance();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");
@@ -109,7 +110,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
            
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu.getXmlConceptNameList());
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(tmp);
             if (c != null){
                 c = Context.getConceptService().getConcept(c.getConceptId());
                 Collection<ConceptName> cnsTmp = c.getNames();
@@ -159,7 +160,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
         for (StringTokenizer st = new StringTokenizer(this.concepts, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"), mu.getXmlConceptNameList());
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(conceptString);
             
             if (c != null) {
                 c = Context.getConceptService().getConcept(c.getConceptId());

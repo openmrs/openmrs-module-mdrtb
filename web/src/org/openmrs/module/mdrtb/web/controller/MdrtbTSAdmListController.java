@@ -22,6 +22,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbTreatmentSupporter;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;
@@ -146,7 +147,8 @@ public class MdrtbTSAdmListController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
         List<MdrtbTreatmentSupporter> ret = new ArrayList<MdrtbTreatmentSupporter>();
         if (Context.isAuthenticated()){
-                MdrtbFactory mu = MdrtbFactory.getInstance();
+                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                MdrtbFactory mu = ms.getMdrtbFactory();
                 Concept phoneConcept = mu.getConceptPhoneNumber();
                 String treatSupAttributeTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_person_attribute_type");
                 PersonService ps = Context.getPersonService();

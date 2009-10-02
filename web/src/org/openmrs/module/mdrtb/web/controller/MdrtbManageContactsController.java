@@ -42,6 +42,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -76,7 +77,8 @@ public class MdrtbManageContactsController extends SimpleFormController {
                 Integer patientId = Integer.valueOf(patientIdString);
                 MessageSourceAccessor msa = this.getMessageSourceAccessor();
                 if (action != null && msa.getMessage("mdrtb.save").equals(action)) {
-                    MdrtbFactory mu = MdrtbFactory.getInstance();
+                    MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                    MdrtbFactory mu = ms.getMdrtbFactory();
 
                    
                     SimpleDateFormat sdf = Context.getDateFormat();
@@ -408,7 +410,8 @@ public class MdrtbManageContactsController extends SimpleFormController {
             mp.setPatient(Context.getPatientService().getPatient(Integer.valueOf(patientIdString)));
             String rtString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_relationship_type");
             RelationshipType rt = ps.getRelationshipTypeByName(rtString);
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             Program program = mu.getMDRTBProgram();
             for (Relationship contact:ps.getRelationshipsByPerson(mp.getPatient())){   
                 //bi-directional:
@@ -589,7 +592,8 @@ public class MdrtbManageContactsController extends SimpleFormController {
     protected Map referenceData(HttpServletRequest request, Object obj, Errors errs) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             PatientService ps = Context.getPatientService();
             AdministrationService as =  Context.getAdministrationService();
             map.put("tbResultConceptId", mu.getConceptSimpleTBResult().getConceptId());

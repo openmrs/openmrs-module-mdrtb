@@ -35,6 +35,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbOverviewObj;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;
@@ -100,7 +101,8 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                     + msa.getMessage("mdrtb.september")+ "','"+ msa.getMessage("mdrtb.october")+ "','"+ msa.getMessage("mdrtb.november")+ "','"+ msa.getMessage("mdrtb.december")+ "','"+ msa.getMessage("mdrtb.jan")+ "','"+ msa.getMessage("mdrtb.feb")+ "','"+ msa.getMessage("mdrtb.mar")+ "','"+ msa.getMessage("mdrtb.ap")+ "','"+ msa.getMessage("mdrtb.may")+ "','"
                     + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
             
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
             map.put("locations", Context.getLocationService().getAllLocations());
@@ -209,7 +211,8 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                    }
                    
                    
-                   MdrtbFactory mu = MdrtbFactory.getInstance();
+                   MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                   MdrtbFactory mu = ms.getMdrtbFactory();
                    boolean update = false;
                    PatientProgram pp = moo.getPatientProgram();
                    
@@ -303,7 +306,8 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
        List<MdrtbOverviewObj> ret = new ArrayList<MdrtbOverviewObj>();
        if (Context.isAuthenticated()){
-           MdrtbFactory mu = MdrtbFactory.getInstance();
+           MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+           MdrtbFactory mu = ms.getMdrtbFactory();
            Program program = mu.getMDRTBProgram();
            Concept tstopdConcept = mu.getConceptTreatmentStopDate();
            ProgramWorkflowService progS = Context.getProgramWorkflowService();

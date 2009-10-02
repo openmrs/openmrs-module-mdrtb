@@ -109,7 +109,7 @@ public class DrugForecastUtil {
         Drug drug = o.getDrug();
         if (drug == null)
             return 0;
-        int days = daysOfOverlap(fromDate, toDate, o.getStartDate(), o.isDiscontinued() ? o.getDiscontinuedDate() : o.getAutoExpireDate());
+        int days = daysOfOverlap(fromDate, toDate, o.getStartDate(), o.isDiscontinuedRightNow() ? o.getDiscontinuedDate() : o.getAutoExpireDate());
         if (days <= 0)
             return 0;
         double pillsPerDose = o.getDose();
@@ -152,7 +152,7 @@ public class DrugForecastUtil {
     }
 
     public static int daysOfOverlap(DrugOrder o, Date startDate, Date endDate) {
-        return daysOfOverlap(startDate, endDate, o.getStartDate(), o.isDiscontinued() ? o.getDiscontinuedDate() : o.getAutoExpireDate());
+        return daysOfOverlap(startDate, endDate, o.getStartDate(), o.isDiscontinuedRightNow() ? o.getDiscontinuedDate() : o.getAutoExpireDate());
     }
     
     public static int daysOfOverlap(Date aStart, Date aEnd, Date bStart, Date bEnd) {

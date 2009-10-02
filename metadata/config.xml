@@ -41,12 +41,13 @@
 		<point>org.openmrs.gutter.tools</point>
 		<class>@MODULE_PACKAGE@.extension.html.MdrtbGutterItem</class>
 	</extension>
-	
+	<!--  
 	<extension>
+		USE ROLE-BASED LOGIN; EXTENSION TAG ON HOMEPAGE HAS CHANGED. 
 		<point>org.openmrs.navigation.homepage</point>
 		<class>@MODULE_PACKAGE@.extension.html.RedirectSomeRolesFromOpenmrsHomepage</class>
 	</extension>
-	
+	-->
 	
 	<!-- AOP
 	<advice>

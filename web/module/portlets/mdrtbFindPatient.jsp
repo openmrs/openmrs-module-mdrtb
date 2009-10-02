@@ -1,3 +1,5 @@
+<%@ page errorPage="/errorhandler.jsp" %>
+<%@ page import="org.openmrs.web.WebConstants" %>
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbFindPatient.js'></script>
 <openmrs:globalProperty key="use_patient_attribute.healthCenter" var="useHealthCenter"/>
@@ -20,10 +22,9 @@
    				$j('#searchBox').val('');
    					$j('#searchBox').keyup(function(){
    						if ($j('#searchBox').val().length > 2){
-	   						var includeRet = false;
 	   						if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on')
 	   							includeRet = true;
-	   						MdrtbFindPatient.findPatients($j('#searchBox').val(), includeRet, function(ret){
+	   						MdrtbFindPatient.findPatients($j('#searchBox').val(), false, function(ret){
 	   						from = 0; 
 	   						to = jumps-1; 
 							if (ret.length <= to)
@@ -276,8 +277,8 @@
    									}
    								}
 								if (headerShown == 0){
-									DWRUtil.addRows('resTableHeader',[""], cellFuncsNextN, {cellCreator:formatCountCell});
-									DWRUtil.addRows('resTableHeader',[""], cellFuncsHeader);
+									DWRUtil.addRows('resTableHeader',[""], cellFuncsNextN, {cellCreator:formatCountCell,escapeHtml:false});
+									DWRUtil.addRows('resTableHeader',[""], cellFuncsHeader, {escapeHtml:false});
 									headerShown ++;
 								}
 								if (!ret[from]){
@@ -290,12 +291,12 @@
    								 		var searchText = sb.value;
    								 		return "<div><Br>&nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.nopatientsfound"/> <i>"+searchText+"</i>.</div>";
    								 		}];
-   								 		DWRUtil.addRows('resTableBody', ["nopatient"], cellFucsNoRecords, null );
+   								 		DWRUtil.addRows('resTableBody', ["nopatient"], cellFucsNoRecords,  {escapeHtml:false} );
    								 		
    								 		}
    								 		
    								}  else {
-								DWRUtil.addRows('resTableBody', getPartOfSavedRet(from, to, ret), cellFuncs, null );
+								DWRUtil.addRows('resTableBody', getPartOfSavedRet(from, to, ret), cellFuncs,  {escapeHtml:false} );
    								 $j('table.resTable tbody tr:odd').addClass('oddRow');
   								 $j('table.resTable tbody tr:even').addClass('evenRow');
    								 $j('table.resTable tbody tr').attr('onmouseover','javascript:mouseOver(this);refresh(this);');
@@ -303,7 +304,7 @@
    								 addRowEventsFindPatient();
    								 fixHeader();
    								 $j('#results').css('display','');		
-   								} 					
+   								} 				
    				}
    				
    	function fixHeader(){
@@ -440,7 +441,7 @@ function useMdrtbLoadingMessage(message) {
 						<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
 						<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
 					</c:choose>
-					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">   &nbsp;&nbsp;<input type="checkbox" id="includeRetired" unchecked><spring:message code="mdrtb.includeretired"/><br>
+					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">   &nbsp;&nbsp;<br>
 
 					<div id="results">
 						<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">

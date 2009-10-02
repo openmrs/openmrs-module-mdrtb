@@ -17,6 +17,7 @@ import org.openmrs.EncounterType;
 import org.openmrs.Order;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -71,7 +72,9 @@ public class MdrtbSpecimenTrackingController extends SimpleFormController {
 		
 		List<Encounter> encounters = new ArrayList<Encounter>();
     	String encounterTypeName = Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type");
-    	Concept dstConcept = MdrtbFactory.getInstance().getConceptDSTParent();
+    	MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
+    	Concept dstConcept = mu.getConceptDSTParent();
     	try {
     		List<EncounterType> ec = Arrays.asList(Context.getEncounterService().getEncounterType(encounterTypeName));
     		List<Encounter> encs = Context.getEncounterService().getEncounters(null, null, null, null, null, ec, false);

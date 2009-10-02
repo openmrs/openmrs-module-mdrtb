@@ -200,7 +200,7 @@ public class RegimenUtils {
      * @should have no effect if order is discontinued before date
      */
     public static void discontinueOrder(Order order, Date date, Concept reason) {
-        if (!order.isDiscontinued()) {
+        if (!order.isDiscontinuedRightNow()) {
             order.setDiscontinued(true);
             order.setDiscontinuedDate(date);
             order.setDiscontinuedReason(reason);

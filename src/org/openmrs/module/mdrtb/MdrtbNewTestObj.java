@@ -61,7 +61,8 @@ public class MdrtbNewTestObj {
         try{
             Integer maxNum = Integer.valueOf(numNewTests);
             for (int i = 0; i < maxNum; i++){
-                MdrtbFactory mu = MdrtbFactory.getInstance();
+                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                MdrtbFactory mu = ms.getMdrtbFactory();
                 
                 if (view.equals("DST")){
                     this.dsts.add(new MdrtbDSTObj(patient, user, mu));

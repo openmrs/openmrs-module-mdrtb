@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
 public class MdrtbCultureConversionCheck extends AbstractTask {
@@ -15,7 +16,8 @@ public class MdrtbCultureConversionCheck extends AbstractTask {
         if (!Context.isAuthenticated())  
             authenticate();
   
-        MdrtbFactory mu = MdrtbFactory.getInstance();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         mu.createCultureConversionsAllPatients();
         Context.closeSession();
     }

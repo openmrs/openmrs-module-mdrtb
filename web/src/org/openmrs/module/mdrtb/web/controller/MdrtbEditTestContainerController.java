@@ -108,7 +108,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             map.put("yellow", yellow.getBestName(Context.getLocale()).getName());
             map.put("green", green.getBestName(Context.getLocale()).getName());
             
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             map.put("none", mu.getConceptNone());
             Concept nonCodedConcept = mu.getConceptOtherMycobacteriaNonCoded();
             
@@ -214,7 +215,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         MessageSourceAccessor msa = getMessageSourceAccessor();
         UserService us = Context.getUserService();
         boolean clean = false;
-        MdrtbFactory mu = MdrtbFactory.getInstance();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         Integer numRowsShown = 1;
         String encString = "";
         encString = request.getParameter("encSelect");
@@ -827,7 +829,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
 
         
         if (Context.isAuthenticated()) {
-            MdrtbFactory mu = MdrtbFactory.getInstance();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             String obsGroupId = request.getParameter("ObsGroupId");
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
             Obs parentObs = new Obs();

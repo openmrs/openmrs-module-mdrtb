@@ -12,6 +12,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbCurrentRegimenTypeService {
@@ -34,7 +35,8 @@ public class MdrtbCurrentRegimenTypeService {
                     System.out.println("error in mdrtb regimen utils: " + regTypeInt + " can't be converted to an integer.");
                 }
                 if (regTypeInt != null) {
-                    MdrtbFactory mu = MdrtbFactory.getInstance();
+                    MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                    MdrtbFactory mu = ms.getMdrtbFactory();
                     Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
                     List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
                     boolean needNewObs = true;

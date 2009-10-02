@@ -1,16 +1,26 @@
 package org.openmrs.module.mdrtb.mdrtbregimens;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.dom4j.io.DOMReader;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
@@ -20,10 +30,11 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
-import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
+import org.w3c.dom.Document;
 
 public class MdrtbRegimenUtils {
 
@@ -31,14 +42,68 @@ public class MdrtbRegimenUtils {
     
     public  static List<MdrtbRegimenSuggestion> getMdrtbRegimenSuggestions(){
             List<MdrtbRegimenSuggestion> ret = new ArrayList<MdrtbRegimenSuggestion>();
-              
-            try {
-            	SAXReader reader = new SAXReader();
-            	InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbRegimenSuggestionTemplate.xml");
-                Document xmlDoc = reader.read(in);
-                in.close();
-                log.warn("Loaded Regimen Suggestions from xml...");
-                Element list = xmlDoc.getRootElement();
+            
+            
+            String httpBase = "http://localhost";
+            String portNum = Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port");
+            if (portNum != null && portNum.trim().length() > 0){
+                if (portNum.contains(":"))
+                    httpBase += portNum.trim();
+                else
+                    httpBase = httpBase + ":" + portNum.trim();
+            }    
+            String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
+
+            try { 
+                    Document doc = null;
+                    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder db = dbf.newDocumentBuilder();
+                    
+                    try {
+                        URL xmlURL = new URL(XMLlocation);
+                        InputStream in = xmlURL.openStream();
+                        doc = db.parse(in);
+                        in.close();
+                    } catch (Exception ex){
+                                if (!XMLlocation.contains("https")){
+                                    XMLlocation = XMLlocation.replace("http", "https");
+                                    XMLlocation = XMLlocation.replace("8080", "8443");
+                                }
+                                
+                                TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {  
+                                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
+                                            return null;  
+                                        }  
+                                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  
+                                        }  
+                                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  
+                                        }  
+                                    }  
+                                };  
+                      
+                            // Install the all-trusting trust manager  
+                            SSLContext sc = SSLContext.getInstance("SSL");  
+                            sc.init(null, trustAllCerts, new java.security.SecureRandom());  
+                            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());  
+                              
+                            // Create all-trusting host name verifier  
+                            HostnameVerifier allHostsValid = new HostnameVerifier() {  
+                                public boolean verify(String hostname, SSLSession session) {  
+                                    return true;  
+                                }  
+                            };  
+                              
+                            // Install the all-trusting host verifier  
+                            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid); 
+                            URL xmlURL = new URL(XMLlocation);
+                            InputStream in = xmlURL.openStream();
+                            doc = db.parse(in);
+                            in.close();
+                    }
+                doc.getDocumentElement().normalize();
+                DOMReader reader = new DOMReader();
+                org.dom4j.Document doc2 = reader.read( doc );
+                Element list = doc2.getRootElement();
                 ConceptService cs = Context.getConceptService();
                 for(Iterator i = list.elements().iterator(); i.hasNext();){
                     Element regSugg = (Element) i.next();
@@ -73,8 +138,7 @@ public class MdrtbRegimenUtils {
                                                     
                                                     try {
                                                         
-                                                        mds.setDrug(cs.getDrug(Integer.valueOf(drugSugChildren.getText())));
-                                                        //System.out.println("set drug successfully");
+                                                        mds.setDrug(cs.getDrugByNameOrId(drugSugChildren.getText()));
                                                         
                                                     } catch (Exception ex){
                                                         System.out.println("Could not parse a drugId value " + drugSugChildren.getText() + "in the xml into a drug" + ex);
@@ -194,7 +258,8 @@ public class MdrtbRegimenUtils {
                    System.out.println("error in mdrtb regimen utils: " + regTypeInt + " can't be converted to an integer.");
                }
                if (regTypeInt != null) {
-                   MdrtbFactory mu = MdrtbFactory.getInstance();
+                   MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                   MdrtbFactory mu = ms.getMdrtbFactory();
                    Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
                    List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
                    boolean needNewObs = true;

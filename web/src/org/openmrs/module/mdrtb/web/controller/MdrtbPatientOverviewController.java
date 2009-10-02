@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
@@ -57,6 +56,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
@@ -74,7 +74,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 
     
     /** Logger for this class and subclasses */
-    protected final Log log = LogFactory.getLog(getClass());
+    protected final Log log = LogFactory.getLog(MdrtbPatientOverviewController.class);
 
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
         super.initBinder(request, binder);
@@ -127,9 +127,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 //                        "The global property mdrtb.mdrtb_drugs_concept did not return a valid concept name");
 //            }
 //            map.put("tbDrugs", tbDrugs);
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             
-            
-            List<MdrtbRegimenSuggestion> suggestions =  MdrtbRegimenUtils.getMdrtbRegimenSuggestions();
+            List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
             map.put("standardRegimens", suggestions);
             
             List<Drug> firstLineDrugs = new ArrayList<Drug>();
@@ -221,7 +221,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("dateFormat", dateFormat);
             
             //workflow states:
-            MdrtbFactory mu = MdrtbFactory.getInstance(); 
+            
+            MdrtbFactory mu = ms.getMdrtbFactory(); 
             map.put("cultureStates", mu.getStatesCultureStatus());
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
@@ -274,6 +275,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         String patientId = request.getParameter("patientId");
         String action = request.getParameter("submit");
         MessageSourceAccessor msa = this.getMessageSourceAccessor();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         String view ="STATUS";
 
         if (action != null && msa.getMessage("mdrtb.saveneworders").equals(action)){
@@ -325,7 +328,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             if (endDateParam != null && !endDateParam.equals(""))
                                 endDateObj = sdf.parse(endDateParam);
                             
-                            List<MdrtbRegimenSuggestion> suggestions =  MdrtbRegimenUtils.getMdrtbRegimenSuggestions();
+                            List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
                             for (MdrtbRegimenSuggestion mrs : suggestions){
                                 String newRegimenType = getMessageSourceAccessor().getMessage(mrs.getRegimenType(), new Locale("en"));
                                 if (newRegimenType == null || newRegimenType.contains("."))
@@ -463,7 +466,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 }
                 
             MdrtbPatient mp = (MdrtbPatient) object;
-            MdrtbFactory mu = MdrtbFactory.getInstance();
             ProgramWorkflowService pws = Context.getProgramWorkflowService();
             ConceptService cs = Context.getConceptService();
             ObsService os = Context.getObsService();
@@ -1580,7 +1582,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         }   
         
         if (action != null && msa.getMessage("mdrtb.enroll").equals(action)){
-            MdrtbFactory mu = MdrtbFactory.getInstance();
             MdrtbPatient mp = (MdrtbPatient) object;
             String enrollmentDateString = request.getParameter("programEnrollmentDate");
             try {
@@ -1616,17 +1617,18 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             if (patientId != null){
                 PatientService patientService = Context.getPatientService();
                 ObsService os = Context.getObsService();    
-                MdrtbFactory mu = MdrtbFactory.getInstance();
+                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                MdrtbFactory mu = ms.getMdrtbFactory();
                 try{
                     Patient patient = patientService.getPatient(Integer.valueOf(patientId));
                     patient.getIdentifiers();
                     mp.setPatient(patient);
                     Person person = Context.getPersonService().getPerson(patient.getPatientId());
                     
-                    List<ConceptName> cnList = mu.getXmlConceptNameList();
+  
                     Set<Concept> cSetTmp = new HashSet<Concept>();
-                    for (ConceptName cn:cnList){
-                        cSetTmp.add(cn.getConcept());
+                    for (Map.Entry<String, Concept> cn:mu.getXmlConceptList().entrySet()){
+                        cSetTmp.add(cn.getValue());
                     }
                     List<Concept> cListForObs = new ArrayList<Concept>(cSetTmp);
                     ArrayList<Person> pList = new ArrayList<Person>();
@@ -1653,7 +1655,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             DrugOrder next = iter.next();
                             if (next.isCurrent()) currentDrugOrders.add(next);
                             if (next.isFuture()) futureDrugOrders.add(next);
-                            if (next.isDiscontinued()) discontinuedDrugOrders.add(next); 
+                            if (next.isDiscontinuedRightNow()) discontinuedDrugOrders.add(next); 
                             if (next.getDiscontinuedDate() == null && next.getAutoExpireDate() != null && next.getAutoExpireDate().before(new Date()))
                                 discontinuedDrugOrders.add(next);
                         }

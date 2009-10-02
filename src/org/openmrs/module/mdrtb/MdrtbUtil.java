@@ -27,7 +27,6 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 
@@ -161,18 +160,8 @@ public class MdrtbUtil {
     }
     
     public static List<Locale> getLocalesFromDB(){
-        List<Locale> locales = new ArrayList<Locale>();
-        List<List<Object>> rows = Context.getAdministrationService().executeSQL("select distinct locale from concept_word", true);
-        
-        for (List<Object> row:rows){
-            for (Object o : row){
-                String oTmp = (String) o;
-                if (oTmp != null && oTmp != "")
-                    locales.add(new Locale(oTmp));
-            }
-        }
-        return locales;
-        
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        return ms.getLocaleSetUsedInDB(); 
     }
     
     public static List<Concept>  getDiscontinueReasons() {
@@ -464,5 +453,10 @@ public class MdrtbUtil {
        return ret;
    }
    
+   public static Concept getConceptFromMDRTBConceptMaps(String name){
+       MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+       MdrtbFactory mu = ms.getMdrtbFactory();
+       return mu.getMDRTBConceptByKey(name, new Locale("en", "US"), mu.getXmlConceptList());
+   }
    
 }

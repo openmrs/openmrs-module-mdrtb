@@ -11,6 +11,7 @@ import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.util.StringUtils;
 
+@Deprecated
 public class RedirectSomeRolesFromOpenmrsHomepage extends Extension {
 
     /**

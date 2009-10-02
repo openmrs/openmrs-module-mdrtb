@@ -53,11 +53,10 @@ import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbPatient;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
-import org.openmrs.propertyeditor.TribeEditor;
 import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.web.WebConstants;
@@ -124,7 +123,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 new CustomNumberEditor(java.lang.Integer.class, nf, true));
         binder.registerCustomEditor(java.util.Date.class, 
                 new CustomDateEditor(Context.getDateFormat(), true));
-        binder.registerCustomEditor(Tribe.class, new TribeEditor());
         binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
         binder.registerCustomEditor(Location.class, new LocationEditor());
         binder.registerCustomEditor(Concept.class, "civilStatus", new ConceptEditor());
@@ -400,12 +398,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             patient.setBirthdate(shortPatient.getBirthdate());
             patient.setBirthdateEstimated(shortPatient.getBirthdateEstimated());
             patient.setGender(shortPatient.getGender());
-            if (shortPatient.getTribe() == "" || shortPatient.getTribe() == null)
-                patient.setTribe(null);
-            else {
-                Tribe t = ps.getTribe(Integer.valueOf(shortPatient.getTribe()));
-                patient.setTribe(t);
-            }
             
             patient.setDead(shortPatient.getDead());
             if (patient.isDead()) {
@@ -457,7 +449,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             Patient newPatient = null;
             try {
                 newPatient = ps.savePatient(patient);
-                MdrtbFactory mu = MdrtbFactory.getInstance();
+                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                MdrtbFactory mu = ms.getMdrtbFactory();
                 //enroll in program
                 String enrollmentDateString = request.getParameter("programEnrollmentDate");
                 try {
