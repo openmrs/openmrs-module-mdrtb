@@ -1,23 +1,37 @@
 package org.openmrs.module.mdrtb;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
+import org.openmrs.ConceptSource;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
@@ -26,15 +40,16 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
-import org.openmrs.util.OpenmrsClassLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 
 public final class MdrtbFactory {
     
@@ -47,13 +62,13 @@ public final class MdrtbFactory {
     private String STR_TB_SAMPLE_SOURCE;
 
     private String STR_BACILLI;
-
+    
     private String STR_RESULT_DATE;
-
+    
     private String STR_DATE_RECEIVED;
-
-    private String STR_TB_SMEAR_MICROSCOPY_METHOD;
- 
+    
+    private String STR_TB_SMEAR_MICROSCOPY_METHOD; 
+    
     private String STR_TB_CULTURE_RESULT;
 
     private String STR_COLONIES;
@@ -168,15 +183,15 @@ public final class MdrtbFactory {
 
     private String STR_OTHER_MYCOBACTERIA_NONCODED;
  
-    private String   STR_HIV_STATUS;
+    private String STR_HIV_STATUS;
 
-    private String   STR_CD4_COUNT;
+    private String STR_CD4_COUNT;
  
-    private String   STR_CD4_PERCENT;
+    private String STR_CD4_PERCENT;
 
-    private String   STR_ALLERGY_COMMENT;
+    private String STR_ALLERGY_COMMENT;
  
-    private String   STR_TREATMENT_PLAN_COMMENT;
+    private String STR_TREATMENT_PLAN_COMMENT;
 
     private String STR_PREV_TREATMENT_DURATION_IN_MONTHS;
 
@@ -240,11 +255,9 @@ public final class MdrtbFactory {
     
     private String STR_ADVERSE_EFFECT_ACTION_TAKEN;
 
-    private List<ConceptName> xmlConceptNameList = new ArrayList<ConceptName>();
+    private Map<String, Concept> xmlConceptList = new HashMap<String, Concept>();
     
-    public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
-        STR_TREATMENT_STOP_DATE = str_treatment_stop_date;
-    }
+
 
     private MdrtbFactory(){readXML();};
     
@@ -258,15 +271,66 @@ public final class MdrtbFactory {
     }
     
     private void readXML(){ 
-        try { 
-	        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	        DocumentBuilder db = dbf.newDocumentBuilder();
-	        InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbConcepts.xml");
-	        Document doc = db.parse(in);
-	        in.close();
-	        log.warn("Loaded MDR Concepts from xml...");
-	        doc.getDocumentElement().normalize();
-	        Element concepts = doc.getDocumentElement();
+        String httpBase = "http://localhost";
+        String portNum = Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port");
+        if (portNum != null && portNum.trim().length() > 0){
+            if (portNum.contains(":"))
+                httpBase += portNum.trim();
+            else
+                httpBase = httpBase + ":" + portNum.trim();
+        }    
+        String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
+
+                try { 
+                    
+                    
+                    Document doc = null;
+                    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder db = dbf.newDocumentBuilder();
+                    
+                    try {
+                        URL xmlURL = new URL(XMLlocation);
+                        InputStream in = xmlURL.openStream();
+                        doc = db.parse(in);
+                        in.close();
+                    } catch (Exception ex){
+                                if (!XMLlocation.contains("https")){
+                                    XMLlocation = XMLlocation.replace("http", "https");
+                                    XMLlocation = XMLlocation.replace("8080", "8443");
+                                }
+                                
+                                TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {  
+                                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
+                                            return null;  
+                                        }  
+                                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  
+                                        }  
+                                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  
+                                        }  
+                                    }  
+                                };  
+                      
+                            // Install the all-trusting trust manager  
+                            SSLContext sc = SSLContext.getInstance("SSL");  
+                            sc.init(null, trustAllCerts, new java.security.SecureRandom());  
+                            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());  
+                              
+                            // Create all-trusting host name verifier  
+                            HostnameVerifier allHostsValid = new HostnameVerifier() {  
+                                public boolean verify(String hostname, SSLSession session) {  
+                                    return true;  
+                                }  
+                            };  
+                              
+                            // Install the all-trusting host verifier  
+                            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid); 
+                            URL xmlURL = new URL(XMLlocation);
+                            InputStream in = xmlURL.openStream();
+                            doc = db.parse(in);
+                            in.close();
+                    }
+                    doc.getDocumentElement().normalize();
+                    Element concepts = doc.getDocumentElement();
 
             NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
             Node node = nodeList.item(0);
@@ -674,382 +738,394 @@ public final class MdrtbFactory {
             for (int i = 0; i < allXMLNodes.length; i++){
                 stList.add(allXMLNodes[i]);
             }
-            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            xmlConceptNameList = ms.getMdrtbConceptNamesByNameList(stList, false, new Locale("en"));
+            //MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            ConceptService cService = Context.getConceptService();
+            ConceptSource cs = cService.getConceptSourceByName("org.openmrs.module.mdrtb");
+            List<ConceptMap> cms = cService.getConceptsByConceptSource(cs);
+            for (ConceptMap cm: cms){
+                Concept c = cm.getConcept();
+                initializeEverythingAboutConcept(c);
+                xmlConceptList.put(cm.getSourceCode(), c);
+            }
+            
+            //generate the necessary concept_maps:
+//            for (ConceptName cn : xmlConceptList){
+//                System.out.println("insert into concept_map (source, source_code, comment, creator, date_created, concept_id) values (\"org.openmrs.module.mdrtb\", \"" + cn.getName() + "\", \"\", " + Context.getAuthenticatedUser().getUserId() + ", current_timestamp(), " + cn.getConcept().getConceptId() +");");
+//            }
             
         } catch (Exception ex){
-            log.error("Could not read XML. Try accessing your server using the port number in the url.  Or, check the mdrtb.webserver_port global property.", ex);
+            throw new RuntimeException(ex);
         }
     }
     
     public Concept getConceptAdverseEffectConstruct(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_CONSTRUCT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_CONSTRUCT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffectMedication(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_MEDICATION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_MEDICATION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffectMedicationNonCoded(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_MEDICATION_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_MEDICATION_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffect(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffectNonCoded(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffectDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAdverseEffectActionTaken(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_ADVERSE_EFFECT_ACTION_TAKEN, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_ACTION_TAKEN, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSmearMicroscopyMethod(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptResultDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_RESULT_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_RESULT_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptBacilli(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_BACILLI, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_BACILLI, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptSampleSource(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TB_SAMPLE_SOURCE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_TB_SAMPLE_SOURCE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptTreatmentStopDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptDSTComplete(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_COMPLETE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_DST_COMPLETE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptDSTMethod(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_DST_METHOD, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptNone(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_NONE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_NONE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
 
     public Concept getConceptSputumCollectionDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptDirectIndirect(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DIRECT_INDIRECT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_DIRECT_INDIRECT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptColoniesInControl(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_COLONIES_IN_CONTROL, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_COLONIES_IN_CONTROL, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptStandardized(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_STANDARDIZED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_STANDARDIZED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptEmpiric(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_EMPIRIC, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_EMPIRIC, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptIndividualized(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_INDIVIDUALIZED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_INDIVIDUALIZED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptCurrentRegimenType(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptScanty(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SCANTY, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SCANTY, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptOtherMycobacteriaNonCoded(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_OTHER_MYCOBACTERIA_NONCODED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_OTHER_MYCOBACTERIA_NONCODED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptDSTParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_DST_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_DST_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptCultureParent(){
         Concept ret = null;
-        ret =  MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret =  this.getMDRTBConceptByKey(STR_CULTURE_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptCultureResult(){
         Concept ret = null;
-        ret =  MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret =  this.getMDRTBConceptByKey(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSmearResult(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptColonies(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_COLONIES, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
 
     public Concept getConceptCultureStartDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CULTURE_START_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptCultureMethod(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_METHOD, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TB_CULTURE_METHOD, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptSmearParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SMEAR_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptCultureConversion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_CONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CULTURE_CONVERSION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptCultureReconversion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_RECONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CULTURE_RECONVERSION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSmearConverstion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_CONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SMEAR_CONVERSION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSmearReconversion(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SMEAR_RECONVERSION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SMEAR_RECONVERSION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     //STR_TYPE_OF_ORGANISM
     public Concept getConceptTypeOfOrganism(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TYPE_OF_ORGANISM, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptTypeOfOrganismNonCoded(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     //STR_DST_RESULT_PARENT
     public Concept getConceptDSTResultParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(this.STR_DST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(this.STR_DST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptDateReceived(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_DATE_RECEIVED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
        
     public Concept getConceptTreatmentStartDate(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_START_DATE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TREATMENT_START_DATE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
 
     
     public Concept getConceptConcentration(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CONCENTRATION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptPatientClassDrugUse(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptPatientClassPrevTreatment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREVIOUS_TREATMENT_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PREVIOUS_TREATMENT_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptTBCaseClassification(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptPulmonary(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PULMONARY, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PULMONARY, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptExtraPulmonary(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_EXTRAPULMONARY, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptExtraPulmonaryLocation(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_EXTRAPULMONARY_LOCATION, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_EXTRAPULMONARY_LOCATION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
  
     public Concept getConceptHIVStatus(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_HIV_STATUS, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_HIV_STATUS, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptCD4(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_COUNT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CD4_COUNT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptContactTestResultParent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_TEST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PATIENT_CONTACT_TEST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSimpleTBResult(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_RESULT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SIMPLE_TB_TEST_RESULT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSimpleTBTestType(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SIMPLE_TB_TEST_TYPE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SIMPLE_TB_TEST_TYPE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
       
     public Concept getConceptNextVisit(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_NEXT_VISIT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_NEXT_VISIT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptOnART(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_ON_ANTIRETROVIRALS, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_ON_ANTIRETROVIRALS, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptPhoneNumber(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PHONE_NUMBER, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PHONE_NUMBER, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptKnownMDRCase(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PATIENT_CONTACT_KNOWN_MDR_CASE, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PATIENT_CONTACT_KNOWN_MDR_CASE, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
 
     public Concept getConceptCD4Percent(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_CD4_PERCENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_CD4_PERCENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
    
     public Concept getConceptTreatmentPlanComment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TREATMENT_PLAN_COMMENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TREATMENT_PLAN_COMMENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptAllergyComment(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_ALLERGY_COMMENT, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_ALLERGY_COMMENT, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptPrevDuration(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptPrevRegNum(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_REGISTRATION_NUM, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PREV_REGISTRATION_NUM, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptPrevTreatmentCenter(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_PREV_TREATMENT_CENTER, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_PREV_TREATMENT_CENTER, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptPrevReferredBy(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_REFERRED_BY, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_REFERRED_BY, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptTransferredTo(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_TO, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TRANSFERRED_TO, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     public Concept getConceptTransferredFrom(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_TRANSFERRED_FROM, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_TRANSFERRED_FROM, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
     public Concept getConceptSuspectedMDR(){
         Concept ret = null;
-        ret = MdrtbUtil.getMDRTBConceptByName(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"), this.xmlConceptNameList);
+        ret = this.getMDRTBConceptByKey(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     
@@ -1425,13 +1501,7 @@ public final class MdrtbFactory {
         return STR_INDIVIDUALIZED;
     }
 
-    public List<ConceptName> getXmlConceptNameList() {
-        return xmlConceptNameList;
-    }
 
-    public void setXmlConceptNameList(List<ConceptName> xmlConceptNameList) {
-        this.xmlConceptNameList = xmlConceptNameList;
-    } 
     
     public String getSTR_SMEAR_CONVERSION() {
         return STR_SMEAR_CONVERSION;
@@ -1487,6 +1557,10 @@ public final class MdrtbFactory {
 
     public String getSTR_ADVERSE_EFFECT_ACTION_TAKEN() {
         return STR_ADVERSE_EFFECT_ACTION_TAKEN;
+    }
+    
+    public void setSTR_TREATMENT_STOP_DATE(String str_treatment_stop_date) {
+        STR_TREATMENT_STOP_DATE = str_treatment_stop_date;
     }
     
     
@@ -1934,7 +2008,7 @@ public final class MdrtbFactory {
                  if (o.getConcept().equals(cc)){
                      
                      for (PatientState ps : pp.getStates()){
-                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
+                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptList))){
                              pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
                              pws.savePatientProgram(pp);
                              break;
@@ -1944,7 +2018,7 @@ public final class MdrtbFactory {
                  } else {
                      
                      for (PatientState ps : pp.getStates()){
-                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(MdrtbUtil.getMDRTBConceptByName(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptNameList))){
+                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptList))){
                              pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
                              pws.savePatientProgram(pp);
                              break;
@@ -2021,10 +2095,9 @@ public final class MdrtbFactory {
                              try {
                                  Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
                                      for (ProgramWorkflow pwTmp:pw){
-                                     
-                                         if (pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()) != null){
-                                        
-                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NOT_CONVERTED()), ppTmp.getDateEnrolled());
+                                         ProgramWorkflowState state = pwTmp.getStateByName(this.getSTR_NOT_CONVERTED());
+                                         if (state != null){
+                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,state, ppTmp.getDateEnrolled());
                                              break;
                                          }  
                                      }
@@ -2625,6 +2698,84 @@ public final class MdrtbFactory {
               }    
             
       }
+      
+      public static Document getDocumentWithSSL(String xmlLocation, DocumentBuilder db) throws Exception {
+          xmlLocation = xmlLocation.replace("http", "https");
+          xmlLocation = xmlLocation.replace("8080", "8443");
+          TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {  
+              public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
+                  return null;  
+              }  
+              public void checkClientTrusted(X509Certificate[] certs, String authType) {  
+              }  
+              public void checkServerTrusted(X509Certificate[] certs, String authType) {  
+              }  
+          }  
+          };  
+    
+          // Install the all-trusting trust manager  
+          SSLContext sc = SSLContext.getInstance("SSL");  
+          sc.init(null, trustAllCerts, new java.security.SecureRandom());  
+          HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());  
+            
+          // Create all-trusting host name verifier  
+          HostnameVerifier allHostsValid = new HostnameVerifier() {  
+              public boolean verify(String hostname, SSLSession session) {  
+                  return true;  
+              }  
+          };  
+            
+          // Install the all-trusting host verifier  
+          HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid); 
+          URL xmlURL = new URL(xmlLocation);
+          InputStream in = xmlURL.openStream();
+          Document doc = db.parse(in);
+          in.close();
+          return doc;
+         }
+      
+      public Concept getMDRTBConceptByKey(String key, Locale loc, Map<String, Concept> xmlConceptList){
+          try {
+              Concept c = xmlConceptList.get(key);
+              if (c == null){
+                   c = MdrtbUtil.getMDRTBConceptByName(key, new Locale("en", "US"));
+                   this.xmlConceptList.put(key, c);
+                   if (c == null)
+                       System.out.println("concept not found in xml concept list " + key);
+              }     
+              return c;
+          } catch (Exception ex) {
+              throw new RuntimeException(ex);
+//              log.error("Search Key " + key + " not found in xmlConceptList");
+//              return null;
+          }
+      }
+
+    public Map<String, Concept> getXmlConceptList() {
+        return xmlConceptList;
+    }
+    
+    public void initializeEverythingAboutConcept(Concept c){
+        if (c != null){
+            for (ConceptName cns : c.getNames()){
+                cns.getTags();
+            }
+            Collection<ConceptAnswer> cas = c.getAnswers();
+            if (cas != null){
+                for (ConceptAnswer ca : cas){
+                    Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
+                    for (ConceptName cn:cnsTmp){
+                        Collection<ConceptNameTag> tags = cn.getTags();
+                        for (ConceptNameTag cnTag:tags){
+                            cnTag.getTag();
+                        }
+                    } 
+                }
+            }
+        }
+    }
+
+
     
 }
 
