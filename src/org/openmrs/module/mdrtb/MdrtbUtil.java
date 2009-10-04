@@ -34,8 +34,17 @@ public class MdrtbUtil {
     
     protected static final Log log = LogFactory.getLog(MdrtbUtil.class);
 
-    public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
+public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
+        
+        MdrtbService ms = Context.getService(MdrtbService.class);
         Concept ret = null;
+        
+        if (conceptString.contains("|") && conceptString.indexOf("|", 0) != conceptString.lastIndexOf("|"))
+               return null;
+        ret = ms.getMdrtbFactory().getMDRTBConceptByKey(conceptString, loc, ms.getMdrtbFactory().getXmlConceptList());
+        if (ret != null)
+              return ret;
+        
         List<Locale> locales = new ArrayList<Locale>();
         locales.add(loc);
         //first, if there's an exact match in the passed-in locale, that's what we want
@@ -57,6 +66,7 @@ public class MdrtbUtil {
                                 } 
                             }
                         }
+                        ms.getMdrtbFactory().addKeyAndConceptToXmlConceptList(conceptString, cTmp);
                         return cTmp;
                     }  
                 }
@@ -76,18 +86,7 @@ public class MdrtbUtil {
                     for (Locale localTmp :locales){
                         for (ConceptName cns : cTmp.getNames(localTmp)){
                             if (cns.getName().trim().equals(conceptString.trim())){
-                                Collection<ConceptAnswer> cas = cTmp.getAnswers();
-                                if (cas != null){
-                                    for (ConceptAnswer ca : cas){
-                                        Collection<ConceptName> cnsTmp = ca.getAnswerConcept().getNames();
-                                        for (ConceptName cn:cnsTmp){
-                                            Collection<ConceptNameTag> tags = cn.getTags();
-                                            for (ConceptNameTag cnTag:tags){
-                                                cnTag.getTag();
-                                            }
-                                        } 
-                                    }
-                                }
+                                ms.getMdrtbFactory().addKeyAndConceptToXmlConceptList(conceptString, cTmp);
                                 return cTmp;
                             }  
                         }  

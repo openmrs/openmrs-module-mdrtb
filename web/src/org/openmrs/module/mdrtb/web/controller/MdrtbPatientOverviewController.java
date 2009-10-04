@@ -141,8 +141,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     firstLineDrugs.addAll(drugs);
                 }
             } catch (Exception ex) {
-                throw new RuntimeException(
-                        "The global property mdrtb.first_line_drugs did not return a valid concept name; check your global property, or maybe you need to rebuild concept words?");
+                throw new RuntimeException("The global property mdrtb.first_line_drugs did not return a valid concept name; check your global property, or maybe you need to rebuild concept words? " + ex);
             }
             map.put("firstLineDrugs", firstLineDrugs);
             map.put("firstLineConcepts", mdrtbDrugs);
@@ -1627,7 +1626,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     
   
                     Set<Concept> cSetTmp = new HashSet<Concept>();
-                    for (Map.Entry<String, Concept> cn:mu.getXmlConceptList().entrySet()){
+                    for (Map.Entry<String, Concept> cn : mu.getXmlConceptList().entrySet()){
                         cSetTmp.add(cn.getValue());
                     }
                     List<Concept> cListForObs = new ArrayList<Concept>(cSetTmp);

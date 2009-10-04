@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
@@ -57,9 +58,10 @@ public class MdrtbActivator implements Activator, Runnable {
         while (ms == null) {
             try {
                 Thread.sleep(1000);
-                ms = Context.getService(MdrtbService.class);
-            } catch (InterruptedException ex) {
-            }
+                try{
+                    ms = Context.getService(MdrtbService.class);
+                } catch (APIException apiEx){}
+            } catch (InterruptedException ex) {}
         }
         
         try {
@@ -96,6 +98,7 @@ public class MdrtbActivator implements Activator, Runnable {
      * user so all required privileges must be added as proxy privileges
      */
     protected void onLoad(MdrtbService ms) {     
+        
         MdrtbFactory mu = MdrtbFactory.getInstance();
         ms.setMdrtbFactory(mu);
         ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
@@ -111,6 +114,7 @@ public class MdrtbActivator implements Activator, Runnable {
             }
         }
         ms.setLocaleSetUsedInDB(locales);
+        log.info("Finished loading mdrtb metadata.");
     }
     
     /**

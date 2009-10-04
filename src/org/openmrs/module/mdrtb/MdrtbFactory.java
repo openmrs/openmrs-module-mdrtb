@@ -2736,18 +2736,10 @@ public final class MdrtbFactory {
       
       public Concept getMDRTBConceptByKey(String key, Locale loc, Map<String, Concept> xmlConceptList){
           try {
-              Concept c = xmlConceptList.get(key);
-              if (c == null){
-                   c = MdrtbUtil.getMDRTBConceptByName(key, new Locale("en", "US"));
-                   this.xmlConceptList.put(key, c);
-                   if (c == null)
-                       System.out.println("concept not found in xml concept list " + key);
-              }     
+              Concept c = xmlConceptList.get(key);    
               return c;
           } catch (Exception ex) {
               throw new RuntimeException(ex);
-//              log.error("Search Key " + key + " not found in xmlConceptList");
-//              return null;
           }
       }
 
@@ -2758,7 +2750,10 @@ public final class MdrtbFactory {
     public void initializeEverythingAboutConcept(Concept c){
         if (c != null){
             for (ConceptName cns : c.getNames()){
-                cns.getTags();
+                Collection<ConceptNameTag> tags = cns.getTags();
+                for (ConceptNameTag cnTag:tags){
+                    cnTag.getTag();
+                }
             }
             Collection<ConceptAnswer> cas = c.getAnswers();
             if (cas != null){
@@ -2775,7 +2770,10 @@ public final class MdrtbFactory {
         }
     }
 
-
+    public void addKeyAndConceptToXmlConceptList(String conceptKey, Concept concept) {
+        initializeEverythingAboutConcept(concept);
+        this.xmlConceptList.put(conceptKey, concept);
+    }
     
 }
 
