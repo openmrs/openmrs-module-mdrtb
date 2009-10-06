@@ -15,10 +15,10 @@
 		<tr>
 			<th class="patientTable"><spring:message code="mdrtb.sampleCollectedOn"/></th>
 			<th class="patientTable"><spring:message code="Patient.identifier"/></th>
-			<th class="patientTable"><spring:message code="Person.name"/></th>
-			<th class="patientTable"><spring:message code="Person.gender"/></th>
-			<th class="patientTable"><spring:message code="Person.age"/></th>
-			<th class="patientTable"><spring:message code="Encounter.location"/></th>
+			<th class="patientTable"><spring:message code="mdrtb.name"/></th>
+			<th class="patientTable"><spring:message code="mdrtb.gender"/></th>
+			<th class="patientTable"><spring:message code="mdrtb.age"/></th>
+			<th class="patientTable"><spring:message code="mdrtb.Location"/></th>
 		</tr>
 		<c:forEach items="${encounters}" var="e">
 			<tr class="patientRow patientRow${e.patient.patientId}">

@@ -99,9 +99,9 @@
 			<tr>
 				<th class="patientTable">&nbsp;</th>
 				<th class="patientTable"><spring:message code="Patient.identifier"/></th>
-				<th class="patientTable"><spring:message code="Person.name"/></th>
-				<th class="patientTable"><spring:message code="Person.gender"/></th>
-				<th class="patientTable"><spring:message code="Person.age"/></th>
+				<th class="patientTable"><spring:message code="mdrtb.name"/></th>
+				<th class="patientTable"><spring:message code="mdrtb.gender"/></th>
+				<th class="patientTable"><spring:message code="mdrtb.age"/></th>
 			</tr>
 		</table>
 		<br/>
