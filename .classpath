@@ -54,7 +54,7 @@
 	<classpathentry kind="lib" path="/openmrs-1.5.x/lib/mysql-connector-java/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.5.x/lib/spring-framework/spring-2.5.6.jar" sourcepath="/openmrs-source/spring-2.5.1-src.zip"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/openmrs-1.5.x/build"/>
+	<classpathentry kind="lib" path="/openmrs-1.5.x/build" sourcepath="/openmrs-1.5.x/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/openmrs-1.5.x"/>
 	<classpathentry kind="lib" path="lib-common/birt-api-1.8.5.jar"/>
 	<classpathentry kind="output" path="build"/>
