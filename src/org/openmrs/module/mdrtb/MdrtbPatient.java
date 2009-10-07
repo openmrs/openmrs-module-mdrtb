@@ -73,8 +73,8 @@ public class MdrtbPatient {
     private List<Concept> resistanceDrugConcepts = new ArrayList<Concept>();
     private List<Obs> stEmpIndObs = new ArrayList<Obs>();
     private List<Encounter> htmlEncList = new ArrayList<Encounter>();
+    private Obs causeOfDeath;
     
-
     public List<Encounter> getHtmlEncList() {
         return htmlEncList;
     }
@@ -133,7 +133,15 @@ public class MdrtbPatient {
         this.onART = onART;
     }
 
-    public Obs getDurationOfPreviousTreatment() {
+	public Obs getCauseOfDeath() {
+		return causeOfDeath;
+	}
+
+	public void setCauseOfDeath(Obs causeOfDeath) {
+		this.causeOfDeath = causeOfDeath;
+	}
+
+	public Obs getDurationOfPreviousTreatment() {
         return durationOfPreviousTreatment;
     }
 

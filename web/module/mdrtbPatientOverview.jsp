@@ -286,6 +286,28 @@
 	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </span>
 
+<c:if test="${obj.patient.dead}">
+	<div id="patientDashboardDeceased" class="retiredMessage">
+		<div>
+			<spring:message code="Patient.patientDeceased"/>
+			<c:if test="${not empty obj.patient.deathDate}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.deathDate"/>: <openmrs:formatDate date="${obj.patient.deathDate}"/>
+			</c:if>
+			<c:if test="${not empty obj.causeOfDeath}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.causeOfDeath"/>: 
+				<c:if test="${not empty obj.causeOfDeath.valueCoded}"> 
+					  &nbsp;&nbsp;<openmrs:format concept="${obj.causeOfDeath.valueCoded}"/>
+				</c:if>
+				<c:if test="${not empty obj.causeOfDeath.valueText}"> 
+					  &nbsp;&nbsp;<c:out value="${obj.causeOfDeath.valueText}"></c:out>
+				</c:if>
+			</c:if>
+		</div>
+	</div>
+</c:if>
+
 <div style="padding:2px;"></div>
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
 <!-- <openmrs:portlet url="mdrtbHeaderBox" id="mdrtbHeaderBox" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>-->

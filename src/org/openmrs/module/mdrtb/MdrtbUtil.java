@@ -322,13 +322,19 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
            }  
        }
        
-
-       
        PatientState newState = new PatientState();
        newState.setPatientProgram(pp);
        newState.setState(programWorkflowState);
        newState.setStartDate(onDate);
        pp.getStates().add(newState);
+       
+       Context.getProgramWorkflowService().savePatientProgram(pp);
+       
+       Concept diedConcept = MdrtbFactory.getInstance().getConceptDiedMDR();
+       if (programWorkflowState.getConcept().equals(diedConcept)) {
+    	   Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
+       }
+   	
        return pp;
    }
    

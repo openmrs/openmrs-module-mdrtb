@@ -1130,6 +1130,12 @@ public final class MdrtbFactory {
         return ret;
     }
     
+    public Concept getConceptDiedMDR() {
+        Concept ret = null;
+        ret = this.getMDRTBConceptByKey(STR_DIED, new Locale("en", "US"), this.xmlConceptList);
+        return ret;
+    }
+    
     /**
      * 
      * Returns the mdrtb program name from global properties

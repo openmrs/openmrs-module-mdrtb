@@ -485,14 +485,11 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     if (outcomeStateVal != null && !outcomeStateVal.equals("")){
                         ProgramWorkflowState pxws = pw.getState(Integer.valueOf(outcomeStateVal));
                         if (ps == null || !ps.getState().equals(pxws) || (ps.getState().equals(pxws) && outcomeStateDate != null && outcomeStateDate.getTime() != ps.getStartDate().getTime())){
-                            if (outcomeStateDate == null){
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, new Date());
-                                update = true;
-                                
-                            } else {
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);  
-                                update = true;
-                            }
+                        	if (outcomeStateDate == null) {
+                        		outcomeStateDate = new Date();
+                        	}
+                            MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);
+                            update = true;
                         }
                     }
                     
@@ -1624,11 +1621,14 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     mp.setPatient(patient);
                     Person person = Context.getPersonService().getPerson(patient.getPatientId());
                     
+                    String codString = Context.getAdministrationService().getGlobalProperty("concept.causeOfDeath");
+        			Concept causeOfDeathConcept = Context.getConceptService().getConcept(codString);           
   
                     Set<Concept> cSetTmp = new HashSet<Concept>();
                     for (Map.Entry<String, Concept> cn : mu.getXmlConceptList().entrySet()){
                         cSetTmp.add(cn.getValue());
                     }
+                    cSetTmp.add(causeOfDeathConcept);
                     List<Concept> cListForObs = new ArrayList<Concept>(cSetTmp);
                     ArrayList<Person> pList = new ArrayList<Person>();
                     pList.add(person);
@@ -1799,9 +1799,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     Concept transferredTo = mu.getConceptTransferredTo();                  
                     Concept onART = mu.getConceptOnART();
                     Concept nextVisit = mu.getConceptNextVisit();
-                    
-                    
-                    
+                                        
                     //use already set obs list on patient:
                    for (Obs o : mp.getObs()){
                        if (o.getConcept().equals(drugUse) && (mp.getPatientClassDrugUse() == null || mp.getPatientClassDrugUse().getObsDatetime().before(o.getObsDatetime())))
@@ -1848,7 +1846,11 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                            mp.setOnART(o);
                        if (o.getConcept().getConceptId().intValue() == nextVisit.getConceptId().intValue() && (mp.getNextScheduledVisit() == null || mp.getNextScheduledVisit().getObsDatetime().before(o.getObsDatetime())))
                            mp.setNextScheduledVisit(o);
-            
+                       
+                       if (o.getConcept().equals(causeOfDeathConcept)) {
+                    	   mp.setCauseOfDeath(o);
+                       }
+                   
                    }
                    
                    //ART number
