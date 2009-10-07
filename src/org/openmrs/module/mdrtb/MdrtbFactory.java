@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1136,6 +1137,16 @@ public final class MdrtbFactory {
         return ret;
     }
     
+    public Set<Concept> getMdrProgramOutcomeConcepts() {
+    	Set<Concept> finalOutcomes = new HashSet<Concept>();
+    	for (ProgramWorkflowState s : getStatesOutcomes()) {
+    		if (!s.getConcept().isNamed(STR_STILL_ON_TREATMENT)) {
+    			finalOutcomes.add(s.getConcept());
+    		}
+    	}
+    	return finalOutcomes;
+    }
+    
     /**
      * 
      * Returns the mdrtb program name from global properties
@@ -1148,10 +1159,13 @@ public final class MdrtbFactory {
         return Context.getProgramWorkflowService().getProgramByName(programString);
     }
     
+    public ProgramWorkflow getOutcomeWorkflow(){
+        Program program = this.getMDRTBProgram();
+        return program.getWorkflowByName(this.STR_TREATMENT_OUTCOME_PARENT);
+     }
+    
     public Set<ProgramWorkflowState> getStatesOutcomes(){
-       Program program = this.getMDRTBProgram();
-       ProgramWorkflow pw = program.getWorkflowByName(this.STR_TREATMENT_OUTCOME_PARENT);
-       return  pw.getSortedStates();
+    	return getOutcomeWorkflow().getSortedStates();
     }
     
     public Set<ProgramWorkflowState> getStatesCultureStatus(){

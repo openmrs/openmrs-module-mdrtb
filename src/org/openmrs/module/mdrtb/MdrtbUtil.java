@@ -328,13 +328,18 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
        newState.setStartDate(onDate);
        pp.getStates().add(newState);
        
+       Set<Concept> outcomeConcepts = MdrtbFactory.getInstance().getMdrProgramOutcomeConcepts();
+       if (outcomeConcepts.contains(programWorkflowState.getConcept())) {
+    	   pp.setDateCompleted(onDate);
+       }
+       
        Context.getProgramWorkflowService().savePatientProgram(pp);
        
        Concept diedConcept = MdrtbFactory.getInstance().getConceptDiedMDR();
        if (programWorkflowState.getConcept().equals(diedConcept)) {
     	   Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
        }
-   	
+       
        return pp;
    }
    
