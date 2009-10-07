@@ -3,7 +3,7 @@
 		href="${pageContext.request.contextPath}/"><spring:message
 		code="Navigation.home" /></a></li>
 		
-		<li><a href="/openmrs/module/mdrtb/mdrtbIndex.form"><spring:message
+		<li><a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form"><spring:message
 		code="mdrtb.title" /></a></li>
 
 <!--  	<li><a href="${pageContext.request.contextPath}/findPatient.htm">

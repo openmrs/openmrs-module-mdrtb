@@ -209,7 +209,7 @@
 	}
 	
 	function selectPatient(input){
-		window.location='/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=BAC';
+		window.location='${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=BAC';
 	}
 	function mouseOver(input){
 		classTmp = this.className;
@@ -283,7 +283,7 @@
 </script>
 
 <span style="text-align:right;">
-	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=/openmrs/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </span>
 
 <div style="padding:2px;"></div>
@@ -405,7 +405,7 @@
 		</div>
 		
 		<div id="searchTab_contacts_content" style="font-size:80%"><Br>
-			<a  href="/openmrs/module/mdrtb/mdrtbManageContacts.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.managecontacts" /></a>
+			<a  href="${pageContext.request.contextPath}/module/mdrtb/mdrtbManageContacts.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.managecontacts" /></a>
 			<br>
 			<Br>	
 			<c:if test="${obj.contacts != null}">
@@ -433,11 +433,11 @@
 					</td>
 					<Td>
 						<c:if test="${contact.isTBPatient}">
-							<a href="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}&view=STATUS">${contact.person.givenName} ${contact.person.familyName}</a>
+							<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}&view=STATUS">${contact.person.givenName} ${contact.person.familyName}</a>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">
 							<c:if test="${contact.isPatient}">
-								<a href="/openmrs/patientDashboard.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
+								<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
 							</c:if>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">

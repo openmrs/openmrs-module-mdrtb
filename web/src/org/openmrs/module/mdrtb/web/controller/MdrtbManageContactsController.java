@@ -383,7 +383,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
                             
                     }
                     mu = null;
-                    RedirectView rv = new RedirectView("/openmrs/module/mdrtb/mdrtbManageContacts.form");
+                    RedirectView rv = new RedirectView("mdrtbManageContacts.form");
                     rv.addStaticAttribute("patientId", patientId);
                     rv.addStaticAttribute("view", view);
                     return new ModelAndView(rv);

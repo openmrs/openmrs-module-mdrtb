@@ -20,7 +20,7 @@
 								if (!ret)
 									alert('<spring:message code="mdrtb.DWRunabletodiscontinueorder" />');
 								else
-									window.location="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
+									window.location="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
 							});
 	 				
 	 			} else {
@@ -34,7 +34,7 @@
 							if (!ret)
 								alert("<spring:message code="mdrtb.DWRnotabletovoidorder" />");
 							else 
-			 					window.location="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
+			 					window.location="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
 						});
 						
 				} else {

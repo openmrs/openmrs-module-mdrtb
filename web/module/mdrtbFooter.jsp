@@ -18,7 +18,7 @@
 					pageContext.setAttribute("databaseVersionExpected", org.openmrs.util.OpenmrsConstants.DATABASE_VERSION_EXPECTED);
 					pageContext.setAttribute("locale", org.openmrs.api.context.Context.getLocale());
 				%> <c:forEach items="${locales}" var="loc" varStatus="status">
-	<%
+				<%
 						java.util.Locale locTmp = (java.util.Locale) pageContext.getAttribute("loc");
 						pageContext.setAttribute("locDisplayName", locTmp.getDisplayName(locTmp));
 					%>

@@ -330,6 +330,11 @@
 		<defaultValue>https://mdrtbmodule.pih-emr.org</defaultValue>
 		<description>The root tomcat URL of your server.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.applicationName</property>
+		<defaultValue>openmrs</defaultValue>
+		<description>The application name, almost always openmrs, unless running multiple openmrs instances within the same web server.</description>
+	</globalProperty>
 	
 	
 	<dwr>

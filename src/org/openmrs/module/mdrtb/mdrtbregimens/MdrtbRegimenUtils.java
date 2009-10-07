@@ -46,13 +46,14 @@ public class MdrtbRegimenUtils {
             
             String httpBase = "http://localhost";
             String portNum = Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port");
+            String appName = Context.getAdministrationService().getGlobalProperty("mdrtb.applicationName");
             if (portNum != null && portNum.trim().length() > 0){
                 if (portNum.contains(":"))
                     httpBase += portNum.trim();
                 else
                     httpBase = httpBase + ":" + portNum.trim();
             }    
-            String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
+            String XMLlocation = httpBase + "/" + appName + "/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
 
             try { 
                     Document doc = null;

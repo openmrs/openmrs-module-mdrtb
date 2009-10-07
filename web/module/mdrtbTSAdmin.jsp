@@ -10,7 +10,7 @@
 	var DAY_NAMES=new Array(${daysOfWeek});
     var MONTH_NAMES=new Array(${monthsOfYear});
 </script>
-<h2><table><tr><td><img src="/openmrs/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" />&nbsp;<spring:message code="mdrtb.managetreatmentsupporters"/></td></tr></table></h2>
+<h2><table><tr><td><img src="${pageContext.request.contextPath}/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" />&nbsp;<spring:message code="mdrtb.managetreatmentsupporters"/></td></tr></table></h2>
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/findPatient.htm" />
 <br>
 <br>

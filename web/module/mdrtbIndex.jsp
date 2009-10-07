@@ -2,7 +2,7 @@
 <%@ include file="mdrtbHeader.jsp"%>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <style><%@ include file="resources/date_input.css"%></style>
-<h2><table><tr><td><img src="/openmrs/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" /></td></tr></table></h2>
+<h2><table><tr><td><img src="${pageContext.request.contextPath}/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" /></td></tr></table></h2>
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/findPatient.htm" />
 <spring:message var="pageTitle" code="findPatient.title" scope="page"/>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
@@ -10,7 +10,7 @@
 <table class="indexTable">
 	<tr>
 		<td width=60% valign='top'>
-			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=/openmrs/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 			<openmrs:hasPrivilege privilege="Add Patients">
 				<br/><br/>
 					<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbAddPatientForm.form|viewType=shortEdit" moduleId="mdrtb" />
@@ -89,7 +89,7 @@
 					</c:set>
 					
 						
-					<Tr class="${rowClass}"><Td><a href="/openmrs/module/birt/generateReport.form?reportId=${report.reportDefinition.reportObjectId}">
+					<Tr class="${rowClass}"><Td><a href="${pageContext.request.contextPath}/module/birt/generateReport.form?reportId=${report.reportDefinition.reportObjectId}">
 								${report.reportDefinition.name}
 							</a></Td></Tr>
 					

@@ -126,9 +126,9 @@
 		</table>
 		<span style="">		
 		<openmrs:hasPrivilege privilege="Edit Patients">
-			<a href="/openmrs/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;&nbsp;
 		</openmrs:hasPrivilege>
 		</span>		
 </div>

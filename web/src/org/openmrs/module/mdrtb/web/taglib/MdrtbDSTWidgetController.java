@@ -262,7 +262,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                                                     else 
                                                         ret = ret.insert(ret.length() -1,  " class='widgetDefault'  ");
                                                     //HERE
-                                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getBestShortName(loc).getName() + getConcentrationStringForDSTResultObj(o) + "</a>");
+                                                    ret.append("<a class='widgetLinks' style='color:black' href='mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getBestShortName(loc).getName() + getConcentrationStringForDSTResultObj(o) + "</a>");
                                                     usedObs.add(o);
                                                     emptyCellTest = false;
                                                     testTmp = true;

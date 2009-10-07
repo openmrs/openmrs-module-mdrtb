@@ -374,7 +374,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                                     String scantyAddition = "";
                                     if (o.getValueCoded().getBestName(locUS).getName().equals(this.scanty) && o.getValueNumeric() != null)
                                         scantyAddition = " (" + o.getValueNumeric().intValue() + ")";
-                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId="
+                                    ret.append("<a class='widgetLinks' style='color:black' href='mdrtbEditTestContainer.form?ObsGroupId="
                                                     + o.getObsGroup().getObsId() + "'>"+ o.getValueCoded().getBestShortName(loc)+ scantyAddition +"</a>");
                                     emptyCellTest = false;
                                     usedObs.add(o);

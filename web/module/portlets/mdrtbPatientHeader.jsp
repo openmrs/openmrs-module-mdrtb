@@ -226,9 +226,9 @@
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
 			&nbsp;
-			<a href="/openmrs/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
 		</openmrs:hasPrivilege>
 			 | &nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
 

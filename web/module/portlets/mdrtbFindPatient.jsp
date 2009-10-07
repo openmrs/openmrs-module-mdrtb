@@ -69,7 +69,7 @@
 	   			$j('#searchBox').val('');
 	   		</c:when>
 	   		<c:otherwise>
-	   			window.location='/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=STATUS';
+	   			window.location='${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=STATUS';
 	   		</c:otherwise>
 	   	</c:choose>
 	}

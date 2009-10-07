@@ -271,18 +271,19 @@ public final class MdrtbFactory {
     }
     
     private void readXML(){ 
+       
         String httpBase = "http://localhost";
         String portNum = Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port");
+        String appName = Context.getAdministrationService().getGlobalProperty("mdrtb.applicationName");
         if (portNum != null && portNum.trim().length() > 0){
             if (portNum.contains(":"))
                 httpBase += portNum.trim();
             else
                 httpBase = httpBase + ":" + portNum.trim();
         }    
-        String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbConcepts.xml";
-
+        String XMLlocation = httpBase + "/" + appName + "/moduleResources/mdrtb/mdrtbConcepts.xml";
+        
                 try { 
-                    
                     
                     Document doc = null;
                     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
