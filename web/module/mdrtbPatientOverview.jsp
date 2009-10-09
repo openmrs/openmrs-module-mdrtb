@@ -546,7 +546,7 @@
 					<c:otherwise>
 					
 						<openmrs:extensionPoint pointId="org.openmrs.mdrtb.mdrtbDashboardTab.${extension.tabId}TabHeader" type="html" parameters="patientId=${patient.patientId}" />
-						<openmrs:portlet url="${extension.portletUrl}" id="${extension.tabId}" moduleId="${extension.moduleId}"/>
+						<openmrs:portlet url="${extension.portletUrl}" id="${extension.tabId}" moduleId="${extension.moduleId}" patientId="${patient.patientId}"/>
 						
 					</c:otherwise>
 				</c:choose>
@@ -563,24 +563,29 @@
 			changeSearchTab('searchTab_status');
 		</c:if>	
 		<c:if test="${!empty view}">
-			<c:if test='${view == "DST"}'>
-				changeSearchTab('searchTab_DST');
-			</c:if>
-			<c:if test='${view == "BAC"}'>
-				changeSearchTab('searchTab_BAC');
-			</c:if>
-			<c:if test='${view == "REG"}'>
-				changeSearchTab('searchTab_patientRegimen');
-			</c:if>
-			<c:if test='${view == "STATUS"}'>
-				changeSearchTab('searchTab_status');
-			</c:if>
-			<c:if test='${view == "CONTACTS"}'>
-				changeSearchTab('searchTab_contacts');
-			</c:if>
-			<c:if test='${view == "FORM"}'>
-				changeSearchTab('searchTab_formEntry');
-			</c:if>
+			<c:choose>
+				<c:when test='${view == "DST"}'>
+					changeSearchTab('searchTab_DST');
+				</c:when>
+				<c:when test='${view == "BAC"}'>
+					changeSearchTab('searchTab_BAC');
+				</c:when>
+				<c:when test='${view == "REG"}'>
+					changeSearchTab('searchTab_patientRegimen');
+				</c:when>
+				<c:when test='${view == "STATUS"}'>
+					changeSearchTab('searchTab_status');
+				</c:when>
+				<c:when test='${view == "CONTACTS"}'>
+					changeSearchTab('searchTab_contacts');
+				</c:when>
+				<c:when test='${view == "FORM"}'>
+					changeSearchTab('searchTab_formEntry');
+				</c:when>
+				<c:otherwise>
+					changeSearchTab('searchTab_${view}');
+				</c:otherwise>
+			</c:choose>
 		</c:if>
 			setHeights();
 </script>
