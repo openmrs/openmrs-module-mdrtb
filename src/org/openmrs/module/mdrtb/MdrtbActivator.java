@@ -74,15 +74,15 @@ public class MdrtbActivator implements Activator, Runnable {
             Context.addProxyPrivilege("Manage Global Properties");
             Context.addProxyPrivilege("SQL Level Access");
             onLoad(ms);
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not pre-load concepts" + ex);
+        } finally {
             Context.removeProxyPrivilege("SQL Level Access");
             Context.removeProxyPrivilege("View Concept Classes");
             Context.removeProxyPrivilege("View Concepts");
             Context.removeProxyPrivilege("Manage Concepts");
             Context.removeProxyPrivilege("View Global Properties");
             Context.removeProxyPrivilege("Manage Global Properties");
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not pre-load concepts" + ex);
-        } finally {
             Context.closeSession();
         }   
     }

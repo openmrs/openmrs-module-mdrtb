@@ -18,13 +18,12 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.Order;
 import org.openmrs.api.db.DAOException;
-import org.openmrs.api.db.hibernate.HibernateOrderDAO;
 import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 
 public class HibernateMdrtbDAO implements MdrtbDAO {
 
-    protected static final Log log = LogFactory.getLog(HibernateOrderDAO.class);
+    protected static final Log log = LogFactory.getLog(HibernateMdrtbDAO.class);
     
     /**
      * Hibernate session factory
@@ -40,7 +39,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
  public List<OrderExtension> getOrderExtension(Order o, boolean includeVoided) throws DAOException{
      
      Criteria crit = sessionFactory.getCurrentSession().createCriteria(OrderExtension.class);
-     
      if (includeVoided == false)
          crit.add(Expression.eq("voided", false));
      
