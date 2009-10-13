@@ -151,7 +151,7 @@ public class MdrtbRegimenUtils {
                                                     
                                                     try {
                                                         Double dose = Double.parseDouble(drugSugChildren.getText());
-                                                        mds.setDose(dose);
+                                                        mds.setDose(dose.toString());
                                                         //System.out.println("set dose successfully " + dose.toString());
                                                         
                                                     } catch (Exception ex){
@@ -228,7 +228,7 @@ public class MdrtbRegimenUtils {
                     doTmp.setDiscontinued(false);
                 }
                 doTmp.setComplex(false);
-                doTmp.setDose(mds.getDose());
+                doTmp.setDose(Double.valueOf(mds.getDose()));
                 doTmp.setFrequency(mds.getFrequency());
                 doTmp.setInstructions(mds.getInstructions());
                 doTmp.setOrderType(new OrderType(new Integer(OpenmrsConstants.ORDERTYPE_DRUG)));
@@ -244,20 +244,14 @@ public class MdrtbRegimenUtils {
         return ret;
     }
     
-    public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, String regimenType, Patient p, Date effectiveDate){
+    //TODO:  replace with ExtendedDrugOrder
+    public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, Integer regTypeInt, Patient p, Date effectiveDate){
            Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
            
            ObsService os = Context.getObsService();
            
            
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
-           if (regimenType != null && !regimenType.equals("")){
-               Integer regTypeInt = null;
-               try{
-                   regTypeInt = Integer.valueOf(regimenType);
-               } catch (Exception ex){
-                   System.out.println("error in mdrtb regimen utils: " + regTypeInt + " can't be converted to an integer.");
-               }
                if (regTypeInt != null) {
                    MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
                    MdrtbFactory mu = ms.getMdrtbFactory();
@@ -285,7 +279,7 @@ public class MdrtbRegimenUtils {
                    }
                    
                }
-           }
+          
            
     }
 }

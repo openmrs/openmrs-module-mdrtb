@@ -114,6 +114,9 @@ public class MdrtbActivator implements Activator, Runnable {
             }
         }
         ms.setLocaleSetUsedInDB(locales);
+        
+        //TODO:  add Mdrtb standard regimens
+        
         log.info("Finished loading mdrtb metadata.");
     }
     

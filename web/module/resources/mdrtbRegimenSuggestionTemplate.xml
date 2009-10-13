@@ -16,7 +16,7 @@
 		<displayName>FIRST-LINE EXAMPLE REGIMEN</displayName>
 		<codeName>INH100RIF300E300</codeName>
 		<canReplace>TUBERCULOSIS DRUGS</canReplace>
-		<regimenType>mdrtb.standardized</regimenType>  options are:  mdrtb.standardized, mdrtb.empiric, mdrtb.individualized
+		<regimenType>6339</regimenType>  options are: 6339 =  mdrtb.standardized, 6340 = mdrtb.empiric, 6341 = mdrtb.individualized
 	</regimenSuggestion>
 	
 	coding strategy:  create an mdrtb regimen factory class, read and parse xml, get menu item, and show menu item
@@ -55,6 +55,6 @@
 		<displayName>FIRST-LINE EXAMPLE REGIMEN</displayName>
 		<codeName>INH100RIF300E300</codeName>
 		<canReplace>TUBERCULOSIS DRUGS</canReplace>
-		<regimenType>mdrtb.standardized</regimenType>
+		<regimenType>6339</regimenType>
 	</regimenSuggestion>
 </list>

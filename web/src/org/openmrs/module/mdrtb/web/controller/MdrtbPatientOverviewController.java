@@ -329,14 +329,15 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             
                             List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
                             for (MdrtbRegimenSuggestion mrs : suggestions){
-                                String newRegimenType = getMessageSourceAccessor().getMessage(mrs.getRegimenType(), new Locale("en"));
-                                if (newRegimenType == null || newRegimenType.contains("."))
-                                    mrs.setRegimenType("");
-                                else
-                                    mrs.setRegimenType(newRegimenType);
                                 if (mrs.getCodeName().equals(newDrugConceptParam)){
                                     List<DrugOrder> newDOs = MdrtbRegimenUtils.regimenSuggestionToDrugOrders(mrs, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj, endDateObj);     
-                                    MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, mrs.getRegimenType(), Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
+                                    Integer regTypeInt = null;
+                                    try {
+                                        regTypeInt = Integer.valueOf(mrs.getRegimenType());
+                                    } catch (Exception ex){
+                                        log.error("Invalid regimen type read in from standard regimen xml file.  Could not convert regimen type value to an Integer.");
+                                    }
+                                    MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, regTypeInt, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
                                     break;
                                 } 
                             }
@@ -402,7 +403,13 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     
                                     List<DrugOrder> newDOs = new ArrayList<DrugOrder>();
                                     newDOs.add(newDO);
-                                    MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, request.getParameter(extension), Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
+                                    Integer regTypeInt = null;
+                                    try {
+                                        regTypeInt = Integer.valueOf(request.getParameter(extension));
+                                    } catch (Exception ex){
+                                        log.error("Invalid regimen type read in from standard regimen xml file.  Could not convert regimen type value to an Integer.");
+                                    }
+                                    MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, regTypeInt, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
                                         
                                 } 
                             } 
