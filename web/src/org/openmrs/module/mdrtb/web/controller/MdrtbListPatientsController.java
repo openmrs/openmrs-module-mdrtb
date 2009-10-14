@@ -69,10 +69,12 @@ public class MdrtbListPatientsController {
     		if (locationMethod == null) {
     			locationMethod = PatientLocationMethod.PATIENT_HEALTH_CENTER;
     		}
+    		Cohort locationCohort = new Cohort();
     		for (Location l : locations) {
     			Cohort atLocation = Context.getPatientSetService().getPatientsHavingLocation(l, locationMethod);
-    			keep = Cohort.intersect(keep, atLocation);
+    			locationCohort = Cohort.union(locationCohort, atLocation);
     		}
+    		keep = Cohort.intersect(keep, locationCohort);
     	}
     	
     	if (states != null) {
