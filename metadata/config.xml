@@ -340,6 +340,11 @@
 		<defaultValue>PATIENT_HEALTH_CENTER</defaultValue>
 		<description>The location calculation method to use for the list patients page</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.unknownLocationName</property>
+		<defaultValue>Unknown Location</defaultValue>
+		<description>The name of the Location that represents an Unknown Location</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>

@@ -2,8 +2,10 @@ package org.openmrs.module.mdrtb.web.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,14 +68,25 @@ public class MdrtbListPatientsController {
     	keep = new Cohort(patients);
     	
     	if (locations != null) {
+    		
     		if (locationMethod == null) {
     			locationMethod = PatientLocationMethod.PATIENT_HEALTH_CENTER;
     		}
+    		Map<Location, Cohort> locationCache = new HashMap<Location, Cohort>();
+    		String unknownLocationName = Context.getAdministrationService().getGlobalProperty("mdrtb.unknownLocationName");
+    		
     		Cohort locationCohort = new Cohort();
     		for (Location l : locations) {
-    			Cohort atLocation = Context.getPatientSetService().getPatientsHavingLocation(l, locationMethod);
-    			locationCohort = Cohort.union(locationCohort, atLocation);
+    			locationCohort = Cohort.union(locationCohort, getLocationCohort(l, locationMethod, locationCache));
+    			if (l.getName().equals(unknownLocationName)) {
+    				Cohort noLocations = new Cohort(patients);
+    				for (Location ul : Context.getLocationService().getAllLocations()) {
+    					noLocations = Cohort.subtract(noLocations, getLocationCohort(ul, locationMethod, locationCache));
+    				}
+    				locationCohort = Cohort.union(locationCohort, noLocations);
+    			}
     		}
+    		
     		keep = Cohort.intersect(keep, locationCohort);
     	}
     	
@@ -91,5 +104,17 @@ public class MdrtbListPatientsController {
     	}
     	
     	model.addAttribute("patients", patients);
+    }
+    
+    /**
+     * Utility method to return a list of patients at a given location
+     */
+    protected Cohort getLocationCohort(Location location, PatientLocationMethod locationMethod, Map<Location, Cohort> cache) {
+    	if (cache.containsKey(location)) {
+    		return cache.get(location);
+    	}
+    	Cohort c = Context.getPatientSetService().getPatientsHavingLocation(location, locationMethod);
+    	cache.put(location, c);
+    	return c;
     }
 }
