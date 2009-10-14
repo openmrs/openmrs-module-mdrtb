@@ -3,9 +3,11 @@ package org.openmrs.module.mdrtb.web.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,6 +19,7 @@ import org.openmrs.api.PatientSetService.PatientLocationMethod;
 import org.openmrs.api.context.Context;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -96,13 +99,18 @@ public class MdrtbListPatientsController {
     		keep = Cohort.intersect(keep, inStates);
     	}
     	
+    	Set<Integer> patientIds = new HashSet<Integer>();
     	for (Iterator<Patient> i = patients.iterator(); i.hasNext();) {
     		Patient p = i.next();
     		if (!keep.contains(p.getPatientId())) {
     			i.remove();
     		}
+    		else {
+    			patientIds.add(p.getPatientId());
+    		}
     	}
     	
+    	model.addAttribute("patientIds", OpenmrsUtil.join(patientIds, ","));
     	model.addAttribute("patients", patients);
     }
     

@@ -67,8 +67,26 @@
 			<form method="get">
 				<input type="hidden" name="locationMethod" value="${locationMethod}"/>
 				<table>
-					<tr><td colspan="2" align="right"><input type="submit" value="<spring:message code="general.search"/>"/></td></tr>
+					<tr style="border-bottom:2px solid black;"><td colspan="2" style="background-color:#C0C0C0; font-weight:bold;">
+						<table width="100%"><tr>
+							<td style="width:100%;">
+								<spring:message code="mdrtb.display"/>: 
+								<select name="displayMode">
+									<option value=""><spring:message code="mdrtb.basicDetails"/></option>
+									<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
+										<option value="${extension.key}"<c:if test="${extension.key == param.displayMode}"> selected</c:if>>
+											<spring:message code="${extension.label}"/>
+										</option>
+									</openmrs:extensionPoint>
+								</select>
+							</td>
+							<td align="right" style="white-space:nowrap;">
+								<input type="submit" value="<spring:message code="general.search"/>"/>
+							</td>
+						</tr></table>
+					</td></tr>
 					<tr><td colspan="2">
+						<br/>
 						<table>
 							<tr>
 								<th><spring:message code="general.name"/>&nbsp;</th>
@@ -108,38 +126,51 @@
 				</table>
 			</form>
 		</td>
-		<td valign="top" class="patientTable" width="100%" style="padding-left:10px;">
-			<table id="patientTable">
-				<thead>
-					<tr>
-						<th>&nbsp;</th>
-						<th class="patientTable"><spring:message code="general.id"/></th>
-						<th class="patientTable"><spring:message code="general.name"/></th>
-						<th class="patientTable"><spring:message code="Person.age"/></th>
-						<th class="patientTable"><spring:message code="Person.gender"/></th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${patients}" var="p">
-						<tr class="patientRow patientRow${p.patientId}">
-							<td class="patientTable" style="white-space:nowrap; width:20px;">
-								<a href="mdrtbPatientOverview.form?patientId=${p.patientId}">
-									<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
-								</a>						
-								<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDetailPortlets" type="html">
-									<a href="javascript:void(0)" onClick="loadUrlIntoDetailsPopup('<spring:message code="${extension.title}"/>', '${pageContext.request.contextPath}/module/mdrtb/viewPortlet.htm?patientId=${p.patientId}&moduleId=${extension.moduleId}&id=${extension.moduleId}&url=${extension.portletUrl}'); return false;">
-										<img src="${pageContext.request.contextPath}${extension.imagePath}" title="<spring:message code="${extension.title}"/>" border="0" align="top" />
-									</a>
-								</openmrs:extensionPoint>
-							</td>
-							<td class="patientTable" style="white-space:nowrap;">${p.patientIdentifier.identifier}</td>
-							<td class="patientTable" >${p.familyName}, ${p.givenName} ${p.middleName}</td>
-							<td class="patientTable" style="white-space:nowrap;">${p.age}</td>
-							<td class="patientTable" style="white-space:nowrap;">${p.gender}</td>
+		<td valign="top" width="100%" style="padding-left:10px;">
+			<c:set var="keyShown" value="" scope="page"/>
+			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
+				<c:if test="${extension.key == param.displayMode}">
+					<a target="_blank" href="${pageContext.request.contextPath}/module/mdrtb/viewPortlet.htm?moduleId=${extension.moduleId}&url=${extension.portletUrl}&patientIds=${patientIds}">
+						<spring:message code="mdrtb.viewInNewWindow"/>
+					</a>
+					<br/><br/>
+					<openmrs:portlet moduleId="${extension.moduleId}" url="${extension.portletUrl}" patientIds="${patientIds}" />
+					<c:set var="keyShown" value="${extension.key}" scope="page"/>
+				</c:if>
+			</openmrs:extensionPoint>
+			<c:if test="${keyShown == ''}">
+				<table id="patientTable">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th class="patientTable"><spring:message code="general.id"/></th>
+							<th class="patientTable"><spring:message code="general.name"/></th>
+							<th class="patientTable"><spring:message code="mdrtb.ageUpper"/></th>
+							<th class="patientTable"><spring:message code="mdrtb.gender"/></th>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<c:forEach items="${patients}" var="p">
+							<tr class="patientRow patientRow${p.patientId}">
+								<td class="patientTable" style="white-space:nowrap; width:20px;">
+									<a href="mdrtbPatientOverview.form?patientId=${p.patientId}">
+										<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
+									</a>						
+									<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDetailPortlets" type="html">
+										<a href="javascript:void(0)" onClick="loadUrlIntoDetailsPopup('<spring:message code="${extension.title}"/>', '${pageContext.request.contextPath}/module/mdrtb/viewPortlet.htm?patientId=${p.patientId}&moduleId=${extension.moduleId}&id=${extension.moduleId}&url=${extension.portletUrl}'); return false;">
+											<img src="${pageContext.request.contextPath}${extension.imagePath}" title="<spring:message code="${extension.title}"/>" border="0" align="top" />
+										</a>
+									</openmrs:extensionPoint>
+								</td>
+								<td class="patientTable" style="white-space:nowrap;">${p.patientIdentifier.identifier}</td>
+								<td class="patientTable" >${p.familyName}, ${p.givenName} ${p.middleName}</td>
+								<td class="patientTable" style="white-space:nowrap;">${p.age}</td>
+								<td class="patientTable" style="white-space:nowrap;">${p.gender}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:if>
 		</td>
 	</tr>
 </table>
