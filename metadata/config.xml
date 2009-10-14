@@ -6,7 +6,7 @@
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>1.5.1</version>
+	<version>1.5.2</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Dave Thomas</author>
 	<description>MDR TB Module.</description>
@@ -335,7 +335,11 @@
 		<defaultValue>openmrs</defaultValue>
 		<description>The application name, almost always openmrs, unless running multiple openmrs instances within the same web server.</description>
 	</globalProperty>
-	
+	<globalProperty>
+		<property>@MODULE_ID@.listPatientsLocationMethod</property>
+		<defaultValue>PATIENT_HEALTH_CENTER</defaultValue>
+		<description>The location calculation method to use for the list patients page</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>

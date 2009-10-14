@@ -56,6 +56,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/openmrs-1.5.x/build" sourcepath="/openmrs-1.5.x/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/openmrs-1.5.x"/>
-	<classpathentry kind="lib" path="lib-common/birt-api-1.8.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/birt-1.9.0.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

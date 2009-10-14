@@ -1162,7 +1162,12 @@ public final class MdrtbFactory {
     public ProgramWorkflow getOutcomeWorkflow(){
         Program program = this.getMDRTBProgram();
         return program.getWorkflowByName(this.STR_TREATMENT_OUTCOME_PARENT);
-     }
+    }
+    
+    public ProgramWorkflow getPatientStatusWorkflow(){
+        Program program = this.getMDRTBProgram();
+        return program.getWorkflowByName(this.STR_TUBERCULOSIS_PATIENT_STATUS_PARENT);
+    }
     
     public Set<ProgramWorkflowState> getStatesOutcomes(){
     	return getOutcomeWorkflow().getSortedStates();
