@@ -22,7 +22,7 @@
 		
 		$j('#patientTable').dataTable( {
 			"bPaginate": true,
-			"iDisplayLength": 25,
+			"iDisplayLength": 20,
 			"bLengthChange": false,
 			"bFilter": false,
 			"bSort": true,
@@ -72,7 +72,7 @@
 							<td style="width:100%;">
 								<spring:message code="mdrtb.display"/>: 
 								<select name="displayMode">
-									<option value=""><spring:message code="mdrtb.basicDetails"/></option>
+									<option value="basic"><spring:message code="mdrtb.basicDetails"/></option>
 									<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
 										<option value="${extension.key}"<c:if test="${extension.key == param.displayMode}"> selected</c:if>>
 											<spring:message code="${extension.label}"/>
@@ -108,6 +108,24 @@
 						</tr>
 					</mdrtb:forEachRecord>
 					
+					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollment"/></th></tr>
+					<tr>
+						<td><input type="radio" name="enrollment" value="ever"<c:if test="${empty enrollment || enrollment == 'ever'}"> checked</c:if>/>&nbsp;</td>
+						<td><spring:message code="mdrtb.enrollment.ever"/></td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="enrollment" value="current"<c:if test="${enrollment == 'current'}"> checked</c:if>/>&nbsp;</td>
+						<td><spring:message code="mdrtb.enrollment.current"/></td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="enrollment" value="previous"<c:if test="${enrollment == 'previous'}"> checked</c:if>/>&nbsp;</td>
+						<td><spring:message code="mdrtb.enrollment.previous"/></td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="enrollment" value="never"<c:if test="${enrollment == 'never'}"> checked</c:if>/>&nbsp;</td>
+						<td><spring:message code="mdrtb.enrollment.never"/></td>
+					</tr>
+									
 					<mdrtb:forEachRecord name="workflow" programName="${mdrProgram}">
 						
 						<tr><th colspan="2">
@@ -127,7 +145,6 @@
 			</form>
 		</td>
 		<td valign="top" width="100%" style="padding-left:10px;">
-			<c:set var="keyShown" value="" scope="page"/>
 			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
 				<c:if test="${extension.key == param.displayMode}">
 					<a target="_blank" href="${pageContext.request.contextPath}/module/mdrtb/viewPortlet.htm?moduleId=${extension.moduleId}&url=${extension.portletUrl}&patientIds=${patientIds}">
@@ -135,10 +152,9 @@
 					</a>
 					<br/><br/>
 					<openmrs:portlet moduleId="${extension.moduleId}" url="${extension.portletUrl}" patientIds="${patientIds}" />
-					<c:set var="keyShown" value="${extension.key}" scope="page"/>
 				</c:if>
 			</openmrs:extensionPoint>
-			<c:if test="${keyShown == ''}">
+			<c:if test="${param.displayMode == 'basic'}">
 				<table id="patientTable">
 					<thead>
 						<tr>

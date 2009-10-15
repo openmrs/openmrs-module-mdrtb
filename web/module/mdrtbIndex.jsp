@@ -70,8 +70,36 @@
 
 			<table class="indexInner" style="border-collapse:collapse;">
 			
+				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;">
+					<b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;
+						<spring:message code="mdrtb.patientLists"/>&nbsp;&nbsp;
+					</b>
+				</td></tr>
+				<tr class="${rowClass}"><td>
+					<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbListPatients.form">
+						<spring:message code="mdrtb.viewListPatientPage"/>
+					</a>
+					<br/><br/>
+					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.listPatientLinks" type="html">
+						<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
+							<spring:message code="${extension.title}"/>:
+							<c:forEach items="${extension.links}" var="link">
+								<a href="${pageContext.request.contextPath}/${link.key}"><spring:message code="${link.value}"/></a>&nbsp;&nbsp;
+							</c:forEach>
+							<br/>
+						</openmrs:hasPrivilege>
+					</openmrs:extensionPoint>
+
+					
+				</td></tr>
+			
 				<c:if test="${enableSpecimenTracking == 'true'}">
-					<tr class="${rowClass}"><Td>
+					<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;">
+						<b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;
+							<spring:message code="mdrtb.specimenTrackingLink"/>&nbsp;&nbsp;
+						</b>
+					</td></tr>
+					<tr class="${rowClass}"><td>
 						<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbSpecimenRegistration.form">
 							<spring:message code="mdrtb.specimenRegistrationLink"/>
 						</a>
@@ -82,26 +110,28 @@
 					</td></tr>
 				</c:if>
 				
-				<Tr><Td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewreports"/>&nbsp;&nbsp;</b></Td></tr>
+				<tr><td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewreports"/>&nbsp;&nbsp;</b></td></tr>
 				<c:forEach var="report" items="${reports}" varStatus="varStatus">
 					<c:set var="rowClass" scope="page">
 						<c:choose><c:when test="${varStatus.index % 2 == 0}">oddRow</c:when><c:otherwise>evenRow</c:otherwise></c:choose>
 					</c:set>
 					
 						
-					<Tr class="${rowClass}"><Td><a href="${pageContext.request.contextPath}/module/birt/generateReport.form?reportId=${report.reportDefinition.reportObjectId}">
+					<tr class="${rowClass}"><td><a href="${pageContext.request.contextPath}/module/birt/generateReport.form?reportId=${report.reportDefinition.reportObjectId}">
 								${report.reportDefinition.name}
-							</a></Td></Tr>
+							</a></td></tr>
 					
 					
 				</c:forEach>
 				<c:if test="${fn:length(reports) == 0}">
-				<Tr><Td><i> &nbsp; <spring:message code="birt.noReports"/></i><br/></Td></Tr>
+				<tr><td><i> &nbsp; <spring:message code="birt.noReports"/></i><br/></td></tr>
 				</c:if>
 					
-					<Tr><Td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></Td></tr>
-					<tr class="oddRow"><td><a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a></td></tr>
-					<tr class="evenRow"><td><a href="drugforecast/patientsTakingDrugs.list"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a></td></tr>
+				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></td></tr>
+				<tr><td>
+					<a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a><br/>
+					<a href="drugforecast/patientsTakingDrugs.list"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a>
+				</td></tr>
 			
 			</table>
 		</td>
