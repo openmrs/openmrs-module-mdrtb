@@ -98,14 +98,10 @@
 				<c:if test="${fn:length(reports) == 0}">
 				<Tr><Td><i> &nbsp; <spring:message code="birt.noReports"/></i><br/></Td></Tr>
 				</c:if>
-				
-				<openmrs:globalProperty key="mdrtb.in_mdrtb_program_cohort_definition_id" defaultValue="false" var="reportDef"/>
-						
-				<c:if test='${reportDef != ""}'>		
+					
 					<Tr><Td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></Td></tr>
 					<tr class="oddRow"><td><a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a></td></tr>
 					<tr class="evenRow"><td><a href="drugforecast/patientsTakingDrugs.list"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a></td></tr>
-				</c:if>
 			
 			</table>
 		</td>
