@@ -2,7 +2,29 @@
 		
 		
 <table class="portletTable" style="border-spacing:20px;border-collapse:separate;border-style:none;">
-<tr><td style="vertical-align:top;">			
+<tr><td style="vertical-align:top;">	
+
+			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.formsPortlet.links" type="html">
+				<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
+					<div>
+						<ul id="menu">
+							<c:forEach items="${extension.links}" var="link">
+								<c:choose>
+									<c:when test="${fn:startsWith(link.key, 'module/')}">
+										<%-- Added for backwards compatibility for most links --%>
+										<li><a href="${pageContext.request.contextPath}/${link.key}?patientId=${obj.patient.patientId}"><spring:message code="${link.value}"/></a></li>
+									</c:when>
+									<c:otherwise>
+										<%-- Allows for external absolute links  --%>
+										<li><a href='<c:url value="${link.key}?patientId=${obj.patient.patientId}"/>'><spring:message code='${link.value}'/></a></li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</ul>
+					</div>
+				</openmrs:hasPrivilege>
+			</openmrs:extensionPoint>
+					
 			<c:if test="${!empty mdrtbForms}">
 				<table class="widgetOut" style="font-size:80%;">
 						<tr nowrap><th nowrap style="background-color:white;"><spring:message code="mdrtb.availablemdrtbforms" /></th></tr>
