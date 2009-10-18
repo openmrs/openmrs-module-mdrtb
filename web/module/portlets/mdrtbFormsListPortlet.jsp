@@ -6,25 +6,23 @@
 
 			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.formsPortlet.links" type="html">
 				<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
-					<div>
-						<ul id="menu">
+					<div style="font-size:80%;">
 							<c:forEach items="${extension.links}" var="link">
 								<c:choose>
 									<c:when test="${fn:startsWith(link.key, 'module/')}">
 										<%-- Added for backwards compatibility for most links --%>
-										<li><a href="${pageContext.request.contextPath}/${link.key}?patientId=${obj.patient.patientId}"><spring:message code="${link.value}"/></a></li>
+										<a href="${pageContext.request.contextPath}/${link.key}?patientId=${obj.patient.patientId}"><spring:message code="${link.value}"/></a><br/>
 									</c:when>
 									<c:otherwise>
 										<%-- Allows for external absolute links  --%>
-										<li><a href='<c:url value="${link.key}?patientId=${obj.patient.patientId}"/>'><spring:message code='${link.value}'/></a></li>
+										<a href='<c:url value="${link.key}?patientId=${obj.patient.patientId}"/>'><spring:message code='${link.value}'/></a><br/>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
-						</ul>
 					</div>
 				</openmrs:hasPrivilege>
 			</openmrs:extensionPoint>
-					
+			<br/>		
 			<c:if test="${!empty mdrtbForms}">
 				<table class="widgetOut" style="font-size:80%;">
 						<tr nowrap><th nowrap style="background-color:white;"><spring:message code="mdrtb.availablemdrtbforms" /></th></tr>
@@ -77,8 +75,8 @@
 					</c:forEach>
 				</table>
 			</c:if>
-			<c:if test="${empty obj.htmlEncList}">
+			<!--<c:if test="${empty obj.htmlEncList}">
 				<span style="font-size:90%;">&nbsp;&nbsp;&nbsp;<i><spring:message code="mdrtb.none" /></i></span>
-			</c:if>
+			</c:if>-->
 </td></tr></table>
 			
