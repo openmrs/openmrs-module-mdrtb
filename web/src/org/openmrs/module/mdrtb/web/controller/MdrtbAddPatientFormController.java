@@ -36,7 +36,6 @@ import org.openmrs.PersonName;
 import org.openmrs.Program;
 import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
-import org.openmrs.Tribe;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
@@ -111,6 +110,25 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                   //String mdrtbIdentifierTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_identifier_type_list");
                   //PatientIdentifierType pit = Context.getPatientService().getPatientIdentifierTypeByName(mdrtbIdentifierTypeString);
                   //map.put("mdrPIdType", pit);
+                  
+                  
+                  User me = Context.getAuthenticatedUser();
+                  map.put("authenticatedUser", me);
+                  AdministrationService as = Context.getAdministrationService();
+                  PatientService ps = Context.getPatientService();
+                  String identifierTypes = as.getGlobalProperty(MdrtbConstants.MDRTB_PATIENT_IDENTIFIER_TYPES);
+                      List<PatientIdentifierType> idTypeList = new ArrayList<PatientIdentifierType>();
+                      for (StringTokenizer st = new StringTokenizer(identifierTypes, "|"); st.hasMoreTokens(); ) {
+                          String s = st.nextToken();
+                          PatientIdentifierType pit = ps.getPatientIdentifierTypeByName(s);
+                          if (pit != null)
+                              idTypeList.add(pit);
+                      }
+
+                  map.put("mdrtbIdentifierTypes", idTypeList);
+               
+                  
+                  
            }
         return map;
     }
@@ -148,6 +166,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 String[] types = request.getParameterValues("identifierType");
                 String[] locs = request.getParameterValues("location");
                 pref = request.getParameter("preferred");
+                
+                
                 if (pref == null)
                     pref = "";
                 
@@ -241,6 +261,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             
         }
             
+        
         return super.processFormSubmission(request, response, shortPatient, errors);
     }
 
@@ -288,6 +309,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                     }
                 }
             }
+            
             
             if (patient == null)
                 patient = new Patient();
@@ -671,7 +693,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
      */
     protected Object formBackingObject(HttpServletRequest request) throws ServletException {
-        
+        newIdentifiers = new HashSet<PatientIdentifier>();
+
         Patient p = null;
         Integer id = null;
         
@@ -726,29 +749,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
         
         return patient;
     }
-    
-    protected Map<String, Object> referenceData(HttpServletRequest request) throws Exception {
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-            User me = Context.getAuthenticatedUser();
-            map.put("authenticatedUser", me);
-            AdministrationService as = Context.getAdministrationService();
-            PatientService ps = Context.getPatientService();
-            String identifierTypes = as.getGlobalProperty(MdrtbConstants.MDRTB_PATIENT_IDENTIFIER_TYPES);
-                List<PatientIdentifierType> idTypeList = new ArrayList<PatientIdentifierType>();
-                for (StringTokenizer st = new StringTokenizer(identifierTypes, "|"); st.hasMoreTokens(); ) {
-                    String s = st.nextToken();
-                    PatientIdentifierType pit = ps.getPatientIdentifierType(s);
-                    if (pit != null)
-                        idTypeList.add(pit);
-                }
 
-            map.put("mdrtbIdentifierTypes", idTypeList);
-            map.put("test", identifierTypes);
-         
-            
-        return map;
-    } 
     
     
 
