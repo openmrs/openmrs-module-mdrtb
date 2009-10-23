@@ -27,4 +27,20 @@ public class Functions {
 		return c != null && c.contains(o);
 	}
 	
+	/**
+	 * Returns true if the passed array contains the passed object
+	 * @param c
+	 * @param o
+	 * @return
+	 */
+	public static boolean arrayContains(Object[] c, Object o) {
+		if (c != null) {
+			for (Object toCheck : c) {
+				if (toCheck.equals(o)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

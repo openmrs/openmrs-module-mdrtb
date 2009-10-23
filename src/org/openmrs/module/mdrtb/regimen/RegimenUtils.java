@@ -284,26 +284,30 @@ public class RegimenUtils {
             return false;
     }
     
-    public static String getRegimenAsString(Date regDate, Patient p, String sepparator, boolean includeDosages){
-        if (sepparator == null)
-            sepparator = "";
-        String ret = "";
-            Regimen r = getRegimenOnDate(p, regDate);
-            if (r != null && r.getComponents()!= null){
-                int total = r.getComponents().size();
-                int count = 1;
-                for (RegimenComponent rc : r.getComponents()){
-                    if (rc.getDrug() == null)
-                        ret += rc.getGeneric().getBestShortName(Context.getLocale());
-                    else
-                        ret += rc.getDrug().getName();
-                    if (includeDosages)
-                        ret += " (" + rc.getDrugOrder().getDose() + " " + rc.getDrugOrder().getUnits()+ " " + rc.getDrugOrder().getFrequency() + ")";
-                    if (count != total )
-                        ret += sepparator;
-                    count ++;
-                }
-            }   
+    public static String getRegimenAsString(Date regDate, Patient p, String separator, boolean includeDosages) {
+    	return getRegimenAsString(getRegimenOnDate(p, regDate), separator, includeDosages);
+    }
+    
+    public static String getRegimenAsString(Regimen r, String separator, boolean includeDosages) {
+    	if (separator == null) {
+    		separator = "";
+    	}
+		String ret = "";
+		if (r != null && r.getComponents()!= null){
+		    int total = r.getComponents().size();
+		    int count = 1;
+		    for (RegimenComponent rc : r.getComponents()){
+		        if (rc.getDrug() == null)
+		            ret += rc.getGeneric().getBestShortName(Context.getLocale());
+		        else
+		            ret += rc.getDrug().getName();
+		        if (includeDosages)
+		            ret += " (" + rc.getDrugOrder().getDose() + " " + rc.getDrugOrder().getUnits()+ " " + rc.getDrugOrder().getFrequency() + ")";
+		        if (count != total )
+		            ret += separator;
+		        count ++;
+		    }
+		}   
         return ret;
     }
     
