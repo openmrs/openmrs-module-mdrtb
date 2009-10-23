@@ -57,7 +57,7 @@ public class MdrtbActivator implements Activator, Runnable {
         MdrtbService ms = null;
         while (ms == null) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
                 try{
                     ms = Context.getService(MdrtbService.class);
                 } catch (APIException apiEx){}

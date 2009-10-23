@@ -345,6 +345,11 @@
 		<defaultValue>Unknown Location</defaultValue>
 		<description>The name of the Location that represents an Unknown Location</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.patientIdentifierLocationToPrefixList</property>
+		<defaultValue></defaultValue>
+		<description>Pipe delimited of location names and id prefix for Rwanda.  For example, "Kigali:K|Rwinkwavu:R</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>

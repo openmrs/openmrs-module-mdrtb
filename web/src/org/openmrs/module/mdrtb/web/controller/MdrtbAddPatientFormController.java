@@ -78,6 +78,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
     
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
+    private final Integer patLocation =  7;
             
     /** Parameters passed in view request object **/
     private String name = "";
@@ -212,7 +213,38 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                             
                             PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
                             pi.setPreferred(pref.equals(identifiers[i]+types[i]));
+                          
+                            //Add prefix for rwanda if global property is not null
+                            try {
+                                String prefixString = Context.getAdministrationService().getGlobalProperty("mdrtb.patientIdentifierLocationToPrefixList");
+              
+                                if (prefixString != null){
+                                    Map<String, String> prefMap = new HashMap<String,String>();
+                                    for (StringTokenizer st = new StringTokenizer(prefixString, "|"); st.hasMoreTokens(); ) {
+                                        String s = st.nextToken().trim();
+                                        String[] split = s.split(":");
+                                        if (split.length == 2){
+                                          String locationName = split[0];  
+                                          String code = split[1];
+                                              Location location = Context.getLocationService().getLocation(locationName);
+                                              if (location != null){
+                                                  prefMap.put(location.getLocationId().toString(),  code);
+                                              }
+                                          
+                                        }
+                                    }  
+                                    Person person = Context.getPersonService().getPerson(Context.getAuthenticatedUser().getUserId());
+                                    PersonAttribute pa = person.getAttribute(Context.getPersonService().getPersonAttributeType(patLocation));
+                                    if (pa != null)
+                                        pi.setIdentifier(prefMap.get(pa.getValue()) + pi.getIdentifier());
+                                }
+                            } catch (Exception ex){
+                                log.error(ex);
+                            }
                             newIdentifiers.add(pi);
+                            
+                            
+                            
                             
                             if (log.isDebugEnabled()) {
                                 log.debug("Creating patient identifier with identifier: " + identifiers[i]);
