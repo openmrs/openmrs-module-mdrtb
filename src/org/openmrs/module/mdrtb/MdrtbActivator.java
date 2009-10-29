@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 
 /**
@@ -30,14 +31,18 @@ import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
  */
 public class MdrtbActivator implements Activator, Runnable {
 
-	private Log log = LogFactory.getLog(this.getClass());
+    private Log log = LogFactory.getLog(this.getClass());
 
-	/**
+    /**
      * @see org.openmrs.module.Activator#startup()
      */
     public final void shutdown() {
         onShutdown();
     }
+    
+    
+    
+
 
     /**
      * @see org.openmrs.module.Activator#shutdown()
@@ -55,14 +60,17 @@ public class MdrtbActivator implements Activator, Runnable {
     public final void run() {
         // Wait for context refresh to finish
         MdrtbService ms = null;
+        try {
+        Thread.sleep(30000);
         while (ms == null) {
-            try {
-                Thread.sleep(5000);
+            
+                Thread.sleep(4000);
                 try{
                     ms = Context.getService(MdrtbService.class);
                 } catch (APIException apiEx){}
-            } catch (InterruptedException ex) {}
+            
         }
+        } catch (InterruptedException ex) {}
         
         try {
             // Start new OpenMRS session on this thread
@@ -126,5 +134,43 @@ public class MdrtbActivator implements Activator, Runnable {
     protected void onShutdown() {       
     }
 
-	
+    /**
+     * Called after module application context has been loaded. There is no authenticated
+     * user so all required privileges must be added as proxy privileges
+     */
+    public void load() {  
+        MdrtbService ms = Context.getService(MdrtbService.class);
+        MdrtbFactory mu = MdrtbFactory.getInstance();
+        ms.setMdrtbFactory(mu);
+        ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
+        List<Locale> locales = new ArrayList<Locale>();
+        List<List<Object>> rows = Context.getAdministrationService().executeSQL("select distinct locale from concept_word", true);
+        
+        //get all used locales in ConceptWord table
+        for (List<Object> row:rows){
+            for (Object o : row){
+                String oTmp = (String) o;
+                if (oTmp != null && oTmp != "")
+                    locales.add(new Locale(oTmp));
+            }
+        }
+        ms.setLocaleSetUsedInDB(locales);
+        
+        //TODO:  add Mdrtb standard regimens
+        
+        log.info("Finished loading mdrtb metadata.");
+    }
+   
+
+    /**
+     * Provides a convenient way of calling load() from another
+     * class, e.g. 
+     * <code>UsageStatsActivator.getInstance().load();</code>
+     * @return the instance of this activator created by OpenMRS
+     */
+    public static MdrtbActivator getInstance() {
+     return (MdrtbActivator) ModuleFactory.getModuleById("mdrtb").getActivator();
+    }
+
+    
 }
