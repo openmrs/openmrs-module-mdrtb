@@ -30,18 +30,16 @@
 			"bAutoWidth": true
 		});
 
-		$j(document).ready(function() { 
-			$j('#displayDetailsPopup').dialog({ 
-				title: 'dynamic', 
-				autoOpen: false, 
-				draggable: false, 
-				resizable: false, 
-				width: '95%', 
-				modal: true, 
-				open: function(a, b) { $j('#displayDetailsPopupLoading').show(); } 
-			});
-			$j("#displayDetailsPopupIframe").load(function() { $j('#displayDetailsPopupLoading').hide(); });
+		$j('#displayDetailsPopup').dialog({ 
+			title: 'dynamic', 
+			autoOpen: false, 
+			draggable: false, 
+			resizable: false, 
+			width: '95%', 
+			modal: true, 
+			open: function(a, b) { $j('#displayDetailsPopupLoading').show(); } 
 		});
+		$j("#displayDetailsPopupIframe").load(function() { $j('#displayDetailsPopupLoading').hide(); });
 		
 	});
 
