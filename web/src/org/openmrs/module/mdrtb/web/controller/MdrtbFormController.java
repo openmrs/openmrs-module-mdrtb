@@ -14,6 +14,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +26,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.birt.BirtReport;
-import org.openmrs.module.birt.BirtReportService;
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -59,31 +61,40 @@ public class MdrtbFormController extends SimpleFormController {
 
     
     @Override
+    @SuppressWarnings("unchecked")
 	protected Map<String, Object> referenceData(HttpServletRequest request, Object obj, Errors err) throws Exception {
         
         Map<String,Object> map = new HashMap<String,Object>();
         if (Context.isAuthenticated()){
             
-            try { 
-                BirtReportService reportService = (BirtReportService) Context.getService(BirtReportService.class);
-                String str = Context.getAdministrationService().getGlobalProperty("mdrtb.birt_report_list");
-                List<BirtReport> brList = new ArrayList<BirtReport>();
-                List<BirtReport> allReports = reportService.getReports();
-                for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens(); ) {
-                    String s = st.nextToken().trim();
-                    for (BirtReport br:allReports){       
-                        if (br.getName().equals(s))
-                        brList.add(br);
-                    }
-                }
-//                if (str.equals(""))
-//                    brList = reportService.getReports();
-                map.put("reports", brList); 
-            } catch (Exception ex){
-                log.error("Unable to setup birt reports in reference data in MdrtbFormController." + ex);
-                map.put("reports", new ArrayList<String>());
-            }
-            //if blank string was passed in:
+        	List brList = new ArrayList();
+        	if (ModuleFactory.getStartedModulesMap().containsKey("birt")) {
+	        	String str = Context.getAdministrationService().getGlobalProperty("mdrtb.birt_report_list");
+	        	if (StringUtils.isNotEmpty(str)) {
+		            try { 
+		            	Class birtServiceClass = OpenmrsClassLoader.getInstance().loadClass("org.openmrs.module.birt.BirtReportService");
+		            	Object reportService = Context.getService(birtServiceClass);
+		            	Method getReportsMethod = birtServiceClass.getDeclaredMethod("getReports");	            	
+		            	Class birtReportClass = OpenmrsClassLoader.getInstance().loadClass("org.openmrs.module.birt.BirtReport");
+		            	Method getNameMethod = birtReportClass.getDeclaredMethod("getName");
+	
+		            	List allReports = (List)getReportsMethod.invoke(reportService);
+		                for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens(); ) {
+		                    String s = st.nextToken().trim();
+		                    for (Object br : allReports) {
+		                    	Object name = getNameMethod.invoke(br);
+		                    	if (name.equals(s)) {
+		                    		brList.add(br);
+		                    	}
+		                    }
+		                }
+		            }
+		            catch (Exception ex){
+		                log.error("Unable to setup birt reports in reference data in MdrtbFormController.", ex);
+		            }
+		            map.put("reports", brList); 
+	        	}
+        	}
              
             String httpBase = request.getRequestURL().toString();
             String httpURI = request.getRequestURI();

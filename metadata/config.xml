@@ -13,10 +13,6 @@
 	<activator>@MODULE_PACKAGE@.MdrtbActivator</activator>
 		
 	<require_version>1.5.0</require_version>
-	
-	<require_modules>
-	   	<require_module>org.openmrs.module.birt</require_module>
-	</require_modules>
 		
 	<extension>
 		<point>org.openmrs.admin.list</point>

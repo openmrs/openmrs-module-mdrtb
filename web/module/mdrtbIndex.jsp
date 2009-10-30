@@ -124,7 +124,7 @@
 					
 				</c:forEach>
 				<c:if test="${fn:length(reports) == 0}">
-				<tr><td><i> &nbsp; <spring:message code="birt.noReports"/></i><br/></td></tr>
+				<tr><td><i> &nbsp; <spring:message code="mdrtb.noReports"/></i><br/></td></tr>
 				</c:if>
 					
 				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></td></tr>
