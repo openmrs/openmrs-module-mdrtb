@@ -48,7 +48,7 @@ public class MdrtbCohortUtil {
 			}	
 		}
 		
-		if (StringUtils.hasText(name) || StringUtils.hasText("identifier")) {
+		if (StringUtils.hasText(name) || StringUtils.hasText(identifier)) {
 			name = "".equals(name) ? null : name;
 			identifier = "".equals(identifier) ? null : identifier;
 			Cohort nameIdMatches = new Cohort(Context.getPatientService().getPatients(name, identifier, null, false));
