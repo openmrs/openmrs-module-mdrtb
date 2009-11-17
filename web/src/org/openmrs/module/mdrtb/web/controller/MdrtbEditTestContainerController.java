@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -802,12 +803,13 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         returnView = "DST";  
                 }
             if (saveTest){
-                
+                    //set uuids
+                    fixEnc(enc);    
                     es.saveEncounter(enc);
                     for (Encounter oldEnc: encsToDelete){
                         Context.getEncounterService().saveEncounter(oldEnc);
                         if (oldEnc.getAllObs() == null || oldEnc.getAllObs().size() == 0){
-                            Context.getEncounterService().voidEncounter(oldEnc, "no obs so worthless...");
+                            Context.getEncounterService().voidEncounter(oldEnc, "no obs...");
                         }
                     }
             }     
@@ -1543,5 +1545,28 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             return false;
         else 
             return true;
+    }
+    private static Encounter fixEnc(Encounter enc){
+        
+        if (enc.getAllObs() != null){
+            for (Obs o : enc.getAllObs()){
+                if (o.getUuid() == null)
+                    o.setUuid(UUID.randomUUID().toString());
+                if (o.hasGroupMembers()){
+                    for (Obs oTmp : o.getGroupMembers()){
+                        if (oTmp.getUuid() == null)
+                            oTmp.setUuid(UUID.randomUUID().toString());
+                        if (oTmp.hasGroupMembers()){
+                            for (Obs oInner : oTmp.getGroupMembers()){
+                                if (oInner.getUuid() == null)
+                                    oInner.setUuid(UUID.randomUUID().toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return enc;
     }
 }
