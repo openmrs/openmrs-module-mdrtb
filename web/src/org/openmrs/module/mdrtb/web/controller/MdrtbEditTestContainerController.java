@@ -217,7 +217,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         UserService us = Context.getUserService();
         boolean clean = false;
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
+        
         Integer numRowsShown = 1;
         String encString = "";
         encString = request.getParameter("encSelect");
@@ -243,6 +243,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 enc = Context.getEncounterService().getEncounter(encounterId);
             }
 
+            fixEnc(enc);
+            
             User defaultProvider = us.getUserByUsername(as
                     .getGlobalProperty("mdrtb.mdrtb_default_provider"));
             if (enc == null || enc.getEncounterId() == null){
@@ -262,8 +264,9 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 newProviderId = Integer.valueOf(providerIdString);
             } catch (Exception ex){}
         
+                
                 if (msa.getMessage("mdrtb.save").equals(action)) {
-                    
+                    MdrtbFactory mu = ms.getMdrtbFactory();
                     for (int i = 0; i < numRowsShown; i ++){
                         MdrtbSmearObj mso = new MdrtbSmearObj();
                         MdrtbCultureObj mco = new MdrtbCultureObj();
@@ -284,7 +287,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         
                         }
                         
-                     
+                        
                         //sputum collection date, a result,
                         if (mso.getSmearResult() != null && mso.getSmearResult().getValueCoded() != null 
                                 && mso.getSmearResult().getObsDatetime() != null){
@@ -765,7 +768,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             }
                         }
                     }
-              
+                    if (clean)
+                        mu.fixCultureConversions(patient);
                 } 
                 if (msa.getMessage("mdrtb.delete").equals(action)) {
                     Obs parentObs = null;
@@ -792,6 +796,10 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         Context.getObsService().voidObs(parentObs, "parent obs deleted");
                         saveTest = true;
                     }
+                    if (clean){
+                        MdrtbFactory mu = ms.getMdrtbFactory();
+                        mu.fixCultureConversions(patient);
+                    } 
                     
                 }
                 if (msa.getMessage("mdrtb.cancel").equals(action)) {
@@ -802,22 +810,19 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     if (retType.equals("dsts"))
                         returnView = "DST";  
                 }
-            if (saveTest){
-                    //set uuids
-                    fixEnc(enc);    
-                    es.saveEncounter(enc);
-                    for (Encounter oldEnc: encsToDelete){
-                        Context.getEncounterService().saveEncounter(oldEnc);
-                        if (oldEnc.getAllObs() == null || oldEnc.getAllObs().size() == 0){
-                            Context.getEncounterService().voidEncounter(oldEnc, "no obs...");
+                if (saveTest){
+                        //set uuids
+                        fixEnc(enc);    
+                        es.saveEncounter(enc);
+                        for (Encounter oldEnc: encsToDelete){
+                            Context.getEncounterService().saveEncounter(oldEnc);
+                            if (oldEnc.getAllObs() == null || oldEnc.getAllObs().size() == 0){
+                                Context.getEncounterService().voidEncounter(oldEnc, "no obs...");
+                            }
                         }
-                    }
-            }     
-            //cleanup culture conversion obs
-            if (clean)
-                mu.fixCultureConversions(patient);
-            
-        mu = null;   
+                }     
+                //cleanup culture conversion obs
+                 
         RedirectView rv = new RedirectView(getSuccessView());
         rv.addStaticAttribute("patientId", patient.getPatientId());
         rv.addStaticAttribute("view", returnView);
@@ -836,7 +841,6 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             String obsGroupId = request.getParameter("ObsGroupId");
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
             Obs parentObs = new Obs();
-            ConceptService cs = Context.getConceptService();
             User user = Context.getAuthenticatedUser();
             try {
                 parentObs = Context.getObsService().getObs(Integer.valueOf(obsGroupId));
@@ -1552,14 +1556,20 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             for (Obs o : enc.getAllObs()){
                 if (o.getUuid() == null)
                     o.setUuid(UUID.randomUUID().toString());
+                if (o.getLocation() == null)
+                    o.setLocation(enc.getLocation());
                 if (o.hasGroupMembers()){
                     for (Obs oTmp : o.getGroupMembers()){
                         if (oTmp.getUuid() == null)
                             oTmp.setUuid(UUID.randomUUID().toString());
+                        if (oTmp.getLocation() == null)
+                            oTmp.setLocation(enc.getLocation());
                         if (oTmp.hasGroupMembers()){
                             for (Obs oInner : oTmp.getGroupMembers()){
                                 if (oInner.getUuid() == null)
                                     oInner.setUuid(UUID.randomUUID().toString());
+                                if (oInner.getLocation() == null)
+                                    oInner.setLocation(enc.getLocation());
                             }
                         }
                     }
