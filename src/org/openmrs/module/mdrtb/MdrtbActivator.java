@@ -83,7 +83,7 @@ public class MdrtbActivator implements Activator, Runnable {
             Context.addProxyPrivilege("SQL Level Access");
             onLoad(ms);
         } catch (Exception ex) {
-            throw new RuntimeException("Could not pre-load concepts" + ex);
+            throw new RuntimeException("Could not pre-load concepts" + ex, ex);
         } finally {
             Context.removeProxyPrivilege("SQL Level Access");
             Context.removeProxyPrivilege("View Concept Classes");
