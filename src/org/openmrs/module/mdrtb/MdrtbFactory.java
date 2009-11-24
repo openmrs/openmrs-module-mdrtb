@@ -1,8 +1,6 @@
 package org.openmrs.module.mdrtb;
 
 import java.io.InputStream;
-import java.net.URL;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -16,12 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -46,6 +38,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -53,8 +46,6 @@ import org.w3c.dom.NodeList;
 
 
 public final class MdrtbFactory {
-    
-    private static MdrtbFactory instance = null;
 
     protected final Log log = LogFactory.getLog(getClass());
     
@@ -271,69 +262,18 @@ public final class MdrtbFactory {
         return uniqueInstance;
     }
     
-    private void readXML(){ 
-       
-        String httpBase = "http://localhost";
-        String portNum = Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port");
-        String appName = Context.getAdministrationService().getGlobalProperty("mdrtb.applicationName");
-        if (portNum != null && portNum.trim().length() > 0){
-            if (portNum.contains(":"))
-                httpBase += portNum.trim();
-            else
-                httpBase = httpBase + ":" + portNum.trim();
-        }    
-        String XMLlocation = httpBase + "/" + appName + "/moduleResources/mdrtb/mdrtbConcepts.xml";
-        
-                try { 
-                    
-                    Document doc = null;
-                    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder db = dbf.newDocumentBuilder();
-                    
-                    try {
-                        URL xmlURL = new URL(XMLlocation);
-                        InputStream in = xmlURL.openStream();
-                        doc = db.parse(in);
-                        in.close();
-                    } catch (Exception ex){
-                                if (!XMLlocation.contains("https")){
-                                    XMLlocation = XMLlocation.replace("http", "https");
-                                    XMLlocation = XMLlocation.replace("8080", "8443");
-                                }
-                                
-                                TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {  
-                                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
-                                            return null;  
-                                        }  
-                                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  
-                                        }  
-                                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  
-                                        }  
-                                    }  
-                                };  
-                      
-                            // Install the all-trusting trust manager  
-                            SSLContext sc = SSLContext.getInstance("SSL");  
-                            sc.init(null, trustAllCerts, new java.security.SecureRandom());  
-                            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());  
-                              
-                            // Create all-trusting host name verifier  
-                            HostnameVerifier allHostsValid = new HostnameVerifier() {  
-                                public boolean verify(String hostname, SSLSession session) {  
-                                    return true;  
-                                }  
-                            };  
-                              
-                            // Install the all-trusting host verifier  
-                            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid); 
-                            URL xmlURL = new URL(XMLlocation);
-                            InputStream in = xmlURL.openStream();
-                            doc = db.parse(in);
-                            in.close();
-                    }
-                    doc.getDocumentElement().normalize();
-                    Element concepts = doc.getDocumentElement();
-
+    private void readXML(){
+    
+        try { 
+	        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbConcepts.xml");
+	        Document doc = db.parse(in);
+	        in.close();
+	        log.warn("Loaded MDR Concepts from xml...");
+	        doc.getDocumentElement().normalize();
+	        Element concepts = doc.getDocumentElement();
+	        
             NodeList nodeList = concepts.getElementsByTagName("STR_TB_SMEAR_RESULT");
             Node node = nodeList.item(0);
             this.STR_TB_SMEAR_RESULT= node.getFirstChild().getNodeValue();  
@@ -2724,41 +2664,6 @@ public final class MdrtbFactory {
               }    
             
       }
-      
-      public static Document getDocumentWithSSL(String xmlLocation, DocumentBuilder db) throws Exception {
-          xmlLocation = xmlLocation.replace("http", "https");
-          xmlLocation = xmlLocation.replace("8080", "8443");
-          TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {  
-              public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
-                  return null;  
-              }  
-              public void checkClientTrusted(X509Certificate[] certs, String authType) {  
-              }  
-              public void checkServerTrusted(X509Certificate[] certs, String authType) {  
-              }  
-          }  
-          };  
-    
-          // Install the all-trusting trust manager  
-          SSLContext sc = SSLContext.getInstance("SSL");  
-          sc.init(null, trustAllCerts, new java.security.SecureRandom());  
-          HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());  
-            
-          // Create all-trusting host name verifier  
-          HostnameVerifier allHostsValid = new HostnameVerifier() {  
-              public boolean verify(String hostname, SSLSession session) {  
-                  return true;  
-              }  
-          };  
-            
-          // Install the all-trusting host verifier  
-          HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid); 
-          URL xmlURL = new URL(xmlLocation);
-          InputStream in = xmlURL.openStream();
-          Document doc = db.parse(in);
-          in.close();
-          return doc;
-         }
       
       public Concept getMDRTBConceptByKey(String key, Locale loc, Map<String, Concept> xmlConceptList){
           try {
