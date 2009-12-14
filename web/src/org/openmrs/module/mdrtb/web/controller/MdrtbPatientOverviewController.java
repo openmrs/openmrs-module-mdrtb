@@ -1824,9 +1824,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                        
                        if (o.getConcept().equals(hivStatus) && (mp.getHivStatus() == null || mp.getHivStatus().getObsDatetime().before(o.getObsDatetime())))
                            mp.setHivStatus(o);
-                       if (o.getConcept().getConceptId() == cd4.getConceptId() && (mp.getCd4() == null || mp.getCd4().getObsDatetime().before(o.getObsDatetime())))
+                       if (o.getConcept().getConceptId().intValue() == cd4.getConceptId().intValue() && (mp.getCd4() == null || mp.getCd4().getObsDatetime().before(o.getObsDatetime())))
                            mp.setCd4(o);
-                       if (o.getConcept().getConceptId() == cd4percent.getConceptId() && (mp.getCd4percent() == null || mp.getCd4percent().getObsDatetime().before(o.getObsDatetime())))
+                       if (o.getConcept().getConceptId().intValue() == cd4percent.getConceptId().intValue() && (mp.getCd4percent() == null || mp.getCd4percent().getObsDatetime().before(o.getObsDatetime())))
                            mp.setCd4percent(o);
                       
                        

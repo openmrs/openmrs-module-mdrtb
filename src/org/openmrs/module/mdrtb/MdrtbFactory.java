@@ -690,7 +690,7 @@ public final class MdrtbFactory {
                 xmlConceptList.put(cm.getSourceCode(), c);
             }
             
-            //generate the necessary concept_maps:
+            //generate the necessary concept_maps:  (missing uuids if 1.5...)
 //            for (ConceptName cn : xmlConceptList){
 //                System.out.println("insert into concept_map (source, source_code, comment, creator, date_created, concept_id) values (\"org.openmrs.module.mdrtb\", \"" + cn.getName() + "\", \"\", " + Context.getAuthenticatedUser().getUserId() + ", current_timestamp(), " + cn.getConcept().getConceptId() +");");
 //            }

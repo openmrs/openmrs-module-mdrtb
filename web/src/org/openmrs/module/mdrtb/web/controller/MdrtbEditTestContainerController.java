@@ -866,83 +866,85 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 Set<MdrtbDSTResultObj> alreadyShownResults = new HashSet<MdrtbDSTResultObj>();
                 
                 for (Obs o : levelTwoObs){
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES_IN_CONTROL())&& !o.getVoided())
-                        mdo.setColoniesInControl(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DIRECT_INDIRECT())&& !o.getVoided())
-                        mdo.setDirectOrIndirect(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_COMPLETE())&& !o.getVoided())
-                        mdo.setDrugSensitivityTestComplete(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DATE_RECEIVED())&& !o.getVoided())
-                        mdo.setDstDateReceived(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_METHOD())&& !o.getVoided())
-                        mdo.setDstMethod(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_RESULT_DATE())&& !o.getVoided())
-                        mdo.setDstResultsDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_START_DATE())&& !o.getVoided())
-                        mdo.setDstStartDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE()) && !o.getVoided())
-                        mdo.setSource(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_SPUTUM_COLLECTION_DATE()) && !o.getVoided())
-                        mdo.setSputumCollectionDate(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM()) && !o.getVoided())
-                        mdo.setTypeOfOrganism(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED()) && !o.getVoided())
-                        mdo.setTypeOfOrganismNonCoded(o);
-                    if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_RESULT_PARENT()) && !o.getVoided()){
-                       
-                       
-                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
-                        
+                    if (!o.isVoided()){
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES_IN_CONTROL())&& !o.getVoided())
+                            mdo.setColoniesInControl(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DIRECT_INDIRECT())&& !o.getVoided())
+                            mdo.setDirectOrIndirect(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_COMPLETE())&& !o.getVoided())
+                            mdo.setDrugSensitivityTestComplete(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DATE_RECEIVED())&& !o.getVoided())
+                            mdo.setDstDateReceived(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_METHOD())&& !o.getVoided())
+                            mdo.setDstMethod(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_RESULT_DATE())&& !o.getVoided())
+                            mdo.setDstResultsDate(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_START_DATE())&& !o.getVoided())
+                            mdo.setDstStartDate(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE()) && !o.getVoided())
+                            mdo.setSource(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_SPUTUM_COLLECTION_DATE()) && !o.getVoided())
+                            mdo.setSputumCollectionDate(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM()) && !o.getVoided())
+                            mdo.setTypeOfOrganism(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED()) && !o.getVoided())
+                            mdo.setTypeOfOrganismNonCoded(o);
+                        if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_RESULT_PARENT()) && !o.getVoided()){
+                           
+                           
+                            MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
                             
-                        Set<Obs> thirdLevelObs = o.getGroupMembers();
-                        
-                        for (Obs oInner : thirdLevelObs){
+                                
+                            Set<Obs> thirdLevelObs = o.getGroupMembers();
                             
-                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES())&& !o.getVoided())
-                                mdro.setColonies(oInner);
-                            if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CONCENTRATION())&& !o.getVoided())
-                                mdro.setConcentration(oInner);
-                            
-                            //if in concept list, add obs 
-                            for (Concept drugConcept : drugConceptList){
-                                if (oInner.getValueCoded() != null && drugConcept.getConceptId().intValue() == oInner.getValueCoded().getConceptId().intValue()){
-                                    mdro.setDrug(oInner);
-                                    break;
-                                }
+                            for (Obs oInner : thirdLevelObs){
+                                if (!oInner.isVoided()){
+                                    if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES())&& !o.getVoided())
+                                        mdro.setColonies(oInner);
+                                    if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CONCENTRATION())&& !o.getVoided())
+                                        mdro.setConcentration(oInner);
+                                    
+                                    //if in concept list, add obs 
+                                    for (Concept drugConcept : drugConceptList){
+                                        if (oInner.getValueCoded() != null && drugConcept.getConceptId().intValue() == oInner.getValueCoded().getConceptId().intValue()){
+                                            mdro.setDrug(oInner);
+                                            break;
+                                        }
+                                    }
+                                }     
                             }
-                                  
-                        }
-                        
-                        if (mdro.getColonies() == null){
-                            Obs colonies = new Obs();
-                            colonies.setConcept( mu.getConceptColonies()); 
-                            colonies.setVoided(false);
-                            colonies.setDateCreated(new Date());
-                            colonies.setPerson(patient);
-                            colonies.setCreator(user);
-                            colonies.setEncounter(enc);
-                            colonies.setObsDatetime(parentObs.getObsDatetime());
-                            mdro.setColonies(colonies);
-                        }
-                        if (mdro.getConcentration() == null){
-                            Obs conc = new Obs();
-                            conc.setConcept(  mu.getConceptConcentration()); 
-                            conc.setVoided(false);
-                            conc.setDateCreated(new Date());
-                            conc.setPerson(patient);
-                            conc.setCreator(user);
-                            conc.setEncounter(enc);
-                            conc.setObsDatetime(parentObs.getObsDatetime());
-                            mdro.setConcentration(conc);
-                        }
-                        
-                        if (mdro.getDrug() != null && !alreadyShownResults.contains(mdro)){
-                            mdro.setDstResultParentObs(o);
-                            mdo.getDstResults().add(mdro);
-                            alreadyShownResults.add(mdro);
-                        }  else {
-                            log.error("HERE's a dst parent with some children but no attached drug obs:" + o.getObsId());
-                        }
+                            
+                            if (mdro.getColonies() == null){
+                                Obs colonies = new Obs();
+                                colonies.setConcept( mu.getConceptColonies()); 
+                                colonies.setVoided(false);
+                                colonies.setDateCreated(new Date());
+                                colonies.setPerson(patient);
+                                colonies.setCreator(user);
+                                colonies.setEncounter(enc);
+                                colonies.setObsDatetime(parentObs.getObsDatetime());
+                                mdro.setColonies(colonies);
+                            }
+                            if (mdro.getConcentration() == null){
+                                Obs conc = new Obs();
+                                conc.setConcept(  mu.getConceptConcentration()); 
+                                conc.setVoided(false);
+                                conc.setDateCreated(new Date());
+                                conc.setPerson(patient);
+                                conc.setCreator(user);
+                                conc.setEncounter(enc);
+                                conc.setObsDatetime(parentObs.getObsDatetime());
+                                mdro.setConcentration(conc);
+                            }
+                            
+                            if (mdro.getDrug() != null && !alreadyShownResults.contains(mdro)){
+                                mdro.setDstResultParentObs(o);
+                                mdo.getDstResults().add(mdro);
+                                alreadyShownResults.add(mdro);
+                            }  else {
+                                log.error("HERE's a dst parent with some children but no attached drug obs:" + o.getObsId());
+                            }
+                        }        
                     }    
                 }
                 if (mdo.getColoniesInControl().getObsId() == null){
