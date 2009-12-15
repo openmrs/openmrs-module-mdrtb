@@ -772,28 +772,31 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         mu.fixCultureConversions(patient);
                 } 
                 if (msa.getMessage("mdrtb.delete").equals(action)) {
-                    Obs parentObs = null;
+                    Integer parentObsId = null;
                     if (retType.equals("smears")){
                         MdrtbSmearObj mso = mnto.getSmears().get(0);
-                        parentObs = mso.getSmearParentObs();
+                        parentObsId = mso.getSmearParentObs().getObsId();
+                        
                         returnView = "BAC";
                     }    
                     if (retType.equals("cultures")){
                         MdrtbCultureObj mco = mnto.getCultures().get(0);
-                        parentObs = mco.getCultureParentObs();
+                        parentObsId = mco.getCultureParentObs().getObsId();
                         returnView = "BAC";
                         clean = true;
                     }
                     if (retType.equals("dsts")){
                         MdrtbDSTObj dst = mnto.getDsts().get(0);
-                        parentObs = dst.getDstParentObs();
+                        parentObsId = dst.getDstParentObs().getObsId();
                         returnView = "DST";
                     }    
-                    if (parentObs != null && parentObs.getObsId() != null && parentObs.isObsGrouping()){
-                        Integer parentObsId = parentObs.getObsId();
-                        Context.evictFromSession(parentObs);
-                        parentObs = Context.getObsService().getObs(parentObsId);
-                        Context.getObsService().voidObs(parentObs, "parent obs deleted");
+                    if (parentObsId  != null){
+                        //TODO:  one of the mnto actions isn't necessary..., test and clean
+                        Context.evictFromSession(mnto);
+                        Context.evictFromSession(object);
+                        mnto = null;
+                        Obs parentObs = Context.getObsService().getObs(parentObsId);
+                        Context.getObsService().voidObs(parentObs, "mdrtb");
                         saveTest = true;
                     }
                     if (clean){

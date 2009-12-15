@@ -169,7 +169,7 @@
 </div>
 <form method="post"> 
 <c:set var="rowCount" scope="page" value="0" />
-<div id="content" style="font-size:68%">
+<div id="content" style="font-size:80%">
 
 			<br>
 	<table class="portletTable">
