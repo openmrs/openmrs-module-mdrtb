@@ -129,7 +129,20 @@
 						
 						<tr><th colspan="2">
 							<br/><mdrtb:concept concept="${record.concept}" nameVar="n" mappingVar="m">
-								<spring:message code="mdrtb.patientstatusworkflow.${m}"/>
+								<c:choose>
+									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME'}">
+										<spring:message code="mdrtb.patientstatusworkflow.outcome"/>
+									</c:when>
+									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS CULTURE STATUS'}">
+										<spring:message code="mdrtb.patientstatusworkflow.cultureStatus"/>
+									</c:when>
+									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS PATIENT STATUS'}">
+										<spring:message code="mdrtb.patientstatusworkflow.patientStatus"/>
+									</c:when>
+									<c:otherwise>
+										${n.name}
+									</c:otherwise>
+								</c:choose>
 							</mdrtb:concept>
 						</th></tr>
 						
