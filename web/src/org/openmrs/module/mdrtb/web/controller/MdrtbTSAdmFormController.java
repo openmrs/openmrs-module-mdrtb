@@ -1,9 +1,12 @@
 package org.openmrs.module.mdrtb.web.controller;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.Obs;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
@@ -43,6 +48,8 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
 
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
+    private final static String TREATMENT_SUPPORTER_ACTIVE = "TREATMENT SUPPORTER IS CURRENTLY ACTIVE";
+    private final static String YES = "YES";
 
     @Override
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -83,6 +90,19 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                     + msa.getMessage("mdrtb.september")+ "','"+ msa.getMessage("mdrtb.october")+ "','"+ msa.getMessage("mdrtb.november")+ "','"+ msa.getMessage("mdrtb.december")+ "','"+ msa.getMessage("mdrtb.jan")+ "','"+ msa.getMessage("mdrtb.feb")+ "','"+ msa.getMessage("mdrtb.mar")+ "','"+ msa.getMessage("mdrtb.ap")+ "','"+ msa.getMessage("mdrtb.may")+ "','"
                     + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
             
+            //get the potential answers for the TS Activity concept and make them available to the JSP 
+            ConceptService cs = Context.getConceptService();
+            Concept tsActivityConcept = cs.getConceptByName("TREATMENT SUPPORTER IS CURRENTLY ACTIVE");
+            List<Concept> activityAnswers = new ArrayList<Concept>();
+            if (tsActivityConcept == null)
+                    throw new RuntimeException("Could not find concept for treatment supporter activity");
+            Collection<ConceptAnswer> cons = tsActivityConcept.getAnswers(false);
+            for (ConceptAnswer c : cons){
+            	activityAnswers.add(c.getAnswerConcept());
+            }
+            if (activityAnswers == null || activityAnswers.size() == 0)
+                    log.warn("No concept answers found for treatment supporter activity.");
+            map.put("activityAnswers", activityAnswers);
         }
         return map ;
     }
@@ -99,6 +119,7 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                 MdrtbTreatmentSupporter mts = (MdrtbTreatmentSupporter) object;
                 Person p = mts.getPerson();
                 List<Obs> o = mts.getPhoneNumbers();
+                Obs activeObs = mts.getActive();
                 
                 if (p.getPersonCreator() == null)
                     p.setPersonCreator(Context.getAuthenticatedUser());
@@ -156,6 +177,12 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                         ob.setPerson(p);
                         os.saveObs(ob, "updating treatment supporter phone number");
                     }
+                    
+                    //update the TS activity
+                    activeObs.setPerson(p);
+                    activeObs.setObsDatetime(new Date());
+                    os.saveObs(activeObs, "updating treatment supporter activity status");
+                    
                 }
                 
             }
@@ -178,6 +205,11 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
            MdrtbFactory mu = ms.getMdrtbFactory();
            Concept phoneConcept = mu.getConceptPhoneNumber();
+           ConceptService cs = Context.getConceptService();
+           
+           //get the concept for TS Activity
+           Concept tsActivityConcept = cs.getConceptByName(TREATMENT_SUPPORTER_ACTIVE);
+          
            ObsService os = Context.getObsService();
            String personId = request.getParameter("personId");
            if (personId != null && !personId.equals("")){
@@ -191,6 +223,17 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                    if (!o.getVoided())
                        p.addPhoneObs(o);
                }
+               
+               //set the TS Activity if it has been assigned
+               List<Obs> oActivity = os.getObservationsByPersonAndConcept(pers, tsActivityConcept);
+               if(oActivity.size()==1) {
+            	   Obs o = oActivity.get(0);
+            	   if(!o.getVoided()) {
+            		   p.setActive(oActivity.get(0));
+            	   }
+            	   
+               }
+              
                
                } catch (Exception ex){
                    log.error("Failed to load person.", ex);
@@ -206,6 +249,20 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                if (o.getLocation() == null)
                    o.setLocation(Context.getLocationService().getLocation("Unknown Location"));
                p.addPhoneObs(o);
+           }
+           
+           //if not assigned, set to YES by default
+           if(p.getActive() == null) {
+        	   Obs o = new Obs();
+        	   o.setConcept(tsActivityConcept);
+        	   o.setCreator(Context.getAuthenticatedUser());
+        	   o.setDateCreated(new Date());
+        	   o.setVoided(false);
+        	   if(o.getLocation()==null)
+        		   o.setLocation(Context.getLocationService().getLocation("Unknown Location"));
+        	   Concept yesConcept = cs.getConceptByName(YES);
+        	   o.setValueCoded(yesConcept);
+        	   p.setActive(o);
            }
            mu = null;
            return p;

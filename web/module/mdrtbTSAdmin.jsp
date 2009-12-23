@@ -16,6 +16,7 @@
 <br>
 
 <c:if test="${!empty listObj}">
+
 	<!-- givenName, familyName, gender, cityVillage, DOB, phone -->
 	<a href="mdrtbTSAdmin.form?personId="><spring:message code="mdrtb.createatreatmentsupporter" /></a><br>
 	<br>
@@ -29,6 +30,7 @@
 			<th><spring:message code="mdrtb.healthcentervillageofsupporterTS" /></th>
 			<th><spring:message code="mdrtb.treatmentsupporterbirthdateTS" /></th>
 			<th><spring:message code="mdrtb.phone" /></th>
+			<th><spring:message code="mdrtb.tsActive" /></th>
 		</tr>
 		<c:set var="itemCount" scope="page" value="0"/>
 		<c:forEach items="${listObj}" var="ts" varStatus="varStatus">
@@ -44,6 +46,7 @@
 				<td><c:if test="${!empty ts.person.addresses}"><c:set var="stopad" scope="page" value="0" /><c:forEach items="${ts.person.addresses}" var="address" varStatus="varStatusAd"><c:if test="${stopad==0}">${address.cityVillage}</c:if><c:set var="stopad" scope="page" value="1" /></c:forEach></c:if></td>
 				<td><openmrs:formatDate date="${ts.person.birthdate}" format="${dateFormat}" /></td>
 				<td><c:forEach items="${ts.phoneNumbers}" var="phone" varStatus="varPH">${phone.valueText}<c:if test="${!varPH.last}">,<br></c:if></c:forEach></td>
+				<td>${ts.active.valueCoded.name.name}</td>
 			</tr>	
 		</c:forEach>
 	</table><br>
@@ -52,6 +55,7 @@
 	</form>
 </c:if>
 <c:if test="${!empty formObj}">
+
 	<form method="post">
 	<table class="portletTable">
 		<tr>
@@ -136,6 +140,24 @@
 				</spring:bind>
 			</td>
 		</tr>
+		<tr>
+			<td><spring:message code="mdrtb.active" /></td>
+			<td>
+				<spring:bind path="formObj.active.valueCoded">
+					<select name="${status.expression}" id="active">
+							
+							<c:forEach items="${activityAnswers}" var="answer">
+								<option value="${answer}" 
+									<c:if test="${answer == status.value || answer.name.name == 'YES'}">
+										SELECTED
+									</c:if>
+								>${answer.name.name}</option>
+							</c:forEach>
+					</select>
+				</spring:bind>
+			</td>
+		</tr>
+		
 	</table><span style="color:black">* = <spring:message code="mdrtb.required" /></span><br><br>
 	<input type="submit" name="submit" value="<spring:message code="mdrtb.save" />">&nbsp;&nbsp;
 	<input type="submit" name="submit" value="<spring:message code="mdrtb.cancel" />">
@@ -159,6 +181,7 @@
 			<th><spring:message code="mdrtb.healthcentervillageofsupporterTS" /></th>
 			<th><spring:message code="mdrtb.treatmentsupporterbirthdateTS" /></th>
 			<th><spring:message code="mdrtb.phone" /></th>
+			<th><spring:message code="mdrtb.tsActive" /></th>
 		</tr>
 		<c:set var="itemCount" scope="page" value="0"/>
 		<c:if test="${itemCount == 0}">

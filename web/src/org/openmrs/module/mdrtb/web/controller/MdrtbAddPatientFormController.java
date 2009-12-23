@@ -209,7 +209,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                                 errors.reject(msg);
                             }
                             else
-                                loc = es.getLocation(Integer.valueOf(locs[i]));
+                                loc = Context.getLocationService().getLocation(Integer.valueOf(locs[i]));
+                            
                             
                             PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
                             pi.setPreferred(pref.equals(identifiers[i]+types[i]));
@@ -246,6 +247,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                             } catch (Exception ex){
                                 log.error(ex);
                             }
+                            if (pi.getIdentifier() != null && !pi.getIdentifier().equals("") && pi.getLocation() != null)
                             newIdentifiers.add(pi);
                             
                             
@@ -297,7 +299,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             }
             
         }
-            
         
         return super.processFormSubmission(request, response, shortPatient, errors);
     }
