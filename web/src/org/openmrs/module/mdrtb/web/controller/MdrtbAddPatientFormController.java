@@ -235,8 +235,13 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                                     }  
                                     Person person = Context.getPersonService().getPerson(Context.getAuthenticatedUser().getUserId());
                                     PersonAttribute pa = person.getAttribute(Context.getPersonService().getPersonAttributeType(patLocation));
-                                    if (pa != null)
-                                        pi.setIdentifier(prefMap.get(pa.getValue()) + pi.getIdentifier());
+                                    
+                                    String prefix = prefMap.get(pa.getValue());
+                                    if (prefix != null && !prefix.equals("null") && pa != null){
+                                            pi.setIdentifier(prefix + pi.getIdentifier());
+                                    } else  if (pa != null) {
+                                            pi.setIdentifier(pi.getIdentifier());
+                                    }
                                 }
                             } catch (Exception ex){
                                 log.error(ex);
