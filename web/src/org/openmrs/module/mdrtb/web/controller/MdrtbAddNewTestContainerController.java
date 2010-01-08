@@ -596,8 +596,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             if (mdrTest){
                 MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
                 MdrtbFactory mu = ms.getMdrtbFactory();
-                mu.fixCultureConversions(patient);
-                mu = null;
+                MdrtbUtil.fixCultureConversions(patient, mu);
             }
            
         }// patientId

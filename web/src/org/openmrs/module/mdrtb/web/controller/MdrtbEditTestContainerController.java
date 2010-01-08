@@ -721,7 +721,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                     
                                     Obs drug = res.getDrug();
                                     if (drug.getObsId() != null){
-                                        Integer tmp = drug.getObsId();
+                                        //Integer tmp = drug.getObsId();
                                         //HERE
                                         //TODO: ooof. the following 5 lines suck:  we need to use sessions.getCurrentSession.evict(drug) to get at the saved value
 //                                        Concept concept  =    MdrtbUtil.getMDRTBConceptByName("UNKNOWN", new Locale("en"));
@@ -769,7 +769,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         }
                     }
                     if (clean)
-                        mu.fixCultureConversions(patient);
+                        MdrtbUtil.fixCultureConversions(patient, mu);
                 } 
                 if (msa.getMessage("mdrtb.delete").equals(action)) {
                     Integer parentObsId = null;
@@ -801,7 +801,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     }
                     if (clean){
                         MdrtbFactory mu = ms.getMdrtbFactory();
-                        mu.fixCultureConversions(patient);
+                        MdrtbUtil.fixCultureConversions(patient, mu);
                     } 
                     
                 }

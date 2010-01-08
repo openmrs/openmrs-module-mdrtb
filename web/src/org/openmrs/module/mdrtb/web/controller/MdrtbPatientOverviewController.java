@@ -1577,7 +1577,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         
                             
                             //cleanup
-                            mu.fixCultureConversions(mp.getPatient());
+                            MdrtbUtil.fixCultureConversions(mp.getPatient(), mu);
 
                 }           
                 view = "STATUS";
