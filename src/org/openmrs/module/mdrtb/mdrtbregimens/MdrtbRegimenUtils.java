@@ -182,15 +182,17 @@ public class MdrtbRegimenUtils {
     
     //TODO:  replace with ExtendedDrugOrder
     public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, Integer regTypeInt, Patient p, Date effectiveDate){
-           Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
+         
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
+           Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(mu); 
            
            ObsService os = Context.getObsService();
            
            
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
                if (regTypeInt != null) {
-                   MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                   MdrtbFactory mu = ms.getMdrtbFactory();
+                   
                    Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
                    List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
                    boolean needNewObs = true;

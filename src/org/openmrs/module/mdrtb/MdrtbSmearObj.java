@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -39,24 +40,28 @@ public class MdrtbSmearObj {
         this.smearResult.setDateCreated(new Date());
         this.smearResult.setPerson(patient);
         this.smearResult.setCreator(user);
+        this.smearResult.setUuid(UUID.randomUUID().toString());
         
         this.source.setConcept(mu.getConceptSampleSource() ); 
         this.source.setVoided(false);
         this.source.setDateCreated(new Date());
         this.source.setPerson(patient);
         this.source.setCreator(user);
+        this.source.setUuid(UUID.randomUUID().toString());
         
         this.bacilli.setConcept(mu.getConceptBacilli()); 
         this.bacilli.setVoided(false);
         this.bacilli.setDateCreated(new Date());
         this.bacilli.setPerson(patient);
         this.bacilli.setCreator(user);
+        this.bacilli.setUuid(UUID.randomUUID().toString());
 
         this.smearResultDate.setConcept(mu.getConceptResultDate()); 
         this.smearResultDate.setVoided(false);
         this.smearResultDate.setDateCreated(new Date());
         this.smearResultDate.setPerson(patient);
         this.smearResultDate.setCreator(user);
+        this.smearResultDate.setUuid(UUID.randomUUID().toString());
         
         //STR_DATE_RECEIVED
         this.smearDateReceived.setConcept(mu.getConceptDateReceived());
@@ -64,6 +69,7 @@ public class MdrtbSmearObj {
         this.smearDateReceived.setDateCreated(new Date());
         this.smearDateReceived.setPerson(patient);
         this.smearDateReceived.setCreator(user);
+        this.smearDateReceived.setUuid(UUID.randomUUID().toString());
         
         //STR_TB_SMEAR_MICROSCOPY_METHOD
         this.smearMethod.setConcept(mu.getConceptSmearMicroscopyMethod());
@@ -71,13 +77,15 @@ public class MdrtbSmearObj {
         this.smearMethod.setDateCreated(new Date());
         this.smearMethod.setPerson(patient);
         this.smearMethod.setCreator(user);
+        this.smearMethod.setUuid(UUID.randomUUID().toString());
+        
+        
         this.smearParentObs.setVoided(false);
         this.smearParentObs.setDateCreated(new Date());
-    
-        //STR_SMEAR_PARENT
         this.smearParentObs.setConcept(mu.getConceptSmearParent());
         this.smearParentObs.setPerson(patient);
         this.smearParentObs.setCreator(user);
+        this.smearParentObs.setUuid(UUID.randomUUID().toString());
     }
     
     public void setSmearParentObs(Obs o){

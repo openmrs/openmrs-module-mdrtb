@@ -148,8 +148,8 @@ public class MdrtbTSAdmListController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
         List<MdrtbTreatmentSupporter> ret = new ArrayList<MdrtbTreatmentSupporter>();
         if (Context.isAuthenticated()){
-                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                MdrtbFactory mu = ms.getMdrtbFactory();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
                 Concept phoneConcept = mu.getConceptPhoneNumber();
                 ConceptService cs = Context.getConceptService();
                 

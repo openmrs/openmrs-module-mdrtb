@@ -10,6 +10,8 @@ import org.openmrs.Concept;
 import org.openmrs.Order;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbOrder {
@@ -29,9 +31,11 @@ public class MdrtbOrder {
     public boolean discontinueOrder(int orderId, String discontinueDate, int discontinueReasonConceptId) {
         try {
            ConceptService cs = Context.getConceptService();
+           MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+           MdrtbFactory mu = ms.getMdrtbFactory();
            Concept discontinueConcept = cs.getConcept(discontinueReasonConceptId);
                if (discontinueConcept == null)
-                   discontinueConcept = MdrtbUtil.getMDRTBConceptByName("OTHER NON-CODED", new Locale("en", "US"));
+                   discontinueConcept = MdrtbUtil.getMDRTBConceptByName("OTHER NON-CODED", new Locale("en", "US"), mu);
                if (discontinueConcept == null)
                    return false;
                Date discDate = null;

@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,19 +32,20 @@ import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.impl.MdrtbServiceImpl;
 
 public class MdrtbUtil {
     
     protected static final Log log = LogFactory.getLog(MdrtbUtil.class);
 
-public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
+public static Concept getMDRTBConceptByName(String conceptString, Locale loc, MdrtbFactory mu){
         
         MdrtbService ms = Context.getService(MdrtbService.class);
         Concept ret = null;
         
         if (conceptString.contains("|") && conceptString.indexOf("|", 0) != conceptString.lastIndexOf("|"))
                return null;
-        MdrtbFactory mu = ms.getMdrtbFactory();
+
         Map<String, Concept> xmlConceptList = mu.getXmlConceptList();
         ret = mu.getMDRTBConceptByKey(conceptString, loc, xmlConceptList);
         if (ret != null)
@@ -70,7 +72,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                                 } 
                             }
                         }
-                        ms.getMdrtbFactory().addKeyAndConceptToXmlConceptList(conceptString, cTmp);
+                        mu.addKeyAndConceptToXmlConceptList(conceptString, cTmp);
                         return cTmp;
                     }  
                 }
@@ -90,7 +92,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                     for (Locale localTmp :locales){
                         for (ConceptName cns : cTmp.getNames(localTmp)){
                             if (cns.getName().trim().equals(conceptString.trim())){
-                                ms.getMdrtbFactory().addKeyAndConceptToXmlConceptList(conceptString, cTmp);
+                                mu.addKeyAndConceptToXmlConceptList(conceptString, cTmp);
                                 return cTmp;
                             }  
                         }  
@@ -167,13 +169,13 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
         return ms.getLocaleSetUsedInDB(); 
     }
     
-    public static List<Concept>  getDiscontinueReasons() {
+    public static List<Concept>  getDiscontinueReasons(MdrtbFactory mu) {
         
         Collection<ConceptAnswer> discontinueReasons = new HashSet<ConceptAnswer>();
         List<Concept> discontinueRes = new ArrayList<Concept>();
         try {
      
-            Concept discontinueReasonsConcept =  getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.discontinue_drug_order_reasons"), new Locale("en", "US"));
+            Concept discontinueReasonsConcept =  getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.discontinue_drug_order_reasons"), new Locale("en", "US"), mu);
             discontinueReasons = discontinueReasonsConcept.getAnswers(false);
             for (ConceptAnswer ca :discontinueReasons){
                 discontinueRes.add(ca.getAnswerConcept());
@@ -186,8 +188,8 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
     }
     
 
-    public static Concept getDefaultDiscontinueReason(){
-        List<Concept> cList = getDiscontinueReasons();
+    public static Concept getDefaultDiscontinueReason(MdrtbFactory mu){
+        List<Concept> cList = getDiscontinueReasons(mu);
         String defaultGPValue = Context.getAdministrationService().getGlobalProperty("mdrtb.default_discontinue_drug_order_reason");
         for (Concept c : cList){
             if (c.getBestName(new Locale("en", "US")) != null && c.getBestName(new Locale("en", "US")).getName().equals(defaultGPValue)){
@@ -274,13 +276,13 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
     * @param parentObs
     * @return
     */
-   public static boolean isNegativeBacteriology(Obs parentObs, Concept cResultConcept){
+   public static boolean isNegativeBacteriology(Obs parentObs, Concept cResultConcept, MdrtbFactory mu){
 
        String positiveConcepts = Context.getAdministrationService().getGlobalProperty("mdrtb.positive_culture_concepts");
        List<Concept> cList = new ArrayList<Concept>();
        for (StringTokenizer st = new StringTokenizer(positiveConcepts, "|"); st.hasMoreTokens(); ) {
            String s = st.nextToken().trim();
-           Concept c = getMDRTBConceptByName(s, new Locale("en", "US"));
+           Concept c = getMDRTBConceptByName(s, new Locale("en", "US"), mu);
            if (c != null)
                cList.add(c);
        }
@@ -305,7 +307,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
     * @param programWorkflowState
     * @param onDate
     */
-   public static PatientProgram  transitionToStateNoErrorChecking(PatientProgram pp, ProgramWorkflowState programWorkflowState, Date onDate) {
+   public static PatientProgram  transitionToStateNoErrorChecking(PatientProgram pp, ProgramWorkflowState programWorkflowState, Date onDate, MdrtbFactory mu) {
 
        Set<PatientState> lastStates = pp.getStates();
 
@@ -332,14 +334,16 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
        newState.setStartDate(onDate);
        pp.getStates().add(newState);
        
-       Set<Concept> outcomeConcepts = MdrtbFactory.getInstance().getMdrProgramOutcomeConcepts();
+ 
+       
+       Set<Concept> outcomeConcepts = mu.getMdrProgramOutcomeConcepts();
        if (outcomeConcepts.contains(programWorkflowState.getConcept())) {
     	   pp.setDateCompleted(onDate);
        }
-       
+       pp.setUuid(UUID.randomUUID().toString());
        Context.getProgramWorkflowService().savePatientProgram(pp);
        
-       Concept diedConcept = MdrtbFactory.getInstance().getConceptDiedMDR();
+       Concept diedConcept = mu.getConceptDiedMDR();
        if (programWorkflowState.getConcept().equals(diedConcept)) {
     	   Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
        }
@@ -348,11 +352,11 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
    }
    
    
-   public static List<Concept> getDstDrugList(boolean removeDuplicates){
+   public static List<Concept> getDstDrugList(boolean removeDuplicates, MdrtbFactory mu){
        String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
        List<Concept> drugConceptList = new ArrayList<Concept>();
        try {
-           Concept c =    MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"));
+           Concept c =    MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"), mu);
            if (c != null && c.isSet()){
               drugConceptList = Context.getConceptService().getConceptsByConceptSet(c);
            } else if (c != null){
@@ -467,9 +471,8 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
        return ret;
    }
    
-   public static Concept getConceptFromMDRTBConceptMaps(String name){
+   public static Concept getConceptFromMDRTBConceptMaps(String name, MdrtbFactory mu){
        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-       MdrtbFactory mu = ms.getMdrtbFactory();
        return mu.getMDRTBConceptByKey(name, new Locale("en", "US"), mu.getXmlConceptList());
    }
    
@@ -669,7 +672,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
          int posOfOriginalPositiveBac = -1;
          for (int i = 0; i < obsList.size(); i++){
              Obs oTmp = obsList.get(i);
-             if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+             if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture, mu)){
                  posOfOriginalPositiveBac = i;
                  break;
              }
@@ -678,7 +681,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
              for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
                  Obs o = obsList.get(i);
                  Date date = map.get(o);
-                 if (MdrtbUtil.isNegativeBacteriology(o, cCulture)){
+                 if (MdrtbUtil.isNegativeBacteriology(o, cCulture, mu)){
                      // if this culture is negative:
                        int k = i - 1;
                        Calendar calcutoff = Calendar.getInstance();
@@ -697,13 +700,13 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                              Date dateInner = map.get(oInner);
                            
                              
-                             if (!MdrtbUtil.isNegativeBacteriology(oInner,cCulture))
+                             if (!MdrtbUtil.isNegativeBacteriology(oInner,cCulture, mu))
                                      break;
                              else {
                                  numConsecutive++; //number of consecutive negatives is now 2
                                  if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
                                      Obs oPrev = obsList.get(k-1);
-                                     if (!MdrtbUtil.isNegativeBacteriology(oPrev, cCulture) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
+                                     if (!MdrtbUtil.isNegativeBacteriology(oPrev, cCulture, mu) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
                                          ret = dateInner;
                                          break;   
                                      }
@@ -740,7 +743,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                  for (Map.Entry<Obs,Date> ent : map.entrySet()){
                      if (!startLooking && ent.getValue().after(o.getValueDatetime()))
                          startLooking = true;
-                     if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cCulture)){
+                     if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cCulture, mu)){
                          Calendar ccCal = Calendar.getInstance();                
                          ccCal.setTime(o.getValueDatetime());
                          ccCal.add(Calendar.DAY_OF_MONTH, (MdrtbUtil.lookupConversionInterval() - 1));
@@ -800,7 +803,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
               int posOfOriginalPositiveBac = -1;
                   for (int i = 0; i < obsList.size(); i++){
                       Obs oTmp = obsList.get(i);
-                      if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                      if (!MdrtbUtil.isNegativeBacteriology(oTmp, cCulture, mu)){
                           posOfOriginalPositiveBac = i;
                           //if the conversion date is before the first positive culture -- return false
                           if (o.getObsDatetime().before(oTmp.getObsDatetime()))
@@ -824,12 +827,12 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                   }
                   pos ++;
               }
-              if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cCulture) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cCulture) || pos + 1 >= obsList.size()){
+              if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cCulture, mu) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cCulture, mu) || pos + 1 >= obsList.size()){
                   return false;
               }
               //check if next X are negative (redundant, but quick)
               for (int k = 1; k < numberNeededInARow;k++){
-                  if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cCulture))
+                  if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cCulture, mu))
                       return false;
               }     
               //now test the next 30 days:
@@ -840,13 +843,13 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
               for (Obs oTmp : obsList){
                   if (map.get(oTmp).after(map.get(ccObs))){
                       count++;
-                      if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                      if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture, mu)){
                           return false;
                       }
-                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cCulture) && count >= numberNeededInARow){
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cCulture, mu) && count >= numberNeededInARow){
                           return true;
                       }
-                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture)){
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cCulture, mu)){
                           return false;
                       }
                   }
@@ -887,13 +890,13 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
                   }
                   pos ++;
               }
-              if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cCulture) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cCulture))
+              if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cCulture, mu) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cCulture, mu))
                   return false;
 
               //get previous cultureconversionObs, and see if its valid.
               for (int k = pos-1; k >= 0 ; k -- ){
                   Obs obsPrevious = obsList.get(k);
-                  if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cCulture))
+                  if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cCulture, mu))
                       return false;
                   if (ccObs.contains(obsPrevious) && isObsValidCultureconversion(o, p, map, mu)){
                       ret = true;

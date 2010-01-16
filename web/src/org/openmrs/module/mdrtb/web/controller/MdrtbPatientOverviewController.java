@@ -128,6 +128,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 //            }
 //            map.put("tbDrugs", tbDrugs);
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory(); 
             
             List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
             map.put("standardRegimens", suggestions);
@@ -135,7 +136,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> firstLineDrugs = new ArrayList<Drug>();
             List<Concept> mdrtbDrugs = new ArrayList<Concept>();
             try {
-                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en")));
+                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en"), mu));
                 for (Concept c : mdrtbDrugs) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     firstLineDrugs.addAll(drugs);
@@ -149,7 +150,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> injectibleDrugs = new ArrayList<Drug>();
             List<Concept> mdrtbDrugConceptsInj = new ArrayList<Concept>();
             try {
-                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en")));
+                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en"), mu));
                 for (Concept c : mdrtbDrugConceptsInj) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     injectibleDrugs.addAll(drugs);
@@ -164,7 +165,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Drug> quinolones = new ArrayList<Drug>();
             List<Concept> mdrtbDrugQ = new ArrayList<Concept>();
             try {
-                Concept quinolonesConcept = MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en"));
+                Concept quinolonesConcept = MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en"), mu);
                 mdrtbDrugQ = cs.getConceptsByConceptSet(quinolonesConcept);
                 for (Concept c : mdrtbDrugQ) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
@@ -181,7 +182,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             List<Concept> mdrtbDrugConceptsSecondLine = new ArrayList<Concept>();
             try {
                 
-                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en")));
+                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en"), mu));
                 for (Concept c : mdrtbDrugConceptsSecondLine) {
                     List<Drug> drugs = cs.getDrugsByConcept(c);
                     secondLineDrugs.addAll(drugs);
@@ -214,14 +215,14 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("otherDrugsConcepts", otherDrugConcepts);
             
             
-            map.put("discontinueReasons", MdrtbUtil.getDiscontinueReasons());
+            map.put("discontinueReasons", MdrtbUtil.getDiscontinueReasons(mu));
             
             String dateFormat = Context.getDateFormat().toPattern();
             map.put("dateFormat", dateFormat);
             
             //workflow states:
             
-            MdrtbFactory mu = ms.getMdrtbFactory(); 
+            
             map.put("cultureStates", mu.getStatesCultureStatus());
             map.put("outcomeStates", mu.getStatesOutcomes());
             map.put("patientStates", mu.getStatesPatientStatus());
@@ -495,7 +496,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         	if (outcomeStateDate == null) {
                         		outcomeStateDate = new Date();
                         	}
-                            MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);
+                            MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate, mu);
                             update = true;
                         }
                     }
@@ -507,9 +508,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         ProgramWorkflowState pxwsTwo = pwTwo.getState(Integer.valueOf(patientStateVal));
                         if (psTwo == null || !psTwo.getState().equals(pxwsTwo) || (psTwo.getState().equals(pxwsTwo) && patientStateDate != null && patientStateDate.getTime() != psTwo.getStartDate().getTime())){
                             if (patientStateDate == null)
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date(), mu);
                             else
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate); 
+                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate, mu); 
                             update = true;
                         }
                     }
@@ -1987,8 +1988,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                  
                    String redSt = as.getGlobalProperty("mdrtb.dst_color_coding_red");
                    String yellowSt = as.getGlobalProperty("mdrtb.dst_color_coding_yellow");
-                   Concept red =  MdrtbUtil.getMDRTBConceptByName(redSt, new Locale("en", "US"));
-                   Concept yellow =  MdrtbUtil.getMDRTBConceptByName(yellowSt, new Locale("en", "US"));
+                   Concept red =  MdrtbUtil.getMDRTBConceptByName(redSt, new Locale("en", "US"), mu);
+                   Concept yellow =  MdrtbUtil.getMDRTBConceptByName(yellowSt, new Locale("en", "US"), mu);
                    List<Concept> resistantConcepts = new ArrayList<Concept>();
                    resistantConcepts.add(red);
                    resistantConcepts.add(yellow);
@@ -1997,7 +1998,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                    Date dateTmp = new Date(0);
                    if (mp.getPatientProgram()!= null)
                        dateTmp = mp.getPatientProgram().getDateEnrolled();
-                   mp.setResistanceDrugConcepts(MdrtbUtil.getResistantToDrugConcepts(dateTmp, mu.getConceptDSTParent(), mu.getConceptDSTResultParent(), MdrtbUtil.getDstDrugList(true), resistantConcepts, patient, false));
+                   mp.setResistanceDrugConcepts(MdrtbUtil.getResistantToDrugConcepts(dateTmp, mu.getConceptDSTParent(), mu.getConceptDSTResultParent(), MdrtbUtil.getDstDrugList(true, mu), resistantConcepts, patient, false));
                    
                    c = mu.getConceptCurrentRegimenType();
                    mp.setStEmpIndObs(os.getObservationsByPersonAndConcept(patient, c));

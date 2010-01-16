@@ -56,13 +56,13 @@ public class MdrtbNewTestObj {
      * @param STR_DST_RESULT_PARENT
      */
     public MdrtbNewTestObj(Patient patient, User user, String view){
-        
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         String numNewTests = as.getGlobalProperty("mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once");
         try{
             Integer maxNum = Integer.valueOf(numNewTests);
             for (int i = 0; i < maxNum; i++){
-                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                MdrtbFactory mu = ms.getMdrtbFactory();
+                
                 
                 if (view.equals("DST")){
                     this.dsts.add(new MdrtbDSTObj(patient, user, mu));

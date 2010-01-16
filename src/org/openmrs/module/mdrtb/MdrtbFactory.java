@@ -1712,7 +1712,7 @@ public final class MdrtbFactory {
                      
                      for (PatientState ps : pp.getStates()){
                          if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
+                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime(), this);
                              pws.savePatientProgram(pp);
                              break;
                          }
@@ -1722,7 +1722,7 @@ public final class MdrtbFactory {
                      
                      for (PatientState ps : pp.getStates()){
                          if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
+                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime(), this);
                              pws.savePatientProgram(pp);
                              break;
                          }
@@ -1771,7 +1771,7 @@ public final class MdrtbFactory {
                              startDate = startCal.getTime();
                              if (e.getValue().before(endDate) && e.getValue().after(startDate)){
                                  relevantCultures.add(e.getKey());
-                                 if (!MdrtbUtil.isNegativeBacteriology(e.getKey(), cCulture))
+                                 if (!MdrtbUtil.isNegativeBacteriology(e.getKey(), cCulture, this))
                                      allCulturesAreNegative = false;
                              }    
                          }
@@ -1784,7 +1784,7 @@ public final class MdrtbFactory {
                                     
                                          if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
                                           
-                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled());
+                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled(), this);
                                              break;
                                          }  
                                      }
@@ -1800,7 +1800,7 @@ public final class MdrtbFactory {
                                      for (ProgramWorkflow pwTmp:pw){
                                          ProgramWorkflowState state = pwTmp.getStateByName(this.getSTR_NOT_CONVERTED());
                                          if (state != null){
-                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,state, ppTmp.getDateEnrolled());
+                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,state, ppTmp.getDateEnrolled(), this);
                                              break;
                                          }  
                                      }
@@ -1882,7 +1882,7 @@ public final class MdrtbFactory {
          int posOfOriginalPositiveBac = -1;
          for (int i = 0; i < obsList.size(); i++){
              Obs oTmp = obsList.get(i);
-             if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+             if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear, this)){
                  posOfOriginalPositiveBac = i;
                  break;
              }
@@ -1891,7 +1891,7 @@ public final class MdrtbFactory {
              for (int i = obsList.size()-1; i > posOfOriginalPositiveBac + 1; i--){
                  Obs o = obsList.get(i);
                  Date date = map.get(o);
-                 if (MdrtbUtil.isNegativeBacteriology(o, cSmear)){
+                 if (MdrtbUtil.isNegativeBacteriology(o, cSmear, this)){
                      // if this smear is negative:
                        int k = i - 1;
                        Calendar calcutoff = Calendar.getInstance();
@@ -1915,13 +1915,13 @@ public final class MdrtbFactory {
                              Date dateInner = map.get(oInner);
                            
                              
-                             if (!MdrtbUtil.isNegativeBacteriology(oInner,cSmear))
+                             if (!MdrtbUtil.isNegativeBacteriology(oInner,cSmear, this))
                                      break;
                              else {
                                  numConsecutive++; //number of consecutive negatives is now 2
                                  if (dateInner.before(calThirty.getTime()) || dateInner.getTime() == calThirty.getTime().getTime()){
                                      Obs oPrev = obsList.get(k-1);
-                                     if (!MdrtbUtil.isNegativeBacteriology(oPrev, cSmear) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
+                                     if (!MdrtbUtil.isNegativeBacteriology(oPrev, cSmear, this) && numConsecutive >= MdrtbUtil.lookupConversionNumberConsecutive()){
                                          ret = dateInner;
                                          break;   
                                      }
@@ -1956,7 +1956,7 @@ public final class MdrtbFactory {
                  for (Map.Entry<Obs,Date> ent : map.entrySet()){
                      if (!startLooking && ent.getValue().after(o.getValueDatetime()))
                          startLooking = true;
-                     if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cSmear)){
+                     if (startLooking && !MdrtbUtil.isNegativeBacteriology(ent.getKey(), cSmear, this)){
                          Calendar ccCal = Calendar.getInstance();                
                          ccCal.setTime(o.getValueDatetime());
                       
@@ -2030,7 +2030,7 @@ public final class MdrtbFactory {
               int posOfOriginalPositiveBac = -1;
                   for (int i = 0; i < obsList.size(); i++){
                       Obs oTmp = obsList.get(i);
-                      if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                      if (!MdrtbUtil.isNegativeBacteriology(oTmp, cSmear, this)){
                           posOfOriginalPositiveBac = i;
                           //if the conversion date is before the first positive smear -- return false
                           if (o.getObsDatetime().before(oTmp.getObsDatetime()))
@@ -2054,12 +2054,12 @@ public final class MdrtbFactory {
                   }
                   pos ++;
               }
-              if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cSmear) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cSmear) || pos + 1 >= obsList.size()){
+              if (ccObs == null || !MdrtbUtil.isNegativeBacteriology(ccObs, cSmear, this) || pos == 0 || MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1) , cSmear, this) || pos + 1 >= obsList.size()){
                   return false;
               }
               //check if next X are negative (redundant, but quick)
               for (int k = 1; k < numberNeededInARow;k++){
-                  if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cSmear))
+                  if (!MdrtbUtil.isNegativeBacteriology(obsList.get(pos+k), cSmear, this))
                       return false;
               }     
               //now test the next 30 days:
@@ -2070,13 +2070,13 @@ public final class MdrtbFactory {
               for (Obs oTmp : obsList){
                   if (map.get(oTmp).after(map.get(ccObs))){
                       count++;
-                      if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                      if (map.get(oTmp).before(cal.getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear, this)){
                           return false;
                       }
-                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cSmear) && count >= numberNeededInARow){
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && MdrtbUtil.isNegativeBacteriology(oTmp, cSmear, this) && count >= numberNeededInARow){
                           return true;
                       }
-                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear)){
+                      else if ((map.get(oTmp).after(cal.getTime()) || map.get(oTmp).getTime() == cal.getTime().getTime()) && !MdrtbUtil.isNegativeBacteriology(oTmp, cSmear, this)){
                           return false;
                       }
                   }
@@ -2118,13 +2118,13 @@ public final class MdrtbFactory {
                   }
                   pos ++;
               }
-              if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cSmear) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cSmear))
+              if (rcObs == null || MdrtbUtil.isNegativeBacteriology(rcObs, cSmear, this) || pos < 3 || !MdrtbUtil.isNegativeBacteriology(obsList.get(pos -1), cSmear, this))
                   return false;
 
               //get previous smear, and see if its valid.
               for (int k = pos-1; k >= 0 ; k -- ){
                   Obs obsPrevious = obsList.get(k);
-                  if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cSmear))
+                  if (!MdrtbUtil.isNegativeBacteriology(obsPrevious, cSmear, this))
                       return false;
                   if (ccObs.contains(obsPrevious) && this.isObsValidSmearconversion(o, p, map)){
                       ret = true;

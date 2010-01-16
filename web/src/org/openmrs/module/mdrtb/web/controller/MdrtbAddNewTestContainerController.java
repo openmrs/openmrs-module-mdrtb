@@ -659,16 +659,18 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 map.put("view", action);
             AdministrationService as = Context.getAdministrationService();
             ConceptService cs = Context.getConceptService();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             
-            map.put("testNames", MdrtbUtil.getDstDrugList(false));
-            map.put("dstResults", this.getDSTRes(as, cs));  
-            map.put("organismTypes", this.getOrganismTypes(as, cs));
-            map.put("smearResults", this.getSmearRes(as, cs));
-            map.put("cultureResults", this.getCultureRes(as, cs));
+            map.put("testNames", MdrtbUtil.getDstDrugList(false, mu));
+            map.put("dstResults", this.getDSTRes(as, cs, mu));  
+            map.put("organismTypes", this.getOrganismTypes(as, cs, mu));
+            map.put("smearResults", this.getSmearRes(as, cs, mu));
+            map.put("cultureResults", this.getCultureRes(as, cs, mu));
             
-            Concept red =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_red"), new Locale("en", "US"));
-            Concept yellow =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_yellow"), new Locale("en", "US"));
-            Concept green =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_green"), new Locale("en", "US"));  
+            Concept red =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_red"), new Locale("en", "US"), mu);
+            Concept yellow =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_yellow"), new Locale("en", "US"), mu);
+            Concept green =  MdrtbUtil.getMDRTBConceptByName(as.getGlobalProperty("mdrtb.dst_color_coding_green"), new Locale("en", "US"), mu);  
             
             
             map.put("red", red.getBestName(Context.getLocale()).getName());
@@ -677,8 +679,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             
             //HACK:
             //MdrtbUtil.getMDRTBConceptByName(STR_DST_COMPLETE, new Locale("en", "US"))
-            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory();
+
             Concept nonCodedConcept = mu.getConceptOtherMycobacteriaNonCoded();
             if (nonCodedConcept != null)
                 map.put("OtherNonCodedId", nonCodedConcept.getConceptId());
@@ -687,7 +688,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
 
             String anatLocList = as.getGlobalProperty("mdrtb.anatomical_locations_concept");
             
-            Concept anatLocSet = MdrtbUtil.getMDRTBConceptByName(anatLocList, new Locale("en", "US"));
+            Concept anatLocSet = MdrtbUtil.getMDRTBConceptByName(anatLocList, new Locale("en", "US"), mu);
             List<Concept> anatomyRetList = new ArrayList<Concept>();
                 if (anatLocSet == null)
                         throw new RuntimeException("Could not find concept for anatomical locations global property");
@@ -702,7 +703,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             String cultureMethodList = as.getGlobalProperty("mdrtb.culture_method_concept");
             
             
-            Concept cultureMethodsSet = MdrtbUtil.getMDRTBConceptByName(cultureMethodList, new Locale("en", "US"));
+            Concept cultureMethodsSet = MdrtbUtil.getMDRTBConceptByName(cultureMethodList, new Locale("en", "US"), mu);
             List<Concept> cultureMethList = new ArrayList<Concept>();
                 if (cultureMethodsSet == null)
                         throw new RuntimeException("Could not find concept for culture methods global property");
@@ -717,7 +718,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             String smearMethodList = as.getGlobalProperty("mdrtb.smear_method_concept");
             
             
-            Concept smearMethodsSet = MdrtbUtil.getMDRTBConceptByName(smearMethodList, new Locale("en", "US"));
+            Concept smearMethodsSet = MdrtbUtil.getMDRTBConceptByName(smearMethodList, new Locale("en", "US"), mu);
             List<Concept> smearMethodsList = new ArrayList<Concept>();
                 if (smearMethodsSet == null)
                     throw new RuntimeException("Could not find concept for smear methods global property");
@@ -732,7 +733,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             String dstMethodList = as.getGlobalProperty("mdrtb.DST_methods");
             
             
-            Concept dstMethodsSet = MdrtbUtil.getMDRTBConceptByName(dstMethodList, new Locale("en", "US"));
+            Concept dstMethodsSet = MdrtbUtil.getMDRTBConceptByName(dstMethodList, new Locale("en", "US"), mu);
             List<Concept> dstMethodsList = new ArrayList<Concept>();
                 if (dstMethodsSet == null)
                     throw new RuntimeException("Could not find concept for DST methods global property");
@@ -779,11 +780,10 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
 
 
     
-    private List<Concept> getOrganismTypes(AdministrationService as, ConceptService cs){
+    private List<Concept> getOrganismTypes(AdministrationService as, ConceptService cs, MdrtbFactory mu){
         List<Concept> res = new ArrayList<Concept>();
         String ots = as.getGlobalProperty("mdrtb.organism_type");
-        
-        Concept otsConcept = MdrtbUtil.getMDRTBConceptByName(ots, new Locale("en", "US"));
+        Concept otsConcept = MdrtbUtil.getMDRTBConceptByName(ots, new Locale("en", "US"), mu);
         if (otsConcept != null){
             Collection<ConceptAnswer> cas =  otsConcept.getAnswers(false);
             if (cas.size() != 0){
@@ -794,7 +794,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         } else {
             for (StringTokenizer st = new StringTokenizer(ots, "|"); st.hasMoreTokens(); ) {
                 String s = st.nextToken().trim();
-                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
+                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                 if (c != null)
                 res.add(c);
             }
@@ -803,10 +803,10 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
     }
     
     private List<Concept> getDSTRes(AdministrationService as,
-            ConceptService cs) {
+            ConceptService cs, MdrtbFactory mu) {
         List<Concept> dstRes = new ArrayList<Concept>();
         String dstResList = as.getGlobalProperty("mdrtb.DST_result_list");
-        Concept dstResListConcept =  MdrtbUtil.getMDRTBConceptByName(dstResList, new Locale("en", "US"));
+        Concept dstResListConcept =  MdrtbUtil.getMDRTBConceptByName(dstResList, new Locale("en", "US"), mu);
         if (dstResListConcept != null && dstResListConcept.isSet()) {
             Collection<ConceptAnswer> cas = dstResListConcept.getAnswers(false);
             for (ConceptAnswer c : cas) {
@@ -840,10 +840,10 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
     }
     
     
-    private List<Concept> getSmearRes(AdministrationService as, ConceptService cs){
+    private List<Concept> getSmearRes(AdministrationService as, ConceptService cs, MdrtbFactory mu){
         String smearResList = as.getGlobalProperty("mdrtb.smear_result_list");
         List<Concept> smearRes = new ArrayList<Concept>();
-        Concept smearResListConcept = MdrtbUtil.getMDRTBConceptByName(smearResList, new Locale("en", "US"));
+        Concept smearResListConcept = MdrtbUtil.getMDRTBConceptByName(smearResList, new Locale("en", "US"), mu);
         if (smearResListConcept != null){    
             Collection<ConceptAnswer> cas =  smearResListConcept.getAnswers(false);
             if (cas.size() != 0){
@@ -855,7 +855,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             for (StringTokenizer st = new StringTokenizer(smearResList, "|"); st.hasMoreTokens(); ) {
                 String s = st.nextToken().trim();
                 
-                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
+                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                 if (c != null)
                 smearRes.add(c);
             }
@@ -863,11 +863,11 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         return smearRes;
     }
     
-    private List<Concept> getCultureRes(AdministrationService as, ConceptService cs){
+    private List<Concept> getCultureRes(AdministrationService as, ConceptService cs, MdrtbFactory mu){
         String cultureResList = as.getGlobalProperty("mdrtb.culture_result_list");
         List<Concept> cultureRes = new ArrayList<Concept>();
         
-        Concept cultureResListConcept = MdrtbUtil.getMDRTBConceptByName(cultureResList, new Locale("en", "US"));
+        Concept cultureResListConcept = MdrtbUtil.getMDRTBConceptByName(cultureResList, new Locale("en", "US"), mu);
         if (cultureResListConcept != null){
             Collection<ConceptAnswer> cas =  cultureResListConcept.getAnswers(false);
             if (cas.size() != 0){
@@ -880,7 +880,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             for (StringTokenizer st = new StringTokenizer(cultureResList, "|"); st.hasMoreTokens(); ) {
                 
                 String s = st.nextToken().trim();
-                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
+                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                 if (c != null)
                 cultureRes.add(c);
             }     

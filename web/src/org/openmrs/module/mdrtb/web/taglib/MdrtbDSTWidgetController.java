@@ -110,7 +110,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
            
-            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(tmp);
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(tmp, mu);
             if (c != null){
                 c = Context.getConceptService().getConcept(c.getConceptId());
                 Collection<ConceptName> cnsTmp = c.getNames();
@@ -160,7 +160,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
         for (StringTokenizer st = new StringTokenizer(this.concepts, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(conceptString);
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(conceptString, mu);
             
             if (c != null) {
                 c = Context.getConceptService().getConcept(c.getConceptId());
@@ -201,7 +201,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
         // TODO: allow columnHeaders to be a conceptSet and return all children
         List<ConceptName> tests = new ArrayList<ConceptName>();
         if (this.columnHeaders != null) 
-            tests = this.getColumnHeaderConceptNames(this.columnHeaders, loc);
+            tests = this.getColumnHeaderConceptNames(this.columnHeaders, loc, mu);
 
         /**
          * Here's where the table gets drawn
@@ -496,8 +496,8 @@ public class MdrtbDSTWidgetController extends TagSupport {
         return test;
     }
     private List<ConceptName> getColumnHeaderConceptNames(String nameList,
-            Locale loc) {
-        List<Concept>  cList = MdrtbUtil.getDstDrugList(false); 
+            Locale loc, MdrtbFactory mu) {
+        List<Concept>  cList = MdrtbUtil.getDstDrugList(false, mu); 
         List<ConceptName> ret = new ArrayList<ConceptName>();
         for (Concept c : cList){
             ret.add(c.getBestShortName(new Locale("en_US")));

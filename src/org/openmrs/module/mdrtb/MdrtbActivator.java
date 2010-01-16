@@ -139,8 +139,8 @@ public class MdrtbActivator implements Activator, Runnable {
      * user so all required privileges must be added as proxy privileges
      */
     public void load() {  
-        MdrtbService ms = Context.getService(MdrtbService.class);
-        MdrtbFactory mu = MdrtbFactory.getInstance();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         ms.setMdrtbFactory(mu);
         ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
         List<Locale> locales = new ArrayList<Locale>();

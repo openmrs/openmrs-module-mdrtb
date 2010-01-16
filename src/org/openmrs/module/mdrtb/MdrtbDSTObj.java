@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import org.openmrs.Concept;
 import org.openmrs.Obs;
@@ -52,72 +53,89 @@ public class MdrtbDSTObj {
     public MdrtbDSTObj(Patient patient,
                         User user, MdrtbFactory mu){
         
-        drugSensitivityTestComplete.setDateCreated(new Date());
-        drugSensitivityTestComplete.setVoided(false);
-        drugSensitivityTestComplete.setConcept(mu.getConceptDSTComplete());   
-        drugSensitivityTestComplete.setCreator(user);
-        drugSensitivityTestComplete.setPerson(patient);
-        dstStartDate.setDateCreated(new Date());
-        dstStartDate.setVoided(false);
-        dstStartDate.setConcept(mu.getConceptCultureStartDate());
-        dstStartDate.setCreator(user);
-        dstStartDate.setPerson(patient);
-        dstResultsDate.setDateCreated(new Date());
-        dstResultsDate.setVoided(false);
-        dstResultsDate.setConcept(mu.getConceptResultDate());
-        dstResultsDate.setCreator(user);
-        dstResultsDate.setPerson(patient);
-        dstDateReceived.setDateCreated(new Date());
-        dstDateReceived.setVoided(false);
+        this.drugSensitivityTestComplete.setDateCreated(new Date());
+        this.drugSensitivityTestComplete.setVoided(false);
+        this.drugSensitivityTestComplete.setConcept(mu.getConceptDSTComplete());   
+        this.drugSensitivityTestComplete.setCreator(user);
+        this.drugSensitivityTestComplete.setPerson(patient);
+        this.drugSensitivityTestComplete.setUuid(UUID.randomUUID().toString());
         
-        dstDateReceived.setConcept(mu.getConceptDateReceived());
-        dstDateReceived.setCreator(user);
-        dstDateReceived.setPerson(patient);
+        this.dstStartDate.setDateCreated(new Date());
+        this.dstStartDate.setVoided(false);
+        this.dstStartDate.setConcept(mu.getConceptCultureStartDate());
+        this.dstStartDate.setCreator(user);
+        this.dstStartDate.setPerson(patient);
+        this.dstStartDate.setUuid(UUID.randomUUID().toString());
         
-        source.setConcept(mu.getConceptSampleSource());
-        source.setVoided(false);
-        source.setDateCreated(new Date());
-        source.setCreator(user);
-        source.setPerson(patient);
-        dstMethod.setDateCreated(new Date());
-        dstMethod.setVoided(false);
-        dstMethod.setConcept(mu.getConceptDSTMethod());
-        dstMethod.setCreator(user);
-        dstMethod.setPerson(patient);
-        typeOfOrganism.setConcept(mu.getConceptTypeOfOrganism());
-        typeOfOrganism.setVoided(false);
-        typeOfOrganism.setDateCreated(new Date());
-        typeOfOrganism.setCreator(user);
-        typeOfOrganism.setPerson(patient);
+        this.dstResultsDate.setDateCreated(new Date());
+        this.dstResultsDate.setVoided(false);
+        this.dstResultsDate.setConcept(mu.getConceptResultDate());
+        this.dstResultsDate.setCreator(user);
+        this.dstResultsDate.setPerson(patient);
+        this.dstResultsDate.setUuid(UUID.randomUUID().toString());
         
-        typeOfOrganismNonCoded.setConcept(mu.getConceptTypeOfOrganismNonCoded());
-        typeOfOrganismNonCoded.setVoided(false);
-        typeOfOrganismNonCoded.setDateCreated(new Date());
-        typeOfOrganismNonCoded.setCreator(user);
-        typeOfOrganismNonCoded.setPerson(patient);
-        directOrIndirect.setDateCreated(new Date());
-        directOrIndirect.setVoided(false);
+        this.dstDateReceived.setDateCreated(new Date());
+        this.dstDateReceived.setVoided(false);   
+        this.dstDateReceived.setConcept(mu.getConceptDateReceived());
+        this.dstDateReceived.setCreator(user);
+        this.dstDateReceived.setPerson(patient);
+        this.dstDateReceived.setUuid(UUID.randomUUID().toString());
         
-        directOrIndirect.setConcept(mu.getConceptDirectIndirect());
-        directOrIndirect.setCreator(user);
-        directOrIndirect.setPerson(patient);
-        coloniesInControl.setDateCreated(new Date());
-        coloniesInControl.setVoided(false);
+        this.source.setConcept(mu.getConceptSampleSource());
+        this.source.setVoided(false);
+        this.source.setDateCreated(new Date());
+        this.source.setCreator(user);
+        this.source.setPerson(patient);
+        this.source.setUuid(UUID.randomUUID().toString());
         
-        coloniesInControl.setConcept(mu.getConceptColoniesInControl());
-        coloniesInControl.setCreator(user);
-        coloniesInControl.setPerson(patient);
-        dstParentObs.setDateCreated(new Date());
-        dstParentObs.setVoided(false);
-        dstParentObs.setConcept(mu.getConceptDSTParent());
-        dstParentObs.setCreator(user);
-        dstParentObs.setPerson(patient);
-        sputumCollectionDate.setDateCreated(new Date());
-        sputumCollectionDate.setVoided(false);
+        this.dstMethod.setDateCreated(new Date());
+        this.dstMethod.setVoided(false);
+        this.dstMethod.setConcept(mu.getConceptDSTMethod());
+        this.dstMethod.setCreator(user);
+        this.dstMethod.setPerson(patient);
+        this.dstMethod.setUuid(UUID.randomUUID().toString());
         
-        sputumCollectionDate.setConcept(mu.getConceptSputumCollectionDate());
-        sputumCollectionDate.setCreator(user);
-        sputumCollectionDate.setPerson(patient);
+        this.typeOfOrganism.setConcept(mu.getConceptTypeOfOrganism());
+        this.typeOfOrganism.setVoided(false);
+        this.typeOfOrganism.setDateCreated(new Date());
+        this.typeOfOrganism.setCreator(user);
+        this.typeOfOrganism.setPerson(patient);
+        this.typeOfOrganism.setUuid(UUID.randomUUID().toString());
+        
+        this.typeOfOrganismNonCoded.setConcept(mu.getConceptTypeOfOrganismNonCoded());
+        this.typeOfOrganismNonCoded.setVoided(false);
+        this.typeOfOrganismNonCoded.setDateCreated(new Date());
+        this.typeOfOrganismNonCoded.setCreator(user);
+        this.typeOfOrganismNonCoded.setPerson(patient);
+        this.typeOfOrganismNonCoded.setUuid(UUID.randomUUID().toString());
+        
+        this.directOrIndirect.setDateCreated(new Date());
+        this.directOrIndirect.setVoided(false);
+        this.directOrIndirect.setConcept(mu.getConceptDirectIndirect());
+        this.directOrIndirect.setCreator(user);
+        this.directOrIndirect.setPerson(patient);
+        this.directOrIndirect.setUuid(UUID.randomUUID().toString());
+        
+        this.coloniesInControl.setDateCreated(new Date());
+        this.coloniesInControl.setVoided(false);
+        this.coloniesInControl.setConcept(mu.getConceptColoniesInControl());
+        this.coloniesInControl.setCreator(user);
+        this.coloniesInControl.setPerson(patient);
+        this.coloniesInControl.setUuid(UUID.randomUUID().toString());
+        
+        this.dstParentObs.setDateCreated(new Date());
+        this.dstParentObs.setVoided(false);
+        this.dstParentObs.setConcept(mu.getConceptDSTParent());
+        this.dstParentObs.setCreator(user);
+        this.dstParentObs.setPerson(patient);
+        this.dstParentObs.setUuid(UUID.randomUUID().toString());
+        
+        this.sputumCollectionDate.setDateCreated(new Date());
+        this.sputumCollectionDate.setVoided(false); 
+        this.sputumCollectionDate.setConcept(mu.getConceptSputumCollectionDate());
+        this.sputumCollectionDate.setCreator(user);
+        this.sputumCollectionDate.setPerson(patient);
+        this.sputumCollectionDate.setUuid(UUID.randomUUID().toString());
 
         
         AdministrationService as = Context.getAdministrationService();
@@ -125,7 +143,7 @@ public class MdrtbDSTObj {
         try {
             
            
-                Concept c =  MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"));
+                Concept c =  MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"), mu);
                 
                 if (c != null && c.isSet()){
                     List<Concept> drugConceptList = cs.getConceptsByConceptSet(c);
@@ -141,7 +159,7 @@ public class MdrtbDSTObj {
                         String s = st.nextToken().trim();
                         
                     
-                        Concept cChildren = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
+                        Concept cChildren = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                         if (cChildren != null){
                         MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, patient, user, mu);
                         dstResults.add(mdro);

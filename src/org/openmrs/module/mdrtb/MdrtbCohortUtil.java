@@ -25,9 +25,10 @@ public class MdrtbCohortUtil {
 		
 		Cohort cohort = Context.getPatientSetService().getAllPatients();
 		
-		MdrtbFactory factory = MdrtbFactory.getInstance();
+		MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
 		Date now = new Date();
-		Program mdrtbProgram = factory.getMDRTBProgram();
+		Program mdrtbProgram = mu.getMDRTBProgram();
 		
 		if ("current".equals(enrollment)) {
 			Cohort current = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, now, now);

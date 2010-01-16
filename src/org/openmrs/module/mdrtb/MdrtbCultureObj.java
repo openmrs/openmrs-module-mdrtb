@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb;
 
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -47,18 +48,21 @@ public class MdrtbCultureObj {
         this.cultureResult.setDateCreated(new Date());
         this.cultureResult.setPerson(patient);
         this.cultureResult.setCreator(user);
+        this.cultureResult.setUuid(UUID.randomUUID().toString());
         
         this.source.setConcept(mu.getConceptSampleSource());       
         this.source.setVoided(false);
         this.source.setDateCreated(new Date());
         this.source.setPerson(patient);
         this.source.setCreator(user);
+        this.source.setUuid(UUID.randomUUID().toString());
         
         this.colonies.setConcept(mu.getConceptColonies());        
         this.colonies.setVoided(false);
         this.colonies.setDateCreated(new Date());
         this.colonies.setPerson(patient);
         this.colonies.setCreator(user);
+        this.colonies.setUuid(UUID.randomUUID().toString());
         
         //STR_CULTURE_START_DATE
         this.cultureStartDate.setConcept(mu.getConceptCultureStartDate());       
@@ -66,42 +70,49 @@ public class MdrtbCultureObj {
         this.cultureStartDate.setDateCreated(new Date());
         this.cultureStartDate.setPerson(patient);
         this.cultureStartDate.setCreator(user);
+        this.cultureStartDate.setUuid(UUID.randomUUID().toString());
        
         this.cultureResultsDate.setConcept(mu.getConceptResultDate());     
         this.cultureResultsDate.setVoided(false);
         this.cultureResultsDate.setDateCreated(new Date());
         this.cultureResultsDate.setPerson(patient);
         this.cultureResultsDate.setCreator(user);
+        this.cultureResultsDate.setUuid(UUID.randomUUID().toString());
         
         this.cultureDateReceived.setConcept(mu.getConceptDateReceived());
         this.cultureDateReceived.setVoided(false);
         this.cultureDateReceived.setDateCreated(new Date());
         this.cultureDateReceived.setPerson(patient);
         this.cultureDateReceived.setCreator(user);
+        this.cultureDateReceived.setUuid(UUID.randomUUID().toString());
       
         this.cultureMethod.setConcept( mu.getConceptCultureMethod());
         this.cultureMethod.setVoided(false);
         this.cultureMethod.setDateCreated(new Date());
         this.cultureMethod.setPerson(patient);
         this.cultureMethod.setCreator(user);
+        this.cultureMethod.setUuid(UUID.randomUUID().toString());
         
         this.typeOfOrganism.setConcept(mu.getConceptTypeOfOrganism());
         this.typeOfOrganism.setVoided(false);
         this.typeOfOrganism.setDateCreated(new Date());
         this.typeOfOrganism.setPerson(patient);
         this.typeOfOrganism.setCreator(user);
+        this.typeOfOrganism.setUuid(UUID.randomUUID().toString());
         
         this.typeOfOrganismNonCoded.setConcept(mu.getConceptTypeOfOrganismNonCoded());
         this.typeOfOrganismNonCoded.setVoided(false);
         this.typeOfOrganismNonCoded.setDateCreated(new Date());
         this.typeOfOrganismNonCoded.setPerson(patient);
         this.typeOfOrganismNonCoded.setCreator(user);
+        this.typeOfOrganismNonCoded.setUuid(UUID.randomUUID().toString());
         
         this.cultureParentObs.setConcept(mu.getConceptCultureParent());
         this.cultureParentObs.setVoided(false);
         this.cultureParentObs.setDateCreated(new Date());
         this.cultureParentObs.setPerson(patient);
         this.cultureParentObs.setCreator(user);
+        this.cultureParentObs.setUuid(UUID.randomUUID().toString());
     }
     
     public void setTypeOfOrganism(Obs o){

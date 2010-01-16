@@ -12,6 +12,8 @@ import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.drugneeds.DrugForecastUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
@@ -42,8 +44,10 @@ public class DrugForecastController {
         Cohort cohort = Context.getPatientSetService().getAllPatients();
         cohort.setDescription("All patients in system");
         List<Concept> drugSets = new ArrayList<Concept>();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         {
-            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"));
+            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"), mu);
             tb.getConceptSets();
             drugSets.add(tb);
         }
@@ -102,9 +106,11 @@ public class DrugForecastController {
     public void showCountPatientsOnDrugsOptions(ModelMap model) {
         Cohort cohort = Context.getPatientSetService().getAllPatients();
         cohort.setDescription("All patients in system");
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         List<Concept> drugSets = new ArrayList<Concept>();
         {
-            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"));
+            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"), mu);
             tb.getConceptSets();
             drugSets.add(tb);
         }

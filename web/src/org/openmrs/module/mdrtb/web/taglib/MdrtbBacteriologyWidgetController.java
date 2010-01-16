@@ -26,6 +26,8 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbBacteriologyWidgetController extends TagSupport {
@@ -139,7 +141,8 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
 
     public int doStartTag() {
 
-    
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");
@@ -175,7 +178,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
        
-            Concept c = MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
+            Concept c = MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu);
             if (c != null){
                 obsGroupConcepts.add(c.getBestName(locUS).getName());
             }    
@@ -214,7 +217,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
            
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"),mu);
             if (c != null) {
                 for (Obs obx : observations) {
                     if (obx.getConcept().equals(c) && !obx.getVoided()){
@@ -298,7 +301,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         // setup left column items
         List<ConceptName> tests = new ArrayList<ConceptName>();
         if (this.columnHeaders != null) {
-            tests = this.getColumnHeaderConceptNames(this.columnHeaders, locUS);
+            tests = this.getColumnHeaderConceptNames(this.columnHeaders, locUS, mu);
         } else {
             tests = this.getConceptNamesFromSet(encObs, locUS);
         }
@@ -529,12 +532,12 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     }
 
     private List<ConceptName> getColumnHeaderConceptNames(String nameList,
-            Locale loc) {
+            Locale loc, MdrtbFactory mu) {
         List<ConceptName> tests = new ArrayList<ConceptName>();
         for (StringTokenizer st = new StringTokenizer(nameList, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"), mu);
             if (c != null) {
                 if (tests.contains(c.getBestName(loc)) == false)
                     tests.add(c.getBestName(loc));

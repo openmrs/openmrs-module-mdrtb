@@ -20,6 +20,8 @@ import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
@@ -129,10 +131,12 @@ public class RegimenHistoryTag extends TagSupport {
         
         //get drugs:
         Set<Concept> drugConcepts = new LinkedHashSet<Concept>();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         if (this.drugConceptList != null && !this.drugConceptList.equals("")){
             for (StringTokenizer st = new StringTokenizer(drugConceptList, "|"); st.hasMoreTokens(); ) {
                 String s = st.nextToken().trim();
-                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en"));
+                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en"), mu);
                 if (c != null)
                     drugConcepts.add(c);
             }    
