@@ -380,7 +380,7 @@
 		<spring:message code='mdrtb.samplecollectiondateLN' var='sampleCollectionDateStrLN'/>
 		<c:if test="${!empty obj.obs}">
 						<mdrtb:bacteriology
-						observations="${obj.obs}"
+						patientId="${obj.patient.patientId}" 
 						concepts="TUBERCULOSIS PROPHYLAXIS STARTED|REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED|TUBERCULOSIS DRUG TREATMENT START DATE"
 						obsGroupConcepts="TUBERCULOSIS SMEAR MICROSCOPY CONSTRUCT|TUBERCULOSIS CULTURE CONSTRUCT"
 						resultConceptList="TUBERCULOSIS SMEAR RESULT|TUBERCULOSIS CULTURE RESULT"

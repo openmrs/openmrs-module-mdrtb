@@ -32,7 +32,7 @@
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 	<attribute>
-		<name>observations</name>
+		<name>patientId</name>
 		<required>true</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
