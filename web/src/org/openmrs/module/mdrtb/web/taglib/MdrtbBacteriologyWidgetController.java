@@ -161,12 +161,6 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         patient = Context.getPatientService().getPatient(patientId);
         observations = Context.getObsService().getObservationsByPerson(patient);
   
-
-        
-        
-        for(Obs o : observations)
-            System.out.println(o.getConcept().getConceptId() + " " + o.getConcept().getBestName(new Locale("en")));
-
         for (StringTokenizer st = new StringTokenizer(this.redList, "|"); st
                 .hasMoreTokens();) {
             String redString = st.nextToken().trim();
