@@ -141,7 +141,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td><spring:message code="mdrtb.active" /></td>
+			<td><spring:message code="mdrtb.tsActive" /></td>
 			<td>
 				<spring:bind path="formObj.active.valueCoded">
 					<select name="${status.expression}" id="active">

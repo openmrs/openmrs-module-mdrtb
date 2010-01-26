@@ -19,6 +19,7 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.ConceptMap;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
@@ -123,7 +124,10 @@ public class MdrtbActivator implements Activator, Runnable {
         }
         ms.setLocaleSetUsedInDB(locales);
         
-        //TODO:  add Mdrtb standard regimens
+        //add concepts to concept map:
+        
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
         
         log.info("Finished loading mdrtb metadata.");
     }
@@ -135,8 +139,8 @@ public class MdrtbActivator implements Activator, Runnable {
     }
 
     /**
-     * Called after module application context has been loaded. There is no authenticated
-     * user so all required privileges must be added as proxy privileges
+     *  utility method if failure at startup, or you have reason to run again.  Waiting for 
+     *  the 'afterContextLoad' method in trunk...
      */
     public void load() {  
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
@@ -155,8 +159,8 @@ public class MdrtbActivator implements Activator, Runnable {
             }
         }
         ms.setLocaleSetUsedInDB(locales);
-        
-        //TODO:  add Mdrtb standard regimens
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
         
         log.info("Finished loading mdrtb metadata.");
     }

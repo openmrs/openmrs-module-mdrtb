@@ -1756,7 +1756,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         }
                     }
                     
-                    //TODO: programatically figure out treatment start date?
+                    //TODO: 
                     Concept c = mu.getConceptTreatmentStartDate();
                     List<Obs> obsTmp = os.getObservationsByPersonAndConcept(patient, c);
                     if (obsTmp.size() > 0)

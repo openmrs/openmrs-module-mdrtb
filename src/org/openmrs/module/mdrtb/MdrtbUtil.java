@@ -18,8 +18,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
+import org.openmrs.ConceptSource;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
@@ -30,9 +32,10 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.User;
 import org.openmrs.api.ObsService;
+import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.impl.MdrtbServiceImpl;
 
 public class MdrtbUtil {
     
@@ -40,7 +43,6 @@ public class MdrtbUtil {
 
 public static Concept getMDRTBConceptByName(String conceptString, Locale loc, MdrtbFactory mu){
         
-        MdrtbService ms = Context.getService(MdrtbService.class);
         Concept ret = null;
         
         if (conceptString.contains("|") && conceptString.indexOf("|", 0) != conceptString.lastIndexOf("|"))
@@ -905,6 +907,32 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
               }
           }    
           return ret;
+      }
+      
+      /**
+       * 
+       * Creates the conceptMap for a concept
+       * 
+       * @param c
+       * @param sourceCode
+       * @param mappingCode
+       */
+      public static void addConceptMapForConcept(Concept c, ConceptSource source, String sourceCode){
+          Concept cTest = Context.getConceptService().getConceptByMapping(sourceCode, source.getName());
+          if (cTest == null){
+              
+              ConceptMap cm = new ConceptMap();
+              cm.setConcept(c);
+              cm.setCreator(c.getCreator());
+              cm.setDateCreated(new Date());
+              cm.setSource(source);
+              cm.setSourceCode(sourceCode);
+              cm.setUuid(UUID.randomUUID().toString());
+              cm.setComment("");
+              c.addConceptMapping(cm);
+              Context.getConceptService().saveConcept(c);
+              
+          }
       }
       
       

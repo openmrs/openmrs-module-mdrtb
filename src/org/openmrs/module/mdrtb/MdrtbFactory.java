@@ -693,7 +693,26 @@ public final class MdrtbFactory {
             //generate the necessary concept_maps:  (missing uuids if 1.5...)
 //            for (ConceptName cn : xmlConceptList){
 //                System.out.println("insert into concept_map (source, source_code, comment, creator, date_created, concept_id) values (\"org.openmrs.module.mdrtb\", \"" + cn.getName() + "\", \"\", " + Context.getAuthenticatedUser().getUserId() + ", current_timestamp(), " + cn.getConcept().getConceptId() +");");
-//            }
+//            }       
+            
+            
+          //TODO: the following is for the concept switch from tuberculosis drug treatment start date to mdrtb drug treatment start date
+            // once botwsana, haiti, pakistan have been upgraded, no worries.
+            if (xmlConceptList.get(STR_TREATMENT_START_DATE) == null){
+                Concept c = cService.getConceptByName(STR_TREATMENT_START_DATE);
+                if (c != null)
+                    xmlConceptList.put(STR_TREATMENT_START_DATE, c);
+                else
+                    throw new RuntimeException("Unable to load concept MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+            }
+            
+            if (xmlConceptList.get(STR_CD4_PERCENT) == null){
+                Concept c = cService.getConceptByName(STR_CD4_PERCENT);
+                if (c != null)
+                    xmlConceptList.put(STR_CD4_PERCENT, c);
+                else
+                    throw new RuntimeException("Unable to load concept CD4%");
+            }
             
         } catch (Exception ex){
             throw new RuntimeException(ex);
@@ -920,7 +939,7 @@ public final class MdrtbFactory {
         ret = this.getMDRTBConceptByKey(STR_DATE_RECEIVED, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
-       
+    
     public Concept getConceptTreatmentStartDate(){
         Concept ret = null;
         ret = this.getMDRTBConceptByKey(STR_TREATMENT_START_DATE, new Locale("en", "US"), this.xmlConceptList);

@@ -45,4 +45,15 @@
 		</sql>
 	</diff>
 	
+		<diff>
+		<version>1.5.4</version>
+		<author>Dave Thomas</author>
+		<date>Aug 8th 2008</date>
+		<description>
+		</description>
+		<sql>
+			update `obs` set `concept_id` = 1453 where `concept_id` = 1113;
+		</sql>
+	</diff>
+	
 </sqldiff>
