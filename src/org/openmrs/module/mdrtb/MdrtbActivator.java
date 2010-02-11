@@ -128,6 +128,7 @@ public class MdrtbActivator implements Activator, Runnable {
         
         MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
         MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(2169), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "RESULT OF HIV TEST");
         
         log.info("Finished loading mdrtb metadata.");
     }
