@@ -362,6 +362,13 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                           //dealing with the possibility of different providers:
                             String providerString = "culture_provider_" + i;
                             String providerIdString = request.getParameter(providerString);
+                            //TODO: add formID to obs, based on new global property
+                            String formIdString = as.getGlobalProperty("mdrtb.formIdToAttachToBacteriologyEntry");
+                            try {
+                                 Integer formId = Integer.valueOf(formIdString);
+                                 enc.setForm(Context.getFormService().getForm(formId));
+                            } catch (Exception ex){}
+                            
                             try{
                                if (providerIdString != null && !providerIdString.equals("")){
                                    User provider = Context.getUserService().getUser(Integer.valueOf(providerIdString));
@@ -662,7 +669,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             MdrtbFactory mu = ms.getMdrtbFactory();
             
-            map.put("testNames", MdrtbUtil.getDstDrugList(false, mu));
+            //map.put("testNames", MdrtbUtil.getDstDrugList(false, mu));
             map.put("dstResults", this.getDSTRes(as, cs, mu));  
             map.put("organismTypes", this.getOrganismTypes(as, cs, mu));
             map.put("smearResults", this.getSmearRes(as, cs, mu));
@@ -898,6 +905,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         enc.setLocation(src.getLocation());
         enc.setPatient(src.getPatient());
         enc.setVoided(false);
+        enc.setForm(src.getForm());
         return enc;
     }
     

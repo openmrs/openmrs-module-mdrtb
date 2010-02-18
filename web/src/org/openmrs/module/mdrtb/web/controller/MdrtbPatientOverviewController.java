@@ -236,10 +236,22 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             Concept tbCaseClass = mu.getConceptTBCaseClassification();
             Concept hivResultStatus = mu.getConceptHIVStatus();
             
-            map.put("prevDrugUse",drugUse.getAnswers());
-            map.put("prevTreatment", prevTreat.getAnswers());
-            map.put("tbCaseClass",tbCaseClass.getAnswers());
-            map.put("hivStatuses", hivResultStatus.getAnswers());
+            
+            try {
+                map.put("prevDrugUse",drugUse.getAnswers());
+            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+            
+            try {
+                map.put("prevTreatment", prevTreat.getAnswers());
+            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+            
+            try {
+                map.put("tbCaseClass",tbCaseClass.getAnswers());
+            } catch (Exception ex){throw new RuntimeException("TUBERCULOSIS CASE CLASSIFICATION is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+            
+            try {
+                map.put("hivStatuses", hivResultStatus.getAnswers());
+            } catch (Exception ex){throw new RuntimeException("RESULT OF HIV TEST is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
             
             map.put("locations", Context.getLocationService().getAllLocations(false));
             

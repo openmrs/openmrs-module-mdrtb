@@ -353,6 +353,8 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
        return pp;
    }
    
+  
+   
    
    public static List<Concept> getDstDrugList(boolean removeDuplicates, MdrtbFactory mu){
        String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
@@ -364,10 +366,15 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
            } else if (c != null){
               drugConceptList.add(c);
            } else if (c == null){
-               //HERE:
+               //HERE:Split up the list
                List<String> dstConceptList = new ArrayList<String>();
                for (StringTokenizer st = new StringTokenizer(drugList, "|"); st.hasMoreTokens(); ) {
-                   dstConceptList.add(st.nextToken().trim());
+                   String drugName = st.nextToken().trim();
+                   if (drugName.contains(":")){
+                       String[] splitStr = drugName.split(":");
+                       drugName = splitStr[0];
+                   }
+                   dstConceptList.add(drugName);
                }
                MdrtbService ms = Context.getService(MdrtbService.class);
                List<ConceptName> names = ms.getMdrtbConceptNamesByNameList(dstConceptList, removeDuplicates, null);

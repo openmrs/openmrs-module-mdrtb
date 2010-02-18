@@ -215,38 +215,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                             PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
                             pi.setPreferred(pref.equals(identifiers[i]+types[i]));
                           
-                            //Add prefix for rwanda if global property is not null
-                            try {
-                                String prefixString = Context.getAdministrationService().getGlobalProperty("mdrtb.patientIdentifierLocationToPrefixList");
-              
-                                if (prefixString != null){
-                                    Map<String, String> prefMap = new HashMap<String,String>();
-                                    for (StringTokenizer st = new StringTokenizer(prefixString, "|"); st.hasMoreTokens(); ) {
-                                        String s = st.nextToken().trim();
-                                        String[] split = s.split(":");
-                                        if (split.length == 2){
-                                          String locationName = split[0];  
-                                          String code = split[1];
-                                              Location location = Context.getLocationService().getLocation(locationName);
-                                              if (location != null){
-                                                  prefMap.put(location.getLocationId().toString(),  code);
-                                              }
-                                          
-                                        }
-                                    }  
-                                    Person person = Context.getPersonService().getPerson(Context.getAuthenticatedUser().getUserId());
-                                    PersonAttribute pa = person.getAttribute(Context.getPersonService().getPersonAttributeType(patLocation));
-                                    
-                                    String prefix = prefMap.get(pa.getValue());
-                                    if (prefix != null && !prefix.equals("null") && pa != null){
-                                            pi.setIdentifier(prefix + pi.getIdentifier());
-                                    } else  if (pa != null) {
-                                            pi.setIdentifier(pi.getIdentifier());
-                                    }
-                                }
-                            } catch (Exception ex){
-                                log.error(ex);
-                            }
                             if (pi.getIdentifier() != null && !pi.getIdentifier().equals("") && pi.getLocation() != null)
                             newIdentifiers.add(pi);
                             

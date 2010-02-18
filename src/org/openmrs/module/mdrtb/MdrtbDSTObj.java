@@ -141,8 +141,6 @@ public class MdrtbDSTObj {
         AdministrationService as = Context.getAdministrationService();
         String drugList = as.getGlobalProperty("mdrtb.DST_drug_list");
         try {
-            
-           
                 Concept c =  MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"), mu);
                 
                 if (c != null && c.isSet()){
@@ -157,11 +155,23 @@ public class MdrtbDSTObj {
                 } else if (c == null){
                     for (StringTokenizer st = new StringTokenizer(drugList, "|"); st.hasMoreTokens(); ) {
                         String s = st.nextToken().trim();
-                        
+                        String concentration = null;
+                        if (s.contains(":")){
+                            String[] splitStr = s.split(":");
+                            s = splitStr[0];
+                            try {
+                                concentration = splitStr[1];
+                            } catch (Exception ex){}    
+                        }
                     
                         Concept cChildren = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                         if (cChildren != null){
                         MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, patient, user, mu);
+                        if (concentration != null){
+                            try {
+                                mdro.getConcentration().setValueNumeric(Double.valueOf(concentration));
+                            } catch (Exception ex){}    
+                        }    
                         dstResults.add(mdro);
                         }
                     }

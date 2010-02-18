@@ -98,7 +98,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             MdrtbFactory mu = ms.getMdrtbFactory();
             
-            map.put("testNames", this.getDSTTests(as, cs, mu));
+            //map.put("testNames", this.getDSTTests(as, cs, mu));
             map.put("dstResults", this.getDSTRes(as, cs, mu));  
             map.put("organismTypes", this.getOrganismTypes(as, cs, mu));
             map.put("smearResults", this.getSmearRes(as, cs, mu));
@@ -842,7 +842,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
     @Override
     protected Object formBackingObject(HttpServletRequest request)
             throws Exception {
-
+        //TODO:  attach concentrations to empty concentration obs that correspond to no results
         
         if (Context.isAuthenticated()) {
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
@@ -864,7 +864,6 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             for (Encounter encs: Context.getEncounterService().getEncountersByPatient(patient)){
                 mnto.getEncounters().add(encs);
             }
-            // find out what we're editing:
 
             if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_PARENT()) && !parentObs.isVoided()) {
                 // DST
@@ -1101,7 +1100,6 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         Obs concentration = new Obs();
                         concentration.setDateCreated(new Date());
                         concentration.setVoided(false);
-                        
                         concentration.setConcept(mu.getConceptConcentration());
                         concentration.setCreator(user);
                         concentration.setPerson(patient);

@@ -103,7 +103,7 @@
 		<property>@MODULE_ID@.DST_drug_list</property>
 		<defaultValue>DST TEST COMPONENTS</defaultValue>
 		<description>
-			The ConceptSet containing all of the ordered drug concepts that are used as a row in a DST test, OR a list of concepts delimited by |.
+			The ConceptSet containing all of the ordered drug concepts that are used as a row in a DST test, OR a list of concepts delimited by |.  If the latter, you can list concept_name, followed by a :, followed by the concentration level for the dst result.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -221,13 +221,6 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.webserver_port</property>
-		<defaultValue>:8080</defaultValue>
-		<description>
-			This is meant to give you a little bit of flexibility with hosting configurations.  For tomcat, the listener port is :8080 by default.
-		</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.positive_culture_concepts</property>
 		<defaultValue>WEAKLY POSITIVE|STRONGLY POSITIVE|MODERATELY POSITIVE|SCANTY</defaultValue>
 		<description>
@@ -295,7 +288,6 @@
 		<description>Used to define culture and smear conversions.  Sets ____ in the following conversion definition: at least ____ consecutive negative bacteriologies with the earliest and the latest occurring at least X days apart.  For example, the WHO definition is 2 negative bacteriologies, at least 30 days apart.  Unit is number of bacteriologies.
 		</description>
 	</globalProperty>
-	
 	<globalProperty>
 		<property>@MODULE_ID@.red_list</property>
 		<defaultValue>resistant|positive|scanty|POSITIVE|SCANTY|RESISTANT|RÉSISTANT|POSITIF|positif|MINIMES</defaultValue>
@@ -322,16 +314,6 @@
 		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.urlResourceRoot</property>
-		<defaultValue>https://mdrtbmodule.pih-emr.org</defaultValue>
-		<description>The root tomcat URL of your server.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.applicationName</property>
-		<defaultValue>openmrs</defaultValue>
-		<description>The application name, almost always openmrs, unless running multiple openmrs instances within the same web server.</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.listPatientsLocationMethod</property>
 		<defaultValue>PATIENT_HEALTH_CENTER</defaultValue>
 		<description>The location calculation method to use for the list patients page</description>
@@ -342,9 +324,9 @@
 		<description>The name of the Location that represents an Unknown Location</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.patientIdentifierLocationToPrefixList</property>
+		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
 		<defaultValue></defaultValue>
-		<description>Pipe delimited of location names and id prefix for Rwanda.  For example, "Kigali:K|Rwinkwavu:R</description>
+		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
 	</globalProperty>
 	
 	<dwr>
