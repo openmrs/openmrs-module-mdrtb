@@ -59,6 +59,9 @@ public class MdrtbServiceImpl  extends BaseOpenmrsService implements MdrtbServic
     }
 
     public MdrtbFactory getMdrtbFactory() {
+        if (mdrtbFactory == null){
+            this.setMdrtbFactory(MdrtbFactory.getInstance());
+        } 
         return mdrtbFactory;
     }
 
