@@ -79,7 +79,6 @@ public class RegimenUtils {
                 for (RegimenComponent before : regOnDate.getComponents()) {
                     //stop the old order only if it isn't exactly identical to a new order (excluding discontinued_date)
                     for (DrugOrder newOrder:drugOrders){
-                        //but either concept or drug is the same
                         if (!before.getDrugOrder().getDiscontinued() && drugOrderMatchesDrugConcept(before.getDrugOrder(), newOrder) && !regimenComponentIsTheSameAsDrugOrderExcludingDates(before.getDrugOrder(), newOrder)){
                             discontinueOrder( before.getDrugOrder(), effectiveDate, reasonForChange);
                         }    

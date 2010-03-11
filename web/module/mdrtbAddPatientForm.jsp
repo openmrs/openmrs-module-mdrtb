@@ -265,7 +265,7 @@
 								</mdrtb:forEachRecord>
 							</select>
 						</td>
-						<td valign="top">
+						<td valign="top" nowrap>
 							<select name="location">
 								<option value=""></option>
 								<openmrs:globalProperty key="mdrtb.location_list" var="locFilterList"/>
@@ -274,7 +274,7 @@
 										${record.name}
 									</option>
 								</mdrtb:forEachRecord>
-							</select>
+							</select><span style="color:red">*</span>
 						</td>
 						<td valign="middle" align="center">
 							<input type="radio" name="preferred" value="1" checked selected onclick="identifierOrTypeChanged(this)" />

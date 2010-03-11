@@ -21,8 +21,203 @@
 	
 	coding strategy:  create an mdrtb regimen factory class, read and parse xml, get menu item, and show menu item
 	
+	
+	NOTE: ***   MAKE SURE CODENAMES ARE UNIQUE ***
 	 --> 
+	 
+	 	<regimenSuggestion> 
+			<drugComponents> 
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>48</drugId> 
+				<dose>1</dose> 
+				<units>g</units> 
+				<frequency>1/day x 6 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>46</drugId> 
+				<dose>400</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>53</drugId> 
+				<dose>200</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>59</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>58</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+		</drugComponents>
+		<displayName>Injectible Phase Initial</displayName>
+		<codeName>INJECTIBLEINITIAL</codeName>
+		<canReplace>TUBERCULOSIS DRUGS</canReplace>
+		<regimenType>6339</regimenType>
+	</regimenSuggestion>
+	
+	
 	<regimenSuggestion> 
+			<drugComponents> 
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>48</drugId> 
+				<dose>1</dose> 
+				<units>g</units> 
+				<frequency>1/day x 3 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>46</drugId> 
+				<dose>400</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>53</drugId> 
+				<dose>200</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>59</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>58</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+		</drugComponents>
+		<displayName>Injectible Phase Continuation</displayName>
+		<codeName>INJECTIBLECONTINUATION</codeName>
+		<canReplace>TUBERCULOSIS DRUGS</canReplace>
+		<regimenType>6339</regimenType>
+	</regimenSuggestion>
+	
+	<regimenSuggestion> 
+		<drugComponents> 
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>53</drugId> 
+				<dose>200</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>59</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>58</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+		</drugComponents>
+		<displayName>Continuation Phase Without Z</displayName>
+		<codeName>CONTINUATIONSIMPLE</codeName>
+		<canReplace>TUBERCULOSIS DRUGS</canReplace>
+		<regimenType>6339</regimenType>
+	</regimenSuggestion>
+	
+	
+	<regimenSuggestion> 
+		<drugComponents> 
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>53</drugId> 
+				<dose>200</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>59</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>58</drugId> 
+				<dose>250</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+			<drugSuggestion> 
+				<conceptId></conceptId> 
+				<drugId>46</drugId> 
+				<dose>400</dose> 
+				<units>mg</units> 
+				<frequency>1/day x 7 days/week</frequency>  
+				<instructions></instructions> 
+				<asNeeded>false</asNeeded>
+			</drugSuggestion>
+		</drugComponents>
+		<displayName>Continuation Phase plus Z</displayName>
+		<codeName>CONTINUATIONPLUS</codeName>
+		<canReplace>TUBERCULOSIS DRUGS</canReplace>
+		<regimenType>6339</regimenType>
+	</regimenSuggestion>
+	
+	
+	<!--  <regimenSuggestion> 
 		<drugComponents> 
 			<drugSuggestion> 
 				<conceptId></conceptId> 
@@ -56,5 +251,5 @@
 		<codeName>INH100RIF300E300</codeName>
 		<canReplace>TUBERCULOSIS DRUGS</canReplace>
 		<regimenType>6339</regimenType>
-	</regimenSuggestion>
+	</regimenSuggestion>-->
 </list>

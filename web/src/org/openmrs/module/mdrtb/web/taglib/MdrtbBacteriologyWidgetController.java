@@ -196,19 +196,20 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
             this.setFromDate(new Date(0));
 
         for (Obs ob : observations) {
-            if (ob.isObsGrouping() && this.doesSetContainSubString(ob.getConcept().getBestName(locUS).getName(), obsGroupConcepts)) {
+            if (this.doesSetContainSubString(ob.getConcept().getBestName(locUS).getName(), obsGroupConcepts)) {
                 Set<Obs> tmpSet = ob.getGroupMembers();
-                for (Obs oTmp : tmpSet) {
-                    if (oTmp.getObsDatetime().getTime() >= fromDate.getTime()
-                            && oTmp.getObsDatetime().getTime() <= toDate.getTime()
-                            && oTmp.getVoided() == false
-                            && this.doesSetContainSubString(oTmp.getConcept().getBestName(locUS).getName(),resultConceptListSet)) {
-                        encObs.add(oTmp);
-                        if (!dates.contains(oTmp.getObsDatetime()))
-                            dates.add(oTmp.getObsDatetime());
+                if (tmpSet != null && tmpSet.size() > 0){
+                    for (Obs oTmp : tmpSet) {
+                        if (oTmp.getObsDatetime().getTime() >= fromDate.getTime()
+                                && oTmp.getObsDatetime().getTime() <= toDate.getTime()
+                                && oTmp.getVoided() == false
+                                && this.doesSetContainSubString(oTmp.getConcept().getBestName(locUS).getName(),resultConceptListSet)) {
+                            encObs.add(oTmp);
+                            if (!dates.contains(oTmp.getObsDatetime()))
+                                dates.add(oTmp.getObsDatetime());
+                        }
                     }
                 }
-
             }
         }
         // toss in the obs that are going to get grey rows:

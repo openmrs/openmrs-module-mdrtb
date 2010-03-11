@@ -255,7 +255,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 map.put("hivStatuses", hivResultStatus.getAnswers());
             } catch (Exception ex){throw new RuntimeException("RESULT OF HIV TEST is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
             
-            map.put("locations", Context.getLocationService().getAllLocations(false));
+            map.put("locations", ms.getAllMdrtrbLocations(false));
             
             MessageSourceAccessor msa = getMessageSourceAccessor();
             map.put("daysOfWeek", "'" + msa.getMessage("mdrtb.sunday")+ "','" + msa.getMessage("mdrtb.monday")+ "','" + msa.getMessage("mdrtb.tuesday") + "','" + msa.getMessage("mdrtb.wednesday")+ "','" + msa.getMessage("mdrtb.thursday")+ "','" + msa.getMessage("mdrtb.friday")+ "','"

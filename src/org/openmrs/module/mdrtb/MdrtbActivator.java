@@ -108,6 +108,14 @@ public class MdrtbActivator implements Activator, Runnable {
      */
     protected void onLoad(MdrtbService ms) {     
         
+//add concepts to concept map:
+        
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(2169), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "RESULT OF HIV TEST");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1391), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TREATMENT PLAN OTHER REMARKS");
+        
+        
         MdrtbFactory mu = MdrtbFactory.getInstance();
         ms.setMdrtbFactory(mu);
         ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
@@ -124,11 +132,6 @@ public class MdrtbActivator implements Activator, Runnable {
         }
         ms.setLocaleSetUsedInDB(locales);
         
-        //add concepts to concept map:
-        
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(2169), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "RESULT OF HIV TEST");
         
         log.info("Finished loading mdrtb metadata.");
     }
@@ -145,6 +148,8 @@ public class MdrtbActivator implements Activator, Runnable {
      */
     public void load() {  
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
         MdrtbFactory mu = ms.getMdrtbFactory();
         ms.setMdrtbFactory(mu);
         ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
@@ -160,9 +165,6 @@ public class MdrtbActivator implements Activator, Runnable {
             }
         }
         ms.setLocaleSetUsedInDB(locales);
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
-        
         log.info("Finished loading mdrtb metadata.");
     }
    

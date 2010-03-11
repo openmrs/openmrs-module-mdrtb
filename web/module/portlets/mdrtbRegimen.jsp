@@ -416,7 +416,7 @@
 				patientId="${obj.patient.patientId}" 
 				drugTitleString="${drugTitle}" 
 				durationTitleString="${durationindays}" 
-				drugConceptList="${dstDrugList}|AMOXICILLIN AND CLAVULANIC ACID|KANAMYCIN|LEVOFLOXACIN|RIFABUTINE|CLARITHROMYCIN|THIOACETAZONE|P-AMINOSALICYLIC ACID"
+				drugConceptList="${dstDrugList}|PYRAZINAMIDE|AMOXICILLIN AND CLAVULANIC ACID|KANAMYCIN|LEVOFLOXACIN|RIFABUTINE|CLARITHROMYCIN|THIOACETAZONE|P-AMINOSALICYLIC ACID"
 				cssClass="widgetOut"
 				invert="true"
 				graphicResourcePath="${pageContext.request.contextPath}/moduleResources/mdrtb/greenCheck.gif"/>	

@@ -687,6 +687,7 @@ public final class MdrtbFactory {
             for (ConceptMap cm: cms){
                 Concept c = cm.getConcept();
                 initializeEverythingAboutConcept(c);
+                //System.out.println("Initializing MDRTB Metadata: Concept " + c + " " + c.getName().getName());
                 xmlConceptList.put(cm.getSourceCode(), c);
             }
             
@@ -712,6 +713,14 @@ public final class MdrtbFactory {
                     xmlConceptList.put(STR_CD4_PERCENT, c);
                 else
                     throw new RuntimeException("Unable to load concept CD4%");
+            }
+            
+            if (xmlConceptList.get(STR_DIED) == null){
+                Concept c = cService.getConceptByName(STR_DIED.trim());
+                if (c != null)
+                    xmlConceptList.put(STR_DIED, c);
+                else
+                    throw new RuntimeException("Unable to load concept DIED - TB");
             }
             
         } catch (Exception ex){

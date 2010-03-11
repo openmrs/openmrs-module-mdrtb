@@ -244,7 +244,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 enc = Context.getEncounterService().getEncounter(encounterId);
             }
 
-            fixEnc(enc);
+            fixEnc(enc, patient);
             
             User defaultProvider = us.getUserByUsername(as
                     .getGlobalProperty("mdrtb.mdrtb_default_provider"));
@@ -818,8 +818,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 }
                 if (saveTest){
                         //set uuids
-                        fixEnc(enc);    
-                        //for lazy loading
+                        fixEnc(enc, patient);    
                         es.saveEncounter(enc);
                         for (Encounter oldEnc: encsToDelete){
                             //for lazy loading
@@ -922,9 +921,9 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 }     
                             }
                             
-                            if (mdro.getColonies() == null){
+                            if (mdro.getColonies() == null || (mdro.getColonies().getConcept() == null)){
                                 Obs colonies = new Obs();
-                                colonies.setConcept( mu.getConceptColonies()); 
+                                colonies.setConcept(mu.getConceptColonies()); 
                                 colonies.setVoided(false);
                                 colonies.setDateCreated(new Date());
                                 colonies.setPerson(patient);
@@ -933,7 +932,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 colonies.setObsDatetime(parentObs.getObsDatetime());
                                 mdro.setColonies(colonies);
                             }
-                            if (mdro.getConcentration() == null){
+                            if (mdro.getConcentration() == null || (mdro.getConcentration().getConcept() == null)){
                                 Obs conc = new Obs();
                                 conc.setConcept(  mu.getConceptConcentration()); 
                                 conc.setVoided(false);
@@ -1559,26 +1558,50 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         else 
             return true;
     }
-    private static Encounter fixEnc(Encounter enc){
-        
+    
+    private static Encounter fixEnc(Encounter enc, Patient patient){   
         if (enc.getAllObs() != null){
             for (Obs o : enc.getAllObs()){
+                if (o.getConcept() == null){
+                    enc.removeObs(o);
+                    continue;
+                }    
                 if (o.getUuid() == null)
                     o.setUuid(UUID.randomUUID().toString());
                 if (o.getLocation() == null)
                     o.setLocation(enc.getLocation());
+                if (o.getDateCreated() == null)
+                    o.setDateCreated(new Date());
+                if (o.getCreator() == null)
+                    o.setCreator(Context.getAuthenticatedUser());
+                o.setPerson(patient);
                 if (o.hasGroupMembers()){
                     for (Obs oTmp : o.getGroupMembers()){
+ 
                         if (oTmp.getUuid() == null)
                             oTmp.setUuid(UUID.randomUUID().toString());
                         if (oTmp.getLocation() == null)
                             oTmp.setLocation(enc.getLocation());
+                        if (oTmp.getDateCreated() == null)
+                            oTmp.setDateCreated(new Date());
+                        if (oTmp.getCreator() == null)
+                            oTmp.setCreator(Context.getAuthenticatedUser());
+                        oTmp.setPerson(patient);
                         if (oTmp.hasGroupMembers()){
                             for (Obs oInner : oTmp.getGroupMembers()){
+                                if (oInner.getConcept() == null){
+                                    oTmp.removeGroupMember(oInner);
+                                    continue;
+                                }
                                 if (oInner.getUuid() == null)
                                     oInner.setUuid(UUID.randomUUID().toString());
                                 if (oInner.getLocation() == null)
                                     oInner.setLocation(enc.getLocation());
+                                if (oInner.getDateCreated() == null)
+                                    oInner.setDateCreated(new Date());
+                                if (oInner.getCreator() == null)
+                                    oInner.setCreator(Context.getAuthenticatedUser());
+                                oInner.setPerson(patient);
                             }
                         }
                     }
@@ -1589,6 +1612,11 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         Set<Order> newOrders = enc.getOrders();
         if (newOrders.size() == 0)
             enc.setOrders(new HashSet<Order>());
+        
+        if (enc.getEncounterType() != null)
+            enc.getEncounterType().getName();
+        if (enc.getForm() != null)
+            enc.getForm().getName();
         
         return enc;
     }

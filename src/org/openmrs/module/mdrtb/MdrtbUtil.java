@@ -47,7 +47,8 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
         
         if (conceptString.contains("|") && conceptString.indexOf("|", 0) != conceptString.lastIndexOf("|"))
                return null;
-
+        
+        MdrtbService ms = Context.getService(MdrtbService.class);
         Map<String, Concept> xmlConceptList = mu.getXmlConceptList();
         ret = mu.getMDRTBConceptByKey(conceptString, loc, xmlConceptList);
         if (ret != null)
@@ -56,7 +57,9 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
         List<Locale> locales = new ArrayList<Locale>();
         locales.add(loc);
         //first, if there's an exact match in the passed-in locale, that's what we want
-        List<ConceptWord> conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+        //TODO:  this is slow...
+        //List<ConceptWord> conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+        List<ConceptWord> conceptWords = ms.getConceptWords(conceptString.trim(), locales);
         for (ConceptWord cw : conceptWords){
             Concept cTmp = cw.getConcept();
             if (!cTmp.isRetired()){
@@ -87,7 +90,9 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
             locales = getLocalesFromDB();
             
             //first, if there's an exact match in the passed-in locale, that's what we want
-            conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+            //TODO: this is slow...
+            //conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);
+            conceptWords = ms.getConceptWords(conceptString.trim(), locales);
             for (ConceptWord cw : conceptWords){
                 Concept cTmp = cw.getConcept();
                 if (!cTmp.isRetired()){
@@ -346,7 +351,9 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
        Context.getProgramWorkflowService().savePatientProgram(pp);
        
        Concept diedConcept = mu.getConceptDiedMDR();
-       if (programWorkflowState.getConcept().equals(diedConcept)) {
+       System.out.println("programWorkflowState.getConcept() " + programWorkflowState.getConcept());
+       System.out.println("diedConcept " + diedConcept);
+       if (programWorkflowState.getConcept().getConceptId().equals(diedConcept.getConceptId())) {
     	   Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
        }
        

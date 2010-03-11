@@ -1,15 +1,25 @@
 package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
+import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptWord;
+import org.openmrs.Location;
 import org.openmrs.Order;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.DAOException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -85,6 +95,13 @@ public class MdrtbServiceImpl  extends BaseOpenmrsService implements MdrtbServic
         MdrtbServiceImpl.localeSetUsedInDB.addAll(localeSetUsedInDB);
     }
 
+    public List<Location> getAllMdrtrbLocations(boolean includeRetired){
+        return dao.getAllMdrtrbLocations(includeRetired);
+    }
+    
+    public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales){
+        return dao.getConceptWords(phrase, locales);
+    }
    
 
 }
