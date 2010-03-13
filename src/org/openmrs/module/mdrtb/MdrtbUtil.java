@@ -306,59 +306,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
        return negResult;
    }
    
-   /**
-    * 
-    * Utility method used to transition to a state, ignoring usual state change rules.
-    * 
-    * @param pp
-    * @param programWorkflowState
-    * @param onDate
-    */
-   public static PatientProgram  transitionToStateNoErrorChecking(PatientProgram pp, ProgramWorkflowState programWorkflowState, Date onDate, MdrtbFactory mu) {
-
-       Set<PatientState> lastStates = pp.getStates();
-
-       for (PatientState lastState : lastStates){
-       
-           
-           if (lastState != null  && lastState.getState().getProgramWorkflow().getProgramWorkflowId().intValue() == programWorkflowState.getProgramWorkflow().getProgramWorkflowId().intValue() && !lastState.getVoided()) {
-               
-                   lastState.setEndDate(onDate);
-               //if nonsensical: void
-               if (lastState.getEndDate().getTime() <= lastState.getStartDate().getTime()){
-                   lastState.setEndDate(onDate);
-                   lastState.setDateVoided(new Date());
-                   lastState.setVoided(true);
-                   lastState.setVoidedBy(Context.getAuthenticatedUser());
-                   lastState.setVoidReason("program states were edited such that this state observation was no longer valid"); 
-               }
-           }  
-       }
-       
-       PatientState newState = new PatientState();
-       newState.setPatientProgram(pp);
-       newState.setState(programWorkflowState);
-       newState.setStartDate(onDate);
-       pp.getStates().add(newState);
-       
- 
-       
-       Set<Concept> outcomeConcepts = mu.getMdrProgramOutcomeConcepts();
-       if (outcomeConcepts.contains(programWorkflowState.getConcept())) {
-    	   pp.setDateCompleted(onDate);
-       }
-       pp.setUuid(UUID.randomUUID().toString());
-       Context.getProgramWorkflowService().savePatientProgram(pp);
-       
-       Concept diedConcept = mu.getConceptDiedMDR();
-       System.out.println("programWorkflowState.getConcept() " + programWorkflowState.getConcept());
-       System.out.println("diedConcept " + diedConcept);
-       if (programWorkflowState.getConcept().getConceptId().equals(diedConcept.getConceptId())) {
-    	   Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
-       }
-       
-       return pp;
-   }
+   
    
   
    
@@ -537,6 +485,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
                                oTmp.setObsDatetime(e.getKey().getObsDatetime());
                                oTmp.setPerson(p);
                                oTmp.setValueDatetime(date);
+                               oTmp.setUuid(UUID.randomUUID().toString());
                                oTmp.setVoided(false);
                                
                                try {
@@ -583,6 +532,7 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
                                oTmp.setObsDatetime(date);
                                oTmp.setPerson(p);
                                oTmp.setValueDatetime(date);
+                               oTmp.setUuid(UUID.randomUUID().toString());
                                oTmp.setVoided(false);
                                
                                try {

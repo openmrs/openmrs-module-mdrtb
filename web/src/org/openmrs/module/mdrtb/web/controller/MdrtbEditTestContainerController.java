@@ -24,6 +24,8 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
@@ -199,53 +201,69 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             List<User> providers = Context.getUserService().getUsers(null, roles, false);
             map.put("providers", providers);
             map.put("scantyId", mu.getConceptScanty().getConceptId());
+            
+            
+            String obsGroupId = request.getParameter("ObsGroupId");
+            Obs o = Context.getObsService().getObs(Integer.valueOf(obsGroupId));
+            List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(Context.getPatientService().getPatient(o.getPersonId()));
+            map.put("encounters", encSet);
             mu = null;
         }
         return map;
     }
     
     @Override
-    protected ModelAndView onSubmit(HttpServletRequest request,
-            HttpServletResponse response, Object object,
-            BindException exceptions) throws Exception {
-        
-        Patient patient = new Patient();
-        String returnView = "BAC";
-        String action = request.getParameter("submit");
-        String retType = request.getParameter("retType");
-        AdministrationService as = Context.getAdministrationService();
-        EncounterService es = Context.getEncounterService();
-        MessageSourceAccessor msa = getMessageSourceAccessor();
-        UserService us = Context.getUserService();
-        boolean clean = false;
-        
-        Integer numRowsShown = 1;
-        String encString = "";
-        encString = request.getParameter("encSelect");
-        int pos = 0;
-        pos = encString.indexOf("|");
-        String encStringTmp = "";
-        if (pos > 0)
-        encStringTmp = encString.substring(0, pos);
-        Integer encounterId = null;
-        try { encounterId = Integer.parseInt(encStringTmp);
-        } catch (Exception ex){log.info("Not able to parse encounterID, creating a new encounter for DST or bacteriology.");}
-            //get the control object:
+    protected ModelAndView onSubmit(HttpServletRequest request,HttpServletResponse response, Object object,BindException exceptions) throws Exception {
+
+            String returnView = "BAC";
+            String action = request.getParameter("submit");
+            String retType = request.getParameter("retType");
+            MessageSourceAccessor msa = getMessageSourceAccessor();
             MdrtbNewTestObj mnto = (MdrtbNewTestObj) object;
-            if (mnto.getPatient() != null)
-                patient = mnto.getPatient();
+            Patient patient = mnto.getPatient();
+    
+            if (msa.getMessage("mdrtb.cancel").equals(action)) {
+                if (retType.equals("smears"))
+                    returnView = "BAC";
+                if (retType.equals("cultures"))
+                    returnView = "BAC";
+                if (retType.equals("dsts"))
+                    returnView = "DST";  
+                RedirectView rv = new RedirectView(getSuccessView());
+                rv.addStaticAttribute("patientId", patient.getPatientId());
+                rv.addStaticAttribute("view", returnView);
+                return new ModelAndView(rv);
+            }
+            
+            AdministrationService as = Context.getAdministrationService();
+            EncounterService es = Context.getEncounterService();
+            UserService us = Context.getUserService();
+            boolean clean = false;
+            Integer numRowsShown = 1;
+            String encString = "";
+            encString = request.getParameter("encSelect");
+            int pos = 0;
+            pos = encString.indexOf("|");
+            String encStringTmp = "";
+            if (pos > 0)
+                encStringTmp = encString.substring(0, pos);
+            Integer encounterId = null;
+            try { 
+                encounterId = Integer.parseInt(encStringTmp);
+            } catch (Exception ex){
+                log.info("Not able to parse encounterID, creating a new encounter for DST or bacteriology.");
+            }
+     
             boolean saveTest = false;
             
             //deal with the encounter & location & provider issue:
             
             Set<Encounter> encsToDelete = new HashSet<Encounter>();
-            Encounter enc = new Encounter();
-            if (encounterId != null){
+            Encounter enc = mnto.getPrimaryEncounter();
+            if (encounterId != null && !encounterId.equals(enc.getEncounterId())){
                 enc = Context.getEncounterService().getEncounter(encounterId);
             }
 
-            fixEnc(enc, patient);
-            
             User defaultProvider = us.getUserByUsername(as
                     .getGlobalProperty("mdrtb.mdrtb_default_provider"));
             if (enc == null || enc.getEncounterId() == null){
@@ -270,50 +288,51 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
                     MdrtbFactory mu = ms.getMdrtbFactory();
                     for (int i = 0; i < numRowsShown; i ++){
-                        MdrtbSmearObj mso = new MdrtbSmearObj();
-                        MdrtbCultureObj mco = new MdrtbCultureObj();
+                        MdrtbSmearObj mso = null;
+                        MdrtbCultureObj mco = null;
                         if (retType.equals("smears")){
-                        mso = mnto.getSmears().get(i);
-                        if (enc.getEncounterType() == null)
-                            enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
-                        if (enc.getEncounterType() == null)
-                            throw new RuntimeException("EncounterType is null.  Make sure that your global properties for MDRTB encounter types are valid.");
+                            mso = mnto.getSmears().get(i);
+                            if (enc.getEncounterType() == null)
+                                enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
+                            if (enc.getEncounterType() == null)
+                                throw new RuntimeException("EncounterType is null.  Make sure that your global properties for MDRTB encounter types are valid.");
 
                         }
                         if (retType.equals("cultures")){
-                        mco = mnto.getCultures().get(i);
-                        if (enc.getEncounterType() == null)
-                            enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
-                        if (enc.getEncounterType() == null)
-                            throw new RuntimeException("EncounterType is null.  Make sure that your global properties for MDRTB encounter types are valid.");
-                        
+                            mco = mnto.getCultures().get(i);
+                            if (enc.getEncounterType() == null)
+                                enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
+                            if (enc.getEncounterType() == null)
+                                throw new RuntimeException("EncounterType is null.  Make sure that your global properties for MDRTB encounter types are valid.");
+                            
                         }
                         
                         
                         //sputum collection date, a result,
-                        if (mso.getSmearResult() != null && mso.getSmearResult().getValueCoded() != null 
+                        if (mso != null && mso.getSmearResult() != null && mso.getSmearResult().getValueCoded() != null 
                                 && mso.getSmearResult().getObsDatetime() != null){
 
                                 
                                 Obs parentObs = mso.getSmearParentObs();
                                 Encounter oldEnc = parentObs.getEncounter();
-                                if (!oldEnc.equals(enc) || enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                                if (!oldEnc.getEncounterId().equals(enc.getEncounterId())){
                                   //we need to clone the old encounter, if provider is different
-                                    if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
-                                        Encounter newEnc = cloneEncounter(enc);
-                                        resetEncOnAllObs(parentObs, newEnc);
-                                        newEnc.setProvider(us.getUser(newProviderId));
-                                        enc = newEnc;
-                                    }
-                                    oldEnc.removeObs(parentObs);
+//                                    if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+//                                        Encounter newEnc = cloneEncounter(enc);
+//                                        resetEncOnAllObs(parentObs, newEnc);
+//                                        newEnc.setProvider(us.getUser(newProviderId));
+//                                        enc = newEnc;
+//                                    }
+                                    oldEnc = removeObsFromOldEnc(oldEnc, parentObs.getObsId());
                                     encsToDelete.add(oldEnc);
                                     
                                 }
+                                if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                                    enc.setProvider(Context.getUserService().getUser(newProviderId));
+                                }
                                 parentObs.setObsDatetime(new Date());
 
-                                
                                 enc.addObs(parentObs);
-                                
                                 //encounter and obs location stuff:
                                 if (parentObs.getLocation() == null && enc.getLocation() != null)
                                 parentObs.setLocation(enc.getLocation());
@@ -367,56 +386,52 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 
                                 Obs source = mso.getSource();
                                 if (source.getValueCoded() != null){
-                                    source.setLocation(parentObs.getLocation());
-                                    source.setEncounter(enc);
-                                    source.setObsDatetime(obsDate);
+                                    setLocationEncounterAndObsDate(source, parentObs.getLocation(), enc, obsDate);
                                     parentObs.addGroupMember(source);
                                 }
                                 
                                 Obs smearResultDate = mso.getSmearResultDate();
                                 if (smearResultDate.getValueDatetime() != null){
-                                    smearResultDate.setLocation(parentObs.getLocation());
-                                    smearResultDate.setEncounter(enc);
-                                    smearResultDate.setObsDatetime(obsDate);
+                                    setLocationEncounterAndObsDate(smearResultDate, parentObs.getLocation(), enc, obsDate);
                                     parentObs.addGroupMember(smearResultDate);
                                 }
                                 
                                 Obs smearDateReceived = mso.getSmearDateReceived();
                                 if (smearDateReceived.getValueDatetime() != null){
-                                    smearDateReceived.setLocation(parentObs.getLocation());
-                                    smearDateReceived.setEncounter(enc);
-                                    smearDateReceived.setObsDatetime(obsDate);
+                                    setLocationEncounterAndObsDate(smearDateReceived, parentObs.getLocation(), enc, obsDate);
                                     parentObs.addGroupMember(smearDateReceived);
                                 }
                                 
                                 Obs smearMethod = mso.getSmearMethod();
                                 if (smearMethod.getValueCoded() != null){
-                                    smearMethod.setLocation(parentObs.getLocation());
-                                    smearMethod.setEncounter(enc);
-                                    smearMethod.setObsDatetime(obsDate);
+                                    setLocationEncounterAndObsDate(smearMethod, parentObs.getLocation(), enc, obsDate);
                                     parentObs.addGroupMember(smearMethod);
                                 }
 
                         }
                         
-                        if (mco.getCultureResult() != null && mco.getCultureResult().getValueCoded() != null 
+                        if (mco != null && mco.getCultureResult() != null && mco.getCultureResult().getValueCoded() != null 
                                 && mco.getCultureResult().getObsDatetime() != null){
                             
                             
                             Obs parentObs = mco.getCultureParentObs();
                             Encounter oldEnc = parentObs.getEncounter();
-                            if (!oldEnc.equals(enc) || enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                            //lazy loading:
+                            enc.getProvider();
+                            if (!oldEnc.getEncounterId().equals(enc.getEncounterId())){
                                 //we need to clone the old encounter, if provider is different
-                                  if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
-                                      Encounter newEnc = cloneEncounter(enc);
-                                      resetEncOnAllObs(parentObs, newEnc);
-                                      newEnc.setProvider(us.getUser(newProviderId));
-                                      enc = newEnc;
-                                  }
-                                  oldEnc.removeObs(parentObs);
+//                                  if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+//                                      Encounter newEnc = cloneEncounter(enc);
+//                                      resetEncOnAllObs(parentObs, newEnc);
+//                                      newEnc.setProvider(us.getUser(newProviderId));
+//                                      enc = newEnc;
+//                                  }
+                                  oldEnc = removeObsFromOldEnc(oldEnc, parentObs.getObsId());
                                   encsToDelete.add(oldEnc);
-                                  
                               }
+                            if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                                enc.setProvider(Context.getUserService().getUser(newProviderId));
+                            }
                             enc.addObs(parentObs);
                             if (parentObs.getLocation() == null && enc.getLocation() != null)
                             parentObs.setLocation(enc.getLocation());
@@ -468,62 +483,50 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             
                             Obs source = mco.getSource();
                             if (source.getValueCoded() != null){
-                                source.setLocation(parentObs.getLocation());
-                                source.setEncounter(enc);
-                                source.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(source, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(source);
                             }
                             
                             Obs cultureStartDate = mco.getCultureStartDate();
                             if (cultureStartDate.getValueDatetime() != null){
-                                cultureStartDate.setLocation(parentObs.getLocation());
-                                cultureStartDate.setEncounter(enc);
-                                cultureStartDate.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(cultureStartDate, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(cultureStartDate);
                                 
                             }
                             
                             Obs cultureResultsDate = mco.getCultureResultsDate();
                             if (cultureResultsDate.getValueDatetime() != null){
-                                cultureResultsDate.setLocation(parentObs.getLocation());
-                                cultureResultsDate.setEncounter(enc);
-                                cultureResultsDate.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(cultureResultsDate, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(cultureResultsDate);
                             }
                             
                             Obs cultureDateReceived = mco.getCultureDateReceived();
                             if (cultureDateReceived.getValueDatetime() != null){
-                                cultureDateReceived.setLocation(parentObs.getLocation());
-                                cultureDateReceived.setEncounter(enc);
-                                cultureDateReceived.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(cultureDateReceived, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(cultureDateReceived);
                             }
                             
                             Obs cultureMethod = mco.getCultureMethod();
                             if (cultureMethod.getValueCoded() != null){
-                                cultureMethod.setLocation(parentObs.getLocation());
-                                cultureMethod.setEncounter(enc);
-                                cultureMethod.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(cultureMethod, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(cultureMethod);
                             }
                             
                             Obs typeOfOrganism = mco.getTypeOfOrganism();
                             if (typeOfOrganism.getValueCoded() != null){
-                                typeOfOrganism.setLocation(parentObs.getLocation());
-                                typeOfOrganism.setEncounter(enc);
-                                typeOfOrganism.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(typeOfOrganism, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(typeOfOrganism);
                             }
                             
                             Obs typeOfOrganismNonCoded = mco.getTypeOfOrganismNonCoded();
                             if (typeOfOrganismNonCoded.getValueText() != null){
-                                typeOfOrganismNonCoded.setLocation(parentObs.getLocation());
-                                typeOfOrganismNonCoded.setEncounter(enc);
-                                typeOfOrganismNonCoded.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(typeOfOrganismNonCoded, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(typeOfOrganismNonCoded);
                             }
                            clean = true;
                         }
+                        Context.evictFromSession(mso);
+                        Context.evictFromSession(mco);
                     }
 
                     
@@ -555,17 +558,20 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         Encounter oldEnc = parentObs.getEncounter();
                         if (dst.getSputumCollectionDate().getValueDatetime() != null && worthSaving ){
                             
-                            if (!oldEnc.equals(enc) || enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                            if (!oldEnc.getEncounterId().equals(enc.getEncounterId())){
                                 //we need to clone the old encounter, if provider is different
-                                  if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
-                                      Encounter newEnc = cloneEncounter(enc);
-                                      resetEncOnAllObs(parentObs, newEnc);
-                                      newEnc.setProvider(us.getUser(newProviderId));
-                                      enc = newEnc;
-                                  }
-                                  oldEnc.removeObs(parentObs);
+//                                  if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+//                                      Encounter newEnc = cloneEncounter(enc);
+//                                      resetEncOnAllObs(parentObs, newEnc);
+//                                      newEnc.setProvider(us.getUser(newProviderId));
+//                                      enc = newEnc;
+//                                  }
+                                  oldEnc = removeObsFromOldEnc(oldEnc, parentObs.getObsId());
                                   encsToDelete.add(oldEnc);
                                   
+                            }
+                            if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
+                                enc.setProvider(Context.getUserService().getUser(newProviderId));
                             }
                             enc.addObs(parentObs);
                             if (parentObs.getLocation() == null && enc.getLocation() != null)
@@ -602,82 +608,62 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             
                             Obs typeOfOrganism = dst.getTypeOfOrganism();
                             if (typeOfOrganism.getValueCoded() != null){
-                                typeOfOrganism.setLocation(parentObs.getLocation());
-                                typeOfOrganism.setEncounter(enc);
-                                typeOfOrganism.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(typeOfOrganism, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(typeOfOrganism);
                             }
                             
                             Obs typeOfOrganismNonCoded = dst.getTypeOfOrganismNonCoded();
                             if (typeOfOrganismNonCoded.getValueText() != null){
-                                typeOfOrganismNonCoded.setLocation(parentObs.getLocation());
-                                typeOfOrganismNonCoded.setEncounter(enc);
-                                typeOfOrganismNonCoded.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(typeOfOrganismNonCoded, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(typeOfOrganismNonCoded);
                             }
                             
                             Obs drugSensitivityTestComplete = dst.getDrugSensitivityTestComplete();
                             if (drugSensitivityTestComplete.getValueAsBoolean() != null){
-                                drugSensitivityTestComplete.setLocation(parentObs.getLocation());
-                                drugSensitivityTestComplete.setEncounter(enc);
-                                drugSensitivityTestComplete.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(drugSensitivityTestComplete, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(drugSensitivityTestComplete);
                             }
                             
                             Obs dstStartDate = dst.getDstStartDate();
                             if (dstStartDate.getValueDatetime() != null){
-                                dstStartDate.setLocation(parentObs.getLocation());
-                                dstStartDate.setEncounter(enc);
-                                dstStartDate.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(dstStartDate, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(dstStartDate);
                             }
                             
                             Obs dstResultsDate = dst.getDstResultsDate();
                             if (dstResultsDate.getValueDatetime() != null){
-                                dstResultsDate.setLocation(parentObs.getLocation());
-                                dstResultsDate.setEncounter(enc);
-                                dstResultsDate.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(dstResultsDate, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(dstResultsDate);
                             }
                             
                             Obs dstDateReceived = dst.getDstDateReceived();
                             if (dstDateReceived.getValueDatetime() != null){
-                                dstDateReceived.setLocation(parentObs.getLocation());
-                                dstDateReceived.setEncounter(enc);
-                                dstDateReceived.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(dstDateReceived, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(dstDateReceived);
                             }
                             
                             Obs source = dst.getSource();
                             if (source.getValueCoded() != null){
-                                source.setLocation(parentObs.getLocation());
-                                source.setEncounter(enc);
-                                source.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(source, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(source);
                             }
                             
                             Obs dstMethod = dst.getDstMethod();
                             if (dstMethod.getValueCoded() != null){
-                                dstMethod.setLocation(parentObs.getLocation());
-                                dstMethod.setEncounter(enc);
-                                dstMethod.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(dstMethod, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(dstMethod);
                             }
                             
                             
                             Obs directOrIndirect = dst.getDirectOrIndirect();
                             if (directOrIndirect.getValueAsBoolean()!= null){
-                                directOrIndirect.setLocation(parentObs.getLocation());
-                                directOrIndirect.setEncounter(enc);
-                                directOrIndirect.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(directOrIndirect, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(directOrIndirect);
                             }
                             
                             Obs  coloniesInControl = dst.getColoniesInControl();
                             if (coloniesInControl.getValueNumeric()!= null){
-                                coloniesInControl.setLocation(parentObs.getLocation());
-                                coloniesInControl.setEncounter(enc);
-                                coloniesInControl.setObsDatetime(obsDate);
+                                setLocationEncounterAndObsDate(coloniesInControl, parentObs.getLocation(), enc, obsDate);
                                 parentObs.addGroupMember(coloniesInControl);
                             }
                             
@@ -686,32 +672,24 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 if (res.getDrug().getConcept() != null && !res.getDrug().getConcept().getConceptId().equals(mu.getConceptNone().getConceptId())){
                                     
                                     Obs dstParentResultObs = res.getDstResultParentObs();
-                                    dstParentResultObs.setLocation(parentObs.getLocation());
-                                    dstParentResultObs.setEncounter(enc);
-                                    dstParentResultObs.setObsDatetime(obsDate);
+                                    setLocationEncounterAndObsDate(dstParentResultObs, parentObs.getLocation(), enc, obsDate);
                                     parentObs.addGroupMember(dstParentResultObs);
                                     
                                    Obs drug = res.getDrug();
                                    if (drug.getConcept() != null){
-                                       drug.setLocation(parentObs.getLocation());
-                                       drug.setEncounter(enc);
-                                       drug.setObsDatetime(obsDate);
+                                       setLocationEncounterAndObsDate(drug, parentObs.getLocation(), enc, obsDate);
                                        dstParentResultObs.addGroupMember(drug);
                                    }
                                    
                                    Obs colonies = res.getColonies();
                                    if (colonies.getValueNumeric() != null){
-                                       colonies.setLocation(parentObs.getLocation());
-                                       colonies.setEncounter(enc);
-                                       colonies.setObsDatetime(obsDate);
+                                       setLocationEncounterAndObsDate(colonies, parentObs.getLocation(), enc, obsDate);
                                        dstParentResultObs.addGroupMember(colonies);
                                    }
                                    
                                    Obs concentration = res.getConcentration();
                                    if (concentration.getValueNumeric() != null){
-                                       concentration.setLocation(parentObs.getLocation());
-                                       concentration.setEncounter(enc);
-                                       concentration.setObsDatetime(obsDate);
+                                       setLocationEncounterAndObsDate(concentration, parentObs.getLocation(), enc, obsDate);
                                        dstParentResultObs.addGroupMember(concentration);
                                    }
                                 } else if (res.getDrug().getConcept() != null && res.getDrug().getConcept().getConceptId().equals(mu.getConceptNone().getConceptId()) && res.getDrug().getObsId() != null){
@@ -769,6 +747,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 Context.getObsService().voidObs(parentObs, "DST had no results"); 
                             }
                         }
+                        Context.evictFromSession(dst);
                     }
                     if (clean)
                         MdrtbUtil.fixCultureConversions(patient, mu);
@@ -808,17 +787,12 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     } 
                     
                 }
-                if (msa.getMessage("mdrtb.cancel").equals(action)) {
-                    if (retType.equals("smears"))
-                        returnView = "BAC";
-                    if (retType.equals("cultures"))
-                        returnView = "BAC";
-                    if (retType.equals("dsts"))
-                        returnView = "DST";  
-                }
                 if (saveTest){
                         //set uuids
-                        fixEnc(enc, patient);    
+                        Context.evictFromSession(mnto);
+                        Context.evictFromSession(object);
+                        object = null;
+                        fixEnc(enc, patient);   
                         es.saveEncounter(enc);
                         for (Encounter oldEnc: encsToDelete){
                             //for lazy loading
@@ -848,25 +822,37 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             MdrtbFactory mu = ms.getMdrtbFactory();
             String obsGroupId = request.getParameter("ObsGroupId");
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
-            Obs parentObs = new Obs();
+            Obs parentObs = null;
             User user = Context.getAuthenticatedUser();
-            try {
-                parentObs = Context.getObsService().getObs(Integer.valueOf(obsGroupId));
-            } catch (Exception ex) {
-                throw new RuntimeException(
-                        "Could not convert obsGroupId request parameter to an Integer.  You should only be able to access this page from the DST or bacteriology table widgets.",ex);
+            
+            Integer parentObsInt = Integer.valueOf(obsGroupId);
+            Encounter enc = null;
+            Encounter encTmp = Context.getObsService().getObs(parentObsInt).getEncounter();
+            if (encTmp == null){
+                parentObs = Context.getObsService().getObs(parentObsInt);
+                enc = new Encounter();
+                enc.addObs(parentObs);
+            }  else {  
+                Integer encounterId = encTmp.getEncounterId();
+                Context.evictFromSession(encTmp);
+                encTmp = null;
+                enc = Context.getEncounterService().getEncounter(encounterId);
+                mnto.setPrimaryEncounter(enc);
+                for (Obs oTmp : enc.getAllObs()){
+                    if (oTmp.getObsId().equals(parentObsInt))
+                        parentObs = oTmp;
+                }
             }
+            if (parentObs == null || enc == null)
+                throw new RuntimeException("Could not load parent obs for this bacteriology or DST.");
+            
             Set<Obs> levelTwoObs = parentObs.getGroupMembers();
-            Encounter enc = parentObs.getEncounter();
-            Patient patient = enc.getPatient();
+            Patient patient = Context.getPatientService().getPatient(parentObs.getPersonId());
             mnto.setPatient(patient);
-            for (Encounter encs: Context.getEncounterService().getEncountersByPatient(patient)){
-                mnto.getEncounters().add(encs);
-            }
 
             if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_PARENT()) && !parentObs.isVoided()) {
                 // DST
-                MdrtbDSTObj mdo = new MdrtbDSTObj();
+                MdrtbDSTObj mdo = new MdrtbDSTObj(patient, user, mu);
                 mdo.setDstParentObs(parentObs);
                 List<Concept> drugConceptList = MdrtbUtil.getDstDrugList(false, mu);
                 
@@ -897,13 +883,8 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED()) && !o.getVoided())
                             mdo.setTypeOfOrganismNonCoded(o);
                         if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_DST_RESULT_PARENT()) && !o.getVoided()){
-                           
-                           
                             MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
-                            
-                                
                             Set<Obs> thirdLevelObs = o.getGroupMembers();
-                            
                             for (Obs oInner : thirdLevelObs){
                                 if (!oInner.isVoided()){
                                     if (oInner.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_COLONIES())&& !o.getVoided())
@@ -922,30 +903,18 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                             }
                             
                             if (mdro.getColonies() == null || (mdro.getColonies().getConcept() == null)){
-                                Obs colonies = new Obs();
-                                colonies.setConcept(mu.getConceptColonies()); 
-                                colonies.setVoided(false);
-                                colonies.setDateCreated(new Date());
-                                colonies.setPerson(patient);
-                                colonies.setCreator(user);
-                                colonies.setEncounter(enc);
-                                colonies.setObsDatetime(parentObs.getObsDatetime());
+                                Obs colonies = createNewObs(mu.getConceptColonies(), patient, user, enc, parentObs.getObsDatetime());
                                 mdro.setColonies(colonies);
                             }
                             if (mdro.getConcentration() == null || (mdro.getConcentration().getConcept() == null)){
-                                Obs conc = new Obs();
-                                conc.setConcept(  mu.getConceptConcentration()); 
-                                conc.setVoided(false);
-                                conc.setDateCreated(new Date());
-                                conc.setPerson(patient);
-                                conc.setCreator(user);
-                                conc.setEncounter(enc);
-                                conc.setObsDatetime(parentObs.getObsDatetime());
+                                Obs conc = createNewObs(mu.getConceptConcentration(), patient, user, enc, parentObs.getObsDatetime());
                                 mdro.setConcentration(conc);
                             }
                             
                             if (mdro.getDrug() != null && !alreadyShownResults.contains(mdro)){
                                 mdro.setDstResultParentObs(o);
+                                //TODO:  HERE -- replace blank mdros 
+                                removeBlankMdroIfNeeded(mdo, mdro);
                                 mdo.getDstResults().add(mdro);
                                 alreadyShownResults.add(mdro);
                             }  else {
@@ -955,177 +924,73 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                     }    
                 }
                 if (mdo.getColoniesInControl().getObsId() == null){
-                    Obs cc = new Obs();
-                    cc.setConcept( mu.getConceptColoniesInControl()); 
-                    cc.setVoided(false);
-                    cc.setDateCreated(new Date());
-                    cc.setPerson(patient);
-                    cc.setCreator(user);
-                    cc.setEncounter(enc);
-                    cc.setObsDatetime(parentObs.getObsDatetime());
+                    Obs cc = createNewObs(mu.getConceptColoniesInControl(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setColoniesInControl(cc);
                 }
                 if (mdo.getDirectOrIndirect().getObsId() == null){
-                    Obs dInd = new Obs();
-                    dInd.setConcept(   mu.getConceptDirectIndirect()); 
-                    dInd.setVoided(false);
-                    dInd.setDateCreated(new Date());
-                    dInd.setPerson(patient);
-                    dInd.setCreator(user);
-                    dInd.setEncounter(enc);
-                    dInd.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dInd = createNewObs(mu.getConceptDirectIndirect(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDirectOrIndirect(dInd);
                 }
                 if (mdo.getDrugSensitivityTestComplete().getObsId() == null){
-                    Obs dC = new Obs();
-                    dC.setConcept(   mu.getConceptDSTComplete()); 
-                    dC.setVoided(false);
-                    dC.setDateCreated(new Date());
-                    dC.setPerson(patient);
-                    dC.setCreator(user);
-                    dC.setEncounter(enc);
-                    dC.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dC = createNewObs(mu.getConceptDSTComplete(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDrugSensitivityTestComplete(dC);
                 }
                 if (mdo.getDstDateReceived().getObsId() == null){
-                    Obs dR = new Obs();
-                    dR.setConcept(   mu.getConceptDateReceived()); 
-                    dR.setVoided(false);
-                    dR.setDateCreated(new Date());
-                    dR.setPerson(patient);
-                    dR.setCreator(user);
-                    dR.setEncounter(enc);
-                    dR.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dR = createNewObs(mu.getConceptDateReceived(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDstDateReceived(dR);
                 }
                 if (mdo.getDstMethod().getObsId() == null){
-                    Obs method = new Obs();
-                    method.setConcept(   mu.getConceptDSTMethod()); 
-                    method.setVoided(false);
-                    method.setDateCreated(new Date());
-                    method.setPerson(patient);
-                    method.setCreator(user);
-                    method.setEncounter(enc);
-                    method.setObsDatetime(parentObs.getObsDatetime());
+                    Obs method = createNewObs(mu.getConceptDSTMethod(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDstMethod(method);
                 }
                 if (mdo.getDstResultsDate().getObsId() == null){
-                    Obs dRD = new Obs();
-                 
-                    dRD.setConcept(  mu.getConceptResultDate()); 
-                    dRD.setVoided(false);
-                    dRD.setDateCreated(new Date());
-                    dRD.setPerson(patient);
-                    dRD.setCreator(user);
-                    dRD.setEncounter(enc);
-                    dRD.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dRD = createNewObs(mu.getConceptResultDate(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDstResultsDate(dRD);
                 }
                 if (mdo.getDstStartDate().getObsId() == null){
-                    Obs dSD = new Obs();
-                    
-                    dSD.setConcept(mu.getConceptCultureStartDate()); 
-                    dSD.setVoided(false);
-                    dSD.setDateCreated(new Date());
-                    dSD.setPerson(patient);
-                    dSD.setCreator(user);
-                    dSD.setEncounter(enc);
-                    dSD.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dSD = createNewObs(mu.getConceptCultureStartDate(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setDstStartDate(dSD);
                 }
                 if (mdo.getSource().getObsId() == null){
-                    Obs source = new Obs();
-                    
-                    source.setConcept(mu.getConceptSampleSource()); 
-                    source.setVoided(false);
-                    source.setDateCreated(new Date());
-                    source.setPerson(patient);
-                    source.setCreator(user);
-                    source.setEncounter(enc);
-                    source.setObsDatetime(parentObs.getObsDatetime());
+                    Obs source = createNewObs(mu.getConceptSampleSource(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setSource(source);
                 }
                 if (mdo.getSputumCollectionDate().getObsId() == null){
-                    Obs sCD = new Obs();
-                    
-                    sCD.setConcept(mu.getConceptSputumCollectionDate()); 
-                    sCD.setVoided(false);
-                    sCD.setDateCreated(new Date());
-                    sCD.setPerson(patient);
-                    sCD.setCreator(user);
-                    sCD.setEncounter(enc);
-                    sCD.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sCD = createNewObs(mu.getConceptSputumCollectionDate(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setSputumCollectionDate(sCD);
                 }
                 if (mdo.getTypeOfOrganism().getObsId() == null){
-                    Obs type = new Obs();
-                    
-                    type.setConcept(mu.getConceptTypeOfOrganism()); 
-                    type.setVoided(false);
-                    type.setDateCreated(new Date());
-                    type.setPerson(patient);
-                    type.setCreator(user);
-                    type.setEncounter(enc);
-                    type.setObsDatetime(parentObs.getObsDatetime());
+                    Obs type = createNewObs(mu.getConceptTypeOfOrganism(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setTypeOfOrganism(type);
                 }
                 if (mdo.getTypeOfOrganismNonCoded().getObsId() == null){
-                    Obs typeOther = new Obs();
-                    
-                    typeOther.setConcept(mu.getConceptTypeOfOrganismNonCoded()); 
-                    typeOther.setVoided(false);
-                    typeOther.setDateCreated(new Date());
-                    typeOther.setPerson(patient);
-                    typeOther.setCreator(user);
-                    typeOther.setEncounter(enc);
-                    typeOther.setObsDatetime(parentObs.getObsDatetime());
+                    Obs typeOther = createNewObs(mu.getConceptTypeOfOrganismNonCoded(), patient, user, enc, parentObs.getObsDatetime());
                     mdo.setTypeOfOrganismNonCoded(typeOther);
                 }
                 
-                //lastly, add DST result obj for all non-used drugs:
-                for (Concept c : drugConceptList){
-                    //HERE
-                    if (!mdoHasBeenCreatedForConcept(drugConceptList, c, mdo)){
-                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
-                        
-                        Obs drug = new Obs();
-                        drug.setDateCreated(new Date());
-                        drug.setVoided(false);
-                        drug.setValueCoded(c);
-                        drug.setCreator(user);
-                        drug.setPerson(patient);
-                        mdro.setDrug(drug);
-                        
-                        Obs concentration = new Obs();
-                        concentration.setDateCreated(new Date());
-                        concentration.setVoided(false);
-                        concentration.setConcept(mu.getConceptConcentration());
-                        concentration.setCreator(user);
-                        concentration.setPerson(patient);
-                        mdro.setConcentration(concentration);
-                        
-                        Obs colonies = new Obs();
-                        
-                        colonies.setConcept(mu.getConceptColonies()); 
-                        colonies.setVoided(false);
-                        colonies.setDateCreated(new Date());
-                        colonies.setCreator(user);
-                        colonies.setPerson(patient);
-                        mdro.setColonies(colonies);
-                        
-                        Obs dstResultParentObs = new Obs();
-                        
-                        dstResultParentObs.setConcept(mu.getConceptDSTResultParent());
-                        dstResultParentObs.setVoided(false);
-                        dstResultParentObs.setDateCreated(new Date());
-                        dstResultParentObs.setCreator(user);
-                        dstResultParentObs.setPerson(patient);
-                        mdro.setDstResultParentObs(dstResultParentObs);
-                        
-                        mdo.addDstResult(mdro);
-                    }
-                    
-                }
+//                //lastly, add DST result obj for all non-used drugs:
+//                for (Concept c : drugConceptList){
+//                    //HERE
+//                    if (!mdoHasBeenCreatedForConcept(drugConceptList, c, mdo) ){
+//                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj();
+//                        
+//                        Obs drug = createNewObs(null, patient, user, enc, parentObs.getObsDatetime());
+//                        drug.setValueCoded(c);
+//                        mdro.setDrug(drug);
+//                        
+//                        Obs concentration = createNewObs(mu.getConceptConcentration(), patient, user, enc, parentObs.getObsDatetime());
+//                        mdro.setConcentration(concentration);
+//                        
+//                        Obs colonies = createNewObs(mu.getConceptColonies(), patient, user, enc, parentObs.getObsDatetime());
+//                        mdro.setColonies(colonies);
+//                        
+//                        Obs dstResultParentObs = createNewObs(mu.getConceptDSTResultParent(), patient, user, enc, parentObs.getObsDatetime());
+//                        mdro.setDstResultParentObs(dstResultParentObs);
+//                        
+//                        mdo.addDstResult(mdro);
+//                    }
+//                    
+//                }
                 
                 /*
                  * re-order DST tests according to global property:
@@ -1146,7 +1011,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 mnto.addDST(mdo);
             } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_SMEAR_PARENT()) && !parentObs.getVoided()) {
                 // SMEAR
-                MdrtbSmearObj mso = new MdrtbSmearObj();
+                MdrtbSmearObj mso = new MdrtbSmearObj(patient, user, mu);
                 mso.setSmearParentObs(parentObs);
                 for (Obs o : levelTwoObs){
                     if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_BACILLI())&& !o.getVoided()){
@@ -1165,82 +1030,34 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         mso.setSource(o); 
                 }
                 if (mso.getBacilli().getObsId() == null){
-                    Obs bacilli = new Obs();
-                    
-                    bacilli.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_BACILLI(), new Locale("en", "US"), mu)); 
-                    bacilli.setVoided(false);
-                    bacilli.setDateCreated(new Date());
-                    bacilli.setPerson(patient);
-                    bacilli.setCreator(user);
-                    bacilli.setEncounter(enc);
-                    bacilli.setObsDatetime(parentObs.getObsDatetime());
+                    Obs bacilli = createNewObs(mu.getConceptBacilli(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setBacilli(bacilli);
                 }
                 if (mso.getSmearDateReceived().getObsId() == null){
-                    Obs sDR = new Obs();
-                    
-                    sDR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_DATE_RECEIVED(), new Locale("en", "US"), mu)); 
-                    sDR.setVoided(false);
-                    sDR.setDateCreated(new Date());
-                    sDR.setPerson(patient);
-                    sDR.setCreator(user);
-                    sDR.setEncounter(enc);
-                    sDR.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sDR = createNewObs(mu.getConceptDateReceived(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setSmearDateReceived(sDR);
                 }
                 if (mso.getSmearMethod().getObsId() == null){
-                    Obs sMeth = new Obs();
-                    
-                    sMeth.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SMEAR_MICROSCOPY_METHOD(), new Locale("en", "US"), mu)); 
-                    sMeth.setVoided(false);
-                    sMeth.setDateCreated(new Date());
-                    sMeth.setPerson(patient);
-                    sMeth.setCreator(user);
-                    sMeth.setEncounter(enc);
-                    sMeth.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sMeth = createNewObs(mu.getConceptSmearMicroscopyMethod(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setSmearMethod(sMeth);
                 }
                 if (mso.getSmearResult().getObsId() == null){
-                    Obs sRes = new Obs();
-                    
-                    sRes.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SMEAR_RESULT(), new Locale("en", "US"), mu)); 
-                    sRes.setVoided(false);
-                    sRes.setDateCreated(new Date());
-                    sRes.setPerson(patient);
-                    sRes.setCreator(user);
-                    sRes.setEncounter(enc);
-                    sRes.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sRes = createNewObs(mu.getConceptSmearResult(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setSmearResult(sRes);
                 }
                 if (mso.getSmearResultDate().getObsId() == null){
-                    Obs sResDate = new Obs();
-                    
-                    sResDate.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_RESULT_DATE(), new Locale("en", "US"), mu)); 
-                    sResDate.setVoided(false);
-                    sResDate.setDateCreated(new Date());
-                    sResDate.setPerson(patient);
-                    sResDate.setCreator(user);
-                    sResDate.setEncounter(enc);
-                    sResDate.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sResDate = createNewObs(mu.getConceptResultDate(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setSmearResultDate(sResDate);
                 }
                 if (mso.getSource().getObsId() == null){
-                    Obs source = new Obs();
-                    
-                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SAMPLE_SOURCE(), new Locale("en", "US"), mu)); 
-                    source.setVoided(false);
-                    source.setDateCreated(new Date());
-                    source.setPerson(patient);
-                    source.setCreator(user);
-                    source.setEncounter(enc);
-                    source.setObsDatetime(parentObs.getObsDatetime());
+                    Obs source = createNewObs(mu.getConceptSampleSource(), patient, user, enc, parentObs.getObsDatetime());
                     mso.setSource(source);
                 }
                 mnto.addSmear(mso);
                 
             } else if (parentObs.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_CULTURE_PARENT())&& !parentObs.getVoided()) {
                 // CULTURE
-                MdrtbCultureObj mco = new MdrtbCultureObj();
+                MdrtbCultureObj mco = new MdrtbCultureObj(patient, user, mu);
                 mco.setCultureParentObs(parentObs);
                 for (Obs o : levelTwoObs){
                     if (o.getConcept().getBestName(new Locale("en")).getName().equals(mu.getSTR_TB_SAMPLE_SOURCE())&& !o.getVoided())
@@ -1263,111 +1080,39 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         mco.setTypeOfOrganismNonCoded(o);
                 }
                 if (mco.getColonies().getObsId() == null){
-                    Obs colonies = new Obs();
-                    
-                    colonies.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_COLONIES(), new Locale("en", "US"), mu)); 
-                    colonies.setVoided(false);
-                    colonies.setDateCreated(new Date());
-                    colonies.setPerson(patient);
-                    colonies.setCreator(user);
-                    colonies.setEncounter(enc);
-                    colonies.setObsDatetime(parentObs.getObsDatetime());
+                    Obs colonies = createNewObs(mu.getConceptColonies(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setColonies(colonies);
                 }
                 if (mco.getCultureDateReceived().getObsId() == null){
-                    Obs dR = new Obs();
-                    
-                    dR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_DATE_RECEIVED(), new Locale("en", "US"), mu)); 
-                    dR.setVoided(false);
-                    dR.setDateCreated(new Date());
-                    dR.setPerson(patient);
-                    dR.setCreator(user);
-                    dR.setEncounter(enc);
-                    dR.setObsDatetime(parentObs.getObsDatetime());
+                    Obs dR = createNewObs(mu.getConceptDateReceived(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setCultureDateReceived(dR);
                 }
                 if (mco.getCultureMethod().getObsId() == null){
-                    Obs method = new Obs();
-                    
-                    method.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_CULTURE_METHOD(), new Locale("en", "US"), mu)); 
-                    method.setVoided(false);
-                    method.setDateCreated(new Date());
-                    method.setPerson(patient);
-                    method.setCreator(user);
-                    method.setEncounter(enc);
-                    method.setObsDatetime(parentObs.getObsDatetime());
+                    Obs method = createNewObs(mu.getConceptCultureMethod(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setCultureMethod(method);
                 }
                 if (mco.getCultureResult().getObsId() == null){
-                    Obs cR = new Obs();
-                    
-                    cR.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_CULTURE_RESULT(), new Locale("en", "US"), mu)); 
-                    cR.setVoided(false);
-                    cR.setDateCreated(new Date());
-                    cR.setPerson(patient);
-                    cR.setCreator(user);
-                    cR.setEncounter(enc);
-                    cR.setObsDatetime(parentObs.getObsDatetime());
+                    Obs cR = createNewObs(mu.getConceptCultureResult(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setCultureResult(cR);
                 }
                 if (mco.getCultureResultsDate().getObsId() == null){
-                    Obs cRD = new Obs();
-                    
-                    cRD.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_RESULT_DATE(), new Locale("en", "US"), mu)); 
-                    cRD.setVoided(false);
-                    cRD.setDateCreated(new Date());
-                    cRD.setPerson(patient);
-                    cRD.setCreator(user);
-                    cRD.setEncounter(enc);
-                    cRD.setObsDatetime(parentObs.getObsDatetime());
+                    Obs cRD = createNewObs(mu.getConceptResultDate(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setCultureResultsDate(cRD);
                 }
                 if (mco.getCultureStartDate().getObsId() == null){
-                    Obs sD = new Obs();
-                    
-                    sD.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_CULTURE_START_DATE(), new Locale("en", "US"), mu)); 
-                    sD.setVoided(false);
-                    sD.setDateCreated(new Date());
-                    sD.setPerson(patient);
-                    sD.setCreator(user);
-                    sD.setEncounter(enc);
-                    sD.setObsDatetime(parentObs.getObsDatetime());
+                    Obs sD = createNewObs(mu.getConceptCultureStartDate(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setCultureStartDate(sD);
                 }
                 if (mco.getSource().getObsId() == null){
-                    Obs source = new Obs();
-                    
-                    source.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TB_SAMPLE_SOURCE(), new Locale("en", "US"), mu)); 
-                    source.setVoided(false);
-                    source.setDateCreated(new Date());
-                    source.setPerson(patient);
-                    source.setCreator(user);
-                    source.setEncounter(enc);
-                    source.setObsDatetime(parentObs.getObsDatetime());
+                    Obs source = createNewObs(mu.getConceptSampleSource(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setSource(source);
                 }
                 if (mco.getTypeOfOrganism().getObsId() == null){
-                    Obs tO = new Obs();
-                    
-                    tO.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TYPE_OF_ORGANISM(), new Locale("en", "US"), mu)); 
-                    tO.setVoided(false);
-                    tO.setDateCreated(new Date());
-                    tO.setPerson(patient);
-                    tO.setCreator(user);
-                    tO.setEncounter(enc);
-                    tO.setObsDatetime(parentObs.getObsDatetime());
+                    Obs tO = createNewObs(mu.getConceptTypeOfOrganism(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setTypeOfOrganism(tO);
                 } 
                 if (mco.getTypeOfOrganismNonCoded().getObsId() == null){
-                    Obs tON = new Obs();
-                 
-                    tON.setConcept(MdrtbUtil.getMDRTBConceptByName(mu.getSTR_TYPE_OF_ORGANISM_NON_CODED(), new Locale("en", "US"), mu)); 
-                    tON.setVoided(false);
-                    tON.setDateCreated(new Date());
-                    tON.setPerson(patient);
-                    tON.setCreator(user);
-                    tON.setEncounter(enc);
-                    tON.setObsDatetime(parentObs.getObsDatetime());
+                    Obs tON = createNewObs(mu.getConceptTypeOfOrganismNonCoded(), patient, user, enc, parentObs.getObsDatetime());
                     mco.setTypeOfOrganismNonCoded(tON);
                 } 
                 mnto.addCulture(mco);
@@ -1526,6 +1271,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         enc.setEncounterType(src.getEncounterType());
         enc.setLocation(src.getLocation());
         enc.setPatient(src.getPatient());
+        enc.setUuid(UUID.randomUUID().toString());
         enc.setVoided(false);
         return enc;
     }
@@ -1547,12 +1293,12 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 
 
         int createdCount = 0;
-        for (MdrtbDSTResultObj mdro : mdo.getDstResults())
+        for (MdrtbDSTResultObj mdro : mdo.getDstResults()){
             if (mdro.getDrug() != null && mdro.getDrug().getValueCoded() != null 
                     && mdro.getDrug().getValueCoded().getConceptId() != null 
                     && mdro.getDrug().getValueCoded().getConceptId().intValue() == c.getConceptId().intValue())
                 createdCount ++;
-        
+        }
         if (neededCount > createdCount)
             return false;
         else 
@@ -1577,7 +1323,10 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 o.setPerson(patient);
                 if (o.hasGroupMembers()){
                     for (Obs oTmp : o.getGroupMembers()){
- 
+                        if (oTmp.getConcept() == null){
+                            enc.removeObs(oTmp);
+                            continue;
+                        }
                         if (oTmp.getUuid() == null)
                             oTmp.setUuid(UUID.randomUUID().toString());
                         if (oTmp.getLocation() == null)
@@ -1613,11 +1362,60 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
         if (newOrders.size() == 0)
             enc.setOrders(new HashSet<Order>());
         
-        if (enc.getEncounterType() != null)
-            enc.getEncounterType().getName();
-        if (enc.getForm() != null)
-            enc.getForm().getName();
+        if (enc.getEncounterType() != null){
+            enc.getEncounterType();
+            EncounterType et = Context.getEncounterService().getEncounterType(enc.getEncounterType().getEncounterTypeId());
+            enc.setEncounterType(et);
+        }
+        if (enc.getForm() != null){
+            enc.getForm();
+            Form form = Context.getFormService().getForm(enc.getForm().getFormId());
+            enc.setForm(form);
+        }    
         
         return enc;
+    }
+    
+
+    private Obs createNewObs(Concept c, Patient patient, User user, Encounter enc, Date obsDatetime){
+          Obs o = new Obs();
+          o.setConcept(c); 
+          o.setVoided(false);
+          o.setDateCreated(new Date());
+          o.setPerson(patient);
+          o.setCreator(user);
+          o.setEncounter(enc);
+          o.setObsDatetime(obsDatetime);
+          o.setUuid(UUID.randomUUID().toString());
+          return o;
+    }
+    
+    private void setLocationEncounterAndObsDate(Obs o, Location location, Encounter enc, Date obsDate){
+        o.setLocation(location);
+        o.setEncounter(enc);
+        o.setObsDatetime(obsDate);
+    }
+    
+    private Encounter removeObsFromOldEnc(Encounter oldEnc, Integer parentObsToRemove){
+       //oldEnc.removeObs(parentObs);
+        Integer id = oldEnc.getEncounterId();
+        Context.evictFromSession(oldEnc);
+        Encounter enc = Context.getEncounterService().getEncounter(id);
+        for (Obs o : enc.getAllObs()){
+            if (o.getObsId().equals(parentObsToRemove))
+                enc.removeObs(o);
+        }
+        return enc;
+    }    
+    
+    private static void removeBlankMdroIfNeeded(MdrtbDSTObj mdo, MdrtbDSTResultObj mdro){
+        for (MdrtbDSTResultObj mdroTmp : mdo.getDstResults()){
+            if (mdroTmp.getDrug() != null && mdroTmp.getDrug().getConcept() == null && 
+                    mdroTmp.getDrug().getValueCoded() != null &&
+                    mdroTmp.getDrug().getValueCoded().getConceptId().equals(mdro.getDrug().getValueCoded().getConceptId())){
+                mdo.getDstResults().remove(mdroTmp);
+                break;
+            }
+        }
     }
 }

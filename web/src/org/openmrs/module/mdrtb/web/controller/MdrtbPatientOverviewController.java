@@ -510,7 +510,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         	if (outcomeStateDate == null) {
                         		outcomeStateDate = new Date();
                         	}
-                            MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate, mu);
+                            mu.transitionToStateNoErrorChecking(pp, pxws, outcomeStateDate);
                             update = true;
                         }
                     }
@@ -522,9 +522,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         ProgramWorkflowState pxwsTwo = pwTwo.getState(Integer.valueOf(patientStateVal));
                         if (psTwo == null || !psTwo.getState().equals(pxwsTwo) || (psTwo.getState().equals(pxwsTwo) && patientStateDate != null && patientStateDate.getTime() != psTwo.getStartDate().getTime())){
                             if (patientStateDate == null)
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date(), mu);
+                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
                             else
-                                MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate, mu); 
+                                mu.transitionToStateNoErrorChecking(pp, pxwsTwo, patientStateDate); 
                             update = true;
                         }
                     }

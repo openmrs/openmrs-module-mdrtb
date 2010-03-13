@@ -19,7 +19,7 @@ public class MdrtbNewTestObj {
     private List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();
     private List<MdrtbCultureObj> cultures = new ArrayList<MdrtbCultureObj>();
     private List<MdrtbDSTObj> dsts = new ArrayList<MdrtbDSTObj>();
-    private List<Encounter> encounters = new ArrayList<Encounter>();
+    private Encounter primaryEncounter;
 
 
 
@@ -108,12 +108,11 @@ public class MdrtbNewTestObj {
         return this.patient;
     }
 
-    public List<Encounter> getEncounters() {
-        return encounters;
+    public Encounter getPrimaryEncounter() {
+        return primaryEncounter;
     }
-
-    public void setEncounters(List<Encounter> encounters) {
-        this.encounters = encounters;
+    public void setPrimaryEncounter(Encounter primaryEncounter) {
+        this.primaryEncounter = primaryEncounter;
     }
     
     public void addSmear(MdrtbSmearObj mso){

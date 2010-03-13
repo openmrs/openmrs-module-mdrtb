@@ -224,11 +224,11 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                                || ps.getState().getProgramWorkflowStateId().intValue() != pxws.getProgramWorkflowStateId().intValue()
                                || (ps.getState().equals(pxws) && outcomeDate != null && outcomeDate.getTime() != ps.getStartDate().getTime())){
                            if (outcomeDate == null){
-                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, new Date(), mu);
+                               mu.transitionToStateNoErrorChecking(pp, pxws, new Date());
                                update = true;
                                
                            } else {
-                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxws, outcomeDate, mu);  
+                               mu.transitionToStateNoErrorChecking(pp, pxws, outcomeDate);  
                                update = true;
                            }
                        }
@@ -244,10 +244,10 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                                || psTwo.getState().getProgramWorkflowStateId().intValue() != pxwsTwo.getProgramWorkflowStateId().intValue()
                                || (psTwo.getState().equals(pxwsTwo) && outcomeDate != null && outcomeDate.getTime() != psTwo.getStartDate().getTime())){
                            if (stateDate == null){
-                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date(), mu);
+                               mu.transitionToStateNoErrorChecking(pp, pxwsTwo, new Date());
                                update = true;
                            } else {
-                               MdrtbUtil.transitionToStateNoErrorChecking(pp, pxwsTwo, stateDate, mu); 
+                               mu.transitionToStateNoErrorChecking(pp, pxwsTwo, stateDate); 
                                update = true;
                            }    
                        }

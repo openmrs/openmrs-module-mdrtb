@@ -642,7 +642,6 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
 //                    cal.add(Calendar.MONTH, -6);
                     //TODO: limit to last X months?
                     List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(patient);
-                    mnto.setEncounters(encSet);
                 }
                 catch (NumberFormatException numberError) {
                     log.warn("Invalid userId supplied: '" + patientId + "'", numberError);
@@ -780,6 +779,10 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             List<User> providers = Context.getUserService().getUsers(null, roles, false);
             map.put("providers", providers);
             map.put("scantyId", mu.getConceptScanty().getConceptId());
+            String patientId = request.getParameter("patientId");
+            Patient p = Context.getPatientService().getPatient(Integer.valueOf(patientId));
+            List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(p);
+            map.put("encounters", encSet);
             mu = null;
         }
         return map;

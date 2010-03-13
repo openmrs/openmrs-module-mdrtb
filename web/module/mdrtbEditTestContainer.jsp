@@ -9,7 +9,7 @@
 	var dateFormat = '${dateFormat}';
 	var DAY_NAMES=new Array(${daysOfWeek});
     var MONTH_NAMES=new Array(${monthsOfYear});
-    var encounterProviderMap = {<c:forEach items="${obj.encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.userId}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
+    var encounterProviderMap = {<c:forEach items="${encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.userId}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
     
 
 	$(document).ready(function(){
@@ -179,7 +179,7 @@
 			<td>
 					<select name="encSelect" id="encSelect" onchange="javascript:setEncounterDate(this)">
 						<option value=""><spring:message code="mdrtb.none" /></option>
-						<c:forEach items="${obj.encounters}" var="encounter">
+						<c:forEach items="${encounters}" var="encounter">
 							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>" 
 								<c:if test="${fn:length(obj.smears) > 0}">
 								<c:if test="${obj.smears[rowCount].smearParentObs.encounter.encounterId == encounter.encounterId}">
@@ -878,23 +878,23 @@
 				${command.drug.valueCoded.name.name}</Td>
 				<td>
 					<spring:bind path="obj.dsts[${rowCount}].dstResults[${counter.index}].drug.concept">
-					<select name="${status.expression}" class="selects" onchange="javascript:resetColorCoding()">
-					<c:if test='${status.value == ""}'>
-					<option value=""><spring:message code="mdrtb.pleasechoosearesult" /></option>
-					</c:if>
-					<c:if test='${status.value != ""}'>
-					<option value="${none}"><spring:message code="mdrtb.removethistest" /></option>
-					</c:if>
-							<c:forEach items="${dstResults}" var="dstresult">					
-									<option value="${dstresult}"
-										<c:if test="${dstresult == status.value}">
-											SELECTED
-										</c:if>
-									>${dstresult.name.name}</option>
-							</c:forEach>	
-					</select>
-					<c:if test="${status.errorMessage != ''}">
-								<span class="error">${status.errorMessage}</span>
+						<select name="${status.expression}" class="selects" onchange="javascript:resetColorCoding()">
+							<c:if test='${status.value == ""}'>
+							<option value=""><spring:message code="mdrtb.pleasechoosearesult" /></option>
+							</c:if>
+							<c:if test='${status.value != ""}'>
+							<option value="${none}"><spring:message code="mdrtb.removethistest" /></option>
+							</c:if>
+									<c:forEach items="${dstResults}" var="dstresult">					
+											<option value="${dstresult}"
+												<c:if test="${dstresult == status.value}">
+													SELECTED 
+												</c:if>
+											>${dstresult.name.name}</option>
+									</c:forEach>	
+						</select>
+						<c:if test="${status.errorMessage != ''}">
+									<span class="error">${status.errorMessage}</span>
 						</c:if>				
 					</spring:bind>
 				</td>

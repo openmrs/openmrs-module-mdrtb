@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1733,14 +1734,14 @@ public final class MdrtbFactory {
                          o = oTmp;
                  }
              }
-             
+
              if (o != null){
                  //this is the winning obs; change pp state accordingly, if necessary.
                  if (o.getConcept().equals(cc)){
                      
                      for (PatientState ps : pp.getStates()){
                          if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime(), this);
+                             pp = transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
                              pws.savePatientProgram(pp);
                              break;
                          }
@@ -1750,7 +1751,7 @@ public final class MdrtbFactory {
                      
                      for (PatientState ps : pp.getStates()){
                          if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = MdrtbUtil.transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime(), this);
+                             pp = transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
                              pws.savePatientProgram(pp);
                              break;
                          }
@@ -1812,7 +1813,7 @@ public final class MdrtbFactory {
                                     
                                          if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
                                           
-                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled(), this);
+                                             ppTmp = transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled());
                                              break;
                                          }  
                                      }
@@ -1828,7 +1829,7 @@ public final class MdrtbFactory {
                                      for (ProgramWorkflow pwTmp:pw){
                                          ProgramWorkflowState state = pwTmp.getStateByName(this.getSTR_NOT_CONVERTED());
                                          if (state != null){
-                                             ppTmp = MdrtbUtil.transitionToStateNoErrorChecking(ppTmp,state, ppTmp.getDateEnrolled(), this);
+                                             ppTmp = transitionToStateNoErrorChecking(ppTmp, state, ppTmp.getDateEnrolled());
                                              break;
                                          }  
                                      }
@@ -2315,6 +2316,60 @@ public final class MdrtbFactory {
     public void addKeyAndConceptToXmlConceptList(String conceptKey, Concept concept) {
         initializeEverythingAboutConcept(concept);
         this.xmlConceptList.put(conceptKey, concept);
+    }
+    
+    /**
+     * 
+     * Utility method used to transition to a state, ignoring usual state change rules.
+     * 
+     * @param pp
+     * @param programWorkflowState
+     * @param onDate
+     */
+    public PatientProgram  transitionToStateNoErrorChecking(PatientProgram pp, ProgramWorkflowState programWorkflowState, Date onDate) {
+
+        Set<PatientState> lastStates = pp.getStates();
+
+        for (PatientState lastState : lastStates){
+        
+            
+            if (lastState != null  && lastState.getState().getProgramWorkflow().getProgramWorkflowId().intValue() == programWorkflowState.getProgramWorkflow().getProgramWorkflowId().intValue() && !lastState.getVoided()) {
+                
+                    lastState.setEndDate(onDate);
+                //if nonsensical: void
+                if (lastState.getEndDate().getTime() <= lastState.getStartDate().getTime()){
+                    lastState.setEndDate(onDate);
+                    lastState.setDateVoided(new Date());
+                    lastState.setVoided(true);
+                    lastState.setVoidedBy(Context.getAuthenticatedUser());
+                    lastState.setVoidReason("program states were edited such that this state observation was no longer valid"); 
+                }
+            }  
+        }
+        
+        PatientState newState = new PatientState();
+        newState.setPatientProgram(pp);
+        newState.setState(programWorkflowState);
+        newState.setStartDate(onDate);
+        pp.getStates().add(newState);
+        
+  
+        
+        Set<Concept> outcomeConcepts = this.getMdrProgramOutcomeConcepts();
+        if (outcomeConcepts.contains(programWorkflowState.getConcept())) {
+            pp.setDateCompleted(onDate);
+        }
+        pp.setUuid(UUID.randomUUID().toString());
+        Context.getProgramWorkflowService().savePatientProgram(pp);
+        
+        Concept diedConcept = this.getConceptDiedMDR();
+        System.out.println("programWorkflowState.getConcept() " + programWorkflowState.getConcept());
+        System.out.println("diedConcept " + diedConcept);
+        if (programWorkflowState.getConcept().getConceptId().equals(diedConcept.getConceptId())) {
+            Context.getPatientService().processDeath(pp.getPatient(), onDate, diedConcept, null);
+        }
+        
+        return pp;
     }
     
 }
