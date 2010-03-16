@@ -8,8 +8,50 @@
 	}
 </style> 
 <script type="text/javascript">  
- 		
  
+ 	function splitOnCommonDateFormatSepparators(input){
+ 		var temp = new Array();
+ 		if (input.indexOf('/') > -1){
+ 			temp =  input.split('/');
+ 		} else if (input.indexOf('-') > -1){
+ 			temp =  input.split('-');
+ 		} else if (input.indexOf('.') > -1){
+ 			temp =  input.split('.');
+ 		} else
+ 			alert("No Separator Found in System DateFormat");
+ 		return temp;
+ 	}
+ 
+ 	function buildJavascriptDateObject(inputString){
+ 		//ok, we're going to expect some combination of d,M,y,/,./-
+ 		var d,m,y;
+		var temp = splitOnCommonDateFormatSepparators('${dateFormat}');
+		for (var i = 0; i < temp.length; i ++){
+			if (temp[i].indexOf('M') > -1)
+				m = i;
+			if (temp[i].indexOf('y') > -1)
+				y = i;
+			if (temp[i].indexOf('d') > -1)
+				d = i;		
+		}
+		var dateArray = splitOnCommonDateFormatSepparators(inputString);
+		var date = new Date();
+		if (d != null)
+			date.setDate(dateArray[d]);
+		if (m != null)
+			date.setMonth(dateArray[m] - 1);
+		if (y != null){
+			var year = dateArray[y];
+			if (year.length == 2 && year <= 40)
+				year = "20" + year;
+			if (year.length == 2 && year > 40)
+				year = "19" + year;
+			date.setFullYear(year);
+		}		
+		return date;
+		
+ 	}		
+ 	
  	function clearOrder(){
  		if (action == 1){ 
  			if (orderDateTmp >= stopDateTmp){
@@ -231,7 +273,9 @@
 					}
 				}
 				if (startDate != null && discontinueDate != null && discontinueDate != ""){
-						if (startDate >= discontinueDate){
+						var startDateDateObj = buildJavascriptDateObject(startDate);
+						var endDateDateObj = buildJavascriptDateObject(discontinueDate);
+						if (startDateDateObj.getTime() >= endDateDateObj.getTime()){
 							alert("<spring:message code="mdrtb.startDateLaterThanEndDate" />");
 							return false;
 						}
