@@ -691,13 +691,7 @@ public final class MdrtbFactory {
                 //System.out.println("Initializing MDRTB Metadata: Concept " + c + " " + c.getName().getName());
                 xmlConceptList.put(cm.getSourceCode(), c);
             }
-            
-            //generate the necessary concept_maps:  (missing uuids if 1.5...)
-//            for (ConceptName cn : xmlConceptList){
-//                System.out.println("insert into concept_map (source, source_code, comment, creator, date_created, concept_id) values (\"org.openmrs.module.mdrtb\", \"" + cn.getName() + "\", \"\", " + Context.getAuthenticatedUser().getUserId() + ", current_timestamp(), " + cn.getConcept().getConceptId() +");");
-//            }       
-            
-            
+
           //TODO: the following is for the concept switch from tuberculosis drug treatment start date to mdrtb drug treatment start date
             // once botwsana, haiti, pakistan have been upgraded, no worries.
             if (xmlConceptList.get(STR_TREATMENT_START_DATE) == null){
@@ -717,11 +711,17 @@ public final class MdrtbFactory {
             }
             
             if (xmlConceptList.get(STR_DIED) == null){
-                Concept c = cService.getConceptByName(STR_DIED.trim());
+                Concept c = cService.getConceptByName(STR_DIED + " ");
                 if (c != null)
                     xmlConceptList.put(STR_DIED, c);
-                else
-                    throw new RuntimeException("Unable to load concept DIED - TB");
+                else {
+                    //TODO: get rid of this
+                    c = cService.getConcept(1565); //hack  -  conceptID for DIED - TB
+                    if (c == null)
+                        throw new RuntimeException("Unable to load concept DIED - TB");
+                    else
+                        xmlConceptList.put(STR_DIED, c);
+                }
             }
             
         } catch (Exception ex){
