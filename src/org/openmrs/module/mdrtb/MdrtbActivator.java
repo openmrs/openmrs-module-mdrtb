@@ -14,11 +14,13 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -148,8 +150,7 @@ public class MdrtbActivator implements Activator, Runnable {
      */
     public void load() {  
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
-        MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
+ 
         MdrtbFactory mu = ms.getMdrtbFactory();
         ms.setMdrtbFactory(mu);
         ms.setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());

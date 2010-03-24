@@ -35,102 +35,123 @@ public class MdrtbSmearObj {
      */
     public MdrtbSmearObj(Patient patient, User user, MdrtbFactory mu){
 
-        this.smearResult.setConcept(mu.getConceptSmearResult()); 
-        this.smearResult.setVoided(false);
-        this.smearResult.setDateCreated(new Date());
-        this.smearResult.setPerson(patient);
-        this.smearResult.setCreator(user);
-        this.smearResult.setUuid(UUID.randomUUID().toString());
+        smearResult.setConcept(mu.getConceptSmearResult()); 
+        smearResult.setVoided(false);
+        smearResult.setDateCreated(new Date());
+        smearResult.setPerson(patient);
+        smearResult.setCreator(user);
+        smearResult.setUuid(UUID.randomUUID().toString());
+        if (smearResult.getConcept() == null)
+            throw new RuntimeException("smear result concept id is null");
         
-        this.source.setConcept(mu.getConceptSampleSource() ); 
-        this.source.setVoided(false);
-        this.source.setDateCreated(new Date());
-        this.source.setPerson(patient);
-        this.source.setCreator(user);
-        this.source.setUuid(UUID.randomUUID().toString());
+        source.setConcept(mu.getConceptSampleSource() ); 
+        source.setVoided(false);
+        source.setDateCreated(new Date());
+        source.setPerson(patient);
+        source.setCreator(user);
+        source.setUuid(UUID.randomUUID().toString());
+        if (source.getConcept() == null)
+            throw new RuntimeException("source concept id is null");
         
-        this.bacilli.setConcept(mu.getConceptBacilli()); 
-        this.bacilli.setVoided(false);
-        this.bacilli.setDateCreated(new Date());
-        this.bacilli.setPerson(patient);
-        this.bacilli.setCreator(user);
-        this.bacilli.setUuid(UUID.randomUUID().toString());
+        bacilli.setConcept(mu.getConceptBacilli()); 
+        bacilli.setVoided(false);
+        bacilli.setDateCreated(new Date());
+        bacilli.setPerson(patient);
+        bacilli.setCreator(user);
+        bacilli.setUuid(UUID.randomUUID().toString());
+        if (bacilli.getConcept() == null)
+            throw new RuntimeException("bacilli concept id is null");
 
-        this.smearResultDate.setConcept(mu.getConceptResultDate()); 
-        this.smearResultDate.setVoided(false);
-        this.smearResultDate.setDateCreated(new Date());
-        this.smearResultDate.setPerson(patient);
-        this.smearResultDate.setCreator(user);
-        this.smearResultDate.setUuid(UUID.randomUUID().toString());
+        smearResultDate.setConcept(mu.getConceptResultDate()); 
+        smearResultDate.setVoided(false);
+        smearResultDate.setDateCreated(new Date());
+        smearResultDate.setPerson(patient);
+        smearResultDate.setCreator(user);
+        smearResultDate.setUuid(UUID.randomUUID().toString());
+        if (smearResult.getConcept() == null)
+            throw new RuntimeException("smear result concept id is null");
         
         //STR_DATE_RECEIVED
-        this.smearDateReceived.setConcept(mu.getConceptDateReceived());
-        this.smearDateReceived.setVoided(false);
-        this.smearDateReceived.setDateCreated(new Date());
-        this.smearDateReceived.setPerson(patient);
-        this.smearDateReceived.setCreator(user);
-        this.smearDateReceived.setUuid(UUID.randomUUID().toString());
+        smearDateReceived.setConcept(mu.getConceptDateReceived());
+        smearDateReceived.setVoided(false);
+        smearDateReceived.setDateCreated(new Date());
+        smearDateReceived.setPerson(patient);
+        smearDateReceived.setCreator(user);
+        smearDateReceived.setUuid(UUID.randomUUID().toString());
+        if (smearDateReceived.getConcept() == null)
+            throw new RuntimeException("ssmearDateReceived smear result concept id is null");
         
         //STR_TB_SMEAR_MICROSCOPY_METHOD
-        this.smearMethod.setConcept(mu.getConceptSmearMicroscopyMethod());
-        this.smearMethod.setVoided(false);
-        this.smearMethod.setDateCreated(new Date());
-        this.smearMethod.setPerson(patient);
-        this.smearMethod.setCreator(user);
-        this.smearMethod.setUuid(UUID.randomUUID().toString());
+        smearMethod.setConcept(mu.getConceptSmearMicroscopyMethod());
+        smearMethod.setVoided(false);
+        smearMethod.setDateCreated(new Date());
+        smearMethod.setPerson(patient);
+        smearMethod.setCreator(user);
+        smearMethod.setUuid(UUID.randomUUID().toString());
+        if (smearMethod.getConcept() == null)
+            throw new RuntimeException("smearMethod smear result concept id is null");
         
-        
-        this.smearParentObs.setVoided(false);
-        this.smearParentObs.setDateCreated(new Date());
-        this.smearParentObs.setConcept(mu.getConceptSmearParent());
-        this.smearParentObs.setPerson(patient);
-        this.smearParentObs.setCreator(user);
-        this.smearParentObs.setUuid(UUID.randomUUID().toString());
+        smearParentObs.setVoided(false);
+        smearParentObs.setDateCreated(new Date());
+        smearParentObs.setConcept(mu.getConceptSmearParent());
+        smearParentObs.setPerson(patient);
+        smearParentObs.setCreator(user);
+        smearParentObs.setUuid(UUID.randomUUID().toString());
+        if (smearParentObs.getConcept() == null)
+            throw new RuntimeException("smearParentObs smear result concept id is null");
     }
     
     public void setSmearParentObs(Obs o){
-        this.smearParentObs = o;
+        smearParentObs = o;
     }
     
     public Obs getSmearParentObs(){
-        return this.smearParentObs;
+        return smearParentObs;
     }
     
     public void setSmearResult(Obs o){
-        this.smearResult = o;
+        smearResult = o;
     }
     public Obs getSmearResult(){
-        return this.smearResult;
+        return smearResult;
     }
     public void setSource(Obs o){
-        this.source = o;
+        source = o;
     }
     public Obs getSource(){
-        return this.source;
+        return source;
     }
     public void setBacilli(Obs o){
-        this.bacilli = o;
+        bacilli = o;
     }
     public Obs getBacilli(){
-        return this.bacilli;
+        return bacilli;
     }
     public void setSmearResultDate(Obs o){
-        this.smearResultDate = o;
+        smearResultDate = o;
     }
     public Obs getSmearResultDate(){
-        return this.smearResultDate;
+        return smearResultDate;
     }
     public void setSmearDateReceived(Obs o){
-        this.smearDateReceived = o;
+        smearDateReceived = o;
     }
     public Obs getSmearDateReceived(){
-        return this.smearDateReceived;
+        return smearDateReceived;
     }
     public void setSmearMethod(Obs o){
-        this.smearMethod = o;
+        smearMethod = o;
     }
     public Obs getSmearMethod(){
-        return this.smearMethod;
+        return smearMethod;
     }
-    
+    public void removeAllObs(){
+        smearResult = null;
+        source = null;
+        bacilli = null;
+        smearResultDate = null;
+        smearDateReceived = null;
+        smearMethod = null;
+        smearParentObs = null;
+    }
 }

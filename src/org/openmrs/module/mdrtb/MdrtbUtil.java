@@ -899,5 +899,17 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
           }
       }
       
+      public static void repairMdrtrbConceptMapping(Concept c, String currentSourceCode, String newSourceCode){
+          Collection<ConceptMap> cmList = c.getConceptMappings();
+          for (ConceptMap cm : cmList){
+              if (cm.getSourceCode().equals(currentSourceCode)){
+                  cm.setSourceCode(newSourceCode);
+                  c.addConceptMapping(cm);
+                  Context.getConceptService().saveConcept(c);
+                  break;
+              }    
+          }
+      }
+      
       
 }

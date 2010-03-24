@@ -109,7 +109,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         pos = encString.indexOf("|");
         String encStringTmp = "";
         if (pos > 0)
-        encStringTmp = encString.substring(0, pos);
+            encStringTmp = encString.substring(0, pos);
         Integer encounterId = null;
         try { encounterId = Integer.parseInt(encStringTmp);
         } catch (Exception ex){log.info("Not able to parse encounterID, creating a new encounter for DST or bacteriology.");}
@@ -127,21 +127,20 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                 enc = Context.getEncounterService().getEncounter(encounterId);
             }
             
-            if (enc == null || enc.getEncounterId() == null){
-            enc.setCreator(Context.getAuthenticatedUser());
-            enc.setDateCreated(new Date());
-            enc.setVoided(false);
-            enc.setPatient(patient);
-            enc.setProvider(us.getUserByUsername(as
-                    .getGlobalProperty("mdrtb.mdrtb_default_provider")));
+            if (enc.getEncounterId() == null){
+                enc.setCreator(Context.getAuthenticatedUser());
+                enc.setDateCreated(new Date());
+                enc.setVoided(false);
+                enc.setPatient(patient);
+                enc.setProvider(us.getUserByUsername(as.getGlobalProperty("mdrtb.mdrtb_default_provider")));
             }
             
             Set<Encounter> encsToSave = new HashSet<Encounter>();
-            
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
         
                 if (msa.getMessage("mdrtb.savebacteriology").equals(action)) {
-                    MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                    MdrtbFactory mu = ms.getMdrtbFactory();
+                    
                     if (enc.getEncounterType() == null)
                         enc.setEncounterType(es.getEncounterType(as.getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
                     if (enc.getEncounterType() == null)
@@ -152,10 +151,9 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                         MdrtbCultureObj mco = mnto.getCultures().get(i);
                         
                         //sputum collection date, a result, and num colonies/bacilli are the required elements
-                        if (mso.getSmearResult().getValueCoded() != null 
-                                && mso.getSmearResult().getObsDatetime() != null){
+                        if (mso.getSmearResult().getValueCoded() != null && mso.getSmearResult().getObsDatetime() != null){
    
-                                Obs parentObs = mso.getSmearParentObs();
+                                Obs parentObs = Obs.newInstance(mso.getSmearParentObs());
                                 parentObs.setObsDatetime(new Date());
                                 
                                 
@@ -181,7 +179,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                     obsDate = mso.getSmearResult().getObsDatetime();
                                 parentObs.setObsDatetime(obsDate);
 
-                                Obs smearResult = mso.getSmearResult();
+                                Obs smearResult = Obs.newInstance(mso.getSmearResult());
                                 smearResult.setValueDatetime(smearResult.getObsDatetime());
                                 if (enc.getEncounterDatetime() == null)
                                     enc.setEncounterDatetime(smearResult.getObsDatetime());
@@ -192,7 +190,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(smearResult);
                                 
                                 if (smearResult.getValueCoded() != null && smearResult.getValueCoded().getConceptId().intValue() == mu.getConceptScanty().getConceptId().intValue()){
-                                    Obs bacilli = mso.getBacilli();
+                                    Obs bacilli = Obs.newInstance(mso.getBacilli());
                                     bacilli.setLocation(parentObs.getLocation());
                                     bacilli.setEncounter(enc);
                                     bacilli.setObsDatetime(obsDate);
@@ -202,7 +200,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 }
                                 
                                 
-                                Obs source = mso.getSource();
+                                Obs source = Obs.newInstance(mso.getSource());
                                 if (source.getValueCoded() != null){
                                     source.setLocation(parentObs.getLocation());
                                     source.setEncounter(enc);
@@ -210,7 +208,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                     parentObs.addGroupMember(source);
                                 }
                                 
-                                Obs smearResultDate = mso.getSmearResultDate();
+                                Obs smearResultDate = Obs.newInstance(mso.getSmearResultDate());
                                 if (smearResultDate.getValueDatetime() != null){
                                     smearResultDate.setLocation(parentObs.getLocation());
                                     smearResultDate.setEncounter(enc);
@@ -218,7 +216,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                     parentObs.addGroupMember(smearResultDate);
                                 }
                                 
-                                Obs smearDateReceived = mso.getSmearDateReceived();
+                                Obs smearDateReceived = Obs.newInstance(mso.getSmearDateReceived());
                                 if (smearDateReceived.getValueDatetime() != null){
                                     smearDateReceived.setLocation(parentObs.getLocation());
                                     smearDateReceived.setEncounter(enc);
@@ -226,7 +224,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                     parentObs.addGroupMember(smearDateReceived);
                                 }
                                 
-                                Obs smearMethod = mso.getSmearMethod();
+                                Obs smearMethod = Obs.newInstance(mso.getSmearMethod());
                                 if (smearMethod.getValueCoded() != null){
                                     smearMethod.setLocation(parentObs.getLocation());
                                     smearMethod.setEncounter(enc);
@@ -256,11 +254,15 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                    }
                                 } catch (Exception ex){enc.addObs(parentObs); encsToSave.add(enc);}
                                 
+                        } else {
+                            mso.removeAllObs();
+                            Context.evictFromSession(mso);
+                            mso = null;
                         }
                         if (mco.getCultureResult().getValueCoded() != null 
                                 && mco.getCultureResult().getObsDatetime() != null){
                             
-                            Obs parentObs = mco.getCultureParentObs();
+                            Obs parentObs = Obs.newInstance(mco.getCultureParentObs());
                             
                             if (parentObs.getLocation() == null && enc.getLocation() != null)
                             parentObs.setLocation(enc.getLocation());
@@ -284,7 +286,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             parentObs.setObsDatetime(obsDate);
                             
                           //now, add the child obs to the parent if their answers are not null:
-                            Obs cultureResult = mco.getCultureResult();
+                            Obs cultureResult = Obs.newInstance(mco.getCultureResult());
                             cultureResult.setValueDatetime(cultureResult.getObsDatetime());
                             if (enc.getEncounterDatetime() == null)
                                 enc.setEncounterDatetime(cultureResult.getValueDatetime());
@@ -294,7 +296,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             parentObs.addGroupMember(cultureResult);
                            
                             if (cultureResult.getValueCoded() != null && cultureResult.getValueCoded().getConceptId().intValue() == mu.getConceptScanty().getConceptId().intValue()){     
-                                Obs colonies = mco.getColonies();
+                                Obs colonies = Obs.newInstance(mco.getColonies());
                                 colonies.setLocation(parentObs.getLocation());
                                 colonies.setEncounter(enc);
                                 colonies.setObsDatetime(obsDate);
@@ -303,7 +305,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(colonies);
                             }
                             
-                            Obs source = mco.getSource();
+                            Obs source = Obs.newInstance(mco.getSource());
                             if (source.getValueCoded() != null){
                                 source.setLocation(parentObs.getLocation());
                                 source.setEncounter(enc);
@@ -311,7 +313,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(source);
                             }
                             
-                            Obs cultureStartDate = mco.getCultureStartDate();
+                            Obs cultureStartDate = Obs.newInstance(mco.getCultureStartDate());
                             if (cultureStartDate.getValueDatetime() != null){
                                 cultureStartDate.setLocation(parentObs.getLocation());
                                 cultureStartDate.setEncounter(enc);
@@ -320,7 +322,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 
                             }
                             
-                            Obs cultureResultsDate = mco.getCultureResultsDate();
+                            Obs cultureResultsDate = Obs.newInstance(mco.getCultureResultsDate());
                             if (cultureResultsDate.getValueDatetime() != null){
                                 cultureResultsDate.setLocation(parentObs.getLocation());
                                 cultureResultsDate.setEncounter(enc);
@@ -328,7 +330,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(cultureResultsDate);
                             }
                             
-                            Obs cultureDateReceived = mco.getCultureDateReceived();
+                            Obs cultureDateReceived = Obs.newInstance(mco.getCultureDateReceived());
                             if (cultureDateReceived.getValueDatetime() != null){
                                 cultureDateReceived.setLocation(parentObs.getLocation());
                                 cultureDateReceived.setEncounter(enc);
@@ -336,15 +338,17 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(cultureDateReceived);
                             }
                             
-                            Obs cultureMethod = mco.getCultureMethod();
+                            Obs cultureMethod = Obs.newInstance(mco.getCultureMethod());
                             if (cultureMethod.getValueCoded() != null){
                                 cultureMethod.setLocation(parentObs.getLocation());
                                 cultureMethod.setEncounter(enc);
                                 cultureMethod.setObsDatetime(obsDate);
+                                if (cultureMethod.getConcept() == null)
+                                    log.info("cultureMethodd concept null");
                                 parentObs.addGroupMember(cultureMethod);
                             }
                             
-                            Obs typeOfOrganism = mco.getTypeOfOrganism();
+                            Obs typeOfOrganism = Obs.newInstance(mco.getTypeOfOrganism());
                             if (typeOfOrganism.getValueCoded() != null){
                                 typeOfOrganism.setLocation(parentObs.getLocation());
                                 typeOfOrganism.setEncounter(enc);
@@ -352,7 +356,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(typeOfOrganism);
                             }
                             
-                            Obs typeOfOrganismNonCoded = mco.getTypeOfOrganismNonCoded();
+                            Obs typeOfOrganismNonCoded = Obs.newInstance(mco.getTypeOfOrganismNonCoded());
                             if (typeOfOrganismNonCoded.getValueText() != null){
                                 typeOfOrganismNonCoded.setLocation(parentObs.getLocation());
                                 typeOfOrganismNonCoded.setEncounter(enc);
@@ -387,11 +391,15 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                    encsToSave.add(enc);
                                }
                             } catch (Exception ex){enc.addObs(parentObs); encsToSave.add(enc);}
+                        } else {
+                            //TODO:  destroy the obs we're not going to use.
+                            mco.removeAllObs();
+                            Context.evictFromSession(mco);
+                            mco=null;
                         }
                     }
                    
                     mdrTest = true;
-                    mu = null;
                 }  //bac  
     
                 if (msa.getMessage("mdrtb.savedst").equals(action)) {
@@ -416,7 +424,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
 
                         //we're requiring at least one drug with a response, and a sputum collection date
                         if (worthSaving && dst.getSputumCollectionDate().getValueDatetime() != null){
-                            Obs parentObs = dst.getDstParentObs();
+                            Obs parentObs = Obs.newInstance(dst.getDstParentObs());
                             
                             if (parentObs.getLocation() == null && enc.getLocation() != null)
                             parentObs.setLocation(enc.getLocation());
@@ -442,7 +450,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             parentObs.setObsDatetime(obsDate);
                             
                             //create the obs tree before saving:
-                            Obs sputumCollectionDate = dst.getSputumCollectionDate();
+                            Obs sputumCollectionDate = Obs.newInstance(dst.getSputumCollectionDate());
                             if (enc.getEncounterDatetime() == null)
                                 enc.setEncounterDatetime(sputumCollectionDate.getValueDatetime());
                             sputumCollectionDate.setLocation(parentObs.getLocation());
@@ -450,7 +458,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             sputumCollectionDate.setObsDatetime(sputumCollectionDate.getValueDatetime());
                             parentObs.addGroupMember(sputumCollectionDate);
                             
-                            Obs typeOfOrganism = dst.getTypeOfOrganism();
+                            Obs typeOfOrganism = Obs.newInstance(dst.getTypeOfOrganism());
                             if (typeOfOrganism.getValueCoded() != null){
                                 typeOfOrganism.setLocation(parentObs.getLocation());
                                 typeOfOrganism.setEncounter(enc);
@@ -458,7 +466,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(typeOfOrganism);
                             }
                             
-                            Obs typeOfOrganismNonCoded = dst.getTypeOfOrganismNonCoded();
+                            Obs typeOfOrganismNonCoded = Obs.newInstance(dst.getTypeOfOrganismNonCoded());
                             if (typeOfOrganismNonCoded.getValueText() != null){
                                 typeOfOrganismNonCoded.setLocation(parentObs.getLocation());
                                 typeOfOrganismNonCoded.setEncounter(enc);
@@ -466,7 +474,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(typeOfOrganismNonCoded);
                             }
                             
-                            Obs drugSensitivityTestComplete = dst.getDrugSensitivityTestComplete();
+                            Obs drugSensitivityTestComplete = Obs.newInstance(dst.getDrugSensitivityTestComplete());
                             if (drugSensitivityTestComplete.getValueAsBoolean() != null){
                                 drugSensitivityTestComplete.setLocation(parentObs.getLocation());
                                 drugSensitivityTestComplete.setEncounter(enc);
@@ -474,7 +482,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(drugSensitivityTestComplete);
                             }
                             
-                            Obs dstStartDate = dst.getDstStartDate();
+                            Obs dstStartDate = Obs.newInstance(dst.getDstStartDate());
                             if (dstStartDate.getValueDatetime() != null){
                                 dstStartDate.setLocation(parentObs.getLocation());
                                 dstStartDate.setEncounter(enc);
@@ -482,7 +490,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(dstStartDate);
                             }
                             
-                            Obs dstResultsDate = dst.getDstResultsDate();
+                            Obs dstResultsDate = Obs.newInstance(dst.getDstResultsDate());
                             if (dstResultsDate.getValueDatetime() != null){
                                 dstResultsDate.setLocation(parentObs.getLocation());
                                 dstResultsDate.setEncounter(enc);
@@ -490,7 +498,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(dstResultsDate);
                             }
                             
-                            Obs dstDateReceived = dst.getDstDateReceived();
+                            Obs dstDateReceived = Obs.newInstance(dst.getDstDateReceived());
                             if (dstDateReceived.getValueDatetime() != null){
                                 dstDateReceived.setLocation(parentObs.getLocation());
                                 dstDateReceived.setEncounter(enc);
@@ -498,7 +506,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(dstDateReceived);
                             }
                             
-                            Obs source = dst.getSource();
+                            Obs source = Obs.newInstance(dst.getSource());
                             if (source.getValueCoded() != null){
                                 source.setLocation(parentObs.getLocation());
                                 source.setEncounter(enc);
@@ -506,7 +514,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(source);
                             }
                             
-                            Obs dstMethod = dst.getDstMethod();
+                            Obs dstMethod = Obs.newInstance(dst.getDstMethod());
                             if (dstMethod.getValueCoded() != null){
                                 dstMethod.setLocation(parentObs.getLocation());
                                 dstMethod.setEncounter(enc);
@@ -515,7 +523,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             }
                             
                             
-                            Obs directOrIndirect = dst.getDirectOrIndirect();
+                            Obs directOrIndirect = Obs.newInstance(dst.getDirectOrIndirect());
                             if (directOrIndirect.getValueAsBoolean()!= null){
                                 directOrIndirect.setLocation(parentObs.getLocation());
                                 directOrIndirect.setEncounter(enc);
@@ -523,7 +531,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 parentObs.addGroupMember(directOrIndirect);
                             }
                             
-                            Obs  coloniesInControl = dst.getColoniesInControl();
+                            Obs  coloniesInControl = Obs.newInstance(dst.getColoniesInControl());
                             if (coloniesInControl.getValueNumeric()!= null){
                                 coloniesInControl.setLocation(parentObs.getLocation());
                                 coloniesInControl.setEncounter(enc);
@@ -535,13 +543,13 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             for (MdrtbDSTResultObj res: dstResObs){
                                 if (res.getDrug().getConcept() != null){
                                     
-                                    Obs dstParentResultObs = res.getDstResultParentObs();
+                                    Obs dstParentResultObs = Obs.newInstance(res.getDstResultParentObs());
                                     dstParentResultObs.setLocation(parentObs.getLocation());
                                     dstParentResultObs.setEncounter(enc);
                                     dstParentResultObs.setObsDatetime(obsDate);
                                     parentObs.addGroupMember(dstParentResultObs);
                                     
-                                   Obs drug = res.getDrug();
+                                   Obs drug = Obs.newInstance(res.getDrug());
                                    if (drug.getConcept() != null){
                                        drug.setLocation(parentObs.getLocation());
                                        drug.setEncounter(enc);
@@ -549,7 +557,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                        dstParentResultObs.addGroupMember(drug);
                                    }
                                    
-                                   Obs colonies = res.getColonies();
+                                   Obs colonies = Obs.newInstance(res.getColonies());
                                    if (colonies.getValueNumeric() != null){
                                        colonies.setLocation(parentObs.getLocation());
                                        colonies.setEncounter(enc);
@@ -557,7 +565,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                        dstParentResultObs.addGroupMember(colonies);
                                    }
                                    
-                                   Obs concentration = res.getConcentration();
+                                   Obs concentration = Obs.newInstance(res.getConcentration());
                                    if (concentration.getValueNumeric() != null){
                                        concentration.setLocation(parentObs.getLocation());
                                        concentration.setEncounter(enc);
@@ -590,19 +598,24 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             } catch (Exception ex){enc.addObs(parentObs); encsToSave.add(enc);}
                            
                            
+                        } else {
+                            //TODO: destroy obs:
+                            dst.removeAllObs();
+                            Context.evictFromSession(dst);
+                            dst = null;
                         }
                     
                     }
                     
                 } //DST
+            //TODO:  deal with this stupid hibernate shit:
 
-                
+            Context.evictFromSession(mnto);
+            mnto = null;
             for (Encounter encTmp : encsToSave){
                 es.saveEncounter(encTmp);
             }
             if (mdrTest){
-                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                MdrtbFactory mu = ms.getMdrtbFactory();
                 MdrtbUtil.fixCultureConversions(patient, mu);
             }
            
@@ -622,26 +635,25 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
      
         if (Context.isAuthenticated()) {
- 
-            User user = Context.getAuthenticatedUser();
             Patient patient = new Patient();
             MdrtbNewTestObj mnto = new MdrtbNewTestObj();
-            PatientService ps = Context.getPatientService();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
             String patientId = request.getParameter("patientId");
             if (patientId != null) {
                 try {
                     int id = Integer.valueOf(patientId);
-                    patient = ps.getPatient(id);
+                    patient = Context.getPatientService().getPatient(id);
                     String view = "";
                     if (request.getParameter("action") != null)
                         view = request.getParameter("action");
-                    mnto = new MdrtbNewTestObj(patient,user, view);
+                    mnto = new MdrtbNewTestObj(patient,Context.getAuthenticatedUser(), view, mu);
                     mnto.setPatient(patient);
 //                    Calendar cal = Calendar.getInstance();
 //                    cal.setTime(new Date());
 //                    cal.add(Calendar.MONTH, -6);
-                    //TODO: limit to last X months?
-                    List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(patient);
+//                    TODO: limit to last X months?
+//                    List<Encounter> encSet = Context.getEncounterService().getEncountersByPatient(patient);
                 }
                 catch (NumberFormatException numberError) {
                     log.warn("Invalid userId supplied: '" + patientId + "'", numberError);

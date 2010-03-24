@@ -311,7 +311,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         //sputum collection date, a result,
                         if (mso != null && mso.getSmearResult() != null && mso.getSmearResult().getValueCoded() != null 
                                 && mso.getSmearResult().getObsDatetime() != null){
-
+                                Date obsDate = mso.getSmearResult().getObsDatetime(); 
                                 
                                 Obs parentObs = mso.getSmearParentObs();
                                 Encounter oldEnc = parentObs.getEncounter();
@@ -345,21 +345,15 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                     parentObs.setLocation(loc);
                                     enc.setLocation(loc);
                                 }
-                                if (enc.getEncounterDatetime() == null)
-                                    enc.setEncounterDatetime(mso.getSmearResult().getObsDatetime());
                                 
                                 saveTest = true;
                                 
-                                //encounter and obs datetime stuff:
-                                Date obsDate = new Date();
-                                if (mso.getSmearResult().getObsDatetime() != null)
-                                    obsDate = mso.getSmearResult().getObsDatetime();
+                                
+                                enc.setEncounterDatetime(obsDate);
                                 parentObs.setObsDatetime(obsDate);
 
                                 Obs smearResult = mso.getSmearResult();
                                 smearResult.setValueDatetime(smearResult.getObsDatetime());
-                                if (enc.getEncounterDatetime() == null)
-                                    enc.setEncounterDatetime(smearResult.getValueDatetime());
                                 smearResult.setLocation(parentObs.getLocation());
                                 smearResult.setEncounter(enc);
                                 parentObs.addGroupMember(smearResult);
@@ -413,7 +407,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         if (mco != null && mco.getCultureResult() != null && mco.getCultureResult().getValueCoded() != null 
                                 && mco.getCultureResult().getObsDatetime() != null){
                             
-                            
+                            Date obsDate = mco.getCultureResult().getObsDatetime();
                             Obs parentObs = mco.getCultureParentObs();
                             Encounter oldEnc = parentObs.getEncounter();
                             //lazy loading:
@@ -444,20 +438,13 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 parentObs.setLocation(loc);
                                 enc.setLocation(loc);
                             }
-                            if (enc.getEncounterDatetime() == null)
-                                enc.setEncounterDatetime(mco.getCultureResult().getObsDatetime());
+                            enc.setEncounterDatetime(mco.getCultureResult().getObsDatetime());
                             saveTest = true;
-                            
-                          //encounter and obs datetime stuff:
-                            Date obsDate = new Date();
-                            if (mco.getCultureResult().getObsDatetime() != null)
-                                obsDate = mco.getCultureResult().getObsDatetime();
+                         
                             parentObs.setObsDatetime(obsDate);
                           //now, add the child obs to the parent if their answers are not null:
                             Obs cultureResult = mco.getCultureResult();
                             cultureResult.setValueDatetime(cultureResult.getObsDatetime());
-                            if (enc.getEncounterDatetime() == null)
-                                enc.setEncounterDatetime(cultureResult.getValueDatetime());
                             cultureResult.setLocation(parentObs.getLocation());
                             cultureResult.setEncounter(enc);
                             parentObs.addGroupMember(cultureResult);
@@ -557,7 +544,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                         Obs parentObs = dst.getDstParentObs();
                         Encounter oldEnc = parentObs.getEncounter();
                         if (dst.getSputumCollectionDate().getValueDatetime() != null && worthSaving ){
-                            
+                            Date obsDate = dst.getSputumCollectionDate().getValueDatetime();
                             if (!oldEnc.getEncounterId().equals(enc.getEncounterId())){
                                 //we need to clone the old encounter, if provider is different
 //                                  if (enc.getProvider().getPersonId().intValue() != newProviderId.intValue()){
@@ -585,22 +572,14 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                                 parentObs.setLocation(loc);
                                 enc.setLocation(loc);
                             }
-                            if (enc.getEncounterDatetime() == null)
-                                enc.setEncounterDatetime(dst.getSputumCollectionDate().getValueDatetime());
+
+                            enc.setEncounterDatetime(dst.getSputumCollectionDate().getValueDatetime());
                             saveTest = true;
-                            
-                          //encounter and obs datetime stuff:
-                            Date obsDate = new Date();
-                            if (dst.getSputumCollectionDate().getValueDatetime() != null)
-                                obsDate = dst.getSputumCollectionDate().getValueDatetime();
-                            else 
-                                obsDate = dst.getDstResultsDate().getValueDatetime();
+
                             parentObs.setObsDatetime(obsDate);
                             
                             //create the obs tree before saving:
                             Obs sputumCollectionDate = dst.getSputumCollectionDate();
-                            if (enc.getEncounterDatetime() == null)
-                                enc.setEncounterDatetime(sputumCollectionDate.getValueDatetime());
                             sputumCollectionDate.setLocation(parentObs.getLocation());
                             sputumCollectionDate.setEncounter(enc);
                             sputumCollectionDate.setObsDatetime(sputumCollectionDate.getValueDatetime());

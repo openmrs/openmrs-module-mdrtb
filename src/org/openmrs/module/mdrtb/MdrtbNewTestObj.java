@@ -16,13 +16,10 @@ import org.openmrs.api.context.Context;
 
 public class MdrtbNewTestObj {
     private Patient patient;
-    private List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();
-    private List<MdrtbCultureObj> cultures = new ArrayList<MdrtbCultureObj>();
-    private List<MdrtbDSTObj> dsts = new ArrayList<MdrtbDSTObj>();
+    private transient List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();
+    private transient List<MdrtbCultureObj> cultures = new ArrayList<MdrtbCultureObj>();
+    private transient List<MdrtbDSTObj> dsts = new ArrayList<MdrtbDSTObj>();
     private Encounter primaryEncounter;
-
-
-
     private AdministrationService as = Context.getAdministrationService();
     
     /**
@@ -55,15 +52,11 @@ public class MdrtbNewTestObj {
      * @param STR_DST_PARENT
      * @param STR_DST_RESULT_PARENT
      */
-    public MdrtbNewTestObj(Patient patient, User user, String view){
-        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
+    public MdrtbNewTestObj(Patient patient, User user, String view, MdrtbFactory mu){
         String numNewTests = as.getGlobalProperty("mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once");
         try{
             Integer maxNum = Integer.valueOf(numNewTests);
             for (int i = 0; i < maxNum; i++){
-                
-                
                 if (view.equals("DST")){
                     this.dsts.add(new MdrtbDSTObj(patient, user, mu));
                 } else {
@@ -73,7 +66,8 @@ public class MdrtbNewTestObj {
                 
             }
         } catch (Exception ex){
-            throw new RuntimeException("Unable to convert global property mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once into an integer, or loading child Obs failed.");
+            ex.printStackTrace();
+            throw new RuntimeException("Unable to convert global property mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once into an integer, or loading child Obs failed. " + ex.getMessage());
         }
     }
  

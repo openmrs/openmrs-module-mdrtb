@@ -681,6 +681,15 @@ public final class MdrtbFactory {
             for (int i = 0; i < allXMLNodes.length; i++){
                 stList.add(allXMLNodes[i]);
             }
+            
+            //TODO: remove these after a while:
+            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
+            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3024), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TYPE OF ORGANISM");
+            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3048), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TUBERCULOSIS CULTURE CONSTRUCT"); 
+            MdrtbUtil.repairMdrtrbConceptMapping(Context.getConceptService().getConcept(1565), "DIED - TB", "DIED - TB");
+            
+            
             //MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             ConceptService cService = Context.getConceptService();
             ConceptSource cs = cService.getConceptSourceByName("org.openmrs.module.mdrtb");
@@ -691,7 +700,8 @@ public final class MdrtbFactory {
                 //System.out.println("Initializing MDRTB Metadata: Concept " + c + " " + c.getName().getName());
                 xmlConceptList.put(cm.getSourceCode(), c);
             }
-
+           
+            
           //TODO: the following is for the concept switch from tuberculosis drug treatment start date to mdrtb drug treatment start date
             // once botwsana, haiti, pakistan have been upgraded, no worries.
             if (xmlConceptList.get(STR_TREATMENT_START_DATE) == null){
@@ -711,16 +721,11 @@ public final class MdrtbFactory {
             }
             
             if (xmlConceptList.get(STR_DIED) == null){
-                Concept c = cService.getConceptByName(STR_DIED + " ");
+                Concept c = cService.getConceptByName(STR_DIED);
                 if (c != null)
                     xmlConceptList.put(STR_DIED, c);
                 else {
-                    //TODO: get rid of this
-                    c = cService.getConcept(1565); //hack  -  conceptID for DIED - TB
-                    if (c == null)
-                        throw new RuntimeException("Unable to load concept DIED - TB");
-                    else
-                        xmlConceptList.put(STR_DIED, c);
+                     throw new RuntimeException("Unable to load concept DIED - TB");
                 }
             }
             

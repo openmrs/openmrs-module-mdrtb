@@ -292,5 +292,20 @@ public class MdrtbDSTObj {
     public void addDstResult(MdrtbDSTResultObj mdro){
         this.dstResults.add(mdro);
     }
+    public void removeAllObs(){
+        drugSensitivityTestComplete = null;
+        dstStartDate = null;
+        dstResultsDate = null;
+        dstDateReceived = null;
+        source = null;
+        dstMethod = null;
+        dstResults = null;
+        typeOfOrganism = null;
+        typeOfOrganismNonCoded = null;
+        directOrIndirect = null;
+        coloniesInControl = null;
+        dstParentObs = null;
+        sputumCollectionDate = null; 
+    }
     
 }
