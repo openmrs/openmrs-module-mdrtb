@@ -1086,7 +1086,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                            
                                    }
                                    
-                                   if (o.getConcept().getConceptId() == cd4percentConcept.getConceptId() 
+                                   if (o.getConcept().getConceptId().intValue() == cd4percentConcept.getConceptId().intValue() 
                                            && ((mp.getHivStatus() != null 
                                                    && o.getObsDatetime().getTime() == mp.getHivStatus().getObsDatetime().getTime() 
                                                    && o.getValueNumeric() != null 
@@ -1121,13 +1121,13 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                Integer cd4Int = Integer.valueOf(cd4count.trim());
                                boolean found = false;
                                for (Obs o:oMasterList){
-                                   if (o.getConcept().getConceptId() == cd4percentConcept.getConceptId()  && o.isVoided() == false
+                                   if (o.getConcept().getConceptId().intValue() == cd4percentConcept.getConceptId().intValue()  && o.isVoided() == false
                                            && ((mp.getHivStatus() != null 
                                            && o.getObsDatetime().getTime() == mp.getHivStatus().getObsDatetime().getTime())
                                            || (killCD4OnThisDate != null && killCD4OnThisDate.getTime() == o.getObsDatetime().getTime())))
                                        os.voidObs(o, "Changing to cd4 count from cd4 percent");
                                    
-                                   if (o.getConcept().getConceptId() == cd4Concept.getConceptId() 
+                                   if (o.getConcept().getConceptId().intValue() == cd4Concept.getConceptId().intValue() 
                                            && ((mp.getHivStatus() != null 
                                                    && o.getObsDatetime().getTime() == mp.getHivStatus().getObsDatetime().getTime() 
                                                    && o.getValueNumeric() != null 
@@ -1138,7 +1138,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                        
                                    }
                                    
-                                   if (o.getConcept().getConceptId() == cd4Concept.getConceptId() 
+                                   if (o.getConcept().getConceptId().intValue() == cd4Concept.getConceptId().intValue() 
                                            && ((mp.getHivStatus() != null 
                                                    && o.getObsDatetime().getTime() == mp.getHivStatus().getObsDatetime().getTime() 
                                                    && o.getValueNumeric() != null 
@@ -1408,13 +1408,16 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 
                               
                               // Duration of previous treatment (in months)
+                               
+
                                if (durationofprevioustreatment  != null && !durationofprevioustreatment.equals("")){
                                    Integer prevTreatment = Integer.valueOf(durationofprevioustreatment);
                                    
-                                   List<Obs> obs = new ArrayList<Obs>();
+                                   List<Obs> obs = new ArrayList<Obs>();                                 
+
                                    for (Obs o:oMasterList){
-                                       if (o.getConcept().getConceptId() == durationOfPrevTreatment.getConceptId())
-                                       obs.add(o);
+                                       if (o.getConcept().getConceptId().equals(durationOfPrevTreatment.getConceptId())){
+                                       obs.add(o);}
                                    }
                                    Obs oTmp = null;
                                    if (obs.size() > 0){
@@ -1447,13 +1450,13 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                        if (oTmp.getObsDatetime() == null)
                                            oTmp.setObsDatetime(new Date());
                                        oTmp.setPerson(mp.getPatient());
-                                       oTmp.setValueNumeric(prevTreatment.doubleValue());
+                                       oTmp.setValueNumeric(prevTreatment.doubleValue());                                    
                                        oTmp.setVoided(false);
                                        os.saveObs(oTmp, "");
                                    }
                                }
                                
-                            
+                            //Duration of previous treatment ends here
                                
                             //onART    
                         
