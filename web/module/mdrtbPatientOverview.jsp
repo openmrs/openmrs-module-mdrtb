@@ -377,6 +377,7 @@
 		<openmrs:globalProperty key="mdrtb.red_list" var="redList"/>
 		<openmrs:globalProperty key="mdrtb.green_list" var="greenList"/>
 		<openmrs:globalProperty key="mdrtb.yellow_list" var="yellowList"/>
+		<openmrs:globalProperty key="mdrtb.show_lab" var="showLab"/>
 		<spring:message code='mdrtb.samplecollectiondateLN' var='sampleCollectionDateStrLN'/>
 		<c:if test="${!empty obj.obs}">
 						<mdrtb:bacteriology
@@ -394,6 +395,7 @@
 						programWorkflowStatesToNotShow="NOT CONVERTED|NONE|STILL ON TREATMENT|ON TREATMENT"
 						programNameReplacementString="${progString}"
 						scanty="SCANTY"
+						showLab="${showLab}"
 						/>
 		</c:if>	<br>
 		</div>

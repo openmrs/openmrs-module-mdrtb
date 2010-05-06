@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.web.taglib;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -20,11 +19,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
-import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
@@ -53,8 +52,15 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     private String programWorkflowStatesToNotShow = "";
     private String programNameReplacementString = "Program Start Date";
     private String scanty = "";
+    private Boolean showLab = false;
 
-
+    public Boolean getShowLab(){
+    	return showLab;
+    }
+    
+    public void setShowLab(Boolean showLab){
+    	this.showLab = showLab;
+    }
 
     public String getScanty() {
         return scanty;
@@ -371,8 +377,24 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                                     String scantyAddition = "";
                                     if (o.getValueCoded().getBestName(locUS).getName().equals(this.scanty) && o.getValueNumeric() != null)
                                         scantyAddition = " (" + o.getValueNumeric().intValue() + ")";
+                                    
+                                    // append the location if the showLab tag is set to true, and the location is a lab (i.e. in global prop mdrtb.location_list)
+                                    String location = "";
+                                    if(showLab){
+                                    	String locationsString = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_list"); 
+                                    	// iterate through all the locations in mdrtb.klab.list
+                                    	for (StringTokenizer st = new StringTokenizer(locationsString, "|"); st.hasMoreTokens(); ) {
+                                    		String s = st.nextToken().trim();
+                                    		Location locTmp = Context.getLocationService().getLocation(s);
+                                    		// if the obs location is in the list, create a string with location name to add to the display
+                                    		if(o.getLocation().equals(locTmp)) {
+                                    			location = " (" + o.getLocation().getDisplayString() + ")";
+                                    		}
+                                    	}
+                                    }
+                                    
                                     ret.append("<a class='widgetLinks' style='color:black' href='mdrtbEditTestContainer.form?ObsGroupId="
-                                                    + o.getObsGroup().getObsId() + "'>"+ o.getValueCoded().getBestShortName(loc)+ scantyAddition +"</a>");
+                                                    + o.getObsGroup().getObsId() + "'>"+ o.getValueCoded().getBestShortName(loc)+ scantyAddition + location + "</a>");
                                     emptyCellTest = false;
                                     usedObs.add(o);
                                     encObs.remove(o);

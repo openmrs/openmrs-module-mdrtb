@@ -328,6 +328,11 @@
 		<defaultValue></defaultValue>
 		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.show_lab</property>
+		<defaultValue>false</defaultValue>
+		<description>True/false whether or not to display lab names in the bacteriology widget.</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>
