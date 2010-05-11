@@ -28,20 +28,22 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
-import org.openmrs.PatientProgram;
-import org.openmrs.PatientState;
 import org.openmrs.Person;
-import org.openmrs.ProgramWorkflowState;
-import org.openmrs.User;
 import org.openmrs.api.ObsService;
-import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 
 public class MdrtbUtil {
     
     protected static final Log log = LogFactory.getLog(MdrtbUtil.class);
-
-public static Concept getMDRTBConceptByName(String conceptString, Locale loc, MdrtbFactory mu){
+    
+    // adding this method back in for backward compatibility--the pihhaiti module still uses it
+    @Deprecated
+    public static Concept getMDRTBConceptByName(String conceptString, Locale loc){
+    	return getMDRTBConceptByName(conceptString, loc, Context.getService(MdrtbService.class).getMdrtbFactory());
+    }
+        
+    
+    public static Concept getMDRTBConceptByName(String conceptString, Locale loc, MdrtbFactory mu){
         
         Concept ret = null;
         
@@ -306,10 +308,10 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
        return negResult;
    }
    
-   
-   
-  
-   
+   @Deprecated
+   public static List<Concept> getDstDrugList (boolean removeDuplicates){
+	   return getDstDrugList(removeDuplicates, Context.getService(MdrtbService.class).getMdrtbFactory());
+   }
    
    public static List<Concept> getDstDrugList(boolean removeDuplicates, MdrtbFactory mu){
        String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
@@ -436,7 +438,6 @@ public static Concept getMDRTBConceptByName(String conceptString, Locale loc, Md
    }
    
    public static Concept getConceptFromMDRTBConceptMaps(String name, MdrtbFactory mu){
-       MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
        return mu.getMDRTBConceptByKey(name, new Locale("en", "US"), mu.getXmlConceptList());
    }
    

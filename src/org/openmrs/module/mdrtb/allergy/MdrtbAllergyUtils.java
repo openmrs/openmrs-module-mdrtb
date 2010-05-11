@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.allergy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,22 @@ public class MdrtbAllergyUtils {
            
            Collections.sort(allergyList, new Comparator<MdrtbAllergyStringObj>() {
                public int compare(MdrtbAllergyStringObj left, MdrtbAllergyStringObj right) {
-                   return (left.getDate()).compareTo(right.getDate());
+            	  
+            	   Date leftDate = left.getDate();
+            	   Date rightDate = right.getDate();
+            	   
+            	   if (leftDate == null && rightDate == null) {
+            		   return 0;
+            	   }
+            	   else if (leftDate == null) {
+            		   return 1;
+            	   }
+            	   else if (rightDate == null) {
+            		   return -1;
+            	   }
+            	   else {
+            		   return (left.getDate()).compareTo(right.getDate());
+            	   }
                }
                
            });
