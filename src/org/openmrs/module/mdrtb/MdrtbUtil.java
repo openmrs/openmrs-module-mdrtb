@@ -191,7 +191,7 @@ public class MdrtbUtil {
             }
         } catch (Exception ex) {
             throw new RuntimeException(
-                    "The global property mdrtb.discontinue_drug_order_reasons did not return a valid concept set name");
+                    "The global property mdrtb.discontinue_drug_order_reasons did not return a valid concept set name", ex);
         }
         return discontinueRes;
     }
