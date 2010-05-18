@@ -18,7 +18,6 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
@@ -42,7 +41,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public class MdrtbTSAdmListController extends SimpleFormController {
 
-    private final static String TREATMENT_SUPPORTER_ACTIVE = "TREATMENT SUPPORTER IS CURRENTLY ACTIVE";
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
 
@@ -151,10 +149,9 @@ public class MdrtbTSAdmListController extends SimpleFormController {
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             MdrtbFactory mu = ms.getMdrtbFactory();
                 Concept phoneConcept = mu.getConceptPhoneNumber();
-                ConceptService cs = Context.getConceptService();
                 
                 //get the concept for TS Activity
-                Concept tsActivityConcept = cs.getConceptByName(TREATMENT_SUPPORTER_ACTIVE);
+                Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
                 
                 
                 String treatSupAttributeTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_person_attribute_type");

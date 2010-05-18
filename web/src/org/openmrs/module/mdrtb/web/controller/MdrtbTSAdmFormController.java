@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +47,6 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
 
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
-    private final static String TREATMENT_SUPPORTER_ACTIVE = "TREATMENT SUPPORTER IS CURRENTLY ACTIVE";
     private final static String YES = "YES";
 
     @Override
@@ -78,8 +76,10 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
 
         Map<String,Object> map = new HashMap<String,Object>();
         if (Context.isAuthenticated()){
-
-        
+        	
+        	MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
+        	
             String dateFormat = Context.getDateFormat().toPattern();
             map.put("dateFormat", dateFormat);
             
@@ -91,8 +91,7 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                     + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
             
             //get the potential answers for the TS Activity concept and make them available to the JSP 
-            ConceptService cs = Context.getConceptService();
-            Concept tsActivityConcept = cs.getConceptByName("TREATMENT SUPPORTER IS CURRENTLY ACTIVE");
+            Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
             List<Concept> activityAnswers = new ArrayList<Concept>();
             if (tsActivityConcept == null)
                     throw new RuntimeException("Could not find concept for treatment supporter activity");
@@ -208,7 +207,7 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
            ConceptService cs = Context.getConceptService();
            
            //get the concept for TS Activity
-           Concept tsActivityConcept = cs.getConceptByName(TREATMENT_SUPPORTER_ACTIVE);
+           Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
           
            ObsService os = Context.getObsService();
            String personId = request.getParameter("personId");

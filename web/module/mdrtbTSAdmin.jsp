@@ -148,7 +148,7 @@
 							
 							<c:forEach items="${activityAnswers}" var="answer">
 								<option value="${answer}" 
-									<c:if test="${answer == status.value || answer.name.name == 'YES'}">
+									<c:if test="${answer == status.value}">
 										SELECTED
 									</c:if>
 								>${answer.name.name}</option>
