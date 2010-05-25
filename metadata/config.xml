@@ -333,6 +333,14 @@
 		<defaultValue>false</defaultValue>
 		<description>True/false whether or not to display lab names in the bacteriology widget.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.patient_dashboard_tab_conf</property>
+		<description>Used to configure what tabs are displayed on the mdrtb patient overview page, and in what order they appear. 
+		Specify the order for the tabs to appear using a pipe-delimited list. For example, "STATUS|FORM|REG|BAC|DST|CONTACTS" will 
+		display the tabs in the default order. To hide a tab, append the tab name with ":hide".  Note that any tabs that aren't explicitly
+		hidden using this method will be displayed at the end of the tab list. For instance "BAC|FORM|STATUS:hide|CONTACTS:hide" would 
+		display the following tabs BAC,FORM,REG,DST, in that order. To use the default display order, keep this property empty.</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>

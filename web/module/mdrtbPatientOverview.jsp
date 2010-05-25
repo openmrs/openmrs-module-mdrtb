@@ -316,40 +316,12 @@
 		
 <div id="R01SearchTabs">
 			<ul>
-			<li>&nbsp;</li>
-			<li><a id="searchTab_status" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.status" /></a></li>
-					
-					<li><a id="searchTab_formEntry" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.formentry" /></a></li>
-					
-			<li><a id="searchTab_patientRegimen" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.patientregimen" /></a></li>
-					
-			<li><a id="searchTab_BAC" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.bacteriologies" /></a></li>
-					
-					<li><a id="searchTab_DST" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.dsts" /></a></li>
-
-					<li><a id="searchTab_contacts" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.contacts" /></a></li>
-					
-					
-					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.mdrtbDashboardTab" type="html">
-							<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
-								<li>
-									<a id="searchTab_${extension.tabId}" href="#" onclick="changeSearchTab(this)"><spring:message code="${extension.tabName}"/></a>
-								</li>
-							</openmrs:hasPrivilege>
-					</openmrs:extensionPoint>
-
+				<li>&nbsp;</li>
+				<c:forEach var="tab" items="${tabs}">
+					<li><a id="searchTab_${tab.id}" href="#"
+						onClick="changeSearchTab(this)"><spring:message
+						code="${tab.messageCode}" /></a></li>
+				</c:forEach>
 			</ul>
 </div>
 	
@@ -457,7 +429,7 @@
 					</td>
 					<Td>
 						<c:if test="${contact.isTBPatient}">
-							<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}&view=STATUS">${contact.person.givenName} ${contact.person.familyName}</a>
+							<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">
 							<c:if test="${contact.isPatient}">
@@ -561,8 +533,9 @@
 
 <bR><br>
 <script>
+		
 		<c:if test="${empty view}">
-			changeSearchTab('searchTab_status');
+			changeSearchTab('searchTab_${tabs[0].id}');
 		</c:if>	
 		<c:if test="${!empty view}">
 			<c:choose>
@@ -588,7 +561,7 @@
 					changeSearchTab('searchTab_${view}');
 				</c:otherwise>
 			</c:choose>
-		</c:if>
+		</c:if> 
 			setHeights();
 </script>
 

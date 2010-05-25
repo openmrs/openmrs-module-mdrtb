@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -53,13 +55,18 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.Extension;
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbPatientDashboardTabs;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
+import org.openmrs.module.web.extension.PatientDashboardTabExt;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
@@ -94,8 +101,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             if (view != null)
                 map.put("view", view);
             else
-                map.put("view", "STATUS");
-            // availableForms
+                map.put("view", getDefaultMdrtbPatientDashboardTab());
+           
+            	// availableForms
             String formsList = as.getGlobalProperty("mdrtb.mdrtb_forms_list");
             List<Form> forms = fs.getAllForms();
             List<Form> mdrtbForms = new ArrayList<Form>();
@@ -277,7 +285,11 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             map.put("stEmpInd", c);
             map.put("stEmpIndAnswers", c.getAnswers(false));
             
-            mu = null;
+           // add this list of tabs to display to the module map
+           List<HashMap<String,String>> tabs = getMdrtbPatientDashboardTabs(); 
+           map.put("tabs", tabs);
+        	   
+           mu = null;
         }
         return map;
     }
@@ -291,7 +303,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         MessageSourceAccessor msa = this.getMessageSourceAccessor();
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
         MdrtbFactory mu = ms.getMdrtbFactory();
-        String view ="STATUS";
+        String view = getDefaultMdrtbPatientDashboardTab();
 
         if (action != null && msa.getMessage("mdrtb.saveneworders").equals(action)){
                 String numberOfNewOrdersString = request.getParameter("numberOfNewOrders");
@@ -431,7 +443,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             
                     }
                     
-                    view = "REG";
+                    view = MdrtbConstants.MdrtbPatientDashboardTabs.REG.name();
         }
         
         if (action != null && msa.getMessage("mdrtb.save").equals(action)){
@@ -1598,7 +1610,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             MdrtbUtil.fixCultureConversions(mp.getPatient(), mu);
 
                 }           
-                view = "STATUS";
+                view = MdrtbConstants.MdrtbPatientDashboardTabs.STATUS.name();
                 mu = null;
         }   
         
@@ -1611,7 +1623,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
             } catch (Exception ex){
                 log.warn("Failed to enroll patient in mdrtb program", ex);
             }
-            view = "STATUS";     
+            view = MdrtbConstants.MdrtbPatientDashboardTabs.STATUS.name();  
             mu = null;
         }
       
@@ -2039,5 +2051,109 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
         }
         return true;
     }
-
+    
+    /**
+     * Utility functions
+     */
+    
+    /**
+     * Returns the mdrtb patient dashboard tabs to display by comparing available tabs against configuration property 
+     */
+    
+    private List<HashMap<String,String>> getMdrtbPatientDashboardTabs(){
+    	
+    	// the list where we will store the tabs available
+        List<HashMap<String,String>> availableTabs = new LinkedList<HashMap<String,String>>();
+        // the list where we will store the actual tabs to display
+        List<HashMap<String,String>> displayTabs = new LinkedList<HashMap<String,String>>();
+        
+        // first, get all the constant tabs defined by the module and add them to available list
+        for (MdrtbPatientDashboardTabs dashboardTab : MdrtbPatientDashboardTabs.values()) {
+     	   	HashMap<String,String> tab = new HashMap<String,String>();
+        		tab.put("name", dashboardTab.name());
+     	   		tab.put("id", dashboardTab.getId());  // the id to reference the code in Javascript
+        		tab.put("messageCode", dashboardTab.getMessageCode());  // the spring:message code for the tag
+        		availableTabs.add(tab);
+        }
+        
+        // now pull out any extension point tabs that have been defined & that the user has privileges to see
+        for (Extension extension:ModuleFactory.getExtensions("org.openmrs.mdrtb.mdrtbDashboardTab")) {
+        	PatientDashboardTabExt patientDashboardTabExt = (PatientDashboardTabExt) extension;
+        	
+        	if(Context.hasPrivilege(patientDashboardTabExt.getRequiredPrivilege())){
+        		HashMap<String,String> tab = new HashMap<String,String>();
+        		tab.put("name", patientDashboardTabExt.getTabId());
+        		tab.put("id", patientDashboardTabExt.getTabId());  // for extension points, name & id are the same
+        		tab.put("messageCode", patientDashboardTabExt.getTabName());
+        		availableTabs.add(tab);
+        	}
+        }
+        
+        // now get the global property that can be used to configure the display, and
+        // loop thru the pipe-delimited values
+        String[] globalPropTabs = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_dashboard_tab_conf").split("\\|");
+        for (String globalPropTab : globalPropTabs) {
+       
+           // split the global property into the id and the show/hide spec
+     	   String[] entry = globalPropTab.split(":");
+  
+     	   // now loop through the available tabs
+     	   Iterator<HashMap<String,String>> availableTabsIterator = availableTabs.iterator();
+     	   while(availableTabsIterator.hasNext()) {
+     		   HashMap<String,String> tab = availableTabsIterator.next();
+     		   
+     		   if (StringUtils.equals(tab.get("name"), entry[0])){
+ 				   // if we've found a match, remove the tab from the available list
+     			   availableTabsIterator.remove();
+     			   // now, unless this configured as "hide", as this tab to the display list
+ 	        	   if ( ((entry.length) < 2) || !(StringUtils.equals(entry[1],"hide")) ){
+ 	        		   displayTabs.add(tab);
+ 	        	   }
+ 			   } 
+     	   }
+     	   // TODO: add a warning if this tab isn't found?
+        }
+        
+        // now, since the default is to display any tabs that aren't explicitly hidden or listed in the conf, we need to
+        // add all remaining tabs to the end of the display list
+        displayTabs.addAll(availableTabs);
+        
+        return displayTabs;
+        
+    }
+    
+    /**
+     * Returns the mdrtab patient dashboard tab to set as the default
+     * (i.e. the first one listed in the patient_dashboard_tab_conf global property
+     */
+    private String getDefaultMdrtbPatientDashboardTab(){
+    	String defaultTab = "";
+    	
+    	// iterate thru all the tabs listed in the configuration property and return the first one that isn't set to "hide"
+    	String[] globalPropTabs = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_dashboard_tab_conf").split("\\|");
+        for (String globalPropTab : globalPropTabs) {
+          // split the global property into the id and the show/hide spec
+     	   String[] entry = globalPropTab.split(":");
+     	   
+     	  if ( ((entry.length) < 2) || !(StringUtils.equals(entry[1],"hide")) ){
+    		   defaultTab = entry[0];
+    		   break;
+    	   }  
+        }
+   
+    log.error("the default tab = " + defaultTab);
+    	
+    	if (defaultTab != null & !defaultTab.isEmpty()) {
+    	
+    		log.error("Got here!");
+    		return defaultTab;
+    	}
+    	else {
+    		// if no default has been defined, use the first tab listed in the MdrtbPatientDashboardTabs enum
+    		return MdrtbConstants.MdrtbPatientDashboardTabs.values()[0].name();
+    	}
+    }
 }
+
+
+
