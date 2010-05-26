@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "../lib-common/config-1.0.dtd">
-
 <module configVersion="1.0">
 	
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>1.5.4</version>
+	<version>1.6</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Partners in Health</author>
 	<description>MDR TB Module.</description>
@@ -36,7 +35,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.roles_to_redirect_from_openmrs_homepage</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			Comma-separated list of role names. Any user in a role listed here will not be able to see the regular OpenMRS homepage.
 			That will redirect them to the MDR-TB homepage instead.
@@ -51,14 +50,14 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.patient_identifier_type_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			Pipe delimited list of all patient identifier types associated with the MDRTB program.
 		</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.location_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			Pipe delimited list of all locations that you want to choose from in the add patient dialogs in the mdrtb module.  This will generally correspond to the health centers that are participating in an mdrtb program.  If blank, all openMRS locations will be displayed.
 		</description>
@@ -129,21 +128,21 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.test_result_encounter_type_DST</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			This should be the name of the encounter type that you want to use for encounters wrapping DST results.
 		</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.test_result_encounter_type_bacteriology</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			This should be the name of the encounter type that you want to use for encounters wrapping bacteriology (smear+culture) results.
 		</description>
 	</globalProperty>	
 	<globalProperty>
 		<property>@MODULE_ID@.mdrtb_forms_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			List all MDR-TB forms by name, pipe delimited.  These will appear in the form list on the MDR-TB home.
 		</description>
@@ -157,7 +156,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.birt_report_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			List all BIRT reports by name that correspond to the MDR-TB program.  Pipe delimited.
 		</description>
@@ -305,12 +304,12 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>This should be the name of the encounter type that you want to use for encounters wrapping specimen collections.</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.lab_test_order_type</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
 	</globalProperty>
 	<globalProperty>
@@ -325,7 +324,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
 	</globalProperty>
 	<globalProperty>
@@ -402,4 +401,3 @@
 	</mappingFiles>	
 	
 </module>
-
