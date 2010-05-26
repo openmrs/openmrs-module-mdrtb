@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>1.6</version>
+	<version>1.5.4</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Partners in Health</author>
 	<description>MDR TB Module.</description>
