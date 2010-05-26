@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 
@@ -15,7 +16,7 @@ public class PatientSummaryTable {
 
 	private List<PatientSummaryTableRow> patientSummaryTableRows = new LinkedList<PatientSummaryTableRow>();
 	
-	private PatientSummaryTableHeader patientSummaryTableHeader;
+	private List<PatientSummaryTableColumn> patientSummaryTableColumns = new LinkedList<PatientSummaryTableColumn>();
 
 	public PatientSummaryTable() {
 		// empty constructor
@@ -29,12 +30,22 @@ public class PatientSummaryTable {
 		// create all the column hashes which we will use to generate the table
 		
 		// get the hashes for all the columns
-		// TODO: pull in the right concept ids!!
-		Map<Date,Obs> smearHash = getDateToObsMap(patientId,12345);
-		Map<Date,Obs> cultureHash = getDateToObsMap(patientId,12345);
-		Map<Date,Obs> astHash = getDateToObsMap(patientId,12345);
+		// TODO: map the concept ids dynamically instead of hard-code!
+		
+		// Map all the Tuberculosis Smear Constructs by month
+		Map<Date,Obs> smearHash = getDateToObsMap(patientId,3053);
+		// Map all the Tuberculosis Culture Constructs by month
+		Map<Date,Obs> cultureHash = getDateToObsMap(patientId,3048);
+		// Map all the Drug Sensitivity Test Constructs by month
+		Map<Date,Obs> dstHash = getDateToObsMap(patientId,3040);
 		
 		// now create the actual rows using the hash maps
+		// first add the known columns
+		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("date"));
+		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("smear"));
+		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("culture"));
+		
+		// now create the calendar that we are going to use
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(resetAllButYearAndMonth(startDate));
 		
@@ -42,19 +53,58 @@ public class PatientSummaryTable {
 		while(cal.getTime().before(endDate)){
 			Date date = cal.getTime();
 			
+			// create a new row for the table
 			PatientSummaryTableRow row = new PatientSummaryTableRow();
 			
-			// TODO: this will need to formatting using SimpleDateFormatter
+			// the date row	
 			row.setDate(date);
-			row.setSmear(new PatientSummaryTableBacElement(smearHash.get(date)));
-			row.setCulture(new PatientSummaryTableBacElement(cultureHash.get(date)));
-			row.setAst(new PatientSummaryTableDSTElement(astHash.get(date)));
 			
+			// pull out the Smear and Culture constructs, if any, for this date
+			row.setSmear(new PatientSummaryTableBacElement(smearHash.get(date))); // most of these will be null
+			row.setCulture(new PatientSummaryTableBacElement(cultureHash.get(date))); // most of these will be null
+			
+			// DSTS are a bit more complex, as we need to create a hash of drug types to results
+			Obs dstTestConstruct = dstHash.get(date);
+			Map<String, PatientSummaryTableDSTElement> dsts = new HashMap<String, PatientSummaryTableDSTElement>();
+		
+			if (dstTestConstruct != null){
+				for	(Obs obs : dstTestConstruct.getGroupMembers()) {
+					// if this obs is a test result, we need to add it to our hash
+					if (obs.getConcept().getId() == 3025){
+						PatientSummaryTableDSTElement dst = new PatientSummaryTableDSTElement(obs);
+					
+						// TODO: we need to be able to handle "waiting on results" case
+					
+						// now loop through all the results to figure out where to hash it
+						for (Obs result : obs.getGroupMembers()){
+						
+							// TODO: this could be handled more elegantly
+							// TODO: we need to hash all concentrations for a certain drug type--multiple drug types in result
+							Integer resultConceptId = result.getConcept().getConceptId();
+							if (resultConceptId == 2472 || resultConceptId == 3017 || resultConceptId == 1441){
+								String dstName = result.getValueCoded().getBestName(Context.getLocale()).getName();
+								dsts.put(dstName, dst);
+								addColumnIfNeeded(dstName); // create a new dst column if we haven't encountered this dst before
+								break;
+							}
+						}
+					}
+				}
+			}
+			
+			
+			// set the DST hash
+			row.setDsts(dsts);
+			
+			// add this row to the object
+			getPatientSummaryTableRows().add(row);
+			
+			// go to the next month
 			cal.add(Calendar.MONTH,1);
 		}
 	}
 	
-	/*
+	/*;
 	 * Utility Functions
 	 */
 	
@@ -74,6 +124,19 @@ public class PatientSummaryTable {
 		}
 		
 		return map;
+	}
+	
+	/*
+	 * Adds a column to PatientSummaryTableColumns if a column with that code doesn't exist
+	 */
+	
+	private void addColumnIfNeeded(String code){
+		for (PatientSummaryTableColumn column : getPatientSummaryTableColumns()) {
+			if (StringUtils.equals(column.getCode(), code))
+				return;
+		}
+		// if we've made it this far we need to add the column
+		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn(code));
 	}
 	
 	/*
@@ -104,15 +167,11 @@ public class PatientSummaryTable {
     	this.patientSummaryTableRows = patientSummaryTableRows;
     }
 
-	
-    public PatientSummaryTableHeader getPatientSummaryTableHeader() {
-    	return patientSummaryTableHeader;
+	public void setPatientSummaryTableColumns(List<PatientSummaryTableColumn> patientSummaryTableColumns) {
+	    this.patientSummaryTableColumns = patientSummaryTableColumns;
     }
 
-	
-    public void setPatientSummaryTableHeader(PatientSummaryTableHeader patientSummaryTableHeader) {
-    	this.patientSummaryTableHeader = patientSummaryTableHeader;
+	public List<PatientSummaryTableColumn> getPatientSummaryTableColumns() {
+	    return patientSummaryTableColumns;
     }
-	
-	
 }

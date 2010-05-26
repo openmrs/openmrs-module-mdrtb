@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.patientsummary;
 
 import java.util.Date;
+import java.util.Map;
 
 
 public class PatientSummaryTableRow {
@@ -11,7 +12,7 @@ public class PatientSummaryTableRow {
 	
 	PatientSummaryTableBacElement culture;
 	
-	PatientSummaryTableDSTElement ast;
+	Map<String,PatientSummaryTableDSTElement> dsts;
 	
 	public PatientSummaryTableRow() {
 		// empty constructor
@@ -51,14 +52,16 @@ public class PatientSummaryTableRow {
     }
 
 	
-    public PatientSummaryTableDSTElement getAst() {
-    	return ast;
+    public Map<String,PatientSummaryTableDSTElement> getDsts() {
+    	return dsts;
     }
 
 	
-    public void setAst(PatientSummaryTableDSTElement ast) {
-    	this.ast = ast;
+    public void setDsts(Map<String,PatientSummaryTableDSTElement> dsts) {
+    	this.dsts = dsts;
     }
+
+
 	
 	
 	
