@@ -2140,12 +2140,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
     		   break;
     	   }  
         }
-   
-    log.error("the default tab = " + defaultTab);
     	
     	if (StringUtils.isNotEmpty(defaultTab)) {
-    	
-    		log.error("Got here!");
     		return defaultTab;
     	}
     	else {
