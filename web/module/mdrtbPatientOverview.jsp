@@ -328,16 +328,6 @@
 	
 <div id="content" style="border-top: 1px grey solid; border-top: none; padding: 4px 5px 2px 10px;">
 		
-		<!--  this will be pulled out into a portlet at some point -->
-	<!--  	<div  style="display:none" id="searchTab_summary_content">
-	    	<display:table name="patientSummary" style="border: 1px black solid">
-  				<display:column property="date" title="Date" />
- 			 	<display:column property="smear" title="Smear" />
- 			 	<display:column property="culture" title="Culture" />
-			</display:table>
-		</div> -->
-		<!--  this will be pulled out into a portlet at some point -->
-		
 		<div  style="display:none" id="searchTab_status_content"><bR>
 			<openmrs:portlet url="mdrtbStatus" id="mdrtbStatus" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</div>
