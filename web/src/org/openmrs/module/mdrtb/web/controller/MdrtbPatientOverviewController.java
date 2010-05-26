@@ -2143,7 +2143,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
    
     log.error("the default tab = " + defaultTab);
     	
-    	if (defaultTab != null & !defaultTab.isEmpty()) {
+    	if (StringUtils.isNotEmpty(defaultTab)) {
     	
     		log.error("Got here!");
     		return defaultTab;
