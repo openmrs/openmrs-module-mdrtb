@@ -57,6 +57,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Extension;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.MdrtbActivator;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
@@ -90,206 +91,210 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
     }
     
     @Override
-    protected Map<String, Object> referenceData(HttpServletRequest request,
-            Object obj, Errors err) throws Exception {
+    protected Map<String, Object> referenceData(HttpServletRequest request, Object obj, Errors err) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (Context.isAuthenticated()){
-            AdministrationService as = Context.getAdministrationService();
-            FormService fs = Context.getFormService();
-            ConceptService cs = Context.getConceptService();
-            String view = request.getParameter("view");
-            if (view != null)
-                map.put("view", view);
-            else
-                map.put("view", getDefaultMdrtbPatientDashboardTab());
-           
-            	// availableForms
-            String formsList = as.getGlobalProperty("mdrtb.mdrtb_forms_list");
-            List<Form> forms = fs.getAllForms();
-            List<Form> mdrtbForms = new ArrayList<Form>();
-            List<Form> htmlForms = new ArrayList<Form>();
-            for (StringTokenizer st = new StringTokenizer(formsList, "|"); st.hasMoreTokens();) {
-                String formName = st.nextToken().trim();
-                
-                for (Form form : forms) {
-                    if (formName.equals(form.getName().trim()))
-                        mdrtbForms.add(form);
-                    if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim()))
-                        htmlForms.add(form);
-                }
-            }
-            map.put("htmlForms", htmlForms);
-            map.put("mdrtbForms", mdrtbForms);
-            
-           
-            
-//            List<Drug> tbDrugs = new ArrayList<Drug>();
-//            try {
-//                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en")));
-//                for (Concept c : mdrtbDrugs) {
-//                    List<Drug> drugs = cs.getDrugsByConcept(c);
-//                    tbDrugs.addAll(drugs);
-//                }
-//            } catch (Exception ex) {
-//                throw new RuntimeException(
-//                        "The global property mdrtb.mdrtb_drugs_concept did not return a valid concept name");
-//            }
-//            map.put("tbDrugs", tbDrugs);
-            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory(); 
-            
-            List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
-            map.put("standardRegimens", suggestions);
-            
-            List<Drug> firstLineDrugs = new ArrayList<Drug>();
-            List<Concept> mdrtbDrugs = new ArrayList<Concept>();
-            try {
-                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en"), mu));
-                for (Concept c : mdrtbDrugs) {
-                    List<Drug> drugs = cs.getDrugsByConcept(c);
-                    firstLineDrugs.addAll(drugs);
-                }
-            } catch (Exception ex) {
-                throw new RuntimeException("The global property mdrtb.first_line_drugs did not return a valid concept name; check your global property, or maybe you need to rebuild concept words? " + ex);
-            }
-            
-            
-            map.put("firstLineDrugs", firstLineDrugs);
-            map.put("firstLineConcepts", mdrtbDrugs);
-            
-            List<Drug> injectibleDrugs = new ArrayList<Drug>();
-            List<Concept> mdrtbDrugConceptsInj = new ArrayList<Concept>();
-            try {
-                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en"), mu));
-                for (Concept c : mdrtbDrugConceptsInj) {
-                    List<Drug> drugs = cs.getDrugsByConcept(c);
-                    injectibleDrugs.addAll(drugs);
-                }
-            } catch (Exception ex) {
-                throw new RuntimeException(
-                        "The global property mdrtb.injectible_drugs did not return a valid concept name");
-            }
-            map.put("injectibleDrugs", injectibleDrugs);
-            map.put("injectibleConcepts", mdrtbDrugConceptsInj);
-            
-            List<Drug> quinolones = new ArrayList<Drug>();
-            List<Concept> mdrtbDrugQ = new ArrayList<Concept>();
-            try {
-                Concept quinolonesConcept = MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en"), mu);
-                mdrtbDrugQ = cs.getConceptsByConceptSet(quinolonesConcept);
-                for (Concept c : mdrtbDrugQ) {
-                    List<Drug> drugs = cs.getDrugsByConcept(c);
-                    quinolones.addAll(drugs);
-                }
-            } catch (Exception ex) {
-                throw new RuntimeException(
-                        "The global property mdrtb.quinolones did not return a valid concept name");
-            }
-            map.put("quinolones", quinolones);
-            map.put("quinolonesConcepts", mdrtbDrugQ);
-            
-            List<Drug> secondLineDrugs = new ArrayList<Drug>();
-            List<Concept> mdrtbDrugConceptsSecondLine = new ArrayList<Concept>();
-            try {
-                
-                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en"), mu));
-                for (Concept c : mdrtbDrugConceptsSecondLine) {
-                    List<Drug> drugs = cs.getDrugsByConcept(c);
-                    secondLineDrugs.addAll(drugs);
-                }
-            } catch (Exception ex) {
-                throw new RuntimeException(
-                        "The global property mdrtb.other_second_line_drugs did not return a valid concept name");
-            }
-            map.put("secondLineDrugs", secondLineDrugs);
-            map.put("secondLineConcepts", mdrtbDrugConceptsSecondLine);
-            
-            //TODO:  Add another set of drug concepts here:
-            List<Drug> otherDrugs = new ArrayList<Drug>();
-            List<Concept> otherDrugConcepts = new ArrayList<Concept>();
-           
-            
-            /*try{
-                otherDrugConcepts = Context.getConceptService().getConceptsByConceptSet(Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_other_second_line")));
-                for (Concept c : otherDrugConcepts) {
-                    List<Drug> drugs = Context.getConceptService().getDrugs(c);
-                    otherDrugs.addAll(drugs);
-                }
-            } catch (Exception ex){
-                throw new RuntimeException(
-                "Error occurred loading up the list of non-MDRTB drugs");
-            }*/
-            
-            
-            map.put("otherDrugs", otherDrugs);
-            map.put("otherDrugsConcepts", otherDrugConcepts);
-            
-            
-            map.put("discontinueReasons", MdrtbUtil.getDiscontinueReasons(mu));
-            
-            String dateFormat = Context.getDateFormat().toPattern();
-            map.put("dateFormat", dateFormat);
-            
-            //workflow states:
-            
-            
-            map.put("cultureStates", mu.getStatesCultureStatus());
-            map.put("outcomeStates", mu.getStatesOutcomes());
-            map.put("patientStates", mu.getStatesPatientStatus());
-            map.put("standardized", mu.getConceptStandardized());
-            map.put("empiric", mu.getConceptEmpiric());
-            map.put("individualized", mu.getConceptIndividualized());
-            
-            //more
-            Concept drugUse = mu.getConceptPatientClassDrugUse();
-            Concept prevTreat = mu.getConceptPatientClassPrevTreatment();
-            Concept tbCaseClass = mu.getConceptTBCaseClassification();
-            Concept hivResultStatus = mu.getConceptHIVStatus();
-            
-            
-            try {
-                map.put("prevDrugUse",drugUse.getAnswers());
-            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
-            
-            try {
-                map.put("prevTreatment", prevTreat.getAnswers());
-            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
-            
-            try {
-                map.put("tbCaseClass",tbCaseClass.getAnswers());
-            } catch (Exception ex){throw new RuntimeException("TUBERCULOSIS CASE CLASSIFICATION is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
-            
-            try {
-                map.put("hivStatuses", hivResultStatus.getAnswers());
-            } catch (Exception ex){throw new RuntimeException("RESULT OF HIV TEST is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
-            
-            map.put("locations", ms.getAllMdrtrbLocations(false));
-            
-            MessageSourceAccessor msa = getMessageSourceAccessor();
-            map.put("daysOfWeek", "'" + msa.getMessage("mdrtb.sunday")+ "','" + msa.getMessage("mdrtb.monday")+ "','" + msa.getMessage("mdrtb.tuesday") + "','" + msa.getMessage("mdrtb.wednesday")+ "','" + msa.getMessage("mdrtb.thursday")+ "','" + msa.getMessage("mdrtb.friday")+ "','"
-                    + msa.getMessage("mdrtb.saturday")+ "','" + msa.getMessage("mdrtb.sun")+ "','" + msa.getMessage("mdrtb.mon")+ "','"+ msa.getMessage("mdrtb.tues")+ "','"+ msa.getMessage("mdrtb.wed")+ "','"+ msa.getMessage("mdrtb.thurs")+ "','"+ msa.getMessage("mdrtb.fri")+ "','" + msa.getMessage("mdrtb.sat") + "'");
-            map.put("monthsOfYear", "'" + msa.getMessage("mdrtb.january")+ "','"+ msa.getMessage("mdrtb.february")+ "','"+ msa.getMessage("mdrtb.march")+ "','"+ msa.getMessage("mdrtb.april")+ "','"+ msa.getMessage("mdrtb.may")+ "','"+ msa.getMessage("mdrtb.june")+ "','"+ msa.getMessage("mdrtb.july")+ "','"+ msa.getMessage("mdrtb.august")+ "','"
-                    + msa.getMessage("mdrtb.september")+ "','"+ msa.getMessage("mdrtb.october")+ "','"+ msa.getMessage("mdrtb.november")+ "','"+ msa.getMessage("mdrtb.december")+ "','"+ msa.getMessage("mdrtb.jan")+ "','"+ msa.getMessage("mdrtb.feb")+ "','"+ msa.getMessage("mdrtb.mar")+ "','"+ msa.getMessage("mdrtb.ap")+ "','"+ msa.getMessage("mdrtb.may")+ "','"
-                    + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
-            
-            SortedSet<String> drugUnits = new TreeSet<String>();
-            List<Drug> drugs = cs.getAllDrugs();
-            for (Drug drug:drugs){
-                if (drug.getUnits() != null && !drug.getUnits().equals("") && !drugUnits.contains(drug.getUnits()))
-                    drugUnits.add(drug.getUnits());
-            }
-            map.put("drugUnits", drugUnits);
-            map.put("concentrationConceptId", mu.getConceptConcentration().getConceptId().intValue());
+        if (Context.isAuthenticated()) {
+        	boolean metadataLoaded = MdrtbActivator.isMetadataLoaded();
+        	map.put("metadataLoaded", metadataLoaded);
+        	if (MdrtbActivator.isMetadataLoaded()) {
 
-            Concept c = mu.getConceptCurrentRegimenType();
-            map.put("stEmpInd", c);
-            map.put("stEmpIndAnswers", c.getAnswers(false));
-            
-           // add this list of tabs to display to the module map
-           List<HashMap<String,String>> tabs = getMdrtbPatientDashboardTabs(); 
-           map.put("tabs", tabs);
-        	   
-           mu = null;
+	            AdministrationService as = Context.getAdministrationService();
+	            FormService fs = Context.getFormService();
+	            ConceptService cs = Context.getConceptService();
+	            String view = request.getParameter("view");
+	            if (view != null)
+	                map.put("view", view);
+	            else
+	                map.put("view", getDefaultMdrtbPatientDashboardTab());
+	           
+	            	// availableForms
+	            String formsList = as.getGlobalProperty("mdrtb.mdrtb_forms_list");
+	            List<Form> forms = fs.getAllForms();
+	            List<Form> mdrtbForms = new ArrayList<Form>();
+	            List<Form> htmlForms = new ArrayList<Form>();
+	            for (StringTokenizer st = new StringTokenizer(formsList, "|"); st.hasMoreTokens();) {
+	                String formName = st.nextToken().trim();
+	                
+	                for (Form form : forms) {
+	                    if (formName.equals(form.getName().trim()))
+	                        mdrtbForms.add(form);
+	                    if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim()))
+	                        htmlForms.add(form);
+	                }
+	            }
+	            map.put("htmlForms", htmlForms);
+	            map.put("mdrtbForms", mdrtbForms);
+	            
+	           
+	            
+	//            List<Drug> tbDrugs = new ArrayList<Drug>();
+	//            try {
+	//                List<Concept> mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs"), new Locale("en")));
+	//                for (Concept c : mdrtbDrugs) {
+	//                    List<Drug> drugs = cs.getDrugsByConcept(c);
+	//                    tbDrugs.addAll(drugs);
+	//                }
+	//            } catch (Exception ex) {
+	//                throw new RuntimeException(
+	//                        "The global property mdrtb.mdrtb_drugs_concept did not return a valid concept name");
+	//            }
+	//            map.put("tbDrugs", tbDrugs);
+	            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+	            MdrtbFactory mu = ms.getMdrtbFactory(); 
+	            
+	            List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
+	            map.put("standardRegimens", suggestions);
+	            
+	            List<Drug> firstLineDrugs = new ArrayList<Drug>();
+	            List<Concept> mdrtbDrugs = new ArrayList<Concept>();
+	            try {
+	                mdrtbDrugs = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.first_line_drugs"), new Locale("en"), mu));
+	                for (Concept c : mdrtbDrugs) {
+	                    List<Drug> drugs = cs.getDrugsByConcept(c);
+	                    firstLineDrugs.addAll(drugs);
+	                }
+	            } catch (Exception ex) {
+	                throw new RuntimeException("The global property mdrtb.first_line_drugs did not return a valid concept name; check your global property, or maybe you need to rebuild concept words? " + ex);
+	            }
+	            
+	            
+	            map.put("firstLineDrugs", firstLineDrugs);
+	            map.put("firstLineConcepts", mdrtbDrugs);
+	            
+	            List<Drug> injectibleDrugs = new ArrayList<Drug>();
+	            List<Concept> mdrtbDrugConceptsInj = new ArrayList<Concept>();
+	            try {
+	                mdrtbDrugConceptsInj = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.injectible_drugs"), new Locale("en"), mu));
+	                for (Concept c : mdrtbDrugConceptsInj) {
+	                    List<Drug> drugs = cs.getDrugsByConcept(c);
+	                    injectibleDrugs.addAll(drugs);
+	                }
+	            } catch (Exception ex) {
+	                throw new RuntimeException(
+	                        "The global property mdrtb.injectible_drugs did not return a valid concept name");
+	            }
+	            map.put("injectibleDrugs", injectibleDrugs);
+	            map.put("injectibleConcepts", mdrtbDrugConceptsInj);
+	            
+	            List<Drug> quinolones = new ArrayList<Drug>();
+	            List<Concept> mdrtbDrugQ = new ArrayList<Concept>();
+	            try {
+	                Concept quinolonesConcept = MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.quinolones"), new Locale("en"), mu);
+	                mdrtbDrugQ = cs.getConceptsByConceptSet(quinolonesConcept);
+	                for (Concept c : mdrtbDrugQ) {
+	                    List<Drug> drugs = cs.getDrugsByConcept(c);
+	                    quinolones.addAll(drugs);
+	                }
+	            } catch (Exception ex) {
+	                throw new RuntimeException(
+	                        "The global property mdrtb.quinolones did not return a valid concept name");
+	            }
+	            map.put("quinolones", quinolones);
+	            map.put("quinolonesConcepts", mdrtbDrugQ);
+	            
+	            List<Drug> secondLineDrugs = new ArrayList<Drug>();
+	            List<Concept> mdrtbDrugConceptsSecondLine = new ArrayList<Concept>();
+	            try {
+	                
+	                mdrtbDrugConceptsSecondLine = cs.getConceptsByConceptSet(MdrtbUtil.getMDRTBConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.other_second_line"), new Locale("en"), mu));
+	                for (Concept c : mdrtbDrugConceptsSecondLine) {
+	                    List<Drug> drugs = cs.getDrugsByConcept(c);
+	                    secondLineDrugs.addAll(drugs);
+	                }
+	            } catch (Exception ex) {
+	                throw new RuntimeException(
+	                        "The global property mdrtb.other_second_line_drugs did not return a valid concept name");
+	            }
+	            map.put("secondLineDrugs", secondLineDrugs);
+	            map.put("secondLineConcepts", mdrtbDrugConceptsSecondLine);
+	            
+	            //TODO:  Add another set of drug concepts here:
+	            List<Drug> otherDrugs = new ArrayList<Drug>();
+	            List<Concept> otherDrugConcepts = new ArrayList<Concept>();
+	           
+	            
+	            /*try{
+	                otherDrugConcepts = Context.getConceptService().getConceptsByConceptSet(Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_other_second_line")));
+	                for (Concept c : otherDrugConcepts) {
+	                    List<Drug> drugs = Context.getConceptService().getDrugs(c);
+	                    otherDrugs.addAll(drugs);
+	                }
+	            } catch (Exception ex){
+	                throw new RuntimeException(
+	                "Error occurred loading up the list of non-MDRTB drugs");
+	            }*/
+	            
+	            
+	            map.put("otherDrugs", otherDrugs);
+	            map.put("otherDrugsConcepts", otherDrugConcepts);
+	            
+	            
+	            map.put("discontinueReasons", MdrtbUtil.getDiscontinueReasons(mu));
+	            
+	            String dateFormat = Context.getDateFormat().toPattern();
+	            map.put("dateFormat", dateFormat);
+	            
+	            //workflow states:
+	            
+	            
+	            map.put("cultureStates", mu.getStatesCultureStatus());
+	            map.put("outcomeStates", mu.getStatesOutcomes());
+	            map.put("patientStates", mu.getStatesPatientStatus());
+	            map.put("standardized", mu.getConceptStandardized());
+	            map.put("empiric", mu.getConceptEmpiric());
+	            map.put("individualized", mu.getConceptIndividualized());
+	            
+	            //more
+	            Concept drugUse = mu.getConceptPatientClassDrugUse();
+	            Concept prevTreat = mu.getConceptPatientClassPrevTreatment();
+	            Concept tbCaseClass = mu.getConceptTBCaseClassification();
+	            Concept hivResultStatus = mu.getConceptHIVStatus();
+	            
+	            
+	            try {
+	                map.put("prevDrugUse",drugUse.getAnswers());
+	            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+	            
+	            try {
+	                map.put("prevTreatment", prevTreat.getAnswers());
+	            } catch (Exception ex){throw new RuntimeException("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+	            
+	            try {
+	                map.put("tbCaseClass",tbCaseClass.getAnswers());
+	            } catch (Exception ex){throw new RuntimeException("TUBERCULOSIS CASE CLASSIFICATION is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+	            
+	            try {
+	                map.put("hivStatuses", hivResultStatus.getAnswers());
+	            } catch (Exception ex){throw new RuntimeException("RESULT OF HIV TEST is returning null -- verify that this concept has a concept mapping with source org.openmrs.module.mdrtb");}
+	            
+	            map.put("locations", ms.getAllMdrtrbLocations(false));
+	            
+	            MessageSourceAccessor msa = getMessageSourceAccessor();
+	            map.put("daysOfWeek", "'" + msa.getMessage("mdrtb.sunday")+ "','" + msa.getMessage("mdrtb.monday")+ "','" + msa.getMessage("mdrtb.tuesday") + "','" + msa.getMessage("mdrtb.wednesday")+ "','" + msa.getMessage("mdrtb.thursday")+ "','" + msa.getMessage("mdrtb.friday")+ "','"
+	                    + msa.getMessage("mdrtb.saturday")+ "','" + msa.getMessage("mdrtb.sun")+ "','" + msa.getMessage("mdrtb.mon")+ "','"+ msa.getMessage("mdrtb.tues")+ "','"+ msa.getMessage("mdrtb.wed")+ "','"+ msa.getMessage("mdrtb.thurs")+ "','"+ msa.getMessage("mdrtb.fri")+ "','" + msa.getMessage("mdrtb.sat") + "'");
+	            map.put("monthsOfYear", "'" + msa.getMessage("mdrtb.january")+ "','"+ msa.getMessage("mdrtb.february")+ "','"+ msa.getMessage("mdrtb.march")+ "','"+ msa.getMessage("mdrtb.april")+ "','"+ msa.getMessage("mdrtb.may")+ "','"+ msa.getMessage("mdrtb.june")+ "','"+ msa.getMessage("mdrtb.july")+ "','"+ msa.getMessage("mdrtb.august")+ "','"
+	                    + msa.getMessage("mdrtb.september")+ "','"+ msa.getMessage("mdrtb.october")+ "','"+ msa.getMessage("mdrtb.november")+ "','"+ msa.getMessage("mdrtb.december")+ "','"+ msa.getMessage("mdrtb.jan")+ "','"+ msa.getMessage("mdrtb.feb")+ "','"+ msa.getMessage("mdrtb.mar")+ "','"+ msa.getMessage("mdrtb.ap")+ "','"+ msa.getMessage("mdrtb.may")+ "','"
+	                    + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
+	            
+	            SortedSet<String> drugUnits = new TreeSet<String>();
+	            List<Drug> drugs = cs.getAllDrugs();
+	            for (Drug drug:drugs){
+	                if (drug.getUnits() != null && !drug.getUnits().equals("") && !drugUnits.contains(drug.getUnits()))
+	                    drugUnits.add(drug.getUnits());
+	            }
+	            map.put("drugUnits", drugUnits);
+	            map.put("concentrationConceptId", mu.getConceptConcentration().getConceptId().intValue());
+	
+	            Concept c = mu.getConceptCurrentRegimenType();
+	            map.put("stEmpInd", c);
+	            map.put("stEmpIndAnswers", c.getAnswers(false));
+	            
+	           // add this list of tabs to display to the module map
+	           List<HashMap<String,String>> tabs = getMdrtbPatientDashboardTabs(); 
+	           map.put("tabs", tabs);
+	        	   
+	           mu = null;
+        	}
         }
         return map;
     }

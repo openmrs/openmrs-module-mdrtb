@@ -14,14 +14,11 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.ConceptMap;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
@@ -35,6 +32,12 @@ import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 public class MdrtbActivator implements Activator, Runnable {
 
     private Log log = LogFactory.getLog(this.getClass());
+    
+    private static boolean metadataLoaded = false;
+    
+    public static boolean isMetadataLoaded() {
+    	return metadataLoaded;
+    }
 
     /**
      * @see org.openmrs.module.Activator#startup()
@@ -42,10 +45,6 @@ public class MdrtbActivator implements Activator, Runnable {
     public final void shutdown() {
         onShutdown();
     }
-    
-    
-    
-
 
     /**
      * @see org.openmrs.module.Activator#shutdown()
@@ -136,6 +135,7 @@ public class MdrtbActivator implements Activator, Runnable {
         
         
         log.info("Finished loading mdrtb metadata.");
+        metadataLoaded = true;
     }
     
     /**

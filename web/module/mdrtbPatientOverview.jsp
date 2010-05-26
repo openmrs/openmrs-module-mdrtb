@@ -282,6 +282,12 @@
     
 </script>
 
+<c:choose>
+	<c:when test="${!metadataLoaded}">
+		<h4><spring:message code="mdrtb.metadataNotLoaded"/></h4>
+	</c:when>
+	<c:otherwise>
+
 <span style="text-align:right;">
 	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </span>
@@ -566,7 +572,8 @@
 </script>
 
 
-
+	</c:otherwise>
+</c:choose>
 
 
 
