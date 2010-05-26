@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="taglibs/mdrtb.tld" %>
+<%@ taglib prefix="display" uri="taglibs/displaytag.tld" %>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <style><%@ include file="resources/date_input.css"%></style>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
@@ -327,22 +328,32 @@
 	
 <div id="content" style="border-top: 1px grey solid; border-top: none; padding: 4px 5px 2px 10px;">
 		
-		<div  style="display:inline" id="searchTab_status_content"><bR>
+		<!--  this will be pulled out into a portlet at some point -->
+	<!--  	<div  style="display:none" id="searchTab_summary_content">
+	    	<display:table name="patientSummary" style="border: 1px black solid">
+  				<display:column property="date" title="Date" />
+ 			 	<display:column property="smear" title="Smear" />
+ 			 	<display:column property="culture" title="Culture" />
+			</display:table>
+		</div> -->
+		<!--  this will be pulled out into a portlet at some point -->
+		
+		<div  style="display:none" id="searchTab_status_content"><bR>
 			<openmrs:portlet url="mdrtbStatus" id="mdrtbStatus" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</div>
 		
 		
-			<div  style="display:inline" id="searchTab_formEntry_content"><bR>
+			<div  style="display:none" id="searchTab_formEntry_content"><bR>
 				<openmrs:portlet url="mdrtbFormsListPortlet" id="mdrtbFormsListPortlet" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 			</div>
 		
 		
-		<div  style="display:inline" id="searchTab_patientRegimen_content"><bR>
+		<div  style="display:none" id="searchTab_patientRegimen_content"><bR>
 			<openmrs:portlet url="mdrtbRegimen" id="mdrtbRegimen" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>
 		</div>
 		
 		
-		<div  style="display:inline;font-size:65%" id="searchTab_BAC_content"><br>
+		<div  style="display:none;font-size:65%" id="searchTab_BAC_content"><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:125%;" href="mdrtbAddNewTestContainer.form?action=BAC&patientId=${obj.patient.patientId}"><spring:message code="mdrtb.addnewbacteriology" /></a>
 		<bR><br>
 		<spring:message code='mdrtb.mdrtbprogramstartdate' var='progString'/>
@@ -373,7 +384,7 @@
 		</div>
 
 		
-		<div id="searchTab_DST_content" style="font-size:65%"><Br>
+		<div id="searchTab_DST_content" style="display:none;font-size:65%"><Br>
 		&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:125%;" href="mdrtbAddNewTestContainer.form?action=DST&patientId=${obj.patient.patientId}"><spring:message code="mdrtb.addnewdst" /></a>
 		<bR><br>
 		<c:if test="${!empty obj.obs}">
@@ -400,7 +411,7 @@
 		</c:if><br>
 		</div>
 		
-		<div id="searchTab_contacts_content" style="font-size:80%"><Br>
+		<div id="searchTab_contacts_content" style="display:none;font-size:80%"><Br>
 			<a  href="${pageContext.request.contextPath}/module/mdrtb/mdrtbManageContacts.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.managecontacts" /></a>
 			<br>
 			<Br>	
@@ -539,6 +550,9 @@
 		</c:if>	
 		<c:if test="${!empty view}">
 			<c:choose>
+				<c:when test='${view == "SUMMARY"}'>
+					changeSearchTab('searchTab_summary');
+				</c:when>
 				<c:when test='${view == "DST"}'>
 					changeSearchTab('searchTab_DST');
 				</c:when>
