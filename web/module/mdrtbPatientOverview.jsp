@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="taglibs/mdrtb.tld" %>
-<%@ taglib prefix="display" uri="taglibs/displaytag.tld" %>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <style><%@ include file="resources/date_input.css"%></style>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>

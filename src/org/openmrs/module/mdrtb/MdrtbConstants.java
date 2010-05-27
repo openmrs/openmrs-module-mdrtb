@@ -7,6 +7,7 @@ public class MdrtbConstants {
     public static final String MDRTB_PATIENT_IDENTIFIER_TYPES = moduleName + ".patient_identifier_type_list";    
     
     public static enum MdrtbPatientDashboardTabs{
+    	SUMMARY("summary","mdrtb.summary"),
     	STATUS("status","mdrtb.status"),
     	FORM("formEntry","mdrtb.formentry"),
     	REG("patientRegimen","mdrtb.patientregimen"),

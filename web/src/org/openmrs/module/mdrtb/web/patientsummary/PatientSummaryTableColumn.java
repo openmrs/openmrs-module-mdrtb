@@ -3,7 +3,7 @@ package org.openmrs.module.mdrtb.web.patientsummary;
 
 public class PatientSummaryTableColumn {
 
-	private String name;
+	private String title;
 	
 	private String code;
 
@@ -15,13 +15,18 @@ public class PatientSummaryTableColumn {
 		this.code = code;
 	}
 	
-    public String getName() {
-    	return name;
+	public PatientSummaryTableColumn(String code, String title) {
+		this.code = code;
+		this.title = title;
+	}
+	
+    public String getTitle() {
+    	return title;
     }
 
 	
-    public void setName(String name) {
-    	this.name = name;
+    public void setTitle(String title) {
+    	this.title = title;
     }
 
 	
