@@ -28,7 +28,6 @@ public class PatientSummaryTableController {
     @RequestMapping("/module/mdrtb/mdrtbPatientSummaryTable")
 	 public Map displayTable(HttpServletRequest request, ModelMap map){
 		
-		
 		Calendar cal = Calendar.getInstance();
 		
 		cal.set(2003, 1, 1);
@@ -45,7 +44,7 @@ public class PatientSummaryTableController {
 		// pull out the column code to create the columns
 		List<String> columns = new LinkedList<String>();
 		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
-			columns.add("dst." + column.getCode());
+			columns.add(column.getCode());
 		}
 		tableFacade.setColumnProperties(columns.toArray(new String [columns.size()]));		
 		
@@ -60,7 +59,7 @@ public class PatientSummaryTableController {
 		
 		// now set each DST to use the proper cell editor
 		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
-			row.getColumn("dst." + column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
+			row.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
 		}
 		
 		map.put("patientSummaryTable", tableFacade.render());

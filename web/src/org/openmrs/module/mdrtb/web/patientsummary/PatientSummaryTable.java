@@ -22,10 +22,10 @@ public class PatientSummaryTable {
 		// empty constructor
 	}
 	
+	// TODO == move this all into a factory method
 	public PatientSummaryTable(int patientId, Date startDate, Date endDate) {
 		
-		// first, generator the header row for the table
-		// TODO!
+		// TODO: we need to handle "program enrollment" and other key dates for full columns
 		
 		// create all the column hashes which we will use to generate the table
 		
@@ -69,7 +69,7 @@ public class PatientSummaryTable {
 		
 			if (dstTestConstruct != null){
 				for	(Obs obs : dstTestConstruct.getGroupMembers()) {
-					// if this obs is a test result, we need to add it to our hash
+					// if this obs is a test result construct, we need to add it to our hash
 					if (obs.getConcept().getId() == 3025){
 						PatientSummaryTableDSTElement dst = new PatientSummaryTableDSTElement(obs);
 					
@@ -79,13 +79,14 @@ public class PatientSummaryTable {
 						for (Obs result : obs.getGroupMembers()){
 						
 							// TODO: this could be handled more elegantly
-							// TODO: we need to hash all concentrations for a certain drug type--multiple drug types in result
+							// TODO: ***we need to hash all concentrations for a certain drug type--multiple drug types in result***
 							Integer resultConceptId = result.getConcept().getConceptId();
 							if (resultConceptId == 2472 || resultConceptId == 3017 || resultConceptId == 1441){
 								String dstName = result.getValueCoded().getBestName(Context.getLocale()).getName();
+								// put it in the hash under the drug name
 								dsts.put(dstName, dst);
-								addColumnIfNeeded(dstName); // create a new dst column if we haven't encountered this dst before
-								break;
+								addPatientSummaryTableColumnIfNeeded(dstName); // create a new dst column if we haven't encountered this dst before
+								break; // once we've identified the drug we are done... a single result construct shouldn't have more than one drug!
 							}
 						}
 					}
@@ -130,13 +131,13 @@ public class PatientSummaryTable {
 	 * Adds a column to PatientSummaryTableColumns if a column with that code doesn't exist
 	 */
 	
-	private void addColumnIfNeeded(String code){
+	private void addPatientSummaryTableColumnIfNeeded(String code){
 		for (PatientSummaryTableColumn column : getPatientSummaryTableColumns()) {
-			if (StringUtils.equals(column.getCode(), code))
+			if (StringUtils.equals(column.getCode(), "dsts." + code))
 				return;
 		}
 		// if we've made it this far we need to add the column
-		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn(code));
+		getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("dsts." + code));
 	}
 	
 	/*
