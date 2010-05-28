@@ -55,6 +55,7 @@ public class CustomTableHtmlView extends HtmlView {
         html.td(2).colspan("1").close().append("&#160;").tdEnd();
         html.td(2).colspan("2").close().append("Bacterologies").tdEnd(); // TODO: need to make these come from message service so that they are localized!!
         html.td(2).colspan("16").close().append("DSTs").tdEnd(); 
+        html.td(2).colspan("16").close().append("Regimens").tdEnd();
         html.trEnd(1);
         return html.toString();
     }

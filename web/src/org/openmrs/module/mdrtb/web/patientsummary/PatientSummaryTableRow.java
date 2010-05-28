@@ -6,13 +6,15 @@ import java.util.Map;
 
 public class PatientSummaryTableRow {
 
-	Date date;
+	private Date date;
 	
-	PatientSummaryTableBacElement smear;
+	private PatientSummaryTableBacElement smear;
 	
-	PatientSummaryTableBacElement culture;
+	private PatientSummaryTableBacElement culture;
 	
-	Map<String,PatientSummaryTableDSTElement> dsts;
+	private Map<String,PatientSummaryTableDSTElement> dsts;
+	
+	private Map<String,PatientSummaryTableRegimenElement> regimens;
 	
 	public PatientSummaryTableRow() {
 		// empty constructor
@@ -59,6 +61,14 @@ public class PatientSummaryTableRow {
 	
     public void setDsts(Map<String,PatientSummaryTableDSTElement> dsts) {
     	this.dsts = dsts;
+    }
+
+	public void setRegimens(Map<String,PatientSummaryTableRegimenElement> regimens) {
+	    this.regimens = regimens;
+    }
+
+	public Map<String,PatientSummaryTableRegimenElement> getRegimens() {
+	    return regimens;
     }
 
 

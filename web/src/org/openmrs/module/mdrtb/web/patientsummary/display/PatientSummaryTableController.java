@@ -1,7 +1,6 @@
-package org.openmrs.module.mdrtb.web.patientsummary;
+package org.openmrs.module.mdrtb.web.patientsummary.display;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,9 @@ import org.jmesa.facade.TableFacadeFactory;
 import org.jmesa.view.editor.DateCellEditor;
 import org.jmesa.view.html.component.HtmlRow;
 import org.jmesa.view.html.component.HtmlTable;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.web.patientsummary.display.BacCellEditor;
-import org.openmrs.module.mdrtb.web.patientsummary.display.CustomTableHtmlView;
-import org.openmrs.module.mdrtb.web.patientsummary.display.DSTCellEditor;
+import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTable;
+import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableColumn;
+import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -35,7 +33,7 @@ public class PatientSummaryTableController {
 		// TODO: test case if patientId has not been set--what is the default>?
 		// hack, set default to patient 922
 		if (patientId == null){
-			patientId = 932;
+			patientId = 927;
 		}
 		
 		// creating the summary table
@@ -67,20 +65,26 @@ public class PatientSummaryTableController {
 		displayRow.getRowRenderer().setOddClass("patientSummaryTableOdd");
 		displayRow.getRowRenderer().setEvenClass("patientSummaryTableEven");
 		
+		
+		displayRow.setHighlighter(false);
 		displayRow.setFilterable(false);
 		displayRow.setSortable(false);
 		
 		displayRow.getColumn("date").getCellRenderer().setCellEditor(new DateCellEditor("MM/yyyy"));
-		displayRow.getColumn("date").getHeaderRenderer().setStyleClass("patientSummaryTableHeader");
 		displayRow.getColumn("smear").getCellRenderer().setCellEditor(new BacCellEditor());
 		displayRow.getColumn("culture").getCellRenderer().setCellEditor(new BacCellEditor());
 		
-		// now set each column to the proper title, and DST columns to use the proper cell editor and standard width
+		// now set each column to the proper title, and DST/regimin columns to use the proper cell editor and standard width
 		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
 			displayRow.getColumn(column.getCode()).setTitle(column.getTitle());
 			
-			if(column.getCode().startsWith("dsts.")) {
+			if (column.getCode().startsWith("dsts.")) {
 				displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
+				displayRow.getColumn(column.getCode()).setWidth("30px");
+			}
+			
+			if (column.getCode().startsWith("regimens.")) {
+				displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new RegimenCellEditor());
 				displayRow.getColumn(column.getCode()).setWidth("30px");
 			}
 		}

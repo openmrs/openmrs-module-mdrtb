@@ -15,6 +15,10 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenComponent;
+import org.openmrs.module.mdrtb.regimen.RegimenHistory;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 
 
 public class PatientSummaryTableFactory {
@@ -41,6 +45,7 @@ public class PatientSummaryTableFactory {
 		
 		
 		// first add the date and bacs
+		// TODO: change this to retrieve localized names for date, smear and culture
 		table.getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("date","Date"));
 		table.getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("smear","Smear"));
 		table.getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("culture","Culture"));
@@ -51,6 +56,14 @@ public class PatientSummaryTableFactory {
 		for (Integer dstId : dstIds){
 			String dstName = Context.getConceptService().getConcept(dstId).getBestShortName(Context.getLocale()).getName();;
 			table.getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("dsts." + dstName,dstName ));
+		}
+		
+		// now add the potential drugs that can be ordered
+		List<Integer> drugIds = new LinkedList<Integer>();
+		initializeDrugs(drugIds);
+		for (Integer drugId : drugIds){
+			String drugName = Context.getConceptService().getConcept(drugId).getBestShortName(Context.getLocale()).getName();;
+			table.getPatientSummaryTableColumns().add(new PatientSummaryTableColumn("regimens." + drugName, drugName ));
 		}
 		
 		
@@ -69,6 +82,8 @@ public class PatientSummaryTableFactory {
 		// iterate through the months
 		while(cal.getTime().before(endDate)){
 			Date date = cal.getTime();
+			
+			// TODO: ? break bacs, dsts, and regimens into separate functions for readability purposes?
 			
 			// create a new row for the table
 			PatientSummaryTableRow row = new PatientSummaryTableRow();
@@ -114,8 +129,27 @@ public class PatientSummaryTableFactory {
 			// set the DST hash
 			row.setDsts(dsts);
 			
+			// now create the regimen information for a certain date
+			Map<String,PatientSummaryTableRegimenElement> regimens = new HashMap<String,PatientSummaryTableRegimenElement>();
+			
+			// get the patient's regimen history
+			RegimenHistory regimenHistory = RegimenUtils.getRegimenHistory(Context.getPatientService().getPatient(patientId));
+			// get the regimen history on this date
+			// TODO: should regimen finder use last day of month instead of first day of month for better accurate?
+			Regimen regimen = regimenHistory.getRegimen(date);
+			
+			if (regimen != null) {
+				for (RegimenComponent component : regimen.getComponents()) {
+					String drugName = component.getDrug().getConcept().getBestShortName(Context.getLocale()).getName();
+					PatientSummaryTableRegimenElement drug = new PatientSummaryTableRegimenElement(component);
+					regimens.put(drugName, drug);
+				}
+			}
+			
+			// add regimens to the row
+			row.setRegimens(regimens);		
+			
 			// add this row to the object
-			log.error("Adding a row!");
 			table.getPatientSummaryTableRows().add(row);
 			
 			// go to the next month
@@ -183,6 +217,33 @@ public class PatientSummaryTableFactory {
 		dstIds.add(1419);
 
 	}
+	
+	/*
+	 * Initialize the DSTs (this of course will be done some other way than hard-coded concept ids in the end)
+	 */
+	private static void initializeDrugs(List<Integer> dstIds){
+		
+		// ugly hack until I figure out where I want to pull the DSTs from
+		
+		dstIds.add(656);
+		dstIds.add(745);
+		dstIds.add(438);
+		dstIds.add(1417);
+		dstIds.add(1411);
+		dstIds.add(1414);
+		dstIds.add(740);
+		dstIds.add(767);
+		dstIds.add(5829);
+		dstIds.add(755);
+		dstIds.add(1406);
+		dstIds.add(1412);
+		dstIds.add(1413);
+		dstIds.add(2459);
+		dstIds.add(2460);
+		dstIds.add(1419);
+
+	}
+	
 	
 	
 	/*

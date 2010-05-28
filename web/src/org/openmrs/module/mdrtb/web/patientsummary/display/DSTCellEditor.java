@@ -16,7 +16,7 @@ public class DSTCellEditor extends AbstractCellEditor {
 		PatientSummaryTableDSTElement dst = (PatientSummaryTableDSTElement) ItemUtils.getItemValue(item, property);
 		
 		// if it's not empty, pull out the Obs that represents the result of the test
-		if (dst != null && dst.getObs() != null) {
+		if (dst != null && dst.getObs() != null && dst.getObs().hasGroupMembers()) {
 			for (Obs obs : dst.getObs().getGroupMembers()){
 				
 				int conceptId = obs.getConcept().getConceptId();
@@ -33,6 +33,16 @@ public class DSTCellEditor extends AbstractCellEditor {
 					}
 					else{
 						html.style("color: black"); // should never get here, but just in case
+					}
+					
+					// now we will add the concentration, if it exists
+					// TODO: make sure it can handle multiple concentrations, which is now lost!
+					// TODO: refactor this so we aren't doing a double for-loop? could be written better!
+					for (Obs obs2 : dst.getObs().getGroupMembers()) {
+						if (obs2.getConcept().getConceptId() == 3016) {
+							// check for empty concentration??
+							html.title("(" + obs2.getValueAsString(Context.getLocale()) + " mcg/ml)"); // TODO: don't hardcode units?
+						}
 					}
 					
 					html.close().append(obs.getConcept().getBestShortName(Context.getLocale()));

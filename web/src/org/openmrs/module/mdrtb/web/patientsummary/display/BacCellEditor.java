@@ -16,7 +16,7 @@ public class BacCellEditor extends AbstractCellEditor {
 		PatientSummaryTableBacElement bac = (PatientSummaryTableBacElement) ItemUtils.getItemValue(item, property);
 		
 		// if it's not empty, pull out the Obs that represents the result of the test
-		if (bac != null && bac.getObs() != null) {
+		if (bac != null && bac.getObs() != null && bac.getObs().hasGroupMembers()) {
 			for (Obs obs : bac.getObs().getGroupMembers()){
 				
 				if (obs.getConcept().getConceptId() == 3046 || obs.getConcept().getConceptId() == 3052) {
@@ -34,7 +34,7 @@ public class BacCellEditor extends AbstractCellEditor {
 					else {
 						html.style("color: black");
 					}
-					html.close().append(obs.getValueCoded().getBestName(Context.getLocale()));
+					html.close().append("[" + obs.getValueCoded().getBestShortName(Context.getLocale()) + "]");				
 					html.spanEnd();
 					
 					return html.toString();
