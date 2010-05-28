@@ -71,20 +71,25 @@ public class PatientSummaryTableController {
 		displayRow.setSortable(false);
 		
 		displayRow.getColumn("date").getCellRenderer().setCellEditor(new DateCellEditor("MM/yyyy"));
-		displayRow.getColumn("smear").getCellRenderer().setCellEditor(new BacCellEditor());
-		displayRow.getColumn("culture").getCellRenderer().setCellEditor(new BacCellEditor());
+		
+		displayRow.getColumn("smear").setCellRenderer(new BacCellRenderer());
+		displayRow.getColumn("culture").setCellRenderer(new BacCellRenderer());
+		//displayRow.getColumn("smear").getCellRenderer().setCellEditor(new BacCellEditor());
+		//displayRow.getColumn("culture").getCellRenderer().setCellEditor(new BacCellEditor());
 		
 		// now set each column to the proper title, and DST/regimin columns to use the proper cell editor and standard width
 		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
 			displayRow.getColumn(column.getCode()).setTitle(column.getTitle());
 			
 			if (column.getCode().startsWith("dsts.")) {
-				displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
+				displayRow.getColumn(column.getCode()).setCellRenderer(new DSTCellRenderer());
+				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
 				displayRow.getColumn(column.getCode()).setWidth("30px");
 			}
 			
 			if (column.getCode().startsWith("regimens.")) {
-				displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new RegimenCellEditor());
+				displayRow.getColumn(column.getCode()).setCellRenderer(new RegimenCellRenderer());
+				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new RegimenCellEditor());
 				displayRow.getColumn(column.getCode()).setWidth("30px");
 			}
 		}
