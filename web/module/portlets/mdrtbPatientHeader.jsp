@@ -222,6 +222,9 @@
 			</table>
 			</c:if>
 			<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.bottomPatientHeader" type="html" parameters="patientId=${model.patient.patientId}" />
+		    
+		    <!-- added this in as a hack solution to allow patient flags to appear on patient dashboard -->
+		    <openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterLastEncounter" type="html" parameters="patientId=${model.patient.patientId}" />
 	</div>
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
