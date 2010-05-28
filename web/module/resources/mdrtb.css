@@ -588,3 +588,38 @@ padding: 1px 1px 1px 1px;
 	padding-left: 0px;
 }
 
+.patientSummaryTable {
+	border: 1px;
+	border-color: black;
+    padding: 2px;	
+}
+
+.patientSummaryTableOdd a,.patientSummaryTableEven a {
+    color: black;
+}
+
+.patientSummaryTableOdd td,.patientSummaryTableEven td {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 11px;
+    padding: 2px 3px 2px 3px;
+}
+
+.patientSummaryTableOdd {
+    background-color: #ffffff;
+}
+
+.patientSummaryTableEven {
+    background-color: #e3e3e3;
+}
+
+.patientSummaryTableHeader {
+	border-color: white;
+  	text-align: center;
+  	white-space: nowrap;
+    background-color: #729fcf;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 3px 4px 3px;
+}
+

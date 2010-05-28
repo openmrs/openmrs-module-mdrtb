@@ -545,6 +545,9 @@
 		</c:if>	
 		<c:if test="${!empty view}">
 			<c:choose>
+				<c:when test='${view == "SUMMARY"}'>
+					changeSearchTab('searchTab_summary');
+				</c:when>
 				<c:when test='${view == "DST"}'>
 					changeSearchTab('searchTab_DST');
 				</c:when>
