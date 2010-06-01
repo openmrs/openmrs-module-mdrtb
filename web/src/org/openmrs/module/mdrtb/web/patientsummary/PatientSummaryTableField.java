@@ -1,21 +1,21 @@
 package org.openmrs.module.mdrtb.web.patientsummary;
 
 
-public class PatientSummaryTableColumn {
+public class PatientSummaryTableField {
 
 	private String title;
 	
 	private String code;
 
-	public PatientSummaryTableColumn() {
+	public PatientSummaryTableField() {
 		// generic constructor
 	}
 	
-	public PatientSummaryTableColumn(String code) {
+	public PatientSummaryTableField (String code) {
 		this.code = code;
 	}
 	
-	public PatientSummaryTableColumn(String code, String title) {
+	public PatientSummaryTableField (String code, String title) {
 		this.code = code;
 		this.title = title;
 	}

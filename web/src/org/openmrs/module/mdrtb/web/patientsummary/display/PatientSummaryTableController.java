@@ -13,8 +13,8 @@ import org.jmesa.view.editor.DateCellEditor;
 import org.jmesa.view.html.component.HtmlRow;
 import org.jmesa.view.html.component.HtmlTable;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTable;
-import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableColumn;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableFactory;
+import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableField;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -37,21 +37,22 @@ public class PatientSummaryTableController {
 		}
 		
 		// creating the summary table
-		PatientSummaryTable patientSummaryTable = PatientSummaryTableFactory.createPatientSummaryTable(patientId, null, Calendar.getInstance().getTime());
+		PatientSummaryTableFactory factory = new PatientSummaryTableFactory();
+		PatientSummaryTable patientSummaryTable = factory.createPatientSummaryTable(patientId, null, Calendar.getInstance().getTime());
 		
 		// now start creating the html view
 		TableFacade tableFacade = TableFacadeFactory.createTableFacade("patientSummaryTable", request); // custom style defined for this table in mdrtb.css
 		
 		// we want to display everything on one page
-		tableFacade.setMaxRows(patientSummaryTable.getPatientSummaryTableRows().size());
+		tableFacade.setMaxRows(patientSummaryTable.getPatientSummaryTableRecords().size());
 		
 		// pull out the column code to create the columns
 		List<String> columns = new LinkedList<String>();
-		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
-			columns.add(column.getCode());
+		for(PatientSummaryTableField field : patientSummaryTable.getPatientSummaryTableFields()) {
+			columns.add(field.getCode());
 		}
 		tableFacade.setColumnProperties(columns.toArray(new String [columns.size()]));		
-		tableFacade.setItems(patientSummaryTable.getPatientSummaryTableRows());
+		tableFacade.setItems(patientSummaryTable.getPatientSummaryTableRecords());
 	
 		// important to set view last for some reason
 		tableFacade.setView(new CustomTableHtmlView());
@@ -65,7 +66,6 @@ public class PatientSummaryTableController {
 		displayRow.getRowRenderer().setOddClass("patientSummaryTableOdd");
 		displayRow.getRowRenderer().setEvenClass("patientSummaryTableEven");
 		
-		
 		displayRow.setHighlighter(false);
 		displayRow.setFilterable(false);
 		displayRow.setSortable(false);
@@ -77,20 +77,20 @@ public class PatientSummaryTableController {
 		//displayRow.getColumn("smear").getCellRenderer().setCellEditor(new BacCellEditor());
 		//displayRow.getColumn("culture").getCellRenderer().setCellEditor(new BacCellEditor());
 		
-		// now set each column to the proper title, and DST/regimin columns to use the proper cell editor and standard width
-		for(PatientSummaryTableColumn column : patientSummaryTable.getPatientSummaryTableColumns()) {
-			displayRow.getColumn(column.getCode()).setTitle(column.getTitle());
+		// now set each column to the proper title, and DST/regimen columns to use the proper cell editor and standard width
+		for(PatientSummaryTableField field : patientSummaryTable.getPatientSummaryTableFields()) {
+			displayRow.getColumn(field.getCode()).setTitle(field.getTitle());
 			
-			if (column.getCode().startsWith("dsts.")) {
-				displayRow.getColumn(column.getCode()).setCellRenderer(new DSTCellRenderer());
+			if (field.getCode().startsWith("dsts.")) {
+				displayRow.getColumn(field.getCode()).setCellRenderer(new DSTCellRenderer());
 				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
-				displayRow.getColumn(column.getCode()).setWidth("30px");
+				displayRow.getColumn(field.getCode()).setWidth("30px");
 			}
 			
-			if (column.getCode().startsWith("regimens.")) {
-				displayRow.getColumn(column.getCode()).setCellRenderer(new RegimenCellRenderer());
+			if (field.getCode().startsWith("regimens.")) {
+				displayRow.getColumn(field.getCode()).setCellRenderer(new RegimenCellRenderer());
 				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new RegimenCellEditor());
-				displayRow.getColumn(column.getCode()).setWidth("30px");
+				displayRow.getColumn(field.getCode()).setWidth("30px");
 			}
 		}
 		

@@ -6,9 +6,9 @@ import java.util.List;
 
 public class PatientSummaryTable {
 
-	private List<PatientSummaryTableRow> patientSummaryTableRows = new LinkedList<PatientSummaryTableRow>();
+	private List<PatientSummaryTableRecord> patientSummaryTableRecords = new LinkedList<PatientSummaryTableRecord>();
 	
-	private List<PatientSummaryTableColumn> patientSummaryTableColumns = new LinkedList<PatientSummaryTableColumn>();
+	private List<PatientSummaryTableField> patientSummaryTableFields = new LinkedList<PatientSummaryTableField>();
 	
 	public PatientSummaryTable() {
 		// empty constructor
@@ -19,20 +19,20 @@ public class PatientSummaryTable {
 	 * Getters and Setters
 	 */
 	
-    public List<PatientSummaryTableRow> getPatientSummaryTableRows() {
-    	return patientSummaryTableRows;
+    public List<PatientSummaryTableRecord> getPatientSummaryTableRecords() {
+    	return patientSummaryTableRecords;
     }
 
 	
-    public void setPatientSummaryTableRows(List<PatientSummaryTableRow> patientSummaryTableRows) {
-    	this.patientSummaryTableRows = patientSummaryTableRows;
+    public void setPatientSummaryTableRows(List<PatientSummaryTableRecord> patientSummaryTableRecords) {
+    	this.patientSummaryTableRecords = patientSummaryTableRecords;
     }
 
-	public void setPatientSummaryTableColumns(List<PatientSummaryTableColumn> patientSummaryTableColumns) {
-	    this.patientSummaryTableColumns = patientSummaryTableColumns;
+	public void setPatientSummaryTableFields(List<PatientSummaryTableField> patientSummaryTableFields) {
+	    this.patientSummaryTableFields = patientSummaryTableFields;
     }
 
-	public List<PatientSummaryTableColumn> getPatientSummaryTableColumns() {
-	    return patientSummaryTableColumns;
+	public List<PatientSummaryTableField> getPatientSummaryTableFields() {
+	    return patientSummaryTableFields;
     }
 }
