@@ -19,8 +19,6 @@ $(document).ready(function(){
   });
 </script>
 
-
-
 <!--  try removing this form at some point? -->
 <form name="patientSummaryTableForm" action="/module/mdrtb/mdrtbPatientSummaryTable.form">
 ${patientSummaryTable}

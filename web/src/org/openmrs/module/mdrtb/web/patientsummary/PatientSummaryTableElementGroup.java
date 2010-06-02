@@ -21,11 +21,11 @@ public class PatientSummaryTableElementGroup extends PatientSummaryTableElement 
 	 */
 
 
-	public void setElementGroup(Map<String,PatientSummaryTableElement> elementGroup) {
+	public void setElements(Map<String,PatientSummaryTableElement> elementGroup) {
 	    this.elements = elementGroup;
     }
 
-	public Map<String,PatientSummaryTableElement> getElementGroup() {
+	public Map<String,PatientSummaryTableElement> getElements() {
 	    return elements;
     }
 	
@@ -33,7 +33,15 @@ public class PatientSummaryTableElementGroup extends PatientSummaryTableElement 
 		this.elements.put(key, element);
 	}
 	
+	public PatientSummaryTableElement getElement(String key) {
+		return this.elements.get(key);
+	}
+	
 	public void removeElement(String key) {
 		this.elements.remove(key);
+	}
+	
+	public Boolean contains(String key) {
+		return this.elements.containsKey(key);
 	}
 }

@@ -55,6 +55,10 @@ public class PatientSummaryTableFactory {
 		return table;
 	}
 	
+	/*
+	 * Private methods
+	 */
+	
 	private void createFields(PatientSummaryTable table) {
 		// first add the date and bacs
 		// TODO: change this to retrieve localized names for date, smear and culture
@@ -119,53 +123,48 @@ public class PatientSummaryTableFactory {
 		while (cal.getTime().before(endDate)) {
 			Date date = cal.getTime();
 			
-			// TODO: ? break bacs, dsts, and regimens into separate functions for readability purposes?
-			
-			// create a new row for the table
+			// create a new record for the table
 			PatientSummaryTableRecord record = new PatientSummaryTableRecord();
 			
-			// the date row	
+			// add the date field	
 			record.addElement("date", new PatientSummaryTableDateElement(date));
 			
-			// pull out the Smear and Culture constructs, if any, for this date
-			
+			// add the the Smear and Culture constructs, if any, for this date
 			record.addElement("smear", new PatientSummaryTableBacElement(smearHash.get(date))); // most of these will be null
 			record.addElement("culture", new PatientSummaryTableBacElement(cultureHash.get(date))); // most of these will be null
 			
-			// DSTS are a bit more complex, as we need to create a hash of drug types to results
+			// add the DSTs for this date; these are a bit more complex, as we need to create a map of drug types to results
 			Obs dstTestConstruct = dstHash.get(date);
 			PatientSummaryTableElementGroup dsts = new PatientSummaryTableElementGroup();
 			
 			if (dstTestConstruct != null) {
 				for (Obs obs : dstTestConstruct.getGroupMembers()) {
-					// if this obs is a test result construct, we need to add it to our hash
+					// if this obs is a test result construct, we need to add it to our dst map
 					if (obs.getConcept().getId() == 3025) {
 						PatientSummaryTableDSTElement dst = new PatientSummaryTableDSTElement(obs);
 						
 						// TODO: we need to be able to handle "waiting on results" case
 						
-						// now loop through all the results to figure out where to hash it
+						// loop through all the results to figure out which drug this result is for
 						for (Obs result : obs.getGroupMembers()) {
 							
 							// TODO: this could be handled more elegantly
-							// TODO: ***we need to hash all concentrations for a certain drug type--multiple drug types in result***
+							// search for a concept that holds a drug name, and then retrieve that drug name
 							Integer resultConceptId = result.getConcept().getConceptId();
 							if (resultConceptId == 2474 || resultConceptId == 3017 || resultConceptId == 1441) {
 								String dstName = result.getValueCoded().getBestShortName(Context.getLocale()).getName();
 								// put it in the hash under the drug name
-								dsts.addElement(dstName, dst);
-								//addPatientSummaryTableColumnIfNeeded(dstName,table); // create a new dst column if we haven't encountered this dst before
-								break; // once we've identified the drug we are done... a single result construct shouldn't have more than one drug!
+									dsts.addElement(dstName, dst);	
+									break; // once we've identified the drug we are done... a single result construct shouldn't have more than one drug!
 							}
 						}
 					}
 				}
 			}
 			
-			// set the DST hash
 			record.addElement("dsts", dsts);
 			
-			// now create the regimen information for a certain date
+			// now add the regimen information for the date
 			PatientSummaryTableElementGroup regimens = new PatientSummaryTableElementGroup();
 			
 			// get the patient's regimen history
@@ -183,7 +182,7 @@ public class PatientSummaryTableFactory {
 				}
 			}
 			
-			// add regimens to the row
+			// add regimens to the record
 			record.addElement("regimens", regimens);
 			
 			// add this row to the object
@@ -195,7 +194,7 @@ public class PatientSummaryTableFactory {
 	}
 	
 	/*
-	 * Utility Functions
+	 * Private Utility Methods
 	 */
 
 	// returns the earliest date we have any data from

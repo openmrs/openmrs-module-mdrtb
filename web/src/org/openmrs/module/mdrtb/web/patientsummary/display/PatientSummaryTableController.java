@@ -7,11 +7,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jmesa.facade.TableFacade;
 import org.jmesa.facade.TableFacadeFactory;
 import org.jmesa.view.editor.DateCellEditor;
 import org.jmesa.view.html.component.HtmlRow;
 import org.jmesa.view.html.component.HtmlTable;
+import org.openmrs.Patient;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTable;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableFactory;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableField;
@@ -24,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PatientSummaryTableController {
 	
+	private static Log log = LogFactory.getLog(Patient.class);
+	
 	@SuppressWarnings("unchecked")
     @RequestMapping("/module/mdrtb/mdrtbPatientSummaryTable")
 	 public Map displayTable(HttpServletRequest request, ModelMap map) throws Exception{
-
+		
 		Integer patientId = ServletRequestUtils.getIntParameter(request, "patientId");
 		
 		// TODO: test case if patientId has not been set--what is the default>?
@@ -70,10 +75,10 @@ public class PatientSummaryTableController {
 		displayRow.setFilterable(false);
 		displayRow.setSortable(false);
 		
-		displayRow.getColumn("date").getCellRenderer().setCellEditor(new DateCellEditor("MM/yyyy"));
+		displayRow.getColumn("elements.date").getCellRenderer().setCellEditor(new CustomDateCellEditor("MM/yyyy"));
 		
-		displayRow.getColumn("smear").setCellRenderer(new BacCellRenderer());
-		displayRow.getColumn("culture").setCellRenderer(new BacCellRenderer());
+		displayRow.getColumn("elements.smear").setCellRenderer(new BacCellRenderer());
+		displayRow.getColumn("elements.culture").setCellRenderer(new BacCellRenderer());
 		//displayRow.getColumn("smear").getCellRenderer().setCellEditor(new BacCellEditor());
 		//displayRow.getColumn("culture").getCellRenderer().setCellEditor(new BacCellEditor());
 		
@@ -81,13 +86,13 @@ public class PatientSummaryTableController {
 		for(PatientSummaryTableField field : patientSummaryTable.getPatientSummaryTableFields()) {
 			displayRow.getColumn(field.getCode()).setTitle(field.getTitle());
 			
-			if (field.getCode().startsWith("dsts.")) {
+			if (field.getCode().startsWith("elements.dsts.")) {
 				displayRow.getColumn(field.getCode()).setCellRenderer(new DSTCellRenderer());
 				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new DSTCellEditor());
 				displayRow.getColumn(field.getCode()).setWidth("30px");
 			}
 			
-			if (field.getCode().startsWith("regimens.")) {
+			if (field.getCode().startsWith("elements.regimens.")) {
 				displayRow.getColumn(field.getCode()).setCellRenderer(new RegimenCellRenderer());
 				//displayRow.getColumn(column.getCode()).getCellRenderer().setCellEditor(new RegimenCellEditor());
 				displayRow.getColumn(field.getCode()).setWidth("30px");
@@ -96,6 +101,7 @@ public class PatientSummaryTableController {
 		
 		map.put("patientSummaryTable", tableFacade.render());
 		
-		return map; 
+		return map;
+	
 	 }
 }
