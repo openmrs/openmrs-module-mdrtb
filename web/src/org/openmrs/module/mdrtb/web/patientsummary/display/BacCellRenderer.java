@@ -35,9 +35,7 @@ public class BacCellRenderer extends HtmlCellRendererImpl{
 						html.style("background-color: green"); // we should move these colors to global props, or perhaps a style sheet?
 					}
 					
-					html.title(obs.getValueCoded().getBestName(Context.getLocale()).getName());				
-					
-				//	return obs.getValueCoded().getBestName(Context.getLocale());
+					html.title("(" + obs.getValueCoded().getBestName(Context.getLocale()).getName() + ")");				
 				}
 			}
 			// TODO: what to return if there is no result code--return "waiting for result"???

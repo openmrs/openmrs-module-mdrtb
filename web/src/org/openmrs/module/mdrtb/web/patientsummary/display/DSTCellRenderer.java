@@ -22,29 +22,22 @@ public class DSTCellRenderer extends HtmlCellRendererImpl {
 		
 		// if it's not empty, pull out the Obs that represents the result of the test
 		if (dst != null && dst.getObs() != null && dst.getObs().hasGroupMembers()) {
-			for (Obs obs : dst.getObs().getGroupMembers()){
-						
-						int conceptId = obs.getConcept().getConceptId();
-						
-						if (conceptId == 2474 || conceptId == 3017 || conceptId == 1441) {
+			
+			// loop through the obs in the result group
+			for (Obs obs : dst.getObs().getGroupMembers()){			
+				int conceptId = obs.getConcept().getConceptId();
 							
-							if (conceptId == 1441 || conceptId == 3017) {
-						html.style("background-color: red"); // we should move these colors to global props, of course
-							}
-							else if (conceptId == 2474) {
-						html.style("background-color: green"); // we should move these colors to global props, of course
-							}
-					
-					// now we will add the concentration, if it exists
-					// TODO: refactor this so we aren't doing a double for-loop? could be written better!
-					for (Obs obs2 : dst.getObs().getGroupMembers()) {
-						if (obs2.getConcept().getConceptId() == 3016) {
-							// check for empty concentration??
-							html.title("(" + obs2.getValueAsString(Context.getLocale()) + " mcg/ml)"); // TODO: don't hardcode units?
-						}
-			}		
+				// if resistance, set the color to red
+				if (conceptId == 1441 || conceptId == 3017) {
+					html.style("background-color: red"); // we should move these colors to global props, of course
+					html.title("(" + Context.getConceptService().getConcept(conceptId).getBestShortName(Context.getLocale()).getName() + ")");
+				}
+				// we can assume that a result can't be both resistance and susceptible--that would be a data error
+				else if (conceptId == 2474) {
+					html.style("background-color: green"); // we should move these colors to global props, of course
+					html.title("(" + Context.getConceptService().getConcept(conceptId).getBestShortName(Context.getLocale()).getName() + ")");
+				}
 			}
-		}
 		}
 		
 		html.close();
