@@ -269,10 +269,15 @@ public class PatientSummaryTableFactory {
 	private static Date calculateStartDate(Set<Date> smearDateSet, Set<Date> cultureDateSet, Set<Date> dstDateSet) {
 		
 		List<Date> minDates = new ArrayList<Date>();
-		minDates.add(Collections.min(smearDateSet));
-		minDates.add(Collections.min(cultureDateSet));
-		minDates.add(Collections.min(dstDateSet));
-		
+		if(smearDateSet != null && !smearDateSet.isEmpty()) {
+			minDates.add(Collections.min(smearDateSet));
+		}
+		if(cultureDateSet != null && !cultureDateSet.isEmpty()) {
+			minDates.add(Collections.min(cultureDateSet));
+		}
+		if(dstDateSet != null && !dstDateSet.isEmpty()) {
+			minDates.add(Collections.min(dstDateSet));
+		}
 		return Collections.min(minDates);
 	}
 	
