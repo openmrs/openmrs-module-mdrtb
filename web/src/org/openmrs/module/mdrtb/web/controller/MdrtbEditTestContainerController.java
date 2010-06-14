@@ -1,5 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +19,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -30,6 +33,7 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
@@ -267,17 +271,17 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
             User defaultProvider = us.getUserByUsername(as
                     .getGlobalProperty("mdrtb.mdrtb_default_provider"));
             if (enc == null || enc.getEncounterId() == null){
-            enc.setCreator(Context.getAuthenticatedUser());
-            enc.setDateCreated(new Date());
-            enc.setVoided(false);
-            enc.setPatient(patient);
-            enc.setProvider(defaultProvider);
+            	enc.setCreator(Context.getAuthenticatedUser());
+            	enc.setDateCreated(new Date());
+            	enc.setVoided(false);
+            	enc.setPatient(patient);
+            	enc.setProvider(defaultProvider);
             }
             
             
             Integer newProviderId = enc.getProvider().getPersonId();
             if (newProviderId == null)
-                newProviderId = defaultProvider.getPersonId();
+                newProviderId = getProviderId(defaultProvider);
             try {
                 String providerIdString = request.getParameter("provider_0");
                 newProviderId = Integer.valueOf(providerIdString);
@@ -791,7 +795,7 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
     }
    
     
-    @Override
+	@Override
     protected Object formBackingObject(HttpServletRequest request)
             throws Exception {
         //TODO:  attach concentrations to empty concentration obs that correspond to no results
@@ -1396,5 +1400,29 @@ public class MdrtbEditTestContainerController extends SimpleFormController{
                 break;
             }
         }
+    }
+    
+    /**
+     * Hack method to handle 1.5 backwards compatibility
+     * @throws InvocationTargetException 
+     * @throws IllegalAccessException 
+     * @throws IllegalArgumentException 
+     */
+    private Integer getProviderId(User defaultProvider) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    	Method [] userMethods = User.class.getMethods();
+    	
+    	// find a methods we can use
+    	for (Method method : userMethods) {
+    		if (StringUtils.equals(method.getName(),"getPerson")) {
+    			Person person = (Person) method.invoke(defaultProvider);
+    			return person.getPersonId();
+    		}
+    		else if (StringUtils.equals(method.getName(),"getPersonId")){
+    			return (Integer) method.invoke(defaultProvider);
+    		}
+    	}
+    	
+    	// TODO Auto-generated method stub
+	    return null;
     }
 }

@@ -121,7 +121,9 @@ public class PatientSummaryTableFactory {
 		
 		// first all the hash mappings we are going to use for table creation
 		// Map all the Tuberculosis Smear Constructs by month
+		// TODO: use the "getSmears" method in mdrtbFactory instead?
 		Map<Date, Obs> smearHash = getDateToObsMap(patientId, 3053);
+		// TODO: use the "getCultures" method in the mdrFactory instead?
 		// Map all the Tuberculosis Culture Constructs by month
 		Map<Date, Obs> cultureHash = getDateToObsMap(patientId, 3048);
 		// Map all the Drug Sensitivity Test Constructs by month
@@ -178,7 +180,10 @@ public class PatientSummaryTableFactory {
 		// IMPORTANT! needs to handle multiple obs within the same month--right now it just overwrite them, okay for prototype, but not for production
 		// IMPORTANT! need to figure out exactly what date we want to use here... encounterDateTime? Obs DateTime?
 		for (Obs obs : obsList) {
+			// TODO: probably want to change this to the Obs date instead?
 			// put the obs in a hash based on the month and year of the obs
+			
+			// TODO: change this to the sample collection date if we have it?
 			map.put(resetAllButYearAndMonth(obs.getEncounter().getEncounterDatetime()), obs);
 		}
 		

@@ -1,5 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +18,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -26,6 +29,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
@@ -237,12 +241,13 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                                 String providerIdString = request.getParameter(providerString);
                                 try{
                                    if (providerIdString != null && !providerIdString.equals("")){
-                                       User provider = Context.getUserService().getUser(Integer.valueOf(providerIdString));
+                                       Person provider = Context.getPersonService().getPerson(Integer.valueOf(providerIdString));                                      
                                        if (provider.getPersonId().intValue() != enc.getProvider().getPersonId().intValue()){
-                                           Encounter newEnc = cloneEncounter(enc);
+                                    	   Encounter newEnc = cloneEncounter(enc);
                                            newEnc.addObs(parentObs);
                                            resetEncOnAllObs(parentObs, newEnc);
-                                           newEnc.setProvider(provider);
+                                           // hack to handle 1.6 User/Person refactoring
+                                           setProviderUsingProperType(newEnc, provider);      
                                            encsToSave.add(newEnc);
                                        } else {
                                            enc.addObs(parentObs);
@@ -375,12 +380,13 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             
                             try{
                                if (providerIdString != null && !providerIdString.equals("")){
-                                   User provider = Context.getUserService().getUser(Integer.valueOf(providerIdString));
+                            	   Person provider = Context.getPersonService().getPerson(Integer.valueOf(providerIdString));  
                                    if (provider.getPersonId().intValue() != enc.getProvider().getPersonId().intValue()){
                                        Encounter newEnc = cloneEncounter(enc);
                                        newEnc.addObs(parentObs);
                                        resetEncOnAllObs(parentObs, newEnc);
-                                       newEnc.setProvider(provider);
+                                       // hack to handle 1.6 User/Person refactoring
+                                       setProviderUsingProperType(newEnc, provider);  
                                        encsToSave.add(newEnc);
                                    } else {
                                        enc.addObs(parentObs);
@@ -580,12 +586,13 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
                             String providerIdString = request.getParameter(providerString);
                             try{
                                if (providerIdString != null && !providerIdString.equals("")){
-                                   User provider = Context.getUserService().getUser(Integer.valueOf(providerIdString));
+                            	   Person provider = Context.getPersonService().getPerson(Integer.valueOf(providerIdString));  
                                    if (provider.getPersonId().intValue() != enc.getProvider().getPersonId().intValue()){
                                        Encounter newEnc = cloneEncounter(enc);
                                        newEnc.addObs(parentObs);
                                        resetEncOnAllObs(parentObs, newEnc);
-                                       newEnc.setProvider(provider);
+                                       // hack to handle 1.6 User/Person refactoring
+                                       setProviderUsingProperType(newEnc, provider);  
                                        encsToSave.add(newEnc);
                                    } else {
                                        enc.addObs(parentObs);
@@ -627,8 +634,7 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
         return new ModelAndView(rv);
     }
 
-
-    /**
+	/**
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
      */
     @Override
@@ -931,5 +937,41 @@ public class MdrtbAddNewTestContainerController extends SimpleFormController  {
             if (o.hasGroupMembers())
                 resetEncOnAllObs(o, newEnc);
         }
+    }
+    
+    /*
+     * Hack method to handle 1.5 compatibility
+     */
+    private void setProviderUsingProperType(Encounter newEnc, Person provider) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	    // TODO Auto-generated method stub
+    	
+    	Method [] encounterMethods = Encounter.class.getMethods();
+    	
+    	Method setProviderPerson = null;
+    	Method setProviderUser = null;
+    	
+    	// find setProvider methods we can use
+    	for (Method method : encounterMethods) {
+    		if (StringUtils.equals(method.getName(),"setProvider")) {
+    			// see what argument it takes
+    			if (method.getParameterTypes().length == 1) {
+    				if(method.getParameterTypes()[0] == Person.class){
+    					setProviderPerson = method;
+    				}
+    				else if (method.getParameterTypes()[0] == User.class){
+    					setProviderUser = method;
+    				}
+    			}
+    		}
+    	}  	
+    	
+    	// use setProvider(person) if there is one
+    	if (setProviderPerson != null) {
+    		setProviderPerson.invoke(newEnc, provider);
+    	}
+    	// otherwise, we are in Openmrs 1.5 or earlier and have to the setProvider(User)
+    	else {
+    		setProviderUser.invoke(newEnc, Context.getUserService().getUser(provider.getId()));
+    	}
     }
 }

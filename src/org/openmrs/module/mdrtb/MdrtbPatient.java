@@ -43,7 +43,7 @@ public class MdrtbPatient {
     private Obs cultureConversion ;
     private Obs cultureReconversion;
     private Location location ;
-    private User provider;
+    private Person provider;
     private PatientProgram patientProgram;
     private PatientState cultureStatus;   
     private Obs patientClassDrugUse;
@@ -326,11 +326,11 @@ public class MdrtbPatient {
         this.location = location;
     }
 
-    public User getProvider() {
+    public Person getProvider() {
         return provider;
     }
 
-    public void setProvider(User provider) {
+    public void setProvider(Person provider) {
         this.provider = provider;
     }
 
