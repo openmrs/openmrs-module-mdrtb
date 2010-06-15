@@ -126,5 +126,6 @@
 	<div id="openmrs_error"><spring:message code="${err}"
 		text="${err}" arguments="${errArgs}" /></div>
 </c:if>
-</body>
-</html>
+
+<!--  </body>
+</html> -->
