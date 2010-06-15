@@ -1,9 +1,10 @@
 package org.openmrs.module.mdrtb;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Location;
@@ -48,4 +49,31 @@ public interface MdrtbService extends OpenmrsService {
     
     @Transactional(readOnly=true)
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
+    
+    /**
+     * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
+     * 
+     * @param obsId
+     * @return
+     */
+    @Transactional(readOnly=true)
+    public MdrtbSmearObj getSmearObj(Integer obsId);
+    
+    /**
+     * Updates a smear in the approriate obs construct
+     */
+    @Transactional
+    public void updateSmearObj(MdrtbSmearObj smear);
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleSmearResults();
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Method concept
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleSmearMethods();
 }
