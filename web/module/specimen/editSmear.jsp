@@ -15,6 +15,9 @@
 <!-- TODO localize all text -->
 
 <!-- TODO is answerConcept.name the correct parameter? -->
+
+<!-- TODO have to create a custom binders!! -->
+
 <tr>
 <td>Smear Result:</td>
 <td><form:select path="smearResult.valueCoded.id" multiple="false">
@@ -36,6 +39,13 @@
 <td>Date Received:</td>
 <td><openmrs_tag:dateField formFieldName="smearDateReceived.valueDatetime" startValue="${smear.smearDateReceived.valueDatetime}"/><form:errors path="smearDateReceived.valueDatetime" cssClass="error" /></td>
 </tr>
+<tr>
+<td>Smear Method:</td>
+<td><form:select path="smearMethod.valueCoded.id" multiple="false">
+	<form:options items="${methods}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
+</form:select></td>
+</tr>
+
 
 </table>
 

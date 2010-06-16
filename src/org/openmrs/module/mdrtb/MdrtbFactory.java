@@ -249,6 +249,8 @@ public final class MdrtbFactory {
     private String STR_ADVERSE_EFFECT_ACTION_TAKEN;
     
     private String STR_TREATMENT_SUPPORTER_ACTIVE;
+    
+    private String STR_SPECIMEN_ID;
 
     private Map<String, Concept> xmlConceptList = new HashMap<String, Concept>();
     
@@ -579,6 +581,10 @@ public final class MdrtbFactory {
             node = nodeList.item(0);
             this.STR_TREATMENT_SUPPORTER_ACTIVE = node.getFirstChild().getNodeValue();
             
+            nodeList = concepts.getElementsByTagName("STR_SPECIMEN_ID");
+            node = nodeList.item(0);
+            this.STR_SPECIMEN_ID = node.getFirstChild().getNodeValue();
+            
             //pre-set concepts
             
             String[] allXMLNodes = {STR_TB_SAMPLE_SOURCE, 
@@ -680,7 +686,8 @@ public final class MdrtbFactory {
                     STR_ADVERSE_EFFECT_NON_CODED,
                     STR_ADVERSE_EFFECT_DATE,
                     STR_ADVERSE_EFFECT_ACTION_TAKEN,
-                    STR_TREATMENT_SUPPORTER_ACTIVE};
+                    STR_TREATMENT_SUPPORTER_ACTIVE,
+                    STR_SPECIMEN_ID};
 
             
             List<String> stList = new ArrayList<String>();
@@ -1119,6 +1126,12 @@ public final class MdrtbFactory {
     public Concept getConceptDiedMDR() {
         Concept ret = null;
         ret = this.getMDRTBConceptByKey(STR_DIED, new Locale("en", "US"), this.xmlConceptList);
+        return ret;
+    }
+    
+    public Concept getConceptSpecimenID() {
+    	Concept ret = null;
+        ret = this.getMDRTBConceptByKey(STR_SPECIMEN_ID, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     

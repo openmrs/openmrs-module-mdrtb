@@ -44,7 +44,6 @@ public class EditSmearController  {
     	return Context.getService(MdrtbService.class).getPossibleSmearResults();
     }
     
-    // TODO: remove this if we end up not using it
     @ModelAttribute("methods")
     Collection<ConceptAnswer> getPossibleSmearMethods() {
     	return Context.getService(MdrtbService.class).getPossibleSmearMethods();

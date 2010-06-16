@@ -9,6 +9,7 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Location;
 import org.openmrs.Order;
+import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
@@ -51,6 +52,26 @@ public interface MdrtbService extends OpenmrsService {
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
     
     /**
+     * Initializes a specimen object, given a specimen object and a patient
+     */
+    public void initializeSpecimenObj(MdrtbSpecimenObj specimen, Patient patient);
+    
+    /**
+     * Fetches a specimen sample obj given an encounter_id of the Specimen Collection type
+     * 
+     * @param obsId
+     * @return
+     */
+    @Transactional(readOnly=true)
+    public MdrtbSpecimenObj getSpecimenObj(Integer encounterId);
+    
+    /**
+     * Saves or updates a specimen object
+     */
+    @Transactional
+	public void saveSpecimenObj(MdrtbSpecimenObj specimen);
+    
+    /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
      * 
      * @param obsId
@@ -58,7 +79,7 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public MdrtbSmearObj getSmearObj(Integer obsId);
-    
+       
     /**
      * Updates a smear in the approriate obs construct
      */
@@ -76,4 +97,9 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSmearMethods();
+    
+    /**
+     * Returns all the concepts that are possible coded answer for the Tuberculosis Sample Source concept
+     */
+    public Collection<ConceptAnswer> getPossibleSpecimenTypes();
 }

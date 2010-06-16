@@ -1,0 +1,133 @@
+package org.openmrs.module.mdrtb.web.controller.specimen;
+
+import java.beans.PropertyEditorSupport;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
+import org.openmrs.Location;
+import org.openmrs.Person;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbSpecimenObj;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+@SessionAttributes("specimen")
+@RequestMapping("/module/mdrtb/specimen/editSpecimen.form")
+public class EditSpecimenController {
+		
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	@ModelAttribute("types")
+	Collection<ConceptAnswer> getPossibleSpecimenTypes() {
+		return Context.getService(MdrtbService.class).getPossibleSpecimenTypes();
+	}
+	
+	@ModelAttribute("providers")
+	Collection<Person> getPossibleProviders() {
+		// obviously, a hack for now; is all the people who are providers?
+		Collection<Person> persons = new HashSet<Person>();
+		persons.add(Context.getPersonService().getPerson(501));
+		persons.add(Context.getPersonService().getPerson(502));
+		
+		return persons;
+	}
+	
+	@ModelAttribute("locations")
+	Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+	
+	@InitBinder
+	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+		//bind dates
+		SimpleDateFormat dateFormat = Context.getDateFormat();
+    	dateFormat.setLenient(false);
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+		
+		// bind a concept id to an actual concept
+		binder.registerCustomEditor(Concept.class, new PropertyEditorSupport() {
+			public void setAsText(String type) {
+				setValue(Context.getConceptService().getConcept(Integer.valueOf(type)));
+			}
+		});
+		
+		// bind a location id to an actual location
+		binder.registerCustomEditor(Location.class, new PropertyEditorSupport() {
+			public void setAsText(String location) {
+				setValue(Context.getLocationService().getLocation(Integer.valueOf(location)));
+			}
+		});
+		
+		// bind a person id to an actual person
+		binder.registerCustomEditor(Person.class, new PropertyEditorSupport() {
+			public void setAsText(String person) {
+				setValue(Context.getPersonService().getPerson(Integer.valueOf(person)));
+			}
+		});
+	}
+	
+	@RequestMapping(method = RequestMethod.GET) 
+	public ModelAndView showSpecimen(@RequestParam(required = false, value="encounterId") Integer encounterId, @RequestParam(required = false, value = "patientId") Integer patientId, ModelMap model) {
+		
+		if(encounterId == null && patientId == null) {
+			throw new RuntimeException("Must specify either a encounter Id or patient Id.");
+		}
+		
+		MdrtbSpecimenObj specimen = null;
+		
+		if (encounterId != null) {
+			specimen = Context.getService(MdrtbService.class).getSpecimenObj(encounterId);
+		}
+		
+		// create and initialize a new specimen object if needed
+		if (specimen == null) {
+			specimen = new MdrtbSpecimenObj();
+			Context.getService(MdrtbService.class).initializeSpecimenObj(specimen, Context.getPatientService().getPatient(patientId));
+		}
+		
+		model.addAttribute("specimen", specimen);
+		
+		return new ModelAndView("/module/mdrtb/specimen/editSpecimen",model);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimenObj specimen, BindingResult result, SessionStatus status) {
+		
+		// TODO: add validation
+		
+		if (result.hasErrors()) {
+			return new ModelAndView("/module/mdrtb/specimen/editSpecimen");
+		}
+		
+		// do the actual update
+		Context.getService(MdrtbService.class).saveSpecimenObj(specimen);
+		
+		// clears the command object from the session
+		status.setComplete();
+		
+		// TODO: this will become a different redirect
+		return new ModelAndView("redirect:/module/mdrtb/mdrtbIndex.form");
+		
+	}
+}
