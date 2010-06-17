@@ -1,12 +1,15 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
+import java.beans.PropertyEditorSupport;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbSmearObj;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes("smear")
 @RequestMapping("/module/mdrtb/specimen/editSmear.form")
 public class EditSmearController  {
 
@@ -34,9 +36,25 @@ public class EditSmearController  {
     // TODO: add validator
     @InitBinder
     public void initBinder(WebDataBinder binder) {
+    	
+    	// bind dates
     	SimpleDateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
     	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    
+    	// bind a concept id to an actual concept
+		binder.registerCustomEditor(Concept.class, new PropertyEditorSupport() {
+			public void setAsText(String type) {
+				setValue(Context.getConceptService().getConcept(Integer.valueOf(type)));
+			}
+		});
+		
+		// bind a location id to an actual location
+		binder.registerCustomEditor(Location.class, new PropertyEditorSupport() {
+			public void setAsText(String location) {
+				setValue(Context.getLocationService().getLocation(Integer.valueOf(location)));
+			}
+		});
     }
     
     @ModelAttribute("results")
@@ -49,25 +67,38 @@ public class EditSmearController  {
     	return Context.getService(MdrtbService.class).getPossibleSmearMethods();
     }
     
+    @ModelAttribute("locations")
+	Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+    
+    @ModelAttribute("smear")
+    public MdrtbSmearObj getSmear(@RequestParam(required = false, value="obsId") Integer obsId, @RequestParam(required = false, value="encounterId") Integer encounterId) {
+    	if (obsId == null && encounterId == null) {
+    		throw new RuntimeException("Must specify either an obs Id or encounter Id");
+    	}
+    	
+    	MdrtbSmearObj smear = null;
+    	
+    	// if we have an obs, fetch the smear
+    	if (obsId != null) {
+    		smear = Context.getService(MdrtbService.class).getSmearObj(obsId);
+    	}
+    	
+    	
+    	// create an initialize a new smear object if needed
+    	if (smear == null) {
+    		smear = new MdrtbSmearObj();
+    		Context.getService(MdrtbService.class).initializeSmearObj(smear,Context.getEncounterService().getEncounter(encounterId));
+    	}
+    	
+    	return smear;
+    }
+    
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showSmear(@RequestParam(required = false, value="obsId") Integer obsId, ModelMap model) {
+	public String showSmear() {
 		
-		MdrtbSmearObj smear = null;
-		
-		// fetch the smear via service method
-		if (obsId != null) {
-			smear = Context.getService(MdrtbService.class).getSmearObj(obsId);
-		}
-			
-		// create a new smear if we haven't fetched one
-		// TODO: this should use the constructor that creates an obs pre-configured for an existing patient?  but need to add encounter?
-		if (smear == null) {
-			smear = new MdrtbSmearObj();
-		}
-		
-		model.addAttribute("smear", smear);
-		
-		return new ModelAndView("/module/mdrtb/specimen/editSmear",model);
+		return "/module/mdrtb/specimen/editSmear";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -80,13 +111,13 @@ public class EditSmearController  {
 		}
 		
 		// do the actual update
-		Context.getService(MdrtbService.class).updateSmearObj(smear);
+		Context.getService(MdrtbService.class).saveSmearObj(smear);
 		
 		// clears the command object from the session
 		status.setComplete();
 		
 		// TODO: this will become a different redirect
-		return new ModelAndView("redirect:/module/mdrtb/mdrtbIndex.form");
+		return new ModelAndView("redirect:specimen.form?encounterId=" + smear.getSmearParentObs().getEncounter().getEncounterId());
 		
 	}
 	

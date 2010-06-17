@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,7 +27,6 @@ import org.openmrs.module.mdrtb.MdrtbSpecimenObj;
 import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.springframework.transaction.annotation.Transactional;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -106,9 +106,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void initializeSpecimenObj(MdrtbSpecimenObj specimen, Patient patient) {
-		// if eithr the specimen or the patient are null, we can't initialize this object
+		// if either the specimen or the patient are null, we can't initialize this object
 		if (specimen == null || patient == null) {
-			log.error("Cant initialize specimen object if specimen or patient is null.");
+			log.error("Can't initialize specimen object if specimen or patient is null.");
 			return;
 		}
 		
@@ -156,7 +156,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			}
 			else if (obsConcept.equals(mdrtbFactory.getConceptSampleSource())) {
 				specimen.setType(obs);
-			}	
+			}
+			else if (obsConcept.equals(mdrtbFactory.getConceptSmearParent())) {
+				specimen.addSmear(getSmearObj(obs.getId()));
+			}
+			
+			// TODO: add cultures and dsts
 		}
 		
 		return specimen;
@@ -167,17 +172,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			log.warn("Unable to save specimen: specimen obj is null");
 			return;
 		}
-		
-		/* HACK TO GET AROUND LAZY LOADING ISSUES */
-		// fetch the encounter again
-		Encounter encounter = Context.getEncounterService().getEncounter(specimen.getEncounter().getEncounterId());
-		// now update this new encounter with the values that may have been changed
-		encounter.setEncounterDatetime(specimen.getEncounter().getEncounterDatetime());
-		encounter.setLocation(specimen.getEncounter().getLocation());
-		// now set the specimen encounter to this new encounter
-		specimen.setEncounter(encounter);
-		/* NOW BACK TO OUR REGULARLY SCHEDULED PROGRAM */
-		
+				
 		// we need to propagate all the encounter date and location to all the basic underlying obs
 		// (note that we don't want the result constructs to have these values, however)
 		// TODO: do we want to set obs.person as well?
@@ -185,14 +180,54 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		specimen.getId().setLocation(specimen.getEncounter().getLocation());
 		specimen.getType().setObsDatetime(specimen.getEncounter().getEncounterDatetime());
 		specimen.getType().setLocation(specimen.getEncounter().getLocation());
-		
-		// now go ahead and save the encounter and the obs
-		// TODO: does this void and create a new obs, even if the obs hasn't changed?
+				
+		// now go ahead and save the encounter
+		// TODO: do we need to handle voiding obs ourselves?
 		Context.getEncounterService().saveEncounter(specimen.getEncounter());
-		Context.getObsService().saveObs(specimen.getId(), "updated via MDR-TB module specimen management ui");
-		Context.getObsService().saveObs(specimen.getType(), "updated via MDR-TB module specimen management ui");
 		
-		// TODO: need to save the underlying tests!
+		// TODO: need to save the underlying tests?
+	}
+	
+	public void initializeSmearObj(MdrtbSmearObj smear, Encounter encounter) {
+		// if either the smear or the encounter are null, we can't initialize the object
+		if (smear == null || encounter == null) {
+			log.error("Can't initialize smear object if smear or encounter is null.");
+		}
+		
+		// initialize all the obs with the proper values
+		Patient patient = encounter.getPatient();
+		Obs smearParentObs = new Obs(patient,mdrtbFactory.getConceptSmearParent(),null,null);
+		smearParentObs.setEncounter(encounter);
+		
+		Obs bacilli = new Obs(patient, mdrtbFactory.getConceptBacilli(), null, null);
+		bacilli.setEncounter(encounter);
+		
+		Obs smearDateReceived = new Obs(patient, mdrtbFactory.getConceptDateReceived(),null,null);
+		smearDateReceived.setEncounter(encounter);
+		
+		Obs smearMethod = new Obs(patient, mdrtbFactory.getConceptSmearMicroscopyMethod(), null, null);
+		smearMethod.setEncounter(encounter);
+		
+		Obs smearResult = new Obs(patient, mdrtbFactory.getConceptSmearResult(),null,null);
+		smearResult.setEncounter(encounter);
+		
+		Obs smearResultDate = new Obs(patient, mdrtbFactory.getConceptResultDate(), null, null);
+		smearResultDate.setEncounter(encounter);
+		
+		// now add all the objects to the parent obs
+		smearParentObs.addGroupMember(bacilli);
+		smearParentObs.addGroupMember(smearDateReceived);
+		smearParentObs.addGroupMember(smearMethod);
+		smearParentObs.addGroupMember(smearResult);
+		smearParentObs.addGroupMember(smearResultDate);
+		
+		// add these new objects we have created to the smear
+		smear.setSmearResultDate(smearResultDate);
+		smear.setBacilli(bacilli);
+		smear.setSmearDateReceived(smearDateReceived);
+		smear.setSmearMethod(smearMethod);
+		smear.setSmearParentObs(smearParentObs);
+		smear.setSmearResult(smearResult);
 	}
 	
 	public MdrtbSmearObj getSmearObj(Integer obsId) {
@@ -232,48 +267,44 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		return smear;
 	}
-	
-	public void updateSmearObj(MdrtbSmearObj smear) {
+
+	public void saveSmearObj(MdrtbSmearObj smear) {
 		// first, make sure this object refers to an existing smear obs
-		if (smear == null || smear.getSmearParentObs() == null || smear.getSmearParentObs().getId() == null) {
-			throw new APIException("Unable to update smear object because object doesn't have valid id.");
+		if (smear == null || smear.getSmearParentObs() == null) {
+			throw new APIException("Unable to update smear object because no smear or construct obs is present.");
 		}
 		
-		// TODO: handle location/provider updates?
+		// need to properly set all the obs locations
+		Location location = smear.getSmearParentObs().getLocation();
+		smear.getBacilli().setLocation(location);
+		smear.getSmearDateReceived().setLocation(location);
+		smear.getSmearMethod().setLocation(location);
+		smear.getSmearResult().setLocation(location);
+		smear.getSmearResultDate().setLocation(location);
 		
-		// now we need to get the existing smear object and compare to see if anything has changed
-		MdrtbSmearObj oldSmear = getSmearObj(smear.getSmearParentObs().getId());
-		
-		if (oldSmear == null) {
-			throw new APIException("Unable to update smear object because object doesn't have valid id.");
+		//if any of the obs don't have a datetime set it to the current time
+		if (smear.getBacilli().getObsDatetime() == null) {
+			smear.getBacilli().setObsDatetime(new Date());
 		}
-		
-		// do the actual comparisons and updates
-		if (oldSmear.getBacilli().getValueNumeric() != smear.getBacilli().getValueNumeric()) {
-			// we actually set the oldSmear value here to the new value and save it (instead of just saving the new obs) to avoid lazy loading issues
-			oldSmear.getBacilli().setValueNumeric(smear.getBacilli().getValueNumeric());
-			Context.getObsService().saveObs(oldSmear.getBacilli(), "updated via MDR-TB module specimen management ui");
+		if (smear.getSmearDateReceived().getObsDatetime() == null) {
+			smear.getSmearDateReceived().setObsDatetime(new Date());
 		}
-		if (oldSmear.getSmearDateReceived().getValueDatetime() != smear.getSmearDateReceived().getValueDatetime()) {
-			// we actually set the oldSmear value here to the new value and save it (instead of just saving the new obs) to avoid lazy loading issues
-			oldSmear.getSmearDateReceived().setValueDatetime(smear.getSmearDateReceived().getValueDatetime());
-			Context.getObsService().saveObs(oldSmear.getSmearDateReceived(),
-			    "updated via MDR-TB module specimen management ui");
+		if (smear.getSmearMethod().getObsDatetime() == null) {
+			smear.getSmearMethod().setObsDatetime(new Date());
 		}
-		
-		// TODO: handle "smear method" once we figure this out
-		
-		if (oldSmear.getSmearResult().getValueCoded().getId() != smear.getSmearResult().getValueCoded().getId()) {
-			// we actually set the oldSmear value here to the new value and save it (instead of just saving the new obs) to avoid lazy loading issues
-			oldSmear.getSmearResult().getValueCoded().setId(smear.getSmearResult().getValueCoded().getId());
-			Context.getObsService().saveObs(oldSmear.getSmearResult(), "updated via MDR-TB module specimen management ui");
+		if (smear.getSmearResult().getObsDatetime() == null) {
+			smear.getSmearResult().setObsDatetime(new Date());
 		}
-		if (oldSmear.getSmearResultDate().getValueDatetime() != smear.getSmearResultDate().getValueDatetime()) {
-			// we actually set the oldSmear value here to the new value and save it (instead of just saving the new obs) to avoid lazy loading issues
-			oldSmear.getSmearResultDate().setValueDatetime(smear.getSmearResultDate().getValueDatetime());
-			Context.getObsService().saveObs(oldSmear.getSmearResultDate(),
-			    "updated via MDR-TB module specimen management ui");
+		if (smear.getSmearResultDate().getObsDatetime() == null) {
+			smear.getSmearResultDate().setObsDatetime(new Date());
 		}
+		if (smear.getSmearParentObs().getObsDatetime() == null) {
+			smear.getSmearParentObs().setObsDatetime(new Date());
+		}
+	
+		// just save the parent obs, and everything should propogate (?)
+		// TODO: does every one get voided and recreated even if it hasn't changed?
+		Context.getObsService().saveObs(smear.getSmearParentObs(), "updated via mdr-tb module specimen tracking interface");
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {

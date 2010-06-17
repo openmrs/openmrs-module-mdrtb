@@ -13,7 +13,7 @@ import org.openmrs.User;
 
 public class MdrtbSmearObj {
     private Obs smearResult = new Obs();
-    private Obs source = new Obs();
+    private Obs source = new Obs();  // NOTE: not currently using this in new specimen tracking; source is stored at top-level with specimen
     private Obs bacilli = new Obs();
     private Obs smearResultDate = new Obs();
     private Obs smearDateReceived = new Obs();

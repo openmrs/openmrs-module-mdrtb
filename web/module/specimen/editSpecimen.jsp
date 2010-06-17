@@ -17,7 +17,7 @@
 <!-- TODO is answerConcept.name the correct parameter? -->
 <tr>
 <td>Sample ID:</td>
-<td><form:input path="id.valueNumeric" size="10" /><form:errors path="id.valueNumeric" cssClass="error" /></td>
+<td><form:input path="id.valueText" size="10" /><form:errors path="id.valueText" cssClass="error" /></td>
 </tr>
  
 <tr>

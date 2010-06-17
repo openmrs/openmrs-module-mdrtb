@@ -20,7 +20,7 @@
 
 <tr>
 <td>Smear Result:</td>
-<td><form:select path="smearResult.valueCoded.id" multiple="false">
+<td><form:select path="smearResult.valueCoded" multiple="false">
 	<form:options items="${results}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
 </form:select></td>
 </tr>
@@ -41,11 +41,16 @@
 </tr>
 <tr>
 <td>Smear Method:</td>
-<td><form:select path="smearMethod.valueCoded.id" multiple="false">
+<td><form:select path="smearMethod.valueCoded" multiple="false">
 	<form:options items="${methods}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
 </form:select></td>
 </tr>
-
+<tr>
+<td>Location:</td>
+<td><form:select path="smearParentObs.location" multiple="false">
+	<form:options items="${locations}" itemValue="locationId" itemLabel="name" />
+</form:select></td>
+</tr>
 
 </table>
 

@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -72,6 +73,11 @@ public interface MdrtbService extends OpenmrsService {
 	public void saveSpecimenObj(MdrtbSpecimenObj specimen);
     
     /**
+     * Initializes an encounter object, given a encounter object and an encounter
+     */
+    public void initializeSmearObj(MdrtbSmearObj smear, Encounter encounter);
+    
+    /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
      * 
      * @param obsId
@@ -84,7 +90,7 @@ public interface MdrtbService extends OpenmrsService {
      * Updates a smear in the approriate obs construct
      */
     @Transactional
-    public void updateSmearObj(MdrtbSmearObj smear);
+    public void saveSmearObj(MdrtbSmearObj smear);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

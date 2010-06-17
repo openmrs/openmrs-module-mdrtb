@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Encounter;
@@ -17,10 +18,11 @@ public class MdrtbSpecimenObj {
 	// the encounter this specimen is associated with
 	private Encounter encounter; 
 	
+	// TODO: these should be sorted lists?
 	// the various tests associated with the specimen
-	private List<MdrtbSmearObj> smears;
-	private List<MdrtbCultureObj> cultures;
-	private List<MdrtbDSTObj> dsts;
+	private List<MdrtbSmearObj> smears = new LinkedList<MdrtbSmearObj>();
+	private List<MdrtbCultureObj> cultures = new LinkedList<MdrtbCultureObj>();
+	private List<MdrtbDSTObj> dsts = new LinkedList<MdrtbDSTObj>();
 	
 
 	public MdrtbSpecimenObj () {
@@ -100,5 +102,32 @@ public class MdrtbSpecimenObj {
 	
     public void setDsts(List<MdrtbDSTObj> dsts) {
     	this.dsts = dsts;
+    }
+    
+    /**
+     * Convenience methods for adding/removing smears, cultures, and DSTs
+     */
+    
+    public void addSmear(MdrtbSmearObj smear) {
+    	this.smears.add(smear);
+    }
+    
+    public void removeSmear(MdrtbSmearObj smear) {
+    	this.smears.remove(smear);
+    }
+    
+    public void addCulture(MdrtbCultureObj culture) {
+    	this.cultures.add(culture);
+    }
+    
+    public void removeCulture(MdrtbCultureObj culture) {
+    	this.cultures.remove(culture);
+    }
+    public void addDst(MdrtbDSTObj dst) {
+    	this.dsts.add(dst);
+    }
+    
+    public void removeDst(MdrtbDSTObj dst) {
+    	this.dsts.remove(dst);
     }
 }

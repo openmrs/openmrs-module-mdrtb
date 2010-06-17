@@ -19,7 +19,6 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbSpecimenObj;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -27,39 +26,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes("specimen")
 @RequestMapping("/module/mdrtb/specimen/editSpecimen.form")
 public class EditSpecimenController {
 		
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@ModelAttribute("types")
-	Collection<ConceptAnswer> getPossibleSpecimenTypes() {
-		return Context.getService(MdrtbService.class).getPossibleSpecimenTypes();
-	}
-	
-	@ModelAttribute("providers")
-	Collection<Person> getPossibleProviders() {
-		// obviously, a hack for now; is all the people who are providers?
-		Collection<Person> persons = new HashSet<Person>();
-		persons.add(Context.getPersonService().getPerson(501));
-		persons.add(Context.getPersonService().getPerson(502));
-		
-		return persons;
-	}
-	
-	@ModelAttribute("locations")
-	Collection<Location> getPossibleLocations() {
-		return Context.getLocationService().getAllLocations();
-	}
-	
+	// TODO: pull these binders out into another file, following Spring docs?
 	@InitBinder
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
@@ -87,8 +66,28 @@ public class EditSpecimenController {
 		});
 	}
 	
-	@RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimen(@RequestParam(required = false, value="encounterId") Integer encounterId, @RequestParam(required = false, value = "patientId") Integer patientId, ModelMap model) {
+	@ModelAttribute("types")
+	Collection<ConceptAnswer> getPossibleSpecimenTypes() {
+		return Context.getService(MdrtbService.class).getPossibleSpecimenTypes();
+	}
+	
+	@ModelAttribute("providers")
+	Collection<Person> getPossibleProviders() {
+		// obviously, a hack for now; is all the people who are providers?
+		Collection<Person> persons = new HashSet<Person>();
+		persons.add(Context.getPersonService().getPerson(501));
+		persons.add(Context.getPersonService().getPerson(502));
+		
+		return persons;
+	}
+	
+	@ModelAttribute("locations")
+	Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+	
+	@ModelAttribute("specimen")
+	public MdrtbSpecimenObj getSpecimen(@RequestParam(required = false, value="encounterId") Integer encounterId, @RequestParam(required = false, value = "patientId") Integer patientId) {
 		
 		if(encounterId == null && patientId == null) {
 			throw new RuntimeException("Must specify either a encounter Id or patient Id.");
@@ -106,9 +105,13 @@ public class EditSpecimenController {
 			Context.getService(MdrtbService.class).initializeSpecimenObj(specimen, Context.getPatientService().getPatient(patientId));
 		}
 		
-		model.addAttribute("specimen", specimen);
+		return specimen;
+	}
 		
-		return new ModelAndView("/module/mdrtb/specimen/editSpecimen",model);
+	@RequestMapping(method = RequestMethod.GET) 
+	public String showSpecimen() {
+		
+		return "/module/mdrtb/specimen/editSpecimen";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -127,7 +130,7 @@ public class EditSpecimenController {
 		status.setComplete();
 		
 		// TODO: this will become a different redirect
-		return new ModelAndView("redirect:/module/mdrtb/mdrtbIndex.form");
+		return new ModelAndView("redirect:specimen.form?encounterId=" + specimen.getEncounter().getEncounterId());
 		
 	}
 }
