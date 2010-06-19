@@ -12,10 +12,9 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbSmearObj;
+import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -73,23 +71,22 @@ public class EditSmearController  {
 	}
     
     @ModelAttribute("smear")
-    public MdrtbSmearObj getSmear(@RequestParam(required = false, value="obsId") Integer obsId, @RequestParam(required = false, value="encounterId") Integer encounterId) {
+    public MdrtbSmear getSmear(@RequestParam(required = false, value="obsId") Integer obsId, @RequestParam(required = false, value="encounterId") Integer encounterId) {
     	if (obsId == null && encounterId == null) {
     		throw new RuntimeException("Must specify either an obs Id or encounter Id");
     	}
     	
-    	MdrtbSmearObj smear = null;
+    	MdrtbSmear smear = null;
     	
     	// if we have an obs, fetch the smear
     	if (obsId != null) {
-    		smear = Context.getService(MdrtbService.class).getSmearObj(obsId);
+    		smear = Context.getService(MdrtbService.class).getSmear(Context.getObsService().getObs(obsId));
     	}
     	
     	
-    	// create an initialize a new smear object if needed
+    	// create a new smear object if needed
     	if (smear == null) {
-    		smear = new MdrtbSmearObj();
-    		Context.getService(MdrtbService.class).initializeSmearObj(smear,Context.getEncounterService().getEncounter(encounterId));
+    		smear = Context.getService(MdrtbService.class).createSmear(Context.getEncounterService().getEncounter(encounterId));
     	}
     	
     	return smear;
@@ -102,7 +99,7 @@ public class EditSmearController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("smear") MdrtbSmearObj smear, BindingResult result, SessionStatus status) {
+	public ModelAndView processSubmit(@ModelAttribute("smear") MdrtbSmear smear, BindingResult result, SessionStatus status) {
 		
 		// TODO: add validation
 		
@@ -111,13 +108,13 @@ public class EditSmearController  {
 		}
 		
 		// do the actual update
-		Context.getService(MdrtbService.class).saveSmearObj(smear);
+		Context.getService(MdrtbService.class).saveSmear(smear);
 		
 		// clears the command object from the session
 		status.setComplete();
 		
 		// TODO: this will become a different redirect
-		return new ModelAndView("redirect:specimen.form?encounterId=" + smear.getSmearParentObs().getEncounter().getEncounterId());
+		return new ModelAndView("redirect:specimen.form?encounterId=" + smear.getSpecimenId());
 		
 	}
 	

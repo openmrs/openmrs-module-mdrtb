@@ -17,33 +17,33 @@
 <!-- TODO is answerConcept.name the correct parameter? -->
 <tr>
 <td>Sample ID:</td>
-<td><form:input path="id.valueText" size="10" /><form:errors path="id.valueText" cssClass="error" /></td>
+<td><form:input path="identifier" size="10" /><form:errors path="identifier" cssClass="error" /></td>
 </tr>
  
 <tr>
 <td>Sample Type:</td>
-<td><form:select path="type.valueCoded" multiple="false">
+<td><form:select path="type" multiple="false">
 	<form:options items="${types}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
 </form:select></td>
 </tr>
 
 <tr>
 <td>Date Collected:</td>
-<td><openmrs_tag:dateField formFieldName="encounter.encounterDatetime" startValue="${specimen.encounter.encounterDatetime}"/><form:errors path="encounter.encounterDatetime" cssClass="error" /></td>
+<td><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/><form:errors path="dateCollected" cssClass="error" /></td>
 </tr>
 
 <!--  TODO: need to figure out how to map provider names properly: can we use the custom tags? -->
 
 <tr>
 <td>Collected By:</td>
-<td><form:select path="encounter.provider" multiple="false">
+<td><form:select path="provider" multiple="false">
 	<form:options items="${providers}" itemValue="id" itemLabel="names[0].familyName" />
 </form:select></td>
 </tr>
 
 <tr>
 <td>Location Collected:</td>
-<td><form:select path="encounter.location" multiple="false">
+<td><form:select path="location" multiple="false">
 	<form:options items="${locations}" itemValue="locationId" itemLabel="name" />
 </form:select>	
 </td>

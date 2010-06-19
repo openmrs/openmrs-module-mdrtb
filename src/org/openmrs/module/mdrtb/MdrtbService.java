@@ -9,11 +9,14 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
+import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
+import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -53,29 +56,25 @@ public interface MdrtbService extends OpenmrsService {
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
     
     /**
-     * Initializes a specimen object, given a specimen object and a patient
+     * Creates a new specimen, associated with the given patient
      */
-    public void initializeSpecimenObj(MdrtbSpecimenObj specimen, Patient patient);
+    public MdrtbSpecimen createSpecimen(Patient patient);
     
     /**
-     * Fetches a specimen sample obj given an encounter_id of the Specimen Collection type
-     * 
-     * @param obsId
-     * @return
+     * Fetches a specimen sample obj given an encounter of the Specimen Collection type
      */
-    @Transactional(readOnly=true)
-    public MdrtbSpecimenObj getSpecimenObj(Integer encounterId);
+    public MdrtbSpecimen getSpecimen(Encounter encounter);
     
     /**
      * Saves or updates a specimen object
      */
     @Transactional
-	public void saveSpecimenObj(MdrtbSpecimenObj specimen);
+	public void saveSpecimen(MdrtbSpecimen specimen);
     
     /**
-     * Initializes an encounter object, given a encounter object and an encounter
+     * Creates a new Smear, associated with the given encounter
      */
-    public void initializeSmearObj(MdrtbSmearObj smear, Encounter encounter);
+    public MdrtbSmear createSmear(Encounter encounter);
     
     /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
@@ -83,14 +82,13 @@ public interface MdrtbService extends OpenmrsService {
      * @param obsId
      * @return
      */
-    @Transactional(readOnly=true)
-    public MdrtbSmearObj getSmearObj(Integer obsId);
+    public MdrtbSmear getSmear(Obs obs);
        
     /**
      * Updates a smear in the approriate obs construct
      */
     @Transactional
-    public void saveSmearObj(MdrtbSmearObj smear);
+    public void saveSmear(MdrtbSmear smear);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

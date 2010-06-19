@@ -16,7 +16,7 @@ import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbSpecimenObj;
+import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -87,22 +87,20 @@ public class EditSpecimenController {
 	}
 	
 	@ModelAttribute("specimen")
-	public MdrtbSpecimenObj getSpecimen(@RequestParam(required = false, value="encounterId") Integer encounterId, @RequestParam(required = false, value = "patientId") Integer patientId) {
+	public MdrtbSpecimen getSpecimen(@RequestParam(required = false, value="encounterId") Integer encounterId, @RequestParam(required = false, value = "patientId") Integer patientId) {
 		
 		if(encounterId == null && patientId == null) {
 			throw new RuntimeException("Must specify either a encounter Id or patient Id.");
 		}
 		
-		MdrtbSpecimenObj specimen = null;
+		MdrtbSpecimen specimen = null;
 		
 		if (encounterId != null) {
-			specimen = Context.getService(MdrtbService.class).getSpecimenObj(encounterId);
+			specimen = Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(encounterId));
 		}
-		
-		// create and initialize a new specimen object if needed
+		// create a new specimen object if needed
 		if (specimen == null) {
-			specimen = new MdrtbSpecimenObj();
-			Context.getService(MdrtbService.class).initializeSpecimenObj(specimen, Context.getPatientService().getPatient(patientId));
+			specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
 		}
 		
 		return specimen;
@@ -115,7 +113,7 @@ public class EditSpecimenController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimenObj specimen, BindingResult result, SessionStatus status) {
+	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, BindingResult result, SessionStatus status) {
 		
 		// TODO: add validation
 		
@@ -124,13 +122,13 @@ public class EditSpecimenController {
 		}
 		
 		// do the actual update
-		Context.getService(MdrtbService.class).saveSpecimenObj(specimen);
+		Context.getService(MdrtbService.class).saveSpecimen(specimen);
 		
 		// clears the command object from the session
 		status.setComplete();
 		
 		// TODO: this will become a different redirect
-		return new ModelAndView("redirect:specimen.form?encounterId=" + specimen.getEncounter().getEncounterId());
+		return new ModelAndView("redirect:editSpecimen.form?encounterId=" + specimen.getSpecimenId());
 		
 	}
 }

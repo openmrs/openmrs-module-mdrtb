@@ -9,48 +9,55 @@
 
 <table>
 <tr>
-<td>Sample Id:</td><td>${specimen.id.valueText}</td>
+<td>Sample Id:</td><td>${specimen.identifier}</td>
 </tr>
 <tr>
-<td>Sample Type:</td><td>${specimen.type.valueCoded.name.name}</td> 
+<td>Sample Type:</td><td>${specimen.type.name.name}</td> 
 </tr>
 <tr>
-<td>Date Collected:</td><td>${specimen.encounter.encounterDatetime}</td>
+<td>Date Collected:</td><td>${specimen.dateCollected}</td>
 </tr>
 <tr>
-<td>Collected By:</td><td>${specimen.encounter.provider.familyName}</td> <!-- TODO: obviously, need to find out proper way to handle names -->
+<td>Collected By:</td><td>${specimen.provider.familyName}</td> <!-- TODO: obviously, need to find out proper way to handle names -->
 </tr>
 <tr>
-<td>Location Collected:</td><td>${specimen.encounter.location.name}</td>
+<td>Location Collected:</td><td>${specimen.location.name}</td>
 </tr>
 </table>
+
+<br/><br/><br/>
 
 <b>Smears</b>
 
 <c:forEach var="smear" items="${specimen.smears}">
 <table>
 <tr>
-<td>Result:</td><td>${smear.smearResult.valueCoded.name.name}</td>
+<td>Result:</td><td>${smear.result.name.name}</td>
 </tr>
 <tr>
-<td>Bacilli:</td><td>${smear.bacilli.valueNumeric}</td>
+<td>Bacilli:</td><td>${smear.bacilli}</td>
 </tr>
 <tr>
-<td>Result Date:</td><td>${smear.smearResultDate.valueDatetime}</td>
+<td>Result Date:</td><td>${smear.resultDate}</td>
 </tr>
 <tr>
-<td>Date Received:</td><td>${smear.smearDateReceived.valueDatetime}</td>
+<td>Date Received:</td><td>${smear.dateReceived}</td>
 </tr>
 <tr>
-<td>Smear Method:</td><td>${smear.smearMethod.valueCoded.name.name}</td>
+<td>Smear Method:</td><td>${smear.method.name.name}</td>
 </tr>
 <tr>
-<td>Location:</td><td>${smear.smearParentObs.location}</td>
+<td>Lab:</td><td>${smear.lab}</td>
 </tr>
 </table>
+
+<br/><br/>
+
 </c:forEach>
 
-<a href="editSmear.form?encounterId=${specimen.encounter.encounterId}">Add a Smear</a>
+
+
+<a href="editSmear.form?encounterId=${specimen.specimenId}">Add a Smear</a>
 
 </body>
 </html>

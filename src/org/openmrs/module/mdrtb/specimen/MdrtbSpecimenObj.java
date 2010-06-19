@@ -1,10 +1,13 @@
-package org.openmrs.module.mdrtb;
+package org.openmrs.module.mdrtb.specimen;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
+import org.openmrs.module.mdrtb.MdrtbCultureObj;
+import org.openmrs.module.mdrtb.MdrtbDSTObj;
+import org.openmrs.module.mdrtb.MdrtbSmearObj;
 
 /**
  * Represents a specimen and holds the results of the various tests that can be performed on it

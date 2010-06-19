@@ -2,7 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbSpecimenObj;
+import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ public class ShowSpecimenController {
 	public ModelAndView showSpecimen(@RequestParam(required = true, value = "encounterId") Integer encounterId, ModelMap map) {
 		
 		// fetch the specimen
-		MdrtbSpecimenObj specimen = Context.getService(MdrtbService.class).getSpecimenObj(encounterId);
+		MdrtbSpecimen specimen = Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(encounterId));
 		
 		map.addAttribute("specimen", specimen);
 		

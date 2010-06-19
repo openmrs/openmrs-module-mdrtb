@@ -20,34 +20,34 @@
 
 <tr>
 <td>Smear Result:</td>
-<td><form:select path="smearResult.valueCoded" multiple="false">
+<td><form:select path="result" multiple="false">
 	<form:options items="${results}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
 </form:select></td>
 </tr>
 
 <tr>
 <td>Bacilli:</td>
-<td><form:input path="bacilli.valueNumeric" size="10" /><form:errors path="bacilli.valueNumeric" cssClass="error" /></td>
+<td><form:input path="bacilli" size="10" /><form:errors path="bacilli" cssClass="error" /></td>
 </tr>
 
 <tr>
 <td>Result Date:</td>
-<td><openmrs_tag:dateField formFieldName="smearResultDate.valueDatetime" startValue="${smear.smearResultDate.valueDatetime}"/><form:errors path="smearResultDate.valueDatetime" cssClass="error" /></td>
+<td><openmrs_tag:dateField formFieldName="resultDate" startValue="${smear.resultDate}"/><form:errors path="resultDate" cssClass="error" /></td>
 </tr>
 
 <tr>
 <td>Date Received:</td>
-<td><openmrs_tag:dateField formFieldName="smearDateReceived.valueDatetime" startValue="${smear.smearDateReceived.valueDatetime}"/><form:errors path="smearDateReceived.valueDatetime" cssClass="error" /></td>
+<td><openmrs_tag:dateField formFieldName="dateReceived" startValue="${smear.dateReceived}"/><form:errors path="dateReceived" cssClass="error" /></td>
 </tr>
 <tr>
 <td>Smear Method:</td>
-<td><form:select path="smearMethod.valueCoded" multiple="false">
+<td><form:select path="method" multiple="false">
 	<form:options items="${methods}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
 </form:select></td>
 </tr>
 <tr>
-<td>Location:</td>
-<td><form:select path="smearParentObs.location" multiple="false">
+<td>Lab:</td>
+<td><form:select path="lab" multiple="false">
 	<form:options items="${locations}" itemValue="locationId" itemLabel="name" />
 </form:select></td>
 </tr>
