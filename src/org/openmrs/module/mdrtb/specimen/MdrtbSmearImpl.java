@@ -1,8 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
@@ -49,10 +47,8 @@ public class MdrtbSmearImpl implements MdrtbSmear {
 		this.smear = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSmearParent(), encounter.getEncounterDatetime(), null);
 	}
 	
-	public List<Object> getSmear() {
-		List<Object> list = new LinkedList<Object>();
-		list.add(this.smear);
-		return list;
+	public Object getSmear() {
+		return this.smear;
 	}
 	
 	public String getSmearId() {

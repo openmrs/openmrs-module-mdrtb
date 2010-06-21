@@ -58,10 +58,8 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		// encounter.addObs(new Obs(patient, mdrtbFactory.getConceptSampleSource(), null, null));
 	}
 	
-	public List<Object> getSpecimen() {
-		List<Object> list = new LinkedList<Object>();
-		list.add(this.encounter);
-		return list;
+	public Object getSpecimen() {
+		return this.encounter;
 	}
 	
 	public String getSpecimenId() {
@@ -130,6 +128,8 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	
 	public List<MdrtbSmear> getSmears() {
 		List<MdrtbSmear> smears = new LinkedList<MdrtbSmear>();
+		
+		// TODO: sort by date, make smears comparable, turn this into a sorted list?
 		
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {

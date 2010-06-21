@@ -1,12 +1,9 @@
 package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
-import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.Patient;
-import org.openmrs.Person;
 
 /**
  * Interface that defines how to interaction with a specimen
@@ -29,7 +26,7 @@ public interface MdrtbSmear {
 	 * 
 	 */
 	
-	public List<Object> getSmear();
+	public Object getSmear();
 	public String getSmearId(); 
 	public String getSpecimenId();
 	

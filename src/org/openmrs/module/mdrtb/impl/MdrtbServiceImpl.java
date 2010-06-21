@@ -2,13 +2,11 @@ package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
@@ -22,7 +20,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbSmearObj;
 import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
@@ -136,17 +133,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			return;
 		}
 		
-		// fetch the object to save
-		List<Object> encounter = specimen.getSpecimen();
-		
 		// make sure getSpecimen returns the right type
-		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a single encounter)
-		if(encounter.size() > 1 || !(encounter.get(0) instanceof Encounter)){
+		// (i.e., that this service implementation is using the specimen implementation that it expects, which should an encounter)
+		if(!(specimen.getSpecimen() instanceof Encounter)){
 			throw new APIException("Not a valid specimen implementation for this service implementation.");
 		}
 				
 		// otherwise, go ahead and do the save
-		Context.getEncounterService().saveEncounter((Encounter) encounter.get(0));
+		Context.getEncounterService().saveEncounter((Encounter) specimen.getSpecimen());
 	}
 	
 	public MdrtbSmear createSmear(Encounter encounter) {		
@@ -172,18 +166,15 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			log.warn("Unable to save smear: smear object is null");
 		}
 		
-		// fetch the object to save
-		List<Object> obs = smear.getSmear();
-		
 		// make sure getSmear returns that right type
-		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a single encounter)
+		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a observation)
 	
-		if(obs.size() > 1 || !(obs.get(0) instanceof Obs)) {
+		if(!(smear.getSmear() instanceof Obs)) {
 			throw new APIException("Not a valid smear implementation for this service implementation");
 		}
 		
 		// otherwise, go ahead and do the save
-		Context.getObsService().saveObs((Obs) obs.get(0), "voided by Mdr-tb module specimen tracking UI");
+		Context.getObsService().saveObs((Obs) smear.getSmear(), "voided by Mdr-tb module specimen tracking UI");
 		
 	}
 	

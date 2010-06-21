@@ -31,13 +31,13 @@ public interface MdrtbSpecimen {
 	 * dsts: a list of the DSTS associated with the specimen
 	 * 
 	 * This interface also defines a "getSpecimen" method, intended to be used
-	 * by a service to retrieve the underlying object or objects that need to be saved
+	 * by a service to retrieve the underlying object that needs to be saved
 	 * to persist this specimen, and a "getSpecimenID", used to retrieve whatever ID
 	 * is used to reference the specimen (in the standard implementation, it's the 
 	 * id of the underlying encounter)
 	 */
 
-	public List<Object> getSpecimen();
+	public Object getSpecimen();
 	public String getSpecimenId();      
 	
 	public String getIdentifier();
