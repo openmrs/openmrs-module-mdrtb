@@ -30,28 +30,26 @@
 <b>Smears</b>
 
 <c:forEach var="smear" items="${specimen.smears}">
+
+<!-- SUMMARY DETAIL SECTION -->
 <table>
+<tr>
+<td>Status:</td><td>${smear.status}</td>
+</tr>
 <tr>
 <td>Result:</td><td>${smear.result.name.name}</td>
 </tr>
 <tr>
-<td>Bacilli:</td><td>${smear.bacilli}</td>
-</tr>
-<tr>
-<td>Result Date:</td><td>${smear.resultDate}</td>
-</tr>
-<tr>
-<td>Date Received:</td><td>${smear.dateReceived}</td>
-</tr>
-<tr>
-<td>Smear Method:</td><td>${smear.method.name.name}</td>
-</tr>
-<tr>
-<td>Lab:</td><td>${smear.lab}</td>
-</tr>
 </table>
 
 <br/><br/>
+
+<!--  FULL DETAIL SECTION -->
+
+
+<!-- EDIT A TEST SECTION -->
+
+
 
 </c:forEach>
 

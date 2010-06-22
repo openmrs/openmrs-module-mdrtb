@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.patientsummary;
 
 import org.openmrs.Obs;
 
+// TODO: get rid of this, change MdrtbSmear and MdrtbCulture to implement PatientSummaryTableElement
 
 public class PatientSummaryTableBacElement extends PatientSummaryTableElement{
 

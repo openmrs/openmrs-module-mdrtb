@@ -306,7 +306,7 @@ public class PatientSummaryTableFactory {
 	 */
 	private static void initializeDrugs(List<Integer> dstIds) {
 		
-		// ugly hack until I figure out where I want to pull the DSTs from
+		// TODO: ugly hack until I figure out where I want to pull the DSTs from
 		
 		dstIds.add(656);
 		dstIds.add(745);

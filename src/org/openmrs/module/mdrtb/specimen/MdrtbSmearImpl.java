@@ -59,6 +59,10 @@ public class MdrtbSmearImpl implements MdrtbSmear {
 		return this.smear.getEncounter().getEncounterId().toString();
 	}
 	
+	public String getStatus() {
+		return calculateStatus();
+	}
+	
     public Double getBacilli() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
     	
@@ -70,6 +74,17 @@ public class MdrtbSmearImpl implements MdrtbSmear {
     	}
     }
 
+    public Date getDateOrdered() {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
+    	
+    	if (obs == null) {
+    		return null;
+    	}
+    	else {
+    		return obs.getValueDatetime();
+    	}
+    }
+    
     public Date getDateReceived() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
     	
@@ -137,6 +152,25 @@ public class MdrtbSmearImpl implements MdrtbSmear {
 		}
     }
 
+    public void setDateOrdered(Date dateOrdered) {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
+		
+		// we only have to update this if the value has changed or this is a new obs
+		if (obs == null || !obs.getValueDatetime().equals(dateOrdered)) {
+			
+			// void the existing obs if it exists
+			if (obs != null) {
+				obs.setVoided(true);
+				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			}
+				
+			// now create the new Obs and add it to the encounter
+			obs = new Obs (smear.getPerson(), mdrtbFactory.getConceptDateOrdered(), smear.getObsDatetime(), smear.getLocation());
+			obs.setValueDatetime(dateOrdered);
+			smear.addGroupMember(obs);
+		}
+    }
+    
     public void setDateReceived(Date dateReceived) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
 		
@@ -253,5 +287,28 @@ public class MdrtbSmearImpl implements MdrtbSmear {
     	return null;
     }
     
+    /**
+     * Determines the current status of this test by examines the
+     * values of the various date fields
+     * Auto generated method comment
+     * 
+     * @return
+     */
+    private String calculateStatus() {
+    	// TODO: determine the best way to localize all the text in this method
+
+    	if (getResultDate() != null) {
+    		return "Completed on " + getResultDate() + " at " + getLab();
+    	}
+    	else if (getDateReceived() != null) {
+    		return "Received by " + getLab() + " on " + getDateReceived();
+    	}
+    	else if (getDateOrdered() != null) {
+    		return "Ordered on " + getDateOrdered() + " from " + getLab();
+    	}
+    	else {
+    		return "Unknown";
+    	}
+    }
 }
 

@@ -3,6 +3,8 @@ package org.openmrs.module.mdrtb.web.patientsummary;
 import org.openmrs.Obs;
 
 
+// TODO: Get rid of this, change MdrtbDst to implement PatientSummaryTableElement
+
 public class PatientSummaryTableDSTElement extends PatientSummaryTableElement{
 
 	private Obs obs;

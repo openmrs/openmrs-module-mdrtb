@@ -31,14 +31,20 @@
 </tr>
 
 <tr>
-<td>Result Date:</td>
-<td><openmrs_tag:dateField formFieldName="resultDate" startValue="${smear.resultDate}"/><form:errors path="resultDate" cssClass="error" /></td>
+<td>Date Ordered:</td>
+<td><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${smear.dateOrdered}"/><form:errors path="dateOrdered" cssClass="error" /></td>
 </tr>
 
 <tr>
 <td>Date Received:</td>
 <td><openmrs_tag:dateField formFieldName="dateReceived" startValue="${smear.dateReceived}"/><form:errors path="dateReceived" cssClass="error" /></td>
 </tr>
+
+<tr>
+<td>Result Date:</td>
+<td><openmrs_tag:dateField formFieldName="resultDate" startValue="${smear.resultDate}"/><form:errors path="resultDate" cssClass="error" /></td>
+</tr>
+
 <tr>
 <td>Smear Method:</td>
 <td><form:select path="method" multiple="false">

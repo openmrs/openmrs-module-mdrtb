@@ -15,12 +15,18 @@ import org.springframework.web.servlet.ModelAndView;
 public class ShowSpecimenController {
 
 	@RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimen(@RequestParam(required = true, value = "encounterId") Integer encounterId, ModelMap map) {
+	public ModelAndView showSpecimen(@RequestParam(required = true, value = "encounterId") Integer encounterId, @RequestParam(required = false, value = "editId") Integer editId, ModelMap map) {
 		
 		// fetch the specimen
 		MdrtbSpecimen specimen = Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(encounterId));
 		
 		map.addAttribute("specimen", specimen);
+		
+		// TODO: remove this, and the editId request param, if we aren't going to use them
+		// add the id of the test to edit, if it exists
+		if (editId != null) {
+			map.addAttribute("editId", editId);
+		}
 		
 		return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 	}

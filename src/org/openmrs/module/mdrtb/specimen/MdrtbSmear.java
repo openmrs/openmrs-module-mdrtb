@@ -6,10 +6,10 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 
 /**
- * Interface that defines how to interaction with a specimen
+ * Interface that defines how to interaction with a smear
  * 
  * An implementation of this interface will help us encapsulate the 
- * the messiness of storing the specimen data in obsgroups
+ * the messiness of storing the smear data in obsgroups
  */
 public interface MdrtbSmear {
 	
@@ -27,6 +27,8 @@ public interface MdrtbSmear {
 	 */
 	
 	public Object getSmear();
+	
+	// TODO: change this to getId() ??
 	public String getSmearId(); 
 	public String getSpecimenId();
 	
@@ -42,9 +44,18 @@ public interface MdrtbSmear {
 	public Date getResultDate();
 	public void setResultDate(Date resultDate);
 	
+	public Date getDateOrdered();
+	public void setDateOrdered(Date dateOrdered);
+	
 	public Date getDateReceived();
 	public void setDateReceived(Date dateReceived);
 	
+	//public Date getDateStarted();
+	//public void setDateStarted(Date dateStarted);
+	
 	public Location getLab();
 	public void setLab(Location location);
+	
+	public String getStatus();
+	
 }
