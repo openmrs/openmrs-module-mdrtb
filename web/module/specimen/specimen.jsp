@@ -29,15 +29,15 @@
 
 <b>Smears</b>
 
-<c:forEach var="smear" items="${specimen.smears}">
+<c:forEach var="test" items="${specimen.tests}">
 
 <!-- SUMMARY DETAIL SECTION -->
 <table>
 <tr>
-<td>Status:</td><td>${smear.status}</td>
+<td>Status:</td><td>${test.status}</td>
 </tr>
 <tr>
-<td>Result:</td><td>${smear.result.name.name}</td>
+<td>Result:</td><td>${test.result.name.name}</td>
 </tr>
 <tr>
 </table>

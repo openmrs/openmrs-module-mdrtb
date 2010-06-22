@@ -92,7 +92,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	
 	public List<MdrtbCulture> getCultures() {
 		// TODO Auto-generated method stub
-		return null;
+		return new LinkedList<MdrtbCulture>();
 	}
 	
 	public Date getDateCollected() {
@@ -101,7 +101,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	
 	public List<MdrtbDst> getDsts() {
 		// TODO Auto-generated method stub
-		return null;
+		return new LinkedList<MdrtbDst>();
 	}
 	
 	public String getIdentifier() {
@@ -140,6 +140,16 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 			}
 		}
 		return smears;
+	}
+	
+	public List<MdrtbTest> getTests() {
+		List<MdrtbTest> tests = new LinkedList<MdrtbTest>();
+		
+		tests.addAll(getSmears());
+		tests.addAll(getCultures());
+		tests.addAll(getDsts());
+		
+		return tests;
 	}
 	
 	public Concept getType() {

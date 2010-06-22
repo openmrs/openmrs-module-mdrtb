@@ -1,6 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
 
-public interface MdrtbCulture {
+public interface MdrtbCulture extends MdrtbTest {
 
 }

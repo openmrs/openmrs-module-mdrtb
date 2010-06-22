@@ -73,4 +73,6 @@ public interface MdrtbSpecimen {
 	public void addDst(MdrtbDst dst);
 	public void removeDst(MdrtbDst dst);
 	
+	public List<MdrtbTest> getTests();
+	
 }

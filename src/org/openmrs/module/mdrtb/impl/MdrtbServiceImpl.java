@@ -169,12 +169,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		// make sure getSmear returns that right type
 		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a observation)
 	
-		if(!(smear.getSmear() instanceof Obs)) {
+		if(!(smear.getTest() instanceof Obs)) {
 			throw new APIException("Not a valid smear implementation for this service implementation");
 		}
 		
 		// otherwise, go ahead and do the save
-		Context.getObsService().saveObs((Obs) smear.getSmear(), "voided by Mdr-tb module specimen tracking UI");
+		Context.getObsService().saveObs((Obs) smear.getTest(), "voided by Mdr-tb module specimen tracking UI");
 		
 	}
 	
