@@ -5,7 +5,6 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbTestType;
 
 /**
  * An implementaton of a MdrtbSmear.  This wraps an ObsGroup and provides access to smear
@@ -14,6 +13,9 @@ import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbTestType;
 
 public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 	
+	public MdrtbSmearImpl() {
+		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
+	}
 
 	// set up a smear object, given an existing obs
 	public MdrtbSmearImpl(Obs smear) {
@@ -38,8 +40,8 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 	}
 	
 	@Override
-	public MdrtbTestType getTestType() {
-		return MdrtbTestType.SMEAR;
+	public String getTestType() {
+		return "smear";
 	}
 	
     public Double getBacilli() {
@@ -78,52 +80,46 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 
     public void setBacilli(Double bacilli) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
-		
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || obs.getValueNumeric() != bacilli) {
-			
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-				
-			// now create the new Obs and add it to the encounter
+    	
+    	// initialize the obs if needed
+		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptBacilli(), test.getObsDatetime(), test.getLocation());
-			obs.setValueNumeric(bacilli);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
+		
+		// now set the value
+		obs.setValueNumeric(bacilli);
     }
 
    
 
     public void setMethod(Concept method) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());
-		
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || !obs.getValueCoded().equals(method)) {
-			
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-				
-			// now create the new Obs and add it to the encounter
+    	
+		// initialize the obs if needed
+		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearMicroscopyMethod(), test.getObsDatetime(), test.getLocation());
-			obs.setValueCoded(method);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
+		
+		// now save the value
+		obs.setValueCoded(method);
     }
 
     public void setResult(Concept result) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
-		
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || !obs.getValueCoded().equals(result)) {
-			
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-				
-			// now create the new Obs and add it to the smear Obs
+    	
+    	// initialize the obs if we need to
+		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearResult(), test.getObsDatetime(), test.getLocation());
-			obs.setValueCoded(result);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
+		
+		// now save the data
+		obs.setValueCoded(result);
     }
 }
 

@@ -72,6 +72,12 @@ public interface MdrtbService extends OpenmrsService {
 	public void saveSpecimen(MdrtbSpecimen specimen);
     
     /**
+     * Deletes a smear, culture, or dst test
+     */
+    @Transactional 
+    public void deleteTest(Integer testId);
+    
+    /**
      * Creates a new Smear, associated with the given encounter
      */
     public MdrtbSmear createSmear(Encounter encounter);
@@ -79,16 +85,34 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
      * 
-     * @param obsId
+     * @param obs
      * @return
      */
     public MdrtbSmear getSmear(Obs obs);
        
     /**
-     * Updates a smear in the approriate obs construct
+     * Fetches a smear given the obs_id of a Tuberculosis Smear Test Construct
+     * 
+     * @param obsId
+     */
+    public MdrtbSmear getSmear(Integer obsId);
+    
+    /**
+     * Saves a smear in the approriate obs construct
      */
     @Transactional
     public void saveSmear(MdrtbSmear smear);
+    
+    
+    // TODO: get rid of this if I end up not using it
+    /**
+     * Updates a smear 
+     * 
+     * @param smearId the reference to the smear to update
+     * @param smear the new values for the smear
+     */
+    @Transactional
+    public void updateSmear(Integer smearId, MdrtbSmear smear);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

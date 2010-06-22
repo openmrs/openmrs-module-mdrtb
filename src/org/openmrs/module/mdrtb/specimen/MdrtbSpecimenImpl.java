@@ -204,6 +204,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		if (obs == null || !StringUtils.equals(obs.getValueText(),id)) {
 			
 			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
@@ -260,6 +261,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		if (obs == null || !obs.getValueCoded().equals(type)) {
 			
 			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
@@ -284,7 +286,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	Obs getObsFromEncounter(Concept concept) {
 		if (encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if(obs.getConcept().equals(concept)) {
+				if(!obs.isVoided() && obs.getConcept().equals(concept)) {
 					return obs;
 				}
 			}

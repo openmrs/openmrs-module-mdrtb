@@ -5,10 +5,7 @@ import java.util.Date;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbTestType;
 
 
 public abstract class MdrtbTestImpl implements MdrtbTest {
@@ -17,12 +14,8 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	
 	MdrtbFactory mdrtbFactory;
 	
-	public MdrtbTestImpl() {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
-	}
-	
 	/** implementing subclasses must override this method to define their type */
-	public abstract MdrtbTestType getTestType();
+	public abstract String getTestType();
 	
 	public Object getTest() {
 		return this.test;
@@ -79,34 +72,31 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 
 	 public void setDateOrdered(Date dateOrdered) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
-			
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || !obs.getValueDatetime().equals(dateOrdered)) {
-				
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-					
+    
+		// create a new obs if needed
+		if (obs == null) {	
 			// now create the new Obs and add it to the encounter
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateOrdered(), test.getObsDatetime(), test.getLocation());
-			obs.setValueDatetime(dateOrdered);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
-		}	
+		}		    
+		
+		// update the value
+		obs.setValueDatetime(dateOrdered);
 	}
 	    
 	 public void setDateReceived(Date dateReceived) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
-			
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || !obs.getValueDatetime().equals(dateReceived)) {
-				
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-					
-			// now create the new Obs and add it to the encounter
+		
+	    // create a new obs if needed
+		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateReceived(), test.getObsDatetime(), test.getLocation());
-			obs.setValueDatetime(dateReceived);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
+		
+		// now set the value
+		obs.setValueDatetime(dateReceived);
 	 }
 
 	 public void setLab(Location location) {
@@ -122,18 +112,16 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 
 	 public void setResultDate(Date resultDate) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptResultDate());
-			
-		// we only have to update this if the value has changed or this is a new obs
-		if (obs == null || !obs.getValueDatetime().equals(resultDate)) {
-				
-			// void the existing obs if it exists
-			voidObsIfNotNull(obs);
-					
-			// now create the new Obs and add it to the encounter
+	    
+		// create a new obs if needed
+		if (obs == null) {			
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptResultDate(), test.getObsDatetime(), test.getLocation());
-			obs.setValueDatetime(resultDate);
+			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
+		
+		// now set the value
+		obs.setValueDatetime(resultDate);
 	 }
 
 	    /**
@@ -156,24 +144,13 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	    protected Obs getObsFromObsGroup(Concept concept) {
 	    	if (test.getGroupMembers() != null) {
 	    		for(Obs obs : test.getGroupMembers()) {
-	    			if (obs.getConcept().equals(concept)) {
+	    			if (!obs.isVoided() && obs.getConcept().equals(concept)) {
 	    				return obs;
 	    			}
 	    		}
 	    	}
 	    	return null;
 	    }
-	    
-	    /**
-	     * Voids an obs if it isn't null
-	     */
-	    protected void voidObsIfNotNull(Obs obs) {
-	    	if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-	    }
-	    
 	    
 	    /**
 	     * Determines the current status of this test by examines the

@@ -27,6 +27,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
+import org.openmrs.module.mdrtb.specimen.MdrtbTest;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -143,6 +144,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Context.getEncounterService().saveEncounter((Encounter) specimen.getSpecimen());
 	}
 	
+	public void deleteTest(Integer testId) {
+		Obs obs = Context.getObsService().getObs(testId);
+		
+		// the id must refer to a valid obs, which is a smear, culture, or dst construct
+		if (obs == null || !(obs.getConcept().equals(mdrtbFactory.getConceptSmearParent()) || obs.getConcept().equals(mdrtbFactory.getConceptCultureParent()) || obs.getConcept().equals(mdrtbFactory.getConceptDSTParent())) ) {
+			throw new APIException ("Unable to delete specimen test: invalid test id " + testId);
+		}
+		else {
+			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");
+		}
+	}
+	
 	public MdrtbSmear createSmear(Encounter encounter) {		
 		// first, get the specimen
 		MdrtbSpecimen specimen = getSpecimen(encounter);
@@ -161,6 +174,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return new MdrtbSmearImpl(obs);
 	}
 
+	public MdrtbSmear getSmear(Integer obsId) {
+		return getSmear(Context.getObsService().getObs(obsId));
+	}
+	
 	public void saveSmear(MdrtbSmear smear) {
 		if (smear == null) {
 			log.warn("Unable to save smear: smear object is null");
@@ -178,6 +195,28 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
+	// TODO: get rid of this if I end up not using it!
+	public void updateSmear(Integer smearId, MdrtbSmear smearUpdate) {
+		MdrtbSmear smear;
+		
+		// first, get the smear that we are looking to update
+		try {
+			smear = getSmear(Context.getObsService().getObs(smearId));
+		}
+		catch (Exception e) {
+			throw new APIException("Unable to get smear to update", e);
+		}
+		
+		if (smear == null) {
+			throw new APIException("Unable to get smear to update");
+		}
+			
+		// perform the update and save the smear
+		// TODO: explain better what an "update" means?
+		updateSmearHelper(smear, smearUpdate);
+		saveSmear(smear);
+	}
+	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return mdrtbFactory.getConceptSmearResult().getAnswers();
 	}
@@ -188,5 +227,30 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {
 		return mdrtbFactory.getConceptSampleSource().getAnswers();
+	}
+	
+	/**
+	 * Utility functions
+	 */
+	
+	// TODO: get rid of these if I end up not using them
+	
+	private void updateTestHelper(MdrtbTest oldTest, MdrtbTest newTest) {
+		// update all the test values that are "settable"
+		oldTest.setDateOrdered(newTest.getDateOrdered());
+		oldTest.setDateReceived(newTest.getDateReceived());
+		oldTest.setLab(newTest.getLab());
+		oldTest.setResultDate(newTest.getResultDate());
+		
+	}
+	
+	private void updateSmearHelper(MdrtbSmear oldSmear, MdrtbSmear newSmear){
+		// first, update all the common test parameters
+		updateTestHelper(oldSmear, newSmear);
+		
+		// now, update everything else
+		oldSmear.setResult(newSmear.getResult());
+		oldSmear.setBacilli(newSmear.getBacilli());
+		oldSmear.setMethod(newSmear.getMethod());		
 	}
 }

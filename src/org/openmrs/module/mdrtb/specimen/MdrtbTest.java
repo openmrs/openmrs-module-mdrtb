@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.specimen;
 import java.util.Date;
 
 import org.openmrs.Location;
-import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbTestType;
 
 /**
  * Interface that defines how to interaction with a tests on a specimen
@@ -33,7 +32,7 @@ public interface MdrtbTest {
 	public Object getTest();
 	public String getId(); 
 	public String getStatus();	
-	public MdrtbTestType getTestType();
+	public String getTestType();
 	public String getSpecimenId();
 	
 	public Date getResultDate();
