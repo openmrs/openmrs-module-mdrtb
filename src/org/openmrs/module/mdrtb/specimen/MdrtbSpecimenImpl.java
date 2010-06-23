@@ -66,9 +66,18 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return this.encounter.getId().toString();
 	}
 	
-	public void addCulture(MdrtbCulture culture) {
-		// TODO Auto-generated method stub
+	public MdrtbCulture addCulture() {
+		// cast to an Impl so we can access protected methods from within the specimen impl
+		MdrtbCultureImpl culture = new MdrtbCultureImpl(this.encounter);
 		
+		// add the smear to the master encounter
+		this.encounter.addObs(culture.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		culture.setLab(null);
+		
+		return culture;
 	}
 	
 	public void addDst(MdrtbDst dst) {
@@ -101,8 +110,19 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	}
 	
 	public List<MdrtbCulture> getCultures() {
-		// TODO Auto-generated method stub
-		return new LinkedList<MdrtbCulture>();
+		List<MdrtbCulture> cultures = new LinkedList<MdrtbCulture>();
+		
+		// TODO: sort by date, make smears comparable, turn this into a sorted list?
+		
+		// iterate through all the obs groups, create smears from them, and add them to the list
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(mdrtbFactory.getConceptCultureParent())) {
+					cultures.add(new MdrtbCultureImpl(obs));
+				}
+			}
+		}
+		return cultures;
 	}
 	
 	public Date getDateCollected() {

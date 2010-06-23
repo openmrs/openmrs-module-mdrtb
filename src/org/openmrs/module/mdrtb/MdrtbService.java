@@ -15,6 +15,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,6 +116,32 @@ public interface MdrtbService extends OpenmrsService {
     public void updateSmear(Integer smearId, MdrtbSmear smear);
     
     /**
+     * Creates a new culture, associated with the given encounter
+     */
+    public MdrtbCulture createCulture(Encounter encounter);
+    
+    /**
+     * Fetches a culture given the obs of a Tuberculosis Smear Test Construct
+     * 
+     * @param obs
+     * @return
+     */
+    public MdrtbCulture getCulture(Obs obs);
+       
+    /**
+     * Fetches a culture given the obs_id of a Tuberculosis Smear Test Construct
+     * 
+     * @param obsId
+     */
+    public MdrtbCulture getCulture(Integer obsId);
+    
+    /**
+     * Saves a culture in the approriate obs construct
+     */
+    @Transactional
+    public void saveCulture(MdrtbCulture culture);
+    
+    /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result
      */
     @Transactional(readOnly=true)
@@ -125,6 +152,24 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSmearMethods();
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the Tuberculosis Culture Test Result
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleCultureResults();
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the Tuberculosis Culture Method concept
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleCultureMethods();
+    
+    /**
+     * Returns all the concepts that are possible coded answered for Type of Organism concept
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleOrganismTypes();
     
     /**
      * Returns all the concepts that are possible coded answer for the Tuberculosis Sample Source concept

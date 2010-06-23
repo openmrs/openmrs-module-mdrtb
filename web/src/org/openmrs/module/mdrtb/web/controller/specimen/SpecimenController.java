@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,27 @@ protected final Log log = LogFactory.getLog(getClass());
 		return smear;
 	}
 	
+	@ModelAttribute("culture")
+	public MdrtbCulture getCulture(@RequestParam(required = false, value="cultureId") Integer cultureId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		MdrtbCulture culture = null;
+		
+		// only do something here if the culture id has been set
+		if (cultureId != null) {
+			// smearId != -1 is means "this is a new culture"
+			if (cultureId != -1) {
+				culture = Context.getService(MdrtbService.class).getCulture(cultureId);
+			}
+			
+			// create the new smear if needed
+			if (culture == null) {
+				culture = Context.getService(MdrtbService.class).createCulture(Context.getEncounterService().getEncounter(specimenId));
+			}
+		}
+				
+		// it's okay if we return null here, as this attribute is only used on a post
+		return culture;
+	}
+	
 	@ModelAttribute("specimen")
 	public MdrtbSpecimen getSpecimen(@RequestParam(required = true, value="specimenId") Integer specimenId) {
 		return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
@@ -55,7 +77,7 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, BindingResult result, SessionStatus status) {
+	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, @ModelAttribute("culture") MdrtbCulture culture, BindingResult result, SessionStatus status) {
 		
 		// TODO: add validation
 		
@@ -69,6 +91,9 @@ protected final Log log = LogFactory.getLog(getClass());
 		}
 		else if(smear != null) {
 			Context.getService(MdrtbService.class).saveSmear(smear);
+		}
+		else if(culture != null) {
+			Context.getService(MdrtbService.class).saveCulture(culture);
 		}
 		
 		// TODO: add cultures and Dsts

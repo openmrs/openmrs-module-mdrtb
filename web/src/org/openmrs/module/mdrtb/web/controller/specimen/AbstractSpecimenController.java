@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,9 +58,34 @@ public abstract class AbstractSpecimenController {
 		return Context.getService(MdrtbService.class).getPossibleSpecimenTypes();
 	}
 	
+	@ModelAttribute("smearResults")
+	Collection<ConceptAnswer> getPossibleSmearResults() {
+		return Context.getService(MdrtbService.class).getPossibleSmearResults();
+	}
+	
+	@ModelAttribute("smearMethods")
+	Collection<ConceptAnswer> getPossibleSmearMethods() {
+		return Context.getService(MdrtbService.class).getPossibleSmearMethods();
+	}
+	
+	@ModelAttribute("cultureResults")
+	Collection<ConceptAnswer> getPossibleCultureResults() {
+		return Context.getService(MdrtbService.class).getPossibleCultureResults();
+	}
+	
+	@ModelAttribute("cultureMethods")
+	Collection<ConceptAnswer> getPossibleCultureMethods() {
+		return Context.getService(MdrtbService.class).getPossibleCultureMethods();
+	}
+	
+	@ModelAttribute("organismTypes")
+	Collection<ConceptAnswer> getPossibleOrganismTypes() {
+		return Context.getService(MdrtbService.class).getPossibleOrganismTypes();
+	}
+	
 	@ModelAttribute("providers")
 	Collection<Person> getPossibleProviders() {
-		// obviously, a hack for now; is all the people who are providers?
+		// TODO: obviously, a hack for now; is all the people who are providers?
 		Collection<Person> persons = new HashSet<Person>();
 		persons.add(Context.getPersonService().getPerson(501));
 		persons.add(Context.getPersonService().getPerson(502));
@@ -72,4 +98,11 @@ public abstract class AbstractSpecimenController {
 		return Context.getLocationService().getAllLocations();
 	}
 	
+	@ModelAttribute("testTypes")
+	Collection<String> getPossibleTestTypes() {
+		Collection<String> testTypes = new LinkedList<String>();
+		testTypes.add("smear");
+		testTypes.add("culture");
+		return testTypes;
+	}
 }

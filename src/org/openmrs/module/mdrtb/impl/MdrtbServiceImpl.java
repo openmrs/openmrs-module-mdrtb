@@ -23,6 +23,8 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
+import org.openmrs.module.mdrtb.specimen.MdrtbCultureImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
@@ -217,12 +219,62 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		saveSmear(smear);
 	}
 	
+	public MdrtbCulture createCulture(Encounter encounter) {		
+		// first, get the specimen
+		MdrtbSpecimen specimen = getSpecimen(encounter);
+		
+		if (specimen == null) {
+			log.error("Unable to create smear: specimen is null.");
+			return null;
+		}
+		
+		// add the culture to the specimen
+		return specimen.addCulture();
+	}
+	
+	public MdrtbCulture getCulture(Obs obs) {
+		// don't need to do much error checking here because the constructor will handle it
+		return new MdrtbCultureImpl(obs);
+	}
+
+	public MdrtbCulture getCulture(Integer obsId) {
+		return getCulture(Context.getObsService().getObs(obsId));
+	}
+	
+	public void saveCulture(MdrtbCulture culture) {
+		if (culture == null) {
+			log.warn("Unable to save culture: smear object is null");
+		}
+		
+		// make sure getCulture returns that right type
+		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a observation)
+		if(!(culture.getTest() instanceof Obs)) {
+			throw new APIException("Not a valid culture implementation for this service implementation");
+		}
+		
+		// otherwise, go ahead and do the save
+		Context.getObsService().saveObs((Obs) culture.getTest(), "voided by Mdr-tb module specimen tracking UI");
+		
+	}
+		
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return mdrtbFactory.getConceptSmearResult().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearMethods() {
 		return mdrtbFactory.getConceptSmearMicroscopyMethod().getAnswers();
+	}
+	
+	public Collection<ConceptAnswer> getPossibleCultureResults() {
+		return mdrtbFactory.getConceptCultureResult().getAnswers();
+	}
+	
+	public Collection<ConceptAnswer> getPossibleCultureMethods() {
+		return mdrtbFactory.getConceptCultureMethod().getAnswers();
+	}
+	
+	public Collection<ConceptAnswer> getPossibleOrganismTypes() {
+		return mdrtbFactory.getConceptTypeOfOrganism().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {

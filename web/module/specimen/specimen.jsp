@@ -7,6 +7,8 @@
 <!-- TODO: add privileges? -->
 <!-- TODO: localize all text -->
 
+<!-- TODO: figure out if I should be using concept.name or concept.name.name or whatever -->
+
 <!--  SPECIMEN SECTION -->
 
 <table>
@@ -54,9 +56,22 @@
 <c:forEach var="test" items="${specimen.tests}">
 <!--  FULL DETAIL SECTION -->
 <table>
+
+<tr>
+<td>Result:</td><td>${test.result.name.name}</td>
+</tr>
+
 <tr>
 <td>Laboratory:</td><td>${test.lab}</td>
 </tr>
+
+<tr>
+<td>Method:</td><td>${test.method.name.name}</td>
+</tr>
+
+<c:if test="${test.testType eq 'culture'}">
+<td>Organism Type:</td><td>${test.organismType.name.name}</td>
+</c:if>
 
 <tr>
 <td>Date ordered:</td><td>${test.dateOrdered}</td>
@@ -91,6 +106,16 @@
 <table>
 
 <tr>
+<td>Results:</td>
+<td><select id="result" name="result">
+<c:forEach var="result" items="${test.testType eq 'smear' ? smearResults : cultureResults}">
+<option value="${result.answerConcept.id}" <c:if test="${result.answerConcept == test.result}">selected</c:if> >${result.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
+
+<tr>
 <td>Laboratory:</td>
 <td><select id="lab" name="lab">
 <c:forEach var="location" items="${locations}">
@@ -99,6 +124,28 @@
 </select>
 </td>
 </tr>
+
+<tr>
+<td>Method:</td>
+<td><select id="method" name="method">
+<c:forEach var="method" items="${test.testType eq 'smear'? smearMethods : cultureMethods}">
+<option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
+
+<c:if test="${test.testType eq 'culture'}">
+<tr>
+<td>Organism Type:</td>
+<td><select id="organismType" name="organismType">
+<c:forEach var="organismType" items="${organismTypes}">
+<option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
+</c:if>
 
 <tr>
 <td>Date ordered:</td>
@@ -192,13 +239,25 @@
 <br/><br/>
 
 
-<!-- NEW SMEAR TEST SECTION -->
+<!-- ADD TEST SECTION -->
+
+<c:forEach var="type" items="${testTypes}">
 
 <!--  TODO: how do i bind errors to this? -->
 <!-- TODO: form id should be specified based on test type; get rid of enum, just use a String getTestType? -->
-<form id="smear" action="specimen.form?smearId=-1&specimenId=${specimen.id}" method="post">
+<form id="${type}" action="specimen.form?${type}Id=-1&specimenId=${specimen.id}" method="post">
 
 <table>
+
+<tr>
+<td>Results:</td>
+<td><select id="result" name="result">
+<c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
+<option value="${result.answerConcept.id}">${result.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
 
 <tr>
 <td>Laboratory:</td>
@@ -209,6 +268,28 @@
 </select>
 </td>
 </tr>
+
+<tr>
+<td>Method:</td>
+<td><select id="method" name="method">
+<c:forEach var="method" items="${type eq 'smear' ? smearMethods : cultureMethods}">
+<option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
+
+<c:if test="${type eq 'culture'}">
+<tr>
+<td>Organism Type:</td>
+<td><select id="organismType" name="organismType">
+<c:forEach var="organismType" items="${organismTypes}">
+<option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</tr>
+</c:if>
 
 <tr>
 <td>Date ordered:</td>
@@ -237,9 +318,13 @@
 
 </table>
 
-<input type="submit" value="Add Smear" />
+<input type="submit" value="Add ${type}" />
 
 </form>
+
+<br/><br/>
+
+</c:forEach>
 
 </body>
 </html>

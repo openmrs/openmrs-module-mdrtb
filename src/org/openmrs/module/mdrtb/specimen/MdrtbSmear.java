@@ -14,8 +14,8 @@ public interface MdrtbSmear extends MdrtbTest {
 	 * Data points this interface provides access to:
 	 * 
 	 * result: the Concept that represents the result of the smear
-	 * bacilli: the bacilli of the smear
-	 * method: the Concept that represents method used when performing the test
+	 * bacilli: the bacilli count
+	 * method: the Concept that represents the method used when performing the test
 	 * 
 	 */
 	

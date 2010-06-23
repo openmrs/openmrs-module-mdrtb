@@ -61,6 +61,8 @@ public interface MdrtbSpecimen {
 	public String getComments();
 	public void setComments(String comments);
 	
+	// TODO: remove the methods below that we end up not implementing
+	
 	public List<MdrtbSmear> getSmears();
 	public void setSmears(List<MdrtbSmear> smears);
 	public MdrtbSmear addSmear();
@@ -68,7 +70,7 @@ public interface MdrtbSpecimen {
 	
 	public List<MdrtbCulture> getCultures();
 	public void setCultures(List<MdrtbCulture> cultures);
-	public void addCulture(MdrtbCulture culture);
+	public MdrtbCulture addCulture();
 	public void removeCulture(MdrtbCulture culture);
 	
 	public List<MdrtbDst> getDsts();

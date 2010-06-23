@@ -10,7 +10,6 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * An implementaton of a MdrtbSmear.  This wraps an ObsGroup and provides access to smear
  * data within the obsgroup.
  */
-
 public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 	
 	public MdrtbSmearImpl() {
