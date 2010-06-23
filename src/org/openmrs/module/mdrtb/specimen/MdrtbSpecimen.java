@@ -38,7 +38,7 @@ public interface MdrtbSpecimen {
 	 */
 
 	public Object getSpecimen();
-	public String getSpecimenId();      
+	public String getId();      
 	
 	public String getIdentifier();
 	public void setIdentifier(String id);
@@ -57,6 +57,9 @@ public interface MdrtbSpecimen {
 	
 	public Date getDateCollected();
 	public void setDateCollected(Date dateCollected);
+	
+	public String getComments();
+	public void setComments(String comments);
 	
 	public List<MdrtbSmear> getSmears();
 	public void setSmears(List<MdrtbSmear> smears);

@@ -62,7 +62,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return this.encounter;
 	}
 	
-	public String getSpecimenId() {
+	public String getId() {
 		return this.encounter.getId().toString();
 	}
 	
@@ -88,6 +88,16 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		smear.setLab(null);
 		
 		return smear;
+	}
+	
+	public String getComments() {
+		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		if (obs == null) {
+			return null;
+		}
+		else {
+			return obs.getValueText();
+		}
 	}
 	
 	public List<MdrtbCulture> getCultures() {
@@ -178,6 +188,26 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		
 	}
 	
+	public void setComments(String comments) {
+		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		
+		// we only have to update this if the value has changed or this is a new obs
+		if (obs == null || !StringUtils.equals(obs.getValueText(), comments)) {
+			
+			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
+			if (obs != null) {
+				obs.setVoided(true);
+				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			}
+				
+			// now create the new Obs and add it to the encounter
+			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenComments(), encounter.getEncounterDatetime(), encounter.getLocation());
+			obs.setValueText(comments);
+			encounter.addObs(obs);
+		}
+	}
+	
 	public void setCultures(List<MdrtbCulture> cultures) {
 		// TODO Auto-generated method stub
 		
@@ -221,6 +251,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		encounter.setLocation(location);
 		
 		// also propagate this location to the appropriate obs
+		// TODO: remember to add any other obs here that get added!
 		Obs id = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
 		if (id != null) {
 			id.setLocation(location);
@@ -228,6 +259,10 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		Obs type = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
 		if (type != null) {
 			type.setLocation(location);
+		}
+		Obs comments = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		if (comments != null) {
+			comments.setLocation(location);
 		}
 	}
 	

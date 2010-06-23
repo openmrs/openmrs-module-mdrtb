@@ -33,6 +33,17 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 		return this.test.getEncounter().getEncounterId().toString();
 	}
 	
+	public String getComments() {
+		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
+		
+		if (obs == null) {
+			return null;
+		}
+		else {
+			return obs.getValueText();
+		}
+	}
+	
 	public Date getDateOrdered() {
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
 	    	
@@ -69,7 +80,32 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
     		return obs.getValueDatetime();
     	}
     }
+	
+	public Date getStartDate() {
+		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptStartDate());
+		
+		if (obs == null) {
+			return null;
+		}
+		else {
+			return obs.getValueDatetime();
+		}
+	}
 
+	public void setComments(String comments) {
+		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
+		
+		if (obs == null) {	
+			// now create the new Obs and add it to the encounter
+			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTestComments(), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}		    
+		
+		// update the value
+		obs.setValueText(comments);
+	}
+	
 	 public void setDateOrdered(Date dateOrdered) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
     
@@ -123,6 +159,20 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 		// now set the value
 		obs.setValueDatetime(resultDate);
 	 }
+	 
+	 public void setStartDate(Date startDate) {
+		 Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptStartDate());
+		 
+		 // create a new obs if needed
+		 if (obs == null) {
+			 obs = new Obs (test.getPerson(), mdrtbFactory.getConceptStartDate(), test.getObsDatetime(), test.getLocation());
+			 obs.setEncounter(test.getEncounter());
+			 test.addGroupMember(obs);
+		 }
+		 
+		 // now set the value
+		 obs.setValueDatetime(startDate);
+	 }
 
 	    /**
 	     * Protected methods used for interacting with the matching MdrSpecimenImpl
@@ -164,6 +214,9 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 
 	    	if (getResultDate() != null) {
 	    		return "Completed on " + getResultDate() + " at " + getLab();
+	    	}
+	    	else if (getStartDate() != null) {
+	    		return "Started on " + getStartDate() + " at " + getLab();
 	    	}
 	    	else if (getDateReceived() != null) {
 	    		return "Received by " + getLab() + " on " + getDateReceived();

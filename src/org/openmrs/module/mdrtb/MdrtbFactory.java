@@ -252,7 +252,11 @@ public final class MdrtbFactory {
     
     private String STR_SPECIMEN_ID;
     
-    private String STR_TB_TEST_DATE_ORDERED;
+    private String STR_TEST_DATE_ORDERED;
+    
+    private String STR_TEST_COMMENTS;
+    
+    private String STR_SPECIMEN_COMMENTS;
 
     private Map<String, Concept> xmlConceptList = new HashMap<String, Concept>();
     
@@ -587,9 +591,17 @@ public final class MdrtbFactory {
             node = nodeList.item(0);
             this.STR_SPECIMEN_ID = node.getFirstChild().getNodeValue();
             
-            nodeList = concepts.getElementsByTagName("STR_TB_TEST_DATE_ORDERED");
+            nodeList = concepts.getElementsByTagName("STR_TEST_DATE_ORDERED");
             node = nodeList.item(0);
-            this.STR_TB_TEST_DATE_ORDERED = node.getFirstChild().getNodeValue();
+            this.STR_TEST_DATE_ORDERED = node.getFirstChild().getNodeValue();
+            
+            nodeList = concepts.getElementsByTagName("STR_TEST_COMMENTS");
+            node = nodeList.item(0);
+            this.STR_TEST_COMMENTS = node.getFirstChild().getNodeValue();
+            
+            nodeList = concepts.getElementsByTagName("STR_SPECIMEN_COMMENTS");
+            node = nodeList.item(0);
+            this.STR_SPECIMEN_COMMENTS = node.getFirstChild().getNodeValue();
             
             //pre-set concepts
             
@@ -694,7 +706,9 @@ public final class MdrtbFactory {
                     STR_ADVERSE_EFFECT_ACTION_TAKEN,
                     STR_TREATMENT_SUPPORTER_ACTIVE,
                     STR_SPECIMEN_ID,
-                    STR_TB_TEST_DATE_ORDERED};
+                    STR_TEST_DATE_ORDERED,
+                    STR_TEST_COMMENTS,
+                    STR_SPECIMEN_COMMENTS};
 
             
             List<String> stList = new ArrayList<String>();
@@ -1108,6 +1122,10 @@ public final class MdrtbFactory {
         ret = this.getMDRTBConceptByKey(STR_REFERRED_BY, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
+    public Concept getConceptStartDate(){
+    	return getConceptCultureStartDate();
+    }
+    
     public Concept getConceptTransferredTo(){
         Concept ret = null;
         ret = this.getMDRTBConceptByKey(STR_TRANSFERRED_TO, new Locale("en", "US"), this.xmlConceptList);
@@ -1144,7 +1162,19 @@ public final class MdrtbFactory {
     
     public Concept getConceptDateOrdered() {
     	Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TB_TEST_DATE_ORDERED, new Locale("en", "US"), this.xmlConceptList);
+        ret = this.getMDRTBConceptByKey(STR_TEST_DATE_ORDERED, new Locale("en", "US"), this.xmlConceptList);
+        return ret;
+    }
+    
+    public Concept getConceptTestComments() {
+    	Concept ret = null;
+        ret = this.getMDRTBConceptByKey(STR_TEST_COMMENTS, new Locale("en", "US"), this.xmlConceptList);
+        return ret;
+    }
+    
+    public Concept getConceptSpecimenComments() {
+    	Concept ret = null;
+        ret = this.getMDRTBConceptByKey(STR_SPECIMEN_COMMENTS, new Locale("en", "US"), this.xmlConceptList);
         return ret;
     }
     

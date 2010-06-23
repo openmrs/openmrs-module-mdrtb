@@ -54,8 +54,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
     		return obs.getValueNumeric();
     	}
     }
-
-  
+      
     public Concept getMethod() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());
     	
@@ -90,9 +89,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 		
 		// now set the value
 		obs.setValueNumeric(bacilli);
-    }
-
-   
+    }   
 
     public void setMethod(Concept method) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());

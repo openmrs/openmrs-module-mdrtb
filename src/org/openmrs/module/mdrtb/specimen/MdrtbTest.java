@@ -35,6 +35,9 @@ public interface MdrtbTest {
 	public String getTestType();
 	public String getSpecimenId();
 	
+	public Date getStartDate();
+	public void setStartDate(Date startDate);
+	
 	public Date getResultDate();
 	public void setResultDate(Date resultDate);
 	
@@ -50,5 +53,6 @@ public interface MdrtbTest {
 	public Location getLab();
 	public void setLab(Location location);
 	
-
+	public String getComments();
+	public void setComments(String comments);
 }

@@ -49,6 +49,11 @@
 </td>
 </tr>
 
+<tr>
+<td>Comments:</td>
+<td><form:textarea path="comments" cols="60" rows="4"/></td>
+</tr>
+
 </table>
 
 <input type="submit" value="Save Specimen" />
