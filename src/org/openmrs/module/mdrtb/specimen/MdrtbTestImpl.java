@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.openmrs.Concept;
@@ -212,17 +213,19 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	    private String calculateStatus() {
 	    	// TODO: determine the best way to localize all the text in this method
 
+	    	DateFormat df = DateFormat.getDateInstance();
+	    	
 	    	if (getResultDate() != null) {
-	    		return "Completed on " + getResultDate() + " at " + getLab();
+	    		return "Completed on " + df.format(getResultDate()) + " at " + getLab();
 	    	}
 	    	else if (getStartDate() != null) {
-	    		return "Started on " + getStartDate() + " at " + getLab();
+	    		return "Started on " + df.format(getStartDate()) + " at " + getLab();
 	    	}
 	    	else if (getDateReceived() != null) {
-	    		return "Received by " + getLab() + " on " + getDateReceived();
+	    		return "Received by " + getLab() + " on " + df.format(getDateReceived());
 	    	}
 	    	else if (getDateOrdered() != null) {
-	    		return "Ordered on " + getDateOrdered() + " from " + getLab();
+	    		return "Ordered on " + df.format(getDateOrdered()) + " from " + getLab();
 	    	}
 	    	else {
 	    		return "Unknown";
