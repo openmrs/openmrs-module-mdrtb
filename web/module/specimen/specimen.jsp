@@ -20,52 +20,78 @@
 
 <script type="text/javascript"><!--
 
-	function hideAll(){
+	// hides all add, edit, and view details boxes
+	function hideDisplayBoxes(){
 		$('.addBox').hide();
 		$('.editBox').hide();
 		$('.detailBox').hide();
 	}
 
-	$(document).ready(function(){
+	// hides all view, edit, and add elements (used to stop used from navigating away from an edit)
+	function hideViewEditAddLinks() {
+		$('.view').hide();  // hide all the view links
+		$('.edit').hide();  // hide all the edit tests links
+		$('.delete').hide(); // hide all the delete links 
+		$('#editSpecimen').hide(); // hide the edit specimen link
+		$('#add').hide(); // hide the "add a test" selector
+	}
 
+	// shows all view, edit, and add elements (called when an edit is complete)
+	function showViewEditAddLinks() {
+		$('.view').show();  // show all the view links
+		$('.edit').show();  // show all the edit tests links
+		$('.delete').show(); // show all the delete links 
+		$('#editSpecimen').show(); // show the edit specimen link
+		$('#add').show(); // show the "add a test" selector
+	}
+	
+	$(document).ready(function(){
+		
 		// event handlers to hide and show custom evaluator text box
 		$('#editSpecimen').click(function(){
-			$('#details_specimen').hide();
-			$('#edit_specimen').show();
+			hideViewEditAddLinks();
+			$('#details_specimen').hide();  // hide the specimen details box
+			$('#edit_specimen').show();  // show the edit speciment box
 		});
 
 		$('#cancelSpecimen').click(function(){
-			// TODO: add something here to reset all field values
-			$('#edit_specimen').hide();
-			$('#details_specimen').show();
+			showViewEditAddLinks();
+			$('#edit_specimen').hide();  // hide the edit specimen box
+			$('#details_specimen').show();  // show the specimen details box
 		});
 
 		// event handlers to display add boxes
-		$('#add').click(function(){
-			hideAll();
-			$('#add_' + $('#addSelect').attr('value')).show()
+		$('#addButton').click(function(){
+			hideDisplayBoxes();
+			hideViewEditAddLinks();
+			$('#add_' + $('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
-		$('#cancelAdd').click(function(){
-		 	hideAll();
+		// TODO: figure out why "cancelAdd" as an id name isn't working
+		// TODO: some sort of precendence issue?
+		$('.cancelAdd').click(function(){
+			hideDisplayBoxes();
+			showViewEditAddLinks();
 		});
-		
+
 		// event handler to display view detail boxes
 		$('.view').click(function(){
-			hideAll();
-			$('#details_' + this.id).show();
+			hideDisplayBoxes();
+			$('#details_' + this.id).show();  // show the selected details box
 		});
 
 		// event handler to display edit detail boxes
 		$('.edit').click(function(){
-			hideAll();
-			$('#edit_' + this.id).show();
+			hideDisplayBoxes();
+			hideViewEditAddLinks();
+			$('#edit_' + this.id).show();  // show the selected edit box
 		});
 
 		// event handler to cancel an edit
 		$('.cancelEdit').click(function(){	
-			hideAll();
-			$('#details_' + this.id).show();
+			hideDisplayBoxes();
+			showViewEditAddLinks();
+			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
 		});
  	});
 -->
@@ -76,8 +102,9 @@
 
 <div id="details_specimen">
 
-<b class="boxHeader">Sample Details<span id="editSpecimen" style="position: absolute; right:25px;"><u>edit</u></span></b>
-<table cellspacing="0" cellpadding="0" class="box">
+<b class="boxHeader">Sample Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
+<div class="box">
+<table cellspacing="0" cellpadding="0">
 
 <tr>
 <td><nobr>Sample Id:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
@@ -99,7 +126,7 @@
 </tr>
 
 </table>
-
+</div>
 </div>
 <!--  END OF SPECIMEN SECTION -->
 
@@ -111,7 +138,8 @@
 <form:errors path="*" cssClass="error" />
 
 <b class="boxHeader">Sample Details</b>
-<table cellspacing="0" cellpadding="0"  class="box">
+<div class="box">
+<table cellspacing="0" cellpadding="0">
 
 <!-- TODO localize all text -->
 
@@ -154,7 +182,7 @@
 </table>
 
 </form:form>
-
+</div>
 </div>
 <!-- END OF EDIT SPECIMEN SECTION -->
 
@@ -163,20 +191,25 @@
 <div id="tests" style="position:relative"> 
 <b class="boxHeader">Tests</b>
 
-<!--  TODO: remove this if I don't use it <table cellspacing="0" class="box" border="2"><tr><td> --> <!-- a one-cell table used to create the box around the other data -->
-
-
 <!-- TEST SUMMARY SECTION -->
-
 <div id="summary" style="position:absolute; left:20px; top:30px; width:400px">
+
+<span id="add">
+Add a new Lab Test:
+<select id="addSelect">
+<option value="smear">Smear</option>
+<option value="culture">Culture</option>
+</select>
+<button id="addButton" type="button">Add</button>
+</span>
+
+<br/><br/>
+
 <c:forEach var="test" items="${specimen.tests}">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
-<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>
-<span style="position: absolute; right:25px;"><span id="${test.id}" class="view"><u>view</u></span>&nbsp;&nbsp;<span id="${test.id}" class="edit"><u>edit</u></span>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}">delete</a></span>
-</b>
-
-<table style="width:396px;" cellspacing="0" cellpadding="0"  class="box">
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view">view</a></span></b>
+<div class="box">
+<table style="width:396px;" cellspacing="0" cellpadding="0">
 
 <tr>
 <td>Status:</td><td>${test.status}</td>
@@ -186,19 +219,11 @@
 </tr>
 <tr>
 </table> 
+</div>
 
 <br/>
 
 </c:forEach>
-
-Add a new Lab Test:
-<span>
-<select id="addSelect">
-<option value="smear">Smear</option>
-<option value="culture">Culture</option>
-</select>
-<button id="add" type="button">Add</button>
-</span>
 
 </div> <!--  end summary div -->
 
@@ -211,9 +236,7 @@ Add a new Lab Test:
 
 <div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
-<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View
-<span id="${test.id}" class="edit" style="position: absolute; right:25px;"><u>edit</u></span></b>
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View<span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit">edit</a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}" class="delete" onclick="return confirm('Are you sure you want to delete this test?')">delete</a></span></b>
 <table cellpadding="0">
 <tr>
 <td><nobr>Accession #:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
@@ -266,8 +289,7 @@ Add a new Lab Test:
 
 <form id="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
-<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
 <table cellpadding="0">
 
 <tr>
@@ -425,15 +447,14 @@ Add a new Lab Test:
 
 </table>
 
-<button type="submit">Save</button><button id="cancelAdd" type="reset">Cancel</button>
+<!--  TODO: figure out why "cancelAdd" as an id (instead of class) isn't working -->
+<button type="submit">Save</button><button class="cancelAdd" type="reset">Cancel</button>
 </form>
 </div>
 
 </c:forEach> 
 
 <!-- END ADD TEST SECTION -->
-
-<!--  </td></tr></table> -->
 
 </div> <!-- END OF TEST DIV -->
 
