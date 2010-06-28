@@ -171,7 +171,11 @@
 <div id="summary" style="position:absolute; left:20px; top:30px; width:400px">
 <c:forEach var="test" items="${specimen.tests}">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><span style="position: absolute; right:25px;"><span id="${test.id}" class="view"><u>view</u></span>&nbsp;&nbsp;<span id="${test.id}" class="edit"><u>edit</u></span>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}">delete</a></span></b>
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
+<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>
+<span style="position: absolute; right:25px;"><span id="${test.id}" class="view"><u>view</u></span>&nbsp;&nbsp;<span id="${test.id}" class="edit"><u>edit</u></span>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}">delete</a></span>
+</b>
+
 <table style="width:396px;" cellspacing="0" cellpadding="0"  class="box">
 
 <tr>
@@ -207,38 +211,40 @@ Add a new Lab Test:
 
 <div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>: Detail View<span id="${test.id}" class="edit" style="position: absolute; right:25px;"><u>edit</u></span></b>
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
+<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View
+<span id="${test.id}" class="edit" style="position: absolute; right:25px;"><u>edit</u></span></b>
 <table cellpadding="0">
 <tr>
-<td><nobr>Laboratory:</nobr></td><td><nobr>${test.lab}</nobr></td>
+<td><nobr>Accession #:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
 <td><nobr>Date ordered:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Method:</nobr></td><td><nobr>${test.method.name.name}</nobr></td>
+<td><nobr>Laboratory:</nobr></td><td><nobr>${test.lab}</nobr></td>
 <td><nobr>Date sample received:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Result:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
+<td><nobr>Method:</nobr></td><td><nobr>${test.method.name.name}</nobr></td>
 <td><nobr>Date started:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<c:choose>
-<c:when test="${test.testType eq 'culture'}">
-<td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
-</c:when>
-<c:otherwise>
-<td colspan="2">&nbsp;</td>
-</c:otherwise>
-</c:choose>
+<td><nobr>Result:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
 <td><nobr>Date completed:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
+
+<c:if test="${test.testType eq 'culture'}">
+<tr>
+<td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
 
 <tr>
 <td><nobr>Comments:</nobr></td><td colspan="3"><nobr>${test.comments}</nobr></td>
@@ -260,8 +266,17 @@ Add a new Lab Test:
 
 <form id="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>: Edit View</b>
+<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/>
+<c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
 <table cellpadding="0">
+
+<tr>
+<td><nobr>Accession #:</nobr></td>
+<td><input type="text" id="accessionNumber" name="accessionNumber" value="${test.accessionNumber}"/></td>
+<td><nobr>Date ordered:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
 
 <tr>
 <td>Laboratory:</td>
@@ -271,8 +286,8 @@ Add a new Lab Test:
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date ordered:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
+<td><nobr>Date sample received:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -284,8 +299,8 @@ Add a new Lab Test:
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date sample received:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
+<td><nobr>Date started:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -297,30 +312,21 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
-<td><nobr>Date started:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
+<td><nobr>Date completed:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
+<c:if test="${test.testType eq 'culture'}">
 <tr>
-<c:choose>
-<c:when test="${test.testType eq 'culture'}">
 <td><nobr>Organism Type:</nobr></td>
 <td><select id="organismType" name="organismType">
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
 </c:forEach></td>
-</select>
-</td>
-</c:when>
-<c:otherwise>
 <td colspan="2">&nbsp;</td>
-</c:otherwise>
-</c:choose>
-<td><nobr>Date completed:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
-<td width="100%">&nbsp;</td>
 </tr>
+</c:if>
 
 <tr>
 <td><nobr>Comments:</nobr></td>
@@ -352,6 +358,14 @@ Add a new Lab Test:
 <table cellpadding="0">
 
 <tr>
+<td><nobr>Accession #:</nobr></td>
+<td><input type="text" id="accessionNumber" name="accessionNumber"/></td>
+<td><nobr>Date ordered:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
 <td>Laboratory:</td>
 <td><select id="lab" name="lab">
 <c:forEach var="location" items="${locations}">
@@ -359,8 +373,8 @@ Add a new Lab Test:
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date ordered:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
+<td><nobr>Date sample received:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -372,8 +386,8 @@ Add a new Lab Test:
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date sample received:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
+<td><nobr>Date started:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -385,14 +399,13 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
-<td><nobr>Date started:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
+<td><nobr>Date completed:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
+<c:if test="${type eq 'culture'}">
 <tr>
-<c:choose>
-<c:when test="${type eq 'culture'}">
 <td><nobr>Organism Type:</nobr></td>
 <td><select id="organismType" name="organismType">
 <c:forEach var="organismType" items="${organismTypes}">
@@ -400,15 +413,9 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
-</c:when>
-<c:otherwise>
 <td colspan="2">&nbsp;</td>
-</c:otherwise>
-</c:choose>
-<td><nobr>Date completed:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
-<td width="100%">&nbsp;</td>
 </tr>
+</c:if>
 
 <tr>
 <td><nobr>Comments:</nobr></td>

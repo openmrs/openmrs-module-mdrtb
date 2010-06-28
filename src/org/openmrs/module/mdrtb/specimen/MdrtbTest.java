@@ -22,6 +22,8 @@ public interface MdrtbTest {
 	 * specimen: the id used to reference the specimen (i.e., in our current implementation, the encounter_id of the parent encounter)
 	 * status: the current status of the test (i.e., ordered, received, completed, etc)
 	 *
+	 * accessionNumber: the accession number (usually a reference # supplied by the lab)
+	 * startDate: the date the test was startd
 	 * resultDate: the date of the result
 	 * dateOrdered: the date the test was ordered
 	 * TODO: dateReceived: the date the specimen was received (by the lab?)
@@ -35,6 +37,9 @@ public interface MdrtbTest {
 	public String getTestType();
 	public String getSpecimenId();
 	
+	public String getAccessionNumber();
+	public void setAccessionNumber(String accessionNumber);
+	
 	public Date getStartDate();
 	public void setStartDate(Date startDate);
 	
@@ -46,9 +51,6 @@ public interface MdrtbTest {
 	
 	public Date getDateReceived();
 	public void setDateReceived(Date dateReceived);
-	
-	//public Date getDateStarted();
-	//public void setDateStarted(Date dateStarted);
 	
 	public Location getLab();
 	public void setLab(Location location);

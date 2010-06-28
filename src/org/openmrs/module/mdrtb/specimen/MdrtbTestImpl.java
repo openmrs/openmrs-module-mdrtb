@@ -34,6 +34,10 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 		return this.test.getEncounter().getEncounterId().toString();
 	}
 	
+	public String getAccessionNumber() {
+		return test.getAccessionNumber();
+	}
+	
 	public String getComments() {
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
 		
@@ -93,6 +97,17 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 		}
 	}
 
+	 public void setAccessionNumber(String accessionNumber) {
+		 test.setAccessionNumber(accessionNumber);
+				
+		 // also propagate this location to the all the child obs
+		 if(test.getGroupMembers() != null) {
+			for(Obs obs : test.getGroupMembers()) {
+		    	obs.setAccessionNumber(accessionNumber);
+		    }
+		 }
+	 }
+	
 	public void setComments(String comments) {
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
 		
