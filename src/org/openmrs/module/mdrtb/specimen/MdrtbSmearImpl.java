@@ -79,6 +79,11 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
     public void setBacilli(Double bacilli) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
     	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && bacilli == null) {
+			return;
+		}
+    	
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptBacilli(), test.getObsDatetime(), test.getLocation());
@@ -93,6 +98,11 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
     public void setMethod(Concept method) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());
     	
+    	 // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && method == null) {
+			return;
+		}
+    	
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearMicroscopyMethod(), test.getObsDatetime(), test.getLocation());
@@ -106,6 +116,11 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 
     public void setResult(Concept result) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
+    	
+    	 // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && result == null) {
+			return;
+		}
     	
     	// initialize the obs if we need to
 		if (obs == null) {

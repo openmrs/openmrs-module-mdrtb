@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
@@ -175,4 +176,9 @@ public interface MdrtbService extends OpenmrsService {
      * Returns all the concepts that are possible coded answer for the Tuberculosis Sample Source concept
      */
     public Collection<ConceptAnswer> getPossibleSpecimenTypes();
+    
+    /**
+     * Returns the concept that represents a Scanty result
+     */
+    public Concept getConceptScanty();
 }

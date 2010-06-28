@@ -93,6 +93,19 @@
 			showViewEditAddLinks();
 			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
 		});
+
+		// event handles to hide/show bacilli and colonies selector
+		$('.result').change(function() {
+				if ($(this).attr('value') == ${scanty.id}) {
+					$('.bacilli').show();
+					$('.colonies').show();
+				}
+				else {
+					$('.bacilli').hide();
+					$('.colonies').hide();
+				}
+		});
+		
  	});
 -->
 </script>
@@ -108,7 +121,7 @@
 
 <tr>
 <td><nobr>Sample Id:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
-<td><nobr>Collected By:</nobr></td><td><nobr>${specimen.provider.familyName}</nobr></td> <!-- TODO: obviously, need to find out proper way to handle names -->
+<td><nobr>Collected By:</nobr></td><td><nobr>${specimen.provider.personName}</nobr></td> <!-- TODO: obviously, need to find out proper way to handle names -->
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -134,8 +147,7 @@
 
 <div id="edit_specimen"  style="display:none">
 
-<form:form modelAttribute="specimen">
-<form:errors path="*" cssClass="error" />
+<form id="specimen" action="specimen.form?specimenId=${specimen.id}" method="post">
 
 <b class="boxHeader">Sample Details</b>
 <div class="box">
@@ -146,32 +158,44 @@
 <!-- TODO is answerConcept.name the correct parameter? -->
 <tr>
 <td><nobr>Sample ID:</nobr></td>
-<td><form:input path="identifier" size="10" /><form:errors path="identifier" cssClass="error" /></td>
+<td><input type="text" size="10" id="identifier" name="identifier" value="${specimen.identifier}"/></td>
 <td><nobr>Collected By:</nobr></td>
-<td><form:select path="provider" multiple="false">
-	<form:options items="${providers}" itemValue="id" itemLabel="names[0].familyName" />
-</form:select></td>
+<td>
+<select id="provider" name="provider">
+<c:forEach var="provider" items="${providers}">
+<option value="${provider.id}" <c:if test="${specimen.provider == provider}">selected</c:if> >${provider.personName}</option>
+</c:forEach>
+</select>
+</td>
 <td width="100%">&nbsp;</td>
 </tr>
- 
+
 <tr>
 <td><nobr>Sample Type:</nobr></td>
-<td><form:select path="type" multiple="false">
-	<form:options items="${types}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
-</form:select></td>
+<td>
+<select id="type" name="type">
+<option value=""></option>
+<c:forEach var="type" items="${types}">
+<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.name}</option>
+</c:forEach>
+</select>
+</td>
 <td><nobr>Location Collected:</nobr></td>
-<td><form:select path="location" multiple="false">
-	<form:options items="${locations}" itemValue="locationId" itemLabel="name" />
-</form:select>	
+<td>
+<select id="location" name="location">
+<c:forEach var="location" items="${locations}">
+<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.name}</option>
+</c:forEach>
+</select>	
 </td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <td><nobr>Date Collected:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/><form:errors path="dateCollected" cssClass="error" /></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></nobr></td>
 <td><nobr>Comments:</nobr></td>
-<td><form:textarea path="comments" cols="100" rows="2"/></td>
+<td><textarea id="comments" name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -181,7 +205,7 @@
 
 </table>
 
-</form:form>
+</form>
 </div>
 </div>
 <!-- END OF EDIT SPECIMEN SECTION -->
@@ -262,6 +286,20 @@ Add a new Lab Test:
 <td width="100%">&nbsp;</td>
 </tr>
 
+<c:if test="${test.testType eq 'smear' && test.result == scanty}">
+<tr>
+<td><nobr># of Bacilli:</nobr></td><td><nobr>${test.bacilli}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${test.testType eq 'culture' && test.result == scanty}">
+<tr>
+<td><nobr># of Colonies</nobr></td><td><nobr>${test.colonies}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
 <c:if test="${test.testType eq 'culture'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
@@ -316,6 +354,7 @@ Add a new Lab Test:
 <tr>
 <td><nobr>Method:</nobr></td>
 <td><select id="method" name="method">
+<option value=""></option>
 <c:forEach var="method" items="${test.testType eq 'smear'? smearMethods : cultureMethods}">
 <option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.name}</option>
 </c:forEach>
@@ -328,7 +367,8 @@ Add a new Lab Test:
 
 <tr>
 <td><nobr>Results:</nobr></td>
-<td><select id="result" name="result">
+<td><select id="result" name="result" class="result">
+<option value=""></option>
 <c:forEach var="result" items="${test.testType eq 'smear' ? smearResults : cultureResults}">
 <option value="${result.answerConcept.id}" <c:if test="${result.answerConcept == test.result}">selected</c:if> >${result.answerConcept.name}</option>
 </c:forEach></td>
@@ -339,10 +379,27 @@ Add a new Lab Test:
 <td width="100%">&nbsp;</td>
 </tr>
 
+<c:if test="${test.testType eq 'smear'}">
+<tr class="bacilli" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
+<td><nobr># of Bacilli:</nobr></td>
+<td><input type="text" id="bacilli" name="bacilli" value="${test.bacilli}"/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${test.testType eq 'culture'}">
+<tr class="colonies" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
+<td><nobr># of Colonies:</nobr></td>
+<td><input type="text" id="colonies" name="colonies" value="${test.colonies}"/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
 <c:if test="${test.testType eq 'culture'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td>
 <td><select id="organismType" name="organismType">
+<option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
 </c:forEach></td>
@@ -403,6 +460,7 @@ Add a new Lab Test:
 <tr>
 <td><nobr>Method:</nobr></td>
 <td><select id="method" name="method">
+<option value=""></option>
 <c:forEach var="method" items="${type eq 'smear'? smearMethods : cultureMethods}">
 <option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
 </c:forEach>
@@ -415,7 +473,8 @@ Add a new Lab Test:
 
 <tr>
 <td><nobr>Results:</nobr></td>
-<td><select id="result" name="result">
+<td><select id="result" name="result" class="result">
+<option value=""></option>
 <c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
 <option value="${result.answerConcept.id}">${result.answerConcept.name}</option>
 </c:forEach></td>
@@ -426,10 +485,28 @@ Add a new Lab Test:
 <td width="100%">&nbsp;</td>
 </tr>
 
+<c:if test="${type eq 'smear'}">
+<tr class="bacilli" style="display:none;">
+<td><nobr># of Bacilli:</nobr></td>
+<td><input type="text" id="bacilli" name="bacilli" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${type eq 'culture'}">
+<tr class="colonies" style="display:none;">
+<td><nobr># of Colonies:</nobr></td>
+<td><input type="text" id="colonies" name="colonies" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+
 <c:if test="${type eq 'culture'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td>
 <td><select id="organismType" name="organismType">
+<option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
 </c:forEach></td>

@@ -90,6 +90,11 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
     public void setColonies(Double colonies) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && colonies == null) {
+			return;
+		}
+    	
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptColonies(), test.getObsDatetime(), test.getLocation());
@@ -103,6 +108,11 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 
     public void setMethod(Concept method) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod());
+    	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && method == null) {
+			return;
+		}
     	
 		// initialize the obs if needed
 		if (obs == null) {		
@@ -118,6 +128,11 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
     public void setOrganismType(Concept organismType) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism());
     	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && organismType == null) {
+			return;
+		}
+    	
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganism(), test.getObsDatetime(), test.getLocation());
@@ -131,6 +146,11 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 
     public void setResult(Concept result) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && result == null) {
+			return;
+		}
     	
     	// initialize the obs if we need to
 		if (obs == null) {

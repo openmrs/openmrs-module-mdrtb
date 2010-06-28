@@ -211,6 +211,11 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	public void setComments(String comments) {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
 		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && StringUtils.isEmpty(comments)) {
+			return;
+		}
+		
 		// we only have to update this if the value has changed or this is a new obs
 		if (obs == null || !StringUtils.equals(obs.getValueText(), comments)) {
 			
@@ -249,6 +254,11 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	
 	public void setIdentifier(String id) {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
+		
+		 // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && StringUtils.isEmpty(id)) {
+			return;
+		}
 		
 		// we only have to update this if the value has changed or this is a new obs
 		if (obs == null || !StringUtils.equals(obs.getValueText(),id)) {
@@ -312,8 +322,13 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		// if there's an existing obs, set it to null (since this doesn't happen automatically when an encounter is saved)
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
 		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && type == null) {
+			return;
+		}
+		
 		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || !obs.getValueCoded().equals(type)) {
+		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(type)) {
 			
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)

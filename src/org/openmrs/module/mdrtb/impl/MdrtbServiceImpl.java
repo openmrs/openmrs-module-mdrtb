@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
@@ -279,6 +280,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {
 		return mdrtbFactory.getConceptSampleSource().getAnswers();
+	}
+	
+	public Concept getConceptScanty() {
+		return mdrtbFactory.getConceptScanty();
 	}
 	
 	/**

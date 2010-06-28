@@ -3,16 +3,21 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 import java.beans.PropertyEditorSupport;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Person;
+import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -34,21 +39,36 @@ public abstract class AbstractSpecimenController {
 		// bind a concept id to an actual concept
 		binder.registerCustomEditor(Concept.class, new PropertyEditorSupport() {
 			public void setAsText(String type) {
-				setValue(Context.getConceptService().getConcept(Integer.valueOf(type)));
+				if(StringUtils.isNotEmpty(type)) {
+					setValue(Context.getConceptService().getConcept(Integer.valueOf(type)));
+				}
+				else {
+					setValue(null);
+				}
 			}
 		});
 		
 		// bind a location id to an actual location
 		binder.registerCustomEditor(Location.class, new PropertyEditorSupport() {
 			public void setAsText(String location) {
-				setValue(Context.getLocationService().getLocation(Integer.valueOf(location)));
-			}
+				if(StringUtils.isNotEmpty(location)) {
+					setValue(Context.getLocationService().getLocation(Integer.valueOf(location)));
+				}
+				else {
+					setValue(null);
+				}
+			}	
 		});
 		
 		// bind a person id to an actual person
 		binder.registerCustomEditor(Person.class, new PropertyEditorSupport() {
 			public void setAsText(String person) {
-				setValue(Context.getPersonService().getPerson(Integer.valueOf(person)));
+				if(StringUtils.isNotEmpty(person)) {
+					setValue(Context.getPersonService().getPerson(Integer.valueOf(person)));
+				}
+				else {
+					setValue(null);
+				}
 			}
 		});
 	}
@@ -85,10 +105,20 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("providers")
 	Collection<Person> getPossibleProviders() {
-		// TODO: obviously, a hack for now; is all the people who are providers?
-		Collection<Person> persons = new HashSet<Person>();
-		persons.add(Context.getPersonService().getPerson(501));
-		persons.add(Context.getPersonService().getPerson(502));
+		// TODO: this should be customizable, so that other installs can define there own provider lists?
+		Role provider = Context.getUserService().getRole("Provider");
+		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
+			
+		// add all the persons to a sorted set sorted by family name
+		SortedSet<Person> persons = new TreeSet<Person>(new Comparator<Person>() {
+			public int compare(Person person1, Person person2) {
+			    return person1.getPersonName().getFamilyName().compareTo(person2.getPersonName().getFamilyName());
+		    }
+		});
+		
+		for(User user : providers) {
+			persons.add(user.getPerson());
+		}
 		
 		return persons;
 	}
@@ -105,4 +135,11 @@ public abstract class AbstractSpecimenController {
 		testTypes.add("culture");
 		return testTypes;
 	}
-}
+	
+	@ModelAttribute("scanty")
+	Concept getScantyConcept() {
+		return Context.getService(MdrtbService.class).getConceptScanty();
+	}
+ }
+
+

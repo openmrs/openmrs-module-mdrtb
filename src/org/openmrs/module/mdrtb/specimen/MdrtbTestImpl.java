@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.specimen;
 import java.text.DateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -111,6 +112,12 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	public void setComments(String comments) {
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
 		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && StringUtils.isEmpty(comments)) {
+			return;
+		}
+		
+		// otherwise, create the obs if necessary
 		if (obs == null) {	
 			// now create the new Obs and add it to the encounter
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTestComments(), test.getObsDatetime(), test.getLocation());
@@ -124,7 +131,12 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	
 	 public void setDateOrdered(Date dateOrdered) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
-    
+	    
+	    // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && dateOrdered == null) {
+			return;
+		}
+	    
 		// create a new obs if needed
 		if (obs == null) {	
 			// now create the new Obs and add it to the encounter
@@ -140,6 +152,11 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	 public void setDateReceived(Date dateReceived) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
 		
+	    // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && dateReceived == null) {
+			return;
+		}
+	    
 	    // create a new obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateReceived(), test.getObsDatetime(), test.getLocation());
@@ -165,6 +182,11 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	 public void setResultDate(Date resultDate) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptResultDate());
 	    
+	    // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && resultDate == null) {
+			return;
+		}
+	    
 		// create a new obs if needed
 		if (obs == null) {			
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptResultDate(), test.getObsDatetime(), test.getLocation());
@@ -178,6 +200,11 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	 
 	 public void setStartDate(Date startDate) {
 		 Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptStartDate());
+		 
+		 // if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && startDate == null) {
+			return;
+		}
 		 
 		 // create a new obs if needed
 		 if (obs == null) {
