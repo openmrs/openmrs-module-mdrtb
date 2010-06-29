@@ -94,15 +94,18 @@
 			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
 		});
 
-		// event handles to hide/show bacilli and colonies selector
+		// event handles to hide/show bacilli and colonies selector, and reset the value if needed
 		$('.result').change(function() {
 				if ($(this).attr('value') == ${scanty.id}) {
-					$('.bacilli').show();
-					$('.colonies').show();
+					// show the bacilli or colonies row in the same div as this element
+					$(this).closest('div').find('.bacilli').show();
+					$(this).closest('div').find('.colonies').show();
 				}
 				else {
-					$('.bacilli').hide();
-					$('.colonies').hide();
+					// hide the bacilli or colonies row in the same div as this element,
+					// then find the bacilli/colonies input element and it's value to empty
+					$(this).closest('div').find('.bacilli').hide().find('#bacilli').attr('value','');
+					$(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
 				}
 		});
 		
