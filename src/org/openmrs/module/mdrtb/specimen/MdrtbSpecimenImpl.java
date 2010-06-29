@@ -70,7 +70,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		// cast to an Impl so we can access protected methods from within the specimen impl
 		MdrtbCultureImpl culture = new MdrtbCultureImpl(this.encounter);
 		
-		// add the smear to the master encounter
+		// add the culture to the master encounter
 		this.encounter.addObs(culture.getObs());
 		
 		// we need to set the location back to null, since it will be set to the encounter location
@@ -80,9 +80,18 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return culture;
 	}
 	
-	public void addDst(MdrtbDst dst) {
-		// TODO Auto-generated method stub
+	public MdrtbDst addDst() {
+		// cast to an Impl so we can access protected methods from within the specimen impl
+		MdrtbDstImpl dst = new MdrtbDstImpl(this.encounter);
 		
+		// add the dst to the master encounter
+		this.encounter.addObs(dst.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		dst.setLab(null);
+		
+		return dst;
 	}
 	
 	public MdrtbSmear addSmear() {
@@ -130,8 +139,19 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	}
 	
 	public List<MdrtbDst> getDsts() {
-		// TODO Auto-generated method stub
-		return new LinkedList<MdrtbDst>();
+		List<MdrtbDst> dsts = new LinkedList<MdrtbDst>();
+		
+		// TODO: sort by date, make smears comparable, turn this into a sorted list?
+		
+		// iterate through all the obs groups, create dsts from them, and add them to the list
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTParent())) {
+					dsts.add(new MdrtbDstImpl(obs));
+				}
+			}
+		}
+		return dsts;
 	}
 	
 	public String getIdentifier() {
@@ -193,21 +213,6 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		}
 	}
 	
-	public void removeCulture(MdrtbCulture culture) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void removeDst(MdrtbDst dst) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void removeSmear(MdrtbSmear smear) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void setComments(String comments) {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
 		
@@ -233,11 +238,6 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		}
 	}
 	
-	public void setCultures(List<MdrtbCulture> cultures) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void setDateCollected(Date dateCollected) {
 		encounter.setEncounterDatetime(dateCollected);
 	
@@ -245,11 +245,6 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		for(Obs obs : encounter.getAllObs()) {
 			obs.setObsDatetime(dateCollected);
 		}
-	}
-	
-	public void setDsts(List<MdrtbDst> dsts) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public void setIdentifier(String id) {
@@ -311,11 +306,6 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	}
 	public void setProvider(Person provider) {
 		encounter.setProvider(provider);
-	}
-	
-	public void setSmears(List<MdrtbSmear> smears) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public void setType(Concept type) {

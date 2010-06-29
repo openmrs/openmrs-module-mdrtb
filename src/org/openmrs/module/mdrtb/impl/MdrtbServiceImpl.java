@@ -26,6 +26,8 @@ import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbCultureImpl;
+import org.openmrs.module.mdrtb.specimen.MdrtbDst;
+import org.openmrs.module.mdrtb.specimen.MdrtbDstImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
@@ -225,7 +227,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		MdrtbSpecimen specimen = getSpecimen(encounter);
 		
 		if (specimen == null) {
-			log.error("Unable to create smear: specimen is null.");
+			log.error("Unable to create culture: specimen is null.");
 			return null;
 		}
 		
@@ -244,7 +246,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public void saveCulture(MdrtbCulture culture) {
 		if (culture == null) {
-			log.warn("Unable to save culture: smear object is null");
+			log.warn("Unable to save culture: culture object is null");
 		}
 		
 		// make sure getCulture returns that right type
@@ -255,6 +257,44 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		// otherwise, go ahead and do the save
 		Context.getObsService().saveObs((Obs) culture.getTest(), "voided by Mdr-tb module specimen tracking UI");
+		
+	}
+	
+	public MdrtbDst createDst(Encounter encounter) {		
+		// first, get the specimen
+		MdrtbSpecimen specimen = getSpecimen(encounter);
+		
+		if (specimen == null) {
+			log.error("Unable to create smear: specimen is null.");
+			return null;
+		}
+		
+		// add the culture to the specimen
+		return specimen.addDst();
+	}
+	
+	public MdrtbDst getDst(Obs obs) {
+		// don't need to do much error checking here because the constructor will handle it
+		return new MdrtbDstImpl(obs);
+	}
+
+	public MdrtbDst getDst(Integer obsId) {
+		return getDst(Context.getObsService().getObs(obsId));
+	}
+	
+	public void saveDst(MdrtbDst dst) {
+		if (dst == null) {
+			log.warn("Unable to save dst: dst object is null");
+		}
+		
+		// make sure getCulture returns that right type
+		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a observation)
+		if(!(dst.getTest() instanceof Obs)) {
+			throw new APIException("Not a valid dst implementation for this service implementation");
+		}
+		
+		// otherwise, go ahead and do the save
+		Context.getObsService().saveObs((Obs) dst.getTest(), "voided by Mdr-tb module specimen tracking UI");
 		
 	}
 		
@@ -272,6 +312,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Collection<ConceptAnswer> getPossibleCultureMethods() {
 		return mdrtbFactory.getConceptCultureMethod().getAnswers();
+	}
+	
+	public Collection<ConceptAnswer> getPossibleDstMethods() {
+		return mdrtbFactory.getConceptDSTMethod().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleOrganismTypes() {

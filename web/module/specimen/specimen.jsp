@@ -224,8 +224,9 @@
 <span id="add">
 Add a new Lab Test:
 <select id="addSelect">
-<option value="smear">Smear</option>
-<option value="culture">Culture</option>
+<c:forEach var="test" items="${testTypes}">
+<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
+</c:forEach>
 </select>
 <button id="addButton" type="button">Add</button>
 </span>
@@ -241,10 +242,13 @@ Add a new Lab Test:
 <tr>
 <td>Status:</td><td>${test.status}</td>
 </tr>
+
+<c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
 <tr>
 <td>Result:</td><td>${test.result.name.name}</td>
 </tr>
-<tr>
+</c:if>
+
 </table> 
 </div>
 
@@ -283,8 +287,14 @@ Add a new Lab Test:
 <td width="100%">&nbsp;</td>
 </tr>
 
+
 <tr>
+<c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
 <td><nobr>Result:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
+</c:if>
+<c:if test="${test.testType eq 'dst'}">
+<td><nobr>Direct/Indirect:</nobr></td><td><nobr>${test.direct ? 'Direct' : 'Indirect'}</nobr></td>
+</c:if>
 <td><nobr>Date completed:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
@@ -306,6 +316,13 @@ Add a new Lab Test:
 <c:if test="${test.testType eq 'culture'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${test.testType eq 'dst'}">
+<tr>
+<td><nobr>Colonies in control:</nobr></td><td><nobr>${test.coloniesInControl}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -358,7 +375,7 @@ Add a new Lab Test:
 <td><nobr>Method:</nobr></td>
 <td><select id="method" name="method">
 <option value=""></option>
-<c:forEach var="method" items="${test.testType eq 'smear'? smearMethods : cultureMethods}">
+<c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
 <option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.name}</option>
 </c:forEach>
 </select>
@@ -369,6 +386,7 @@ Add a new Lab Test:
 </tr>
 
 <tr>
+<c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
 <td><nobr>Results:</nobr></td>
 <td><select id="result" name="result" class="result">
 <option value=""></option>
@@ -377,6 +395,17 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
+</c:if>
+
+<c:if test="${test.testType eq 'dst'}">
+<td><nobr>Direct/Indirect:</nobr></td>
+<td><select id="direct" name="direct">
+<option value=""></option>
+<option <c:if test="${test.direct}">selected </c:if>value="1">Direct</option>
+<option <c:if test="${!test.direct}">selected </c:if>value="0">Indirect</option>
+</select></td>
+</c:if>
+
 <td><nobr>Date completed:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
@@ -406,6 +435,14 @@ Add a new Lab Test:
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
 </c:forEach></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${dst.testType eq 'dst'}">
+<tr>
+<td><nobr>Colonies in control:</nobr></td>
+<td><input type="text" id="coloniesInControl" name="coloniesInControl" value="${test.coloniesInControl}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -464,7 +501,7 @@ Add a new Lab Test:
 <td><nobr>Method:</nobr></td>
 <td><select id="method" name="method">
 <option value=""></option>
-<c:forEach var="method" items="${type eq 'smear'? smearMethods : cultureMethods}">
+<c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
 <option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
 </c:forEach>
 </select>
@@ -475,6 +512,7 @@ Add a new Lab Test:
 </tr>
 
 <tr>
+<c:if test="${type eq 'smear' || type eq 'culture'}">
 <td><nobr>Results:</nobr></td>
 <td><select id="result" name="result" class="result">
 <option value=""></option>
@@ -483,6 +521,17 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
+</c:if>
+
+<c:if test="${type eq 'dst'}">
+<td><nobr>Direct/Indirect:</nobr></td>
+<td><select id="direct" name="direct">
+<option value=""></option>
+<option value="1">Direct</option>
+<option value="0">Indirect</option>
+</select></td>
+</c:if>
+
 <td><nobr>Date completed:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
@@ -515,6 +564,14 @@ Add a new Lab Test:
 </c:forEach></td>
 </select>
 </td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${type eq 'dst'}">
+<tr>
+<td><nobr>Colonies in control:</nobr></td>
+<td><input type="text" id="coloniesInControl" name="coloniesInControl" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>

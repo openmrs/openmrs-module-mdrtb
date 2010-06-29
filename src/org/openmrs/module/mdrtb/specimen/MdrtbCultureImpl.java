@@ -7,7 +7,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 
 /**
- * An implementaton of a MdrtbCulture.  This wraps an ObsGroup and provides access to smear
+ * An implementaton of a MdrtbCulture.  This wraps an ObsGroup and provides access to culture
  * data within the obsgroup.
  */
 public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
@@ -16,7 +16,7 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
-	// set up a smear object, given an existing obs
+	// set up a culture object, given an existing obs
 	public MdrtbCultureImpl(Obs culture) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
@@ -27,7 +27,7 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 		test = culture;
 	}
 	
-	// create a new smear object, given an existing patient
+	// create a new culture object, given an existing patient
 	public MdrtbCultureImpl(Encounter encounter) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		

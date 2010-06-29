@@ -98,6 +98,11 @@ public abstract class AbstractSpecimenController {
 		return Context.getService(MdrtbService.class).getPossibleCultureMethods();
 	}
 	
+	@ModelAttribute("dstMethods")
+	Collection<ConceptAnswer> getPossibleDstMethods() {
+		return Context.getService(MdrtbService.class).getPossibleDstMethods();
+	}
+	
 	@ModelAttribute("organismTypes")
 	Collection<ConceptAnswer> getPossibleOrganismTypes() {
 		return Context.getService(MdrtbService.class).getPossibleOrganismTypes();
@@ -133,6 +138,7 @@ public abstract class AbstractSpecimenController {
 		Collection<String> testTypes = new LinkedList<String>();
 		testTypes.add("smear");
 		testTypes.add("culture");
+		testTypes.add("dst");
 		return testTypes;
 	}
 	

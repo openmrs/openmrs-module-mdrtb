@@ -17,6 +17,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
+import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,6 +143,33 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional
     public void saveCulture(MdrtbCulture culture);
     
+    
+    /**
+     * Creates a new dst, associated with the given encounter
+     */
+    public MdrtbDst createDst(Encounter encounter);
+    
+    /**
+     * Fetches a dst given the obs of a Tuberculosis Smear Test Construct
+     * 
+     * @param obs
+     * @return
+     */
+    public MdrtbDst getDst(Obs obs);
+       
+    /**
+     * Fetches a dst given the obs_id of a Tuberculosis Smear Test Construct
+     * 
+     * @param obsId
+     */
+    public MdrtbDst getDst(Integer obsId);
+    
+    /**
+     * Saves a dst in the approriate obs construct
+     */
+    @Transactional
+    public void saveDst(MdrtbDst dst);
+    
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result
      */
@@ -165,6 +193,12 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleCultureMethods();
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the Tuberculosis Drug Sensitivity Test Method concept
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleDstMethods();
     
     /**
      * Returns all the concepts that are possible coded answered for Type of Organism concept

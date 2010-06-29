@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
+import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,13 @@ public class SpecimenController extends AbstractSpecimenController {
 	
 protected final Log log = LogFactory.getLog(getClass());
 	
+	/**
+	 * Returns the smear that should be used to bind a form posting to
+	 * 
+	 * @param smearId
+	 * @param specimenId
+	 * @return
+	 */
 	@ModelAttribute("smear")
 	public MdrtbSmear getSmear(@RequestParam(required = false, value="smearId") Integer smearId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
 		MdrtbSmear smear = null;
@@ -50,12 +58,12 @@ protected final Log log = LogFactory.getLog(getClass());
 		
 		// only do something here if the culture id has been set
 		if (cultureId != null) {
-			// smearId != -1 is means "this is a new culture"
+			// cultureId != -1 is means "this is a new culture"
 			if (cultureId != -1) {
 				culture = Context.getService(MdrtbService.class).getCulture(cultureId);
 			}
 			
-			// create the new smear if needed
+			// create the new culture if needed
 			if (culture == null) {
 				culture = Context.getService(MdrtbService.class).createCulture(Context.getEncounterService().getEncounter(specimenId));
 			}
@@ -63,6 +71,27 @@ protected final Log log = LogFactory.getLog(getClass());
 				
 		// it's okay if we return null here, as this attribute is only used on a post
 		return culture;
+	}
+	
+	@ModelAttribute("dst")
+	public MdrtbDst getDst(@RequestParam(required = false, value="dstId") Integer dstId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		MdrtbDst dst = null;
+		
+		// only do something here if the dst id has been set
+		if (dstId != null) {
+			// dstId != -1 is means "this is a new dst"
+			if (dstId != -1) {
+				dst = Context.getService(MdrtbService.class).getDst(dstId);
+			}
+			
+			// create the new dst if needed
+			if (dst == null) {
+				dst = Context.getService(MdrtbService.class).createDst(Context.getEncounterService().getEncounter(specimenId));
+			}
+		}
+				
+		// it's okay if we return null here, as this attribute is only used on a post
+		return dst;
 	}
 	
 	@ModelAttribute("specimen")
@@ -77,7 +106,7 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, @ModelAttribute("culture") MdrtbCulture culture, BindingResult result, SessionStatus status) {
+	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst, BindingResult result, SessionStatus status) {
 		
 		// TODO: add validation
 		
@@ -95,9 +124,10 @@ protected final Log log = LogFactory.getLog(getClass());
 		else if(culture != null) {
 			Context.getService(MdrtbService.class).saveCulture(culture);
 		}
-		
-		// TODO: add cultures and Dsts
-			
+		else if(dst != null) {
+			Context.getService(MdrtbService.class).saveDst(dst);
+		}
+
 		// clears the command object from the session
 		status.setComplete();
 		
