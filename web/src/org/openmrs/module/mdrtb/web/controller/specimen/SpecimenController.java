@@ -104,8 +104,16 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 		
 	
-	@RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimen(ModelMap map) {
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET) 
+	public ModelAndView showSpecimen(@RequestParam(required = false, value = "testId") String testId, ModelMap map) {
+		
+		// add the testId to the model map if there is one (this is used to make sure the proper detail page is shown after an edit)
+		if (StringUtils.isEmpty(testId)) {
+			testId = "-1";
+		}
+		map.put("testId", testId);
+		
 		return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 	}
 	
@@ -150,7 +158,10 @@ protected final Log log = LogFactory.getLog(getClass());
 			i++;
 		}
 		
-		
+		// pull out the proper test id, so when we refresh we display the test that we were just editing
+		String testId;
+		testId = (smear != null ? smear.getId() : ( culture != null ? culture.getId() : (dst !=null ? dst.getId() : "-1")));
+			
 		if (result.hasErrors()) {
 			return new ModelAndView("/module/mdrtb/specimen/specimen");
 		}
@@ -161,8 +172,7 @@ protected final Log log = LogFactory.getLog(getClass());
 		// clears the command object from the session
 		status.setComplete();
 		
-		// TODO: this will become a different redirect
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId);
 		
 	}
 	
