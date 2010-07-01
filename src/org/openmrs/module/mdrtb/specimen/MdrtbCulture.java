@@ -3,7 +3,7 @@ package org.openmrs.module.mdrtb.specimen;
 import org.openmrs.Concept;
 
 /**
- * Interface that defines how to interaction with a smear
+ * Interface that defines how to interaction with a culture
  * 
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the smear data in obsgroups

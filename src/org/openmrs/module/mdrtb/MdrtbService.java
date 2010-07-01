@@ -201,6 +201,12 @@ public interface MdrtbService extends OpenmrsService {
     public Collection<ConceptAnswer> getPossibleDstMethods();
     
     /**
+     * Returns all the concepts that are possible Dst results
+     */
+    @Transactional(readOnly=true)
+    public Collection<Concept> getPossibleDstResults();
+    
+    /**
      * Returns all the concepts that are possible coded answered for Type of Organism concept
      */
     @Transactional(readOnly=true)
@@ -209,6 +215,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Returns all the concepts that are possible coded answer for the Tuberculosis Sample Source concept
      */
+    @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSpecimenTypes();
     
     /**

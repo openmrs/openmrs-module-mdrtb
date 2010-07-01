@@ -1,5 +1,8 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -43,6 +46,18 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 		return "dst";
 	}
 
+	public MdrtbDstResult addResult() {
+		// create a new obs for the result, set to the proper values
+		Obs resultObs = new Obs(this.test.getPerson(), mdrtbFactory.getConceptDSTResultParent(), this.test.getObsDatetime(), this.test.getLocation());
+		resultObs.setEncounter(this.test.getEncounter());
+		
+		// add the result to this obs group
+		this.test.addGroupMember(resultObs);
+		
+		// now create and return a new DstResult
+		return new MdrtbDstResultImpl(resultObs);
+	}
+	
     public Double getColoniesInControl() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl());
     	
@@ -87,6 +102,36 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
     	}
     }
 
+    public List<MdrtbDstResult> getResults() {
+    	List<MdrtbDstResult> results = new LinkedList<MdrtbDstResult>();
+		
+		// iterate through all the obs groups, create dst results from them, and add them to the list
+		if(test.getGroupMembers() != null) {
+			for(Obs obs : test.getGroupMembers()) {
+				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
+					results.add(new MdrtbDstResultImpl(obs));
+				}
+			}
+		}
+		return results;
+    }
+    
+    // TODO: remove this if we don't end up using it
+ /** May up using this somewhere
+    public Map<String,MdrtbDstResult> getResultsMap() {
+    	List<MdrtbDstResult> results = getResults();
+    	
+    	Map<String,MdrtbDstResult> resultsMap = new HashMap<String,MdrtbDstResult>();
+    	
+    	// map the results based on a key created by concatenating the string representation of the drug concept id and the
+    	// string representation of the concentration
+    	for(MdrtbDstResult result : results) {
+    		resultsMap.put((result.getDrug().getId()).toString() + result.getConcentration().toString(), result);
+    	}
+    	
+    	return resultsMap;
+    } */
+    
     public void setColoniesInControl(Double coloniesInControl) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl());
     	

@@ -103,6 +103,11 @@ public abstract class AbstractSpecimenController {
 		return Context.getService(MdrtbService.class).getPossibleDstMethods();
 	}
 	
+	@ModelAttribute("dstResults")
+	Collection<Concept> getPossibleDstResults() {
+		return Context.getService(MdrtbService.class).getPossibleDstResults();
+	}
+	
 	@ModelAttribute("organismTypes")
 	Collection<ConceptAnswer> getPossibleOrganismTypes() {
 		return Context.getService(MdrtbService.class).getPossibleOrganismTypes();
@@ -142,10 +147,39 @@ public abstract class AbstractSpecimenController {
 		return testTypes;
 	}
 	
+	// TODO: hack type until we get to the point that we can derive this from somewhere else
+	@ModelAttribute("drugTypes")
+	Collection<DrugTypeModelAttribute> getPossibleDrugTypes() {
+		Collection<DrugTypeModelAttribute> drugTypes = new LinkedList<DrugTypeModelAttribute>();
+		
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(656),0.2));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(656),1.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(656),5.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(745),5.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(438),2.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(438),10.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1417),5.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1411),10.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1414),5.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(740),1.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(767),1.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(5829),100.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(755)));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1406)));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1412)));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1413),30.0));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(2459)));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(2460)));
+		drugTypes.add(new DrugTypeModelAttribute(Context.getConceptService().getConcept(1419)));		
+		
+		return drugTypes;
+	}
+	
 	@ModelAttribute("scanty")
 	Concept getScantyConcept() {
 		return Context.getService(MdrtbService.class).getConceptScanty();
 	}
+	
  }
 
 

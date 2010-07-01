@@ -1,5 +1,7 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.util.List;
+
 import org.openmrs.Concept;
 
 /**
@@ -17,6 +19,8 @@ public interface MdrtbDst extends MdrtbTest {
 	 * organism: the type of organism present
 	 * coloniesInControl: the colonies in the control
 	 * 
+	 * results: returns a set of all the dst results for this test	
+	 * 
 	 */
 	
 	public Concept getMethod();
@@ -30,4 +34,8 @@ public interface MdrtbDst extends MdrtbTest {
 	
 	public Double getColoniesInControl();
 	public void setColoniesInControl(Double coloniesInControl);
+
+	public List<MdrtbDstResult> getResults();
+	public MdrtbDstResult addResult();
 }
+

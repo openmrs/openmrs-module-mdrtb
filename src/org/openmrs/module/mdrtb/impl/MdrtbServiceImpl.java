@@ -2,8 +2,10 @@ package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -316,6 +318,15 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Collection<ConceptAnswer> getPossibleDstMethods() {
 		return mdrtbFactory.getConceptDSTMethod().getAnswers();
+	}
+	
+	public Collection<Concept> getPossibleDstResults() {
+		Set<Concept> results = new HashSet<Concept>();
+		results.add(mdrtbFactory.getConceptSusceptibleToTuberculosisDrug());
+		results.add(mdrtbFactory.getConceptIntermediateToTuberculosisDrug());
+		results.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
+		
+		return results;
 	}
 	
 	public Collection<ConceptAnswer> getPossibleOrganismTypes() {

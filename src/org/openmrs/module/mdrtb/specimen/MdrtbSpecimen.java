@@ -68,7 +68,7 @@ public interface MdrtbSpecimen {
 	public MdrtbCulture addCulture();
 	
 	public List<MdrtbDst> getDsts();
-	public MdrtbDst addDst();;
+	public MdrtbDst addDst();
 	
 	public List<MdrtbTest> getTests();
 	

@@ -1,11 +1,15 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
+import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.stereotype.Controller;
@@ -105,29 +109,55 @@ protected final Log log = LogFactory.getLog(getClass());
 		return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst, BindingResult result, SessionStatus status) {
-		
+	
+    @RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, 
+	                                  @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst,
+	                                  BindingResult result, SessionStatus status, HttpServletRequest request) {
+	                        
+				
 		// TODO: add validation
+		
+		// hacky way to manually handle the addition of new dsts
+		int i = 0;
+		while(StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".drug"))) {
+			
+			if(StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".colonies")) || StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".result")) ) {
+				// create the new result
+				MdrtbDstResult dstResult = dst.addResult();
+			
+				// pull the values from the request
+				String colonies = request.getParameter("addDst" + i + ".colonies");
+				String concentration = request.getParameter("addDst" + i + ".concentration");
+				String resultType = request.getParameter("addDst" + i + ".result");
+				String drug = request.getParameter("addDst" + i + ".drug");
+				
+				// assign them if they exist
+				if (StringUtils.isNotEmpty(colonies)) {
+					dstResult.setColonies(Double.valueOf(colonies));
+				}
+				if (StringUtils.isNotEmpty(concentration)) {
+					dstResult.setConcentration(Double.valueOf(concentration));
+				}
+				// although the DstResult obj should handle it, still a good idea to set the result before the drug because of the wonky way result/drugs are stored
+				if (StringUtils.isNotEmpty(resultType)) {
+					dstResult.setResult(Context.getConceptService().getConcept(Integer.valueOf(resultType)));
+				}
+				if (StringUtils.isNotEmpty(drug)) {
+					dstResult.setDrug(Context.getConceptService().getConcept(Integer.valueOf(drug)));
+				}
+			}
+			i++;
+		}
+		
 		
 		if (result.hasErrors()) {
 			return new ModelAndView("/module/mdrtb/specimen/specimen");
 		}
 		
-		// do the actual updates--there should only be one update per POST request!
-		if(specimen != null) {
-			Context.getService(MdrtbService.class).saveSpecimen(specimen);
-		}
-		else if(smear != null) {
-			Context.getService(MdrtbService.class).saveSmear(smear);
-		}
-		else if(culture != null) {
-			Context.getService(MdrtbService.class).saveCulture(culture);
-		}
-		else if(dst != null) {
-			Context.getService(MdrtbService.class).saveDst(dst);
-		}
-
+		// do the actual update
+		Context.getService(MdrtbService.class).saveSpecimen(specimen);
+			
 		// clears the command object from the session
 		status.setComplete();
 		

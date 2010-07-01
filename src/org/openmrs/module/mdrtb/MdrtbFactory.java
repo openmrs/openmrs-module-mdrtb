@@ -1178,6 +1178,23 @@ public final class MdrtbFactory {
         return ret;
     }
     
+    /**
+     * The follow concepts are pulled using mdrtb concept mappings, not from the concept list this factory creates.
+     * We can probably switch all the "getConcept" methods to work in this manner
+     */
+    
+    public Concept getConceptSusceptibleToTuberculosisDrug() {
+    	return Context.getConceptService().getConceptByMapping("SUSCEPTIBLE TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    }
+    
+    public Concept getConceptIntermediateToTuberculosisDrug() {
+    	return Context.getConceptService().getConceptByMapping("INTERMEDIATE TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    }
+    
+    public Concept getConceptResistantToTuberculosisDrug() {
+    	return Context.getConceptService().getConceptByMapping("RESISTANT TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    }
+    
     public Set<Concept> getMdrProgramOutcomeConcepts() {
     	Set<Concept> finalOutcomes = new HashSet<Concept>();
     	for (ProgramWorkflowState s : getStatesOutcomes()) {
