@@ -121,7 +121,8 @@ protected final Log log = LogFactory.getLog(getClass());
     @RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, 
 	                                  @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst,
-	                                  BindingResult result, SessionStatus status, HttpServletRequest request) {
+	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
+	                                  @RequestParam(required = false, value = "testId") String testId) {
 	                        
 				
 		// TODO: add validation
@@ -156,12 +157,8 @@ protected final Log log = LogFactory.getLog(getClass());
 				}
 			}
 			i++;
-		}
-		
-		// pull out the proper test id, so when we refresh we display the test that we were just editing
-		String testId;
-		testId = (smear != null ? smear.getId() : ( culture != null ? culture.getId() : (dst !=null ? dst.getId() : "-1")));
-			
+		} 
+
 		if (result.hasErrors()) {
 			return new ModelAndView("/module/mdrtb/specimen/specimen");
 		}

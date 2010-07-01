@@ -217,60 +217,107 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 		 obs.setValueDatetime(startDate);
 	 }
 
-	    /**
-	     * Protected methods used for interacting with the matching MdrSpecimenImpl
-	     */
+	 /**
+	  * Comparable interface method and utility methods
+	  */
+	 
+	 public int compareTo(MdrtbTest test1) {
+		 Date recent0 = oldestDate(this);
+		 Date recent1 = oldestDate(test1);
+		 
+		 if (recent0 == null) {
+			 // use the actual obs datetime if there are no value dates
+			 recent0 = this.getObs().getObsDatetime();
+		 }
+		 if (recent1 == null) {
+			 recent1 = this.getObs().getObsDatetime();
+		 }
 
-	    protected Obs getObs() {
-	    	return test;
-	    }
+		return recent0.compareTo(recent1);  
+	 }
+	 
+	 // checks all the dates properties associated with the mdrtb test and returns the date that is most recent
+	 private Date oldestDate(MdrtbTest test) {
+		 Date oldest = null;
+		 
+		 if (test.getDateOrdered() != null) {
+			 if (oldest == null || test.getDateOrdered().before(oldest)) {
+				 oldest = test.getDateOrdered();
+			 }
+		 }
+		 if (test.getDateReceived() != null) {
+			 if (oldest == null || test.getDateReceived().before(oldest)) {
+				 oldest = test.getDateReceived();
+			 }
+		 }
+		 if (test.getResultDate() != null) {
+			 if (oldest == null || test.getResultDate().before(oldest)) {
+				 oldest = test.getResultDate();
+			 }
+		 }
+		 if (test.getStartDate() != null) {
+			 if (oldest == null || test.getStartDate().before(oldest)) {
+				 oldest = test.getStartDate();
+			 }
+		 }
+		 
+		 return oldest;
+	 }
+	 
+	 /**
+	  * Protected methods used for interacting with the matching MdrSpecimenImpl
+	  */
+
+	 protected Obs getObs() {
+		 return test;
+	 }
 	    
-	    /**
-		 * Utility methods 
-		 */
+	 /**
+	  * Utility methods 
+	  */
 		
-		/**
-		 * Iterates through all the obs in the test obs group and
-		 * returns the first one that who concept matches the specified concept
-		 * Returns null if obs not found
-		 */
-	    protected Obs getObsFromObsGroup(Concept concept) {
-	    	if (test.getGroupMembers() != null) {
-	    		for(Obs obs : test.getGroupMembers()) {
-	    			if (!obs.isVoided() && obs.getConcept().equals(concept)) {
-	    				return obs;
-	    			}
+	 /**
+	  * Iterates through all the obs in the test obs group and
+	  * returns the first one that who concept matches the specified concept
+	  * Returns null if obs not found
+	  */
+	 protected Obs getObsFromObsGroup(Concept concept) {
+	    if (test.getGroupMembers() != null) {
+	    	for(Obs obs : test.getGroupMembers()) {
+	    		if (!obs.isVoided() && obs.getConcept().equals(concept)) {
+	    			return obs;
 	    		}
 	    	}
-	    	return null;
 	    }
+	    return null;
+	 }
 	    
-	    /**
-	     * Determines the current status of this test by examines the
-	     * values of the various date fields
-	     * Auto generated method comment
-	     * 
-	     * @return
-	     */
-	    private String calculateStatus() {
-	    	// TODO: determine the best way to localize all the text in this method
+	 /**
+	  * Determines the current status of this test by examines the
+	  * values of the various date fields
+	  * Auto generated method comment
+	  * 
+	  * @return
+	  */
+	 private String calculateStatus() {
+	    // TODO: determine the best way to localize all the text in this method
 
-	    	DateFormat df = DateFormat.getDateInstance();
+	    DateFormat df = DateFormat.getDateInstance();
 	    	
-	    	if (getResultDate() != null) {
-	    		return "Completed on " + df.format(getResultDate()) + " at " + getLab();
-	    	}
-	    	else if (getStartDate() != null) {
-	    		return "Started on " + df.format(getStartDate()) + " at " + getLab();
-	    	}
-	    	else if (getDateReceived() != null) {
-	    		return "Received by " + getLab() + " on " + df.format(getDateReceived());
-	    	}
-	    	else if (getDateOrdered() != null) {
-	    		return "Ordered on " + df.format(getDateOrdered()) + " from " + getLab();
-	    	}
-	    	else {
-	    		return "Unknown";
-	    	}
+	    if (getResultDate() != null) {
+	    	return "Completed on " + df.format(getResultDate()) + " at " + getLab();
 	    }
+	    else if (getStartDate() != null) {
+	    	return "Started on " + df.format(getStartDate()) + " at " + getLab();
+	    }
+	    else if (getDateReceived() != null) {
+	    	return "Received by " + getLab() + " on " + df.format(getDateReceived());
+	    }
+	    else if (getDateOrdered() != null) {
+	    	return "Ordered on " + df.format(getDateOrdered()) + " from " + getLab();
+	    }
+	    else {
+	    	return "Unknown";
+	    }
+	 }
 }

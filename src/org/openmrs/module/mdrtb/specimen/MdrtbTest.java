@@ -11,7 +11,7 @@ import org.openmrs.Location;
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the smear data in obsgroups
  */
-public interface MdrtbTest {
+public interface MdrtbTest extends Comparable<MdrtbTest> {
 	
 	/**
 	 * Data points this interface provides access to:

@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,6 +132,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 				}
 			}
 		}
+		Collections.sort(cultures);
 		return cultures;
 	}
 	
@@ -151,6 +153,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 				}
 			}
 		}
+		Collections.sort(dsts);
 		return dsts;
 	}
 	
@@ -189,6 +192,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 				}
 			}
 		}
+		Collections.sort(smears);
 		return smears;
 	}
 	
@@ -198,7 +202,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		tests.addAll(getSmears());
 		tests.addAll(getCultures());
 		tests.addAll(getDsts());
-		
+	
 		return tests;
 	}
 	

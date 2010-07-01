@@ -154,7 +154,7 @@
 
 <div id="edit_specimen"  style="display:none">
 
-<form name="specimen" action="specimen.form?specimenId=${specimen.id}" method="post">
+<form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post">
 
 <b class="boxHeader">Sample Details</b>
 <div class="box">
@@ -264,6 +264,10 @@ Add a new Lab Test:
 
 <!-- END OF TEST SUMMARY SECTION -->
 
+<!-- BLANK DIV FOR VIEWING/EDITING PAN -->
+<div id="details" class="detailBox" style="position:absolute; left:450px; top:30px; height:700px; width: 700px; font-size:0.9em">
+Select a smear, culture or DST to view it's details.
+</div>
 
 <c:forEach var="test" items="${specimen.tests}">
 
@@ -377,7 +381,7 @@ Add a new Lab Test:
 <!--  TODO: how do i bind errors to this? -->
 <!-- TODO: form id should be specified based on test type; get rid of enum, just use a String getTestType? -->
 
-<form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&specimenId=${specimen.id}" method="post">
+<form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
 
 <b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
 <table cellpadding="0">
@@ -554,7 +558,7 @@ Add a new Lab Test:
 
 <div id="add_${type}" class="addBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
 
-<form name="${type}" action="specimen.form?${type}Id=-1&specimenId=${specimen.id}" method="post">
+<form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
 
 <b class="boxHeader"><spring:message code="mdrtb.${type}"/>: Add</b>
 <table cellpadding="0">
@@ -706,7 +710,6 @@ Add a new Lab Test:
 </c:forEach> 
 
 <!-- END ADD TEST SECTION -->
-
 </div> <!-- END OF TEST DIV -->
 
 </body>
