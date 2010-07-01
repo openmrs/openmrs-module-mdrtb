@@ -136,6 +136,7 @@ public class RegimenHistoryTag extends TagSupport {
         if (this.drugConceptList != null && !this.drugConceptList.equals("")){
             for (StringTokenizer st = new StringTokenizer(drugConceptList, "|"); st.hasMoreTokens(); ) {
                 String s = st.nextToken().trim();
+                s = s.split(":")[0];
                 Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en"), mu);
                 if (c != null)
                     drugConcepts.add(c);
