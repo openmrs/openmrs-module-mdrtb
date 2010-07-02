@@ -222,4 +222,8 @@ public interface MdrtbService extends OpenmrsService {
      * Returns the concept that represents a Scanty result
      */
     public Concept getConceptScanty();
+    
+    public Concept getConceptWaitingForTestResults();
+    
+    public Concept getConceptDstTestContaminated();
 }

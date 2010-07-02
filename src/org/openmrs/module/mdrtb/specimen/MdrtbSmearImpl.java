@@ -43,14 +43,14 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 		return "smear";
 	}
 	
-    public Double getBacilli() {
+    public Integer getBacilli() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
     	
     	if (obs == null) {
     		return null;
     	}
     	else {
-    		return obs.getValueNumeric();
+    		return obs.getValueNumeric().intValue();
     	}
     }
       
@@ -76,7 +76,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
     	}
     }
 
-    public void setBacilli(Double bacilli) {
+    public void setBacilli(Integer bacilli) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
     	
     	// if this obs have not been created, and there is no data to add, do nothing
@@ -92,7 +92,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 		}
 		
 		// now set the value
-		obs.setValueNumeric(bacilli);
+		obs.setValueNumeric(bacilli.doubleValue());
     }   
 
     public void setMethod(Concept method) {

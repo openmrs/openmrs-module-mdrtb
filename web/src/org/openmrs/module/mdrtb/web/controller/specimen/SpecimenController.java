@@ -143,7 +143,7 @@ protected final Log log = LogFactory.getLog(getClass());
 				
 				// assign them if they exist
 				if (StringUtils.isNotEmpty(colonies)) {
-					dstResult.setColonies(Double.valueOf(colonies));
+					dstResult.setColonies(Integer.valueOf(colonies));
 				}
 				if (StringUtils.isNotEmpty(concentration)) {
 					dstResult.setConcentration(Double.valueOf(concentration));

@@ -25,6 +25,7 @@
 		$('.addBox').hide();
 		$('.editBox').hide();
 		$('.detailBox').hide();
+		$('#details_-1').hide();
 	}
 
 	// hides all view, edit, and add elements (used to stop used from navigating away from an edit)
@@ -48,10 +49,8 @@
 	$(document).ready(function(){
 
 		// show the proper detail windows if it has been specified
-		if ("${testId}" != "-1") {
-			$('#details_' + ${testId}).show();
-		}
-		
+		$('#details_' + ${testId}).show();
+	
 		// event handlers to hide and show custom evaluator text box
 		$('#editSpecimen').click(function(){
 			hideViewEditAddLinks();
@@ -99,7 +98,7 @@
 			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
 		});
 
-		// event handles to hide/show bacilli and colonies selector, and reset the value if needed
+		// event handler to hide/show bacilli and colonies selector, and reset the value if needed
 		$('.result').change(function() {
 				if ($(this).attr('value') == ${scanty.id}) {
 					// show the bacilli or colonies row in the same div as this element
@@ -113,6 +112,16 @@
 					$(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
 				}
 		});
+
+		// event handler to reset dst colonies if result is reset to an empty value
+		$('.dstResult').change(function() {
+			if ($(this).attr('value') == '' || $(this).attr('value') == ${waitingForTestResult.id} || $(this).attr('value') == ${dstTestContaminated.id} ) {
+				$(this).closest('tr').find('.dstColonies').hide().attr('value',null);
+			}
+			else {
+				$(this).closest('tr').find('.dstColonies').show();
+			}
+		});
  	});
 -->
 </script>
@@ -122,8 +131,8 @@
 
 <div id="details_specimen">
 
-<b class="boxHeader">Sample Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
-<div class="box">
+<b class="boxHeader" style="margin:0px">Sample Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
+<div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
 <tr>
@@ -156,8 +165,8 @@
 
 <form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post">
 
-<b class="boxHeader">Sample Details</b>
-<div class="box">
+<b class="boxHeader" style="margin:0px">Sample Details</b>
+<div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
 <!-- TODO localize all text -->
@@ -239,8 +248,8 @@ Add a new Lab Test:
 
 <c:forEach var="test" items="${specimen.tests}">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view">view</a></span></b>
-<div class="box">
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view">view</a></span></b>
+<div class="box" style="margin:0px">
 <table style="width:396px;" cellspacing="0" cellpadding="0">
 
 <tr>
@@ -265,8 +274,9 @@ Add a new Lab Test:
 <!-- END OF TEST SUMMARY SECTION -->
 
 <!-- BLANK DIV FOR VIEWING/EDITING PAN -->
-<div id="details" class="detailBox" style="position:absolute; left:450px; top:30px; height:700px; width: 700px; font-size:0.9em">
-Select a smear, culture or DST to view it's details.
+<div id="details_-1" class="box" style="position:absolute; left:450px; top:30px; height:400px; width: 700px; font-size:0.9em; text-align:center; display:none;">
+<br/><br/>
+Select a smear, culture, or DST  from the list on the left to view it's details.
 </div>
 
 <c:forEach var="test" items="${specimen.tests}">
@@ -275,7 +285,8 @@ Select a smear, culture or DST to view it's details.
 
 <div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View<span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit">edit</a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}" class="delete" onclick="return confirm('Are you sure you want to delete this test?')">delete</a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View<span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit">edit</a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}" class="delete" onclick="return confirm('Are you sure you want to delete this test?')">delete</a></span></b>
+<div class="box" style="margin:0px">
 <table cellpadding="0">
 <tr>
 <td><nobr>Accession #:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
@@ -350,26 +361,20 @@ Select a smear, culture or DST to view it's details.
 <td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
 </tr>
 <c:forEach var="drugType" items="${drugTypes}">
+<c:if test="${!empty test.resultsMap[drugType.key].result}">
 <tr>
 <td>${drugType.drug.name}</td>
 <td>${drugType.concentration}</td>
-<c:set var="flag" value="1"/>
-<c:forEach var="result" items="${test.results}">
-<c:if test="${result.drug == drugType.drug && result.concentration == drugType.concentration}">
-<td>${result.result.name}</td>
-<td>${result.colonies}</td>
-<c:set var="flag" value="0"/> <!-- so that we know we don't need to print the empty cells -->
-</c:if>
-</c:forEach>
-<c:if test="${flag == 1}">
-<td colspan="2">&nbsp;</td>
-</c:if>
+<td>${test.resultsMap[drugType.key].result.name}</td>
+<td>${test.resultsMap[drugType.key].colonies}</td>
 </tr>
+</c:if>
 </c:forEach>
 </table>
 </c:if>
 <!-- end of the DST table -->
 
+</div>
 </div> <!-- end of details div -->
 
 <!-- END OF TEST DETAILS SECTION -->
@@ -383,7 +388,8 @@ Select a smear, culture or DST to view it's details.
 
 <form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
+<div class="box" style="margin:0px">
 <table cellpadding="0">
 
 <tr>
@@ -502,36 +508,34 @@ Select a smear, culture or DST to view it's details.
 
 <c:set var="i" value="0"/>
 <c:forEach var="drugType" items="${drugTypes}">
-
 <c:set var="flag" value="1"/>
+
 <tr>
-<c:forEach var="result" items="${test.results}" varStatus="j">
-<c:if test="${result.drug == drugType.drug && result.concentration == drugType.concentration}">
+<c:if test="${!empty test.resultsMap[drugType.key].result}">
 <td>${drugType.drug.name}</td>
 <td>${drugType.concentration}</td>
-<td><select name="results[${j.count-1}].result">
+<td><select name="resultsMap[${drugType.key}].result" class="dstResult">
 <option value=""></option>
 <c:forEach var="possibleResult" items="${dstResults}">
-<option value="${possibleResult.id}" <c:if test="${possibleResult == test.results[j.count-1].result}">selected</c:if> >${possibleResult.name}</option>
+<option value="${possibleResult.id}" <c:if test="${possibleResult == test.resultsMap[drugType.key].result}">selected</c:if> >${possibleResult.name}</option>
 </c:forEach></td>
 </select>
 </td>
-<td><input type="text" name="results[${j.count-1}].colonies" value="${result.colonies}"/></td>
+<td><input type="text" size="6" name="resultsMap[${drugType.key}].colonies" value="${test.resultsMap[drugType.key].colonies}" class="dstColonies"<c:if test="${test.resultsMap[drugType.key].result == '' || test.resultsMap[drugType.key].result == waitingForTestResult || test.resultsMap[drugType.key].result == dstTestContaminated}"> style="display:none"</c:if>/></td>
 <c:set var="flag" value="0"/> <!-- so that we know we don't need to print the empty inputs -->
 </c:if>
-</c:forEach>
 
 <c:if test="${flag == 1}">
 <td>${drugType.drug.name}<input type="hidden" name="addDst${i}.drug" value="${drugType.drug.id}"/></td>
 <td>${drugType.concentration}<input type="hidden" name="addDst${i}.concentration" value="${drugType.concentration}"/></td>
-<td><select name="addDst${i}.result">
+<td><select name="addDst${i}.result" class="dstResult">
 <option value=""></option>
 <c:forEach var="possibleResult" items="${dstResults}">
 <option value="${possibleResult.id}">${possibleResult.name}</option>
 </c:forEach></td>
 </select>
 </td>
-<td><input type="text" name="addDst${i}.colonies" value=""/></td>
+<td><input type="text" size="6" name="addDst${i}.colonies" value="" class="dstColonies" style="display:none"/></td>
 <c:set var="i" value="${i+1}"/>
 </c:if>
 
@@ -547,6 +551,7 @@ Select a smear, culture or DST to view it's details.
 </form>
 
 </div>
+</div>
 
 </c:forEach>
 
@@ -560,7 +565,8 @@ Select a smear, culture or DST to view it's details.
 
 <form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader"><spring:message code="mdrtb.${type}"/>: Add</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: Add</b>
+<div class="box" style="margin:0px">
 <table cellpadding="0">
 
 <tr>
@@ -685,14 +691,14 @@ Select a smear, culture or DST to view it's details.
 <tr>
 <td>${drugType.drug.name}<input type="hidden" name="addDst${i}.drug" value="${drugType.drug.id}"/></td>
 <td>${drugType.concentration}<input type="hidden" name="addDst${i}.concentration" value="${drugType.concentration}"/></td>
-<td><select name="addDst${i}.result">
+<td><select name="addDst${i}.result" class="dstResult">
 <option value=""></option>
 <c:forEach var="possibleResult" items="${dstResults}">
 <option value="${possibleResult.id}">${possibleResult.name}</option>
 </c:forEach></td>
 </select>
 </td>
-<td><input type="text" name="addDst${i}.colonies" value=""/></td>
+<td><input type="text" size="6" name="addDst${i}.colonies" value="" class="dstColonies" style="display:none"/></td>
 <c:set var="i" value="${i+1}"/>
 </tr>
 </c:forEach>
@@ -705,6 +711,7 @@ Select a smear, culture or DST to view it's details.
 <!--  TODO: figure out why "cancelAdd" as an id (instead of class) isn't working -->
 <button type="submit">Save</button><button class="cancelAdd" type="reset">Cancel</button>
 </form>
+</div>
 </div>
 
 </c:forEach> 

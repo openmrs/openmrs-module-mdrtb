@@ -29,7 +29,7 @@ public interface MdrtbDstResult {
 	public Concept getResult();
 	public void setResult(Concept result);
 	
-	public Double getColonies();
-	public void setColonies(Double colonies);
+	public Integer getColonies();
+	public void setColonies(Integer colonies);
 	
 }

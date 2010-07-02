@@ -1195,6 +1195,14 @@ public final class MdrtbFactory {
     	return Context.getConceptService().getConceptByMapping("RESISTANT TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
     }
     
+    public Concept getConceptWaitingForTestResults() {
+    	return Context.getConceptService().getConceptByMapping("waitingForTestResults", "org.openmrs.module.mdrtb");
+    }
+    
+    public Concept getConceptDstTestContaminated() {
+    	return Context.getConceptService().getConceptByMapping("dstTestContaminated", "org.openmrs.module.mdrtb");
+    }
+    
     public Set<Concept> getMdrProgramOutcomeConcepts() {
     	Set<Concept> finalOutcomes = new HashSet<Concept>();
     	for (ProgramWorkflowState s : getStatesOutcomes()) {

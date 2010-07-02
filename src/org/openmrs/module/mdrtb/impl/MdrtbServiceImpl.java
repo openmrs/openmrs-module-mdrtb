@@ -2,10 +2,9 @@ package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -321,10 +320,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Collection<Concept> getPossibleDstResults() {
-		Set<Concept> results = new HashSet<Concept>();
+		List<Concept> results = new LinkedList<Concept>();
 		results.add(mdrtbFactory.getConceptSusceptibleToTuberculosisDrug());
 		results.add(mdrtbFactory.getConceptIntermediateToTuberculosisDrug());
 		results.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
+		results.add(mdrtbFactory.getConceptDstTestContaminated());
+		results.add(mdrtbFactory.getConceptWaitingForTestResults());
 		
 		return results;
 	}
@@ -339,6 +340,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Concept getConceptScanty() {
 		return mdrtbFactory.getConceptScanty();
+	}
+	
+	public Concept getConceptWaitingForTestResults() {
+		return mdrtbFactory.getConceptWaitingForTestResults();
+	}
+	
+	public Concept getConceptDstTestContaminated() {
+		return mdrtbFactory.getConceptDstTestContaminated();
 	}
 	
 	/**

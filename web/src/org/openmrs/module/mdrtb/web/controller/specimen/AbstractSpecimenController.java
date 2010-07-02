@@ -176,8 +176,18 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("scanty")
-	Concept getScantyConcept() {
+	Concept getConceptScanty() {
 		return Context.getService(MdrtbService.class).getConceptScanty();
+	}
+	
+	@ModelAttribute("waitingForTestResult")
+	Concept getWaitingForTestResultConcept() {
+		return Context.getService(MdrtbService.class).getConceptWaitingForTestResults();
+	}
+	
+	@ModelAttribute("dstTestContaminated")
+	Concept dstTestContaiminated() {
+		return Context.getService(MdrtbService.class).getConceptDstTestContaminated();
 	}
 	
  }

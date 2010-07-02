@@ -11,6 +11,8 @@ public class DrugTypeModelAttribute {
 	Concept drug;
 	
 	Double concentration;
+	
+	String key;
 
 	public DrugTypeModelAttribute() {	
 		// generic constructor
@@ -19,11 +21,13 @@ public class DrugTypeModelAttribute {
 	public DrugTypeModelAttribute(Concept drug) {
 	    this.drug = drug;
 	    this.concentration = null;
+	    createKey();
     }
 	
 	public DrugTypeModelAttribute(Concept drug, Double concentration) {
 	    this.drug = drug;
 	    this.concentration = concentration;
+	    createKey();
     }
 
 	
@@ -34,6 +38,7 @@ public class DrugTypeModelAttribute {
 	
     public void setDrug(Concept drug) {
     	this.drug = drug;
+    	createKey();
     }
 
 	
@@ -44,8 +49,24 @@ public class DrugTypeModelAttribute {
 	
     public void setConcentration(Double concentration) {
     	this.concentration = concentration;
+    	createKey();
     }
+
 	
+    public String getKey() {
+    	return key;
+    }
+    
+    /**
+     * Utility methods
+     */
 	
-	
+    private void createKey() {
+    	if (this.concentration != null) {
+    		this.key = this.drug.getId().toString() + "|" + this.concentration.toString();
+    	}
+    	else {
+    		this.key = this.drug.getId().toString();
+    	}
+    }
 }

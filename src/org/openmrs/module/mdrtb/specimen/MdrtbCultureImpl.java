@@ -43,14 +43,14 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 		return "culture";
 	}
 	
-    public Double getColonies() {
+    public Integer getColonies() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
     	if (obs == null) {
     		return null;
     	}
     	else {
-    		return obs.getValueNumeric();
+    		return (obs.getValueNumeric()).intValue();
     	}
     }
     
@@ -87,7 +87,7 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
     	}
     }
     
-    public void setColonies(Double colonies) {
+    public void setColonies(Integer colonies) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
     	// if this obs have not been created, and there is no data to add, do nothing
@@ -103,7 +103,7 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 		}
 		
 		// now set the value
-		obs.setValueNumeric(colonies);
+		obs.setValueNumeric(colonies.doubleValue());
     }   
 
     public void setMethod(Concept method) {

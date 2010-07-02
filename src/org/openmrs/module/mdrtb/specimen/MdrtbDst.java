@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.specimen;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Concept;
 
@@ -20,6 +21,7 @@ public interface MdrtbDst extends MdrtbTest {
 	 * coloniesInControl: the colonies in the control
 	 * 
 	 * results: returns a set of all the dst results for this test	
+	 * resultsMap: returns a set of all the dst results, mapped by concept_id + "|" + concentration
 	 * 
 	 */
 	
@@ -32,10 +34,11 @@ public interface MdrtbDst extends MdrtbTest {
 	public Concept getOrganismType();
 	public void setOrganismType(Concept organismType);
 	
-	public Double getColoniesInControl();
-	public void setColoniesInControl(Double coloniesInControl);
+	public Integer getColoniesInControl();
+	public void setColoniesInControl(Integer coloniesInControl);
 
 	public List<MdrtbDstResult> getResults();
+	public Map<String,MdrtbDstResult> getResultsMap();
 	public MdrtbDstResult addResult();
 }
 

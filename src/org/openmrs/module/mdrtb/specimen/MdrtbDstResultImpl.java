@@ -44,14 +44,14 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 		}	 
 	}
 	
-    public Double getColonies() {
+    public Integer getColonies() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
     	if (obs == null) {
     		return null;
     	}
     	else {
-    		return obs.getValueNumeric();
+    		return obs.getValueNumeric().intValue();
     	}
     }
 
@@ -94,7 +94,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
     	}
     }
 
-    public void setColonies(Double colonies) {
+    public void setColonies(Integer colonies) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
     	// if this obs have not been created, and there is no data to add, do nothing
@@ -110,7 +110,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 		}
 		
 		// now set the value
-		obs.setValueNumeric(colonies);
+		obs.setValueNumeric(colonies.doubleValue());
     }
 
     public void setConcentration(Double concentration) {
@@ -214,6 +214,8 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
     	resultSet.add(mdrtbFactory.getConceptSusceptibleToTuberculosisDrug());
     	resultSet.add(mdrtbFactory.getConceptIntermediateToTuberculosisDrug());
     	resultSet.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
+    	resultSet.add(mdrtbFactory.getConceptWaitingForTestResults());
+    	resultSet.add(mdrtbFactory.getConceptDstTestContaminated());
     	
     	return resultSet;
     }

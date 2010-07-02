@@ -22,8 +22,8 @@ public interface MdrtbSmear extends MdrtbTest {
 	public Concept getResult();
 	public void setResult(Concept result);
 	
-	public Double getBacilli();
-	public void setBacilli(Double bacilli);
+	public Integer getBacilli();
+	public void setBacilli(Integer bacilli);
 	
 	public Concept getMethod();
 	public void setMethod(Concept method);
