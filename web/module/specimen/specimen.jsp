@@ -1,5 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
-<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
+<%@ include file="/WEB-INF/template/include.jsp"%> 
 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
@@ -136,7 +135,7 @@
 <table cellspacing="0" cellpadding="0">
 
 <tr>
-<td><nobr>Sample Id:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
+<td><nobr>Sample ID:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
 <td><nobr>Collected By:</nobr></td><td><nobr>${specimen.provider.personName}</nobr></td> <!-- TODO: obviously, need to find out proper way to handle names -->
 <td width="100%">&nbsp;</td>
 </tr>

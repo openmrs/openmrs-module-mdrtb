@@ -339,6 +339,13 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	}
 	
 	/**
+	 * Implementation of comparable method
+	 */
+	public int compareTo(MdrtbSpecimen specimenToCompare) {
+		return this.getDateCollected().compareTo(specimenToCompare.getDateCollected());
+	}
+	
+	/**
 	 * Utility methods 
 	 */
 	

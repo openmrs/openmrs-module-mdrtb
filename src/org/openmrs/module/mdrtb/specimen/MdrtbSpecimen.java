@@ -14,7 +14,7 @@ import org.openmrs.Person;
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the specimen data in nested obsgroups
  */
-public interface MdrtbSpecimen {
+public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 
 	/**
 	 * Data points this interface provides access to

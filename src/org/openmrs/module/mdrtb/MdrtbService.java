@@ -69,6 +69,16 @@ public interface MdrtbService extends OpenmrsService {
     public MdrtbSpecimen getSpecimen(Encounter encounter);
     
     /**
+     * Fetches all specimens for a patient (i.e., all Specimen Collection encounters)
+     */
+    public List<MdrtbSpecimen> getSpecimens(Patient patient);
+    
+    /**
+     * Deletes a specimen, referenced by specimen Id
+     */
+    public void deleteSpecimen(Integer patientId);
+    
+    /**
      * Saves or updates a specimen object
      */
     @Transactional

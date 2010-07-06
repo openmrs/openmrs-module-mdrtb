@@ -6,6 +6,14 @@
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 
+<!-- SPECIALIZED STYLES FOR THIS PAGE -->
+<style type="text/css">
+	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+</style>
+
+
+<b class="boxHeader">Add a Specimen</b>
+<div class="box">
 
 <form:form modelAttribute="specimen">
 <form:errors path="*" cssClass="error" />
@@ -37,7 +45,7 @@
 <tr>
 <td>Collected By:</td>
 <td><form:select path="provider" multiple="false">
-	<form:options items="${providers}" itemValue="id" itemLabel="names[0].familyName" />
+	<form:options items="${providers}" itemValue="id" itemLabel="personName" />
 </form:select></td>
 </tr>
 
@@ -59,6 +67,7 @@
 <input type="submit" value="Save Specimen" />
 
 </form:form>
+</div>
 
 </body>
 </html>

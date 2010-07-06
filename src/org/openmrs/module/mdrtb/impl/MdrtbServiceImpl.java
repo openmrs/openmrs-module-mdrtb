@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
@@ -134,6 +136,25 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return new MdrtbSpecimenImpl(encounter);
 	}
 	
+	public List<MdrtbSpecimen> getSpecimens(Patient patient) {
+		List<MdrtbSpecimen> specimens = new LinkedList<MdrtbSpecimen>();
+		List<Encounter> specimenEncounters = new LinkedList<Encounter>();
+		
+		// create the specific specimen encounter types
+		EncounterType specimenEncounterType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
+		List<EncounterType> specimenEncounterTypes = new LinkedList<EncounterType>();
+		specimenEncounterTypes.add(specimenEncounterType);
+		
+		specimenEncounters = Context.getEncounterService().getEncounters(patient, null, null, null, null, specimenEncounterTypes, null, false);
+		
+		for(Encounter encounter : specimenEncounters) {
+			specimens.add(new MdrtbSpecimenImpl(encounter));
+		}
+		
+		Collections.sort(specimens);
+		return specimens;
+	}
+	
 	public void saveSpecimen(MdrtbSpecimen specimen) {
 		if (specimen == null) {
 			log.warn("Unable to save specimen: specimen object is null");
@@ -148,6 +169,17 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 				
 		// otherwise, go ahead and do the save
 		Context.getEncounterService().saveEncounter((Encounter) specimen.getSpecimen());
+	}
+	
+	public void deleteSpecimen(Integer specimenId) {
+		Encounter encounter = Context.getEncounterService().getEncounter(specimenId);
+		
+		if (encounter == null) {
+			throw new APIException("Unable to delete specimen: invalid specimen id " + specimenId);
+		}
+		else {
+			Context.getEncounterService().voidEncounter(encounter, "voided by Mdr-tb module specimen tracking UI");
+		}
 	}
 	
 	public void deleteTest(Integer testId) {
