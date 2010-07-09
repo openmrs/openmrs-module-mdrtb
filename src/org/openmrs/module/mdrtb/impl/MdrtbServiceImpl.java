@@ -332,54 +332,54 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 		
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
-		return mdrtbFactory.getConceptSmearResult().getAnswers();
+		return getMdrtbFactory().getConceptSmearResult().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearMethods() {
-		return mdrtbFactory.getConceptSmearMicroscopyMethod().getAnswers();
+		return getMdrtbFactory().getConceptSmearMicroscopyMethod().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleCultureResults() {
-		return mdrtbFactory.getConceptCultureResult().getAnswers();
+		return getMdrtbFactory().getConceptCultureResult().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleCultureMethods() {
-		return mdrtbFactory.getConceptCultureMethod().getAnswers();
+		return getMdrtbFactory().getConceptCultureMethod().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleDstMethods() {
-		return mdrtbFactory.getConceptDSTMethod().getAnswers();
+		return getMdrtbFactory().getConceptDSTMethod().getAnswers();
 	}
 	
 	public Collection<Concept> getPossibleDstResults() {
 		List<Concept> results = new LinkedList<Concept>();
-		results.add(mdrtbFactory.getConceptSusceptibleToTuberculosisDrug());
-		results.add(mdrtbFactory.getConceptIntermediateToTuberculosisDrug());
-		results.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
-		results.add(mdrtbFactory.getConceptDstTestContaminated());
-		results.add(mdrtbFactory.getConceptWaitingForTestResults());
+		results.add(getMdrtbFactory().getConceptSusceptibleToTuberculosisDrug());
+		results.add(getMdrtbFactory().getConceptIntermediateToTuberculosisDrug());
+		results.add(getMdrtbFactory().getConceptResistantToTuberculosisDrug());
+		results.add(getMdrtbFactory().getConceptDstTestContaminated());
+		results.add(getMdrtbFactory().getConceptWaitingForTestResults());
 		
 		return results;
 	}
 	
 	public Collection<ConceptAnswer> getPossibleOrganismTypes() {
-		return mdrtbFactory.getConceptTypeOfOrganism().getAnswers();
+		return getMdrtbFactory().getConceptTypeOfOrganism().getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {
-		return mdrtbFactory.getConceptSampleSource().getAnswers();
+		return getMdrtbFactory().getConceptSampleSource().getAnswers();
 	}
 	
 	public Concept getConceptScanty() {
-		return mdrtbFactory.getConceptScanty();
+		return getMdrtbFactory().getConceptScanty();
 	}
 	
 	public Concept getConceptWaitingForTestResults() {
-		return mdrtbFactory.getConceptWaitingForTestResults();
+		return getMdrtbFactory().getConceptWaitingForTestResults();
 	}
 	
 	public Concept getConceptDstTestContaminated() {
-		return mdrtbFactory.getConceptDstTestContaminated();
+		return getMdrtbFactory().getConceptDstTestContaminated();
 	}
 	
 	/**

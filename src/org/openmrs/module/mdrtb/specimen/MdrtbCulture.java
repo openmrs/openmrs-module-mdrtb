@@ -14,7 +14,7 @@ public interface MdrtbCulture extends MdrtbTest {
 	 * Data points this interface provides access to:
 	 * 
 	 * result: the Concept that represents the result of the culture
-	 * culture: the culture count
+	 * colonies: the # of colonies present
 	 * method: the Concept that represents the method used when performing the test
 	 * organism: the type of organism present
 	 * 

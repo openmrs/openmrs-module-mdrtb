@@ -14,21 +14,23 @@ import org.openmrs.Location;
 public interface MdrtbTest extends Comparable<MdrtbTest> {
 	
 	/**
-	 * Data points this interface provides access to:
+	 * Data points this interface provides "get" and "set" access to:
+	 *
+	 * accessionNumber: the accession number (usually a reference # supplied by the lab)
+	 * startDate: the date the test was started
+	 * resultDate: the date of the result
+	 * dateOrdered: the date the test was ordered
+	 * dateReceived: the date the specimen was received by the lab?
+	 * lab: the lab that performed the test
+	 * comments: any comments about the test
+	 * 
+	 * Data points this interface provides "get" access to:
 	 * 
 	 * test: the actual object that stores the data this interface is providing access to (i.e., in our current implementation, the test construct obsgroup)
 	 * id: the id used to reference the test (i.e., in our current implementation, the obs_id of the test construct obs for this test)
 	 * type: the type of the test (smear,culture,dst)
 	 * specimen: the id used to reference the specimen (i.e., in our current implementation, the encounter_id of the parent encounter)
-	 * status: the current status of the test (i.e., ordered, received, completed, etc)
-	 *
-	 * accessionNumber: the accession number (usually a reference # supplied by the lab)
-	 * startDate: the date the test was startd
-	 * resultDate: the date of the result
-	 * dateOrdered: the date the test was ordered
-	 * TODO: dateReceived: the date the specimen was received (by the lab?)
-	 * lab: the lab that performed the smear
-	 * 
+	 * status: the current status of the test (i.e., ordered, received, completed, etc) (this should be a calculated based on the existing datas and some set of rules)
 	 */
 	
 	public Object getTest();

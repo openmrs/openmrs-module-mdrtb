@@ -25,6 +25,7 @@ public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 	 * location: the location where the specimen was collected
 	 * provider: who collected the specimen
 	 * dateCollected: the date the specimen was collected
+	 * comments: any comments about the specimen itself
 	 * 
 	 * smears: a list of the smears associated with the specimen
 	 * cultures: a list of the cultures associated with the specimen

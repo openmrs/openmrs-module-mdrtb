@@ -955,7 +955,7 @@ public final class MdrtbFactory {
         return ret;
     }
     
-    public Concept getConceptSmearConverstion(){
+    public Concept getConceptSmearConversion(){
         Concept ret = null;
         ret = this.getMDRTBConceptByKey(STR_SMEAR_CONVERSION, new Locale("en", "US"), this.xmlConceptList);
         return ret;
@@ -1201,6 +1201,10 @@ public final class MdrtbFactory {
     
     public Concept getConceptDstTestContaminated() {
     	return Context.getConceptService().getConceptByMapping("dstTestContaminated", "org.openmrs.module.mdrtb");
+    }
+    
+    public Concept getConceptScannedLabReport() {
+    	return Context.getConceptService().getConceptByMapping("scannedLabReport", "org.openmrs.module.mdrtb");
     }
     
     public Set<Concept> getMdrProgramOutcomeConcepts() {
@@ -2072,7 +2076,7 @@ public final class MdrtbFactory {
          
          Date ret = null;
          Map<Obs,Date> map = this.getSmears(p);
-         List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptSmearConverstion());      
+         List<Obs> oList = Context.getObsService().getObservationsByPersonAndConcept(p, this.getConceptSmearConversion());      
          Concept cSmear = this.getConceptSmearResult();
          
          if (oList != null){
@@ -2110,7 +2114,7 @@ public final class MdrtbFactory {
        */
       public void cleanSmearStatusObs(Patient p){
           ObsService os = Context.getObsService();
-          Concept ccConcept = this.getConceptSmearConverstion();
+          Concept ccConcept = this.getConceptSmearConversion();
           Concept rcConcept = this.getConceptSmearReconversion();
           Map<Obs, Date> map = this.getSmears(p);
           
@@ -2273,7 +2277,7 @@ public final class MdrtbFactory {
               this.cleanSmearStatusObs(p);
               Date date = null;
               Map<Obs, Date> map = this.getSmears(p);
-              Concept ccConcept = this.getConceptSmearConverstion();
+              Concept ccConcept = this.getConceptSmearConversion();
                   if (ccConcept == null)
                       throw new RuntimeException("Smear Conversion Concept not loaded");
               Concept rcConcept = this.getConceptSmearReconversion();
