@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
-import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-public class SpecimenUpgradeController {
+public class SpecimenMigrationValidationController {
 
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -69,7 +69,7 @@ public class SpecimenUpgradeController {
 	private String results = "";
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/specimen/upgrade.form") 
+    @RequestMapping("/module/mdrtb/specimen/validate.form") 
 	public ModelAndView validateSpecimenData() {
 		
 		ModelMap map = new ModelMap();
@@ -80,7 +80,7 @@ public class SpecimenUpgradeController {
 		for(Patient patient : Context.getPatientService().getAllPatients()) {
 			results = results.concat("Integrity checking patient #" + patient.getId() +":<br/>");
 			
-			// now loop over all Bac encounter for this patient			
+			// now loop over all Bac and DST encounter for this patient			
 			List<EncounterType> testEncounterTypes = new LinkedList<EncounterType>();
 			testEncounterTypes.add(Context.getEncounterService().getEncounterType(5));
 			testEncounterTypes.add(Context.getEncounterService().getEncounterType(6));
@@ -95,7 +95,7 @@ public class SpecimenUpgradeController {
 		
 		map.put("results", results);
 		
-		return new ModelAndView("/module/mdrtb/specimen/specimenUpgrade",map);
+		return new ModelAndView("/module/mdrtb/specimen/specimenMigrationValidation",map);
 	}
 	
 	// TODO: do I need to check for doubles of anything--ie, too many of a obs type on a construct
@@ -107,8 +107,9 @@ public class SpecimenUpgradeController {
 		testConstructConcepts.add(mdrtbFactory.getConceptSmearParent());
 		testConstructConcepts.add(mdrtbFactory.getConceptCultureParent());
 		testConstructConcepts.add(mdrtbFactory.getConceptDSTParent());
-		testConstructConcepts.add(mdrtbFactory.getConceptScannedLabReport());
+		
 		// TODO: what do we want to do with these:
+		testConstructConcepts.add(mdrtbFactory.getConceptScannedLabReport());
 		testConstructConcepts.add(mdrtbFactory.getConceptSmearConversion());
 		testConstructConcepts.add(mdrtbFactory.getConceptSmearReconversion());
 		testConstructConcepts.add(mdrtbFactory.getConceptCultureConversion());
@@ -213,7 +214,30 @@ public class SpecimenUpgradeController {
 			}
 			else if (obs.getConcept() == mdrtbFactory.getConceptDSTParent()) {
 				validateDst(obs);
+			}	
+		}
+		
+		Concept sampleSource = null;
+		Date collectionDate = null;
+		// now make sure that all the sample sources associated with this encounter are the same, and that the collection dates are the same
+		for(Obs obs : encounter.getAllObs(false)) {
+			// check the sample sources
+			if(obs.getConcept() == mdrtbFactory.getConceptSampleSource()) {
+				if(sampleSource != null && obs.getValueCoded() != null && obs.getValueCoded() != sampleSource) {
+					results = results.concat("<span style=\"color:red\">Mismatched sample source of types: " + sampleSource.getName() + " and " + obs.getValueCoded().getName() + "</span><br/>");
+				}
+				sampleSource = obs.getValueCoded();
 			}
+			// check the collection dates
+			if(obs.getConcept() == mdrtbFactory.getConceptSmearParent() || obs.getConcept() == mdrtbFactory.getConceptCultureParent()) {
+				if(collectionDate != null && obs.getValueDatetime() != null && collectionDate != obs.getValueDatetime()) {
+					results = results.concat("<span style=\"color:red\">Mismatched collect dates: " + collectionDate + " and " + obs.getValueDatetime());
+				}
+				collectionDate = obs.getValueDatetime();
+			}
+		}
+		if(collectionDate == null) {
+			results = results.concat("<span style=\"color:red\"> No collection date for this sample</span><br/>");
 		}
 	}
 	
@@ -266,6 +290,11 @@ public class SpecimenUpgradeController {
 				concepts.remove(childObs.getConcept());
 			}
 			
+			// specific test to check the colonies issue
+			if(childObs.getConcept() == mdrtbFactory.getConceptColonies() && childObs.getValueNumeric() != null) {
+					results = results.concat("<span style=\"color:red\">Colony value: = " + childObs.getValueNumeric().toString() + "<br/></span>");
+			}
+		
 			// make sure that any of the value-coded have only valid answer
 			if(childObs.getConcept() == mdrtbFactory.getConceptSampleSource() && !sampleSource.contains(childObs.getValueCoded()) ) {
 				results = results.concat("<span style=\"color:red\">Invalid smear sample source as answer to " + childObs.getId() + " of type " + childObs.getValueCoded().getName() + " - " + childObs.getValueCoded().getId() + "</span><br/>");

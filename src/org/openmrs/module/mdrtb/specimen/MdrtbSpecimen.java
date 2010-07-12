@@ -59,6 +59,9 @@ public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 	public Date getDateCollected();
 	public void setDateCollected(Date dateCollected);
 	
+	public Concept getAppearanceOfSpecimen();
+	public void setAppearanceOfSpecimen(Concept appearanceOfSpecimen);
+	
 	public String getComments();
 	public void setComments(String comments);
 	

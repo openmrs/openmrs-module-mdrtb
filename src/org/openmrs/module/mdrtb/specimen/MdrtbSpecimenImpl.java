@@ -109,6 +109,17 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return smear;
 	}
 	
+	public Concept getAppearanceOfSpecimen() {
+		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		
+		if (obs == null) {
+			return null;
+		}
+		else {
+			return obs.getValueCoded();
+		}
+	}
+	
 	public String getComments() {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
 		if (obs == null) {
@@ -214,6 +225,31 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		}
 		else {
 			return obs.getValueCoded();
+		}
+	}
+	
+	public void setAppearanceOfSpecimen(Concept appearanceOfSpecimen) {
+		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && appearanceOfSpecimen == null) {
+			return;
+		}
+		
+		// we only need to update this if this is a new obs or if the value has changed.
+		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(appearanceOfSpecimen)) {
+			
+			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
+			if (obs != null) {
+				obs.setVoided(true);
+				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			}
+				
+			// now create the new Obs and add it to the encounter
+			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptAppearanceOfSpecimen(), encounter.getEncounterDatetime(), encounter.getLocation());
+			obs.setValueCoded(appearanceOfSpecimen);
+			encounter.addObs(obs);
 		}
 	}
 	
