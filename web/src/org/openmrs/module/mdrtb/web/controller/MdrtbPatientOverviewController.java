@@ -328,9 +328,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 String startDateRoot = "startDate_";
                 String stopDateRoot = "stopDate_";
                 String instructionsRoot = "instructions_";
-                String orderExtensionRoot = "regimenType_";
-                
-                    
+                String regimenTypeRoot = "regimenType_";
+  
                     for (int i = 1; i <= numberOfNewOrders; i++){
                         String newDrugSelectConcept = newDrugRoot+i;
                         String newDrug = newDrugSelect+i;
@@ -342,7 +341,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         String startDate = startDateRoot+i;
                         String stopDate = stopDateRoot+i;
                         String instructions = instructionsRoot+i;
-                        String extension = orderExtensionRoot + i;
+                        String regimenType = regimenTypeRoot + i;
                         
                         String newDrugParam = request.getParameter(newDrug);
                         String newDrugConceptParam = request.getParameter(newDrugSelectConcept);
@@ -437,7 +436,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     newDOs.add(newDO);
                                     Integer regTypeInt = null;
                                     try {
-                                        regTypeInt = Integer.valueOf(request.getParameter(extension));
+                                        regTypeInt = Integer.valueOf(request.getParameter(regimenType));
                                     } catch (Exception ex){
                                         log.error("Invalid regimen type read in from standard regimen xml file.  Could not convert regimen type value to an Integer.");
                                     }

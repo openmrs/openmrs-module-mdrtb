@@ -22,15 +22,11 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
-import org.openmrs.ConceptClass;
-import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.ConceptWord;
 import org.openmrs.Location;
-import org.openmrs.Order;
 import org.openmrs.api.db.DAOException;
-import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 
 public class HibernateMdrtbDAO implements MdrtbDAO {
@@ -46,31 +42,7 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
     public void setSessionFactory(SessionFactory sessionFactory) { 
         this.sessionFactory = sessionFactory;
     }
-    
- @SuppressWarnings("unchecked")
- public List<OrderExtension> getOrderExtension(Order o, boolean includeVoided) throws DAOException{
-     
-     Criteria crit = sessionFactory.getCurrentSession().createCriteria(OrderExtension.class);
-     if (includeVoided == false)
-         crit.add(Expression.eq("voided", false));
-     
-     if (o != null)
-         crit.add(Expression.eq("order", o));
-     
-     crit.addOrder( org.hibernate.criterion.Order.desc("dateCreated") );
-     
-     return crit.list();
- }
-    
-    public void purgeOrderException(OrderExtension oe) throws DAOException{
-        sessionFactory.getCurrentSession().delete(oe);
-    }
-    
-    public OrderExtension saveOrderExtension(OrderExtension oe) throws DAOException{ 
-       sessionFactory.getCurrentSession().saveOrUpdate(oe);
-        return oe;
-    }
-    
+        
     @SuppressWarnings("unchecked")
     public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws DAOException {
         List<ConceptName> ret = new ArrayList<ConceptName>();

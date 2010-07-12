@@ -395,9 +395,5 @@
 		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
-	
-	<mappingFiles>
-		OrderExtension.hbm.xml
-	</mappingFiles>	
-	
+
 </module>

@@ -17,14 +17,12 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
-import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.OrderExtension;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
@@ -51,27 +49,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
-	}
-	
-	public List<OrderExtension> getOrderExtension(Order o, boolean includeVoided) throws APIException {
-		return dao.getOrderExtension(o, includeVoided);
-	}
-	
-	public void purgeOrderException(OrderExtension oe) throws APIException {
-		dao.purgeOrderException(oe);
-	}
-	
-	public OrderExtension saveOrderExtension(OrderExtension oe) throws APIException {
-		dao.saveOrderExtension(oe);
-		return oe;
-	}
-	
-	public OrderExtension voidOrderExtension(OrderExtension oe) throws APIException {
-		oe.setVoided(true);
-		oe.setVoidReason(" ");
-		oe.setVoidedBy(Context.getAuthenticatedUser());
-		saveOrderExtension(oe);
-		return oe;
 	}
 	
 	public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)
