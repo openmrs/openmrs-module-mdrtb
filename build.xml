@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!-- ********************************************************* -->
-<!-- ** mdrtb module                                       ** -->
+<!-- ** MDR-TB Module                                       ** -->
 <!-- **	                                                    ** -->
-<!-- ** @author Dave Thomas                                  ** -->
+<!-- ** @author Partners In Health                          ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="mdrtb-1.5.x" default="package-module">
+<project name="mdrtb" default="package-module">
 	
 	<property environment="env"/>
 	
