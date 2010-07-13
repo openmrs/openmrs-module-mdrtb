@@ -35,6 +35,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 			throw new RuntimeException ("Cannot create smear: encounter can not be null.");
 		}
 		
+		// note that we are setting the location null--tests don't immediately inherit the location of the parent encounter
 		test = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSmearParent(), encounter.getEncounterDatetime(), null);
 	}
 	

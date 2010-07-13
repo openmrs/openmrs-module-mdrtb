@@ -329,6 +329,10 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		if (comments != null) {
 			comments.setLocation(location);
 		}
+		Obs appearance = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		if (appearance != null) {
+			appearance.setLocation(null);
+		}
 	}
 	
 	public void setPatient(Patient patient) {

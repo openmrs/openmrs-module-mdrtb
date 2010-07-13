@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class SpecimenMigration {
+public class SpecimenMigrationController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -137,15 +137,14 @@ public class SpecimenMigration {
 	}
 	
 	public void migrateBacAndDstEncounters() {
-		// fetch the specimen collection encounter type
+		// fetch the bac and dst encounter types
 		List<EncounterType> specimenEncounter = new LinkedList<EncounterType>();
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.test_result_encounter_type_DST")));
 		
 		
-		// loop thru all the specimen collection encounters
+		// loop thru all the bac and dst encounters
 		for(Encounter encounter : Context.getEncounterService().getEncounters(null, null, null, null, null, specimenEncounter, null, false)) {
-			// to handle any test patients where the encounter hasn't been voided for some reason
 			// to handle any test patients where the encounter hasn't been voided for some reason
 			if (encounter.getPatient().isVoided()) {
 				log.info("Voiding encounter " + encounter.getId() + " because it belongs to a voided patient");
@@ -153,24 +152,6 @@ public class SpecimenMigration {
 			else {
 				log.info("Migrating bac/dst results encounter " + encounter.getEncounterId());
 			}
-			
-			// change the encounter type to "specimen collection" encounter
-			encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
-			
-			// now instantiate a new specimen using this encounter
-			MdrtbSpecimen specimen = new MdrtbSpecimenImpl(encounter);
-			
-			// set the patient and provider of the specimen to the patient and provider of the underlying encounter
-			specimen.setPatient(encounter.getPatient());
-			specimen.setProvider(encounter.getProvider());
-			specimen.setLocation(encounter.getLocation());
-			
-			// NOTE: PIH-HAITI specific functionality...
-			// if the location on the initial encounter is a the MSLI, set the location to unknown
-			if(encounter.getLocation().getId() == 5) {
-				specimen.setLocation(Context.getLocationService().getLocation(1));
-			}
-			
 			
 			// now we need to iterate through all the test obs in the encounter and perform various modifications
 			Obs type = null;
@@ -181,32 +162,38 @@ public class SpecimenMigration {
 				if(testConstructConcepts.contains(obs.getConcept())) {
 					// if this is a test, iterate through all the obs in the test
 					Obs colonies = null;
+					String accessionNumber = obs.getAccessionNumber();
 					for(Obs childObs : obs.getGroupMembers()) {
-						// check the sample source
+						// set the accession number to same as parent
+						childObs.setAccessionNumber(accessionNumber);
+						
+						// check to see if this is a the sample source obs
 						if(childObs.getConcept() == mdrtbFactory.getConceptSampleSource()) {
 							if(compareAndUpdateSampleSource(childObs,type)) {
 								log.warn("Encounter " + encounter.getId() + " has multiple sample source obs with different values. Using obs with most recent datetime.");
 							}
-						}
-						// void the sample source on this test construct, as we are going to move it up to the specimen level
-						Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");	
+							// void the sample source on this test construct, as we are going to move it up to the specimen level
+							Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");
+						}	
 					
 						// handle issues specific only to smears and cultures
 						if(obs.getConcept() == mdrtbFactory.getConceptSmearParent() || obs.getConcept() == mdrtbFactory.getConceptCultureParent()) {
 							
+							// check to see if this is a smear or culture result obs
 							if(childObs.getConcept() == mdrtbFactory.getConceptSmearResult() || childObs.getConcept() == mdrtbFactory.getConceptCultureResult()) {
-								// handle the funky date issue
-								// check to see if there's a date stored in the value_datetime field of the result observation
+								// check to see if there's a collection date stored in the value_datetime field of the result observation
 								compareAndUpdateCollectionDate(childObs, collectionDate,collectionDateObsDate);
 								
-								// now set the existing value datetime to null, since this really isn't correct
+								// now set the existing value datetime to null, since we will no longer be storing the date collected here
 								childObs.setValueDatetime(null);
 							}
 						}
 						
 						// handle issues specific to cultures
 						if(obs.getConcept() == mdrtbFactory.getConceptCultureParent()) {
+							// check to see if this is a colonies obs
 							if(childObs.getConcept() == mdrtbFactory.getConceptColonies()) {
+								// only use the most recent colonies obs (to handle bug where colonies was being stored multiple times)
 								if(compareAndUpdateColonies(childObs,colonies)) {
 									log.warn("Encounter " + encounter.getId() + " has multiple colonies obs with different values. Using obs with most recent datetime.");
 								}
@@ -233,6 +220,24 @@ public class SpecimenMigration {
 					}
 				}
 			}
+			
+			// change the encounter type to "specimen collection" encounter
+			encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
+			
+			// now instantiate a new specimen using this encounter
+			MdrtbSpecimen specimen = new MdrtbSpecimenImpl(encounter);
+			
+			// set the patient and provider of the specimen to the patient and provider of the underlying encounter
+			specimen.setPatient(encounter.getPatient());
+			specimen.setProvider(encounter.getProvider());
+			specimen.setLocation(encounter.getLocation());
+			
+			// NOTE: PIH-HAITI specific functionality...
+			// if the location on the initial encounter is a the MSLI, set the location to unknown (b/c specimen would never be COLLECTED at MSLI
+			if(encounter.getLocation().getId() == 5) {
+				specimen.setLocation(Context.getLocationService().getLocation(1));
+			}
+			
 			
 			// set the sample source
 			if(type != null) {
