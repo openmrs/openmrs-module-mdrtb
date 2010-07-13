@@ -1,9 +1,11 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -30,6 +32,7 @@ public class SpecimenMigrationController {
 	
 	private MdrtbFactory mdrtbFactory;
 	private Set<Concept> testConstructConcepts;
+	private Map<String,MdrtbSpecimen> specimenMap = new HashMap<String,MdrtbSpecimen>();
 	
     @RequestMapping("/module/mdrtb/specimen/migrate.form")
 	public ModelAndView migrateSpecimenData() {
@@ -153,133 +156,182 @@ public class SpecimenMigrationController {
 				log.info("Migrating bac/dst results encounter " + encounter.getEncounterId());
 			}
 			
-			// now we need to iterate through all the test obs in the encounter and perform various modifications
-			Obs type = null;
-			Date collectionDate = null;
-			Date collectionDateObsDate = null;
+			Boolean moveObsAndVoidEncounter = false;
+			MdrtbSpecimen specimen = null;
 			
-			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if(testConstructConcepts.contains(obs.getConcept())) {
-					// if this is a test, iterate through all the obs in the test
-					Obs colonies = null;
-					String accessionNumber = obs.getAccessionNumber();
-					for(Obs childObs : obs.getGroupMembers()) {
-						// set the accession number to same as parent
-						childObs.setAccessionNumber(accessionNumber);
-						
-						// check to see if this is a the sample source obs
-						if(childObs.getConcept() == mdrtbFactory.getConceptSampleSource()) {
-							if(compareAndUpdateSampleSource(childObs,type)) {
-								log.warn("Encounter " + encounter.getId() + " has multiple sample source obs with different values. Using obs with most recent datetime.");
-							}
-							// void the sample source on this test construct, as we are going to move it up to the specimen level
-							Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");
-						}	
-					
-						// handle issues specific only to smears and cultures
-						if(obs.getConcept() == mdrtbFactory.getConceptSmearParent() || obs.getConcept() == mdrtbFactory.getConceptCultureParent()) {
-							
-							// check to see if this is a smear or culture result obs
-							if(childObs.getConcept() == mdrtbFactory.getConceptSmearResult() || childObs.getConcept() == mdrtbFactory.getConceptCultureResult()) {
-								// check to see if there's a collection date stored in the value_datetime field of the result observation
-								compareAndUpdateCollectionDate(childObs, collectionDate,collectionDateObsDate);
-								
-								// now set the existing value datetime to null, since we will no longer be storing the date collected here
-								childObs.setValueDatetime(null);
-							}
-						}
-						
-						// handle issues specific to cultures
-						if(obs.getConcept() == mdrtbFactory.getConceptCultureParent()) {
-							// check to see if this is a colonies obs
-							if(childObs.getConcept() == mdrtbFactory.getConceptColonies()) {
-								// only use the most recent colonies obs (to handle bug where colonies was being stored multiple times)
-								if(compareAndUpdateColonies(childObs,colonies)) {
-									log.warn("Encounter " + encounter.getId() + " has multiple colonies obs with different values. Using obs with most recent datetime.");
-								}
-							}
-						}
-						
-						// handle issues specific to DSTs
-						if(obs.getConcept() == mdrtbFactory.getConceptDSTParent()) {
-							// handle the date
-							if(childObs.getConcept() == mdrtbFactory.getConceptSputumCollectionDate()) {
-								// check to see if there's a date stored in the value_datetime field of the result observation
-								compareAndUpdateCollectionDate(childObs, collectionDate,collectionDateObsDate);
-								
-								// now void the existing obs, since we aren't using it anymore
-								Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");
-							}
-							
-							// change all contaminated to the proper type
-							// NOTE: PIH Haiti specific functionality!
-							if(childObs.getConcept() == Context.getConceptService().getConceptByName("CONTAMINATED")) {
-								childObs.setConcept(Context.getConceptService().getConceptByName("DRUG SENSITIVITY TEST CONTAMINATED"));
-							}
-						}
+			// first we need to figure out if we are going to need to create a new specimen for this encounter or not by checking if accession numbers
+			for(Obs obs : encounter.getAllObs()) {
+				if(obs.getAccessionNumber() != null && specimenMap.get(obs.getAccessionNumber()) != null) {
+					specimen = specimenMap.get(obs.getAccessionNumber());
+					moveObsAndVoidEncounter = true; // since this specimen already exists, we need to move all the obs to the encounter associated with the existing specimen
+					break;
+				}
+			}
+			
+			// if the specimen is still null at this point, we need to create a new once
+			if(!moveObsAndVoidEncounter) {
+				specimen = createSpecimenFromEncounter(encounter);
+			}
+				
+			// now make sure all accession numbers within this encounter map to this specimen
+			for(Obs obs : encounter.getAllObs()) {
+				if(obs.getAccessionNumber() != null) {
+					if(specimenMap.get(obs.getAccessionNumber()) != null && specimenMap.get(obs.getAccessionNumber()) != specimen) {
+						log.warn("Specimen " + specimen.getId() + " and specimen " + specimenMap.get(obs.getAccessionNumber()).getId() + " may be the same. They share the same accession number.");
+					}
+					else {
+						specimenMap.put(obs.getAccessionNumber(),specimen);
 					}
 				}
 			}
 			
-			// change the encounter type to "specimen collection" encounter
-			encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
 			
-			// now instantiate a new specimen using this encounter
-			MdrtbSpecimen specimen = new MdrtbSpecimenImpl(encounter);
-			
-			// set the patient and provider of the specimen to the patient and provider of the underlying encounter
-			specimen.setPatient(encounter.getPatient());
-			specimen.setProvider(encounter.getProvider());
-			specimen.setLocation(encounter.getLocation());
-			
-			// NOTE: PIH-HAITI specific functionality...
-			// if the location on the initial encounter is a the MSLI, set the location to unknown (b/c specimen would never be COLLECTED at MSLI
-			if(encounter.getLocation().getId() == 5) {
-				specimen.setLocation(Context.getLocationService().getLocation(1));
+			// now we need to iterate through all the test obs
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				// check to see if this is a test construct				
+				if(testConstructConcepts.contains(obs.getConcept())) {
+					Obs colonies = null;
+					
+					// iterate through all the obs in the test
+					for(Obs childObs : obs.getGroupMembers()) {	
+						// check to see if this is a the sample source obs
+						if(childObs.getConcept() == mdrtbFactory.getConceptSampleSource()) {
+							// copy and void the existing sample source
+							compareAndSetSampleSource(specimen, childObs);
+							Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");
+						}	
+					
+						// check to see if this is a smear or culture result obs, or a sputum collection date
+						if(childObs.getConcept() == mdrtbFactory.getConceptSmearResult() || childObs.getConcept() == mdrtbFactory.getConceptCultureResult()) {
+							if(childObs.getValueDatetime() != null) {
+								compareAndSetDateCollected(specimen, childObs);
+								childObs.setValueDatetime(null);
+							}
+							// set the accession number on construct to the accession number on the result obs
+							obs.setAccessionNumber(childObs.getAccessionNumber());
+						}
+					
+						// see if this a dst with a sputum collection date on it
+						if(childObs.getConcept() == mdrtbFactory.getConceptSputumCollectionDate()) {
+							if(childObs.getValueDatetime() != null) {
+								compareAndSetDateCollected(specimen, childObs);
+								Context.getObsService().voidObs(childObs, "voided as part of mdr-tb migration");
+							}
+							// for some reason, the accession number for DST tests is stored in this construct
+							obs.setAccessionNumber(childObs.getAccessionNumber());
+						}
+							
+						// change all DST contaminated to the proper type
+						// NOTE: PIH Haiti specific functionality!
+						if(obs.getConcept() == mdrtbFactory.getConceptDSTParent() && childObs.getConcept() == Context.getConceptService().getConceptByName("CONTAMINATED")) {
+							childObs.setConcept(Context.getConceptService().getConceptByName("DRUG SENSITIVITY TEST CONTAMINATED"));
+							log.warn("Changing concept on obs " + obs.getConcept().getId() + " from CONTAMINATED to DRUG SENSITIVITY TEST CONTAMINATED");
+						}
+							
+						// check to see if this is a colonies obs
+						if(childObs.getConcept() == mdrtbFactory.getConceptColonies()) {
+							// only use the most recent colonies obs (to handle bug where colonies was being stored multiple times)
+							if(compareAndUpdateColonies(childObs,colonies)) {
+								log.warn("Encounter " + encounter.getId() + " has multiple colonies obs with different values. Using obs with most recent datetime.");
+							}
+						}
+					}
+				}			
+			}
+			if(moveObsAndVoidEncounter) {
+				log.info("Moving obs on encounter " + encounter.getId() + " to specimen encounter " + specimen.getId());
+				for(Obs obs : encounter.getAllObs()) {
+					obs.setEncounter((Encounter) specimen.getSpecimen());
+				}
+				Context.getEncounterService().saveEncounter(encounter);   // need to save first so that all the obs we just copied aren't voided
+				Context.getEncounterService().voidEncounter(encounter, "voided as part of mdr-tb migration");
 			}
 			
-			
-			// set the sample source
-			if(type != null) {
-				specimen.setType(type.getValueCoded());
-			}
-			
-			// set the date collected
-			if(collectionDate != null) {
-				specimen.setDateCollected(collectionDate);
-			}
-
-			// save the specimen
 			Context.getService(MdrtbService.class).saveSpecimen(specimen);
 		}
 	}
 	
 	
-	// this method compares the source object to the target object, and returns true if the
-	// source and target are both not null, and their values aren't equal
-	// it also sets the target object to the obs of the two with the most recent datetime 
-	public Boolean compareAndUpdateSampleSource(Obs source, Obs target) {		
-		Boolean returnValue = null;
+	public MdrtbSpecimen createSpecimenFromEncounter(Encounter encounter) {
+		// change the encounter type to "specimen collection" encounter
+		encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
 		
-		if(source == null) {
-			return false;
+		// now instantiate a new specimen using this encounter
+		MdrtbSpecimen specimen = new MdrtbSpecimenImpl(encounter);
+		
+		// set the patient and provider of the specimen to the patient and provider of the underlying encounter
+		// (not really needed, but just in case)
+		specimen.setPatient(encounter.getPatient());
+		specimen.setProvider(encounter.getProvider());
+		specimen.setLocation(encounter.getLocation());
+		
+		// NOTE: PIH-HAITI specific functionality...
+		// if the location on the initial encounter is a the MSLI, set the location to unknown (b/c specimen would never be COLLECTED at MSLI
+		if(encounter.getLocation().getId() == 5) {
+			specimen.setLocation(Context.getLocationService().getLocation(1));
 		}
 		
-		if(target == null) {
-			target = source;
-			return false;
-		}
-		
-		if(source.getValueCoded() != target.getValueCoded()) {
-			returnValue = true;
-		}
-				
-		if(target.getObsDatetime() == null || (source.getObsDatetime() != null && source.getObsDatetime().before(target.getObsDatetime()))) {
-			target = source;
-		}
-		
-		return returnValue;
+		return specimen;
 	}
+		
+	
+	
+	
+	public void compareAndSetSampleSource(MdrtbSpecimen specimen, Obs obs) {
+		// nothing to do if no value for this obs
+		if(obs.getValueCoded() == null) {
+			return;
+		}
+		
+		// fetch the obs on this specimen that holds the sample source
+		Obs type = null;
+		for(Obs obs2 : ((Encounter) specimen.getSpecimen()).getObsAtTopLevel(false)){
+			if(obs2.getConcept() == mdrtbFactory.getConceptSampleSource()) {
+				type = obs;
+				break;
+			}
+		}
+		
+		if(type == null) {
+			specimen.setType(obs.getValueCoded());
+			return;
+		}
+		if(type.getValueCoded() != obs.getValueCoded()) {
+			log.warn("Mismatched sample type on specimen " + specimen.getId() + "; using sample source with most recent obs date");
+		}
+		
+		if(type.getObsDatetime() == null || (obs.getObsDatetime() != null && type.getObsDatetime().before(obs.getObsDatetime())) ) {
+			type = Obs.newInstance(obs);
+		}
+	}
+	
+	public void compareAndSetDateCollected(MdrtbSpecimen specimen, Obs obs) {
+		// nothing to do if no value for this obs
+		if(obs.getValueDatetime() == null) {
+			return;
+		}
+		
+		Date datetime = ((Encounter) specimen.getSpecimen()).getEncounterDatetime();
+		
+		if(datetime == null) {
+			datetime = obs.getValueDatetime();
+			return;
+		}
+		
+		if(datetime.before(obs.getValueDatetime())) {
+			log.warn("Mismatched collection date on specimen " + specimen.getId() + "; using oldest date most recent obs date");
+			return;
+		}
+		
+		if(datetime.after(obs.getValueDatetime())) {
+			log.warn("Mismatched collection date on specimen " + specimen.getId() + "; using oldest date most recent obs date");
+			datetime = obs.getValueDatetime();
+			return;
+		}
+		
+	}
+		
+	
 	
 	// to fix an existing bug where colony obs were being stored in multiple
 	public Boolean compareAndUpdateColonies(Obs source, Obs target) {
@@ -309,26 +361,5 @@ public class SpecimenMigrationController {
 		
 		return returnValue;
 		
-	}
-	
-	// to port collection date to the new format we are using
-	public void compareAndUpdateCollectionDate(Obs source, Date collectionDate, Date collectionDateObsDate) {
-		if(source.getValueDatetime() == null) {
-			return;
-		}
-		
-		if(collectionDate == null) {
-			collectionDate = source.getValueDatetime();
-			collectionDateObsDate = source.getObsDatetime();
-		}
-		
-		if(collectionDate != source.getValueDatetime()) {
-			log.warn("Encounter " + source.getEncounter().getId() + " has multiple date collected obs. Using obs with most recent obs_datetime.");
-		}
-		
-		if(collectionDateObsDate == null || (source.getValueDatetime() != null && collectionDateObsDate.before(source.getValueDatetime()))) {
-			collectionDate = source.getValueDatetime();
-			collectionDateObsDate = source.getObsDatetime();
-		}
 	}
 }

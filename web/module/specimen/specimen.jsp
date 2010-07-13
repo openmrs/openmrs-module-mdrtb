@@ -354,18 +354,20 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <!-- handle the DST table -->
 <c:if test="${test.testType eq 'dst'}">
+<!-- fetch the map of test results for this dst -->
+<c:set var="resultsMap" value="${test.resultsMap}"/>
 <br/>
 <table cellpadding="0">
 <tr>
 <td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
 </tr>
 <c:forEach var="drugType" items="${drugTypes}">
-<c:if test="${!empty test.resultsMap[drugType.key].result}">
+<c:if test="${!empty resultsMap[drugType.key].result}">
 <tr>
 <td>${drugType.drug.name}</td>
 <td>${drugType.concentration}</td>
-<td>${test.resultsMap[drugType.key].result.name}</td>
-<td>${test.resultsMap[drugType.key].colonies}</td>
+<td>${resultsMap[drugType.key].result.name}</td>
+<td>${resultsMap[drugType.key].colonies}</td>
 </tr>
 </c:if>
 </c:forEach>
@@ -510,17 +512,17 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:set var="flag" value="1"/>
 
 <tr>
-<c:if test="${!empty test.resultsMap[drugType.key].result}">
+<c:if test="${!empty resultsMap[drugType.key].result}">
 <td>${drugType.drug.name}</td>
 <td>${drugType.concentration}</td>
 <td><select name="resultsMap[${drugType.key}].result" class="dstResult">
 <option value=""></option>
 <c:forEach var="possibleResult" items="${dstResults}">
-<option value="${possibleResult.id}" <c:if test="${possibleResult == test.resultsMap[drugType.key].result}">selected</c:if> >${possibleResult.name}</option>
+<option value="${possibleResult.id}" <c:if test="${possibleResult == resultsMap[drugType.key].result}">selected</c:if> >${possibleResult.name}</option>
 </c:forEach></td>
 </select>
 </td>
-<td><input type="text" size="6" name="resultsMap[${drugType.key}].colonies" value="${test.resultsMap[drugType.key].colonies}" class="dstColonies"<c:if test="${test.resultsMap[drugType.key].result == '' || test.resultsMap[drugType.key].result == waitingForTestResult || test.resultsMap[drugType.key].result == dstTestContaminated}"> style="display:none"</c:if>/></td>
+<td><input type="text" size="6" name="resultsMap[${drugType.key}].colonies" value="${resultsMap[drugType.key].colonies}" class="dstColonies"<c:if test="${resultsMap[drugType.key].result == '' || resultsMap[drugType.key].result == waitingForTestResult || resultsMap[drugType.key].result == dstTestContaminated}"> style="display:none"</c:if>/></td>
 <c:set var="flag" value="0"/> <!-- so that we know we don't need to print the empty inputs -->
 </c:if>
 
