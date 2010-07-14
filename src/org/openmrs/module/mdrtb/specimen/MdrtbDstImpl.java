@@ -63,7 +63,7 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
     public Integer getColoniesInControl() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl());
     	
-    	if (obs == null) {
+    	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
     	}
     	else {

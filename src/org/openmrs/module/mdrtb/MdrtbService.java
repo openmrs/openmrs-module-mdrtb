@@ -15,6 +15,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
@@ -166,6 +167,12 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional
     public void saveDst(MdrtbDst dst);
+    
+    /**
+     * Gets the patient chart for a specific patient
+     */
+    @Transactional(readOnly=true)
+    public PatientChart getPatientChart(Patient patient);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

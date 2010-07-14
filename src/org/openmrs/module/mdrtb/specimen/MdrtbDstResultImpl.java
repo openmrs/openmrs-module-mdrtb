@@ -47,7 +47,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
     public Integer getColonies() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
-    	if (obs == null) {
+    	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
     	}
     	else {

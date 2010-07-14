@@ -47,7 +47,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
     public Integer getBacilli() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
     	
-    	if (obs == null) {
+    	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
     	}
     	else {

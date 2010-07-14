@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +19,8 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
+import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -25,6 +28,7 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbCultureImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
@@ -308,6 +312,40 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 		
+	public PatientChart getPatientChart(Patient patient) {
+		if (patient == null) {
+			log.warn("Can't fetch patient chart, patient is null");
+			return null;
+		}
+		
+		// first, fetch all the specimens for this patient
+		List<MdrtbSpecimen> specimens = getSpecimens(patient);
+		
+		// the getSpecimen method should return the specimens sorted, but just in case it is changed
+		Collections.sort(specimens);
+		
+		// now fetch the program start date
+		// TODO: fix this
+		Date startDate;
+		Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
+		
+		if(programs == null || programs.size() == 0){
+			// set some sort of default date?
+			// use collected date of this first specimen for now
+			startDate = specimens.get(0).getDateCollected();
+		}
+		else {
+			// this is only temporary, not what we want to do long term, doesn't handle patients in more than one program?
+			startDate = programs.get(0).getDateEnrolled();
+		}
+		
+		// loop thru all the specimens, and add them to the proper place in the chart, or loop through the chart instead?
+		// negative specimens???
+		
+		return null;
+	}
+	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return getMdrtbFactory().getConceptSmearResult().getAnswers();
 	}

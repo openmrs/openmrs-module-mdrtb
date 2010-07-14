@@ -6,6 +6,7 @@ import org.jmesa.view.html.HtmlBuilder;
 import org.openmrs.DrugOrder;
 import org.openmrs.module.mdrtb.web.patientsummary.PatientSummaryTableRegimenElement;
 
+// TODO: I'm pretty sure I can remove this file
 
 public class RegimenCellEditor extends AbstractCellEditor {
 	
