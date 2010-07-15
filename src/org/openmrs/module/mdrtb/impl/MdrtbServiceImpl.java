@@ -1,13 +1,14 @@
 package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -26,9 +27,11 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
+import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbCultureImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
@@ -38,6 +41,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbTest;
+import org.openmrs.module.mdrtb.web.controller.attribute.DrugTypeModelAttribute;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -313,6 +317,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 		
 	public PatientChart getPatientChart(Patient patient) {
+		
+		PatientChart chart = new PatientChart();
+		
 		if (patient == null) {
 			log.warn("Can't fetch patient chart, patient is null");
 			return null;
@@ -325,25 +332,39 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Collections.sort(specimens);
 		
 		// now fetch the program start date
-		// TODO: fix this
-		Date startDate;
+		Calendar startDate = Calendar.getInstance();
+		
 		Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
 		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
 		
 		if(programs == null || programs.size() == 0){
 			// set some sort of default date?
-			// use collected date of this first specimen for now
-			startDate = specimens.get(0).getDateCollected();
+			// TODO: use collected date of this first specimen for now
+			startDate.setTime(specimens.get(0).getDateCollected());
 		}
 		else {
-			// this is only temporary, not what we want to do long term, doesn't handle patients in more than one program?
-			startDate = programs.get(0).getDateEnrolled();
+			// TODO: this is only temporary, not what we want to do long term, doesn't handle patients with more than one; baseline/prior
+			startDate.setTime(programs.get(0).getDateEnrolled());
 		}
 		
-		// loop thru all the specimens, and add them to the proper place in the chart, or loop through the chart instead?
-		// negative specimens???
+		// first, we want to get all specimens collected more than a month before treatment start date
+		startDate.add(Calendar.MONTH, -1);
+		chart.getRecords().put("PRIOR", new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
 		
-		return null;
+		// now add all the specimens collected in the month prior to treatment
+		startDate.add(Calendar.MONTH, 1);
+		chart.getRecords().put("BASELINE", new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
+		
+		// now go through the add all the other specimens
+		startDate.add(Calendar.MONTH, 1);
+		Integer iteration = 0;
+		while(specimens.size() > 0) {
+			chart.getRecords().put(iteration.toString(), new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
+			startDate.add(Calendar.MONTH, 1);
+			iteration++;
+		}
+		
+		return chart;
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
@@ -385,6 +406,26 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptSampleSource().getAnswers();
 	}
 	
+    public List<DrugTypeModelAttribute> getPossibleDrugTypesToDisplay() {
+    	// TODO: do we want to start pulling this from somewhere else?
+    	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
+    	
+    	List<DrugTypeModelAttribute> drugTypes = new LinkedList<DrugTypeModelAttribute>();
+    	
+    	for(String drugEntry : drugList.split("|")) {
+    		String[] drugFields = drugEntry.split(":");
+    		Concept drug = Context.getConceptService().getConcept(drugFields[0]);
+    		if(StringUtils.isEmpty(drugFields[1])) {
+    			drugTypes.add(new DrugTypeModelAttribute(drug));
+    		}
+    		else {
+    			drugTypes.add(new DrugTypeModelAttribute(drug, Double.valueOf(drugFields[1])));
+    		}
+    	}
+    	
+    	return drugTypes;
+    }
+    
 	public Concept getConceptScanty() {
 		return getMdrtbFactory().getConceptScanty();
 	}
@@ -401,8 +442,32 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	 * Utility functions
 	 */
 	
-	// TODO: get rid of these if I end up not using them
 	
+	// IMPORTANT: the assumption this method makes is that list of specimens are ordered in descending date order
+	// also, this method pulls all the specimens it returns off the list of specimens passed to it;
+	// this method is intended to be use with the getPatientChart API method
+	private List<MdrtbSpecimen> getSpecimensBeforeDate(List<MdrtbSpecimen> specimens, Calendar compareDate) {
+		List<MdrtbSpecimen> results = new LinkedList<MdrtbSpecimen>();
+		Calendar specimenDate = Calendar.getInstance();
+		
+		while(!specimens.isEmpty()) {
+			specimenDate.setTime(specimens.get(0).getDateCollected());
+			if(specimenDate.before(compareDate)) {
+				results.add(specimens.get(0));
+				specimens.remove(specimens.get(0));
+			}
+			else {
+				// we don't need to keep checking since the the dates are in order
+				break;
+			}
+		}
+		
+		return results;
+	}
+	
+	
+	
+	// TODO: get rid of these if I end up not using them
 	private void updateTestHelper(MdrtbTest oldTest, MdrtbTest newTest) {
 		// update all the test values that are "settable"
 		oldTest.setDateOrdered(newTest.getDateOrdered());

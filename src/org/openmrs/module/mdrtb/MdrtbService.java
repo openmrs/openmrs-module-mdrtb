@@ -20,6 +20,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.web.controller.attribute.DrugTypeModelAttribute;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -221,6 +222,11 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSpecimenTypes();
+  
+    /**
+     * Returns all the possible drug to display in a DST result, in the order we want to display them
+     */
+    public List<DrugTypeModelAttribute> getPossibleDrugTypesToDisplay();
     
     /**
      * Returns the concept that represents a Scanty result

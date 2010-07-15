@@ -15,10 +15,13 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
+import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +77,51 @@ public class SpecimenMigrationValidationController {
 		
 		ModelMap map = new ModelMap();
 		
+		int patientsWithNoEnrollDate = 0;
+		int patientsWithMoreThanOneEnrollDate = 0;
+		int patientsWithSpecimenCollectionsBeforeEnrollDate = 0;
+		
 		initialize();
+
+		for(Patient patient: Context.getPatientService().getAllPatients()) {
+	
+			// first, fetch all the specimens for this patient
+			List<MdrtbSpecimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
+			
+			// now fetch the program start date
+			// TODO: fix this
+			Date startDate;
+			Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+			List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
+		
+			if(programs.size() == 0) {
+				patientsWithNoEnrollDate++;
+			}
+			else {
+				if(programs.size() > 1) {
+					patientsWithMoreThanOneEnrollDate++;
+				}
+				
+				startDate = programs.get(0).getDateEnrolled();
+			
+				Boolean flag = false;
+				
+				for(MdrtbSpecimen specimen : specimens) {
+					if(specimen.getDateCollected().before(startDate)) {
+						results = results.concat("Patient " + patient.getId() + " has collection date " + specimen.getDateCollected() + " before enroll date " + startDate + ".</br>");	
+						if(!flag) {
+							patientsWithSpecimenCollectionsBeforeEnrollDate++;
+							flag = true;
+						}
+					}
+				}
+			}
+			
+			results = results.concat("<br/>");
+		}
+		
+		
+		/**
 		
 		// loop thru all patients in the system
 		for(Patient patient : Context.getPatientService().getAllPatients()) {
@@ -92,6 +139,12 @@ public class SpecimenMigrationValidationController {
 		// TODO: specifically handle the colonies issue
 			
 		}
+		
+		*/
+		
+		results = results.concat("Patients with no enroll date = " + patientsWithNoEnrollDate + "<br/>");
+		results = results.concat("Patients with more than one enroll date = " + patientsWithMoreThanOneEnrollDate + "<br/>");
+		results = results.concat("Patients with specimen collections before enroll date = " + patientsWithSpecimenCollectionsBeforeEnrollDate + "<br/>");
 		
 		map.put("results", results);
 		

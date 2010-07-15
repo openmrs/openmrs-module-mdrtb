@@ -6,12 +6,16 @@ import java.util.List;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 
 
-public class PatientChartMonth {
+public class PatientChartRecord {
 	
 	private List<MdrtbSpecimen> specimens;
 	
-	public PatientChartMonth() {
-		specimens = new LinkedList<MdrtbSpecimen>();
+	public PatientChartRecord() {
+		this.specimens = new LinkedList<MdrtbSpecimen>();
+	}
+	
+	public PatientChartRecord(List<MdrtbSpecimen> specimens) {
+		this.specimens = specimens;
 	}
 
 	public void setSpecimens(List<MdrtbSpecimen> specimens) {

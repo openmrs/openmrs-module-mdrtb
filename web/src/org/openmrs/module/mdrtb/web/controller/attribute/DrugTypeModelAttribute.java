@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.controller.specimen;
+package org.openmrs.module.mdrtb.web.controller.attribute;
 
 import org.openmrs.Concept;
 
@@ -6,7 +6,8 @@ import org.openmrs.Concept;
 /**
  * Simple object used to put potential drug types into the model
  */
-public class DrugTypeModelAttribute {
+
+public class DrugTypeModelAttribute implements Comparable<DrugTypeModelAttribute> {
 
 	Concept drug;
 	
@@ -56,6 +57,13 @@ public class DrugTypeModelAttribute {
     public String getKey() {
     	return key;
     }
+    
+    /**
+	 * Implementation of comparable method
+	 */
+	public int compareTo(DrugTypeModelAttribute drugTypeToCompare) {
+		return this.getKey().compareTo(drugTypeToCompare.getKey());
+	}
     
     /**
      * Utility methods

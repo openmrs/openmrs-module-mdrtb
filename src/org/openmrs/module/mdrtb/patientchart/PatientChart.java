@@ -1,27 +1,25 @@
 package org.openmrs.module.mdrtb.patientchart;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class PatientChart {
 
-	private List<PatientChartMonth> months;
+	// Note: this map should be an ordered (Linked) map because we rely on the order in the implementation
+	private Map<String,PatientChartRecord> records;
 	
 	
 	public PatientChart() {
-		months = new LinkedList<PatientChartMonth>();
+		records = new LinkedHashMap<String,PatientChartRecord>();
 	}
 	
 
-	public void setMonths(List<PatientChartMonth> months) {
-	    this.months = months;
+	public void setRecords(Map<String,PatientChartRecord> records) {
+	    this.records = records;
     }
 
-	public List<PatientChartMonth> getMonths() {
-	    return months;
+	public Map<String,PatientChartRecord> getRecords() {
+	    return records;
     }
-	
-	
-	
 }
