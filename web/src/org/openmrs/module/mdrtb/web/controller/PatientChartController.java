@@ -1,19 +1,20 @@
 package org.openmrs.module.mdrtb.web.controller;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.DrugTypeModelAttribute;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
-import org.openmrs.module.mdrtb.web.controller.attribute.DrugTypeModelAttribute;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PatientChartController {
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	@SuppressWarnings("unchecked")
     @RequestMapping("/module/mdrtb/patientChart.form")
@@ -40,14 +43,14 @@ public class PatientChartController {
 		List<DrugTypeModelAttribute> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
 		
 		// in this set we will store all the existing drug types in the set of specimens
-		Set<DrugTypeModelAttribute> existingDrugTypes = new HashSet<DrugTypeModelAttribute>();
+		List<DrugTypeModelAttribute> existingDrugTypes = new LinkedList<DrugTypeModelAttribute>();
 		
 		// get all the existing drugs in the specimen
 		Map<String,PatientChartRecord> records = patientChart.getRecords();
-		for(String key: records.keySet()) {
+		for(String key : records.keySet()) {
 			for(MdrtbSpecimen specimen : records.get(key).getSpecimens()) {
 				for(MdrtbDst dst : specimen.getDsts()) {
-					for(MdrtbDstResult dstResult : dst.getResults()) {
+					for(MdrtbDstResult dstResult : dst.getResults()) {	
 						existingDrugTypes.add(new DrugTypeModelAttribute(dstResult.getDrug(), dstResult.getConcentration()));
 					}
 				}

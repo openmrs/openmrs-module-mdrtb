@@ -22,7 +22,7 @@
 <td>Cultures</td>
 <td width="20px">&nbsp;</td>
 <c:forEach var="drugType" items="${drugTypes}">
-<td>${drugType.concept} ${drugType.concentration}</td>
+<td>${drugType.drug} ${drugType.concentration}</td>
 </c:forEach>
 </tr>
 
@@ -44,15 +44,20 @@
 			<td><c:if test="${!empty specimen.smears}">${specimen.smears[0].result}</c:if></td>  <!-- TODO: obviously we need to handle multiple smears -->
 			<td><c:if test="${!empty specimen.cultures}">${specimen.cultures[0].result}</c:if></td>
 			<td/>
+			<c:if test="${!empty specimen.dsts}">
+				<c:set var="resultsMap" value="${specimen.dsts[0].resultsMap}"/>
+			</c:if>
+			<c:forEach var="drugType" items="${drugTypes}">
+				<td><c:if test="${!empty resultsMap && !empty resultsMap[drugType.key] && !empty resultsMap[drugType.key].result}">${resultsMap[drugType.key].result}</c:if></td>
+			</c:forEach>
 			</tr>
 			</c:forEach>
-			<forEach items="${drugtypes}"><td/></forEach>
 		</c:when>
 		<c:otherwise>
 			<tr>
 			<td>${record.key}</td>
 			<td/><td/><td/><td/>
-			<forEach items="${drugtypes}"><td/></forEach>
+			<c:forEach items="${drugTypes}"><td/></c:forEach>
 			</tr>		
 		</c:otherwise>
 	</c:choose>

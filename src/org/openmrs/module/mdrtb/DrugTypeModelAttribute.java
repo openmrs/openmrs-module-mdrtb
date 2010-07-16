@@ -1,14 +1,18 @@
-package org.openmrs.module.mdrtb.web.controller.attribute;
+package org.openmrs.module.mdrtb;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 
 
 /**
- * Simple object used to put potential drug types into the model
+ * Simple object used store info about a DST drug type
  */
 
-public class DrugTypeModelAttribute implements Comparable<DrugTypeModelAttribute> {
+public class DrugTypeModelAttribute {
 
+	protected final Log log = LogFactory.getLog(getClass());
+	
 	Concept drug;
 	
 	Double concentration;
@@ -59,12 +63,22 @@ public class DrugTypeModelAttribute implements Comparable<DrugTypeModelAttribute
     }
     
     /**
-	 * Implementation of comparable method
+	 * Implementation of equals method
 	 */
-	public int compareTo(DrugTypeModelAttribute drugTypeToCompare) {
-		return this.getKey().compareTo(drugTypeToCompare.getKey());
+    public boolean equals(Object obj) {
+		if (obj instanceof DrugTypeModelAttribute) {
+			DrugTypeModelAttribute drugType = (DrugTypeModelAttribute) obj;
+			
+			if (getKey() != null && drugType.getKey() != null) {
+				return getKey().equals(drugType.getKey());
+			}
+		}
+		
+		// if key is null for either object, for equality the
+		// two objects must be the same
+		return this == obj;
 	}
-    
+
     /**
      * Utility methods
      */

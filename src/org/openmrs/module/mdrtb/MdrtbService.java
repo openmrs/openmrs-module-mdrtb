@@ -20,7 +20,6 @@ import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
-import org.openmrs.module.mdrtb.web.controller.attribute.DrugTypeModelAttribute;
 import org.springframework.transaction.annotation.Transactional;
 
 

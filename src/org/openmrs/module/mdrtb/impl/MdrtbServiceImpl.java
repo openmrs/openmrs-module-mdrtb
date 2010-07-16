@@ -25,9 +25,9 @@ import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.mdrtb.DrugTypeModelAttribute;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
@@ -41,7 +41,6 @@ import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbTest;
-import org.openmrs.module.mdrtb.web.controller.attribute.DrugTypeModelAttribute;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -412,10 +411,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	
     	List<DrugTypeModelAttribute> drugTypes = new LinkedList<DrugTypeModelAttribute>();
     	
-    	for(String drugEntry : drugList.split("|")) {
+    	for(String drugEntry : drugList.split("\\|")) {
     		String[] drugFields = drugEntry.split(":");
-    		Concept drug = Context.getConceptService().getConcept(drugFields[0]);
-    		if(StringUtils.isEmpty(drugFields[1])) {
+    	   		
+    		Concept drug = Context.getConceptService().getConceptByName(drugFields[0]);
+    		if(drugFields.length == 1 || StringUtils.isEmpty(drugFields[1])) {
     			drugTypes.add(new DrugTypeModelAttribute(drug));
     		}
     		else {
