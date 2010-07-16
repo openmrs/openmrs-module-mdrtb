@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="mdrtb" uri="taglibs/mdrtb.tld" %>
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
@@ -8,13 +9,15 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
-	table {border:4px solid black}
 	td {border:1px solid black; padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
+<!-- PATIENT CHART -->
 <div id="patientChart">
+<table style="border:4px solid black">
 
-<table>
+<!-- START HEADER ROW -->
+
 <tr>
 <td>Month</td>
 <td>Date collected</td>
@@ -22,13 +25,14 @@
 <td>Cultures</td>
 <td width="20px">&nbsp;</td>
 <c:forEach var="drugType" items="${drugTypes}">
-<td>${drugType.drug} ${drugType.concentration}</td>
+	<td>${drugType.drug} ${drugType.concentration}</td>
 </c:forEach>
 </tr>
 
-<!-- TODO: handle prior or baseline -->
+<!-- END HEADER ROW -->
 
-<!--  handle the main months-->
+<!-- START ROWS -->
+
 <c:forEach var="record" items="${records}">
 
 	<c:set var="specimenCount" value="${fn:length(record.value.specimens)}"/>
@@ -40,16 +44,46 @@
 			<c:if test="${i.count == 1}" >
 				<td rowspan="${specimenCount}">${record.key}</td>
 			</c:if>
+			
 			<td><openmrs:formatDate date="${specimen.dateCollected}"/></td>
-			<td><c:if test="${!empty specimen.smears}">${specimen.smears[0].result}</c:if></td>  <!-- TODO: obviously we need to handle multiple smears -->
-			<td><c:if test="${!empty specimen.cultures}">${specimen.cultures[0].result}</c:if></td>
+			
+			<td style="padding:0px"><c:if test="${!empty specimen.smears}">
+				<table style="padding:0px; border:0px; margin0px; width:100%">
+				<tr>
+				<c:forEach var="smear" items="${specimen.smears}">	
+					<mdrtb:smearCell smear="${smear}"/>
+				</c:forEach>
+				</tr>
+				</table>
+			</c:if></td> 
+			
+			<td style="padding:0px"><c:if test="${!empty specimen.cultures}">
+				<table style="padding:0px; border:0px; margin0px; width:100%">
+				<tr>
+				<c:forEach var="culture" items="${specimen.cultures}">	
+					<mdrtb:cultureCell culture="${culture}"/>
+				</c:forEach>
+				</tr>
+				</table>
+			</c:if></td> 
+			
 			<td/>
-			<c:if test="${!empty specimen.dsts}">
-				<c:set var="resultsMap" value="${specimen.dsts[0].resultsMap}"/>
-			</c:if>
+				
+			<!--  new implementation of dsts -->
 			<c:forEach var="drugType" items="${drugTypes}">
-				<td><c:if test="${!empty resultsMap && !empty resultsMap[drugType.key] && !empty resultsMap[drugType.key].result}">${resultsMap[drugType.key].result}</c:if></td>
+				<td>
+				<table>
+				<tr>
+					<c:forEach var="dst" items="${specimen.dsts}">
+						<td style="padding:0px;border:0px"><c:if test="${!empty dst.resultsMap[drugType.key]}">${dst.resultsMap[drugType.key].result}</c:if></td>
+					</c:forEach>
+				</tr>
+				</table>
+				</td>	
 			</c:forEach>
+			
+			
+		
 			</tr>
 			</c:forEach>
 		</c:when>
@@ -64,10 +98,12 @@
 	
 </c:forEach>
 
+<!-- END ROWS -->
 
 </table>
+</div> 
 
-</div> <!-- end patientChart div -->
+<!-- END PATIENT CHART -->
 
 </body>
 </html>

@@ -16,7 +16,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	Obs dstResult;  // the top-level obs that holds all the data for this smear
+	Obs dstResult;  // the top-level obs that holds all the data for this result
 	
 	Concept drug; // a secondary location to store drug-type; used as a workaround for the odd way that the result and the drug are stored in a single obs
 	

@@ -16,6 +16,8 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * data within the obsgroup.
  */
 public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
+
+	Map<String,MdrtbDstResult> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
 	
 	public MdrtbDstImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -118,17 +120,21 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 		return results;
     }
     
-    public Map<String,MdrtbDstResult> getResultsMap() {  	
-    	Map<String,MdrtbDstResult> resultsMap = new HashMap<String,MdrtbDstResult>();
+    // Note this is created ONCE per instantiation, for performance reasons, so if underlying drugs change, this will be inaccurate
+    public Map<String,MdrtbDstResult> getResultsMap() {  
+    
+    	if (resultsMap == null) {
+    		resultsMap = new HashMap<String,MdrtbDstResult>();
     	
-    	// map the results based on a key created by concatenating the string representation of the drug concept id and the
-    	// string representation of the concentration
-    	for(MdrtbDstResult result : getResults()) {
-    		if(result.getConcentration() != null) {
-    			resultsMap.put((result.getDrug().getId()).toString() + "|" + result.getConcentration().toString(), result);
-    		}
-    		else {
-    			resultsMap.put((result.getDrug().getId()).toString(), result);
+    		// map the results based on a key created by concatenating the string representation of the drug concept id and the
+    		// string representation of the concentration
+    		for(MdrtbDstResult result : getResults()) {
+    			if(result.getConcentration() != null) {
+    				resultsMap.put((result.getDrug().getId()).toString() + "|" + result.getConcentration().toString(), result);
+    			}
+    			else {
+    				resultsMap.put((result.getDrug().getId()).toString(), result);
+    			}
     		}
     	}
     	
