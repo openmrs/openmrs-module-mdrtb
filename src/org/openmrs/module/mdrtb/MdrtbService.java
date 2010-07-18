@@ -225,7 +225,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Returns all the possible drug to display in a DST result, in the order we want to display them
      */
-    public List<DrugTypeModelAttribute> getPossibleDrugTypesToDisplay();
+    public List<DrugType> getPossibleDrugTypesToDisplay();
     
     /**
      * Returns the concept that represents a Scanty result

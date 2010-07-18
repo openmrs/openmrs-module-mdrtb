@@ -25,7 +25,7 @@ import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.mdrtb.DrugTypeModelAttribute;
+import org.openmrs.module.mdrtb.DrugType;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
@@ -405,21 +405,21 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptSampleSource().getAnswers();
 	}
 	
-    public List<DrugTypeModelAttribute> getPossibleDrugTypesToDisplay() {
+    public List<DrugType> getPossibleDrugTypesToDisplay() {
     	// TODO: do we want to start pulling this from somewhere else?
     	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
     	
-    	List<DrugTypeModelAttribute> drugTypes = new LinkedList<DrugTypeModelAttribute>();
+    	List<DrugType> drugTypes = new LinkedList<DrugType>();
     	
     	for(String drugEntry : drugList.split("\\|")) {
     		String[] drugFields = drugEntry.split(":");
     	   		
     		Concept drug = Context.getConceptService().getConceptByName(drugFields[0]);
     		if(drugFields.length == 1 || StringUtils.isEmpty(drugFields[1])) {
-    			drugTypes.add(new DrugTypeModelAttribute(drug));
+    			drugTypes.add(new DrugType(drug));
     		}
     		else {
-    			drugTypes.add(new DrugTypeModelAttribute(drug, Double.valueOf(drugFields[1])));
+    			drugTypes.add(new DrugType(drug, Double.valueOf(drugFields[1])));
     		}
     	}
     	

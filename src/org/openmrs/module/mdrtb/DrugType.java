@@ -9,7 +9,7 @@ import org.openmrs.Concept;
  * Simple object used store info about a DST drug type
  */
 
-public class DrugTypeModelAttribute {
+public class DrugType {
 
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -19,17 +19,17 @@ public class DrugTypeModelAttribute {
 	
 	String key;
 
-	public DrugTypeModelAttribute() {	
+	public DrugType() {	
 		// generic constructor
 	}
 	
-	public DrugTypeModelAttribute(Concept drug) {
+	public DrugType(Concept drug) {
 	    this.drug = drug;
 	    this.concentration = null;
 	    createKey();
     }
 	
-	public DrugTypeModelAttribute(Concept drug, Double concentration) {
+	public DrugType(Concept drug, Double concentration) {
 	    this.drug = drug;
 	    this.concentration = concentration;
 	    createKey();
@@ -66,8 +66,8 @@ public class DrugTypeModelAttribute {
 	 * Implementation of equals method
 	 */
     public boolean equals(Object obj) {
-		if (obj instanceof DrugTypeModelAttribute) {
-			DrugTypeModelAttribute drugType = (DrugTypeModelAttribute) obj;
+		if (obj instanceof DrugType) {
+			DrugType drugType = (DrugType) obj;
 			
 			if (getKey() != null && drugType.getKey() != null) {
 				return getKey().equals(drugType.getKey());
