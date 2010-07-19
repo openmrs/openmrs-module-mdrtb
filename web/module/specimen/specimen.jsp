@@ -1,7 +1,10 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
-
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
+
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 <!-- TODO: localize all text -->
@@ -127,6 +130,7 @@
 <!-- END JQUERY -->
 
 <!--  SPECIMEN SECTION -->
+<div id="specimen" align="center">
 
 <div id="details_specimen">
 
@@ -720,5 +724,4 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <!-- END ADD TEST SECTION -->
 </div> <!-- END OF TEST DIV -->
 
-</body>
-</html>
+</div> <!-- END OF SPECIMEN DIV -->

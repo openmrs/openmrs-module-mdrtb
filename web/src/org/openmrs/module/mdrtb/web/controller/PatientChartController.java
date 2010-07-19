@@ -33,6 +33,7 @@ public class PatientChartController {
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		PatientChart patientChart = Context.getService(MdrtbService.class).getPatientChart(patient);
 		
+		map.put("patientId",patientId);
 		map.put("drugTypes", getDrugTypes(patientChart));
 		map.put("records",patientChart.getRecords());
 		

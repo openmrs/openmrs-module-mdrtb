@@ -1,7 +1,10 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
-
+<%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 
@@ -25,20 +28,18 @@
 </tr>
 
 <c:forEach var="specimen" items="${specimens}">
-<tr>
-<td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-<td><nobr><a href="specimen.form?specimenId=${specimen.id}">${specimen.identifier}</a></nobr></td>
-<td><nobr>${specimen.location.name}</nobr></td>
-<td><nobr>${specimen.provider.personName}</nobr></td>  <!-- TODO: fix/use proper name? -->
-<td><a href="specimen.form?specimenId=${specimen.id}">view</a></td>
-<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('Are you sure you want to delete this specimen?')">delete</a></td>
-<td width="99%">&nbsp;</td>
-</tr>
+	<tr>
+	<td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
+	<td><nobr><a href="specimen.form?specimenId=${specimen.id}">${specimen.identifier}</a></nobr></td>
+	<td><nobr>${specimen.location.name}</nobr></td>
+	<td><nobr>${specimen.provider.personName}</nobr></td>  <!-- TODO: fix/use proper name? -->
+	<td><a href="specimen.form?specimenId=${specimen.id}">view</a></td>
+	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('Are you sure you want to delete this specimen?')">delete</a></td>
+	<td width="99%">&nbsp;</td>
+	</tr>
 </c:forEach>
 
 </table>
 </div>
 
-</body>
-</html>
 

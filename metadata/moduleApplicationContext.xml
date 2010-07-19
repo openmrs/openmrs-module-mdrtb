@@ -28,6 +28,9 @@
             	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
             	<prop key="module/@MODULE_ID@/mdrtbSpecimenRegistration.form">MdrtbSpecimenRegistrationController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbSpecimenTracking.form">MdrtbSpecimenTrackingController</prop>
+            	
+            	<!-- hacky way to handle existing tabs until we substitute them out -->
+            	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -89,6 +92,14 @@
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbSpecimenTracking</value></property>
 		<property name="successView"><value>mdrtbSpecimenTracking.form</value></property>
     </bean>
+    
+    <!-- hacky way to handle existing tabs until we substitute them out -->
+    <bean id="RegimenController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
+		<property name="commandName"><value>obj</value></property>
+		<property name="formView"><value>/module/@MODULE_ID@/regimen/regimen</value></property>
+		<property name="successView"><value>mdrtbPatientOverview.form</value></property>
+    </bean>
+    
     <bean parent="serviceContext">
 		<property name="moduleService">
 			<list>

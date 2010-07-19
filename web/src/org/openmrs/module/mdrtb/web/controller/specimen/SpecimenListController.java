@@ -25,7 +25,7 @@ public class SpecimenListController {
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
 	public ModelAndView showSpecimenList(@RequestParam(required = true, value="patientId") int patientId, ModelMap map) {
-		
+				
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		if(patient == null) {

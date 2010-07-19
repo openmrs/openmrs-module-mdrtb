@@ -1,8 +1,11 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
-<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
-
+<%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
+<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 
@@ -69,6 +72,4 @@
 </form:form>
 </div>
 
-</body>
-</html>
 

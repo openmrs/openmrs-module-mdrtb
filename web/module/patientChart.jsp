@@ -1,31 +1,33 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
-
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
-<%@ taglib prefix="mdrtb" uri="taglibs/mdrtb.tld" %>
+<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 <!-- TODO: localize all text -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
-	td {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+	.chartCell {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
 <!-- PATIENT CHART -->
-<div id="patientChart">
+<div id="patientChart" align="center">
 <table style="border:2px solid #8FABC7; font-size: .9em;">
 
 <!-- START HEADER ROW -->
 
 <tr>
-<td>Month</td>
-<td>Date collected</td>
-<td>Smears</td>
-<td>Cultures</td>
-<td width="30px">&nbsp;</td>
+<td class="chartCell">Month</td>
+<td class="chartCell">Date collected</td>
+<td class="chartCell">Smears</td>
+<td class="chartCell">Cultures</td>
+<td class="chartCell" width="30px">&nbsp;</td>
 <c:forEach var="drugType" items="${drugTypes}">
-	<td style="vertical-align:top">${drugType.drug.name.shortName}<br/>${drugType.concentration}</td>  <!-- TODO: getShortName is depreciated? -->
+	<td class="chartCell" style="vertical-align:top">${drugType.drug.name.shortName}<br/>${drugType.concentration}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
 </tr>
 
@@ -42,12 +44,12 @@
 			<c:forEach var="specimen" items="${record.value.specimens}" varStatus="i">
 			<tr>
 			<c:if test="${i.count == 1}" >
-				<td rowspan="${specimenCount}">${record.key}</td>
+				<td class="chartCell" rowspan="${specimenCount}">${record.key}</td>
 			</c:if>
 			
-			<td><a href="specimen/specimen.form?specimenId=${specimen.id}"><openmrs:formatDate date="${specimen.dateCollected}"/></a></td>
+			<td class="chartCell"><a href="specimen/specimen.form?specimenId=${specimen.id}"><openmrs:formatDate date="${specimen.dateCollected}"/></a></td>
 			
-			<td><c:if test="${!empty specimen.smears}">
+			<td class="chartCell"><c:if test="${!empty specimen.smears}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 				<c:forEach var="smear" items="${specimen.smears}">	
@@ -57,7 +59,7 @@
 				</table>
 			</c:if></td> 
 			
-			<td><c:if test="${!empty specimen.cultures}">
+			<td class="chartCell"><c:if test="${!empty specimen.cultures}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 				<c:forEach var="culture" items="${specimen.cultures}">	
@@ -67,11 +69,11 @@
 				</table>
 			</c:if></td> 
 			
-			<td/>
+			<td class="chartCell"/>
 				
 			<!--  dsts -->
 			<c:forEach var="drugType" items="${drugTypes}">
-				<td style="width:30px">
+				<td class="chartCell" style="width:30px">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 					<c:forEach var="dst" items="${specimen.dsts}">
@@ -87,9 +89,9 @@
 		</c:when>
 		<c:otherwise>
 			<tr>
-			<td>${record.key}</td>
-			<td/><td/><td/><td/>
-			<c:forEach items="${drugTypes}"><td/></c:forEach>
+			<td class="chartCell">${record.key}</td>
+			<td class="chartCell"/><td class="chartCell"/><td class="chartCell"/><td class="chartCell"/>
+			<c:forEach items="${drugTypes}"><td class="chartCell"/></c:forEach>
 			</tr>		
 		</c:otherwise>
 	</c:choose>
@@ -103,5 +105,4 @@
 
 <!-- END PATIENT CHART -->
 
-</body>
-</html>
+<%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>

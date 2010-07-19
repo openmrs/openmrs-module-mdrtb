@@ -24,8 +24,10 @@ public class SpecimenAddController extends AbstractSpecimenController {
 	}
 		
 	
-	@RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimenAdd(ModelMap map) {
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET) 
+	public ModelAndView showSpecimenAdd(@RequestParam(required = true, value = "patientId") Integer patientId, ModelMap map) {
+		map.put("patientId", patientId);
 		return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
 	}
 	
