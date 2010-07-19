@@ -232,7 +232,26 @@ public interface MdrtbService extends OpenmrsService {
      */
     public Concept getConceptScanty();
     
+    /**
+     * Returns the concept that represents a Waiting For Test Results result
+     */
     public Concept getConceptWaitingForTestResults();
     
+    /**
+     * Returns the concept that represents a DST Test Contaminated result
+     */
     public Concept getConceptDstTestContaminated();
+    
+	/**
+     * Check to see what color to associate with a given result concept
+     */
+    public String getColorForConcept(Concept concept);
+
+    /**
+     * Resets the color map cache to null to force cache reload
+     * Auto generated method comment
+     *
+     */
+    public void resetColorMapCache();
 }
+

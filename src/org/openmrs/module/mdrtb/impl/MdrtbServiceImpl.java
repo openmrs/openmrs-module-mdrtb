@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -53,6 +55,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	private static List<MdrtbRegimenSuggestion> standardRegimens = new ArrayList<MdrtbRegimenSuggestion>();
 	
 	private static List<Locale> localeSetUsedInDB = new ArrayList<Locale>();
+	
+	private Map<Integer,String> colorMapCache = null;
 	
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
@@ -438,6 +442,29 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptDstTestContaminated();
 	}
 	
+    public String getColorForConcept(Concept concept) {
+    	
+    	// initialize the cache if need be
+    	if(colorMapCache == null) {
+    		colorMapCache = new HashMap<Integer,String>();
+    		
+    		String colorMap = Context.getAdministrationService().getGlobalProperty("mdrtb.colorMap");
+    	  	
+        	if(colorMap != null) {    	
+        		for(String mapping : colorMap.split("\\|")) {
+        			String[] mappingFields = mapping.split(":");
+        			colorMapCache.put(Integer.valueOf(mappingFields[0]), mappingFields[1]);
+        		}
+        	}
+    	}
+    	
+    	return colorMapCache.get(concept.getId());
+    }
+	
+    public void resetColorMapCache() {
+    	colorMapCache = null;
+    }
+    
 	/**
 	 * Utility functions
 	 */
