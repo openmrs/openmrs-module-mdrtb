@@ -9,12 +9,12 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
-	td {border:1px solid black; padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+	td {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
 <!-- PATIENT CHART -->
 <div id="patientChart">
-<table style="border:4px solid black">
+<table style="border:2px solid #8FABC7; font-size: .9em;">
 
 <!-- START HEADER ROW -->
 
@@ -23,9 +23,9 @@
 <td>Date collected</td>
 <td>Smears</td>
 <td>Cultures</td>
-<td width="20px">&nbsp;</td>
+<td width="30px">&nbsp;</td>
 <c:forEach var="drugType" items="${drugTypes}">
-	<td>${drugType.drug} ${drugType.concentration}</td>
+	<td style="vertical-align:top">${drugType.drug.name.shortName}<br/>${drugType.concentration}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
 </tr>
 
@@ -45,9 +45,9 @@
 				<td rowspan="${specimenCount}">${record.key}</td>
 			</c:if>
 			
-			<td><openmrs:formatDate date="${specimen.dateCollected}"/></td>
+			<td><a href="specimen/specimen.form?specimenId=${specimen.id}"><openmrs:formatDate date="${specimen.dateCollected}"/></a></td>
 			
-			<td style="padding:0px"><c:if test="${!empty specimen.smears}">
+			<td><c:if test="${!empty specimen.smears}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 				<c:forEach var="smear" items="${specimen.smears}">	
@@ -57,7 +57,7 @@
 				</table>
 			</c:if></td> 
 			
-			<td style="padding:0px"><c:if test="${!empty specimen.cultures}">
+			<td><c:if test="${!empty specimen.cultures}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 				<c:forEach var="culture" items="${specimen.cultures}">	
@@ -69,21 +69,19 @@
 			
 			<td/>
 				
-			<!--  new implementation of dsts -->
+			<!--  dsts -->
 			<c:forEach var="drugType" items="${drugTypes}">
-				<td>
-				<table>
+				<td style="width:30px">
+				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 					<c:forEach var="dst" items="${specimen.dsts}">
-						<td style="padding:0px;border:0px"><c:if test="${!empty dst.resultsMap[drugType.key]}">${dst.resultsMap[drugType.key].result}</c:if></td>
+						<mdrtb:dstResultCell dstResult="${dst.resultsMap[drugType.key]}"/>
 					</c:forEach>
 				</tr>
 				</table>
 				</td>	
 			</c:forEach>
 			
-			
-		
 			</tr>
 			</c:forEach>
 		</c:when>

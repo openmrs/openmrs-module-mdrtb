@@ -470,6 +470,19 @@
 	</attribute>
 </tag>
 	
+<tag>
+	<description>
+		Renders a DST result cell for display
+	</description>
+	<name>dstResultCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.DstResultCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>dstResult</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
 
 <function>
     <description>

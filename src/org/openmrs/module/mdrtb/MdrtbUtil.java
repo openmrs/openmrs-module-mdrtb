@@ -912,5 +912,23 @@ public class MdrtbUtil {
           }
       }
       
+      /**
+       * Checks the mdrtb.colorMap global prop to see what color to associate with a given concept
+       */
+      public static String getColorForConcept(Concept concept) {
+    	  
+    	String colorMap = Context.getAdministrationService().getGlobalProperty("mdrtb.colorMap");
+    	
+    	if(colorMap != null) {    	
+    		for(String mapping : colorMap.split("\\|")) {
+    			String[] mappingFields = mapping.split(":");
+    			if(Integer.valueOf(mappingFields[0]).equals(concept.getId())) {
+    				return mappingFields[1];
+    			}
+    		}
+    	}
+    	
+    	return null;
+      }
       
 }
