@@ -7,7 +7,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
 
 
@@ -24,7 +25,7 @@ public class DstResultCellTag extends TagSupport {
     	String ret = null;
     	
     	if(dstResult != null && dstResult.getResult() != null) {
-    		String color = MdrtbUtil.getColorForConcept(dstResult.getResult());
+    		String color = Context.getService(MdrtbService.class).getColorForConcept(dstResult.getResult());
     		if (color == null) {
     			color = "black";
     		}

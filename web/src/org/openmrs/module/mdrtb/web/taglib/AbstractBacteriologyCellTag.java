@@ -8,7 +8,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 
 
 public abstract class AbstractBacteriologyCellTag extends TagSupport {
@@ -21,7 +22,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     	String ret = null;
     	
     	if(result != null) {	
-    		String color = MdrtbUtil.getColorForConcept(result);
+    		String color = Context.getService(MdrtbService.class).getColorForConcept(result);
     		if (color == null) {
     			color = "black";
     		}
