@@ -341,9 +341,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
 		
 		if(programs == null || programs.size() == 0){
-			// set some sort of default date?
-			// TODO: use collected date of this first specimen for now
-			startDate.setTime(specimens.get(0).getDateCollected());
+			if(specimens.size() > 0) {
+				// set some sort of default date?
+				// TODO: use collected date of this first specimen for now
+				startDate.setTime(specimens.get(0).getDateCollected());
+			}
 		}
 		else {
 			// TODO: this is only temporary, not what we want to do long term, doesn't handle patients with more than one; baseline/prior

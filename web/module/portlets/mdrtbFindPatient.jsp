@@ -69,7 +69,7 @@
 	   			$j('#searchBox').val('');
 	   		</c:when>
 	   		<c:otherwise>
-	   			window.location='${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input;
+	   			window.location='${pageContext.request.contextPath}/module/mdrtb/summary/summary.form?patientId=' + input;
 	   		</c:otherwise>
 	   	</c:choose>
 	}

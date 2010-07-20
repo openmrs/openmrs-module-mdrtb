@@ -93,6 +93,8 @@
 					
 				</td></tr>
 			
+		<!--  this old specimen tracking is defunct -->
+		<!--
 				<c:if test="${enableSpecimenTracking == 'true'}">
 					<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;">
 						<b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;
@@ -109,6 +111,7 @@
 						</a>
 					</td></tr>
 				</c:if>
+			-->
 				
 				<tr><td style = "background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewreports"/>&nbsp;&nbsp;</b></td></tr>
 				<c:forEach var="report" items="${reports}" varStatus="varStatus">

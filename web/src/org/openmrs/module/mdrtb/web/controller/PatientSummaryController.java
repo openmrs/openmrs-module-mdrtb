@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class PatientChartController {
+public class PatientSummaryController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/patientChart.form")
+    @RequestMapping("/module/mdrtb/summary/summary.form")
 	ModelAndView showPatientChart(@RequestParam(required = false, value="patientId") Integer patientId, ModelMap map) {
 		
 		Patient patient = Context.getPatientService().getPatient(patientId);
@@ -37,7 +37,7 @@ public class PatientChartController {
 		map.put("drugTypes", getDrugTypes(patientChart));
 		map.put("records",patientChart.getRecords());
 		
-		return new ModelAndView("/module/mdrtb/patientChart", map);
+		return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
 	}
 
 	List<DrugType> getDrugTypes(PatientChart patientChart) {
