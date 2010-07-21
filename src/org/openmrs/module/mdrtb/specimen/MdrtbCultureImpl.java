@@ -76,6 +76,17 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
     	}
     }
     
+    public String getOrganismTypeNonCoded() {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	
+    	if (obs == null) {
+    		return null;
+    	}
+    	else {
+    		return obs.getValueText();
+    	}
+    }
+    
     public Concept getResult() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
     	
@@ -142,6 +153,25 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 		
 		// now save the value
 		obs.setValueCoded(organismType);
+    }
+    
+    public void setOrganismTypeNonCoded(String organismType) {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && organismType == null) {
+			return;
+		}
+    	
+		// initialize the obs if needed
+		if (obs == null) {		
+			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
+		
+		// now save the value
+		obs.setValueText(organismType);
     }
 
     public void setResult(Concept result) {

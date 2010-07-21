@@ -105,6 +105,17 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
     		return obs.getValueCoded();
     	}
     }
+    
+    public String getOrganismTypeNonCoded() {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	
+    	if (obs == null) {
+    		return null;
+    	}
+    	else {
+    		return obs.getValueText();
+    	}
+    }
 
     public List<MdrtbDstResult> getResults() {
     	List<MdrtbDstResult> results = new LinkedList<MdrtbDstResult>();
@@ -219,6 +230,23 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 		obs.setValueCoded(organismType);
     }
 	
-	
-
+    public void setOrganismTypeNonCoded(String organismType) {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && organismType == null) {
+			return;
+		}
+    	
+		// initialize the obs if needed
+		if (obs == null) {		
+			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
+		
+		// now save the value
+		obs.setValueText(organismType);
+    }
+    
 }

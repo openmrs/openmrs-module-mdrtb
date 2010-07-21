@@ -187,10 +187,14 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("dstTestContaminated")
-	Concept dstTestContaiminated() {
+	Concept getDstTestContaiminated() {
 		return Context.getService(MdrtbService.class).getConceptDstTestContaminated();
 	}
 	
+	@ModelAttribute("otherMycobacteriaNonCoded")
+	Concept getOtherMycobacteriaNonCoded() {
+		return Context.getService(MdrtbService.class).getConceptOtherMycobacteriaNonCoded();
+	}	
  }
 
 

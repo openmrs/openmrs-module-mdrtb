@@ -444,6 +444,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptDstTestContaminated();
 	}
 	
+	public Concept getConceptOtherMycobacteriaNonCoded() {
+		return getMdrtbFactory().getConceptOtherMycobacteriaNonCoded();
+	}
+	
+	public Concept getConceptSputum() {
+		return getMdrtbFactory().getConceptSputum();
+	}
+	
     public String getColorForConcept(Concept concept) {
     	
     	// initialize the cache if need be

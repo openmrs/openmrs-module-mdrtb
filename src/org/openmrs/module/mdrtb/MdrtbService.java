@@ -242,6 +242,16 @@ public interface MdrtbService extends OpenmrsService {
      */
     public Concept getConceptDstTestContaminated();
     
+    /**
+     * Returns the concept that represents Other Mycobacteria Non-Coded
+     */
+    public Concept getConceptOtherMycobacteriaNonCoded();
+    
+    /**
+     * Returns the concept that represents Sputum
+     */
+    public Concept getConceptSputum();
+    
 	/**
      * Check to see what color to associate with a given result concept
      */

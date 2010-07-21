@@ -20,7 +20,12 @@ public class SpecimenAddController extends AbstractSpecimenController {
 	
 	@ModelAttribute("specimen")
 	public MdrtbSpecimen getSpecimen(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		return Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
+		MdrtbSpecimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
+		
+		// set the default type to "sputum"
+		specimen.setType(Context.getService(MdrtbService.class).getConceptSputum());
+		
+		return specimen;
 	}
 		
 	

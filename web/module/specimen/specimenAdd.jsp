@@ -28,6 +28,7 @@
 <!-- TODO localize all text -->
 
 <!-- TODO is answerConcept.name the correct parameter? -->
+
 <tr>
 <td>Sample ID:</td>
 <td><form:input path="identifier" size="10" /><form:errors path="identifier" cssClass="error" /></td>
@@ -36,7 +37,7 @@
 <tr>
 <td>Sample Type:</td>
 <td><form:select path="type" multiple="false">
-	<form:options items="${types}" itemValue="answerConcept.id" itemLabel="answerConcept.name" />
+	<form:options items="${types}" itemValue="answerConcept.id" itemLabel="answerConcept.name"/>
 </form:select></td>
 </tr>
 

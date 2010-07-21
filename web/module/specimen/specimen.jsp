@@ -110,12 +110,12 @@
 				}
 				else {
 					// hide the bacilli or colonies row in the same div as this element,
-					// then find the bacilli/colonies input element and it's value to empty
+					// then find the bacilli/colonies input element and set it's value to empty
 					$(this).closest('div').find('.bacilli').hide().find('#bacilli').attr('value','');
 					$(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
 				}
 		});
-
+		
 		// event handler to reset dst colonies if result is reset to an empty value
 		$('.dstResult').change(function() {
 			if ($(this).attr('value') == '' || $(this).attr('value') == ${waitingForTestResult.id} || $(this).attr('value') == ${dstTestContaminated.id} ) {
@@ -123,6 +123,19 @@
 			}
 			else {
 				$(this).closest('tr').find('.dstColonies').show();
+			}
+		});
+
+		//event handler to hide/show organism non-coded selector, and reset the value if needed
+		$('.organismType').change(function() {
+			if ($(this).attr('value') == ${otherMycobacteriaNonCoded.id}) {
+				// show the organism type non-code row in the same div element
+				$(this).closest('div').find('.organismTypeNonCoded').show();
+			}
+			else {
+				// hide the organism type non-coded row in the same div as this element
+				// then find the organism type non-coded inpout element and set it's value to empty
+				$(this).closest('div').find('.organismTypeNonCoded').hide().find('#organismTypeNonCoded').attr('value','');	
 			}
 		});
  	});
@@ -277,7 +290,7 @@ Add a new Lab Test:
 
 <!-- END OF TEST SUMMARY SECTION -->
 
-<!-- BLANK DIV FOR VIEWING/EDITING PAN -->
+<!-- BLANK DIV FOR VIEWING/EDITING PANE -->
 <div id="details_-1" class="box" style="position:absolute; left:450px; top:30px; height:400px; width: 700px; font-size:0.9em; text-align:center; display:none;">
 <br/><br/>
 Select a smear, culture, or DST  from the list on the left to view it's details.
@@ -336,12 +349,20 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </tr>
 </c:if>
 
-<c:if test="${test.testType eq 'culture'}">
+<c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
+
+<c:if test="${(test.testType eq 'culture' || test.testType eq 'dst') && test.organismType == otherMycobacteriaNonCoded}">
+<tr>
+<td><nobr>Organism Type Non-Coded:</nobr></td><td><nobr>${test.organismTypeNonCoded}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
 
 <c:if test="${test.testType eq 'dst'}">
 <tr>
@@ -462,7 +483,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:if test="${test.testType eq 'smear'}">
 <tr class="bacilli" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
 <td><nobr># of Bacilli:</nobr></td>
-<td><input type="text" name="bacilli" value="${test.bacilli}"/></td>
+<td><input type="text" name="bacilli" id="bacilli" value="${test.bacilli}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -470,19 +491,24 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:if test="${test.testType eq 'culture'}">
 <tr class="colonies" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
 <td><nobr># of Colonies:</nobr></td>
-<td><input type="text" name="colonies" value="${test.colonies}"/></td>
+<td><input type="text" name="colonies" id="colonies" value="${test.colonies}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
-<c:if test="${test.testType eq 'culture'}">
+<c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td>
-<td><select name="organismType">
+<td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
 </c:forEach></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr class="organismTypeNonCoded" <c:if test="${test.organismType != otherMycobacteriaNonCoded}"> style="display:none;"</c:if>>
+<td><nobr>Organism Type Non-Coded:</nobr></td>
+<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value="${test.organismTypeNonCoded}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -639,7 +665,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:if test="${type eq 'smear'}">
 <tr class="bacilli" style="display:none;">
 <td><nobr># of Bacilli:</nobr></td>
-<td><input type="text" name="bacilli" value=""/></td>
+<td><input type="text" name="bacilli" id="bacilli" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -647,22 +673,27 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:if test="${type eq 'culture'}">
 <tr class="colonies" style="display:none;">
 <td><nobr># of Colonies:</nobr></td>
-<td><input type="text" name="colonies" value=""/></td>
+<td><input type="text" name="colonies" id="colonies" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 
-<c:if test="${type eq 'culture'}">
+<c:if test="${type eq 'culture' || type eq 'dst'}">
 <tr>
 <td><nobr>Organism Type:</nobr></td>
-<td><select name="organismType">
+<td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
 <option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
 </c:forEach></td>
 </select>
 </td>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr class="organismTypeNonCoded" style="display:none;">
+<td><nobr>Organism Type Non-Coded:</nobr></td>
+<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>

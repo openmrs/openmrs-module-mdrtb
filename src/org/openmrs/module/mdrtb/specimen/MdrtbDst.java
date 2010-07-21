@@ -34,6 +34,9 @@ public interface MdrtbDst extends MdrtbTest {
 	public Concept getOrganismType();
 	public void setOrganismType(Concept organismType);
 	
+	public String getOrganismTypeNonCoded();
+	public void setOrganismTypeNonCoded(String organismType);
+	
 	public Integer getColoniesInControl();
 	public void setColoniesInControl(Integer coloniesInControl);
 

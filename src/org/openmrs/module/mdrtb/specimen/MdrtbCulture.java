@@ -31,4 +31,8 @@ public interface MdrtbCulture extends MdrtbTest {
 	
 	public Concept getOrganismType();
 	public void setOrganismType(Concept organismType);
+
+	public String getOrganismTypeNonCoded();
+	public void setOrganismTypeNonCoded(String organismType);
+
 }
