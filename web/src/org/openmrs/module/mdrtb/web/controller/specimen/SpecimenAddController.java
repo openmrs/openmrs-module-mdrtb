@@ -51,7 +51,7 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		status.setComplete();
 		
 		// redirect to the new detail patient for this specimen
-		return new ModelAndView("redirect:list.form?patientId=" + specimen.getPatient().getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId());
 		
 	}
 }

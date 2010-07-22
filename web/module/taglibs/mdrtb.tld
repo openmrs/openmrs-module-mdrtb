@@ -482,6 +482,25 @@
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>dst</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a Germ cell for display
+	</description>
+	<name>germCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.GermCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>cultures</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
 
 <function>

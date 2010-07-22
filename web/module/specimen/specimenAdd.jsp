@@ -63,12 +63,16 @@
 </td>
 </tr>
 
+<!--  
+
 <tr>
 <td>Appearance:</td>
 <td><form:select path="appearance" multiple="false">
 	<form:options items="${appearances}" itemValue="answerConcept.id" itemLabel="answerConcept.name"/>
 </form:select></td>
 </tr>
+
+-->
 
 <tr>
 <td>Comments:</td>
@@ -77,7 +81,7 @@
 
 </table>
 
-<input type="submit" value="Save Specimen" />
+<button type="submit">Save</button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}"><button type="button">Cancel</button></a>
 
 </form:form>
 </div>

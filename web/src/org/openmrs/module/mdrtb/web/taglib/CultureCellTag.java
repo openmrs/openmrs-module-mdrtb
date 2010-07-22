@@ -10,7 +10,7 @@ public class CultureCellTag extends AbstractBacteriologyCellTag {
     private MdrtbCulture culture;
 
     public int doStartTag() {
-    	renderCell(culture.getResult());
+    	renderCell(culture, culture.getResult());
     	return SKIP_BODY;
     }
     

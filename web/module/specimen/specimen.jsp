@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery/jquery-1.3.2.min.js"></script>
+
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${specimen.patient.patientId}"/>
 <openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
@@ -18,8 +20,6 @@
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
-<!-- TODO: is this the right link for jquery? -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery/jquery-1.3.2.min.js"></script>
 
 <script type="text/javascript"><!--
 
@@ -152,12 +152,23 @@
 </script>
 <!-- END JQUERY -->
 
+<!--  
+<div align="left">
+<ul id="menu">
+<li class="first">
+<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${specimen.patient.patientId}">Return to Specimen List</a>
+</li>
+</ul>
+</div>
+-->
+
+
 <!--  SPECIMEN SECTION -->
 <div id="specimen" align="center">
 
 <div id="details_specimen">
 
-<b class="boxHeader" style="margin:0px">Sample Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
+<b class="boxHeader" style="margin:0px">Specimen Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 

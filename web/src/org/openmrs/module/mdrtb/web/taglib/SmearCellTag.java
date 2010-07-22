@@ -10,7 +10,7 @@ public class SmearCellTag extends AbstractBacteriologyCellTag {
     private MdrtbSmear smear;
 
     public int doStartTag() {
-    	renderCell(smear.getResult());
+    	renderCell(smear, smear.getResult());
     	return SKIP_BODY;
     }
     

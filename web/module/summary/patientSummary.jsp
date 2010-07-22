@@ -2,7 +2,12 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css" /> 
+
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${patientId}"/>
 <openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${patientId}"/>
 
@@ -15,6 +20,13 @@
 	.chartCell {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
+<!-- ADD THE CUSTOM JQUERY TOOLTIP  -->
+<script type="text/javascript">
+$(document).ready(function(){
+    $("td").tooltip();
+  });
+</script>
+
 <!-- PATIENT CHART -->
 <div id="patientChart" align="center">
 <table style="border:2px solid #8FABC7; font-size: .9em;">
@@ -24,9 +36,10 @@
 <tr>
 <td class="chartCell">Month</td>
 <td class="chartCell">Date collected</td>
-<td class="chartCell">Smears</td>
-<td class="chartCell">Cultures</td>
-<td class="chartCell" width="30px">&nbsp;</td>
+<td class="chartCell" style="width:150px">Smears</td>
+<td class="chartCell" style="width:150px">Cultures</td>
+<td class="chartCell">Germ</td>
+<!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${drugTypes}">
 	<td class="chartCell" style="vertical-align:top">${drugType.drug.name.shortName}<br/>${drugType.concentration}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
@@ -70,7 +83,11 @@
 				</table>
 			</c:if></td> 
 			
-			<td class="chartCell"/>
+			<td class="chartCell" style="font-size:60%">
+				<mdrtb:germCell cultures="${specimen.cultures}"/>
+			</td>
+			
+		<!--  	<td class="chartCell" style="border-top:none;border-bottom:none"/>  --> <!-- BLANK COLUMN -->
 				
 			<!--  dsts -->
 			<c:forEach var="drugType" items="${drugTypes}">
@@ -78,7 +95,7 @@
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
 					<c:forEach var="dst" items="${specimen.dsts}">
-						<mdrtb:dstResultCell dstResult="${dst.resultsMap[drugType.key]}"/>
+						<mdrtb:dstResultCell dst="${dst}" dstResult="${dst.resultsMap[drugType.key]}"/>
 					</c:forEach>
 				</tr>
 				</table>
@@ -92,6 +109,7 @@
 			<tr>
 			<td class="chartCell">${record.key}</td>
 			<td class="chartCell"/><td class="chartCell"/><td class="chartCell"/><td class="chartCell"/>
+			<!-- <td class="chartCell" style="border-top:none;border-bottom:none"/> -->  <!-- BLANK COLUMN -->
 			<c:forEach items="${drugTypes}"><td class="chartCell"/></c:forEach>
 			</tr>		
 		</c:otherwise>
