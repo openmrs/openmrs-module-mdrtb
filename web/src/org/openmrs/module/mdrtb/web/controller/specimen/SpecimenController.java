@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
@@ -12,6 +13,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -122,7 +125,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, 
 	                                  @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst,
 	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
-	                                  @RequestParam(required = false, value = "testId") String testId) {
+	                                  @RequestParam(required = false, value = "testId") String testId, 
+	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport) {
 	                        
 				
 		// TODO: add validation
@@ -158,6 +162,21 @@ protected final Log log = LogFactory.getLog(getClass());
 			}
 			i++;
 		} 
+		
+		// (somewhat) hacky way to manually handle the addition of new scanned lab report
+		if(scannedLabReport != null) {
+			// create the new result
+			ScannedLabReport report = specimen.addScannedLabReport();
+			
+			// TODO: hack for now, we are assuming that the location must be MSLI!
+			report.setLab(Context.getLocationService().getLocation("MSLI"));
+			report.setFile(scannedLabReport);
+			
+			// TODO: pull this into the service layer
+			// need to save this explicitly for the obs handler to pick it up and handle it properly
+			Context.getObsService().saveObs((Obs) report.getScannedLabReport(), "added by mdr-tb module specimen management ui");
+		}
+	
 
 		if (result.hasErrors()) {
 			return new ModelAndView("/module/mdrtb/specimen/specimen");

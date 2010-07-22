@@ -64,6 +64,13 @@
 </tr>
 
 <tr>
+<td>Appearance:</td>
+<td><form:select path="appearance" multiple="false">
+	<form:options items="${appearances}" itemValue="answerConcept.id" itemLabel="answerConcept.name"/>
+</form:select></td>
+</tr>
+
+<tr>
 <td>Comments:</td>
 <td><form:textarea path="comments" cols="60" rows="4"/></td>
 </tr>

@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/module/mdrtb/specimen/add.form")
 public class SpecimenAddController extends AbstractSpecimenController {
 
-	
 	@ModelAttribute("specimen")
 	public MdrtbSpecimen getSpecimen(@RequestParam(required = true, value = "patientId") Integer patientId) {
 		MdrtbSpecimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
@@ -55,5 +54,4 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		return new ModelAndView("redirect:list.form?patientId=" + specimen.getPatient().getId());
 		
 	}
-	
 }

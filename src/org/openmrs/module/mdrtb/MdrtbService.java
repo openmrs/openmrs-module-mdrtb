@@ -221,6 +221,12 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSpecimenTypes();
+    
+    /**
+     * Returns all the concepts that are possible coded answers for the appearance of a sputum specimen
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleSpecimenAppearances();
   
     /**
      * Returns all the possible drug to display in a DST result, in the order we want to display them

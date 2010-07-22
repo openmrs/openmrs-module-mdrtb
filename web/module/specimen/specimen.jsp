@@ -167,7 +167,22 @@
 <!-- TODO: how should comments wrap properly??? -->
 <tr>
 <td><nobr>Date Collected:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-<td><nobr>Comments:</td><td>${specimen.comments}</td>
+<td><nobr>Appearance:</td><td>${specimen.appearance.name.name}</td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td><nobr>Comments:</td><td colspan="3">${specimen.comments}</td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td><nobr>Scanned Lab Reports:</nobr></td>
+<td colspan="3">
+<c:forEach var="report" items="${specimen.scannedLabReports}">
+${report.filename}
+</c:forEach>
+</td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -180,7 +195,7 @@
 
 <div id="edit_specimen"  style="display:none">
 
-<form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post">
+<form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post" enctype="multipart/form-data">
 
 <b class="boxHeader" style="margin:0px">Sample Details</b>
 <div class="box" style="margin:0px">
@@ -227,8 +242,27 @@
 <tr>
 <td><nobr>Date Collected:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></nobr></td>
+<td><nobr>Appearance:</nobr></td>
+<td>
+<select name="appearance">
+<option value=""></option>
+<c:forEach var="appearance" items="${appearances}">
+<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.name}</option>
+</c:forEach>
+</select>
+</td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
 <td><nobr>Comments:</nobr></td>
-<td><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
+<td colspan="3"><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td><nobr>Scanned Lab Reports:</nobr></td>
+<td colspan="3"><input type="file" name="addScannedLabReport" size="50" /></td>
 <td width="100%">&nbsp;</td>
 </tr>
 

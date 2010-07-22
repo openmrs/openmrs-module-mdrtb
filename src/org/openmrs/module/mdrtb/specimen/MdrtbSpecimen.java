@@ -27,6 +27,7 @@ public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 	 * dateCollected: the date the specimen was collected
 	 * comments: any comments about the specimen itself
 	 * 
+	 * scannedLabReports: a list of the scanned lab reports associated with patient
 	 * smears: a list of the smears associated with the specimen
 	 * cultures: a list of the cultures associated with the specimen
 	 * dsts: a list of the DSTS associated with the specimen
@@ -59,11 +60,13 @@ public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 	public Date getDateCollected();
 	public void setDateCollected(Date dateCollected);
 	
-	public Concept getAppearanceOfSpecimen();
-	public void setAppearanceOfSpecimen(Concept appearanceOfSpecimen);
+	public Concept getAppearance();
+	public void setAppearance(Concept appearance);
 	
 	public String getComments();
 	public void setComments(String comments);
+	
+	public List<ScannedLabReport> getScannedLabReports();
 	
 	public List<MdrtbSmear> getSmears();
 	public MdrtbSmear addSmear();
@@ -75,5 +78,6 @@ public interface MdrtbSpecimen extends Comparable<MdrtbSpecimen>{
 	public MdrtbDst addDst();
 	
 	public List<MdrtbTest> getTests();
+	public ScannedLabReport addScannedLabReport();
 	
 }

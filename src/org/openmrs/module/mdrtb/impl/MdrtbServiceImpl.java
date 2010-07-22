@@ -411,6 +411,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptSampleSource().getAnswers();
 	}
 	
+	public Collection<ConceptAnswer> getPossibleSpecimenAppearances() {
+		return getMdrtbFactory().getConceptAppearanceOfSpecimen().getAnswers();
+	}
+	
     public List<DrugType> getPossibleDrugTypesToDisplay() {
     	// TODO: do we want to start pulling this from somewhere else?
     	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");

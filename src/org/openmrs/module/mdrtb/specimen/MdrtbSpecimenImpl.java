@@ -95,6 +95,20 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return dst;
 	}
 	
+	public ScannedLabReport addScannedLabReport() {
+		// cast to an Impl so that we can access protected methods from within the specimen impl
+		ScannedLabReportImpl report = new ScannedLabReportImpl(this.encounter);
+		
+		// add the scanned lab report back to the master encounter
+		this.encounter.addObs(report.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		report.setLab(null);
+		
+		return report;
+	}
+	
 	public MdrtbSmear addSmear() {
 		// cast to an Impl so we can access protected methods from within the specimen impl
 		MdrtbSmearImpl smear = new MdrtbSmearImpl(this.encounter);
@@ -109,7 +123,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return smear;
 	}
 	
-	public Concept getAppearanceOfSpecimen() {
+	public Concept getAppearance() {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
 		
 		if (obs == null) {
@@ -190,11 +204,22 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return encounter.getProvider();
 	}
 	
+	public List<ScannedLabReport> getScannedLabReports() {
+		List<ScannedLabReport> reports = new LinkedList<ScannedLabReport>();
+		
+		// iterate through top-level obs and create scanned lab reports
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(mdrtbFactory.getConceptScannedLabReport())) {
+					reports.add(new ScannedLabReportImpl(obs));
+				}
+			}
+		}
+		return reports;
+	}
+	
 	public List<MdrtbSmear> getSmears() {
-		List<MdrtbSmear> smears = new LinkedList<MdrtbSmear>();
-		
-		// TODO: sort by date, make smears comparable, turn this into a sorted list?
-		
+		List<MdrtbSmear> smears = new LinkedList<MdrtbSmear>();		
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
@@ -228,16 +253,17 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		}
 	}
 	
-	public void setAppearanceOfSpecimen(Concept appearanceOfSpecimen) {
+	public void setAppearance(Concept appearance) {
+		
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && appearanceOfSpecimen == null) {
+		if (obs == null && appearance == null) {
 			return;
 		}
 		
 		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(appearanceOfSpecimen)) {
+		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(appearance)) {
 			
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
@@ -246,11 +272,11 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
 				
-			// now create the new Obs and add it to the encounter
+			// now create the new Obs and add it to the encounter		
 			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptAppearanceOfSpecimen(), encounter.getEncounterDatetime(), encounter.getLocation());
-			obs.setValueCoded(appearanceOfSpecimen);
+			obs.setValueCoded(appearance);
 			encounter.addObs(obs);
-		}
+		} 
 	}
 	
 	public void setComments(String comments) {

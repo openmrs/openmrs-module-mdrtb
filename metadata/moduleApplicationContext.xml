@@ -140,6 +140,19 @@
 		</property>
 	</bean>
     <!-- /Controllers -->
+    
+    
+    <!-- Define the Complex Obs Handler -->
+    <bean parent="obsServiceTarget">
+        <property name="handlers">
+            <map>
+                <entry>
+                    <key><value>BinaryDataHandler</value></key>
+                    <bean class="org.openmrs.module.mdrtb.obs.handler.BinaryDataHandler"/>
+                </entry>
+            </map>
+        </property>
+	</bean>
 
 	<!--  Enable annotation-driven Spring MVC -->    
     <context:component-scan base-package="@MODULE_PACKAGE@" />

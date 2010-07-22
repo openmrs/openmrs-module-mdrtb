@@ -104,7 +104,7 @@ public class SpecimenMigrationController {
 				
 					// set the appearance if necessary
 					if(appearanceOfSpecimen != null) {
-						specimen.setAppearanceOfSpecimen(appearanceOfSpecimen.getValueCoded());
+						specimen.setAppearance(appearanceOfSpecimen.getValueCoded());
 					}
 				
 					// set the date collected if it exists

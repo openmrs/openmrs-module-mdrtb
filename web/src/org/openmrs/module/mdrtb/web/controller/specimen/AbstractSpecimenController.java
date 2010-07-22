@@ -139,6 +139,11 @@ public abstract class AbstractSpecimenController {
 		return Context.getLocationService().getAllLocations();
 	}
 	
+	@ModelAttribute("appearances")
+	Collection<ConceptAnswer> getPossibleSpecimenAppearances() {
+		return Context.getService(MdrtbService.class).getPossibleSpecimenAppearances();
+	}
+	
 	@ModelAttribute("testTypes")
 	Collection<String> getPossibleTestTypes() {
 		Collection<String> testTypes = new LinkedList<String>();
