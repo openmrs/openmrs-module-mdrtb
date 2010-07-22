@@ -43,6 +43,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
 import org.openmrs.module.mdrtb.specimen.MdrtbTest;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -207,6 +208,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public void saveSmear(MdrtbSmear smear) {
 		if (smear == null) {
 			log.warn("Unable to save smear: smear object is null");
+			return;
 		}
 		
 		// make sure getSmear returns that right type
@@ -268,6 +270,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public void saveCulture(MdrtbCulture culture) {
 		if (culture == null) {
 			log.warn("Unable to save culture: culture object is null");
+			return;
 		}
 		
 		// make sure getCulture returns that right type
@@ -306,6 +309,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public void saveDst(MdrtbDst dst) {
 		if (dst == null) {
 			log.warn("Unable to save dst: dst object is null");
+			return;
 		}
 		
 		// make sure getCulture returns that right type
@@ -319,6 +323,34 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 		
+	public void saveScannedLabReport(ScannedLabReport report) {
+		if (report == null) {
+			log.warn("Unable to save dst: dst object is null");
+			return;
+		}
+		
+		// make sure getScannedLabReport returns that right type
+		// (i.e., that this service implementation is using the specimen implementation that it expects, which should return a observation)
+		if(!(report.getScannedLabReport() instanceof Obs)) {
+			throw new APIException("Not a valid scanned lab report implementation for this service implementation");
+		}
+		
+		// otherwise, go ahead and do the save
+		Context.getObsService().saveObs((Obs) report.getScannedLabReport(), "voided by Mdr-tb module specimen tracking UI");
+	}
+	
+	public void deleteScannedLabReport(Integer reportId) {
+		Obs obs = Context.getObsService().getObs(reportId);
+		
+		// the id must refer to a valid obs, which is a scanned lab report
+		if (obs == null || ! obs.getConcept().equals(mdrtbFactory.getConceptScannedLabReport()) ) {
+			throw new APIException ("Unable to delete scanned lab report: invalid report id " + reportId);
+		}
+		else {
+			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");
+		}
+	}
+	
 	public PatientChart getPatientChart(Patient patient) {
 		
 		PatientChart chart = new PatientChart();

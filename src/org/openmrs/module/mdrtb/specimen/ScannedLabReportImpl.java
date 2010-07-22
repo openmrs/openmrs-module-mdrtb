@@ -32,7 +32,7 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {
-			throw new RuntimeException ("Cannot create smear: encounter can not be null.");
+			throw new RuntimeException ("Cannot create scanned lab report: encounter can not be null.");
 		}
 		
 		report = new Obs (encounter.getPatient(), mdrtbFactory.getConceptScannedLabReport(), encounter.getEncounterDatetime(), null);

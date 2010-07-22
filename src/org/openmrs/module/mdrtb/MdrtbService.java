@@ -20,6 +20,7 @@ import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
 import org.openmrs.module.mdrtb.specimen.MdrtbDst;
 import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
 import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -167,6 +168,18 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional
     public void saveDst(MdrtbDst dst);
+    
+    /**
+     * Saves a scanned lab report in the appropriate obs constructs
+     */
+    @Transactional
+    public void saveScannedLabReport(ScannedLabReport report);
+    
+    /**
+     * Deletes a scanned lab report
+     */
+    @Transactional 
+    public void deleteScannedLabReport(Integer reportId);
     
     /**
      * Gets the patient chart for a specific patient

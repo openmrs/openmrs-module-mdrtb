@@ -85,7 +85,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 
     public Concept getResult() {
     	Obs obs = getResultObs();
-   	 
+
     	if (obs == null) {
     		return null;
     	}
@@ -216,6 +216,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
     	resultSet.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
     	resultSet.add(mdrtbFactory.getConceptWaitingForTestResults());
     	resultSet.add(mdrtbFactory.getConceptDstTestContaminated());
+    	resultSet.add(mdrtbFactory.getConceptNone());
     	
     	return resultSet;
     }

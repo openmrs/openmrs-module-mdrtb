@@ -65,6 +65,7 @@
 			showViewEditAddLinks();
 			$('#edit_specimen').hide();  // hide the edit specimen box
 			$('#details_specimen').show();  // show the specimen details box
+			$('.scannedLabReport').show(); // show any scanned lab reports that may have been deleted
 		});
 
 		// event handlers to display add boxes
@@ -138,6 +139,14 @@
 				$(this).closest('div').find('.organismTypeNonCoded').hide().find('#organismTypeNonCoded').attr('value','');	
 			}
 		});
+
+		//event handler to handle removing lab reports
+		$('.removeScannedLabReport').click(function() {
+			// hide the lab report
+			$(this).closest('.scannedLabReport').hide();
+			// set it's hidden input to the id of this scanned lab report
+			$('#removeScannedLabReport' + $(this).attr('value')).attr('value',$(this).attr('value'));
+		});
  	});
 -->
 </script>
@@ -180,7 +189,7 @@
 <td><nobr>Scanned Lab Reports:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
-${report.filename}
+<a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
 </c:forEach>
 </td>
 <td width="100%">&nbsp;</td>
@@ -262,7 +271,15 @@ ${report.filename}
 
 <tr>
 <td><nobr>Scanned Lab Reports:</nobr></td>
-<td colspan="3"><input type="file" name="addScannedLabReport" size="50" /></td>
+<td colspan="3">
+<c:forEach var="report" items="${specimen.scannedLabReports}">
+<span class="scannedLabReport"><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
+<button class="removeScannedLabReport" value="${report.id}" type="button">X</button>
+<input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/></span>
+<br/>
+</c:forEach>
+<input type="file" name="addScannedLabReport" size="50" />
+</td>
 <td width="100%">&nbsp;</td>
 </tr>
 

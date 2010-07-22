@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
@@ -126,10 +125,15 @@ protected final Log log = LogFactory.getLog(getClass());
 	                                  @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst,
 	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
-	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport) {
+	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
+	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
 	                        
 				
 		// TODO: add validation
+
+		if (result.hasErrors()) {
+			return new ModelAndView("/module/mdrtb/specimen/specimen");
+		}
 		
 		// hacky way to manually handle the addition of new dsts
 		int i = 0;
@@ -164,24 +168,27 @@ protected final Log log = LogFactory.getLog(getClass());
 		} 
 		
 		// (somewhat) hacky way to manually handle the addition of new scanned lab report
-		if(scannedLabReport != null) {
+		if(scannedLabReport != null && !scannedLabReport.isEmpty()) {
 			// create the new result
 			ScannedLabReport report = specimen.addScannedLabReport();
 			
 			// TODO: hack for now, we are assuming that the location must be MSLI!
 			report.setLab(Context.getLocationService().getLocation("MSLI"));
 			report.setFile(scannedLabReport);
-			
-			// TODO: pull this into the service layer
+		
 			// need to save this explicitly for the obs handler to pick it up and handle it properly
-			Context.getObsService().saveObs((Obs) report.getScannedLabReport(), "added by mdr-tb module specimen management ui");
+			Context.getService(MdrtbService.class).saveScannedLabReport(report);
 		}
 	
-
-		if (result.hasErrors()) {
-			return new ModelAndView("/module/mdrtb/specimen/specimen");
+		// (somewhat) hacky method to manually remove lab reports
+		if(removeScannedLabReports != null) {
+			for(String reportId : removeScannedLabReports) {
+				if(StringUtils.isNotEmpty(reportId)) {
+					Context.getService(MdrtbService.class).deleteScannedLabReport(Integer.valueOf(reportId));
+				}
+			}
 		}
-		
+
 		// do the actual update
 		Context.getService(MdrtbService.class).saveSpecimen(specimen);
 			

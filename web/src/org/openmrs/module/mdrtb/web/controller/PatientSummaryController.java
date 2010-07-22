@@ -52,7 +52,9 @@ public class PatientSummaryController {
 			for(MdrtbSpecimen specimen : records.get(key).getSpecimens()) {
 				for(MdrtbDst dst : specimen.getDsts()) {
 					for(MdrtbDstResult dstResult : dst.getResults()) {	
-						existingDrugTypes.add(new DrugType(dstResult.getDrug(), dstResult.getConcentration()));
+						if(dstResult.getDrug() != null) {
+							existingDrugTypes.add(new DrugType(dstResult.getDrug(), dstResult.getConcentration()));
+						}
 					}
 				}
 			}

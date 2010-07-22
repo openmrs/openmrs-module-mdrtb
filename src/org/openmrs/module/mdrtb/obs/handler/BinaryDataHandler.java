@@ -74,9 +74,6 @@ public class BinaryDataHandler extends AbstractHandler implements ComplexObsHand
 	 * @see ComplexObsHandler#saveObs(Obs)
 	 */
 	public Obs saveObs(Obs obs) throws APIException {
-
-		log.error("Do we even get here?");
-		
 		try {			
 			// Write the File to the File System
 			String fileName = obs.getComplexData().getTitle();
