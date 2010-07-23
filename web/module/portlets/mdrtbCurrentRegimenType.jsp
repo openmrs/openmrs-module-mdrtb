@@ -12,7 +12,7 @@
 							if (!ret)
 								alert('DWR error');
 							else
-								window.location="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${obj.patient.patientId}&view=REG";
+								window.location="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${obj.patient.patientId}";
 						});
 			
 		}
