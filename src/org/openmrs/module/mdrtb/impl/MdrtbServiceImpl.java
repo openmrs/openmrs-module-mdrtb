@@ -38,12 +38,11 @@ import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstImpl;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
-import org.openmrs.module.mdrtb.specimen.Test;
-import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	

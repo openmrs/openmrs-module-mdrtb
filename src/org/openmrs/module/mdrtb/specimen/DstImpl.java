@@ -187,7 +187,7 @@ public class DstImpl extends TestImpl implements Dst {
 		}
 		
 		// now save the value
-		// TODO: is this the proper way to cast from Boolean to Double?
+		// is this the proper way to cast from Boolean to Double?
 		obs.setValueNumeric(direct ? 1.0 : 0.0);
     }
 

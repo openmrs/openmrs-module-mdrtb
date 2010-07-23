@@ -146,9 +146,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public List<Culture> getCultures() {
 		List<Culture> cultures = new LinkedList<Culture>();
-		
-		// TODO: sort by date, make smears comparable, turn this into a sorted list?
-		
+
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
@@ -167,9 +165,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public List<Dst> getDsts() {
 		List<Dst> dsts = new LinkedList<Dst>();
-		
-		// TODO: sort by date, make smears comparable, turn this into a sorted list?
-		
+				
 		// iterate through all the obs groups, create dsts from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
