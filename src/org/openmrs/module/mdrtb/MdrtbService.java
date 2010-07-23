@@ -104,18 +104,7 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional
     public void saveSmear(Smear smear);
-    
-    
-    // TODO: get rid of this if I end up not using it
-    /**
-     * Updates a smear 
-     * 
-     * @param smearId the reference to the smear to update
-     * @param smear the new values for the smear
-     */
-    @Transactional
-    public void updateSmear(Integer smearId, Smear smear);
-    
+     
     /**
      * Creates a new culture, associated with the given encounter
      */

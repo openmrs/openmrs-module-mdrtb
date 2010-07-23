@@ -223,28 +223,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	// TODO: get rid of this if I end up not using it!
-	public void updateSmear(Integer smearId, Smear smearUpdate) {
-		Smear smear;
-		
-		// first, get the smear that we are looking to update
-		try {
-			smear = getSmear(Context.getObsService().getObs(smearId));
-		}
-		catch (Exception e) {
-			throw new APIException("Unable to get smear to update", e);
-		}
-		
-		if (smear == null) {
-			throw new APIException("Unable to get smear to update");
-		}
-			
-		// perform the update and save the smear
-		// TODO: explain better what an "update" means?
-		updateSmearHelper(smear, smearUpdate);
-		saveSmear(smear);
-	}
-	
 	public Culture createCulture(Encounter encounter) {		
 		// first, get the specimen
 		Specimen specimen = getSpecimen(encounter);
@@ -536,27 +514,5 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		
 		return results;
-	}
-	
-	
-	
-	// TODO: get rid of these if I end up not using them
-	private void updateTestHelper(Test oldTest, Test newTest) {
-		// update all the test values that are "settable"
-		oldTest.setDateOrdered(newTest.getDateOrdered());
-		oldTest.setDateReceived(newTest.getDateReceived());
-		oldTest.setLab(newTest.getLab());
-		oldTest.setResultDate(newTest.getResultDate());
-		
-	}
-	
-	private void updateSmearHelper(Smear oldSmear, Smear newSmear){
-		// first, update all the common test parameters
-		updateTestHelper(oldSmear, newSmear);
-		
-		// now, update everything else
-		oldSmear.setResult(newSmear.getResult());
-		oldSmear.setBacilli(newSmear.getBacilli());
-		oldSmear.setMethod(newSmear.getMethod());		
 	}
 }
