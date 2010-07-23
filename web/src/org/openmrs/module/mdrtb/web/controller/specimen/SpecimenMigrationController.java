@@ -205,6 +205,8 @@ public class SpecimenMigrationController {
 						// iterate through all the obs in the test
 						for(Obs childObs : obs.getGroupMembers()) {	
 							
+							// TODO: do I want to ignore voided obs... get Group Members doesn't do so automatically
+							
 							log.info("Processing test obs " + childObs.getId() + " of concept type " + childObs.getConcept());
 							
 							// check to see if this is a the sample source obs

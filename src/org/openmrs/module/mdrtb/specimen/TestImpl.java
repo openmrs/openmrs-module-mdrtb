@@ -104,8 +104,10 @@ public abstract class TestImpl implements Test {
 		 // also propagate this location to the all the child obs
 		 if(test.getGroupMembers() != null) {
 			for(Obs obs : test.getGroupMembers()) {
-		    	obs.setAccessionNumber(accessionNumber);
-		    }
+		    	if(!obs.isVoided()) {
+		    		obs.setAccessionNumber(accessionNumber);
+		    	}
+			}
 		 }
 	 }
 	
@@ -174,7 +176,9 @@ public abstract class TestImpl implements Test {
 		// also propagate this location to the all the child obs
 	    if(test.getGroupMembers() != null) {
 	    	for(Obs obs : test.getGroupMembers()) {
-	    		obs.setLocation(location);
+	    		if(!obs.isVoided()) {
+	    			obs.setLocation(location);
+	    		}
 	    	}
 	    }
 	 }

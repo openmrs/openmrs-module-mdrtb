@@ -331,6 +331,8 @@ public class SpecimenMigrationValidationController {
 	private void validateCulture(Obs obs) {
 		Collection<Concept> concepts = new HashSet<Concept>(cultureConcepts);
 		
+		// TODO: remember that get group members includes voided obs!
+		
 		for(Obs childObs : obs.getGroupMembers()) {
 			// make sure that all child obs are of the proper type for a culture
 			if(!concepts.contains(childObs.getConcept())) {

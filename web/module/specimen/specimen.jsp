@@ -450,13 +450,15 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
 </tr>
 <c:forEach var="drugType" items="${drugTypes}">
-<c:if test="${!empty resultsMap[drugType.key].result}">
-<tr>
-<td>${drugType.drug.name}</td>
-<td>${drugType.concentration}</td>
-<td>${resultsMap[drugType.key].result.name}</td>
-<td>${resultsMap[drugType.key].colonies}</td>
-</tr>
+<c:if test="${!empty resultsMap[drugType.id]}">
+	<c:forEach var="dstResult" items="${resultsMap[drugType.id]}">
+		<tr>
+		<td><nobr>${dstResult.drug.name}</nobr></td>
+		<td><nobr>${dstResult.concentration}</nobr></td>
+		<td><nobr>${dstResult.result.name}</nobr></td>
+		<td><nobr>${dstResult.colonies}</nobr></td>
+		</tr>
+	</c:forEach>
 </c:if>
 </c:forEach>
 </table>
@@ -599,42 +601,18 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <tr>
 <td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
 </tr>
-
-<c:set var="i" value="0"/>
 <c:forEach var="drugType" items="${drugTypes}">
-<c:set var="flag" value="1"/>
-
-<tr>
-<c:if test="${!empty resultsMap[drugType.key].result}">
-<td>${drugType.drug.name}</td>
-<td>${drugType.concentration}</td>
-<td><select name="resultsMap[${drugType.key}].result" class="dstResult">
-<option value=""></option>
-<c:forEach var="possibleResult" items="${dstResults}">
-<option value="${possibleResult.id}" <c:if test="${possibleResult == resultsMap[drugType.key].result}">selected</c:if> >${possibleResult.name}</option>
-</c:forEach></td>
-</select>
-</td>
-<td><input type="text" size="6" name="resultsMap[${drugType.key}].colonies" value="${resultsMap[drugType.key].colonies}" class="dstColonies"<c:if test="${resultsMap[drugType.key].result == '' || resultsMap[drugType.key].result == waitingForTestResult || resultsMap[drugType.key].result == dstTestContaminated}"> style="display:none"</c:if>/></td>
-<c:set var="flag" value="0"/> <!-- so that we know we don't need to print the empty inputs -->
-</c:if>
-
-<c:if test="${flag == 1}">
-<td>${drugType.drug.name}<input type="hidden" name="addDst${i}.drug" value="${drugType.drug.id}"/></td>
-<td>${drugType.concentration}<input type="hidden" name="addDst${i}.concentration" value="${drugType.concentration}"/></td>
-<td><select name="addDst${i}.result" class="dstResult">
-<option value=""></option>
-<c:forEach var="possibleResult" items="${dstResults}">
-<option value="${possibleResult.id}">${possibleResult.name}</option>
-</c:forEach></td>
-</select>
-</td>
-<td><input type="text" size="6" name="addDst${i}.colonies" value="" class="dstColonies" style="display:none"/></td>
-<c:set var="i" value="${i+1}"/>
-</c:if>
-
-</tr>
-</c:forEach>
+	<c:if test="${!empty resultsMap[drugType.id]}">
+		<c:forEach var="dstResult" items="${resultsMap[drugType.id]}">
+			<tr>
+			<td><nobr>${dstResult.drug.name}</nobr></td>
+			<td><nobr>${dstResult.concentration}</nobr></td>
+			<td><nobr>${dstResult.result.name}</nobr></td>
+			<td><nobr>${dstResult.colonies}</nobr></td>
+			</tr>
+		</c:forEach>
+	</c:if>
+	</c:forEach>
 </table>
 <br/>
 </c:if>
@@ -651,171 +629,8 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <!--  END OF EDIT TESTS SECTION -->
 
-<!-- ADD TEST SECTION -->
-
-<c:forEach var="type" items="${testTypes}">
-
-<div id="add_${type}" class="addBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
-
-<form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: Add</b>
-<div class="box" style="margin:0px">
-<table cellpadding="0">
-
-<tr>
-<td><nobr>Accession #:</nobr></td>
-<td><input type="text" name="accessionNumber"/></td>
-<td><nobr>Date ordered:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-<tr>
-<td>Laboratory:</td>
-<td><select name="lab">
-<c:forEach var="location" items="${locations}">
-<option value="${location.locationId}">${location.name}</option>
-</c:forEach>
-</select>
-</td>
-<td><nobr>Date sample received:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-<tr>
-<td><nobr>Method:</nobr></td>
-<td><select name="method">
-<option value=""></option>
-<c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
-<option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
-</c:forEach>
-</select>
-</td>
-<td><nobr>Date started:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-<tr>
-<c:if test="${type eq 'smear' || type eq 'culture'}">
-<td><nobr>Results:</nobr></td>
-<td><select name="result" class="result">
-<option value=""></option>
-<c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
-<option value="${result.answerConcept.id}">${result.answerConcept.name}</option>
-</c:forEach></td>
-</select>
-</td>
-</c:if>
-
-<c:if test="${type eq 'dst'}">
-<td><nobr>Direct/Indirect:</nobr></td>
-<td><select name="direct">
-<option value=""></option>
-<option value="1">Direct</option>
-<option value="0">Indirect</option>
-</select></td>
-</c:if>
-
-<td><nobr>Date completed:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-<c:if test="${type eq 'smear'}">
-<tr class="bacilli" style="display:none;">
-<td><nobr># of Bacilli:</nobr></td>
-<td><input type="text" name="bacilli" id="bacilli" value=""/></td>
-<td colspan="2">&nbsp;</td>
-</tr>
-</c:if>
-
-<c:if test="${type eq 'culture'}">
-<tr class="colonies" style="display:none;">
-<td><nobr># of Colonies:</nobr></td>
-<td><input type="text" name="colonies" id="colonies" value=""/></td>
-<td colspan="2">&nbsp;</td>
-</tr>
-</c:if>
 
 
-<c:if test="${type eq 'culture' || type eq 'dst'}">
-<tr>
-<td><nobr>Organism Type:</nobr></td>
-<td><select name="organismType" class="organismType">
-<option value=""></option>
-<c:forEach var="organismType" items="${organismTypes}">
-<option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
-</c:forEach></td>
-</select>
-</td>
-<td colspan="2">&nbsp;</td>
-</tr>
-<tr class="organismTypeNonCoded" style="display:none;">
-<td><nobr>Organism Type Non-Coded:</nobr></td>
-<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
-<td colspan="2">&nbsp;</td>
-</tr>
-</c:if>
-
-<c:if test="${type eq 'dst'}">
-<tr>
-<td><nobr>Colonies in control:</nobr></td>
-<td><input type="text" name="coloniesInControl" value=""/></td>
-<td colspan="2">&nbsp;</td>
-</tr>
-</c:if>
-
-<tr>
-<td><nobr>Comments:</nobr></td>
-<td colspan="3"><textarea cols="60" rows="4" name="comments"></textarea></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-</table>
-
-<!-- handle the DST table -->
-<c:if test="${type eq 'dst'}">
-<br/>
-<table cellpadding="0">
-
-<tr>
-<td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
-</tr>
-
-<c:set var="i" value="0"/>
-<c:forEach var="drugType" items="${drugTypes}">
-<tr>
-<td>${drugType.drug.name}<input type="hidden" name="addDst${i}.drug" value="${drugType.drug.id}"/></td>
-<td>${drugType.concentration}<input type="hidden" name="addDst${i}.concentration" value="${drugType.concentration}"/></td>
-<td><select name="addDst${i}.result" class="dstResult">
-<option value=""></option>
-<c:forEach var="possibleResult" items="${dstResults}">
-<option value="${possibleResult.id}">${possibleResult.name}</option>
-</c:forEach></td>
-</select>
-</td>
-<td><input type="text" size="6" name="addDst${i}.colonies" value="" class="dstColonies" style="display:none"/></td>
-<c:set var="i" value="${i+1}"/>
-</tr>
-</c:forEach>
-</table>
-<br/>
-</c:if>
-<!-- end of the DST table -->
-
-
-<!--  TODO: figure out why "cancelAdd" as an id (instead of class) isn't working -->
-<button type="submit">Save</button><button class="cancelAdd" type="reset">Cancel</button>
-</form>
-</div>
-</div>
-
-</c:forEach> 
-
-<!-- END ADD TEST SECTION -->
 </div> <!-- END OF TEST DIV -->
 
 </div> <!-- END OF SPECIMEN DIV -->

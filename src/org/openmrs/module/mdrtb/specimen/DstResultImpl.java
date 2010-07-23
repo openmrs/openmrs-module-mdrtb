@@ -249,7 +249,7 @@ public class DstResultImpl implements DstResult {
     private Obs getResultObs() {
     	if (dstResult.getGroupMembers() != null) {    	
     		for(Obs obs : dstResult.getGroupMembers()) {
-    			if (resultSet.contains(obs.getConcept())) {
+    			if (!obs.isVoided() && resultSet.contains(obs.getConcept())) {
     				return obs;
     			}
     		}

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -19,6 +21,8 @@ import org.openmrs.module.mdrtb.MdrtbService;
 public class DstImpl extends TestImpl implements Dst {
 
 	Map<Integer,List<DstResult>> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	public DstImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -124,7 +128,8 @@ public class DstImpl extends TestImpl implements Dst {
 		// iterate through all the obs groups, create dst results from them, and add them to the list
 		if(test.getGroupMembers() != null) {
 			for(Obs obs : test.getGroupMembers()) {
-				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
+				// need to filter for voided obs, since get group members returns voided and non-voided
+				if (!obs.isVoided() && obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
 					results.add(new DstResultImpl(obs));
 				}
 			}
