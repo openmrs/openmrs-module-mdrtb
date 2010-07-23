@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.openmrs.module.mdrtb.MdrtbService;
  */
 public class DstImpl extends TestImpl implements Dst {
 
-	Map<String,DstResult> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
+	Map<Integer,List<DstResult>> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
 	
 	public DstImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -132,20 +133,39 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     // Note this is created ONCE per instantiation, for performance reasons, so if underlying drugs change, this will be inaccurate
-    public Map<String,DstResult> getResultsMap() {  
+    public Map<Integer,List<DstResult>> getResultsMap() {  
     
-    	if (resultsMap == null) {
-    		resultsMap = new HashMap<String,DstResult>();
+    	if (resultsMap == null) {   		
+    		resultsMap = new HashMap<Integer,List<DstResult>>();
     	
     		// map the results based on a key created by concatenating the string representation of the drug concept id and the
     		// string representation of the concentration
     		for(DstResult result : getResults()) {
+    			
+    			Integer drug = result.getDrug().getId();
+    			
+    			// if a result for this drug already exists in the map, attach this result to that list
+    			if(resultsMap.containsKey(drug)) {
+    				resultsMap.get(drug).add(result);
+    				// re-sort, so that the concentrations are in order
+    				Collections.sort(resultsMap.get(drug));
+    			}
+    			// otherwise, create a new entry for this drug
+    			else {
+    				List<DstResult> drugResults = new LinkedList<DstResult>();
+    				drugResults.add(result);
+    				resultsMap.put(drug, drugResults);
+    			}
+    			
+    			// TODO: remove this when we are sure we don't need it
+    			/**
     			if(result.getConcentration() != null) {
     				resultsMap.put((result.getDrug().getId()).toString() + "|" + result.getConcentration().toString(), result);
     			}
     			else {
     				resultsMap.put((result.getDrug().getId()).toString(), result);
     			}
+    			*/
     		}
     	}
     	

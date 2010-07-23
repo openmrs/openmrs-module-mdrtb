@@ -233,7 +233,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Returns all the possible drug to display in a DST result, in the order we want to display them
      */
-    public List<DrugType> getPossibleDrugTypesToDisplay();
+    public List<Concept> getPossibleDrugTypesToDisplay();
     
     /**
      * Returns the concept that represents a Scanty result
@@ -259,6 +259,16 @@ public interface MdrtbService extends OpenmrsService {
      * Returns the concept that represents Sputum
      */
     public Concept getConceptSputum();
+    
+    /**
+     * Returns the concept that represents INTERMEDIATE TO TUBERCULOSIS DRUG
+     */
+    public Concept getConceptIntermediateToTuberculosisDrug();
+    
+    /**
+     * Returns the concept that represents None
+     */
+    public Concept getConceptNone();
     
 	/**
      * Check to see what color to associate with a given result concept

@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.DrugType;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
@@ -40,11 +40,11 @@ public class PatientSummaryController {
 		return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
 	}
 
-	List<DrugType> getDrugTypes(PatientChart patientChart) {
-		List<DrugType> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
+	List<Concept> getDrugTypes(PatientChart patientChart) {
+		List<Concept> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
 		
 		// in this set we will store all the existing drug types in the set of specimens
-		List<DrugType> existingDrugTypes = new LinkedList<DrugType>();
+		List<Concept> existingDrugTypes = new LinkedList<Concept>();
 		
 		// get all the existing drugs in the specimen
 		Map<String,PatientChartRecord> records = patientChart.getRecords();
@@ -53,7 +53,7 @@ public class PatientSummaryController {
 				for(Dst dst : specimen.getDsts()) {
 					for(DstResult dstResult : dst.getResults()) {	
 						if(dstResult.getDrug() != null) {
-							existingDrugTypes.add(new DrugType(dstResult.getDrug(), dstResult.getConcentration()));
+							existingDrugTypes.add(dstResult.getDrug());
 						}
 					}
 				}

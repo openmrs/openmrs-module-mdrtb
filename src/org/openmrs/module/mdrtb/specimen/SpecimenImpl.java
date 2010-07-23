@@ -2,8 +2,10 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -30,6 +32,8 @@ public class SpecimenImpl implements Specimen {
 	Encounter encounter; // the encounter where information about the specimen is stored
 	
 	MdrtbFactory mdrtbFactory;
+	
+	Map<Integer,List<DstResult>> dstResultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
 	
 	public SpecimenImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -176,6 +180,36 @@ public class SpecimenImpl implements Specimen {
 		}
 		Collections.sort(dsts);
 		return dsts;
+	}
+	
+	public Map<Integer,List<DstResult>> getDstResultsMap() {
+	         
+		List<Dst> dsts = getDsts();
+				
+	    if (dstResultsMap == null && dsts.size() > 0) {  
+	    	dstResultsMap = new HashMap<Integer,List<DstResult>>();
+	    	
+	    	for(Dst dst : dsts) {
+	    		for(DstResult result : dst.getResults()) {
+	    		
+	    			Integer drug = result.getDrug().getId();
+    			
+	    			// if a result for this drug already exists in the map, attach this result to that list
+	    			if(dstResultsMap.containsKey(drug)) {
+	    				dstResultsMap.get(drug).add(result);
+	    				// re-sort, so that the concentrations are in order
+	    				Collections.sort(dstResultsMap.get(drug));
+	    			}
+	    			// otherwise, create a new entry for this drug
+	    			else {
+	    				List<DstResult> drugResults = new LinkedList<DstResult>();
+	    				drugResults.add(result);
+	    				dstResultsMap.put(drug, drugResults);
+	    			}
+    			}
+	    	}
+	    }	
+		return dstResultsMap;
 	}
 	
 	public String getIdentifier() {

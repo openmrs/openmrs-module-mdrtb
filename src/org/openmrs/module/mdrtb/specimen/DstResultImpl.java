@@ -185,6 +185,27 @@ public class DstResultImpl implements DstResult {
     }
 
     /**
+	  * Comparable interface method and utility methods
+	  * 
+	  * (TODO: This simply sorts by concentration for now, so it doesn't really
+	  * make sense to use except for a set when the drugs are the same,
+	  * which is all we use it for now.  May want to expand it to sort
+	  * alphabetically, or by the "possibleDrugTypesToDisplay" list)
+	  */
+	 
+	public int compareTo(DstResult dstResult1) {
+		if(dstResult1 == null || dstResult1.getConcentration() == null) {
+			return 1;
+		}
+		else if(this.getConcentration() == null) {
+			return -1;
+		}
+		else {
+			 return this.getConcentration().compareTo(dstResult1.getConcentration());
+		}
+	 }
+    
+    /**
 	 * Utility methods 
 	 */
 	

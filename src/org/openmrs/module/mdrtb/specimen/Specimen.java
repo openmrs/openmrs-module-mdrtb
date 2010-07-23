@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -31,6 +32,8 @@ public interface Specimen extends Comparable<Specimen>{
 	 * smears: a list of the smears associated with the specimen
 	 * cultures: a list of the cultures associated with the specimen
 	 * dsts: a list of the DSTS associated with the specimen
+	 * 
+	 * dstResultsMap: a combined map of all the dst results for *all* dst results associated with this specimen
 	 * 
 	 * This interface also defines a "getSpecimen" method, intended to be used
 	 * by a service to retrieve the underlying object that needs to be saved
@@ -78,6 +81,11 @@ public interface Specimen extends Comparable<Specimen>{
 	public Dst addDst();
 	
 	public List<Test> getTests();
+	
+	public Map<Integer,List<DstResult>> getDstResultsMap();
+	
 	public ScannedLabReport addScannedLabReport();
+	
+	
 	
 }

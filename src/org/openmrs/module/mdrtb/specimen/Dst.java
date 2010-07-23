@@ -41,7 +41,7 @@ public interface Dst extends Test {
 	public void setColoniesInControl(Integer coloniesInControl);
 
 	public List<DstResult> getResults();
-	public Map<String,DstResult> getResultsMap();
+	public Map<Integer,List<DstResult>> getResultsMap();
 	public DstResult addResult();
 }
 

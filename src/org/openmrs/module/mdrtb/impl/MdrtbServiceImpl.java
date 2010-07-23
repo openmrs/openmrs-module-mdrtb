@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -27,7 +26,6 @@ import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.mdrtb.DrugType;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
@@ -424,10 +422,27 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptAppearanceOfSpecimen().getAnswers();
 	}
 	
-    public List<DrugType> getPossibleDrugTypesToDisplay() {
+    public List<Concept> getPossibleDrugTypesToDisplay() {
     	// TODO: do we want to start pulling this from somewhere else?
     	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
     	
+    	List<Concept> drugTypes = new LinkedList<Concept>();
+    	
+    	// we are simply making a list out of drugs, not drugs/concentration
+    	for(String drugEntry : drugList.split("\\|")) {
+    		String[] drugFields = drugEntry.split(":");
+    		
+    		Concept drug = Context.getConceptService().getConceptByName(drugFields[0]);
+    		
+    		if(!drugTypes.contains(drug)) {
+    			drugTypes.add(drug);
+    		}
+    	}
+    	
+    	return drugTypes;
+    	
+    	// TODO: delete this stuff below when we are sure we don't need it
+    	/** 
     	List<DrugType> drugTypes = new LinkedList<DrugType>();
     	
     	for(String drugEntry : drugList.split("\\|")) {
@@ -443,6 +458,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	}
     	
     	return drugTypes;
+    	*/
     }
     
 	public Concept getConceptScanty() {
@@ -465,6 +481,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return getMdrtbFactory().getConceptSputum();
 	}
 	
+	public Concept getConceptIntermediateToTuberculosisDrug() {
+		return getMdrtbFactory().getConceptIntermediateToTuberculosisDrug();
+	}
+	
+    public Concept getConceptNone() {
+    	return getMdrtbFactory().getConceptNone();
+    }
+    
     public String getColorForConcept(Concept concept) {
     	
     	// initialize the cache if need be

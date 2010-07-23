@@ -8,7 +8,7 @@ import org.openmrs.Concept;
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the smear data in obsgroups
  */
-public interface DstResult {
+public interface DstResult extends Comparable<DstResult>{
 
 	/**
 	 * Data points this interface provides access to:

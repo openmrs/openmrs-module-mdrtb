@@ -41,7 +41,7 @@ $(document).ready(function(){
 <td class="chartCell">Germ</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${drugTypes}">
-	<td class="chartCell" style="vertical-align:top">${drugType.drug.name.shortName}<br/>${drugType.concentration}</td>  <!-- TODO: getShortName is depreciated? -->
+	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
 </tr>
 
@@ -91,15 +91,13 @@ $(document).ready(function(){
 				
 			<!--  dsts -->
 			<c:forEach var="drugType" items="${drugTypes}">
-				<td class="chartCell" style="width:30px">
+				<td class="chartCell"><c:if test="${!empty specimen.dstResultsMap[drugType.id]}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
-					<c:forEach var="dst" items="${specimen.dsts}">
-						<mdrtb:dstResultCell dst="${dst}" dstResult="${dst.resultsMap[drugType.key]}"/>
-					</c:forEach>
+					<mdrtb:dstResultsCell dstResults="${specimen.dstResultsMap[drugType.id]}"/>	
 				</tr>
 				</table>
-				</td>	
+				</c:if></td>
 			</c:forEach>
 			
 			</tr>

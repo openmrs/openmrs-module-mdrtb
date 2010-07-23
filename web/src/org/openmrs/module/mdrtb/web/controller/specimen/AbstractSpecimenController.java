@@ -19,7 +19,6 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.DrugType;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -154,7 +153,7 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("drugTypes")
-	Collection<DrugType> getPossibleDrugTypes() {
+	Collection<Concept> getPossibleDrugTypes() {
 		return Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
 	}
 	
