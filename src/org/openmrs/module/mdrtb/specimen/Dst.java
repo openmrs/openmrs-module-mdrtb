@@ -11,7 +11,7 @@ import org.openmrs.Concept;
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the dst data in obsgroups
  */
-public interface MdrtbDst extends MdrtbTest {
+public interface Dst extends Test {
 	/**
 	 * Data points this interface provides access to:
 	 * 
@@ -40,8 +40,8 @@ public interface MdrtbDst extends MdrtbTest {
 	public Integer getColoniesInControl();
 	public void setColoniesInControl(Integer coloniesInControl);
 
-	public List<MdrtbDstResult> getResults();
-	public Map<String,MdrtbDstResult> getResultsMap();
-	public MdrtbDstResult addResult();
+	public List<DstResult> getResults();
+	public Map<String,DstResult> getResultsMap();
+	public DstResult addResult();
 }
 

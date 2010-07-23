@@ -7,11 +7,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
-import org.openmrs.module.mdrtb.specimen.MdrtbDst;
-import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
-import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Culture;
+import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.DstResult;
+import org.openmrs.module.mdrtb.specimen.Smear;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,8 +38,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	 * @return
 	 */
 	@ModelAttribute("smear")
-	public MdrtbSmear getSmear(@RequestParam(required = false, value="smearId") Integer smearId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
-		MdrtbSmear smear = null;
+	public Smear getSmear(@RequestParam(required = false, value="smearId") Integer smearId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		Smear smear = null;
 		
 		// only do something here if the smear id has been set
 		if (smearId != null) {
@@ -59,8 +59,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	@ModelAttribute("culture")
-	public MdrtbCulture getCulture(@RequestParam(required = false, value="cultureId") Integer cultureId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
-		MdrtbCulture culture = null;
+	public Culture getCulture(@RequestParam(required = false, value="cultureId") Integer cultureId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		Culture culture = null;
 		
 		// only do something here if the culture id has been set
 		if (cultureId != null) {
@@ -80,8 +80,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	@ModelAttribute("dst")
-	public MdrtbDst getDst(@RequestParam(required = false, value="dstId") Integer dstId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
-		MdrtbDst dst = null;
+	public Dst getDst(@RequestParam(required = false, value="dstId") Integer dstId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		Dst dst = null;
 		
 		// only do something here if the dst id has been set
 		if (dstId != null) {
@@ -101,7 +101,7 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	@ModelAttribute("specimen")
-	public MdrtbSpecimen getSpecimen(@RequestParam(required = true, value="specimenId") Integer specimenId) {
+	public Specimen getSpecimen(@RequestParam(required = true, value="specimenId") Integer specimenId) {
 		return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
 	}
 		
@@ -121,8 +121,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	
 	
     @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, @ModelAttribute("smear") MdrtbSmear smear, 
-	                                  @ModelAttribute("culture") MdrtbCulture culture, @ModelAttribute("dst") MdrtbDst dst,
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, @ModelAttribute("smear") Smear smear, 
+	                                  @ModelAttribute("culture") Culture culture, @ModelAttribute("dst") Dst dst,
 	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
@@ -141,7 +141,7 @@ protected final Log log = LogFactory.getLog(getClass());
 			
 			if(StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".colonies")) || StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".result")) ) {
 				// create the new result
-				MdrtbDstResult dstResult = dst.addResult();
+				DstResult dstResult = dst.addResult();
 			
 				// pull the values from the request
 				String colonies = request.getParameter("addDst" + i + ".colonies");

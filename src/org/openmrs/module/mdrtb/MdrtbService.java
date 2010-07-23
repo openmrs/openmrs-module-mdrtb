@@ -16,10 +16,10 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
-import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
-import org.openmrs.module.mdrtb.specimen.MdrtbDst;
-import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Culture;
+import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.Smear;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,17 +50,17 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Creates a new specimen, associated with the given patient
      */
-    public MdrtbSpecimen createSpecimen(Patient patient);
+    public Specimen createSpecimen(Patient patient);
     
     /**
      * Fetches a specimen sample obj given an encounter of the Specimen Collection type
      */
-    public MdrtbSpecimen getSpecimen(Encounter encounter);
+    public Specimen getSpecimen(Encounter encounter);
     
     /**
      * Fetches all specimens for a patient (i.e., all Specimen Collection encounters)
      */
-    public List<MdrtbSpecimen> getSpecimens(Patient patient);
+    public List<Specimen> getSpecimens(Patient patient);
     
     /**
      * Deletes a specimen, referenced by specimen Id
@@ -71,7 +71,7 @@ public interface MdrtbService extends OpenmrsService {
      * Saves or updates a specimen object
      */
     @Transactional
-	public void saveSpecimen(MdrtbSpecimen specimen);
+	public void saveSpecimen(Specimen specimen);
     
     /**
      * Deletes a smear, culture, or dst test
@@ -82,7 +82,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Creates a new Smear, associated with the given encounter
      */
-    public MdrtbSmear createSmear(Encounter encounter);
+    public Smear createSmear(Encounter encounter);
     
     /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
@@ -90,20 +90,20 @@ public interface MdrtbService extends OpenmrsService {
      * @param obs
      * @return
      */
-    public MdrtbSmear getSmear(Obs obs);
+    public Smear getSmear(Obs obs);
        
     /**
      * Fetches a smear given the obs_id of a Tuberculosis Smear Test Construct
      * 
      * @param obsId
      */
-    public MdrtbSmear getSmear(Integer obsId);
+    public Smear getSmear(Integer obsId);
     
     /**
      * Saves a smear in the approriate obs construct
      */
     @Transactional
-    public void saveSmear(MdrtbSmear smear);
+    public void saveSmear(Smear smear);
     
     
     // TODO: get rid of this if I end up not using it
@@ -114,12 +114,12 @@ public interface MdrtbService extends OpenmrsService {
      * @param smear the new values for the smear
      */
     @Transactional
-    public void updateSmear(Integer smearId, MdrtbSmear smear);
+    public void updateSmear(Integer smearId, Smear smear);
     
     /**
      * Creates a new culture, associated with the given encounter
      */
-    public MdrtbCulture createCulture(Encounter encounter);
+    public Culture createCulture(Encounter encounter);
     
     /**
      * Fetches a culture given the obs of a Tuberculosis Smear Test Construct
@@ -127,26 +127,26 @@ public interface MdrtbService extends OpenmrsService {
      * @param obs
      * @return
      */
-    public MdrtbCulture getCulture(Obs obs);
+    public Culture getCulture(Obs obs);
        
     /**
      * Fetches a culture given the obs_id of a Tuberculosis Smear Test Construct
      * 
      * @param obsId
      */
-    public MdrtbCulture getCulture(Integer obsId);
+    public Culture getCulture(Integer obsId);
     
     /**
      * Saves a culture in the approriate obs construct
      */
     @Transactional
-    public void saveCulture(MdrtbCulture culture);
+    public void saveCulture(Culture culture);
     
     
     /**
      * Creates a new dst, associated with the given encounter
      */
-    public MdrtbDst createDst(Encounter encounter);
+    public Dst createDst(Encounter encounter);
     
     /**
      * Fetches a dst given the obs of a Tuberculosis Smear Test Construct
@@ -154,20 +154,20 @@ public interface MdrtbService extends OpenmrsService {
      * @param obs
      * @return
      */
-    public MdrtbDst getDst(Obs obs);
+    public Dst getDst(Obs obs);
        
     /**
      * Fetches a dst given the obs_id of a Tuberculosis Smear Test Construct
      * 
      * @param obsId
      */
-    public MdrtbDst getDst(Integer obsId);
+    public Dst getDst(Integer obsId);
     
     /**
      * Saves a dst in the approriate obs construct
      */
     @Transactional
-    public void saveDst(MdrtbDst dst);
+    public void saveDst(Dst dst);
     
     /**
      * Saves a scanned lab report in the appropriate obs constructs

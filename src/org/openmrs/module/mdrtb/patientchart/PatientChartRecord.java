@@ -3,26 +3,26 @@ package org.openmrs.module.mdrtb.patientchart;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 
 
 public class PatientChartRecord {
 	
-	private List<MdrtbSpecimen> specimens;
+	private List<Specimen> specimens;
 	
 	public PatientChartRecord() {
-		this.specimens = new LinkedList<MdrtbSpecimen>();
+		this.specimens = new LinkedList<Specimen>();
 	}
 	
-	public PatientChartRecord(List<MdrtbSpecimen> specimens) {
+	public PatientChartRecord(List<Specimen> specimens) {
 		this.specimens = specimens;
 	}
 
-	public void setSpecimens(List<MdrtbSpecimen> specimens) {
+	public void setSpecimens(List<Specimen> specimens) {
 	    this.specimens = specimens;
     }
 
-	public List<MdrtbSpecimen> getSpecimens() {
+	public List<Specimen> getSpecimens() {
 	    return specimens;
     }
 	

@@ -18,9 +18,9 @@ import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
+import org.openmrs.module.mdrtb.specimen.Smear;
+import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ public class SpecimenMigrationController {
 	
 	private MdrtbFactory mdrtbFactory;
 	private Set<Concept> testConstructConcepts;
-	private Map<String,MdrtbSpecimen> specimenMap = new HashMap<String,MdrtbSpecimen>();
+	private Map<String,Specimen> specimenMap = new HashMap<String,Specimen>();
 	
     @RequestMapping("/module/mdrtb/specimen/migrate.form")
 	public ModelAndView migrateSpecimenData() {
@@ -97,7 +97,7 @@ public class SpecimenMigrationController {
 				// now create a new specimen for each result
 				// (the assumption here is that each result is off a different specimen)
 				for(Obs smearResult : smearResults) {		
-					MdrtbSpecimen specimen = Context.getService(MdrtbService.class).createSpecimen(encounter.getPatient());
+					Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(encounter.getPatient());
 				
 					// set the type to sputum
 					specimen.setType(Context.getConceptService().getConceptByName("SPUTUM")); // NOTE: this is a PIH-specific concept
@@ -122,7 +122,7 @@ public class SpecimenMigrationController {
 					specimen.setLocation(encounter.getLocation());
 					
 					// now create the smear for this specimen
-					MdrtbSmear smear = specimen.addSmear();
+					Smear smear = specimen.addSmear();
 					
 					// for these smears, the "lab" is just where the specimen was collected
 					smear.setLab(encounter.getLocation());
@@ -165,7 +165,7 @@ public class SpecimenMigrationController {
 				log.info("Migrating bac/dst results encounter " + encounter.getEncounterId());
 			
 				Boolean moveObsAndVoidEncounter = false;
-				MdrtbSpecimen specimen = null;
+				Specimen specimen = null;
 			
 				// first we need to figure out if we are going to need to create a new specimen for this encounter or not by checking if accession numbers
 				for(Obs obs : encounter.getAllObs()) {
@@ -285,12 +285,12 @@ public class SpecimenMigrationController {
 	}
 	
 	
-	public MdrtbSpecimen createSpecimenFromEncounter(Encounter encounter) {
+	public Specimen createSpecimenFromEncounter(Encounter encounter) {
 		// change the encounter type to "specimen collection" encounter
 		encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
 		
 		// now instantiate a new specimen using this encounter
-		MdrtbSpecimen specimen = new MdrtbSpecimenImpl(encounter);
+		Specimen specimen = new SpecimenImpl(encounter);
 		
 		// set the patient and provider of the specimen to the patient and provider of the underlying encounter
 		// (not really needed, but just in case)
@@ -310,7 +310,7 @@ public class SpecimenMigrationController {
 	
 	
 	
-	public void compareAndSetSampleSource(MdrtbSpecimen specimen, Obs obs) {
+	public void compareAndSetSampleSource(Specimen specimen, Obs obs) {
 		// nothing to do if no value for this obs
 		if(obs.getValueCoded() == null) {
 			return;
@@ -338,7 +338,7 @@ public class SpecimenMigrationController {
 		}
 	}
 	
-	public void compareAndSetDateCollected(MdrtbSpecimen specimen, Obs obs) {
+	public void compareAndSetDateCollected(Specimen specimen, Obs obs) {
 		// nothing to do if no value for this obs
 		if(obs.getValueDatetime() == null) {
 			return;

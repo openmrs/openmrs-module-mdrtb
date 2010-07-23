@@ -15,16 +15,16 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * An implementation of a MdrtbDst.  This wraps an ObsGroup and provides access to dst
  * data within the obsgroup.
  */
-public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
+public class DstImpl extends TestImpl implements Dst {
 
-	Map<String,MdrtbDstResult> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
+	Map<String,DstResult> resultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
 	
-	public MdrtbDstImpl() {
+	public DstImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
 	// set up a dst object, given an existing obs
-	public MdrtbDstImpl(Obs dst) {
+	public DstImpl(Obs dst) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(dst == null || !(dst.getConcept().equals(mdrtbFactory.getConceptDSTParent()))) {
@@ -35,7 +35,7 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 	}
 	
 	// create a new culture object, given an existing patient
-	public MdrtbDstImpl(Encounter encounter) {
+	public DstImpl(Encounter encounter) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {
@@ -50,7 +50,7 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 		return "dst";
 	}
 
-	public MdrtbDstResult addResult() {
+	public DstResult addResult() {
 		// create a new obs for the result, set to the proper values
 		Obs resultObs = new Obs(this.test.getPerson(), mdrtbFactory.getConceptDSTResultParent(), this.test.getObsDatetime(), this.test.getLocation());
 		resultObs.setEncounter(this.test.getEncounter());
@@ -59,7 +59,7 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
 		this.test.addGroupMember(resultObs);
 		
 		// now create and return a new DstResult
-		return new MdrtbDstResultImpl(resultObs);
+		return new DstResultImpl(resultObs);
 	}
 	
     public Integer getColoniesInControl() {
@@ -117,14 +117,14 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
     	}
     }
 
-    public List<MdrtbDstResult> getResults() {
-    	List<MdrtbDstResult> results = new LinkedList<MdrtbDstResult>();
+    public List<DstResult> getResults() {
+    	List<DstResult> results = new LinkedList<DstResult>();
 		
 		// iterate through all the obs groups, create dst results from them, and add them to the list
 		if(test.getGroupMembers() != null) {
 			for(Obs obs : test.getGroupMembers()) {
 				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
-					results.add(new MdrtbDstResultImpl(obs));
+					results.add(new DstResultImpl(obs));
 				}
 			}
 		}
@@ -132,14 +132,14 @@ public class MdrtbDstImpl extends MdrtbTestImpl implements MdrtbDst {
     }
     
     // Note this is created ONCE per instantiation, for performance reasons, so if underlying drugs change, this will be inaccurate
-    public Map<String,MdrtbDstResult> getResultsMap() {  
+    public Map<String,DstResult> getResultsMap() {  
     
     	if (resultsMap == null) {
-    		resultsMap = new HashMap<String,MdrtbDstResult>();
+    		resultsMap = new HashMap<String,DstResult>();
     	
     		// map the results based on a key created by concatenating the string representation of the drug concept id and the
     		// string representation of the concentration
-    		for(MdrtbDstResult result : getResults()) {
+    		for(DstResult result : getResults()) {
     			if(result.getConcentration() != null) {
     				resultsMap.put((result.getDrug().getId()).toString() + "|" + result.getConcentration().toString(), result);
     			}

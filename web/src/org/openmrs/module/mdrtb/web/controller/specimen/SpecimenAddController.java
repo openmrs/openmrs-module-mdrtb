@@ -2,7 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class SpecimenAddController extends AbstractSpecimenController {
 
 	@ModelAttribute("specimen")
-	public MdrtbSpecimen getSpecimen(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		MdrtbSpecimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
+	public Specimen getSpecimen(@RequestParam(required = true, value = "patientId") Integer patientId) {
+		Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
 		
 		// set the default type to "sputum"
 		specimen.setType(Context.getService(MdrtbService.class).getConceptSputum());
@@ -36,7 +36,7 @@ public class SpecimenAddController extends AbstractSpecimenController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") MdrtbSpecimen specimen, BindingResult result, SessionStatus status) {
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result, SessionStatus status) {
 		
 		// TODO: add validation
 		

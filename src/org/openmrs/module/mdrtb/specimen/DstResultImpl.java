@@ -12,7 +12,7 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 
 
-public class MdrtbDstResultImpl implements MdrtbDstResult {
+public class DstResultImpl implements DstResult {
 
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -24,7 +24,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 	
 	MdrtbFactory mdrtbFactory;
 	
-	public MdrtbDstResultImpl() {
+	public DstResultImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();	
 		this.resultSet = initResultSet();
 		// also instantiate an empty obs so that we can use this as a backing object
@@ -32,7 +32,7 @@ public class MdrtbDstResultImpl implements MdrtbDstResult {
 	}
 	
 	// set up a dst object, given an existing obs, or an existing dst
-	public MdrtbDstResultImpl(Obs dstResult) {
+	public DstResultImpl(Obs dstResult) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		this.resultSet = initResultSet();
 				

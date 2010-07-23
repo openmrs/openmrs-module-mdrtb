@@ -12,9 +12,9 @@ import org.openmrs.module.mdrtb.DrugType;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
-import org.openmrs.module.mdrtb.specimen.MdrtbDst;
-import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.DstResult;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,9 +49,9 @@ public class PatientSummaryController {
 		// get all the existing drugs in the specimen
 		Map<String,PatientChartRecord> records = patientChart.getRecords();
 		for(String key : records.keySet()) {
-			for(MdrtbSpecimen specimen : records.get(key).getSpecimens()) {
-				for(MdrtbDst dst : specimen.getDsts()) {
-					for(MdrtbDstResult dstResult : dst.getResults()) {	
+			for(Specimen specimen : records.get(key).getSpecimens()) {
+				for(Dst dst : specimen.getDsts()) {
+					for(DstResult dstResult : dst.getResults()) {	
 						if(dstResult.getDrug() != null) {
 							existingDrugTypes.add(new DrugType(dstResult.getDrug(), dstResult.getConcentration()));
 						}

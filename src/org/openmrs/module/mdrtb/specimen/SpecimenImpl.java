@@ -23,7 +23,7 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * various specimen-related data in Encounter
  */
 
-public class MdrtbSpecimenImpl implements MdrtbSpecimen {
+public class SpecimenImpl implements Specimen {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -31,18 +31,18 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	
 	MdrtbFactory mdrtbFactory;
 	
-	public MdrtbSpecimenImpl() {
+	public SpecimenImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
 	// set up a specimen object from an existing encounter
-	public MdrtbSpecimenImpl(Encounter encounter) {
+	public SpecimenImpl(Encounter encounter) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		this.encounter = encounter;
 	}
 	
 	// initialize a new specimen, given a patient
-	public MdrtbSpecimenImpl(Patient patient) {
+	public SpecimenImpl(Patient patient) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(patient == null) {
@@ -67,9 +67,9 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return this.encounter.getId().toString();
 	}
 	
-	public MdrtbCulture addCulture() {
+	public Culture addCulture() {
 		// cast to an Impl so we can access protected methods from within the specimen impl
-		MdrtbCultureImpl culture = new MdrtbCultureImpl(this.encounter);
+		CultureImpl culture = new CultureImpl(this.encounter);
 		
 		// add the culture to the master encounter
 		this.encounter.addObs(culture.getObs());
@@ -81,9 +81,9 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return culture;
 	}
 	
-	public MdrtbDst addDst() {
+	public Dst addDst() {
 		// cast to an Impl so we can access protected methods from within the specimen impl
-		MdrtbDstImpl dst = new MdrtbDstImpl(this.encounter);
+		DstImpl dst = new DstImpl(this.encounter);
 		
 		// add the dst to the master encounter
 		this.encounter.addObs(dst.getObs());
@@ -109,9 +109,9 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return report;
 	}
 	
-	public MdrtbSmear addSmear() {
+	public Smear addSmear() {
 		// cast to an Impl so we can access protected methods from within the specimen impl
-		MdrtbSmearImpl smear = new MdrtbSmearImpl(this.encounter);
+		SmearImpl smear = new SmearImpl(this.encounter);
 		
 		// add the smear to the master encounter
 		this.encounter.addObs(smear.getObs());
@@ -144,8 +144,8 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		}
 	}
 	
-	public List<MdrtbCulture> getCultures() {
-		List<MdrtbCulture> cultures = new LinkedList<MdrtbCulture>();
+	public List<Culture> getCultures() {
+		List<Culture> cultures = new LinkedList<Culture>();
 		
 		// TODO: sort by date, make smears comparable, turn this into a sorted list?
 		
@@ -153,7 +153,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
 				if (obs.getConcept().equals(mdrtbFactory.getConceptCultureParent())) {
-					cultures.add(new MdrtbCultureImpl(obs));
+					cultures.add(new CultureImpl(obs));
 				}
 			}
 		}
@@ -165,8 +165,8 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return encounter.getEncounterDatetime();
 	}
 	
-	public List<MdrtbDst> getDsts() {
-		List<MdrtbDst> dsts = new LinkedList<MdrtbDst>();
+	public List<Dst> getDsts() {
+		List<Dst> dsts = new LinkedList<Dst>();
 		
 		// TODO: sort by date, make smears comparable, turn this into a sorted list?
 		
@@ -174,7 +174,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
 				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTParent())) {
-					dsts.add(new MdrtbDstImpl(obs));
+					dsts.add(new DstImpl(obs));
 				}
 			}
 		}
@@ -218,13 +218,13 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return reports;
 	}
 	
-	public List<MdrtbSmear> getSmears() {
-		List<MdrtbSmear> smears = new LinkedList<MdrtbSmear>();		
+	public List<Smear> getSmears() {
+		List<Smear> smears = new LinkedList<Smear>();		
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
 				if (obs.getConcept().equals(mdrtbFactory.getConceptSmearParent())) {
-					smears.add(new MdrtbSmearImpl(obs));
+					smears.add(new SmearImpl(obs));
 				}
 			}
 		}
@@ -232,8 +232,8 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 		return smears;
 	}
 	
-	public List<MdrtbTest> getTests() {
-		List<MdrtbTest> tests = new LinkedList<MdrtbTest>();
+	public List<Test> getTests() {
+		List<Test> tests = new LinkedList<Test>();
 		
 		tests.addAll(getSmears());
 		tests.addAll(getCultures());
@@ -407,7 +407,7 @@ public class MdrtbSpecimenImpl implements MdrtbSpecimen {
 	/**
 	 * Implementation of comparable method
 	 */
-	public int compareTo(MdrtbSpecimen specimenToCompare) {
+	public int compareTo(Specimen specimenToCompare) {
 		return this.getDateCollected().compareTo(specimenToCompare.getDateCollected());
 	}
 	

@@ -1,13 +1,13 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
-import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
+import org.openmrs.module.mdrtb.specimen.Smear;
 
 
 public class SmearCellTag extends AbstractBacteriologyCellTag {
 
     private static final long serialVersionUID = 6971553873382451091L;
 
-    private MdrtbSmear smear;
+    private Smear smear;
 
     public int doStartTag() {
     	renderCell(smear, smear.getResult());
@@ -21,11 +21,11 @@ public class SmearCellTag extends AbstractBacteriologyCellTag {
     }
     
     
-	public void setSmear(MdrtbSmear smear) {
+	public void setSmear(Smear smear) {
 	    this.smear = smear;
     }
 
-	public MdrtbSmear getSmear() {
+	public Smear getSmear() {
 	    return smear;
     }
 }

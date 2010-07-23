@@ -34,15 +34,15 @@ import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
-import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
-import org.openmrs.module.mdrtb.specimen.MdrtbCultureImpl;
-import org.openmrs.module.mdrtb.specimen.MdrtbDst;
-import org.openmrs.module.mdrtb.specimen.MdrtbDstImpl;
-import org.openmrs.module.mdrtb.specimen.MdrtbSmear;
-import org.openmrs.module.mdrtb.specimen.MdrtbSmearImpl;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimenImpl;
-import org.openmrs.module.mdrtb.specimen.MdrtbTest;
+import org.openmrs.module.mdrtb.specimen.Culture;
+import org.openmrs.module.mdrtb.specimen.CultureImpl;
+import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.DstImpl;
+import org.openmrs.module.mdrtb.specimen.Smear;
+import org.openmrs.module.mdrtb.specimen.SmearImpl;
+import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
@@ -103,7 +103,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return dao.getConceptWords(phrase, locales);
 	}
 	
-	public MdrtbSpecimen createSpecimen(Patient patient) {
+	public Specimen createSpecimen(Patient patient) {
 		// return null if the patient is null
 		if(patient == null) {
 			log.error("Unable to create specimen obj: createSpecimen called with null patient.");
@@ -111,10 +111,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		
 		// otherwise, instantiate the specimen object
-		return new MdrtbSpecimenImpl(patient);
+		return new SpecimenImpl(patient);
 	}
 	
-	public MdrtbSpecimen getSpecimen(Encounter encounter) {
+	public Specimen getSpecimen(Encounter encounter) {
 		// return null if there is no encounter, or if the encounter if of the wrong type
 		if(encounter == null || encounter.getEncounterType() != Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"))) {
 			log.error("Unable to fetch specimen obj: getSpecimen called with invalid encounter");
@@ -122,11 +122,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		
 		// otherwise, instantiate the specimen object
-		return new MdrtbSpecimenImpl(encounter);
+		return new SpecimenImpl(encounter);
 	}
 	
-	public List<MdrtbSpecimen> getSpecimens(Patient patient) {
-		List<MdrtbSpecimen> specimens = new LinkedList<MdrtbSpecimen>();
+	public List<Specimen> getSpecimens(Patient patient) {
+		List<Specimen> specimens = new LinkedList<Specimen>();
 		List<Encounter> specimenEncounters = new LinkedList<Encounter>();
 		
 		// create the specific specimen encounter types
@@ -137,14 +137,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		specimenEncounters = Context.getEncounterService().getEncounters(patient, null, null, null, null, specimenEncounterTypes, null, false);
 		
 		for(Encounter encounter : specimenEncounters) {
-			specimens.add(new MdrtbSpecimenImpl(encounter));
+			specimens.add(new SpecimenImpl(encounter));
 		}
 		
 		Collections.sort(specimens);
 		return specimens;
 	}
 	
-	public void saveSpecimen(MdrtbSpecimen specimen) {
+	public void saveSpecimen(Specimen specimen) {
 		if (specimen == null) {
 			log.warn("Unable to save specimen: specimen object is null");
 			return;
@@ -183,9 +183,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 	}
 	
-	public MdrtbSmear createSmear(Encounter encounter) {		
+	public Smear createSmear(Encounter encounter) {		
 		// first, get the specimen
-		MdrtbSpecimen specimen = getSpecimen(encounter);
+		Specimen specimen = getSpecimen(encounter);
 		
 		if (specimen == null) {
 			log.error("Unable to create smear: specimen is null.");
@@ -196,16 +196,16 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimen.addSmear();
 	}
 	
-	public MdrtbSmear getSmear(Obs obs) {
+	public Smear getSmear(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
-		return new MdrtbSmearImpl(obs);
+		return new SmearImpl(obs);
 	}
 
-	public MdrtbSmear getSmear(Integer obsId) {
+	public Smear getSmear(Integer obsId) {
 		return getSmear(Context.getObsService().getObs(obsId));
 	}
 	
-	public void saveSmear(MdrtbSmear smear) {
+	public void saveSmear(Smear smear) {
 		if (smear == null) {
 			log.warn("Unable to save smear: smear object is null");
 			return;
@@ -224,8 +224,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	// TODO: get rid of this if I end up not using it!
-	public void updateSmear(Integer smearId, MdrtbSmear smearUpdate) {
-		MdrtbSmear smear;
+	public void updateSmear(Integer smearId, Smear smearUpdate) {
+		Smear smear;
 		
 		// first, get the smear that we are looking to update
 		try {
@@ -245,9 +245,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		saveSmear(smear);
 	}
 	
-	public MdrtbCulture createCulture(Encounter encounter) {		
+	public Culture createCulture(Encounter encounter) {		
 		// first, get the specimen
-		MdrtbSpecimen specimen = getSpecimen(encounter);
+		Specimen specimen = getSpecimen(encounter);
 		
 		if (specimen == null) {
 			log.error("Unable to create culture: specimen is null.");
@@ -258,16 +258,16 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimen.addCulture();
 	}
 	
-	public MdrtbCulture getCulture(Obs obs) {
+	public Culture getCulture(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
-		return new MdrtbCultureImpl(obs);
+		return new CultureImpl(obs);
 	}
 
-	public MdrtbCulture getCulture(Integer obsId) {
+	public Culture getCulture(Integer obsId) {
 		return getCulture(Context.getObsService().getObs(obsId));
 	}
 	
-	public void saveCulture(MdrtbCulture culture) {
+	public void saveCulture(Culture culture) {
 		if (culture == null) {
 			log.warn("Unable to save culture: culture object is null");
 			return;
@@ -284,9 +284,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	public MdrtbDst createDst(Encounter encounter) {		
+	public Dst createDst(Encounter encounter) {		
 		// first, get the specimen
-		MdrtbSpecimen specimen = getSpecimen(encounter);
+		Specimen specimen = getSpecimen(encounter);
 		
 		if (specimen == null) {
 			log.error("Unable to create smear: specimen is null.");
@@ -297,16 +297,16 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimen.addDst();
 	}
 	
-	public MdrtbDst getDst(Obs obs) {
+	public Dst getDst(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
-		return new MdrtbDstImpl(obs);
+		return new DstImpl(obs);
 	}
 
-	public MdrtbDst getDst(Integer obsId) {
+	public Dst getDst(Integer obsId) {
 		return getDst(Context.getObsService().getObs(obsId));
 	}
 	
-	public void saveDst(MdrtbDst dst) {
+	public void saveDst(Dst dst) {
 		if (dst == null) {
 			log.warn("Unable to save dst: dst object is null");
 			return;
@@ -361,7 +361,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		
 		// first, fetch all the specimens for this patient
-		List<MdrtbSpecimen> specimens = getSpecimens(patient);
+		List<Specimen> specimens = getSpecimens(patient);
 		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
@@ -519,8 +519,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	// IMPORTANT: the assumption this method makes is that list of specimens are ordered in descending date order
 	// also, this method pulls all the specimens it returns off the list of specimens passed to it;
 	// this method is intended to be use with the getPatientChart API method
-	private List<MdrtbSpecimen> getSpecimensBeforeDate(List<MdrtbSpecimen> specimens, Calendar compareDate) {
-		List<MdrtbSpecimen> results = new LinkedList<MdrtbSpecimen>();
+	private List<Specimen> getSpecimensBeforeDate(List<Specimen> specimens, Calendar compareDate) {
+		List<Specimen> results = new LinkedList<Specimen>();
 		Calendar specimenDate = Calendar.getInstance();
 		
 		while(!specimens.isEmpty()) {
@@ -541,7 +541,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	
 	// TODO: get rid of these if I end up not using them
-	private void updateTestHelper(MdrtbTest oldTest, MdrtbTest newTest) {
+	private void updateTestHelper(Test oldTest, Test newTest) {
 		// update all the test values that are "settable"
 		oldTest.setDateOrdered(newTest.getDateOrdered());
 		oldTest.setDateReceived(newTest.getDateReceived());
@@ -550,7 +550,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	private void updateSmearHelper(MdrtbSmear oldSmear, MdrtbSmear newSmear){
+	private void updateSmearHelper(Smear oldSmear, Smear newSmear){
 		// first, update all the common test parameters
 		updateTestHelper(oldSmear, newSmear);
 		

@@ -1,13 +1,13 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
-import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
+import org.openmrs.module.mdrtb.specimen.Culture;
 
 
 public class CultureCellTag extends AbstractBacteriologyCellTag {
 
     private static final long serialVersionUID = 6971553873382451091L;
 
-    private MdrtbCulture culture;
+    private Culture culture;
 
     public int doStartTag() {
     	renderCell(culture, culture.getResult());
@@ -22,13 +22,13 @@ public class CultureCellTag extends AbstractBacteriologyCellTag {
 
 
 	
-    public MdrtbCulture getCulture() {
+    public Culture getCulture() {
     	return culture;
     }
 
 
 	
-    public void setCulture(MdrtbCulture culture) {
+    public void setCulture(Culture culture) {
     	this.culture = culture;
     }
 

@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
@@ -21,7 +19,7 @@ import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,7 +84,7 @@ public class SpecimenMigrationValidationController {
 		for(Patient patient: Context.getPatientService().getAllPatients()) {
 	
 			// first, fetch all the specimens for this patient
-			List<MdrtbSpecimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
+			List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
 			
 			// now fetch the program start date
 			// TODO: fix this
@@ -106,7 +104,7 @@ public class SpecimenMigrationValidationController {
 			
 				Boolean flag = false;
 				
-				for(MdrtbSpecimen specimen : specimens) {
+				for(Specimen specimen : specimens) {
 					if(specimen.getDateCollected().before(startDate)) {
 						results = results.concat("Patient " + patient.getId() + " has collection date " + specimen.getDateCollected() + " before enroll date " + startDate + ".</br>");	
 						if(!flag) {

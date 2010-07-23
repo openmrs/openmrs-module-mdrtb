@@ -8,7 +8,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbSpecimen;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ public class SpecimenListController {
 			throw new APIException("Invalid patient id");
 		}
 		
-		List<MdrtbSpecimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
+		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
 		
 		map.put("patientId", patientId);
 		map.put("specimens", specimens);

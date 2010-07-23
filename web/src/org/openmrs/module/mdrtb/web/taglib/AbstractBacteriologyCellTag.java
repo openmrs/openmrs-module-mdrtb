@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbTest;
+import org.openmrs.module.mdrtb.specimen.Test;
 
 
 public abstract class AbstractBacteriologyCellTag extends TagSupport {
@@ -19,7 +19,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     
 	private final Log log = LogFactory.getLog(getClass());
    
-    protected void renderCell(MdrtbTest test, Concept result) {
+    protected void renderCell(Test test, Concept result) {
     	String ret = null;
     	   	
     	if(result != null) {	

@@ -10,14 +10,14 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * An implementaton of a MdrtbCulture.  This wraps an ObsGroup and provides access to culture
  * data within the obsgroup.
  */
-public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
+public class CultureImpl extends TestImpl implements Culture {
 
-	public MdrtbCultureImpl() {
+	public CultureImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
 	// set up a culture object, given an existing obs
-	public MdrtbCultureImpl(Obs culture) {
+	public CultureImpl(Obs culture) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(culture == null || !(culture.getConcept().equals(mdrtbFactory.getConceptCultureParent()))) {
@@ -28,7 +28,7 @@ public class MdrtbCultureImpl extends MdrtbTestImpl implements MdrtbCulture {
 	}
 	
 	// create a new culture object, given an existing patient
-	public MdrtbCultureImpl(Encounter encounter) {
+	public CultureImpl(Encounter encounter) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {

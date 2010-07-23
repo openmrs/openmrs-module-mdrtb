@@ -10,7 +10,7 @@ import org.openmrs.Obs;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 
 
-public abstract class MdrtbTestImpl implements MdrtbTest {
+public abstract class TestImpl implements Test {
 	
 	Obs test;  // the top-level obs that holds all the data for this smear
 	
@@ -221,7 +221,7 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	  * Comparable interface method and utility methods
 	  */
 	 
-	 public int compareTo(MdrtbTest test1) {
+	 public int compareTo(Test test1) {
 		 Date recent0 = oldestDate(this);
 		 Date recent1 = oldestDate(test1);
 		 
@@ -237,7 +237,7 @@ public abstract class MdrtbTestImpl implements MdrtbTest {
 	 }
 	 
 	 // checks all the dates properties associated with the mdrtb test and returns the date that is most recent
-	 private Date oldestDate(MdrtbTest test) {
+	 private Date oldestDate(Test test) {
 		 Date oldest = null;
 		 
 		 if (test.getDateOrdered() != null) {

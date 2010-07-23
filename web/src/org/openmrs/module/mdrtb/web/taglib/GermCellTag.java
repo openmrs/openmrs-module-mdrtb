@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbCulture;
+import org.openmrs.module.mdrtb.specimen.Culture;
 
 
 public class GermCellTag extends TagSupport {
@@ -21,7 +21,7 @@ public class GermCellTag extends TagSupport {
     
 	private final Log log = LogFactory.getLog(getClass());
 
-    private List<MdrtbCulture> cultures;
+    private List<Culture> cultures;
 
     public int doStartTag() {
     	
@@ -31,7 +31,7 @@ public class GermCellTag extends TagSupport {
     	String organismTypeNonCoded = "";
     	
     	// run through the cultures and pull out the organism type
-    	for(MdrtbCulture culture : cultures) {
+    	for(Culture culture : cultures) {
     		if(culture.getOrganismType() != null) {
     			if(organismType == null) {
     				organismType = culture.getOrganismType();
@@ -78,11 +78,11 @@ public class GermCellTag extends TagSupport {
     }
     
     
-	public void setCultures(List<MdrtbCulture> cultures) {
+	public void setCultures(List<Culture> cultures) {
 	    this.cultures = cultures;
     }
 
-	public List<MdrtbCulture> getCultures() {
+	public List<Culture> getCultures() {
 	    return cultures;
     }
 

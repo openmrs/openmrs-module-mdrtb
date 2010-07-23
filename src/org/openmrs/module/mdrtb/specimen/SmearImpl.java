@@ -10,14 +10,14 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * An implementaton of a MdrtbSmear.  This wraps an ObsGroup and provides access to smear
  * data within the obsgroup.
  */
-public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
+public class SmearImpl extends TestImpl implements Smear {
 	
-	public MdrtbSmearImpl() {
+	public SmearImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 
 	// set up a smear object, given an existing obs
-	public MdrtbSmearImpl(Obs smear) {
+	public SmearImpl(Obs smear) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(smear == null || !(smear.getConcept().equals(mdrtbFactory.getConceptSmearParent()))) {
@@ -28,7 +28,7 @@ public class MdrtbSmearImpl extends MdrtbTestImpl implements MdrtbSmear {
 	}
 	
 	// create a new smear object, given an existing patient
-	public MdrtbSmearImpl(Encounter encounter) {
+	public SmearImpl(Encounter encounter) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {

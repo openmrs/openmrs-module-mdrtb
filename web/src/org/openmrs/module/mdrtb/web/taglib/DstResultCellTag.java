@@ -9,8 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.MdrtbDst;
-import org.openmrs.module.mdrtb.specimen.MdrtbDstResult;
+import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.DstResult;
 
 
 public class DstResultCellTag extends TagSupport {
@@ -19,9 +19,9 @@ public class DstResultCellTag extends TagSupport {
     
 	private final Log log = LogFactory.getLog(getClass());
 
-	private MdrtbDst dst;
+	private Dst dst;
 	
-    private MdrtbDstResult dstResult;
+    private DstResult dstResult;
 
     public int doStartTag() {
     	
@@ -59,21 +59,21 @@ public class DstResultCellTag extends TagSupport {
     	return EVAL_PAGE;
     }
     
-	public void setDstResult(MdrtbDstResult dstResult) {
+	public void setDstResult(DstResult dstResult) {
 	    this.dstResult = dstResult;
     }
 
-	public MdrtbDstResult getDstResult() {
+	public DstResult getDstResult() {
 	    return dstResult;
     }
 
 
-	public void setDst(MdrtbDst dst) {
+	public void setDst(Dst dst) {
 	    this.dst = dst;
     }
 
 
-	public MdrtbDst getDst() {
+	public Dst getDst() {
 	    return dst;
     }
     
