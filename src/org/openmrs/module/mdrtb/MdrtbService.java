@@ -153,10 +153,17 @@ public interface MdrtbService extends OpenmrsService {
     public Dst getDst(Integer obsId);
     
     /**
-     * Saves a dst in the approriate obs construct
+     * Saves a dst in the appropriate obs construct
      */
     @Transactional
     public void saveDst(Dst dst);
+    
+    
+    /**
+     * Deletes a dst result
+     */
+    @Transactional 
+    public void deleteDstResult(Integer dstResultId);
     
     /**
      * Saves a scanned lab report in the appropriate obs constructs

@@ -10,9 +10,9 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
-import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -126,7 +126,8 @@ protected final Log log = LogFactory.getLog(getClass());
 	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
-	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
+	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports,
+	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
 	                        
 				
 		// TODO: add validation
@@ -136,18 +137,18 @@ protected final Log log = LogFactory.getLog(getClass());
 		}
 		
 		// hacky way to manually handle the addition of new dsts
-		int i = 0;
-		while(StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".drug"))) {
+		int i = 1;
+		while(i<=30) {
 			
-			if(StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".colonies")) || StringUtils.isNotEmpty(request.getParameter("addDst" + i + ".result")) ) {
+			if(StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".drug")) ) {
 				// create the new result
 				DstResult dstResult = dst.addResult();
 			
 				// pull the values from the request
-				String colonies = request.getParameter("addDst" + i + ".colonies");
-				String concentration = request.getParameter("addDst" + i + ".concentration");
-				String resultType = request.getParameter("addDst" + i + ".result");
-				String drug = request.getParameter("addDst" + i + ".drug");
+				String colonies = request.getParameter("addDstResult" + i + ".colonies");
+				String concentration = request.getParameter("addDstResult" + i + ".concentration");
+				String resultType = request.getParameter("addDstResult" + i + ".result");
+				String drug = request.getParameter("addDstResult" + i + ".drug");
 				
 				// assign them if they exist
 				if (StringUtils.isNotEmpty(colonies)) {
@@ -167,6 +168,11 @@ protected final Log log = LogFactory.getLog(getClass());
 			i++;
 		} 
 		
+		// save the actual update
+		// NOTE: for some reason we need to make sure we save the specimen here (i.e. commit the changes) before
+		// moving on to additions and deletions that we handle manually; otherwise hibernate throws an error
+		Context.getService(MdrtbService.class).saveSpecimen(specimen);
+		
 		// (somewhat) hacky way to manually handle the addition of new scanned lab report
 		if(scannedLabReport != null && !scannedLabReport.isEmpty()) {
 			// create the new result
@@ -180,6 +186,15 @@ protected final Log log = LogFactory.getLog(getClass());
 			Context.getService(MdrtbService.class).saveScannedLabReport(report);
 		}
 	
+		// (somewhat) hacky method to manually remove dst results
+		if(removeDstResults != null) {
+			for(String dstResultId : removeDstResults) {
+				if(StringUtils.isNotEmpty(dstResultId)) {
+					Context.getService(MdrtbService.class).deleteDstResult(Integer.valueOf(dstResultId));
+				}
+			}
+		}
+		
 		// (somewhat) hacky method to manually remove lab reports
 		if(removeScannedLabReports != null) {
 			for(String reportId : removeScannedLabReports) {
@@ -188,9 +203,6 @@ protected final Log log = LogFactory.getLog(getClass());
 				}
 			}
 		}
-
-		// do the actual update
-		Context.getService(MdrtbService.class).saveSpecimen(specimen);
 			
 		// clears the command object from the session
 		status.setComplete();

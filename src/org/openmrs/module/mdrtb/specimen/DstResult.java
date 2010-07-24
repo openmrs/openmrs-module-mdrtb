@@ -11,14 +11,21 @@ import org.openmrs.Concept;
 public interface DstResult extends Comparable<DstResult>{
 
 	/**
-	 * Data points this interface provides access to:
+	 * Data points this interface provides get/set access to:
 	 * 
 	 * drug: the drug this test refers to
 	 * concentration: the concentration of the drug
 	 * colonies: the colonies present (after testing?)
 	 * result: coded result of the test
 	 * 
+	 * Data points this interface provides get access to:
+	 * test: the actual object that stores the data this interface is providing access to (i.e., in our current implementation, the dst result obsgroup)
+	 * id: the id used to reference the test (i.e., in our current implementation, the obs_id of the dst result obsgroup for this test)
+	 * 
 	 */
+	
+	public Object getDstResult();
+	public String getId(); 
 	
 	public Concept getDrug();
 	public void setDrug(Concept drug);

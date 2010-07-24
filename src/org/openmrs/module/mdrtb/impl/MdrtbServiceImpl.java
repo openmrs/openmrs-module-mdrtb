@@ -298,6 +298,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 		
+	public void deleteDstResult(Integer dstResultId) {
+		Obs obs = Context.getObsService().getObs(dstResultId);
+		
+		// the id must refer to a valid obs, which is a scanned lab report
+		if (obs == null || ! obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent()) ) {
+			throw new APIException ("Unable to delete scanned lab report: invalid report id " + dstResultId);
+		}
+		else {
+			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");
+		}
+	}
+	
 	public void saveScannedLabReport(ScannedLabReport report) {
 		if (report == null) {
 			log.warn("Unable to save dst: dst object is null");

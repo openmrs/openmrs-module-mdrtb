@@ -51,10 +51,13 @@
 	
 	$(document).ready(function(){
 
+		// set the add dst count to 1
+		var addDstResultCounter = 1;
+		
 		// show the proper detail windows if it has been specified
 		$('#details_' + ${testId}).show();
 	
-		// event handlers to hide and show custom evaluator text box
+		// event handlers to hide and show specimen edit box
 		$('#editSpecimen').click(function(){
 			hideViewEditAddLinks();
 			$('#details_specimen').hide();  // hide the specimen details box
@@ -75,13 +78,6 @@
 			$('#add_' + $('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
-		// TODO: figure out why "cancelAdd" as an id name isn't working
-		// TODO: some sort of precendence issue?
-		$('.cancelAdd').click(function(){
-			hideDisplayBoxes();
-			showViewEditAddLinks();
-		});
-
 		// event handler to display view detail boxes
 		$('.view').click(function(){
 			hideDisplayBoxes();
@@ -95,11 +91,14 @@
 			$('#edit_' + this.id).show();  // show the selected edit box
 		});
 
-		// event handler to cancel an edit
-		$('.cancelEdit').click(function(){	
+		// event handler to cancel an edit or add
+		$('.cancel').click(function(){	
 			hideDisplayBoxes();
 			showViewEditAddLinks();
+			$('.dstResult').show(); // show any dst results that may have been deleted
 			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
+			$('.addDstResult').hide().find('input,select').attr('value',''); // hide all the add dst result rows and reset their values
+			addDstResultCounter = 1; // reset the add dst result counter
 		});
 
 		// event handler to hide/show bacilli and colonies selector, and reset the value if needed
@@ -147,6 +146,41 @@
 			// set it's hidden input to the id of this scanned lab report
 			$('#removeScannedLabReport' + $(this).attr('value')).attr('value',$(this).attr('value'));
 		});
+
+		//event handler to handle removing dst results
+		$('.removeDstResult').click(function() {
+			// hide the dst result
+			$(this).closest('.dstResult').hide();
+			// set it's hidden input to the id of this dst report
+			$('#removeDstResult' + $(this).attr('value')).attr('value',$(this).attr('value'));
+		});
+
+		// event handle to handle adding dst results
+		$('#addDstResultRow').click(function() {
+			if(addDstResultCounter < 30) {
+				// hacky! two things with the same id... also relies on table structure...
+				$(this).closest('table').find('#addDstResult' + addDstResultCounter).show();
+				addDstResultCounter++;
+			}
+		});
+
+		// event handle to handle adding dst results in the "add" section
+		// TODO: the name "addSectionAddDstResult" makes me cring... have to refactor this better!
+		// I've able to repeat all the add dst result functionality between the edit and add sections,
+		// except for this because I use ids here
+		$('#addSectionAddDstResultRow').click(function() {
+			if(addDstResultCounter < 30) {
+				$('#addSectionAddDstResult' + addDstResultCounter).show();
+				addDstResultCounter++;
+			}
+		});
+
+		//event handler to handle removing of dst rows that have been added, but not saved
+		$('.removeDstResultRow').click(function() {
+			// hide the dst result row and reset the value of all the interior elements
+			$(this).closest('.addDstResult').hide().find('input,select').attr('value','');
+		});
+		
  	});
 -->
 </script>
@@ -604,21 +638,53 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:forEach var="drugType" items="${drugTypes}">
 	<c:if test="${!empty resultsMap[drugType.id]}">
 		<c:forEach var="dstResult" items="${resultsMap[drugType.id]}">
-			<tr>
+			<tr class="dstResult">
 			<td><nobr>${dstResult.drug.name}</nobr></td>
 			<td><nobr>${dstResult.concentration}</nobr></td>
 			<td><nobr>${dstResult.result.name}</nobr></td>
 			<td><nobr>${dstResult.colonies}</nobr></td>
+			<td><button class="removeDstResult" value="${dstResult.id}" type="button">X</button>
+				<input type="hidden" id="removeDstResult${dstResult.id}" name="removeDstResult" value=""/></td>
 			</tr>
 		</c:forEach>
 	</c:if>
 	</c:forEach>
+	
+	<!-- now the rows to add a new table -->
+	<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
+	<c:forEach begin="1" end="30" varStatus="i">
+		<tr id="addDstResult${i.count}" class="addDstResult" style="display:none">
+		<td><select name="addDstResult${i.count}.drug">
+			<option value=""></option>
+			<c:forEach var="drug" items="${drugTypes}">
+				<option value="${drug.id}">${drug.name}</option>
+			</c:forEach>
+			</select>
+		</td>
+		<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
+		<td><select name="addDstResult${i.count}.result" class="dstResult">
+			<option value=""></option>
+			<c:forEach var="possibleResult" items="${dstResults}">
+				<option value="${possibleResult.id}">${possibleResult.name}</option>
+			</c:forEach></td>
+			</select>
+		</td>
+		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
+		<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
+		</tr>
+	</c:forEach>
+
+	<tr>
+	<td><button id="addDstResultRow" type="button">Add DST result</button></td>
+	<td colspan="4"/>
+	</tr>
+	
 </table>
 <br/>
 </c:if>
 <!-- end of the DST table -->
 
-<button type="submit">Save</button><button type="reset" id="${test.id}" class="cancelEdit">Cancel</button>
+<button type="submit">Save</button><button type="reset" id="${test.id}" class="cancel">Cancel</button>
 
 </form>
 
@@ -629,7 +695,184 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <!--  END OF EDIT TESTS SECTION -->
 
+<!-- ADD TEST SECTION -->
+<!--  TODO: would really like to combine this with the edit tests section, to avoid all this code repeating... -->
 
+
+<c:forEach var="type" items="${testTypes}">
+
+<div id="add_${type}" class="addBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
+
+<form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
+
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: Add</b>
+<div class="box" style="margin:0px">
+<table cellpadding="0">
+
+<tr>
+<td><nobr>Accession #:</nobr></td>
+<td><input type="text" name="accessionNumber"/></td>
+<td><nobr>Date ordered:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td>Laboratory:</td>
+<td><select name="lab">
+<c:forEach var="location" items="${locations}">
+<option value="${location.locationId}">${location.name}</option>
+</c:forEach>
+</select>
+</td>
+<td><nobr>Date sample received:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td><nobr>Method:</nobr></td>
+<td><select name="method">
+<option value=""></option>
+<c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
+<option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
+</c:forEach>
+</select>
+</td>
+<td><nobr>Date started:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<c:if test="${type eq 'smear' || type eq 'culture'}">
+<td><nobr>Results:</nobr></td>
+<td><select name="result" class="result">
+<option value=""></option>
+<c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
+<option value="${result.answerConcept.id}">${result.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+</c:if>
+
+<c:if test="${type eq 'dst'}">
+<td><nobr>Direct/Indirect:</nobr></td>
+<td><select name="direct">
+<option value=""></option>
+<option value="1">Direct</option>
+<option value="0">Indirect</option>
+</select></td>
+</c:if>
+
+<td><nobr>Date completed:</nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<c:if test="${type eq 'smear'}">
+<tr class="bacilli" style="display:none;">
+<td><nobr># of Bacilli:</nobr></td>
+<td><input type="text" name="bacilli" id="bacilli" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${type eq 'culture'}">
+<tr class="colonies" style="display:none;">
+<td><nobr># of Colonies:</nobr></td>
+<td><input type="text" name="colonies" id="colonies" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+
+<c:if test="${type eq 'culture' || type eq 'dst'}">
+<tr>
+<td><nobr>Organism Type:</nobr></td>
+<td><select name="organismType" class="organismType">
+<option value=""></option>
+<c:forEach var="organismType" items="${organismTypes}">
+<option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
+</c:forEach></td>
+</select>
+</td>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr class="organismTypeNonCoded" style="display:none;">
+<td><nobr>Organism Type Non-Coded:</nobr></td>
+<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${type eq 'dst'}">
+<tr>
+<td><nobr>Colonies in control:</nobr></td>
+<td><input type="text" name="coloniesInControl" value=""/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<tr>
+<td><nobr>Comments:</nobr></td>
+<td colspan="3"><textarea cols="60" rows="4" name="comments"></textarea></td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+</table>
+
+<!-- handle the DST table -->
+<c:if test="${type eq 'dst'}">
+<br/>
+<table cellpadding="0">
+
+<tr>
+<td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
+</tr>
+	
+	<!-- now the rows to add a new table -->
+	<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
+	<c:forEach begin="1" end="30" varStatus="i">
+		<tr id="addSectionAddDstResult${i.count}" class="addDstResult" style="display:none">
+		<td><select name="addDstResult${i.count}.drug">
+			<option value=""></option>
+			<c:forEach var="drug" items="${drugTypes}">
+				<option value="${drug.id}">${drug.name}</option>
+			</c:forEach>
+			</select>
+		</td>
+		<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
+		<td><select name="addDstResult${i.count}.result" class="dstResult">
+			<option value=""></option>
+			<c:forEach var="possibleResult" items="${dstResults}">
+				<option value="${possibleResult.id}">${possibleResult.name}</option>
+			</c:forEach></td>
+			</select>
+		</td>
+		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
+		<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
+		</tr>
+	</c:forEach>
+
+	<tr>
+	<td><button id="addSectionAddDstResultRow" type="button">Add DST result</button></td>
+	<td colspan="4"/>
+	</tr>
+	
+</table>
+<br/>
+</c:if>
+<!-- end of the DST table -->
+
+<button type="submit">Save</button><button class="cancel" type="reset">Cancel</button>
+</form>
+</div>
+</div>
+
+</c:forEach> 
+
+<!-- END ADD TEST SECTION -->
 
 </div> <!-- END OF TEST DIV -->
 

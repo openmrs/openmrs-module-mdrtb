@@ -44,6 +44,15 @@ public class DstResultImpl implements DstResult {
 		}	 
 	}
 	
+	public Object getDstResult() {
+		return this.dstResult;
+	}
+	
+	public String getId() {
+		return this.dstResult.getId().toString();
+	}
+	
+	
     public Integer getColonies() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
     	
