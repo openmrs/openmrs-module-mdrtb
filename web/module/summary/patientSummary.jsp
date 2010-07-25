@@ -6,7 +6,8 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
-<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css" /> 
+
+<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
 
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${patientId}"/>
 <openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${patientId}"/>
@@ -17,15 +18,93 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
+	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 	.chartCell {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
-<!-- ADD THE CUSTOM JQUERY TOOLTIP  -->
+<!-- CUSTOM JQUERY  -->
 <script type="text/javascript">
-$(document).ready(function(){
-    $("td").tooltip();
-  });
+	$(document).ready(function(){
+
+		// add the custom tooltip
+	    $("td").tooltip();
+
+	 	// event handlers to hide and show summary edit box
+		$('#editSummary').click(function(){
+			$('#summary').hide();  // hide the specimen details box
+			$('#edit_summary').show();  // show the edit speciment box
+		});
+
+		$('#cancelSummary').click(function(){
+			$('#edit_summary').hide();  // hide the edit specimen box
+			$('#summary').show();  // show the specimen details box
+		});
+
+    });
 </script>
+
+
+<div align="center"> <!-- start of page div -->
+
+<!-- PATIENT SUMMARY -->
+
+<!-- PATIENT SUMMARY - VIEW -->
+
+<div id="summary">
+
+<b class="boxHeader" style="margin:0px">Patient Summary<span style="position: absolute; right:25px;"><a href="#" id="editSummary">edit</a></span></b>
+<div class="box" style="margin:0px">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td>Patient Enrollment Date:</td>
+<td>
+<c:forEach var="program" items="${mdrtbPatient.mdrtbPrograms}">
+	<openmrs:formatDate date="${program.dateEnrolled}"/><br/>
+</c:forEach>
+</td>
+</tr>
+</table>
+
+<div align="center">
+<a href="<%= request.getContextPath() %>/patientDashboard.form?patientId=${patientId}">View Main Patient Dashboard</a> |
+<a href="<%= request.getContextPath() %>/admin/patients/newPatient.form?patientId=${patientId}">Edit Patient Information (Short Form)</a> |
+<a href="<%= request.getContextPath() %>/admin/patients/patient.form?patientId=${patientId}">Edit Patient Information (Long Form)</a>
+</div>
+
+</div>
+
+</div>
+
+<!-- END PATIENT SUMMARY - VIEW -->
+
+<!-- PATIENT SUMMARY - EDIT -->
+<div id="edit_summary" style="display:none">
+
+<b class="boxHeader" style="margin:0px">Patient Summary</b>
+<div class="box" style="margin:0px">
+<form name="mdrtbPatient" action="summary.form?patientId=${patientId}" method="post">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td>Patient Enrollment Date:</td>
+<td>
+<c:forEach var="program" items="${mdrtbPatient.mdrtbPrograms}" varStatus="i">
+	<openmrs_tag:dateField formFieldName="mdrtbPrograms[${i.count - 1}].dateEnrolled" startValue="${program.dateEnrolled}"/><br/>
+</c:forEach>
+</td>
+</tr>
+</table>
+<button type="submit">Save</button><button id="cancelSummary" type="reset">Cancel</button>
+</form>
+
+</div>
+
+</div>
+
+<!-- END PATIENT SUMMARY - EDIT -->
+
+<br/><br/>
+
+<!-- END PATIENT SUMMARY -->
 
 <!-- PATIENT CHART -->
 <div id="patientChart" align="center">
@@ -40,7 +119,7 @@ $(document).ready(function(){
 <td class="chartCell" style="width:150px">Cultures</td>
 <td class="chartCell">Germ</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
-<c:forEach var="drugType" items="${drugTypes}">
+<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
 </tr>
@@ -49,7 +128,7 @@ $(document).ready(function(){
 
 <!-- START ROWS -->
 
-<c:forEach var="record" items="${records}">
+<c:forEach var="record" items="${mdrtbPatient.chart.records}">
 
 	<c:set var="specimenCount" value="${fn:length(record.value.specimens)}"/>
 	
@@ -90,7 +169,7 @@ $(document).ready(function(){
 		<!--  	<td class="chartCell" style="border-top:none;border-bottom:none"/>  --> <!-- BLANK COLUMN -->
 				
 			<!--  dsts -->
-			<c:forEach var="drugType" items="${drugTypes}">
+			<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
 				<td class="chartCell"><c:if test="${!empty specimen.dstResultsMap[drugType.id]}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
@@ -108,7 +187,7 @@ $(document).ready(function(){
 			<td class="chartCell">${record.key}</td>
 			<td class="chartCell"/><td class="chartCell"/><td class="chartCell"/><td class="chartCell"/>
 			<!-- <td class="chartCell" style="border-top:none;border-bottom:none"/> -->  <!-- BLANK COLUMN -->
-			<c:forEach items="${drugTypes}"><td class="chartCell"/></c:forEach>
+			<c:forEach items="${mdrtbPatient.chart.drugTypes}"><td class="chartCell"/></c:forEach>
 			</tr>		
 		</c:otherwise>
 	</c:choose>
@@ -121,5 +200,7 @@ $(document).ready(function(){
 </div> 
 
 <!-- END PATIENT CHART -->
+
+</div> <!-- end of page div -->
 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>

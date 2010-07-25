@@ -12,15 +12,16 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
-import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -181,7 +182,19 @@ public interface MdrtbService extends OpenmrsService {
      * Gets the patient chart for a specific patient
      */
     @Transactional(readOnly=true)
-    public PatientChart getPatientChart(Patient patient);
+    public PatientChart getPatientChart(Integer patientId);
+    
+    /**
+     * Gets the Mdrtb Programs for a specified patient
+     */
+    @Transactional(readOnly=true)
+    public List<PatientProgram> getMdrtbPrograms(Integer patientId);
+    
+    /**
+     * Saves a set of Mdrtb Programs
+     */
+    @Transactional
+    public void saveMdrtbPrograms(List<PatientProgram> mdrtbPrograms);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

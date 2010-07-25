@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
-import org.openmrs.module.mdrtb.patientchart.PatientChartRecord;
+import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -338,57 +337,38 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 	}
 	
-	public PatientChart getPatientChart(Patient patient) {
+	public PatientChart getPatientChart(Integer patientId) {
 		
-		PatientChart chart = new PatientChart();
+		Patient patient = Context.getPatientService().getPatient(patientId);
 		
-		if (patient == null) {
-			log.warn("Can't fetch patient chart, patient is null");
+		if(patient == null) {
+			log.warn("Unable to fetch patient chart, no patient with Id " + patientId);
 			return null;
 		}
+		else {
+			PatientChartFactory factory = new PatientChartFactory();
+			return factory.createPatientChart(patient);
+		}
+	}
+	
+	public List<PatientProgram> getMdrtbPrograms(Integer patientId) {
 		
-		// first, fetch all the specimens for this patient
-		List<Specimen> specimens = getSpecimens(patient);
+		Patient patient = Context.getPatientService().getPatient(patientId);
 		
-		// the getSpecimen method should return the specimens sorted, but just in case it is changed
-		Collections.sort(specimens);
-		
-		// now fetch the program start date
-		Calendar startDate = Calendar.getInstance();
-		
-		Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
-		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
-		
-		if(programs == null || programs.size() == 0){
-			if(specimens.size() > 0) {
-				// set some sort of default date?
-				// TODO: use collected date of this first specimen for now
-				startDate.setTime(specimens.get(0).getDateCollected());
-			}
+		if(patient == null) {
+			log.warn("Unable to fetch patient mdrtb programs, no patient with Id " + patientId);
+			return null;
 		}
 		else {
-			// TODO: this is only temporary, not what we want to do long term, doesn't handle patients with more than one; baseline/prior
-			startDate.setTime(programs.get(0).getDateEnrolled());
+			Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+			return Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtbProgram, null, null, null, null, false);
 		}
-		
-		// first, we want to get all specimens collected more than a month before treatment start date
-		startDate.add(Calendar.MONTH, -1);
-		chart.getRecords().put("PRIOR", new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
-		
-		// now add all the specimens collected in the month prior to treatment
-		startDate.add(Calendar.MONTH, 1);
-		chart.getRecords().put("BASELINE", new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
-		
-		// now go through the add all the other specimens
-		startDate.add(Calendar.MONTH, 1);
-		Integer iteration = 0;
-		while(specimens.size() > 0) {
-			chart.getRecords().put(iteration.toString(), new PatientChartRecord(getSpecimensBeforeDate(specimens,startDate)));
-			startDate.add(Calendar.MONTH, 1);
-			iteration++;
+	}
+	
+	public void saveMdrtbPrograms(List<PatientProgram> mdrtbPrograms) {
+		for(PatientProgram program : mdrtbPrograms) {
+			Context.getProgramWorkflowService().savePatientProgram(program);
 		}
-		
-		return chart;
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
@@ -528,26 +508,4 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	 * Utility functions
 	 */
 	
-	
-	// IMPORTANT: the assumption this method makes is that list of specimens are ordered in descending date order
-	// also, this method pulls all the specimens it returns off the list of specimens passed to it;
-	// this method is intended to be use with the getPatientChart API method
-	private List<Specimen> getSpecimensBeforeDate(List<Specimen> specimens, Calendar compareDate) {
-		List<Specimen> results = new LinkedList<Specimen>();
-		Calendar specimenDate = Calendar.getInstance();
-		
-		while(!specimens.isEmpty()) {
-			specimenDate.setTime(specimens.get(0).getDateCollected());
-			if(specimenDate.before(compareDate)) {
-				results.add(specimens.get(0));
-				specimens.remove(specimens.get(0));
-			}
-			else {
-				// we don't need to keep checking since the the dates are in order
-				break;
-			}
-		}
-		
-		return results;
-	}
 }
