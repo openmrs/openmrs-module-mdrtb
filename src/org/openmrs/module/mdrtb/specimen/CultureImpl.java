@@ -106,6 +106,13 @@ public class CultureImpl extends TestImpl implements Culture {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(colonies == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptColonies(), test.getObsDatetime(), test.getLocation());
@@ -124,7 +131,14 @@ public class CultureImpl extends TestImpl implements Culture {
 		if (obs == null && method == null) {
 			return;
 		}
-    	
+
+		// if we are trying to set the obs to null, simply void the obs
+		if(method == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptCultureMethod(), test.getObsDatetime(), test.getLocation());
@@ -144,6 +158,13 @@ public class CultureImpl extends TestImpl implements Culture {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(organismType == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganism(), test.getObsDatetime(), test.getLocation());
@@ -163,6 +184,13 @@ public class CultureImpl extends TestImpl implements Culture {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(organismType == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test.getObsDatetime(), test.getLocation());
@@ -182,6 +210,13 @@ public class CultureImpl extends TestImpl implements Culture {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(result == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if we need to
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptCultureResult(), test.getObsDatetime(), test.getLocation());

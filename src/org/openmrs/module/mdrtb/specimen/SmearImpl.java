@@ -85,6 +85,13 @@ public class SmearImpl extends TestImpl implements Smear {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(bacilli == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptBacilli(), test.getObsDatetime(), test.getLocation());
@@ -101,6 +108,13 @@ public class SmearImpl extends TestImpl implements Smear {
     	
     	 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
+			return;
+		}
+		
+		// if we are trying to set the obs to null, simply void the obs
+		if(method == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			return;
 		}
     	
@@ -123,6 +137,13 @@ public class SmearImpl extends TestImpl implements Smear {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(result == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if we need to
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearResult(), test.getObsDatetime(), test.getLocation());

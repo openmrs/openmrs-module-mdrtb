@@ -185,6 +185,13 @@ public class DstImpl extends TestImpl implements Dst {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(coloniesInControl == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptColoniesInControl(), test.getObsDatetime(), test.getLocation());
@@ -204,6 +211,13 @@ public class DstImpl extends TestImpl implements Dst {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(direct == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDirectIndirect(), test.getObsDatetime(), test.getLocation());
@@ -221,6 +235,13 @@ public class DstImpl extends TestImpl implements Dst {
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
+			return;
+		}
+		
+		// if we are trying to set the obs to null, simply void the obs
+		if(method == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			return;
 		}
     	
@@ -244,6 +265,13 @@ public class DstImpl extends TestImpl implements Dst {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(organismType == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// initialize the obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganism(), test.getObsDatetime(), test.getLocation());
@@ -260,6 +288,13 @@ public class DstImpl extends TestImpl implements Dst {
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
+			return;
+		}
+		
+		// if we are trying to set the obs to null, simply void the obs
+		if(organismType == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			return;
 		}
     	

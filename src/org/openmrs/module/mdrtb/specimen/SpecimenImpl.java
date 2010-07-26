@@ -302,10 +302,12 @@ public class SpecimenImpl implements Specimen {
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
 				
-			// now create the new Obs and add it to the encounter		
-			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptAppearanceOfSpecimen(), encounter.getEncounterDatetime(), encounter.getLocation());
-			obs.setValueCoded(appearance);
-			encounter.addObs(obs);
+			// now create the new Obs and add it to the encounter	
+			if(appearance != null) {
+				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptAppearanceOfSpecimen(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs.setValueCoded(appearance);
+				encounter.addObs(obs);
+			}
 		} 
 	}
 	
@@ -313,7 +315,7 @@ public class SpecimenImpl implements Specimen {
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && StringUtils.isEmpty(comments)) {
+		if (obs == null && StringUtils.isBlank(comments)) {
 			return;
 		}
 		
@@ -328,9 +330,11 @@ public class SpecimenImpl implements Specimen {
 			}
 				
 			// now create the new Obs and add it to the encounter
-			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenComments(), encounter.getEncounterDatetime(), encounter.getLocation());
-			obs.setValueText(comments);
-			encounter.addObs(obs);
+			if(StringUtils.isNotBlank(comments)) {
+				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenComments(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs.setValueText(comments);
+				encounter.addObs(obs);
+			}
 		}
 	}
 	
@@ -362,9 +366,11 @@ public class SpecimenImpl implements Specimen {
 			}
 				
 			// now create the new Obs and add it to the encounter
-			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenID(), encounter.getEncounterDatetime(), encounter.getLocation());
-			obs.setValueText(id);
-			encounter.addObs(obs);
+			if(StringUtils.isNotBlank(id)) {
+				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenID(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs.setValueText(id);
+				encounter.addObs(obs);
+			}
 		}
 	}
 	
@@ -409,7 +415,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public void setType(Concept type) {
-		// if there's an existing obs, set it to null (since this doesn't happen automatically when an encounter is saved)
+		
 		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
 		
 		// if this obs have not been created, and there is no data to add, do nothing
@@ -428,9 +434,11 @@ public class SpecimenImpl implements Specimen {
 			}
 				
 			// now create the new Obs and add it to the encounter
-			obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSampleSource(), encounter.getEncounterDatetime(), encounter.getLocation());
-			obs.setValueCoded(type);
-			encounter.addObs(obs);
+			if(type != null) {
+				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSampleSource(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs.setValueCoded(type);
+				encounter.addObs(obs);
+			}
 		}
 	}
 	

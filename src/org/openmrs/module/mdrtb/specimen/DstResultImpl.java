@@ -111,6 +111,13 @@ public class DstResultImpl implements DstResult {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(colonies == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (dstResult.getPerson(), mdrtbFactory.getConceptColonies(), dstResult.getObsDatetime(), dstResult.getLocation());
@@ -130,6 +137,13 @@ public class DstResultImpl implements DstResult {
 			return;
 		}
     	
+		// if we are trying to set the obs to null, simply void the obs
+		if(concentration == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
     	// initialize the obs if needed
 		if (obs == null) {
 			obs = new Obs (dstResult.getPerson(), mdrtbFactory.getConceptConcentration(), dstResult.getObsDatetime(), dstResult.getLocation());

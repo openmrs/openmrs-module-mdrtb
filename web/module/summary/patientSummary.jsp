@@ -52,7 +52,7 @@
 
 <div id="summary">
 
-<b class="boxHeader" style="margin:0px">Patient Summary<span style="position: absolute; right:25px;"><a href="#" id="editSummary">edit</a></span></b>
+<b class="boxHeader" style="margin:0px">Patient Overview<span style="position: absolute; right:25px;"><a href="#" id="editSummary">edit</a></span></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 <tr>
@@ -80,7 +80,7 @@
 <!-- PATIENT SUMMARY - EDIT -->
 <div id="edit_summary" style="display:none">
 
-<b class="boxHeader" style="margin:0px">Patient Summary</b>
+<b class="boxHeader" style="margin:0px">Patient Overview</b>
 <div class="box" style="margin:0px">
 <form name="mdrtbPatient" action="summary.form?patientId=${patientId}" method="post">
 <table cellspacing="0" cellpadding="0">
@@ -115,8 +115,8 @@
 <tr>
 <td class="chartCell">Month</td>
 <td class="chartCell">Date collected</td>
-<td class="chartCell" style="width:150px">Smears</td>
-<td class="chartCell" style="width:150px">Cultures</td>
+<td class="chartCell" style="width:50px">Smears</td>
+<td class="chartCell" style="width:50px">Cultures</td>
 <td class="chartCell">Germ</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">

@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.specimen;
 import java.text.DateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -40,6 +39,10 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public String getComments() {
+	
+		return test.getComment();
+		
+		/** Delete this once we are sure we don't need it
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
 		
 		if (obs == null) {
@@ -47,7 +50,7 @@ public abstract class TestImpl implements Test {
 		}
 		else {
 			return obs.getValueText();
-		}
+		} */
 	}
 	
 	public Date getDateOrdered() {
@@ -112,10 +115,21 @@ public abstract class TestImpl implements Test {
 	 }
 	
 	public void setComments(String comments) {
+		
+		test.setComment(comments);
+		
+		/** get rid of this old implementation once we know we don't need it
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && StringUtils.isEmpty(comments)) {
+		if (obs == null && StringUtils.isBlank(comments)) {
+			return;
+		}
+		
+		// if we are trying to set the obs to null, simply void the obs
+		if(StringUtils.isBlank(comments)) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			return;
 		}
 		
@@ -129,6 +143,8 @@ public abstract class TestImpl implements Test {
 		
 		// update the value
 		obs.setValueText(comments);
+		
+		*/
 	}
 	
 	 public void setDateOrdered(Date dateOrdered) {
@@ -139,6 +155,13 @@ public abstract class TestImpl implements Test {
 			return;
 		}
 	    
+		// if we are trying to set the obs to null, simply void the obs
+		if(dateOrdered == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// create a new obs if needed
 		if (obs == null) {	
 			// now create the new Obs and add it to the encounter
@@ -159,6 +182,13 @@ public abstract class TestImpl implements Test {
 			return;
 		}
 	    
+		// if we are trying to set the obs to null, simply void the obs
+		if(dateReceived == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 	    // create a new obs if needed
 		if (obs == null) {		
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateReceived(), test.getObsDatetime(), test.getLocation());
@@ -191,6 +221,13 @@ public abstract class TestImpl implements Test {
 			return;
 		}
 	    
+		// if we are trying to set the obs to null, simply void the obs
+		if(resultDate == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
 		// create a new obs if needed
 		if (obs == null) {			
 			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptResultDate(), test.getObsDatetime(), test.getLocation());
@@ -210,12 +247,19 @@ public abstract class TestImpl implements Test {
 			return;
 		}
 		 
-		 // create a new obs if needed
-		 if (obs == null) {
-			 obs = new Obs (test.getPerson(), mdrtbFactory.getConceptStartDate(), test.getObsDatetime(), test.getLocation());
-			 obs.setEncounter(test.getEncounter());
-			 test.addGroupMember(obs);
-		 }
+		// if we are trying to set the obs to null, simply void the obs
+		if(startDate == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
+		// create a new obs if needed
+		if (obs == null) {
+			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptStartDate(), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
 		 
 		 // now set the value
 		 obs.setValueDatetime(startDate);

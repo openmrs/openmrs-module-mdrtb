@@ -61,9 +61,4 @@ public class MdrtbPatientWrapper {
 	    // TODO Auto-generated method stub
 	    return null;
     }
-
-    // perform all the saves that need to be performed to 
-    public void update() {
-    	
-    }
 }

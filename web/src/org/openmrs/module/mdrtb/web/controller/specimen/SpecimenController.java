@@ -120,10 +120,11 @@ protected final Log log = LogFactory.getLog(getClass());
 	}
 	
 	
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, @ModelAttribute("smear") Smear smear, 
 	                                  @ModelAttribute("culture") Culture culture, @ModelAttribute("dst") Dst dst,
-	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
+	                                  BindingResult result, SessionStatus status, HttpServletRequest request, ModelMap map,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports,
@@ -133,7 +134,12 @@ protected final Log log = LogFactory.getLog(getClass());
 		// TODO: add validation
 
 		if (result.hasErrors()) {
-			return new ModelAndView("/module/mdrtb/specimen/specimen");
+			for(Object error : result.getAllErrors()) {	
+				log.error("Binding error: " + error.toString());
+			}
+			map.put("testId", testId);
+			//map.put("errors", result.getAllErrors());
+			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
 		
 		// hacky way to manually handle the addition of new dsts

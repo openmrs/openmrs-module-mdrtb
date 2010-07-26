@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery/jquery-1.3.2.min.js"></script>
@@ -156,21 +157,9 @@
 		});
 
 		// event handle to handle adding dst results
-		$('#addDstResultRow').click(function() {
+		$('.addDstResultRow').click(function() {
 			if(addDstResultCounter < 30) {
-				// hacky! two things with the same id... also relies on table structure...
-				$(this).closest('table').find('#addDstResult' + addDstResultCounter).show();
-				addDstResultCounter++;
-			}
-		});
-
-		// event handle to handle adding dst results in the "add" section
-		// TODO: the name "addSectionAddDstResult" makes me cring... have to refactor this better!
-		// I've able to repeat all the add dst result functionality between the edit and add sections,
-		// except for this because I use ids here
-		$('#addSectionAddDstResultRow').click(function() {
-			if(addDstResultCounter < 30) {
-				$('#addSectionAddDstResult' + addDstResultCounter).show();
+				$('#addDstResult' + $(this).attr('value') + "_" + addDstResultCounter).show();
 				addDstResultCounter++;
 			}
 		});
@@ -392,7 +381,7 @@ Add a new Lab Test:
 Select a smear, culture, or DST  from the list on the left to view it's details.
 </div>
 
-<c:forEach var="test" items="${specimen.tests}">
+<c:forEach var="test" items="${specimen.tests}" varStatus="testIteration">
 
 <!--  TEST DETAILS SECTION -->
 
@@ -648,34 +637,37 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 			</tr>
 		</c:forEach>
 	</c:if>
-	</c:forEach>
+</c:forEach>
 	
-	<!-- now the rows to add a new table -->
-	<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
-	<c:forEach begin="1" end="30" varStatus="i">
-		<tr id="addDstResult${i.count}" class="addDstResult" style="display:none">
-		<td><select name="addDstResult${i.count}.drug">
-			<option value=""></option>
-			<c:forEach var="drug" items="${drugTypes}">
-				<option value="${drug.id}">${drug.name}</option>
-			</c:forEach>
-			</select>
-		</td>
-		<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
-		<td><select name="addDstResult${i.count}.result" class="dstResult">
-			<option value=""></option>
-			<c:forEach var="possibleResult" items="${dstResults}">
-				<option value="${possibleResult.id}">${possibleResult.name}</option>
-			</c:forEach></td>
-			</select>
-		</td>
-		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
-		<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
-		</tr>
-	</c:forEach>
+<!-- now the rows to add a new table -->
+<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
+<!-- note that we have to add the test id to the tr so that jquery can find the right tr to hide/show 
+	 when there are multiple dsts for a sample, but we don't need to add this count to the actual form fields because
+	 we never update more than one test at any time -->
+<c:forEach begin="1" end="30" varStatus="i">
+	<tr id="addDstResult${test.id}_${i.count}" class="addDstResult" style="display:none">
+	<td><select name="addDstResult${i.count}.drug">
+		<option value=""></option>
+		<c:forEach var="drug" items="${drugTypes}">
+			<option value="${drug.id}">${drug.name}</option>
+		</c:forEach>
+		</select>
+	</td>
+	<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
+	<td><select name="addDstResult${i.count}.result" class="dstResult">
+		<option value=""></option>
+		<c:forEach var="possibleResult" items="${dstResults}">
+			<option value="${possibleResult.id}">${possibleResult.name}</option>
+		</c:forEach></td>
+		</select>
+	</td>
+	<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
+	<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
+	</tr>
+</c:forEach>
 
 	<tr>
-	<td><button id="addDstResultRow" type="button">Add DST result</button></td>
+	<td><button class="addDstResultRow" value="${test.id}" type="button">Add DST result</button></td>
 	<td colspan="4"/>
 	</tr>
 	
@@ -834,7 +826,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 	<!-- now the rows to add a new table -->
 	<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
 	<c:forEach begin="1" end="30" varStatus="i">
-		<tr id="addSectionAddDstResult${i.count}" class="addDstResult" style="display:none">
+		<tr id="addDstResult_${i.count}" class="addDstResult" style="display:none">
 		<td><select name="addDstResult${i.count}.drug">
 			<option value=""></option>
 			<c:forEach var="drug" items="${drugTypes}">
@@ -856,7 +848,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 	</c:forEach>
 
 	<tr>
-	<td><button id="addSectionAddDstResultRow" type="button">Add DST result</button></td>
+	<td><button class="addDstResultRow" value="" type="button">Add DST result</button></td>
 	<td colspan="4"/>
 	</tr>
 	
