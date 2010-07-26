@@ -78,6 +78,10 @@ public class DstImpl extends TestImpl implements Dst {
     	}
     }
 
+    public String getComments() {
+    	return test.getComment();
+    }
+    
     public Boolean getDirect() {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect());
     	
@@ -203,6 +207,10 @@ public class DstImpl extends TestImpl implements Dst {
 		obs.setValueNumeric(coloniesInControl.doubleValue());
     }
 
+    public void setComments(String comments) {
+    	test.setComment(comments);
+    }
+    
     public void setDirect(Boolean direct) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect());
     	

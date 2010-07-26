@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -51,6 +52,17 @@ public class CultureImpl extends TestImpl implements Culture {
     	}
     	else {
     		return (obs.getValueNumeric()).intValue();
+    	}
+    }
+    
+    public String getComments() {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	
+    	if(obs == null) {
+    		return null;
+    	}
+    	else {
+    		return obs.getComment();
     	}
     }
     
@@ -124,6 +136,27 @@ public class CultureImpl extends TestImpl implements Culture {
 		obs.setValueNumeric(colonies.doubleValue());
     }   
 
+    public void setComments(String comments) {
+    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	
+    	// if this obs has not been created, and there is no data to add, do nothing
+    	if (obs == null && StringUtils.isBlank(comments)) {
+    		return;
+    	}
+    	
+    	// we don't need to test for comments == null here like the other obs because
+    	// the comments are stored on the results obs
+    	
+    	// initialize the obs if needed
+		if (obs == null) {
+			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptCultureResult(), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
+		
+		obs.setComment(comments);
+    }
+    
     public void setMethod(Concept method) {
     	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod());
     	
@@ -211,7 +244,7 @@ public class CultureImpl extends TestImpl implements Culture {
 		}
     	
 		// if we are trying to set the obs to null, simply void the obs
-		if(result == null) {
+		if(result == null && StringUtils.isBlank(obs.getComment())) {  // only void if there are no comments as well
 			obs.setVoided(true);
 			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			return;

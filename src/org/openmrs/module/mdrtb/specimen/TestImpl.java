@@ -38,20 +38,8 @@ public abstract class TestImpl implements Test {
 		return test.getAccessionNumber();
 	}
 	
-	public String getComments() {
-	
-		return test.getComment();
-		
-		/** Delete this once we are sure we don't need it
-		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueText();
-		} */
-	}
+	// unfortunately we have to implement this separately for each test type since they handle comments differently
+	abstract public String getComments();
 	
 	public Date getDateOrdered() {
 		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
@@ -114,38 +102,9 @@ public abstract class TestImpl implements Test {
 		 }
 	 }
 	
-	public void setComments(String comments) {
-		
-		test.setComment(comments);
-		
-		/** get rid of this old implementation once we know we don't need it
-		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTestComments());
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && StringUtils.isBlank(comments)) {
-			return;
-		}
-		
-		// if we are trying to set the obs to null, simply void the obs
-		if(StringUtils.isBlank(comments)) {
-			obs.setVoided(true);
-			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			return;
-		}
-		
-		// otherwise, create the obs if necessary
-		if (obs == null) {	
-			// now create the new Obs and add it to the encounter
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTestComments(), test.getObsDatetime(), test.getLocation());
-			obs.setEncounter(test.getEncounter());
-			test.addGroupMember(obs);
-		}		    
-		
-		// update the value
-		obs.setValueText(comments);
-		
-		*/
-	}
+	 
+	 // unfortunately we have to implement this separately for each test type since they handle comments differently
+	 abstract public void setComments(String comments);
 	
 	 public void setDateOrdered(Date dateOrdered) {
 	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
