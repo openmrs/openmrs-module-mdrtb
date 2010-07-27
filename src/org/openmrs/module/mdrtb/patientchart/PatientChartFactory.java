@@ -107,10 +107,11 @@ public class PatientChartFactory {
 	}
 	
 	private List<Concept> getDrugTypesForChart(PatientChart patientChart) {
+		// get all the possible drug types to display--this method also returns them in the order we want to display them
 		List<Concept> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
 		
-		// in this set we will store all the existing drug types in the set of specimens
-		List<Concept> existingDrugTypes = new LinkedList<Concept>();
+		// in this set we will all the drug types we want to display
+		List<Concept> drugTypesToDisplay = new LinkedList<Concept>();
 		
 		// get all the existing drugs in the specimen
 		Map<String,PatientChartRecord> records = patientChart.getRecords();
@@ -119,15 +120,24 @@ public class PatientChartFactory {
 				for(Dst dst : specimen.getDsts()) {
 					for(DstResult dstResult : dst.getResults()) {	
 						if(dstResult.getDrug() != null) {
-							existingDrugTypes.add(dstResult.getDrug());
+							drugTypesToDisplay.add(dstResult.getDrug());
 						}
 					}
 				}
 			}
 		}
+	
+		// now get all the first line drugs, because we want to display them no matter what
+		// TODO: move this fetch to the Mdrtb Service?  Something else?
+		Concept firstLineTBDrugs = Context.getService(MdrtbService.class).getMdrtbFactory().getConceptFirstLineTBDrugs();
+		for(Concept drug : Context.getConceptService().getConceptsByConceptSet(firstLineTBDrugs)) {
+			drugTypesToDisplay.add(drug);
+		}
 		
-		// only retain the drugs that exist within the patient specimen
-		drugTypes.retainAll(existingDrugTypes);
+		
+		// only keep the drug types that are in our drug types to display
+		// note that we need to return this list (and not just the drugTypesToDisplay) because it holds the drugs in the proper order
+		drugTypes.retainAll(drugTypesToDisplay);
 		
 		return drugTypes;
 	}

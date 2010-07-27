@@ -111,7 +111,7 @@
 <table style="border:2px solid #8FABC7; font-size: .9em;">
 
 <!-- START HEADER ROW -->
-
+<thead>
 <tr>
 <td class="chartCell">Month</td>
 <td class="chartCell">Date collected</td>
@@ -123,11 +123,12 @@
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->
 </c:forEach>
 </tr>
+</thead>
 
 <!-- END HEADER ROW -->
 
 <!-- START ROWS -->
-
+<tbody style="overflow:scroll;height:500px">
 <c:forEach var="record" items="${mdrtbPatient.chart.records}">
 
 	<c:set var="specimenCount" value="${fn:length(record.value.specimens)}"/>
@@ -195,6 +196,7 @@
 </c:forEach>
 
 <!-- END ROWS -->
+</tbody>
 
 </table>
 </div> 

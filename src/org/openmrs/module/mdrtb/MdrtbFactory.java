@@ -1215,6 +1215,10 @@ public final class MdrtbFactory {
     	return Context.getConceptService().getConceptByMapping("sputum", "org.openmrs.module.mdrtb");
     }
     
+    public Concept getConceptFirstLineTBDrugs() {
+    	return Context.getConceptService().getConceptByMapping("firstLineTBDrugs", "org.openmrs.module.mdrtb");
+    }
+    
     public Set<Concept> getMdrProgramOutcomeConcepts() {
     	Set<Concept> finalOutcomes = new HashSet<Concept>();
     	for (ProgramWorkflowState s : getStatesOutcomes()) {
