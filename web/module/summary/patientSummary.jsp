@@ -128,7 +128,7 @@
 <!-- END HEADER ROW -->
 
 <!-- START ROWS -->
-<tbody style="overflow:scroll;height:500px">
+<tbody>
 <c:forEach var="record" items="${mdrtbPatient.chart.records}">
 
 	<c:set var="specimenCount" value="${fn:length(record.value.specimens)}"/>
