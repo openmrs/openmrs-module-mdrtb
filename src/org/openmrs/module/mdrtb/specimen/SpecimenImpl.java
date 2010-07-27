@@ -393,7 +393,7 @@ public class SpecimenImpl implements Specimen {
 		}
 		Obs appearance = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
 		if (appearance != null) {
-			appearance.setLocation(null);
+			appearance.setLocation(location);
 		}
 	}
 	

@@ -13,6 +13,7 @@ import org.openmrs.module.mdrtb.specimen.DstResult;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.validators.SpecimenValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -122,23 +123,26 @@ protected final Log log = LogFactory.getLog(getClass());
 	
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, @ModelAttribute("smear") Smear smear, 
-	                                  @ModelAttribute("culture") Culture culture, @ModelAttribute("dst") Dst dst,
-	                                  BindingResult result, SessionStatus status, HttpServletRequest request, ModelMap map,
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult specimenErrors, 
+	                                  @ModelAttribute("smear") Smear smear, BindingResult smearErrors, 
+	                                  @ModelAttribute("culture") Culture culture, BindingResult cultureErrors,
+	                                  @ModelAttribute("dst") Dst dst, BindingResult dstErrors, 
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports,
 	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
-	                        
-				
-		// TODO: add validation
+	                     
 
-		if (result.hasErrors()) {
-			for(Object error : result.getAllErrors()) {	
-				log.error("Binding error: " + error.toString());
-			}
+		// validate
+    	// TODO: add validation of other model objects
+    	if(specimen != null) {
+    		new SpecimenValidator().validate(specimen, specimenErrors);
+    	}
+		
+		if (specimenErrors.hasErrors()) {
 			map.put("testId", testId);
-			//map.put("errors", result.getAllErrors());
+			map.put("errors", specimenErrors);
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
 		

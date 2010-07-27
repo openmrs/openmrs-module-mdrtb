@@ -185,6 +185,13 @@
 </div>
 -->
 
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+	</c:forEach>
+	<br/>
+</c:if>
 
 <!--  SPECIMEN SECTION -->
 <div id="specimen" align="center">
@@ -340,7 +347,7 @@
 Add a new Lab Test:
 <select id="addSelect">
 <c:forEach var="test" items="${testTypes}">
-<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
+	<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
 </c:forEach>
 </select>
 <button id="addButton" type="button">Add</button>

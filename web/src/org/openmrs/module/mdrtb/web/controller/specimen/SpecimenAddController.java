@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.validators.SpecimenValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -35,13 +36,18 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result, SessionStatus status) {
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result, SessionStatus status, ModelMap map,
+	                                  @RequestParam(required = true, value = "patientId") Integer patientId) {
 		
-		// TODO: add validation
+		// validate
+		new SpecimenValidator().validate(specimen, result);
 		
-		if (result.hasErrors()) {
-			return new ModelAndView("/module/mdrtb/specimen/specimen");
+    	if (result.hasErrors()) {
+			map.put("patientId", patientId);
+			map.put("errors", result);
+			return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
 		}
 		
 		// save the specimen

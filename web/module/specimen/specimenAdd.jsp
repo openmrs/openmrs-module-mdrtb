@@ -16,6 +16,13 @@
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+	</c:forEach>
+	<br/>
+</c:if>
 
 <b class="boxHeader">Add a Specimen</b>
 <div class="box">
