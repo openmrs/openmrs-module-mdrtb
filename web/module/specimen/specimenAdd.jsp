@@ -20,8 +20,7 @@
 <b class="boxHeader">Add a Specimen</b>
 <div class="box">
 
-<form:form modelAttribute="specimen">
-<form:errors path="*" cssClass="error" />
+<form name="specimen" action="add.form?patientId=${patientId}" method="post">
 
 <table>
 
@@ -31,59 +30,72 @@
 
 <tr>
 <td>Sample ID:</td>
-<td><form:input path="identifier" size="10" /><form:errors path="identifier" cssClass="error" /></td>
+<td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>
 </tr>
  
 <tr>
 <td>Sample Type:</td>
-<td><form:select path="type" multiple="false">
-	<form:options items="${types}" itemValue="answerConcept.id" itemLabel="answerConcept.name"/>
-</form:select></td>
+<td>
+<select name="type">
+<option value=""></option>
+<c:forEach var="type" items="${types}">
+	<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.name}</option>
+</c:forEach>
+</select>
+</td>
 </tr>
 
 <tr>
 <td>Date Collected:</td>
-<td><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/><form:errors path="dateCollected" cssClass="error" /></td>
+<td><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></td>
 </tr>
 
 <!--  TODO: need to figure out how to map provider names properly: can we use the custom tags? -->
 
 <tr>
 <td>Collected By:</td>
-<td><form:select path="provider" multiple="false">
-	<form:options items="${providers}" itemValue="id" itemLabel="personName" />
-</form:select></td>
+<td>
+<select name="provider">
+<c:forEach var="provider" items="${providers}">
+	<option value="${provider.id}" <c:if test="${specimen.provider == provider}">selected</c:if> >${provider.personName}</option>
+</c:forEach>
+</select>
+</td>
 </tr>
 
 <tr>
 <td>Location Collected:</td>
-<td><form:select path="location" multiple="false">
-	<form:options items="${locations}" itemValue="locationId" itemLabel="name" />
-</form:select>	
+<td>
+<select name="location">
+<c:forEach var="location" items="${locations}">
+	<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.name}</option>
+</c:forEach>
+</select>		
 </td>
 </tr>
 
-<!--  
-
 <tr>
 <td>Appearance:</td>
-<td><form:select path="appearance" multiple="false">
-	<form:options items="${appearances}" itemValue="answerConcept.id" itemLabel="answerConcept.name"/>
-</form:select></td>
+<td>
+<select name="appearance">
+<option value=""></option>
+<c:forEach var="appearance" items="${appearances}">
+	<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.name}</option>
+</c:forEach>
+</select>
+</td>
 </tr>
-
--->
 
 <tr>
 <td>Comments:</td>
-<td><form:textarea path="comments" cols="60" rows="4"/></td>
+<td><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
 </tr>
 
 </table>
 
 <button type="submit">Save</button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}"><button type="button">Cancel</button></a>
 
-</form:form>
+</form>
 </div>
 
 
