@@ -498,6 +498,25 @@
 	</attribute>
 </tag>
 
+<tag>
+	<description>
+		Renders display text for the status of a Test
+	</description>
+	<name>testStatus</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.TestStatusTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>test</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>type</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
 <function>
     <description>
       Tests if a collection contains a specified object

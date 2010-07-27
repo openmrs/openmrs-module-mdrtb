@@ -1,12 +1,12 @@
 package org.openmrs.module.mdrtb.specimen;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
 
 public abstract class TestImpl implements Test {
@@ -26,7 +26,7 @@ public abstract class TestImpl implements Test {
 		return this.test.getId().toString();
 	}
 
-	public String getStatus() {
+	public TestStatus getStatus() {
 		return calculateStatus();
 	}
 	
@@ -306,25 +306,22 @@ public abstract class TestImpl implements Test {
 	  * 
 	  * @return
 	  */
-	 private String calculateStatus() {
-	    // TODO: determine the best way to localize all the text in this method
-
-	    DateFormat df = DateFormat.getDateInstance();
+	 private TestStatus calculateStatus() {
 	    	
 	    if (getResultDate() != null) {
-	    	return "Completed on " + df.format(getResultDate()) + " at " + getLab();
+	    	return TestStatus.COMPLETED;
 	    }
 	    else if (getStartDate() != null) {
-	    	return "Started on " + df.format(getStartDate()) + " at " + getLab();
+	    	return TestStatus.STARTED;
 	    }
 	    else if (getDateReceived() != null) {
-	    	return "Received by " + getLab() + " on " + df.format(getDateReceived());
+	    	return TestStatus.RECEIVED;
 	    }
 	    else if (getDateOrdered() != null) {
-	    	return "Ordered on " + df.format(getDateOrdered()) + " from " + getLab();
+	    	return TestStatus.ORDERED;
 	    }
 	    else {
-	    	return "Unknown";
+	    	return TestStatus.UNKNOWN;
 	    }
 	 }
 }

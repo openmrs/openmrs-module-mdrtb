@@ -362,7 +362,7 @@ Add a new Lab Test:
 <table style="width:396px;" cellspacing="0" cellpadding="0">
 
 <tr>
-<td>Status:</td><td>${test.status}</td>
+<td>Status:</td><td><mdrtb:testStatus test="${test}"/></td>
 </tr>
 
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">

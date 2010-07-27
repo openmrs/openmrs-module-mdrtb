@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.specimen;
 import java.util.Date;
 
 import org.openmrs.Location;
+import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
 /**
  * Interface that defines how to interaction with a tests on a specimen
@@ -35,7 +36,7 @@ public interface Test extends Comparable<Test> {
 	
 	public Object getTest();
 	public String getId(); 
-	public String getStatus();	
+	public TestStatus getStatus();	
 	public String getTestType();
 	public String getSpecimenId();
 	
