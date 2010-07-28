@@ -24,150 +24,152 @@
 
 <script type="text/javascript"><!--
 
+	var $j = jQuery.noConflict();	
+
 	// hides all add, edit, and view details boxes
 	function hideDisplayBoxes(){
-		$('.addBox').hide();
-		$('.editBox').hide();
-		$('.detailBox').hide();
-		$('#details_-1').hide();
+		$j('.addBox').hide();
+		$j('.editBox').hide();
+		$j('.detailBox').hide();
+		$j('#details_-1').hide();
 	}
 
 	// hides all view, edit, and add elements (used to stop used from navigating away from an edit)
 	function hideViewEditAddLinks() {
-		$('.view').fadeOut();  // hide all the view links
-		$('.edit').fadeOut();  // hide all the edit tests links
-		$('.delete').fadeOut(); // hide all the delete links 
-		$('#editSpecimen').fadeOut(); // hide the edit specimen link
-		$('#add').fadeOut(); // hide the "add a test" selector
+		$j('.view').fadeOut();  // hide all the view links
+		$j('.edit').fadeOut();  // hide all the edit tests links
+		$j('.delete').fadeOut(); // hide all the delete links 
+		$j('#editSpecimen').fadeOut(); // hide the edit specimen link
+		$j('#add').fadeOut(); // hide the "add a test" selector
 	}
 
 	// shows all view, edit, and add elements (called when an edit is complete)
 	function showViewEditAddLinks() {
-		$('.view').fadeIn();  // show all the view links
-		$('.edit').fadeIn();  // show all the edit tests links
-		$('.delete').fadeIn(); // show all the delete links 
-		$('#editSpecimen').fadeIn(); // show the edit specimen link
-		$('#add').fadeIn(); // show the "add a test" selector
+		$j('.view').fadeIn();  // show all the view links
+		$j('.edit').fadeIn();  // show all the edit tests links
+		$j('.delete').fadeIn(); // show all the delete links 
+		$j('#editSpecimen').fadeIn(); // show the edit specimen link
+		$j('#add').fadeIn(); // show the "add a test" selector
 	}
 	
-	$(document).ready(function(){
+	$j(document).ready(function(){
 
 		// set the add dst count to 1
 		var addDstResultCounter = 1;
 		
 		// show the proper detail windows if it has been specified
-		$('#details_' + ${testId}).show();
+		$j('#details_' + ${testId}).show();
 	
 		// event handlers to hide and show specimen edit box
-		$('#editSpecimen').click(function(){
+		$j('#editSpecimen').click(function(){
 			hideViewEditAddLinks();
-			$('#details_specimen').hide();  // hide the specimen details box
-			$('#edit_specimen').show();  // show the edit speciment box
+			$j('#details_specimen').hide();  // hide the specimen details box
+			$j('#edit_specimen').show();  // show the edit speciment box
 		});
 
-		$('#cancelSpecimen').click(function(){
+		$j('#cancelSpecimen').click(function(){
 			showViewEditAddLinks();
-			$('#edit_specimen').hide();  // hide the edit specimen box
-			$('#details_specimen').show();  // show the specimen details box
-			$('.scannedLabReport').show(); // show any scanned lab reports that may have been deleted
+			$j('#edit_specimen').hide();  // hide the edit specimen box
+			$j('#details_specimen').show();  // show the specimen details box
+			$j('.scannedLabReport').show(); // show any scanned lab reports that may have been deleted
 		});
 
 		// event handlers to display add boxes
-		$('#addButton').click(function(){
+		$j('#addButton').click(function(){
 			hideDisplayBoxes();
 			hideViewEditAddLinks();
-			$('#add_' + $('#addSelect').attr('value')).show(); // show the proper add a test box
+			$j('#add_' + $j('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
 		// event handler to display view detail boxes
-		$('.view').click(function(){
+		$j('.view').click(function(){
 			hideDisplayBoxes();
-			$('#details_' + this.id).show();  // show the selected details box
+			$j('#details_' + this.id).show();  // show the selected details box
 		});
 
 		// event handler to display edit detail boxes
-		$('.edit').click(function(){
+		$j('.edit').click(function(){
 			hideDisplayBoxes();
 			hideViewEditAddLinks();
-			$('#edit_' + this.id).show();  // show the selected edit box
+			$j('#edit_' + this.id).show();  // show the selected edit box
 		});
 
 		// event handler to cancel an edit or add
-		$('.cancel').click(function(){	
+		$j('.cancel').click(function(){	
 			hideDisplayBoxes();
 			showViewEditAddLinks();
-			$('.dstResult').show(); // show any dst results that may have been deleted
-			$('#details_' + this.id).show(); // display the details box for the test that was just being edited
-			$('.addDstResult').hide().find('input,select').attr('value',''); // hide all the add dst result rows and reset their values
+			$j('.dstResult').show(); // show any dst results that may have been deleted
+			$j('#details_' + this.id).show(); // display the details box for the test that was just being edited
+			$j('.addDstResult').hide().find('input,select').attr('value',''); // hide all the add dst result rows and reset their values
 			addDstResultCounter = 1; // reset the add dst result counter
 		});
 
 		// event handler to hide/show bacilli and colonies selector, and reset the value if needed
-		$('.result').change(function() {
-				if ($(this).attr('value') == ${scanty.id}) {
+		$j('.result').change(function() {
+				if ($j(this).attr('value') == ${scanty.id}) {
 					// show the bacilli or colonies row in the same div as this element
-					$(this).closest('div').find('.bacilli').show();
-					$(this).closest('div').find('.colonies').show();
+					$j(this).closest('div').find('.bacilli').show();
+					$j(this).closest('div').find('.colonies').show();
 				}
 				else {
 					// hide the bacilli or colonies row in the same div as this element,
 					// then find the bacilli/colonies input element and set it's value to empty
-					$(this).closest('div').find('.bacilli').hide().find('#bacilli').attr('value','');
-					$(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
+					$j(this).closest('div').find('.bacilli').hide().find('#bacilli').attr('value','');
+					$j(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
 				}
 		});
 		
 		// event handler to reset dst colonies if result is reset to an empty value
-		$('.dstResult').change(function() {
-			if ($(this).attr('value') == '' || $(this).attr('value') == ${waitingForTestResult.id} || $(this).attr('value') == ${dstTestContaminated.id} ) {
-				$(this).closest('tr').find('.dstColonies').hide().attr('value',null);
+		$j('.dstResult').change(function() {
+			if ($j(this).attr('value') == '' || $j(this).attr('value') == ${waitingForTestResult.id} || $j(this).attr('value') == ${dstTestContaminated.id} ) {
+				$j(this).closest('tr').find('.dstColonies').hide().attr('value',null);
 			}
 			else {
-				$(this).closest('tr').find('.dstColonies').show();
+				$j(this).closest('tr').find('.dstColonies').show();
 			}
 		});
 
 		//event handler to hide/show organism non-coded selector, and reset the value if needed
-		$('.organismType').change(function() {
-			if ($(this).attr('value') == ${otherMycobacteriaNonCoded.id}) {
+		$j('.organismType').change(function() {
+			if ($j(this).attr('value') == ${otherMycobacteriaNonCoded.id}) {
 				// show the organism type non-code row in the same div element
-				$(this).closest('div').find('.organismTypeNonCoded').show();
+				$j(this).closest('div').find('.organismTypeNonCoded').show();
 			}
 			else {
 				// hide the organism type non-coded row in the same div as this element
 				// then find the organism type non-coded inpout element and set it's value to empty
-				$(this).closest('div').find('.organismTypeNonCoded').hide().find('#organismTypeNonCoded').attr('value','');	
+				$j(this).closest('div').find('.organismTypeNonCoded').hide().find('#organismTypeNonCoded').attr('value','');	
 			}
 		});
 
 		//event handler to handle removing lab reports
-		$('.removeScannedLabReport').click(function() {
+		$j('.removeScannedLabReport').click(function() {
 			// hide the lab report
-			$(this).closest('.scannedLabReport').hide();
+			$j(this).closest('.scannedLabReport').hide();
 			// set it's hidden input to the id of this scanned lab report
-			$('#removeScannedLabReport' + $(this).attr('value')).attr('value',$(this).attr('value'));
+			$j('#removeScannedLabReport' + $j(this).attr('value')).attr('value',$j(this).attr('value'));
 		});
 
 		//event handler to handle removing dst results
-		$('.removeDstResult').click(function() {
+		$j('.removeDstResult').click(function() {
 			// hide the dst result
-			$(this).closest('.dstResult').hide();
+			$j(this).closest('.dstResult').hide();
 			// set it's hidden input to the id of this dst report
-			$('#removeDstResult' + $(this).attr('value')).attr('value',$(this).attr('value'));
+			$j('#removeDstResult' + $j(this).attr('value')).attr('value',$j(this).attr('value'));
 		});
 
 		// event handle to handle adding dst results
-		$('.addDstResultRow').click(function() {
+		$j('.addDstResultRow').click(function() {
 			if(addDstResultCounter < 30) {
-				$('#addDstResult' + $(this).attr('value') + "_" + addDstResultCounter).show();
+				$j('#addDstResult' + $j(this).attr('value') + "_" + addDstResultCounter).show();
 				addDstResultCounter++;
 			}
 		});
 
 		//event handler to handle removing of dst rows that have been added, but not saved
-		$('.removeDstResultRow').click(function() {
+		$j('.removeDstResultRow').click(function() {
 			// hide the dst result row and reset the value of all the interior elements
-			$(this).closest('.addDstResult').hide().find('input,select').attr('value','');
+			$j(this).closest('.addDstResult').hide().find('input,select').attr('value','');
 		});
 		
  	});

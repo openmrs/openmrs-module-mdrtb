@@ -1,7 +1,9 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 
 <!-- TODO create a style that merges first and active? -->
-<div align="left">
+<table width="100%">
+<tr>
+<td align="left">
 	<ul id="menu">	
 		<li style="border-left-width: 0px;" <c:if test='<%= request.getRequestURI().contains("summary") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/summary/summary.form?patientId=${model.patient.patientId}">Overview</a></li>
@@ -31,4 +33,9 @@
 		<a href="${pageContext.request.contextPath}/module/mdrtb/status/status.form?patientId=${model.patient.patientId}">Status</a></li>
 	
 	</ul>
-</div>
+</td>
+<td align="right">
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+</td>
+</tr>
+</table>

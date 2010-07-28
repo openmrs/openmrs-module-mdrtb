@@ -24,20 +24,23 @@
 
 <!-- CUSTOM JQUERY  -->
 <script type="text/javascript">
-	$(document).ready(function(){
+
+	var $j = jQuery.noConflict();	
+
+	$j(document).ready(function(){
 
 		// add the custom tooltip
-	    $("td").tooltip();
+	    $j("td").tooltip();
 
 	 	// event handlers to hide and show summary edit box
-		$('#editSummary').click(function(){
-			$('#summary').hide();  // hide the specimen details box
-			$('#edit_summary').show();  // show the edit speciment box
+		$j('#editSummary').click(function(){
+			$j('#summary').hide();  // hide the specimen details box
+			$j('#edit_summary').show();  // show the edit speciment box
 		});
 
-		$('#cancelSummary').click(function(){
-			$('#edit_summary').hide();  // hide the edit specimen box
-			$('#summary').show();  // show the specimen details box
+		$j('#cancelSummary').click(function(){
+			$j('#edit_summary').hide();  // hide the edit specimen box
+			$j('#summary').show();  // show the specimen details box
 		});
 
     });
