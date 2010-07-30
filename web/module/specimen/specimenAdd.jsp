@@ -3,9 +3,11 @@
 <%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${patientId}"/>
-<openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${patientId}"/>
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${patientId}"/>
 
 
 <!-- TODO: clean up above paths so they use dynamic reference -->

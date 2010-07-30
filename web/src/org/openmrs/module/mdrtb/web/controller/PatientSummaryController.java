@@ -45,37 +45,82 @@ public class PatientSummaryController {
 		
 	}
 	
-	/*
-	@ModelAttribute("mdrtbPrograms")
-	public List<PatientProgram> getMdrtbPrograms(@RequestParam(required = true, value="patientId") Integer patientId) {
-		return Context.getService(MdrtbService.class).getMdrtbPrograms(patientId);
-	}
-	
-	@ModelAttribute("patientChart")
-	public PatientChart getPatientChart(@RequestParam(required = true, value="patientId") Integer patientId) {
-		return Context.getService(MdrtbService.class).getPatientChart(patientId);
-	}
-	*/
-	
-	
-	
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showPatientSummary(@RequestParam(required = true, value="patientId") Integer patientId, ModelMap map) {
+	public ModelAndView showPatientSummary(@ModelAttribute("mdrtbPatient") MdrtbPatientWrapper mdrtbPatient,
+	                                       @RequestParam(required = true, value="patientId") Integer patientId, 
+	                                       ModelMap map) {
 		
 		map.put("patientId",patientId);
+	
+		// if the patient has never been enrolled, show the enrollment page
+		if(!mdrtbPatient.everEnrolledInMdrtbProgram()) {
+			return new ModelAndView("/module/mdrtb/summary/enrollInProgram", map);
+		}
+		// otherwise, show the patient overview
+		else {
+			return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
+		}
+	}
+	
+
+
+	// handle the "enroll in program" submittal
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST, params="dateEnrolled")
+	public ModelAndView processEnrollment(@ModelAttribute("mdrtbPatient") MdrtbPatientWrapper mdrtbPatient,
+		                                  BindingResult result, SessionStatus status, HttpServletRequest request,
+	                                      @RequestParam(required = true, value="dateEnrolled") Date dateEnrolled,
+	                                      @RequestParam(required = true, value="patientId") Integer patientId,
+	                                      ModelMap map) {
+		
+		map.put("patientId", patientId);
+		
+		// validate the enrollment date
+		
+		if(dateEnrolled == null) {
+			result.reject("mdrtb.errors.noEnrollmentDate", "Please specify an enrollment date.");
+		}
+		else if (dateEnrolled.after(new Date())) {
+			result.reject("mdrtb.errors.enrollmentDateInFuture","The enrollment date should not be in the future.");
+		}
+		
+		if (result.hasErrors()) {
+			map.put("errors", result);
+			return new ModelAndView("/module/mdrtb/summary/enrollInProgram", map);
+		}
+		 
+		// enroll the patient in the program
+		mdrtbPatient.enrollInMdrtbProgram(dateEnrolled);
+		
+		
+		// clears the command object from the session
+		status.setComplete();
+		
+		return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
+
+	}
+	
+	// handle all other submittals
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processSubmit(@ModelAttribute("mdrtbPatient") MdrtbPatientWrapper mdrtbPatient,
+	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
+	                                  @RequestParam(required = true, value="patientId") Integer patientId, ModelMap map) {
+		 
+		map.put("patientId", patientId);
+		
+		if(mdrtbPatient != null) {
+    		// TODO: create a new validator here
+    	}
+		
+		if (result.hasErrors()) {
+			// TODO: handle the error case
+		}
+		 
+		// clears the command object from the session
+		status.setComplete();
 		
 		return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
 	}
-	
-	 @SuppressWarnings("unchecked")
-	 @RequestMapping(method = RequestMethod.POST)
-	 public ModelAndView processSubmit(@ModelAttribute("mdrtbPatient") MdrtbPatientWrapper mdrtbPatient,
-	                                   BindingResult result, SessionStatus status, HttpServletRequest request,
-	                                   @RequestParam(required = true, value="patientId") Integer patientId, ModelMap map) {
-		 
-		 map.put("patientId", patientId);
-		 
-		return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
-	 }
 }

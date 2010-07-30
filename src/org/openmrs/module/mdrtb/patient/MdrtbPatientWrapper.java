@@ -6,6 +6,7 @@ import java.util.List;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Program;
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
@@ -39,7 +40,15 @@ public class MdrtbPatientWrapper {
 	}
 	
 	public void enrollInMdrtbProgram(Date dateEnrolled) {
-		// TODO: should I use the MdrtbFactory method here?
+		if(dateEnrolled == null) {
+			throw new APIException("Can't enroll patient in program: date enrolled is null.");
+		}
+		else if (dateEnrolled.after(new Date())) {
+			throw new APIException("Can't enroll patient in program: date enrolled cannot be in the future");
+		}
+		
+		// go ahead and enroll the patient in the program
+		// TODO: should I set the program workflow state to none?  see the MdrtbFactory method here?
 		PatientProgram patientProgram = new PatientProgram();
 		patientProgram.setPatient(this.patient);
 		patientProgram.setProgram(this.mdrtbProgram);

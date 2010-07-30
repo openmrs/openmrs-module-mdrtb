@@ -3,7 +3,7 @@
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbOrder.js'></script>
-<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery/jquery-1.3.2.min.js"></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/date_input.js'></script>
 

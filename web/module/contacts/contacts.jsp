@@ -2,11 +2,11 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/date_input.css"%></style>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/date_input.css""/>
 
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${obj.patient.patientId}"/>
-<openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>

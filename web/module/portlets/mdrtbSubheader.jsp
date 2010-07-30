@@ -1,6 +1,30 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 
+<!-- BANNER FOR DEAD PATIENTS -->
+<c:if test="${model.patient.dead}">
+	<div id="patientDashboardDeceased" class="retiredMessage">
+		<div>
+			<spring:message code="Patient.patientDeceased"/>
+			<c:if test="${not empty model.patient.deathDate}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.deathDate"/>: <openmrs:formatDate date="${model.patient.deathDate}"/>
+			</c:if>
+			<c:if test="${not empty model.causeOfDeath}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.causeOfDeath"/>: 
+				<c:if test="${not empty model.causeOfDeath.valueCoded}"> 
+					  &nbsp;&nbsp;<openmrs:format concept="${obj.causeOfDeath.valueCoded}"/>
+				</c:if>
+				<c:if test="${not empty model.causeOfDeath.valueText}"> 
+					  &nbsp;&nbsp;<c:out value="${model.causeOfDeath.valueText}"></c:out>
+				</c:if>
+			</c:if>
+		</div>
+	</div>
+</c:if>
+
 <!-- TODO create a style that merges first and active? -->
+<!-- MENU TABS AND FIND PATIENT SEARCH BOX -->
 <table width="100%">
 <tr>
 <td align="left">
@@ -34,6 +58,7 @@
 	
 	</ul>
 </td>
+<!-- patient search box -->
 <td align="right">
 	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </td>

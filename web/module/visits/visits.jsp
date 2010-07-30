@@ -2,9 +2,11 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${obj.patient.patientId}"/>
-<openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		
 <table class="portletTable" style="border-spacing:20px;border-collapse:separate;border-style:none;">
 <tr><td style="vertical-align:top;">	

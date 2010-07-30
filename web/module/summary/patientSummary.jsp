@@ -6,11 +6,10 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
-
-<style><%@ include file="/WEB-INF/view/module/mdrtb/resources/mdrtb.css"%></style>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="patientHeader" id="patientDashboardHeader" patientId="${patientId}"/>
-<openmrs:portlet url="mdrtbTabs" id="mdrtbTabs" moduleId="mdrtb" patientId="${patientId}"/>
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${patientId}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
@@ -19,7 +18,7 @@
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
-	.chartCell {border:1px solid #8FABC7; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+	.chartCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
 <!-- CUSTOM JQUERY  -->
@@ -46,6 +45,13 @@
     });
 </script>
 
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+	</c:forEach>
+	<br/>
+</c:if>
 
 <div align="center"> <!-- start of page div -->
 
