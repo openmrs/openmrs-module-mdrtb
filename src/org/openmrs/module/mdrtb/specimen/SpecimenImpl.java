@@ -379,6 +379,7 @@ public class SpecimenImpl implements Specimen {
 		
 		// also propagate this location to the appropriate obs
 		// TODO: remember to add any other obs here that get added!
+		// ** but note that we don't want to propogate location to scanned lab result obs **
 		Obs id = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
 		if (id != null) {
 			id.setLocation(location);

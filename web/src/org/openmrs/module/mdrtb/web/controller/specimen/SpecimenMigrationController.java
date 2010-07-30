@@ -44,7 +44,7 @@ public class SpecimenMigrationController {
 		
 		// migrate any existing Specimen Collection Encounters in the system
 		// note: this needs t happen first
-		//migrateResultatsDeCrachetEncounters();
+		migrateResultatsDeCrachetEncounters();
 		
 		// migrate any existing BAC and DST encounters in the system
 		migrateBacAndDstEncounters();
@@ -279,11 +279,11 @@ public class SpecimenMigrationController {
 		// loop thru all the bac and dst encounters
 		
 		// TODO: might need to pull this into a separate call if I can't get this to work properly
-		for(Encounter encounter : Context.getEncounterService().getEncounters(null, null, null, null, null, specimenEncounter, null, false)) {
+/**		for(Encounter encounter : Context.getEncounterService().getEncounters(null, null, null, null, null, specimenEncounter, null, false)) {
 			if (encounter.getAllObs().size() == 0) {
 				Context.getEncounterService().voidEncounter(encounter, "voided as part of mdr-tb migration");
 			}
-		}
+		} */
 	}
 	
 	
