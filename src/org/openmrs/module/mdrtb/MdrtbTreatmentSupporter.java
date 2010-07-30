@@ -1,6 +1,5 @@
 package org.openmrs.module.mdrtb;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,12 +14,18 @@ public class MdrtbTreatmentSupporter {
     private List<Obs> phoneNumbers;
     private Person person;
     
-
+    //indicates whether or not the TS is available
+    private Obs active;
+    
     public Person getPerson() {
         return person;
     }
     public void setPerson(Person person) {
         this.person = person;
+    }
+    
+    public void setActive(Obs active) {
+    	this.active = active;
     }
 
     public List<Obs> getPhoneNumbers() {
@@ -36,6 +41,11 @@ public class MdrtbTreatmentSupporter {
             phoneNumbers = new ArrayList<Obs>();
         this.phoneNumbers.add(o);
     }
+
+    
+    public Obs getActive() {
+    	return active;
+    }
     
     public MdrtbTreatmentSupporter(){
         this.person = new Person();
@@ -50,5 +60,6 @@ public class MdrtbTreatmentSupporter {
 
     }
     
+
      
 }

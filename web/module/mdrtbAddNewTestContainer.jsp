@@ -8,7 +8,7 @@
 	var dateFormat = '${dateFormat}';
 	var DAY_NAMES=new Array(${daysOfWeek});
     var MONTH_NAMES=new Array(${monthsOfYear});
-    var encounterProviderMap = {<c:forEach items="${obj.encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.userId}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
+    var encounterProviderMap = {<c:forEach items="${encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.id}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
     
     
     function setEncounterDate(inp){

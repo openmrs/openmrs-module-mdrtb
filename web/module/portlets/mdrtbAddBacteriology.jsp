@@ -147,9 +147,13 @@
 			<td>
 					<select name="encSelect" id="encSelect" onchange="javascript:setEncounterDate(this)">
 						<option value=""><spring:message code="mdrtb.none" /></option>
-						<c:forEach items="${obj.encounters}" var="encounter">
-							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>"><openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>&nbsp; ${encounter.location}&nbsp; ${encounter.provider}</option>
-						</c:forEach>	
+						<c:forEach items="${encounters}" var="encounter">
+							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>">
+								${encounter.encounterType.name}&nbsp;-&nbsp;
+								<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>&nbsp;
+								${encounter.location}&nbsp; ${encounter.provider}
+							</option>
+						</c:forEach>
 					</select>
 			</td>
 		</tr>
@@ -177,7 +181,7 @@
 			<tr>
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
-					<spring:bind path="obj.smears[${rowCount}].smearResult.valueDatetime">
+					<spring:bind path="obj.smears[${rowCount}].smearResult.obsDatetime">
 						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate_${rowCount}" name="${status.expression}"  onMouseDown="$(this).date_input()" class="dateType">&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 							<span class="error">${status.errorMessage}</span>
@@ -377,7 +381,7 @@
 			<tr>
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
-					<spring:bind path="obj.cultures[${rowCount}].cultureResult.valueDatetime">
+					<spring:bind path="obj.cultures[${rowCount}].cultureResult.obsDatetime">
 					<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateCultures_${rowCount}" name="${status.expression}" onMouseDown="$(this).date_input()" class="dateType">&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 								<span class="error">${status.errorMessage}</span>

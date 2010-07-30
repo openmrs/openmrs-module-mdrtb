@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.type.IdentifierType;
+import org.openmrs.Attributable;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -35,8 +36,8 @@ import org.openmrs.PersonName;
 import org.openmrs.Program;
 import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
-import org.openmrs.Tribe;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.DuplicateIdentifierException;
 import org.openmrs.api.EncounterService;
@@ -47,16 +48,19 @@ import org.openmrs.api.InvalidIdentifierFormatException;
 import org.openmrs.api.PatientIdentifierException;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
+import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
-import org.openmrs.propertyeditor.TribeEditor;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.web.WebConstants;
 import org.openmrs.web.controller.patient.ShortPatientModel;
-import org.openmrs.web.controller.user.UserFormController;
+import org.openmrs.web.controller.person.PersonFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -74,6 +78,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
     
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
+    private final Integer patLocation =  7;
             
     /** Parameters passed in view request object **/
     private String name = "";
@@ -106,6 +111,25 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                   //String mdrtbIdentifierTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.patient_identifier_type_list");
                   //PatientIdentifierType pit = Context.getPatientService().getPatientIdentifierTypeByName(mdrtbIdentifierTypeString);
                   //map.put("mdrPIdType", pit);
+                  
+                  
+                  User me = Context.getAuthenticatedUser();
+                  map.put("authenticatedUser", me);
+                  AdministrationService as = Context.getAdministrationService();
+                  PatientService ps = Context.getPatientService();
+                  String identifierTypes = as.getGlobalProperty(MdrtbConstants.MDRTB_PATIENT_IDENTIFIER_TYPES);
+                      List<PatientIdentifierType> idTypeList = new ArrayList<PatientIdentifierType>();
+                      for (StringTokenizer st = new StringTokenizer(identifierTypes, "|"); st.hasMoreTokens(); ) {
+                          String s = st.nextToken();
+                          PatientIdentifierType pit = ps.getPatientIdentifierTypeByName(s);
+                          if (pit != null)
+                              idTypeList.add(pit);
+                      }
+
+                  map.put("mdrtbIdentifierTypes", idTypeList);
+               
+                  
+                  
            }
         return map;
     }
@@ -118,7 +142,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 new CustomNumberEditor(java.lang.Integer.class, nf, true));
         binder.registerCustomEditor(java.util.Date.class, 
                 new CustomDateEditor(Context.getDateFormat(), true));
-        binder.registerCustomEditor(Tribe.class, new TribeEditor());
         binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
         binder.registerCustomEditor(Location.class, new LocationEditor());
         binder.registerCustomEditor(Concept.class, "civilStatus", new ConceptEditor());
@@ -144,6 +167,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 String[] types = request.getParameterValues("identifierType");
                 String[] locs = request.getParameterValues("location");
                 pref = request.getParameter("preferred");
+                
+                
                 if (pref == null)
                     pref = "";
                 
@@ -184,11 +209,17 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                                 errors.reject(msg);
                             }
                             else
-                                loc = es.getLocation(Integer.valueOf(locs[i]));
+                                loc = Context.getLocationService().getLocation(Integer.valueOf(locs[i]));
+                            
                             
                             PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
                             pi.setPreferred(pref.equals(identifiers[i]+types[i]));
+                          
+                            if (pi.getIdentifier() != null && !pi.getIdentifier().equals("") && pi.getLocation() != null)
                             newIdentifiers.add(pi);
+                            
+                            
+                            
                             
                             if (log.isDebugEnabled()) {
                                 log.debug("Creating patient identifier with identifier: " + identifiers[i]);
@@ -236,7 +267,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             }
             
         }
-            
+        
         return super.processFormSubmission(request, response, shortPatient, errors);
     }
 
@@ -284,6 +315,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                     }
                 }
             }
+            
             
             if (patient == null)
                 patient = new Patient();
@@ -394,12 +426,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             patient.setBirthdate(shortPatient.getBirthdate());
             patient.setBirthdateEstimated(shortPatient.getBirthdateEstimated());
             patient.setGender(shortPatient.getGender());
-            if (shortPatient.getTribe() == "" || shortPatient.getTribe() == null)
-                patient.setTribe(null);
-            else {
-                Tribe t = ps.getTribe(Integer.valueOf(shortPatient.getTribe()));
-                patient.setTribe(t);
-            }
             
             patient.setDead(shortPatient.getDead());
             if (patient.isDead()) {
@@ -411,18 +437,57 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 patient.setCauseOfDeath(null);
             }
             
-            // look for person attributes in the request and save to person
-            for (PersonAttributeType type : personService.getPersonAttributeTypes("patient", "viewing")) {
-                String value = request.getParameter(type.getPersonAttributeTypeId().toString());
-                if (value != null)
-                patient.addAttribute(new PersonAttribute(type, value));
-            }
+			// look for person attributes in the request and save to patient
+			for (PersonAttributeType type : personService.getPersonAttributeTypes(PERSON_TYPE.PATIENT,
+			    ATTR_VIEW_TYPE.VIEWING)) {
+				String paramName = type.getPersonAttributeTypeId().toString();
+				String value = request.getParameter(paramName);
+				
+				// if there is an error displaying the attribute, the value will be null
+				if (value != null) {
+					PersonAttribute attribute = new PersonAttribute(type, value);
+					try {
+						Object hydratedObject = attribute.getHydratedObject();
+						if (hydratedObject == null || "".equals(hydratedObject.toString())) {
+							// if null is returned, the value should be blanked out
+							attribute.setValue("");
+						} else if (hydratedObject instanceof Attributable) {
+							attribute.setValue(((Attributable) hydratedObject).serialize());
+						} else if (!hydratedObject.getClass().getName().equals(type.getFormat()))
+							// if the classes doesn't match the format, the hydration failed somehow
+							// TODO change the PersonAttribute.getHydratedObject() to not swallow all errors?
+							throw new APIException();
+					}
+					catch (APIException e) {
+						errors.rejectValue("attributeMap[" + type.getName() + "]", "Invalid value for " + type.getName()
+						        + ": '" + value + "'");
+						log
+						        .warn("Got an invalid value: " + value + " while setting personAttributeType id #"
+						                + paramName, e);
+						
+						// setting the value to empty so that the user can reset the value to something else
+						attribute.setValue("");
+						
+					}
+					patient.addAttribute(attribute);
+				}
+			}
             
             // save or add the patient
             Patient newPatient = null;
             try {
                 newPatient = ps.savePatient(patient);
-              //enroll patient in program; attach to encounter, if possible. 
+                MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+                MdrtbFactory mu = ms.getMdrtbFactory();
+                //enroll in program
+                String enrollmentDateString = request.getParameter("programEnrollmentDate");
+                try {
+                    SimpleDateFormat sdf = Context.getDateFormat();
+                    mu.enrollPatientInMDRTBProgram(newPatient, sdf.parse(enrollmentDateString));
+                } catch (Exception ex){
+                    log.warn("Failed to enroll patient in mdrtb program", ex);
+                }     
+                mu = null;
                
             } catch ( InvalidIdentifierFormatException iife ) {
                 log.error(iife);
@@ -634,7 +699,8 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
      */
     protected Object formBackingObject(HttpServletRequest request) throws ServletException {
-        
+        newIdentifiers = new HashSet<PatientIdentifier>();
+
         Patient p = null;
         Integer id = null;
         
@@ -676,7 +742,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             String age = request.getParameter("addAge");
             
             p = new Patient();
-            UserFormController.getMiniPerson(p, name, gender, date, age);
+            PersonFormController.getMiniPerson(p, name, gender, date, age);
             
             patient = new ShortPatientModel(p);
         }
@@ -689,29 +755,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
         
         return patient;
     }
-    
-    protected Map<String, Object> referenceData(HttpServletRequest request) throws Exception {
-        
-        Map<String, Object> map = new HashMap<String, Object>();
-            User me = Context.getAuthenticatedUser();
-            map.put("authenticatedUser", me);
-            AdministrationService as = Context.getAdministrationService();
-            PatientService ps = Context.getPatientService();
-            String identifierTypes = as.getGlobalProperty(MdrtbConstants.MDRTB_PATIENT_IDENTIFIER_TYPES);
-                List<PatientIdentifierType> idTypeList = new ArrayList<PatientIdentifierType>();
-                for (StringTokenizer st = new StringTokenizer(identifierTypes, "|"); st.hasMoreTokens(); ) {
-                    String s = st.nextToken();
-                    PatientIdentifierType pit = ps.getPatientIdentifierType(s);
-                    if (pit != null)
-                        idTypeList.add(pit);
-                }
 
-            map.put("mdrtbIdentifierTypes", idTypeList);
-            map.put("test", identifierTypes);
-         
-            
-        return map;
-    } 
     
     
 

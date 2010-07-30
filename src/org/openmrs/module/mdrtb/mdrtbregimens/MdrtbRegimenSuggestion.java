@@ -5,16 +5,15 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.order.RegimenSuggestion;
 
-public class MdrtbRegimenSuggestion {
-
+public class MdrtbRegimenSuggestion extends RegimenSuggestion {
+    
+    private static final long serialVersionUID = 1345L;
     protected final Log log = LogFactory.getLog(getClass());
     
         private List<MdrtbDrugSuggestion> drugSuggestionList = new ArrayList<MdrtbDrugSuggestion>();
-        private String displayName;
-        private String codeName;
-        private String canReplace;
-        private String regimenType = "standardized";
+        private String regimenType = "mdrtb.standardized";
 
         public String getRegimenType() {
             return regimenType;
@@ -27,26 +26,7 @@ public class MdrtbRegimenSuggestion {
         }
         public void setDrugSuggestionList(List<MdrtbDrugSuggestion> drugSuggestionList) {
             this.drugSuggestionList = drugSuggestionList;
-        }
-        public String getDisplayName() {
-            return displayName;
-        }
-        public void setDisplayName(String displayName) {
-            this.displayName = displayName;
-        }
-        public String getCodeName() {
-            return codeName;
-        }
-        public void setCodeName(String codeName) {
-            this.codeName = codeName;
-        }
-        public String getCanReplace() {
-            return canReplace;
-        }
-        public void setCanReplace(String canReplace) {
-            this.canReplace = canReplace;
-        }
-        
+        }        
         public void addMdrtbDrugSuggestion(MdrtbDrugSuggestion mds){
             if (this.getDrugSuggestionList() == null)
                 this.setDrugSuggestionList(new ArrayList<MdrtbDrugSuggestion>());

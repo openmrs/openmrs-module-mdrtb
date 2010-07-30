@@ -1,6 +1,9 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +23,11 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.PatientService;
@@ -28,6 +35,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.springframework.util.StringUtils;
 
 
 public class MdrtbForEachRecordTagController extends BodyTagSupport {
@@ -41,6 +49,8 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
     private String reportObjectType;
     private String concept;
     private String conceptSet;
+    private String programName;
+    private String workflowNames;
     private Iterator records;
     private String filterList;
 
@@ -68,6 +78,9 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
                                     pitsOut.add(p);
                             }
                         }
+                        
+                        if (pitsOut.size() == 0)
+                            pitsOut = pits;
                        
                     }
                     }catch (Exception e){
@@ -146,17 +159,61 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
             if (select != null)
                 select = select.toString() + "=" + opts.get(select);
         }
-//        else if (name.equals("workflowStatus")) {
-//            List<ProgramWorkflowState> ret = Context.getProgramWorkflowService().getStates();
-//            records = ret.iterator();
-//        }
         else if (name.equals("workflowProgram")) {
             List<org.openmrs.Program> ret = Context.getProgramWorkflowService().getAllPrograms();
             records = ret.iterator();
         }
+        else if (name.equals("workflow")) {
+        	List<ProgramWorkflow> workflows = new ArrayList<ProgramWorkflow>();
+        	Program p = Context.getProgramWorkflowService().getProgramByName(programName);
+        	if (StringUtils.hasText(workflowNames)) {
+        		for (StringTokenizer st = new StringTokenizer(workflowNames, "|"); st.hasMoreTokens(); ) {
+        			String workflowName = st.nextToken();
+        			workflows.add(p.getWorkflowByName(workflowName));
+        		}
+        	}
+        	else {
+        		workflows.addAll(p.getAllWorkflows());
+        	}
+        	records = workflows.iterator();
+        }
+        else if (name.equals("state")) {
+        	List<ProgramWorkflowState> filteredStates = new ArrayList<ProgramWorkflowState>();
+        	Program p = Context.getProgramWorkflowService().getProgramByName(programName);
+        	if (StringUtils.hasText(workflowNames)) {
+        		for (StringTokenizer st = new StringTokenizer(workflowNames, "|"); st.hasMoreTokens(); ) {
+        			String workflowName = st.nextToken();
+        			ProgramWorkflow wf = p.getWorkflowByName(workflowName);
+        			filteredStates.addAll(wf.getStates());
+        		}
+        	}
+        	records = filteredStates.iterator();
+        }
         else if (name.equals("role")) {
             List<Role> ret = Context.getUserService().getAllRoles();
             records = ret.iterator();
+        }
+        else if (name.equals("user")) {
+        	List<User> users = new ArrayList<User>();
+        	if (StringUtils.hasText(filterList)) {
+        		for (StringTokenizer st = new StringTokenizer(filterList, "|"); st.hasMoreTokens(); ) {
+        			String r = st.nextToken();
+        			Role role = Context.getUserService().getRole(r);
+        			if (role == null) {
+        				throw new IllegalArgumentException("An invalid role of " + r + " was specified.");
+        			}
+        			users.addAll(Context.getUserService().getUsersByRole(role));
+        		}
+        	}
+        	else {
+        		users.addAll(Context.getUserService().getAllUsers());
+        	}
+        	Collections.sort(users, new Comparator<User>() {
+    			public int compare(User u1, User u2) {
+    				return u1.getPersonName().compareTo(u2.getPersonName());
+    			}
+    		});
+    		records = users.iterator();
         }
         else if (name.equals("conceptSet")) {
             if (conceptSet == null)
@@ -223,7 +280,10 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
                 obj = e;
             }
             pageContext.setAttribute("record", obj);
-            pageContext.setAttribute("selected", obj.equals(select) ? "selected" : "");
+            
+            boolean isSelected = obj.equals(select) || (select instanceof Collection && ((Collection)select).contains(obj));
+            pageContext.setAttribute("selected", isSelected ? "selected" : "");
+            
             if (name.equals("civilStatus")) { //Kludge until this in the db and not a HashMap
                 String str = obj.toString();
                 pageContext.setAttribute("selected", str.equals(select) ? "selected" : "");
@@ -303,5 +363,20 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
     public void setFilterList(String str){
         this.filterList = str;
     }
-    
+
+	public String getProgramName() {
+		return programName;
+	}
+	
+	public void setProgramName(String programName) {
+		this.programName = programName;
+	}
+	
+	public String getWorkflowNames() {
+		return workflowNames;
+	}
+	
+	public void setWorkflowNames(String workflowNames) {
+		this.workflowNames = workflowNames;
+	}
 }

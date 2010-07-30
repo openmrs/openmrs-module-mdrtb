@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <style><%@ include file="resources/date_input.css"%></style>
+<style><%@ include file="resources/mdrtb.css"%></style>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/date_input.js'></script>
@@ -182,10 +183,11 @@
 </script>
 
 <style>
-	th { text-align: left } 
+	th { text-align: left;
+	     font-size:93% } 
 	th.headerCell {
 		border-top: 1px lightgray solid; 
-		xborder-right: 1px lightgray solid
+		xborder-right: 1px lightgray solid;
 	}
 	td.inputCell {
 		border-top: 1px lightgray solid;
@@ -196,6 +198,7 @@
 	.lastCell {
 		border-bottom: 1px lightgray solid;
 	}
+	td { font-size:93%;}
 </style>
 
 <openmrs:globalProperty key="use_patient_attribute.tribe" defaultValue="false" var="showTribe"/>
@@ -210,7 +213,7 @@
 </spring:hasBindErrors>
 
 <form method="post" onSubmit="removeHiddenRows()">
-	<c:if test="${patient.patientId == null}"><h2><spring:message code="Patient.create"/></h2></c:if>
+	<c:if test="${patient.patientId == null}"><h3><spring:message code="Patient.create"/></h3></c:if>
 
 
 	
@@ -230,12 +233,17 @@
 			</table>
 		</td>
 	</tr>
+	<Tr>
+		<th class="headerCell"><spring:message code="mdrtb.enrollpatientinmdrtbprogram" /></th>
+		<Td class="inputCell" ><input type="text" value=""  name="programEnrollmentDate" id="newProgramEnrollmentDate" style="width:90px" onmousedown="javascript:$(this).date_input();"></Td>
+	</Tr>
 	<tr>
 		<th class="headerCell"><spring:message code="PatientIdentifier.title.endUser"/></th>
 		<td class="inputCell">
 			<table id="identifiers" cellspacing="2">
 				<tr>
 					<td><spring:message code="PatientIdentifier.identifier"/></td>
+					<openmrs:extensionPoint pointId="newPatientForm.identifierHeader" />
 					<td><spring:message code="PatientIdentifier.identifierType"/></td>
 					<td><spring:message code="PatientIdentifier.location.identifier"/></td>
 					<td><spring:message code="general.preferred"/></td>
@@ -246,9 +254,10 @@
 						<td valign="top">
 							<input type="text" size="30" name="identifier" onmouseup="identifierOrTypeChanged(this)" />
 						</td>
+						<openmrs:extensionPoint pointId="newPatientForm.identifierBody" />
 						<td valign="top">
 							<select name="identifierType" onclick="identifierOrTypeChanged(this)">
-							<openmrs:globalProperty key="mdrtb.patient_identifier_type_list" var="filterList"/>
+								<openmrs:globalProperty key="mdrtb.patient_identifier_type_list" var="filterList"/>
 								<mdrtb:forEachRecord name="patientIdentifierType" filterList="${filterList}">
 									<option value="${record.patientIdentifierTypeId}">
 										${record.name}
@@ -256,7 +265,7 @@
 								</mdrtb:forEachRecord>
 							</select>
 						</td>
-						<td valign="top">
+						<td valign="top" nowrap>
 							<select name="location">
 								<option value=""></option>
 								<openmrs:globalProperty key="mdrtb.location_list" var="locFilterList"/>
@@ -265,7 +274,7 @@
 										${record.name}
 									</option>
 								</mdrtb:forEachRecord>
-							</select>
+							</select><span style="color:red">*</span>
 						</td>
 						<td valign="middle" align="center">
 							<input type="radio" name="preferred" value="1" checked selected onclick="identifierOrTypeChanged(this)" />
@@ -358,6 +367,20 @@
 			</spring:nestedPath>
 		</td>
 	</tr>
+	
+	<openmrs:forEachDisplayAttributeType personType="patient" displayType="viewing" var="attrType">
+		<tr>
+			<th class="headerCell">
+			<spring:message code="PersonAttributeType.${fn:replace(attrType.name, ' ', '')}" text="${attrType.name}"/></th>
+			<td class="inputCell">
+				<openmrs:fieldGen 
+					type="${attrType.format}" 
+					formFieldName="${attrType.personAttributeTypeId}" 
+					val="${patient.attributeMap[attrType.name].hydratedObject}" 
+					parameters="optionHeader=[blank]|showAnswers=${attrType.foreignKey}" />
+			</td>
+		</tr>
+	</openmrs:forEachDisplayAttributeType>
 	
 	</table>
 	

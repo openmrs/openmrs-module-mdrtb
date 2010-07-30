@@ -1,8 +1,9 @@
 package org.openmrs.module.mdrtb.extension.html;
 
 import org.openmrs.module.Extension;
+import org.openmrs.module.web.extension.PatientDashboardTabExt;
 
-public class MdrtbPatientDashboardTabExt extends Extension {
+public class MdrtbPatientDashboardTabExt extends PatientDashboardTabExt {
     
     
     public Extension.MEDIA_TYPE getMediaType() {

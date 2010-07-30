@@ -135,8 +135,12 @@
 			<td>
 					<select name="encSelect" onchange="javascript:setEncounterDate(this)">
 						<option value=""><spring:message code="mdrtb.none" /></option>
-						<c:forEach items="${obj.encounters}" var="encounter">
-							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>"><openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>&nbsp; ${encounter.location}&nbsp; ${encounter.provider}</option>
+						<c:forEach items="${encounters}" var="encounter">
+							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>">
+								${encounter.encounterType.name}&nbsp;-&nbsp;
+								<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>&nbsp;
+								${encounter.location}&nbsp; ${encounter.provider}
+							</option>
 						</c:forEach>	
 					</select>
 			</td>

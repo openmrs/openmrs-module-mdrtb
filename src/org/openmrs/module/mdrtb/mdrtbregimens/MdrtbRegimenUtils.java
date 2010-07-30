@@ -1,6 +1,6 @@
 package org.openmrs.module.mdrtb.mdrtbregimens;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,40 +13,34 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
-import org.openmrs.Order;
+import org.openmrs.Obs;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.OrderService;
+import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.OrderExtension;
-import org.openmrs.module.mdrtb.OrderExtensionService;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 
 public class MdrtbRegimenUtils {
 
-    protected final Log log = LogFactory.getLog(getClass());
+    protected static final Log log = LogFactory.getLog(MdrtbRegimenUtils.class);
     
     public  static List<MdrtbRegimenSuggestion> getMdrtbRegimenSuggestions(){
             List<MdrtbRegimenSuggestion> ret = new ArrayList<MdrtbRegimenSuggestion>();
             
-            
-            String httpBase = "http://localhost";
-            if (httpBase.indexOf("/openmrs") > 0)
-                httpBase = httpBase.substring(0, httpBase.indexOf("/openmrs"));
-            String XMLlocation = httpBase + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
-            if (!XMLlocation.substring(10).contains(":"))
-                XMLlocation = httpBase + Context.getAdministrationService().getGlobalProperty("mdrtb.webserver_port") + "/openmrs/moduleResources/mdrtb/mdrtbRegimenSuggestionTemplate.xml";
-            
-            try{ 
-                
-                URL xmlURL = new URL(XMLlocation);
-                SAXReader reader = new SAXReader();
-                Document xmlDoc = reader.read(xmlURL);
+            try {
+            	SAXReader reader = new SAXReader();
+            	InputStream in = OpenmrsClassLoader.getInstance().getResourceAsStream("mdrtbRegimenSuggestionTemplate.xml");
+                Document xmlDoc = reader.read(in);
+                in.close();
+                log.warn("Loaded Regimen Suggestions from xml...");
                 Element list = xmlDoc.getRootElement();
+                
                 ConceptService cs = Context.getConceptService();
                 for(Iterator i = list.elements().iterator(); i.hasNext();){
                     Element regSugg = (Element) i.next();
@@ -81,8 +75,7 @@ public class MdrtbRegimenUtils {
                                                     
                                                     try {
                                                         
-                                                        mds.setDrug(cs.getDrug(Integer.valueOf(drugSugChildren.getText())));
-                                                        //System.out.println("set drug successfully");
+                                                        mds.setDrug(cs.getDrugByNameOrId(drugSugChildren.getText()));
                                                         
                                                     } catch (Exception ex){
                                                         System.out.println("Could not parse a drugId value " + drugSugChildren.getText() + "in the xml into a drug" + ex);
@@ -94,7 +87,7 @@ public class MdrtbRegimenUtils {
                                                     
                                                     try {
                                                         Double dose = Double.parseDouble(drugSugChildren.getText());
-                                                        mds.setDose(dose);
+                                                        mds.setDose(dose.toString());
                                                         //System.out.println("set dose successfully " + dose.toString());
                                                         
                                                     } catch (Exception ex){
@@ -171,7 +164,7 @@ public class MdrtbRegimenUtils {
                     doTmp.setDiscontinued(false);
                 }
                 doTmp.setComplex(false);
-                doTmp.setDose(mds.getDose());
+                doTmp.setDose(Double.valueOf(mds.getDose()));
                 doTmp.setFrequency(mds.getFrequency());
                 doTmp.setInstructions(mds.getInstructions());
                 doTmp.setOrderType(new OrderType(new Integer(OpenmrsConstants.ORDERTYPE_DRUG)));
@@ -187,31 +180,64 @@ public class MdrtbRegimenUtils {
         return ret;
     }
     
-    public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, String regimenType, Patient p, Date effectiveDate){
-           OrderExtensionService oes = (OrderExtensionService)Context.getService(OrderExtensionService.class);
-           Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(); 
+    //TODO:  replace with ExtendedDrugOrder
+    public static void reconcileAndSaveDrugOrders(List<DrugOrder> newDOs, Integer regTypeInt, Patient p, Date effectiveDate){
+         
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
+           Concept reasonForChange = MdrtbUtil.getDefaultDiscontinueReason(mu); 
+           
+           ObsService os = Context.getObsService();
+           
+           
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
-           OrderService os = Context.getOrderService();
-               for (DrugOrder doTmp:newDOs){
-                   Order order = null;
-                   if (doTmp.getOrderId() != null){
-                       order = os.getOrder(doTmp.getOrderId());
+               if (regTypeInt != null) {
+                   
+                   Concept regimenTypeConcept = mu.getConceptCurrentRegimenType();
+                   List<Obs> oList = os.getObservationsByPersonAndConcept(p, regimenTypeConcept);
+                   boolean needNewObs = true;
+                   for (Obs oTmp : oList){
+                      if (oTmp.getObsDatetime().equals(effectiveDate) && !oTmp.getValueCoded().getConceptId().equals(regTypeInt)){
+                          oTmp.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
+                          os.saveObs(oTmp, "");
+                          needNewObs = false;
+                      }    
                    }
-                   if (order != null){ 
-                       OrderExtension oe = new OrderExtension(order, regimenType);
-                       List<OrderExtension> extensions = oes.getOrderExtension(order, false);
-                       if (extensions.size() != 0){    
-                           for (OrderExtension extension:extensions){
-                               extension.setVoided(true);
-                               extension.setVoidedBy(Context.getAuthenticatedUser());
-                               extension.setVoidReason("overwritten");
-                               oes.saveOrderExtension(extension);
-                           }
-                       }
-                       oes.saveOrderExtension(oe);
-                   }    
-               }        
+                   if (needNewObs){
+                       Obs o = new Obs();
+                       o.setConcept(mu.getConceptCurrentRegimenType());
+                       o.setCreator(Context.getAuthenticatedUser());
+                       o.setDateCreated(new Date());
+                       o.setObsDatetime(effectiveDate);
+                       o.setLocation(MdrtbUtil.getDefaultLocation(p));
+                       o.setPerson(p);
+                       o.setValueCoded(Context.getConceptService().getConcept(regTypeInt));
+                       o.setVoided(false);
+                       os.saveObs(o, "");
+                   }
+                   
+               }
+          
+           
     }
-    
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

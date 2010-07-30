@@ -1,30 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "C:/config-1.0.dtd">
-
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "../lib-common/config-1.0.dtd">
 <module configVersion="1.0">
 	
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>1.2</version>
+	<version>2.0</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
-	<author>Dave Thomas</author>
-	<description>
-			MDR TB Module.
-	</description>
-
+	<author>Partners in Health</author>
+	<description>MDR TB Module.</description>
 	<activator>@MODULE_PACKAGE@.MdrtbActivator</activator>
-	
-	<!-- <updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
-	<!-- /Base Module Properties -->
-	
-	<require_version>1.4.2.00</require_version>
-
-	<require_modules>
-   		<require_module>org.openmrs.module.birt</require_module>
-   		<require_module>org.openmrs.module.formentry</require_module>
-	</require_modules>
-	
+		
+	<require_version>1.6</require_version>
+		
 	<extension>
 		<point>org.openmrs.admin.list</point>
 		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
@@ -33,35 +21,24 @@
 		<point>org.openmrs.patientDashboardTab</point>
 		<class>@MODULE_PACKAGE@.extension.html.MdrtbPatientDashboardTabExt</class>
 	</extension>
-
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
 		<class>@MODULE_PACKAGE@.extension.html.MdrtbGutterItem</class>
 	</extension>
-	
-	
-	<!-- AOP
-	<advice>
-		<point>org.openmrs.api.FormService</point>
-		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
-	</advice>
-	 /AOP -->
-	
-	
-	<!-- Required Privileges 
-	<privilege>
-		<name>Form Entry</name>
-		<description>Allows user to access Form Entry pages/functions</description>
-	</privilege>
-	 /Required Privileges -->
-
-
 
 	<globalProperty>
 		<property>@MODULE_ID@.program_name</property>
 		<defaultValue>MDR-TB PROGRAM</defaultValue>
 		<description>
 			MDR-TB program name.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.roles_to_redirect_from_openmrs_homepage</property>
+		<defaultValue/>
+		<description>
+			Comma-separated list of role names. Any user in a role listed here will not be able to see the regular OpenMRS homepage.
+			That will redirect them to the MDR-TB homepage instead.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -73,14 +50,14 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.patient_identifier_type_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			Pipe delimited list of all patient identifier types associated with the MDRTB program.
 		</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.location_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			Pipe delimited list of all locations that you want to choose from in the add patient dialogs in the mdrtb module.  This will generally correspond to the health centers that are participating in an mdrtb program.  If blank, all openMRS locations will be displayed.
 		</description>
@@ -125,7 +102,7 @@
 		<property>@MODULE_ID@.DST_drug_list</property>
 		<defaultValue>DST TEST COMPONENTS</defaultValue>
 		<description>
-			The ConceptSet containing all of the ordered drug concepts that are used as a row in a DST test, OR a list of concepts delimited by |.
+			The ConceptSet containing all of the ordered drug concepts that are used as a row in a DST test, OR a list of concepts delimited by |.  If the latter, you can list concept_name, followed by a :, followed by the concentration level for the dst result.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -151,21 +128,21 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.test_result_encounter_type_DST</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			This should be the name of the encounter type that you want to use for encounters wrapping DST results.
 		</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.test_result_encounter_type_bacteriology</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			This should be the name of the encounter type that you want to use for encounters wrapping bacteriology (smear+culture) results.
 		</description>
 	</globalProperty>	
 	<globalProperty>
 		<property>@MODULE_ID@.mdrtb_forms_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			List all MDR-TB forms by name, pipe delimited.  These will appear in the form list on the MDR-TB home.
 		</description>
@@ -179,7 +156,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.birt_report_list</property>
-		<defaultValue></defaultValue>
+		<defaultValue/>
 		<description>
 			List all BIRT reports by name that correspond to the MDR-TB program.  Pipe delimited.
 		</description>
@@ -240,13 +217,6 @@
 		<defaultValue>TYPE OF ORGANISM</defaultValue>
 		<description>
 			A concept set of possible TB culture organism types, or a | delimited list of organism concepts
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.webserver_port</property>
-		<defaultValue>:8080</defaultValue>
-		<description>
-			This is meant to give you a little bit of flexibility with hosting configurations.  For tomcat, the listener port is :8080 by default.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -317,7 +287,6 @@
 		<description>Used to define culture and smear conversions.  Sets ____ in the following conversion definition: at least ____ consecutive negative bacteriologies with the earliest and the latest occurring at least X days apart.  For example, the WHO definition is 2 negative bacteriologies, at least 30 days apart.  Unit is number of bacteriologies.
 		</description>
 	</globalProperty>
-	
 	<globalProperty>
 		<property>@MODULE_ID@.red_list</property>
 		<defaultValue>resistant|positive|scanty|POSITIVE|SCANTY|RESISTANT|RÉSISTANT|POSITIF|positif|MINIMES</defaultValue>
@@ -332,6 +301,44 @@
 		<property>@MODULE_ID@.yellow_list</property>
 		<defaultValue>intermediate|INTERMEDIATE|MODÉRÉE</defaultValue>
 		<description>Sets list of concept name strings that should be displayed in yellow in bacteriology and dst widget.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
+		<defaultValue/>
+		<description>This should be the name of the encounter type that you want to use for encounters wrapping specimen collections.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.lab_test_order_type</property>
+		<defaultValue/>
+		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.listPatientsLocationMethod</property>
+		<defaultValue>PATIENT_HEALTH_CENTER</defaultValue>
+		<description>The location calculation method to use for the list patients page</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.unknownLocationName</property>
+		<defaultValue>Unknown Location</defaultValue>
+		<description>The name of the Location that represents an Unknown Location</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
+		<defaultValue/>
+		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.show_lab</property>
+		<defaultValue>false</defaultValue>
+		<description>True/false whether or not to display lab names in the bacteriology widget.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.patient_dashboard_tab_conf</property>
+		<description>Used to configure what tabs are displayed on the mdrtb patient overview page, and in what order they appear. 
+		Specify the order for the tabs to appear using a pipe-delimited list. For example, "STATUS|FORM|REG|BAC|DST|CONTACTS" will 
+		display the tabs in the default order. To hide a tab, append the tab name with ":hide".  Note that any tabs that aren't explicitly
+		hidden using this method will be displayed at the end of the tab list. For instance "BAC|FORM|STATUS:hide|CONTACTS:hide" would 
+		display the following tabs BAC,FORM,REG,DST, in that order. To use the default display order, keep this property empty.</description>
 	</globalProperty>
 	
 	<dwr>
@@ -351,6 +358,10 @@
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbNextVisit"/>
 				<include method="setNextVisitDate"/>
 			</create>
+			<create creator="new" javascript="MdrtbCurrentRegimenTypeService">
+				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbCurrentRegimenTypeService"/>
+				<include method="setCurrentRegimenTypeOnDate"/>
+			</create>
 			<create creator="new" javascript="MdrtbContactsDWRService">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbContactsDWRService"/>
 				<include method="updateAddress"/>
@@ -368,17 +379,6 @@
 			<![CDATA[  ]]>
 		</signatures>	
 	</dwr>
-
-	
-	<!-- Servlets -->
-	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 
-	<servlet>
-		<servlet-name>formDownload</servlet-name>
-		<servlet-class>@MODULE_PACKAGE@.web.FormDownloadServlet</servlet-class>
-	</servlet>
-	-->
-	<!-- /Servlets -->
-	
 	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->
@@ -395,8 +395,5 @@
 		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
-	<mappingFiles>
-		OrderExtension.hbm.xml
-	</mappingFiles>	
-</module>
 
+</module>

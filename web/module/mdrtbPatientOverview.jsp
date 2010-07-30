@@ -10,6 +10,7 @@
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbFindPatient.js'></script>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbContactsDWRService.js'></script>
 <script type="text/javascript"> 
+	var $j = jQuery.noConflict();
 	var xmlDoc;
 	var currentSearchTab;
 	function changeSearchTab(tabObj, focusToId) {
@@ -91,8 +92,7 @@
     }
     
     //Simple popup:
-    
-    	var $j = jQuery.noConflict();
+   
 	$j(document).ready(function(){ 		
 		cssTables();		 
   		 var viewport = {
@@ -127,8 +127,8 @@
             strSimple += $j(this).siblings(".simple_popup_info").html();
             strSimple += "<Br><Br><table class='popupTable'><tr>";
             if (showSubmit == true)
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:clearOrder()'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
+            strSimple += "<td nowrap ><p class='simple_close' nowrap>[ x ] <a href='#' onmouseup='javascript:clearOrder()'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
+            strSimple += "<td nowrap><p class='simple_close' nowrap>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
             strSimple += "<Br></div></div>";
             $j("body").append(strSimple);
             viewport.init(".simple_popup_div");
@@ -209,7 +209,7 @@
 	}
 	
 	function selectPatient(input){
-		window.location='/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=BAC';
+		window.location='${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=' + input + '&view=BAC';
 	}
 	function mouseOver(input){
 		classTmp = this.className;
@@ -281,95 +281,86 @@
 	}
     
 </script>
+
+<c:choose>
+	<c:when test="${!metadataLoaded}">
+		<h4><spring:message code="mdrtb.metadataNotLoaded"/></h4>
+	</c:when>
+	<c:otherwise>
+
+<span style="text-align:right;">
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+</span>
+
+<c:if test="${obj.patient.dead}">
+	<div id="patientDashboardDeceased" class="retiredMessage">
+		<div>
+			<spring:message code="Patient.patientDeceased"/>
+			<c:if test="${not empty obj.patient.deathDate}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.deathDate"/>: <openmrs:formatDate date="${obj.patient.deathDate}"/>
+			</c:if>
+			<c:if test="${not empty obj.causeOfDeath}">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<spring:message code="Person.causeOfDeath"/>: 
+				<c:if test="${not empty obj.causeOfDeath.valueCoded}"> 
+					  &nbsp;&nbsp;<openmrs:format concept="${obj.causeOfDeath.valueCoded}"/>
+				</c:if>
+				<c:if test="${not empty obj.causeOfDeath.valueText}"> 
+					  &nbsp;&nbsp;<c:out value="${obj.causeOfDeath.valueText}"></c:out>
+				</c:if>
+			</c:if>
+		</div>
+	</div>
+</c:if>
+
+<div style="padding:2px;"></div>
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
 <!-- <openmrs:portlet url="mdrtbHeaderBox" id="mdrtbHeaderBox" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>-->
-<br><br>		
+<br><br>
 		
 		
 <div id="R01SearchTabs">
 			<ul>
-			<li>&nbsp;</li>
-			<li><a id="searchTab_status" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.status" /></a></li>
-					
-					<li><a id="searchTab_formEntry" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.formentry" /></a></li>
-					
-			<li><a id="searchTab_patientRegimen" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.patientregimen" /></a></li>
-					
-			<li><a id="searchTab_BAC" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.bacteriologies" /></a></li>
-					
-					<li><a id="searchTab_DST" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.dsts" /></a></li>
-
-					<li><a id="searchTab_contacts" href="#"
-					onClick="changeSearchTab(this)"><spring:message
-					code="mdrtb.contacts" /></a></li>
-					
-					
-					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.mdrtbDashboardTab" type="html">
-							<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
-								<li>
-									<a id="searchTab_${extension.tabId}" href="#" onclick="changeSearchTab(this)"><spring:message code="${extension.tabName}"/></a>
-								</li>
-							</openmrs:hasPrivilege>
-					</openmrs:extensionPoint>
-
+				<li>&nbsp;</li>
+				<c:forEach var="tab" items="${tabs}">
+					<li><a id="searchTab_${tab.id}" href="#"
+						onClick="changeSearchTab(this)"><spring:message
+						code="${tab.messageCode}" /></a></li>
+				</c:forEach>
 			</ul>
 </div>
 	
 <div id="content" style="border-top: 1px grey solid; border-top: none; padding: 4px 5px 2px 10px;">
 		
-		<div  style="display:inline" id="searchTab_status_content"><bR>
+		<div  style="display:none" id="searchTab_status_content"><bR>
 			<openmrs:portlet url="mdrtbStatus" id="mdrtbStatus" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</div>
 		
-		<div  style="display:inline" id="searchTab_formEntry_content"><bR>
-			<table class="portletTable" style="font-size:80%;">
-				
-				<tr><td><b><spring:message
-						code="mdrtb.availablemdrtbforms" /></b></td></tr>
-				<c:if test="${!empty mdrtbForms}">
-						
-					<c:forEach items="${mdrtbForms}" var="form" varStatus="varStatus">
-						<c:set var="rowClass" scope="page">
-							<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
-						</c:set>
-						<Tr><td class="${rowClass}"><a href='/openmrs/moduleServlet/formentry/formDownload?target=formentry&patientId=${obj.patient.patientId}&formId=${form.formId}'>${form.name}</a></td></Tr>
-					</c:forEach>
-					
-				</c:if>
-				<c:if test="${empty mdrtbForms}">
-					<tr><td style="text-align:center;"><i><spring:message code="mdrtb.none" /></i></td></tr>
-				</c:if>
-			</table><br>
-		</div>
+		
+			<div  style="display:none" id="searchTab_formEntry_content"><bR>
+				<openmrs:portlet url="mdrtbFormsListPortlet" id="mdrtbFormsListPortlet" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+			</div>
 		
 		
-		<div  style="display:inline" id="searchTab_patientRegimen_content"><bR>
+		<div  style="display:none" id="searchTab_patientRegimen_content"><bR>
 			<openmrs:portlet url="mdrtbRegimen" id="mdrtbRegimen" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>
 		</div>
 		
 		
-		<div  style="display:inline;font-size:65%" id="searchTab_BAC_content"><br>
+		<div  style="display:none;font-size:65%" id="searchTab_BAC_content"><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:125%;" href="mdrtbAddNewTestContainer.form?action=BAC&patientId=${obj.patient.patientId}"><spring:message code="mdrtb.addnewbacteriology" /></a>
 		<bR><br>
 		<spring:message code='mdrtb.mdrtbprogramstartdate' var='progString'/>
 		<openmrs:globalProperty key="mdrtb.red_list" var="redList"/>
 		<openmrs:globalProperty key="mdrtb.green_list" var="greenList"/>
 		<openmrs:globalProperty key="mdrtb.yellow_list" var="yellowList"/>
+		<openmrs:globalProperty key="mdrtb.show_lab" var="showLab"/>
 		<spring:message code='mdrtb.samplecollectiondateLN' var='sampleCollectionDateStrLN'/>
 		<c:if test="${!empty obj.obs}">
 						<mdrtb:bacteriology
-						observations="${obj.obs}"
-						concepts="TUBERCULOSIS TREATMENT STARTED|TUBERCULOSIS PROPHYLAXIS STARTED|REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED|TUBERCULOSIS DRUG TREATMENT START DATE"
+						patientId="${obj.patient.patientId}" 
+						concepts="TUBERCULOSIS PROPHYLAXIS STARTED|REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED|MULTIDRUG-RESISTANT TB TREATMENT START DATE|TUBERCULOSIS DRUG TREATMENT START DATE|TUBERCULOSIS CATEGORY II TREATMENT START DATE|TUBERCULOSIS CATEGORY I TREATMENT START DATE"
 						obsGroupConcepts="TUBERCULOSIS SMEAR MICROSCOPY CONSTRUCT|TUBERCULOSIS CULTURE CONSTRUCT"
 						resultConceptList="TUBERCULOSIS SMEAR RESULT|TUBERCULOSIS CULTURE RESULT"
 						cssClass="widgetOut"
@@ -381,13 +372,14 @@
 						stringForBlankCells=" "
 						programWorkflowStatesToNotShow="NOT CONVERTED|NONE|STILL ON TREATMENT|ON TREATMENT"
 						programNameReplacementString="${progString}"
-						scanty="scanty"
+						scanty="SCANTY"
+						showLab="${showLab}"
 						/>
 		</c:if>	<br>
 		</div>
 
 		
-		<div id="searchTab_DST_content" style="font-size:65%"><Br>
+		<div id="searchTab_DST_content" style="display:none;font-size:65%"><Br>
 		&nbsp;&nbsp;&nbsp;&nbsp;<a style="font-size:125%;" href="mdrtbAddNewTestContainer.form?action=DST&patientId=${obj.patient.patientId}"><spring:message code="mdrtb.addnewdst" /></a>
 		<bR><br>
 		<c:if test="${!empty obj.obs}">
@@ -396,7 +388,7 @@
 					<spring:message code='mdrtb.samplecollectiondate' var='sampleCollectionDateStr'/>
 					<mdrtb:dst
 						observations="${obj.obs}"
-						concepts="TUBERCULOSIS TREATMENT STARTED|TUBERCULOSIS PROPHYLAXIS STARTED|REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED|TUBERCULOSIS DRUG TREATMENT START DATE"
+						concepts="REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED|MULTIDRUG-RESISTANT TB TREATMENT START DATE|TUBERCULOSIS DRUG TREATMENT START DATE|TUBERCULOSIS CATEGORY II TREATMENT START DATE|TUBERCULOSIS CATEGORY I TREATMENT START DATE"
 						obsGroupConceptDST="TUBERCULOSIS DRUG SENSITIVITY TEST CONSTRUCT" 
 						sputumCollectionDateConcept="SPUTUM COLLECTION DATE"
 						obsGroupConcepts="TUBERCULOSIS DRUG SENSITIVITY TEST RESULT"
@@ -414,8 +406,8 @@
 		</c:if><br>
 		</div>
 		
-		<div id="searchTab_contacts_content" style="font-size:80%"><Br>
-			<a  href="/openmrs/module/mdrtb/mdrtbManageContacts.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.managecontacts" /></a>
+		<div id="searchTab_contacts_content" style="display:none;font-size:80%"><Br>
+			<a  href="${pageContext.request.contextPath}/module/mdrtb/mdrtbManageContacts.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.managecontacts" /></a>
 			<br>
 			<Br>	
 			<c:if test="${obj.contacts != null}">
@@ -443,11 +435,11 @@
 					</td>
 					<Td>
 						<c:if test="${contact.isTBPatient}">
-							<a href="/openmrs/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}&view=STATUS">${contact.person.givenName} ${contact.person.familyName}</a>
+							<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">
 							<c:if test="${contact.isPatient}">
-								<a href="/openmrs/patientDashboard.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
+								<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${contact.person.personId}">${contact.person.givenName} ${contact.person.familyName}</a>
 							</c:if>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">
@@ -534,7 +526,7 @@
 					<c:otherwise>
 					
 						<openmrs:extensionPoint pointId="org.openmrs.mdrtb.mdrtbDashboardTab.${extension.tabId}TabHeader" type="html" parameters="patientId=${patient.patientId}" />
-						<openmrs:portlet url="${extension.portletUrl}" id="${extension.tabId}" moduleId="${extension.moduleId}"/>
+						<openmrs:portlet url="${extension.portletUrl}" id="${extension.tabId}" moduleId="${extension.moduleId}" patientId="${patient.patientId}"/>
 						
 					</c:otherwise>
 				</c:choose>
@@ -547,31 +539,44 @@
 
 <bR><br>
 <script>
+		
 		<c:if test="${empty view}">
-			changeSearchTab('searchTab_status');
+			changeSearchTab('searchTab_${tabs[0].id}');
 		</c:if>	
 		<c:if test="${!empty view}">
-			<c:if test='${view == "DST"}'>
-				changeSearchTab('searchTab_DST');
-			</c:if>
-			<c:if test='${view == "BAC"}'>
-				changeSearchTab('searchTab_BAC');
-			</c:if>
-			<c:if test='${view == "REG"}'>
-				changeSearchTab('searchTab_patientRegimen');
-			</c:if>
-			<c:if test='${view == "STATUS"}'>
-				changeSearchTab('searchTab_status');
-			</c:if>
-			<c:if test='${view == "CONTACTS"}'>
-				changeSearchTab('searchTab_contacts');
-			</c:if>
-		</c:if>
+			<c:choose>
+				<c:when test='${view == "SUMMARY"}'>
+					changeSearchTab('searchTab_summary');
+				</c:when>
+				<c:when test='${view == "DST"}'>
+					changeSearchTab('searchTab_DST');
+				</c:when>
+				<c:when test='${view == "BAC"}'>
+					changeSearchTab('searchTab_BAC');
+				</c:when>
+				<c:when test='${view == "REG"}'>
+					changeSearchTab('searchTab_patientRegimen');
+				</c:when>
+				<c:when test='${view == "STATUS"}'>
+					changeSearchTab('searchTab_status');
+				</c:when>
+				<c:when test='${view == "CONTACTS"}'>
+					changeSearchTab('searchTab_contacts');
+				</c:when>
+				<c:when test='${view == "FORM"}'>
+					changeSearchTab('searchTab_formEntry');
+				</c:when>
+				<c:otherwise>
+					changeSearchTab('searchTab_${view}');
+				</c:otherwise>
+			</c:choose>
+		</c:if> 
 			setHeights();
 </script>
 
 
-
+	</c:otherwise>
+</c:choose>
 
 
 

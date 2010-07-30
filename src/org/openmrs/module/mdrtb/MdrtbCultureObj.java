@@ -2,18 +2,17 @@ package org.openmrs.module.mdrtb;
 
 
 import java.util.Date;
-import java.util.Locale;
+import java.util.UUID;
 
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.User;
-import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 
 /**
  * Class representing a TB Culture
  */
 public class MdrtbCultureObj {
+    
     private Obs cultureResult = new Obs();
     private Obs source = new Obs();
     private Obs colonies = new Obs();
@@ -24,9 +23,7 @@ public class MdrtbCultureObj {
     private Obs typeOfOrganism = new Obs();
     private Obs typeOfOrganismNonCoded = new Obs();
     private Obs cultureParentObs = new Obs();
-    
-    private ConceptService cs = Context.getConceptService();
-    
+
     public MdrtbCultureObj(){}
     
     /**
@@ -42,138 +39,159 @@ public class MdrtbCultureObj {
      * @param STR_TYPE_OF_ORGANISM
      * @param STR_TYPE_OF_ORGANISM_NON_CODED
      */
-    public MdrtbCultureObj(String STR_TB_CULTURE_RESULT, 
-                           String STR_TB_SAMPLE_SOURCE,
-                           String STR_COLONIES,
-                           String STR_CULTURE_START_DATE,
-                           String STR_RESULT_DATE,
-                           String STR_DATE_RECEIVED, 
-                           String STR_TB_CULTURE_METHOD, 
-                           String STR_TYPE_OF_ORGANISM, 
-                           String STR_TYPE_OF_ORGANISM_NON_CODED,
-                           String STR_CULTURE_PARENT,
-                           Patient patient,
-                           User user){
+    public MdrtbCultureObj(Patient patient, User user, MdrtbFactory mu){
 
-        this.cultureResult.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_RESULT, new Locale("en", "US")));
         
-        this.cultureResult.setVoided(false);
-        this.cultureResult.setDateCreated(new Date());
-        this.cultureResult.setPerson(patient);
-        this.cultureResult.setCreator(user);
+        //STR_TB_CULTURE_RESULT
+        cultureResult.setConcept(mu.getConceptCultureResult());  
+        cultureResult.setVoided(false);
+        cultureResult.setDateCreated(new Date());
+        cultureResult.setPerson(patient);
+        cultureResult.setCreator(user);
+        cultureResult.setUuid(UUID.randomUUID().toString());
+        if (cultureResult.getConcept() == null)
+            throw new RuntimeException("cultureResult id is null");
         
-        this.source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US")));       
-        this.source.setVoided(false);
-        this.source.setDateCreated(new Date());
-        this.source.setPerson(patient);
-        this.source.setCreator(user);
+        source.setConcept(mu.getConceptSampleSource());       
+        source.setVoided(false);
+        source.setDateCreated(new Date());
+        source.setPerson(patient);
+        source.setCreator(user);
+        source.setUuid(UUID.randomUUID().toString());
+        if (source.getConcept() == null)
+            throw new RuntimeException("source id is null");
         
-        this.colonies.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US")));        
-        this.colonies.setVoided(false);
-        this.colonies.setDateCreated(new Date());
-        this.colonies.setPerson(patient);
-        this.colonies.setCreator(user);
+        colonies.setConcept(mu.getConceptColonies());        
+        colonies.setVoided(false);
+        colonies.setDateCreated(new Date());
+        colonies.setPerson(patient);
+        colonies.setCreator(user);
+        colonies.setUuid(UUID.randomUUID().toString());
+        if (colonies.getConcept() == null)
+            throw new RuntimeException("colonies id is null");
         
-        this.cultureStartDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US")));       
-        this.cultureStartDate.setVoided(false);
-        this.cultureStartDate.setDateCreated(new Date());
-        this.cultureStartDate.setPerson(patient);
-        this.cultureStartDate.setCreator(user);
+        //STR_CULTURE_START_DATE
+        cultureStartDate.setConcept(mu.getConceptCultureStartDate());       
+        cultureStartDate.setVoided(false);
+        cultureStartDate.setDateCreated(new Date());
+        cultureStartDate.setPerson(patient);
+        cultureStartDate.setCreator(user);
+        cultureStartDate.setUuid(UUID.randomUUID().toString());
+        if (cultureStartDate.getConcept() == null)
+            throw new RuntimeException("cultureStartDate id is null");
        
-        this.cultureResultsDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US")));     
-        this.cultureResultsDate.setVoided(false);
-        this.cultureResultsDate.setDateCreated(new Date());
-        this.cultureResultsDate.setPerson(patient);
-        this.cultureResultsDate.setCreator(user);
+        cultureResultsDate.setConcept(mu.getConceptResultDate());     
+        cultureResultsDate.setVoided(false);
+        cultureResultsDate.setDateCreated(new Date());
+        cultureResultsDate.setPerson(patient);
+        cultureResultsDate.setCreator(user);
+        cultureResultsDate.setUuid(UUID.randomUUID().toString());
+        if (cultureResultsDate.getConcept() == null)
+            throw new RuntimeException("cultureResultsDate id is null");
         
-        this.cultureDateReceived.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US")));
-        this.cultureDateReceived.setVoided(false);
-        this.cultureDateReceived.setDateCreated(new Date());
-        this.cultureDateReceived.setPerson(patient);
-        this.cultureDateReceived.setCreator(user);
+        cultureDateReceived.setConcept(mu.getConceptDateReceived());
+        cultureDateReceived.setVoided(false);
+        cultureDateReceived.setDateCreated(new Date());
+        cultureDateReceived.setPerson(patient);
+        cultureDateReceived.setCreator(user);
+        cultureDateReceived.setUuid(UUID.randomUUID().toString());
+        if (cultureDateReceived.getConcept() == null)
+            throw new RuntimeException("cultureDateReceived id is null");
       
-        this.cultureMethod.setConcept( MdrtbUtil.getMDRTBConceptByName(STR_TB_CULTURE_METHOD, new Locale("en", "US")));
-        this.cultureMethod.setVoided(false);
-        this.cultureMethod.setDateCreated(new Date());
-        this.cultureMethod.setPerson(patient);
-        this.cultureMethod.setCreator(user);
+        cultureMethod.setConcept( mu.getConceptCultureMethod());
+        cultureMethod.setVoided(false);
+        cultureMethod.setDateCreated(new Date());
+        cultureMethod.setPerson(patient);
+        cultureMethod.setCreator(user);
+        cultureMethod.setUuid(UUID.randomUUID().toString());
+        if (cultureMethod.getConcept() == null)
+            throw new RuntimeException("cultureMethod id is null");
         
-        this.typeOfOrganism.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US")));
-        this.typeOfOrganism.setVoided(false);
-        this.typeOfOrganism.setDateCreated(new Date());
-        this.typeOfOrganism.setPerson(patient);
-        this.typeOfOrganism.setCreator(user);
+        typeOfOrganism.setConcept(mu.getConceptTypeOfOrganism());
+        typeOfOrganism.setVoided(false);
+        typeOfOrganism.setDateCreated(new Date());
+        typeOfOrganism.setPerson(patient);
+        typeOfOrganism.setCreator(user);
+        typeOfOrganism.setUuid(UUID.randomUUID().toString());
+        if (typeOfOrganism.getConcept() == null)
+            throw new RuntimeException("typeOfOrganism id is null");
         
-        this.typeOfOrganismNonCoded.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US")));
-        this.typeOfOrganismNonCoded.setVoided(false);
-        this.typeOfOrganismNonCoded.setDateCreated(new Date());
-        this.typeOfOrganismNonCoded.setPerson(patient);
-        this.typeOfOrganismNonCoded.setCreator(user);
+        typeOfOrganismNonCoded.setConcept(mu.getConceptTypeOfOrganismNonCoded());
+        typeOfOrganismNonCoded.setVoided(false);
+        typeOfOrganismNonCoded.setDateCreated(new Date());
+        typeOfOrganismNonCoded.setPerson(patient);
+        typeOfOrganismNonCoded.setCreator(user);
+        typeOfOrganismNonCoded.setUuid(UUID.randomUUID().toString());
+        if (typeOfOrganismNonCoded.getConcept() == null)
+            throw new RuntimeException("typeOfOrganismNonCoded id is null");
         
-        this.cultureParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_PARENT, new Locale("en", "US")));
-        this.cultureParentObs.setVoided(false);
-        this.cultureParentObs.setDateCreated(new Date());
-        this.cultureParentObs.setPerson(patient);
-        this.cultureParentObs.setCreator(user);
+        cultureParentObs.setConcept(mu.getConceptCultureParent());
+        cultureParentObs.setVoided(false);
+        cultureParentObs.setDateCreated(new Date());
+        cultureParentObs.setPerson(patient);
+        cultureParentObs.setCreator(user);
+        cultureParentObs.setUuid(UUID.randomUUID().toString());
+        if (cultureParentObs.getConcept() == null)
+            throw new RuntimeException("cultureParentObs id is null");
     }
     
     public void setTypeOfOrganism(Obs o){
-        this.typeOfOrganism = o;
+        typeOfOrganism = o;
     }
     
     public Obs getTypeOfOrganism(){
-        return this.typeOfOrganism;
+        return typeOfOrganism;
     }
     
     public void setTypeOfOrganismNonCoded(Obs o){
-        this.typeOfOrganismNonCoded = o;
+        typeOfOrganismNonCoded = o;
     }
     
     public Obs getTypeOfOrganismNonCoded(){
-        return this.typeOfOrganismNonCoded;
+        return typeOfOrganismNonCoded;
     }
     
     public void setCultureResult(Obs o){
-        this.cultureResult = o;
+        cultureResult = o;
     }
     public Obs getCultureResult(){
-        return this.cultureResult;
+        return cultureResult;
     }
     public void setSource(Obs o){
-        this.source = o;
+        source = o;
     }
     public Obs getSource(){
-        return this.source;
+        return source;
     }
     public void setColonies(Obs o){
-        this.colonies = o;
+        colonies = o;
     }
     public Obs getColonies(){
-        return this.colonies;
+        return colonies;
     }
     public void setCultureStartDate(Obs o){
-        this.cultureStartDate = o;
+        cultureStartDate = o;
     }
     public Obs getCultureStartDate(){
-        return this.cultureStartDate;
+        return cultureStartDate;
     }
     public void setCultureResultsDate(Obs o){
-        this.cultureResultsDate = o;
+        cultureResultsDate = o;
     }
     public Obs getCultureResultsDate(){
-        return this.cultureResultsDate;
+        return cultureResultsDate;
     }
     public void setCultureDateReceived(Obs o){
-        this.cultureDateReceived = o;
+        cultureDateReceived = o;
     }
     public Obs getCultureDateReceived(){
-        return this.cultureDateReceived;
+        return cultureDateReceived;
     }
     public void setCultureMethod(Obs o){
-        this.cultureMethod = o;
+        cultureMethod = o;
     }
     public Obs getCultureMethod(){
-        return this.cultureMethod;
+        return cultureMethod;
     }
 
     public Obs getCultureParentObs() {
@@ -182,6 +200,21 @@ public class MdrtbCultureObj {
 
     public void setCultureParentObs(Obs cultureParentObs) {
         this.cultureParentObs = cultureParentObs;
+    }
+    
+    public void removeAllObs(){
+        
+        cultureResult = null;
+        source = null;
+        colonies = null;
+        cultureStartDate = null;
+        cultureResultsDate = null;
+        cultureDateReceived = null;
+        cultureMethod = null;
+        typeOfOrganism = null;
+        typeOfOrganismNonCoded = null;
+        cultureParentObs = null;
+        
     }
     
 }

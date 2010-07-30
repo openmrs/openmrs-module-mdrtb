@@ -11,13 +11,15 @@ import org.openmrs.Obs;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 
 public class MdrtbNextVisit {
     protected final Log log = LogFactory.getLog(getClass());
     
     public boolean setNextVisitDate(String newDate, int patientId, int locationId){
         Date ret = new Date();
-        MdrtbFactory mu = new MdrtbFactory();
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         
         Concept nextVisitConcept = mu.getConceptNextVisit();
         Person p = Context.getPersonService().getPerson(patientId);

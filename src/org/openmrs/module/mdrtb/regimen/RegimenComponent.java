@@ -28,7 +28,7 @@ public class RegimenComponent {
         this.drug = drugOrder.getDrug();
         this.generic = drugOrder.getConcept();
         this.startDate = drugOrder.getStartDate();
-        if (drugOrder.isDiscontinued()) {
+        if (drugOrder.isDiscontinuedRightNow()) {
             this.stopDate = drugOrder.getDiscontinuedDate();
             this.stopReason = drugOrder.getDiscontinuedReason();
         } else {

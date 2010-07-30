@@ -1,6 +1,8 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
@@ -21,7 +24,6 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.User;
 
 public class MdrtbPatient {
-    
     
     private Patient patient;
     private PatientIdentifier patientIdentifier;
@@ -41,7 +43,7 @@ public class MdrtbPatient {
     private Obs cultureConversion ;
     private Obs cultureReconversion;
     private Location location ;
-    private User provider;
+    private Person provider;
     private PatientProgram patientProgram;
     private PatientState cultureStatus;   
     private Obs patientClassDrugUse;
@@ -69,9 +71,25 @@ public class MdrtbPatient {
     private List<MdrtbContactPerson> contacts;
     private Map<Integer, String> oes = new HashMap<Integer, String>();
     private List<Concept> resistanceDrugConcepts = new ArrayList<Concept>();
+    private List<Obs> stEmpIndObs = new ArrayList<Obs>();
+    private List<Encounter> htmlEncList = new ArrayList<Encounter>();
+    private Obs causeOfDeath;
+    
+    public List<Encounter> getHtmlEncList() {
+        return htmlEncList;
+    }
 
+    public void setHtmlEncList(List<Encounter> htmlEncList) {
+        this.htmlEncList = htmlEncList;
+    }
 
+    public List<Obs> getStEmpIndObs() {
+        return stEmpIndObs;
+    }
 
+    public void setStEmpIndObs(List<Obs> stEmpIndObs) {
+        this.stEmpIndObs = stEmpIndObs;
+    }
 
     public List<Concept> getResistanceDrugConcepts() {
         return resistanceDrugConcepts;
@@ -115,7 +133,15 @@ public class MdrtbPatient {
         this.onART = onART;
     }
 
-    public Obs getDurationOfPreviousTreatment() {
+	public Obs getCauseOfDeath() {
+		return causeOfDeath;
+	}
+
+	public void setCauseOfDeath(Obs causeOfDeath) {
+		this.causeOfDeath = causeOfDeath;
+	}
+
+	public Obs getDurationOfPreviousTreatment() {
         return durationOfPreviousTreatment;
     }
 
@@ -300,11 +326,11 @@ public class MdrtbPatient {
         this.location = location;
     }
 
-    public User getProvider() {
+    public Person getProvider() {
         return provider;
     }
 
-    public void setProvider(User provider) {
+    public void setProvider(Person provider) {
         this.provider = provider;
     }
 
@@ -477,6 +503,21 @@ public class MdrtbPatient {
         this.treatmentSupporterPhone = treatmentSupporterPhone;
     }
 
-
+    public void addEncounterToHtmlEncList(Encounter enc){
+        if (this.htmlEncList == null)
+            this.htmlEncList = new ArrayList<Encounter>();
+        this.htmlEncList.add(enc);
+    }
+    
+    /*
+     * sort Encounters by encounterDatetime, desc
+     */
+    public void sortHtmlEncListByEncounterDatetime(){
+        Collections.sort(this.htmlEncList, new Comparator<Encounter>() {
+            public int compare(Encounter u1, Encounter u2) {
+                return u2.getEncounterDatetime().compareTo(u1.getEncounterDatetime());
+            }
+        });
+    }
        
 }

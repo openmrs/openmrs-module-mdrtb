@@ -9,7 +9,7 @@
 	var dateFormat = '${dateFormat}';
 	var DAY_NAMES=new Array(${daysOfWeek});
     var MONTH_NAMES=new Array(${monthsOfYear});
-    var encounterProviderMap = {<c:forEach items="${obj.encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.userId}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
+    var encounterProviderMap = {<c:forEach items="${encounters}" var="encounter" varStatus="varStatus">${encounter.encounterId}:"${encounter.provider.id}"<c:if test="${!varStatus.last}">,</c:if></c:forEach>};
     
 
 	$(document).ready(function(){
@@ -169,7 +169,7 @@
 </div>
 <form method="post"> 
 <c:set var="rowCount" scope="page" value="0" />
-<div id="content" style="font-size:68%">
+<div id="content" style="font-size:80%">
 
 			<br>
 	<table class="portletTable">
@@ -179,7 +179,7 @@
 			<td>
 					<select name="encSelect" id="encSelect" onchange="javascript:setEncounterDate(this)">
 						<option value=""><spring:message code="mdrtb.none" /></option>
-						<c:forEach items="${obj.encounters}" var="encounter">
+						<c:forEach items="${encounters}" var="encounter">
 							<option value="${encounter.encounterId}|<openmrs:formatDate date="${encounter.encounterDatetime}" format="${dateFormat}"/>" 
 								<c:if test="${fn:length(obj.smears) > 0}">
 								<c:if test="${obj.smears[rowCount].smearParentObs.encounter.encounterId == encounter.encounterId}">
@@ -216,8 +216,8 @@
 			<tr>
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
-					<spring:bind path="obj.smears[${rowCount}].smearResult.valueDatetime">
-						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}"  onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+					<spring:bind path="obj.smears[${rowCount}].smearResult.obsDatetime">
+						<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateSmear" name="${status.expression}"  onMouseDown="$(this).date_input()" class="sputumCollection"/>&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 							<span class="error">${status.errorMessage}</span>
 						</c:if>
@@ -391,12 +391,14 @@
 			</tr>
 			<tr>
 				<td><spring:message code="mdrtb.comment" /></td>
+				<td>
 				<spring:bind path="obj.smears[${rowCount}].smearResult.comment">
-				<td><textarea name='${status.expression}' id='commentSmear'>${status.value}</textarea></td>
+				<textarea name='${status.expression}' id='commentSmear'>${status.value}</textarea>
 				<c:if test="${status.errorMessage != ''}">
 								<span class="error">${status.errorMessage}</span>
 					</c:if>
 				</spring:bind>
+				</td>
 			</tr>	
 		</table>
 						</td></Tr>
@@ -410,8 +412,8 @@
 								<tr>
 									<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 									<td>
-										<spring:bind path="obj.cultures[${rowCount}].cultureResult.valueDatetime">
-										<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+										<spring:bind path="obj.cultures[${rowCount}].cultureResult.obsDatetime">
+										<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateCulture" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection"/>&nbsp;&nbsp;(${dateFormat})
 											<c:if test="${status.errorMessage != ''}">
 													<span class="error">${status.errorMessage}</span>
 											</c:if>
@@ -652,7 +654,7 @@
 				<td><spring:message code="mdrtb.samplecollectiondate" /></td>
 				<td>
 					<spring:bind path="obj.dsts[${rowCount}].sputumCollectionDate.valueDatetime">
-					<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDate" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
+					<input type="text" style="width:100px" value="${status.value}" id="sputumCollectionDateDST" name="${status.expression}" onMouseDown="$(this).date_input()" class="sputumCollection">&nbsp;&nbsp;(${dateFormat})
 						<c:if test="${status.errorMessage != ''}">
 								<span class="error">${status.errorMessage}</span>
 						</c:if>
@@ -876,23 +878,23 @@
 				${command.drug.valueCoded.name.name}</Td>
 				<td>
 					<spring:bind path="obj.dsts[${rowCount}].dstResults[${counter.index}].drug.concept">
-					<select name="${status.expression}" class="selects" onchange="javascript:resetColorCoding()">
-					<c:if test='${status.value == ""}'>
-					<option value=""><spring:message code="mdrtb.pleasechoosearesult" /></option>
-					</c:if>
-					<c:if test='${status.value != ""}'>
-					<option value=""><spring:message code="mdrtb.removethistest" /></option>
-					</c:if>
-							<c:forEach items="${dstResults}" var="dstresult">					
-									<option value="${dstresult}"
-										<c:if test="${dstresult == status.value}">
-											SELECTED
-										</c:if>
-									>${dstresult.name.name}</option>
-							</c:forEach>	
-					</select>
-					<c:if test="${status.errorMessage != ''}">
-								<span class="error">${status.errorMessage}</span>
+						<select name="${status.expression}" class="selects" onchange="javascript:resetColorCoding()">
+							<c:if test='${status.value == ""}'>
+							<option value=""><spring:message code="mdrtb.pleasechoosearesult" /></option>
+							</c:if>
+							<c:if test='${status.value != ""}'>
+							<option value="${none}"><spring:message code="mdrtb.removethistest" /></option>
+							</c:if>
+									<c:forEach items="${dstResults}" var="dstresult">					
+											<option value="${dstresult}"
+												<c:if test="${dstresult == status.value}">
+													SELECTED 
+												</c:if>
+											>${dstresult.name.name}</option>
+									</c:forEach>	
+						</select>
+						<c:if test="${status.errorMessage != ''}">
+									<span class="error">${status.errorMessage}</span>
 						</c:if>				
 					</spring:bind>
 				</td>
@@ -923,19 +925,20 @@
 		<br>
 		<c:set var="retType" scope="page" value="none" />
 		<c:if test="${fn:length(obj.smears) > 0}">
-		<c:set var="retType" scope="page" value="smears" />
+			<c:set var="retType" scope="page" value="smears" />
 		</c:if>
 		<c:if test="${fn:length(obj.cultures) > 0}">
-		<c:set var="retType" scope="page" value="cultures" />
+			<c:set var="retType" scope="page" value="cultures" />
 		</c:if>
 		<c:if test="${fn:length(obj.dsts) > 0}">
-		<c:set var="retType" scope="page" value="dsts" />
+			<c:set var="retType" scope="page" value="dsts" />
 		</c:if>
-		<input type="hidden" name="retType" value="${retType}" />
+		
 		<input type="submit"  name="submit"    value='<spring:message code="mdrtb.save" />'>
 		&nbsp;<input type="submit"  name="submit"  value='<spring:message code="mdrtb.cancel" />'>
 		&nbsp;<input type="submit" name="submit"  value='<spring:message code="mdrtb.delete" />'>
 </div>
+<input type="hidden" name="retType" value='${retType}'/>
 </form>	
 	<script>
 		showTrIfScanty();

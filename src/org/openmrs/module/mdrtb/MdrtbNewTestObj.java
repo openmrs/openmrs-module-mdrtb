@@ -16,13 +16,10 @@ import org.openmrs.api.context.Context;
 
 public class MdrtbNewTestObj {
     private Patient patient;
-    private List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();
-    private List<MdrtbCultureObj> cultures = new ArrayList<MdrtbCultureObj>();
-    private List<MdrtbDSTObj> dsts = new ArrayList<MdrtbDSTObj>();
-    private List<Encounter> encounters = new ArrayList<Encounter>();
-
-
-
+    private transient List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();
+    private transient List<MdrtbCultureObj> cultures = new ArrayList<MdrtbCultureObj>();
+    private transient List<MdrtbDSTObj> dsts = new ArrayList<MdrtbDSTObj>();
+    private Encounter primaryEncounter;
     private AdministrationService as = Context.getAdministrationService();
     
     /**
@@ -55,41 +52,22 @@ public class MdrtbNewTestObj {
      * @param STR_DST_PARENT
      * @param STR_DST_RESULT_PARENT
      */
-    public MdrtbNewTestObj(String STR_TB_SMEAR_RESULT, 
-                            String STR_TB_SAMPLE_SOURCE, 
-                            String STR_BACILLI,
-                            String STR_RESULT_DATE, 
-                            String STR_DATE_RECEIVED, 
-                            String STR_TB_SMEAR_MICROSCOPY_METHOD,
-                            String STR_TB_CULTURE_RESULT, 
-                            String STR_COLONIES, 
-                            String STR_CULTURE_START_DATE, 
-                            String STR_TB_CULTURE_METHOD, 
-                            String STR_TYPE_OF_ORGANISM, 
-                            String STR_TYPE_OF_ORGANISM_NON_CODED,
-                            String STR_DST_COMPLETE, 
-                            String STR_DST_METHOD, 
-                            String STR_DIRECT_INDIRECT, 
-                            String STR_COLONIES_IN_CONTROL,
-                            String STR_CONCENTRATION,
-                            String STR_SMEAR_PARENT,
-                            String STR_CULTURE_PARENT,
-                            String STR_DST_PARENT,
-                            String STR_DST_RESULT_PARENT,
-                            String STR_SPUTUM_COLLECTION_DATE,
-                            Patient patient, 
-                            User user){
-        
+    public MdrtbNewTestObj(Patient patient, User user, String view, MdrtbFactory mu){
         String numNewTests = as.getGlobalProperty("mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once");
         try{
             Integer maxNum = Integer.valueOf(numNewTests);
             for (int i = 0; i < maxNum; i++){
-                this.smears.add(new MdrtbSmearObj(STR_TB_SMEAR_RESULT, STR_TB_SAMPLE_SOURCE, STR_BACILLI, STR_RESULT_DATE, STR_DATE_RECEIVED, STR_TB_SMEAR_MICROSCOPY_METHOD, STR_SMEAR_PARENT, patient, user));
-                this.cultures.add(new MdrtbCultureObj(STR_TB_CULTURE_RESULT, STR_TB_SAMPLE_SOURCE, STR_COLONIES, STR_CULTURE_START_DATE, STR_RESULT_DATE, STR_DATE_RECEIVED, STR_TB_CULTURE_METHOD, STR_TYPE_OF_ORGANISM, STR_TYPE_OF_ORGANISM_NON_CODED, STR_CULTURE_PARENT, patient, user));
-                this.dsts.add(new MdrtbDSTObj(STR_DST_COMPLETE, STR_CULTURE_START_DATE, STR_RESULT_DATE, STR_DATE_RECEIVED, STR_TB_SAMPLE_SOURCE, STR_DST_METHOD, STR_TYPE_OF_ORGANISM, STR_TYPE_OF_ORGANISM_NON_CODED, STR_DIRECT_INDIRECT, STR_COLONIES_IN_CONTROL, STR_CONCENTRATION, STR_COLONIES, STR_DST_PARENT, STR_DST_RESULT_PARENT,STR_SPUTUM_COLLECTION_DATE, patient, user));
+                if (view.equals("DST")){
+                    this.dsts.add(new MdrtbDSTObj(patient, user, mu));
+                } else {
+                    this.smears.add(new MdrtbSmearObj(patient, user, mu));
+                    this.cultures.add(new MdrtbCultureObj( patient, user, mu));
+                }
+                
             }
         } catch (Exception ex){
-            throw new RuntimeException("Unable to convert global property mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once into an integer, or loading child Obs failed.");
+            ex.printStackTrace();
+            throw new RuntimeException("Unable to convert global property mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once into an integer, or loading child Obs failed. " + ex.getMessage());
         }
     }
  
@@ -124,12 +102,11 @@ public class MdrtbNewTestObj {
         return this.patient;
     }
 
-    public List<Encounter> getEncounters() {
-        return encounters;
+    public Encounter getPrimaryEncounter() {
+        return primaryEncounter;
     }
-
-    public void setEncounters(List<Encounter> encounters) {
-        this.encounters = encounters;
+    public void setPrimaryEncounter(Encounter primaryEncounter) {
+        this.primaryEncounter = primaryEncounter;
     }
     
     public void addSmear(MdrtbSmearObj mso){

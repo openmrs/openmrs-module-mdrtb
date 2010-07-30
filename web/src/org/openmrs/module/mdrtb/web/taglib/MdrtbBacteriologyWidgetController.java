@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.web.taglib;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -20,12 +19,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbBacteriologyWidgetController extends TagSupport {
@@ -34,7 +36,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     private final Log log = LogFactory.getLog(getClass());
     private String obsGroupConcepts;
     private String concepts; //holds concepts for grey-bar obs
-    private Collection<Obs> observations; //holds all observations
+    private Integer patientId;
     private Boolean showDateHeader = true;
     private String cssClass;
     private Date fromDate;
@@ -50,8 +52,15 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     private String programWorkflowStatesToNotShow = "";
     private String programNameReplacementString = "Program Start Date";
     private String scanty = "";
+    private Boolean showLab = false;
 
-
+    public Boolean getShowLab(){
+    	return showLab;
+    }
+    
+    public void setShowLab(Boolean showLab){
+    	this.showLab = showLab;
+    }
 
     public String getScanty() {
         return scanty;
@@ -139,7 +148,8 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
 
     public int doStartTag() {
 
-        
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");
@@ -152,7 +162,11 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         Set<String> redSet = new HashSet<String>();
         Set<String> resultConceptListSet = new HashSet<String>();
         Patient patient = null;
-
+        List<Obs> observations = new ArrayList<Obs>();
+  
+        patient = Context.getPatientService().getPatient(patientId);
+        observations = Context.getObsService().getObservationsByPerson(patient);
+  
         for (StringTokenizer st = new StringTokenizer(this.redList, "|"); st
                 .hasMoreTokens();) {
             String redString = st.nextToken().trim();
@@ -175,37 +189,35 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
        
-            Concept c = MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
-            if (c != null)
-                obsGroupConcepts.add(c.getName(locUS).getName());
+            Concept c = MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"), mu);
+            if (c != null){
+                obsGroupConcepts.add(c.getBestName(locUS).getName());
+            }    
         }
 
+        
         if (this.toDate == null)
             this.setToDate(new Date());
         if (this.fromDate == null)
             this.setFromDate(new Date(0));
 
         for (Obs ob : observations) {
-            if (ob.isObsGrouping()
-                    && this.doesSetContainSubString(ob.getConcept().getName(locUS).getName(), obsGroupConcepts)) {
+            if (this.doesSetContainSubString(ob.getConcept().getBestName(locUS).getName(), obsGroupConcepts)) {
                 Set<Obs> tmpSet = ob.getGroupMembers();
-                for (Obs oTmp : tmpSet) {
-                    if (oTmp.getObsDatetime().getTime() >= fromDate.getTime()
-                            && oTmp.getObsDatetime().getTime() <= toDate.getTime()
-                            && oTmp.getVoided() == false
-                            && this.doesSetContainSubString(oTmp.getConcept().getName(locUS).getName(),resultConceptListSet)) {
-                        encObs.add(oTmp);
-                        if (!dates.contains(oTmp.getValueDatetime()))
-                            dates.add(oTmp.getValueDatetime());
+                if (tmpSet != null && tmpSet.size() > 0){
+                    for (Obs oTmp : tmpSet) {
+                        if (oTmp.getObsDatetime().getTime() >= fromDate.getTime()
+                                && oTmp.getObsDatetime().getTime() <= toDate.getTime()
+                                && oTmp.getVoided() == false
+                                && this.doesSetContainSubString(oTmp.getConcept().getBestName(locUS).getName(),resultConceptListSet)) {
+                            encObs.add(oTmp);
+                            if (!dates.contains(oTmp.getObsDatetime()))
+                                dates.add(oTmp.getObsDatetime());
+                        }
                     }
                 }
-
             }
-            if (patient == null)
-                patient = Context.getPatientService().getPatient(ob.getPerson().getPersonId());
         }
-
-
         // toss in the obs that are going to get grey rows:
         // if concept found: for all obs -- if matches concept, add date if not exists:
         // headerObs holds these going into the final routine.
@@ -213,7 +225,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
            
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"),mu);
             if (c != null) {
                 for (Obs obx : observations) {
                     if (obx.getConcept().equals(c) && !obx.getVoided()){
@@ -236,7 +248,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         PatientProgram pp = null;
         String mdrtbProgram = Context.getAdministrationService().getGlobalProperty("mdrtb.program_name");
         Obs oProgramStart = new Obs(); 
-        if (mdrtbProgram != null && !mdrtbProgram.equals("") && this.observations.size() > 0){
+        if (mdrtbProgram != null && !mdrtbProgram.equals("") && observations.size() > 0){
 
             Program program = Context.getProgramWorkflowService().getProgramByName(mdrtbProgram);
             List<PatientProgram> pps = Context.getProgramWorkflowService().getPatientPrograms(patient, program, null, null, null, null, false);
@@ -282,7 +294,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         if (pp != null){
             for (PatientState state : pp.getStates()){
 
-                if (state.getEndDate() == null && state.getVoided() == false && !doNotShowNames.contains(state.getState().getConcept().getName().getName())){
+                if (state.getEndDate() == null && state.getVoided() == false && !doNotShowNames.contains(state.getState().getConcept().getBestName(Context.getLocale()).getName())){
                     psList.add(state);
                     if (!dates.contains(state.getStartDate()))
                         dates.add(state.getStartDate());
@@ -297,7 +309,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         // setup left column items
         List<ConceptName> tests = new ArrayList<ConceptName>();
         if (this.columnHeaders != null) {
-            tests = this.getColumnHeaderConceptNames(this.columnHeaders, locUS);
+            tests = this.getColumnHeaderConceptNames(this.columnHeaders, locUS, mu);
         } else {
             tests = this.getConceptNamesFromSet(encObs, locUS);
         }
@@ -318,7 +330,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                 //if so,
                 //Concept cInner = Context.getConceptService().getConcept(cn.getConceptId());
                 //then use cInner;
-                ret.append("<th valign='top' style='font-size:120%'>" + cn.getConcept().getName(loc).getShortName()+ "</th>");
+                ret.append("<th valign='top' style='font-size:120%'>" + cn.getConcept().getBestShortName(loc) + "</th>");
             }
             ret.append("</tr>");
             
@@ -351,30 +363,38 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                             boolean emptyCellTest = true;
                             for (Obs o : encObs) {
 
-                                if ((o.getValueCoded().getName(locUS)
-                                        .equals(test) || o.getConcept()
-                                        .getName(locUS).equals(test))
-                                        && o.getValueDatetime().equals(date)
+                                if ((o.getValueCoded().getBestName(locUS).getConceptNameId().equals(test.getConceptNameId()) 
+                                        || o.getConcept().getBestName(locUS).getConceptNameId().equals(test.getConceptNameId()))
+                                        && o.getObsDatetime().equals(date)
                                         && !arrayListContainsObs(o, usedObs)) {
 
-                                    if (this.doesSetContainSubString(o
-                                            .getValueCoded().getName(loc)
-                                            .getName(), greenSet))
-                                        ret = ret.insert(ret.length() - 1,
-                                                " class='widgetGreen'  ");
-                                    else if (this.doesSetContainSubString(o
-                                            .getValueCoded().getName(loc)
-                                            .getName(), redSet))
-                                        ret = ret.insert(ret.length() - 1,
-                                                " class='widgetRed'  ");
+                                    if (this.doesSetContainSubString(o.getValueCoded().getBestName(loc).getName(), greenSet))
+                                        ret = ret.insert(ret.length() - 1," class='widgetGreen'  ");
+                                    else if (this.doesSetContainSubString(o.getValueCoded().getBestName(loc).getName(), redSet))
+                                        ret = ret.insert(ret.length() - 1," class='widgetRed'  ");
                                     else
-                                        ret = ret.insert(ret.length() - 1,
-                                                " class='widgetDefault'  ");
+                                        ret = ret.insert(ret.length() - 1," class='widgetDefault'  ");
                                     String scantyAddition = "";
-                                    if (o.getValueCoded().getName(locUS).getName().equals(this.scanty) && o.getValueNumeric() != null)
-                                        scantyAddition = " (" + o.getValueNumeric().intValue()+ ")";
-                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId="
-                                                    + o.getObsGroup().getObsId() + "'>"+ o.getValueCoded().getName(loc).getShortestName()+ scantyAddition +"</a>");
+                                    if (o.getValueCoded().getBestName(locUS).getName().equals(this.scanty) && o.getValueNumeric() != null)
+                                        scantyAddition = " (" + o.getValueNumeric().intValue() + ")";
+                                    
+                                    // append the location if the showLab tag is set to true, and the location is a lab (i.e. in global prop mdrtb.location_list)
+                                    String location = "";
+                                    if(showLab){
+                                    	String locationsString = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_list"); 
+                                    	// iterate through all the locations in mdrtb.klab.list
+                                    	for (StringTokenizer st = new StringTokenizer(locationsString, "|"); st.hasMoreTokens(); ) {
+                                    		String s = st.nextToken().trim();
+                                    		Location locTmp = Context.getLocationService().getLocation(s);
+                                    		// if the obs location is in the list, create a string with location name to add to the display
+                                    		if(o.getLocation().equals(locTmp)) {
+                                    			location = " (" + o.getLocation().getDisplayString() + ")";
+                                    		}
+                                    	}
+                                    }
+                                    
+                                    ret.append("<a class='widgetLinks' style='color:black' href='mdrtbEditTestContainer.form?ObsGroupId="
+                                                    + o.getObsGroup().getObsId() + "'>"+ o.getValueCoded().getBestShortName(loc)+ scantyAddition + location + "</a>");
                                     emptyCellTest = false;
                                     usedObs.add(o);
                                     encObs.remove(o);
@@ -398,12 +418,12 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                                 for (Obs os : headerObs) {
                                     if (!arrayListContainsObs(os, usedObs) && (os.getObsDatetime().getTime() == date.getTime() && os.getValueDatetime() == null) || (os.getValueDatetime() != null && os.getValueDatetime().getTime() == date.getTime())) {
                                         if (!os.equals(oProgramStart))
-                                            ret.append(os.getConcept().getName(loc).getName());
+                                            ret.append(os.getConcept().getBestName(loc).getName());
                                         else {
                                             ret.append(this.programNameReplacementString.toUpperCase());
                                         }    
                                         if (os.getValueCoded()!= null )
-                                            ret.append(": " + os.getValueCoded().getName(loc).getName());
+                                            ret.append(": " + os.getValueCoded().getBestName(loc).getName());
                                     
                                         usedObs.add(os);
                                         test = true;
@@ -417,7 +437,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                                      + "' class='widgetHeaderRows'>");
                                     for (PatientState ps : psList){
                                         if (ps.getStartDate().getTime() == date.getTime() && !psListUsedList.contains(ps) && ps.getEndDate() == null){
-                                            ret.append(ps.getState().getProgramWorkflow().getConcept().getName(loc).getName() + ":<Br> " + ps.getState().getConcept().getName(loc).getName());
+                                            ret.append(ps.getState().getProgramWorkflow().getConcept().getBestName(loc).getName() + ":<Br> " + ps.getState().getConcept().getBestName(loc).getName());
                                             psListUsedList.add(ps);
                                             psList.remove(ps);
                                             break;
@@ -476,13 +496,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         this.showDateHeader = showDateHeader;
     }
 
-    public Collection<Obs> getObservations() {
-        return observations;
-    }
 
-    public void setObservations(Collection<Obs> observations) {
-        this.observations = observations;
-    }
 
     public Date getFromDate() {
         return fromDate;
@@ -507,7 +521,7 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
 
     public int doEndTag() {
         concepts = null;
-        observations = null;
+        patientId = null;
         cssClass = null;
         fromDate = null;
         toDate = null;
@@ -528,15 +542,15 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     }
 
     private List<ConceptName> getColumnHeaderConceptNames(String nameList,
-            Locale loc) {
+            Locale loc, MdrtbFactory mu) {
         List<ConceptName> tests = new ArrayList<ConceptName>();
         for (StringTokenizer st = new StringTokenizer(nameList, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"), mu);
             if (c != null) {
-                if (tests.contains(c.getName(loc)) == false)
-                    tests.add(c.getName(loc));
+                if (tests.contains(c.getBestName(loc)) == false)
+                    tests.add(c.getBestName(loc));
             }
         }
         return tests;
@@ -546,8 +560,8 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
         List<ConceptName> tests = new ArrayList<ConceptName>();
         for (Obs o : encObs) {
             if (o.getValueCoded() != null
-                    && tests.contains(o.getValueCoded().getName(loc)) == false)
-                tests.add(o.getValueCoded().getName(loc));
+                    && tests.contains(o.getValueCoded().getBestName(loc)) == false)
+                tests.add(o.getValueCoded().getBestName(loc));
         }
         return tests;
     }
@@ -576,13 +590,11 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
     }
 
     private boolean doesSetContainSubString(String str, Set<String> sSet) {
-        boolean test = false;
         for (String sTest : sSet) {
-            if (sTest.equals(str) || sTest.contains(str) || str.contains(sTest)) {
+            if (sTest.equals(str) || sTest.contains(str) || str.contains(sTest)) 
                 return true;
-            }
         }
-        return test;
+        return false;
     }
 
     public String getObsGroupConcepts() {
@@ -611,6 +623,14 @@ public class MdrtbBacteriologyWidgetController extends TagSupport {
                     return true;
             }
         return ret;
+    }
+
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
     
 }

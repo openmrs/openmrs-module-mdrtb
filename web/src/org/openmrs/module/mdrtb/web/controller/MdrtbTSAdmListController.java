@@ -22,6 +22,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbTreatmentSupporter;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;
@@ -40,7 +41,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public class MdrtbTSAdmListController extends SimpleFormController {
 
-    
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
 
@@ -124,7 +124,7 @@ public class MdrtbTSAdmListController extends SimpleFormController {
                               ps.voidRelationship(r, "person no longer a valid treatment supporter");
                           }
                           
-                          
+              
                       }    
                   }
                   
@@ -146,8 +146,14 @@ public class MdrtbTSAdmListController extends SimpleFormController {
     protected Object formBackingObject(HttpServletRequest request) throws Exception { 
         List<MdrtbTreatmentSupporter> ret = new ArrayList<MdrtbTreatmentSupporter>();
         if (Context.isAuthenticated()){
-                MdrtbFactory mu = new MdrtbFactory();
+            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+            MdrtbFactory mu = ms.getMdrtbFactory();
                 Concept phoneConcept = mu.getConceptPhoneNumber();
+                
+                //get the concept for TS Activity
+                Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
+                
+                
                 String treatSupAttributeTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_person_attribute_type");
                 PersonService ps = Context.getPersonService();
                 ObsService os = Context.getObsService();
@@ -168,6 +174,17 @@ public class MdrtbTSAdmListController extends SimpleFormController {
                                         if (!o.getVoided())
                                             mts.addPhoneObs(o);
                                     }
+                                    
+                                   //set the TS Activity field if it exists
+                                    List<Obs> oActivity = os.getObservationsByPersonAndConcept(p, tsActivityConcept);
+                                    if(oActivity.size()==1) {
+                                 	   Obs o = oActivity.get(0);
+                                 	   if(!o.getVoided()) {
+                                 		   mts.setActive(oActivity.get(0));
+                                 	   }
+                                 	   
+                                    }
+                                   
                                     
                                 ret.add(mts);
                             }

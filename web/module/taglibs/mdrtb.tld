@@ -32,7 +32,7 @@
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 	<attribute>
-		<name>observations</name>
+		<name>patientId</name>
 		<required>true</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
@@ -103,6 +103,11 @@
 	</attribute>
 	<attribute>
 		<name>scanty</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showLab</name>
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
@@ -259,6 +264,18 @@
 		<required>false</required>
 		<rtexprvalue>false</rtexprvalue>
 	</attribute>
+	<attribute>
+		<description>if you set name to 'state', you must specify which program by name</description>
+		<name>programName</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<description>if you set name to 'state', you must specify which workflows (pipe-separated names)</description>
+		<name>workflowNames</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
 
 <tag>
@@ -287,5 +304,241 @@
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 </tag>
+
+<tag>
+	<description>
+		Gets the concept with the given mdrtb mapping.  If the var parameter is passed, 
+		it places it into the pageContext with that variable.  If the nameVar parameter is
+		passed, it places the concept name for the concept in the pageContext.
+		If neither are passed, it prints it.	
+	</description>
+	<name>concept</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.MdrtbConceptTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>concept</name>
+		<required>true</required>
+		<type>org.openmrs.Concept</type>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>nameTag</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>nameVar</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>mappingVar</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Draws an HTML table for bacteriologies. See mdrtbPatientOverview.jsp for an example usage.
+	</description>
+	<name>bacteriology</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.MdrtbBacteriologyWidgetController</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>obsGroupConcepts</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>resultConceptList</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>concepts</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>patientId</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>sortDescending</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>cssClass</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>fromDate</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>toDate</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>columnHeaders</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>redList</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>greenList</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>headerDescTop</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>headerDescLeft</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>fillInBlankCells</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>stringForBlankCells</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>programWorkflowStatesToNotShow</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>programNameReplacementString</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>scanty</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showLab</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a smear cell for display
+	</description>
+	<name>smearCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.SmearCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>smear</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a culture cell for display
+	</description>
+	<name>cultureCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.CultureCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>culture</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+	
+<tag>
+	<description>
+		Renders a DST results cell for display
+	</description>
+	<name>dstResultsCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.DstResultsCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>dstResults</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a Germ cell for display
+	</description>
+	<name>germCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.GermCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>cultures</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders display text for the status of a Test
+	</description>
+	<name>testStatus</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.TestStatusTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>test</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>type</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<function>
+    <description>
+      Tests if a collection contains a specified object
+    </description>
+    <name>collectionContains</name>
+    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
+    <function-signature>boolean collectionContains(java.util.Collection, java.lang.Object)</function-signature>
+    <example>
+      &lt;c:if test="${fn:collectionContains(myList, myObject)}">
+    </example>
+</function>
+
+<function>
+    <description>
+      Tests if an Object[] contains a specified object
+    </description>
+    <name>arrayContains</name>
+    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
+    <function-signature>boolean arrayContains(java.lang.Object[], java.lang.Object)</function-signature>
+    <example>
+      &lt;c:if test="${fn:arrayContains(myArray, myObject)}">
+    </example>
+</function>
 
 </taglib>

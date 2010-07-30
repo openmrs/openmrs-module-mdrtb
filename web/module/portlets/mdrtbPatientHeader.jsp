@@ -41,7 +41,7 @@
 				</c:if>
 				<c:if test="${not empty model.patient.attributeMap['Health Center']}">
 					<td id="patientHeaderHealthCenter">
-						<spring:message code="PersonAttributeType.HealthCenter"/>:
+						<spring:message code="mdrtb.healthcenter"/>:
 						<b>${model.patient.attributeMap['Health Center'].hydratedObject}</b>
 					</td>
 				</c:if>
@@ -117,6 +117,8 @@
 				</td>
 			</tr>
 		</table>
+		
+<!--  
 		<table><tr>
 			<td><spring:message code="Patient.lastEncounter"/>:</td>
 			<th>
@@ -221,16 +223,35 @@
 			</tr>
 			</table>
 			</c:if>
+			<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.bottomPatientHeader" type="html" parameters="patientId=${model.patient.patientId}" />
+	
+-->	    
+		    <!-- added this in as a hack solution to allow patient flags to appear on patient dashboard -->
+		    <openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterLastEncounter" type="html" parameters="patientId=${model.patient.patientId}" />
+</div>
+
+<div align="left">
+	<ul id="menu">	
+		<li class="first">
+		<a href="${pageContext.request.contextPath}/module/mdrtb/patientChart.form?patientId=${model.patient.patientId}">Overview</a></li>
+		
+		<li <c:if test='<%= request.getRequestURI().contains("list") %>'>class="active"</c:if>>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${model.patient.patientId}">Specimens</a></li>
 			
-	</div>
+		<li <c:if test='<%= request.getRequestURI().contains("regimen") %>'>class="active"</c:if>>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${model.patient.patientId}">Regimen</a></li>
+	</ul>
+</div>
+
+<!--  	
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
 			&nbsp;
-			<a href="/openmrs/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;&nbsp;
-			<a href="/openmrs/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
 		</openmrs:hasPrivilege>
-			 | &nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
+			 | &nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
 
 							<input type="text" name="nextscheduledvisit" id="nextscheduledvisit" value='<c:if test="${!empty obj.nextScheduledVisit}"><openmrs:formatDate date="${obj.nextScheduledVisit.valueDatetime}" format="${dateFormat}"/></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()" onchange="javascript:showNextVisitDiv(this)"/>
 							<span id="nextVisitDivnextscheduledvisit" class="displayOff">
@@ -238,7 +259,9 @@
 								<input type='hidden' id='patientId' name='patientId' value='${obj.patient.patientId}'>
 							</span><span id="nextVisitMessage" style="vertical-align:bottom;color:red;font-size:80%;"></span>
 
-		</div>	
+	</div>	
+	-->
+	
 	<script type="text/javascript">
 		function showMoreIdentifiers() {
 			if (identifierElement.style.display == '') {

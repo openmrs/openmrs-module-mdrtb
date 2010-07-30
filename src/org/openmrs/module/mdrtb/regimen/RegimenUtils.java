@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
@@ -16,6 +18,8 @@ import org.openmrs.util.OpenmrsUtil;
 
 public class RegimenUtils {
 
+    protected final Log log = LogFactory.getLog(getClass());
+    
     public static RegimenHistory getRegimenHistory(Patient patient) {
         return new RegimenHistory(Context.getOrderService().getDrugOrdersByPatient(patient));
     }
@@ -75,7 +79,6 @@ public class RegimenUtils {
                 for (RegimenComponent before : regOnDate.getComponents()) {
                     //stop the old order only if it isn't exactly identical to a new order (excluding discontinued_date)
                     for (DrugOrder newOrder:drugOrders){
-                        //but either concept or drug is the same
                         if (!before.getDrugOrder().getDiscontinued() && drugOrderMatchesDrugConcept(before.getDrugOrder(), newOrder) && !regimenComponentIsTheSameAsDrugOrderExcludingDates(before.getDrugOrder(), newOrder)){
                             discontinueOrder( before.getDrugOrder(), effectiveDate, reasonForChange);
                         }    
@@ -196,7 +199,7 @@ public class RegimenUtils {
      * @should have no effect if order is discontinued before date
      */
     public static void discontinueOrder(Order order, Date date, Concept reason) {
-        if (!order.isDiscontinued()) {
+        if (!order.isDiscontinuedRightNow()) {
             order.setDiscontinued(true);
             order.setDiscontinuedDate(date);
             order.setDiscontinuedReason(reason);
@@ -278,6 +281,45 @@ public class RegimenUtils {
             return true;
         else 
             return false;
+    }
+    
+    public static String getRegimenAsString(Date regDate, Patient p, String separator, boolean includeDosages) {
+    	return getRegimenAsString(getRegimenOnDate(p, regDate), separator, includeDosages);
+    }
+    
+    public static String getRegimenAsString(Regimen r, String separator, boolean includeDosages) {
+    	if (separator == null) {
+    		separator = "";
+    	}
+		String ret = "";
+		if (r != null && r.getComponents()!= null){
+		    int total = r.getComponents().size();
+		    int count = 1;
+		    for (RegimenComponent rc : r.getComponents()){
+		        if (rc.getDrug() == null)
+		            ret += rc.getGeneric().getBestShortName(Context.getLocale());
+		        else
+		            ret += rc.getDrug().getName();
+		        if (includeDosages)
+		            ret += " (" + rc.getDrugOrder().getDose() + " " + rc.getDrugOrder().getUnits()+ " " + rc.getDrugOrder().getFrequency() + ")";
+		        if (count != total )
+		            ret += separator;
+		        count ++;
+		    }
+		}   
+        return ret;
+    }
+    
+    public static Regimen getRegimenOnDate(Patient p, Date regDate){
+        Regimen ret = null;
+        RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
+        if (rh != null){
+            Regimen r = rh.getRegimen(regDate);
+            if (r != null){
+               return r;
+            }   
+        }
+        return ret;
     }
 }
 

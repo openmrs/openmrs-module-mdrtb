@@ -1,15 +1,8 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>MDR TB</title>
-</head>
-<body>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@ page import="org.openmrs.web.WebConstants"%>
+<%@ page import="org.openmrs.web.WebConstants" %>
 <%
 	pageContext.setAttribute("msg", session.getAttribute(WebConstants.OPENMRS_MSG_ATTR));
 	pageContext.setAttribute("msgArgs", session.getAttribute(WebConstants.OPENMRS_MSG_ARGS));
@@ -21,13 +14,14 @@
 	session.removeAttribute(WebConstants.OPENMRS_ERROR_ARGS);
 %>
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <openmrs:htmlInclude file="/openmrs.js" />
 <openmrs:htmlInclude file="/openmrs.css" />
 <openmrs:htmlInclude file="/style.css" />
 <openmrs:htmlInclude file="/dwr/engine.js" />
-<openmrs:htmlInclude file="/style.css" />
+<openmrs:htmlInclude file="/dwr/util.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRAlertService.js" />
 
 <c:choose>
@@ -77,11 +71,7 @@
 <div id="banner"><%@ include file="/WEB-INF/template/banner.jsp"%>
 </div>
 
-<div id="popupTray">&nbsp; <c:if
-	test="${empty OPENMRS_DO_NOT_SHOW_PATIENT_SET}">
-	<openmrs:portlet url="patientSet" id="patientSetPortlet" size="compact"
-		parameters="selectedPatientId=|linkUrl=patientDashboard.form|allowRemove=true|allowClear=true|mutable=true|droppable=true|allowBatchEntry=true|allowActions=true" />
-</c:if></div>
+
 
 <openmrs:hasPrivilege privilege="View Navigation Menu">
 
@@ -136,5 +126,6 @@
 	<div id="openmrs_error"><spring:message code="${err}"
 		text="${err}" arguments="${errArgs}" /></div>
 </c:if>
-</body>
-</html>
+
+<!--  </body>
+</html> -->

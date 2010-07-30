@@ -1,16 +1,13 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Date;
-import java.util.Locale;
+import java.util.UUID;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.Person;
 import org.openmrs.User;
-import org.openmrs.api.ConceptService;
-import org.openmrs.api.context.Context;
 
 
 /**
@@ -23,7 +20,6 @@ public class MdrtbDSTResultObj {
     private Obs drug = new Obs();
     private Obs dstResultParentObs = new Obs();
     
-    private ConceptService cs = Context.getConceptService();
     
     public MdrtbDSTResultObj(){}
     
@@ -36,33 +32,35 @@ public class MdrtbDSTResultObj {
      * @param STR_CONCENTRATION
      * @param STR_COLONIES
      */
-    public MdrtbDSTResultObj(Concept drugConcept,String STR_CONCENTRATION, String STR_COLONIES, String STR_DST_RESULT_PARENT, Patient patient, User user){
-       
-        
+    public MdrtbDSTResultObj(Concept drugConcept,Patient patient, User user, MdrtbFactory mu){
 
-        drug.setDateCreated(new Date());
-        drug.setVoided(false);
-        drug.setValueCoded(drugConcept);
-        drug.setCreator(user);
-        drug.setPerson(patient);
-        concentration.setDateCreated(new Date());
-        concentration.setVoided(false);
+        this.drug.setDateCreated(new Date());
+        this.drug.setVoided(false);
+        this.drug.setValueCoded(drugConcept);
+        this.drug.setCreator(user);
+        this.drug.setPerson(patient);
+        this.drug.setUuid(UUID.randomUUID().toString());
         
-        concentration.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CONCENTRATION, new Locale("en", "US")));
-        concentration.setCreator(user);
-        concentration.setPerson(patient);
+        this.concentration.setDateCreated(new Date());
+        this.concentration.setVoided(false);
+        this.concentration.setConcept(mu.getConceptConcentration());
+        this.concentration.setCreator(user);
+        this.concentration.setPerson(patient);
+        this.concentration.setUuid(UUID.randomUUID().toString());
        
-        colonies.setConcept( MdrtbUtil.getMDRTBConceptByName(STR_COLONIES, new Locale("en", "US"))); 
-        colonies.setVoided(false);
-        colonies.setDateCreated(new Date());
-        colonies.setCreator(user);
-        colonies.setPerson(patient);
+        this.colonies.setConcept( mu.getConceptColonies()); 
+        this.colonies.setVoided(false);
+        this.colonies.setDateCreated(new Date());
+        this.colonies.setCreator(user);
+        this.colonies.setPerson(patient);
+        this.colonies.setUuid(UUID.randomUUID().toString());
 
-        dstResultParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_RESULT_PARENT, new Locale("en", "US")));
-        dstResultParentObs.setVoided(false);
-        dstResultParentObs.setDateCreated(new Date());
-        dstResultParentObs.setCreator(user);
-        dstResultParentObs.setPerson(patient);
+        this.dstResultParentObs.setConcept(mu.getConceptDSTResultParent());
+        this.dstResultParentObs.setVoided(false);
+        this.dstResultParentObs.setDateCreated(new Date());
+        this.dstResultParentObs.setCreator(user);
+        this.dstResultParentObs.setPerson(patient);
+        this.dstResultParentObs.setUuid(UUID.randomUUID().toString());
     }
     
     public void setColonies(Obs o){

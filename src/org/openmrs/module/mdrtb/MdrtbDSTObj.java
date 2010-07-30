@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import org.openmrs.Concept;
 import org.openmrs.Obs;
@@ -49,116 +50,128 @@ public class MdrtbDSTObj {
      * @param STR_DIRECT_INDIRECT
      * @param STR_COLONIES_IN_CONTROL
      */
-    public MdrtbDSTObj(String STR_DST_COMPLETE,
-                        String STR_CULTURE_START_DATE,
-                        String STR_RESULT_DATE,
-                        String STR_DATE_RECEIVED, 
-                        String STR_TB_SAMPLE_SOURCE,
-                        String STR_DST_METHOD, 
-                        String STR_TYPE_OF_ORGANISM, 
-                        String STR_TYPE_OF_ORGANISM_NON_CODED,
-                        String STR_DIRECT_INDIRECT, 
-                        String STR_COLONIES_IN_CONTROL, 
-                        String STR_CONCENTRATION, 
-                        String STR_COLONIES,
-                        String STR_DST_PARENT,
-                        String STR_DST_RESULT_PARENT,
-                        String STR_SPUTUM_COLLECTION_DATE, 
-                        Patient patient,
-                        User user){
+    public MdrtbDSTObj(Patient patient,
+                        User user, MdrtbFactory mu){
         
-        drugSensitivityTestComplete.setDateCreated(new Date());
-        drugSensitivityTestComplete.setVoided(false);
-        drugSensitivityTestComplete.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_COMPLETE, new Locale("en", "US")));   
-        drugSensitivityTestComplete.setCreator(user);
-        drugSensitivityTestComplete.setPerson(patient);
-        dstStartDate.setDateCreated(new Date());
-        dstStartDate.setVoided(false);
-        dstStartDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_CULTURE_START_DATE, new Locale("en", "US")));
-        dstStartDate.setCreator(user);
-        dstStartDate.setPerson(patient);
-        dstResultsDate.setDateCreated(new Date());
-        dstResultsDate.setVoided(false);
-        dstResultsDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_RESULT_DATE, new Locale("en", "US")));
-        dstResultsDate.setCreator(user);
-        dstResultsDate.setPerson(patient);
-        dstDateReceived.setDateCreated(new Date());
-        dstDateReceived.setVoided(false);
+        this.drugSensitivityTestComplete.setDateCreated(new Date());
+        this.drugSensitivityTestComplete.setVoided(false);
+        this.drugSensitivityTestComplete.setConcept(mu.getConceptDSTComplete());   
+        this.drugSensitivityTestComplete.setCreator(user);
+        this.drugSensitivityTestComplete.setPerson(patient);
+        this.drugSensitivityTestComplete.setUuid(UUID.randomUUID().toString());
         
-        dstDateReceived.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DATE_RECEIVED, new Locale("en", "US")));
-        dstDateReceived.setCreator(user);
-        dstDateReceived.setPerson(patient);
+        this.dstStartDate.setDateCreated(new Date());
+        this.dstStartDate.setVoided(false);
+        this.dstStartDate.setConcept(mu.getConceptCultureStartDate());
+        this.dstStartDate.setCreator(user);
+        this.dstStartDate.setPerson(patient);
+        this.dstStartDate.setUuid(UUID.randomUUID().toString());
         
-        source.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TB_SAMPLE_SOURCE, new Locale("en", "US")));
-        source.setVoided(false);
-        source.setDateCreated(new Date());
-        source.setCreator(user);
-        source.setPerson(patient);
-        dstMethod.setDateCreated(new Date());
-        dstMethod.setVoided(false);
-        dstMethod.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_METHOD, new Locale("en", "US")));
-        dstMethod.setCreator(user);
-        dstMethod.setPerson(patient);
-        typeOfOrganism.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM, new Locale("en", "US")));
-        typeOfOrganism.setVoided(false);
-        typeOfOrganism.setDateCreated(new Date());
-        typeOfOrganism.setCreator(user);
-        typeOfOrganism.setPerson(patient);
+        this.dstResultsDate.setDateCreated(new Date());
+        this.dstResultsDate.setVoided(false);
+        this.dstResultsDate.setConcept(mu.getConceptResultDate());
+        this.dstResultsDate.setCreator(user);
+        this.dstResultsDate.setPerson(patient);
+        this.dstResultsDate.setUuid(UUID.randomUUID().toString());
         
-        typeOfOrganismNonCoded.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US")));
-        typeOfOrganismNonCoded.setVoided(false);
-        typeOfOrganismNonCoded.setDateCreated(new Date());
-        typeOfOrganismNonCoded.setCreator(user);
-        typeOfOrganismNonCoded.setPerson(patient);
-        directOrIndirect.setDateCreated(new Date());
-        directOrIndirect.setVoided(false);
+        this.dstDateReceived.setDateCreated(new Date());
+        this.dstDateReceived.setVoided(false);   
+        this.dstDateReceived.setConcept(mu.getConceptDateReceived());
+        this.dstDateReceived.setCreator(user);
+        this.dstDateReceived.setPerson(patient);
+        this.dstDateReceived.setUuid(UUID.randomUUID().toString());
         
-        directOrIndirect.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DIRECT_INDIRECT, new Locale("en", "US")));
-        directOrIndirect.setCreator(user);
-        directOrIndirect.setPerson(patient);
-        coloniesInControl.setDateCreated(new Date());
-        coloniesInControl.setVoided(false);
+        this.source.setConcept(mu.getConceptSampleSource());
+        this.source.setVoided(false);
+        this.source.setDateCreated(new Date());
+        this.source.setCreator(user);
+        this.source.setPerson(patient);
+        this.source.setUuid(UUID.randomUUID().toString());
         
-        coloniesInControl.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_COLONIES_IN_CONTROL, new Locale("en", "US")));
-        coloniesInControl.setCreator(user);
-        coloniesInControl.setPerson(patient);
-        dstParentObs.setDateCreated(new Date());
-        dstParentObs.setVoided(false);
-        dstParentObs.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_DST_PARENT, new Locale("en", "US")));
-        dstParentObs.setCreator(user);
-        dstParentObs.setPerson(patient);
-        sputumCollectionDate.setDateCreated(new Date());
-        sputumCollectionDate.setVoided(false);
+        this.dstMethod.setDateCreated(new Date());
+        this.dstMethod.setVoided(false);
+        this.dstMethod.setConcept(mu.getConceptDSTMethod());
+        this.dstMethod.setCreator(user);
+        this.dstMethod.setPerson(patient);
+        this.dstMethod.setUuid(UUID.randomUUID().toString());
         
-        sputumCollectionDate.setConcept(MdrtbUtil.getMDRTBConceptByName(STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US")));
-        sputumCollectionDate.setCreator(user);
-        sputumCollectionDate.setPerson(patient);
+        this.typeOfOrganism.setConcept(mu.getConceptTypeOfOrganism());
+        this.typeOfOrganism.setVoided(false);
+        this.typeOfOrganism.setDateCreated(new Date());
+        this.typeOfOrganism.setCreator(user);
+        this.typeOfOrganism.setPerson(patient);
+        this.typeOfOrganism.setUuid(UUID.randomUUID().toString());
+        
+        this.typeOfOrganismNonCoded.setConcept(mu.getConceptTypeOfOrganismNonCoded());
+        this.typeOfOrganismNonCoded.setVoided(false);
+        this.typeOfOrganismNonCoded.setDateCreated(new Date());
+        this.typeOfOrganismNonCoded.setCreator(user);
+        this.typeOfOrganismNonCoded.setPerson(patient);
+        this.typeOfOrganismNonCoded.setUuid(UUID.randomUUID().toString());
+        
+        this.directOrIndirect.setDateCreated(new Date());
+        this.directOrIndirect.setVoided(false);
+        this.directOrIndirect.setConcept(mu.getConceptDirectIndirect());
+        this.directOrIndirect.setCreator(user);
+        this.directOrIndirect.setPerson(patient);
+        this.directOrIndirect.setUuid(UUID.randomUUID().toString());
+        
+        this.coloniesInControl.setDateCreated(new Date());
+        this.coloniesInControl.setVoided(false);
+        this.coloniesInControl.setConcept(mu.getConceptColoniesInControl());
+        this.coloniesInControl.setCreator(user);
+        this.coloniesInControl.setPerson(patient);
+        this.coloniesInControl.setUuid(UUID.randomUUID().toString());
+        
+        this.dstParentObs.setDateCreated(new Date());
+        this.dstParentObs.setVoided(false);
+        this.dstParentObs.setConcept(mu.getConceptDSTParent());
+        this.dstParentObs.setCreator(user);
+        this.dstParentObs.setPerson(patient);
+        this.dstParentObs.setUuid(UUID.randomUUID().toString());
+        
+        this.sputumCollectionDate.setDateCreated(new Date());
+        this.sputumCollectionDate.setVoided(false); 
+        this.sputumCollectionDate.setConcept(mu.getConceptSputumCollectionDate());
+        this.sputumCollectionDate.setCreator(user);
+        this.sputumCollectionDate.setPerson(patient);
+        this.sputumCollectionDate.setUuid(UUID.randomUUID().toString());
 
         
         AdministrationService as = Context.getAdministrationService();
         String drugList = as.getGlobalProperty("mdrtb.DST_drug_list");
         try {
-            
-           
-                Concept c =  MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"));
+                Concept c =  MdrtbUtil.getMDRTBConceptByName(drugList, new Locale("en", "US"), mu);
                 
                 if (c != null && c.isSet()){
                     List<Concept> drugConceptList = cs.getConceptsByConceptSet(c);
                     for (Concept cChildren:drugConceptList){
-                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, STR_CONCENTRATION, STR_COLONIES, STR_DST_RESULT_PARENT, patient, user);
+                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, patient, user, mu);
                         dstResults.add(mdro);
                     }
                 } else if (c != null){
-                    MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(c, STR_CONCENTRATION, STR_COLONIES,STR_DST_RESULT_PARENT, patient, user);
+                    MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(c, patient, user, mu);
                     dstResults.add(mdro);
                 } else if (c == null){
                     for (StringTokenizer st = new StringTokenizer(drugList, "|"); st.hasMoreTokens(); ) {
                         String s = st.nextToken().trim();
-                        
+                        String concentration = null;
+                        if (s.contains(":")){
+                            String[] splitStr = s.split(":");
+                            s = splitStr[0];
+                            try {
+                                concentration = splitStr[1];
+                            } catch (Exception ex){}    
+                        }
                     
-                        Concept cChildren = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"));
+                        Concept cChildren = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en", "US"), mu);
                         if (cChildren != null){
-                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, STR_CONCENTRATION, STR_COLONIES, STR_DST_RESULT_PARENT, patient, user);
+                        MdrtbDSTResultObj mdro = new MdrtbDSTResultObj(cChildren, patient, user, mu);
+                        if (concentration != null){
+                            try {
+                                mdro.getConcentration().setValueNumeric(Double.valueOf(concentration));
+                            } catch (Exception ex){}    
+                        }    
                         dstResults.add(mdro);
                         }
                     }
@@ -278,6 +291,21 @@ public class MdrtbDSTObj {
     
     public void addDstResult(MdrtbDSTResultObj mdro){
         this.dstResults.add(mdro);
+    }
+    public void removeAllObs(){
+        drugSensitivityTestComplete = null;
+        dstStartDate = null;
+        dstResultsDate = null;
+        dstDateReceived = null;
+        source = null;
+        dstMethod = null;
+        dstResults = null;
+        typeOfOrganism = null;
+        typeOfOrganismNonCoded = null;
+        directOrIndirect = null;
+        coloniesInControl = null;
+        dstParentObs = null;
+        sputumCollectionDate = null; 
     }
     
 }

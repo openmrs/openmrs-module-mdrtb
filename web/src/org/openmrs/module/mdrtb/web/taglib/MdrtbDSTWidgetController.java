@@ -20,8 +20,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 public class MdrtbDSTWidgetController extends TagSupport {
@@ -64,7 +67,8 @@ public class MdrtbDSTWidgetController extends TagSupport {
     
     
     public int doStartTag() {
-
+        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
+        MdrtbFactory mu = ms.getMdrtbFactory();
         StringBuilder ret = new StringBuilder();
         Locale loc = Context.getLocale();
         Locale locUS = new Locale("en");
@@ -106,9 +110,19 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 "|"); st.hasMoreTokens();) {
             String tmp = st.nextToken().trim();
            
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(tmp, new Locale("en", "US"));
-            if (c != null)
-                obsGroupConcepts.add(c.getName(locUS).getName());
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(tmp, mu);
+            if (c != null){
+                c = Context.getConceptService().getConcept(c.getConceptId());
+                Collection<ConceptName> cnsTmp = c.getNames();
+                for (ConceptName cn:cnsTmp){
+                    Collection<ConceptNameTag> tags = cn.getTags();
+                    for (ConceptNameTag cnTag:tags){
+                        cnTag.getTag();
+                    }
+                }
+                obsGroupConcepts.add(c.getBestName(locUS).getName());
+                
+            }    
         }
         
         if (this.toDate == null)
@@ -118,11 +132,11 @@ public class MdrtbDSTWidgetController extends TagSupport {
         
         for (Obs ob : observations) {
             if (ob.isObsGrouping()
-                    && ob.getConcept().getName(locUS).getName().equals(this.obsGroupConceptDST)) {
+                    && ob.getConcept().getBestName(locUS).getName().equals(this.obsGroupConceptDST)) {
                 Set<Obs> tmpSet = ob.getGroupMembers();
                 boolean dateAdded = false;
                 for (Obs oTmp : tmpSet) {
-                    if (this.doesSetContainSubString(oTmp.getConcept().getName(locUS).getName(), obsGroupConcepts) 
+                    if (this.doesSetContainSubString(oTmp.getConcept().getBestName(locUS).getName(), obsGroupConcepts) 
                             && oTmp.isObsGrouping()
                             && oTmp.getObsDatetime().getTime() >= fromDate.getTime()
                             && oTmp.getObsDatetime().getTime() <= toDate.getTime()
@@ -146,8 +160,10 @@ public class MdrtbDSTWidgetController extends TagSupport {
         for (StringTokenizer st = new StringTokenizer(this.concepts, "|"); st
                 .hasMoreTokens();) {
             String conceptString = st.nextToken().trim();
-            Concept c =  MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
+            Concept c =  MdrtbUtil.getConceptFromMDRTBConceptMaps(conceptString, mu);
+            
             if (c != null) {
+                c = Context.getConceptService().getConcept(c.getConceptId());
                 for (Obs obx : observations) {
                     if (obx.getConcept().equals(c) && !obx.getVoided()){
                         if (obx.getValueDatetime() != null){
@@ -185,7 +201,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
         // TODO: allow columnHeaders to be a conceptSet and return all children
         List<ConceptName> tests = new ArrayList<ConceptName>();
         if (this.columnHeaders != null) 
-            tests = this.getColumnHeaderConceptNames(this.columnHeaders, loc);
+            tests = this.getColumnHeaderConceptNames(this.columnHeaders, loc, mu);
 
         /**
          * Here's where the table gets drawn
@@ -215,7 +231,7 @@ public class MdrtbDSTWidgetController extends TagSupport {
                 Integer colIndexCount = 0;
                 
                 //create the row header for each test
-                ret.append("<tr><Th><b>"+ test.getConcept().getName(loc) .getShortestName() + "</b></th>");
+                ret.append("<tr><Th><b>"+ test.getConcept().getBestShortName(Context.getLocale()) + "</b></th>");
 
                 Set<Obs> usedObsThisRow = new HashSet<Obs>();
                 for (int k = 0; k <dates.size(); k++){
@@ -237,16 +253,16 @@ public class MdrtbDSTWidgetController extends TagSupport {
                                                 if (o.getValueCoded()!= null && o.getValueCoded().equals(test.getConcept()) && !usedObs.contains(o) && !o.isVoided()) {
                                                     
 
-                                                    if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), greenSet))
+                                                    if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), greenSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetGreen'  ");
-                                                    else if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), redSet))
+                                                    else if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), redSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetRed'  ");
-                                                    else if (this.doesSetContainSubString(o.getConcept().getName(loc).getName(), yellowSet))
+                                                    else if (this.doesSetContainSubString(o.getConcept().getBestName(loc).getName(), yellowSet))
                                                         ret = ret.insert(ret.length() -1,  " class='widgetYellow'  ");
                                                     else 
                                                         ret = ret.insert(ret.length() -1,  " class='widgetDefault'  ");
                                                     //HERE
-                                                    ret.append("<a class='widgetLinks' style='color:black' href='/openmrs/module/mdrtb/mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getName(loc).getShortestName() + getConcentrationStringForDSTResultObj(o) + "</a>");
+                                                    ret.append("<a class='widgetLinks' style='color:black' href='mdrtbEditTestContainer.form?ObsGroupId=" + oP.getObsId() + "'>" + o.getConcept().getBestShortName(loc).getName() + getConcentrationStringForDSTResultObj(o) + "</a>");
                                                     usedObs.add(o);
                                                     emptyCellTest = false;
                                                     testTmp = true;
@@ -272,9 +288,9 @@ public class MdrtbDSTWidgetController extends TagSupport {
                                 ret.append("<td rowspan='"
                                         + tests.size() + "' class='widgetHeaderRows'>");
                                 
-                                ret.append(os.getConcept().getName(loc).getShortestName());
+                                ret.append(os.getConcept().getBestShortName(loc).getName());
                                 if (os.getValueCoded()!= null)
-                                    ret.append(" " + os.getValueCoded().getName(loc).getShortestName());
+                                    ret.append(" " + os.getValueCoded().getBestShortName(loc).getName());
                                 usedObs.add(os);
                                 
                                 
@@ -480,19 +496,13 @@ public class MdrtbDSTWidgetController extends TagSupport {
         return test;
     }
     private List<ConceptName> getColumnHeaderConceptNames(String nameList,
-            Locale loc) {
-        List<ConceptName> tests = new ArrayList<ConceptName>();
-        for (StringTokenizer st = new StringTokenizer(nameList, "|"); st
-                .hasMoreTokens();) {
-            String conceptString = st.nextToken().trim();
-
-            Concept c = MdrtbUtil.getMDRTBConceptByName(conceptString, new Locale("en", "US"));
-            if (c != null) {
-                //if (tests.contains(c.getName(loc)) == false)  //we need to support multiples
-                    tests.add(c.getName(loc));
-            }
+            Locale loc, MdrtbFactory mu) {
+        List<Concept>  cList = MdrtbUtil.getDstDrugList(false, mu); 
+        List<ConceptName> ret = new ArrayList<ConceptName>();
+        for (Concept c : cList){
+            ret.add(c.getBestShortName(new Locale("en_US")));
         }
-        return tests;
+       return  ret;
     }
 
 
