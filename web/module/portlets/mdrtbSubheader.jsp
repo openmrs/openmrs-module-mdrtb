@@ -60,7 +60,7 @@
 </td>
 <!-- patient search box -->
 <td align="right">
-	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/summary/summary.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </td>
 </tr>
 </table>

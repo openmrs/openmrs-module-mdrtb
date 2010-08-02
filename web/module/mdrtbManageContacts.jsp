@@ -604,7 +604,7 @@
 					</Td>
 					<Td id="contactName_${contact.person.personId}">
 						<c:if test="${contact.isTBPatient}">
-							<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${contact.person.personId}"><span id="spGivenName_${contact.person.personId}">${contact.person.givenName}</span> <span id="spFamilyName_${contact.person.personId}">${contact.person.familyName}</span></a>
+							<a href="${pageContext.request.contextPath}/module/mdrtb/summary/summary.form?patientId=${contact.person.personId}"><span id="spGivenName_${contact.person.personId}">${contact.person.givenName}</span> <span id="spFamilyName_${contact.person.personId}">${contact.person.familyName}</span></a>
 						</c:if>
 						<c:if test="${!contact.isTBPatient}">
 							<c:if test="${contact.isPatient}">
