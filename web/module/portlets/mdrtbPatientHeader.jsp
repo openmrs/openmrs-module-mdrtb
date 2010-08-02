@@ -117,8 +117,6 @@
 				</td>
 			</tr>
 		</table>
-		
-<!--  
 		<table><tr>
 			<td><spring:message code="Patient.lastEncounter"/>:</td>
 			<th>
@@ -224,26 +222,10 @@
 			</table>
 			</c:if>
 			<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.bottomPatientHeader" type="html" parameters="patientId=${model.patient.patientId}" />
-	
--->	    
+		    
 		    <!-- added this in as a hack solution to allow patient flags to appear on patient dashboard -->
 		    <openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterLastEncounter" type="html" parameters="patientId=${model.patient.patientId}" />
-</div>
-
-<div align="left">
-	<ul id="menu">	
-		<li class="first">
-		<a href="${pageContext.request.contextPath}/module/mdrtb/patientChart.form?patientId=${model.patient.patientId}">Overview</a></li>
-		
-		<li <c:if test='<%= request.getRequestURI().contains("list") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${model.patient.patientId}">Specimens</a></li>
-			
-		<li <c:if test='<%= request.getRequestURI().contains("regimen") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${model.patient.patientId}">Regimen</a></li>
-	</ul>
-</div>
-
-<!--  	
+	</div>
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
 			&nbsp;
@@ -260,8 +242,6 @@
 							</span><span id="nextVisitMessage" style="vertical-align:bottom;color:red;font-size:80%;"></span>
 
 	</div>	
-	-->
-	
 	<script type="text/javascript">
 		function showMoreIdentifiers() {
 			if (identifierElement.style.display == '') {
