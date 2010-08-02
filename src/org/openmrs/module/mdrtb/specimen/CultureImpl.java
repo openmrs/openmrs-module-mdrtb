@@ -6,6 +6,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 /**
  * An implementaton of a MdrtbCulture.  This wraps an ObsGroup and provides access to culture
@@ -45,7 +46,7 @@ public class CultureImpl extends TestImpl implements Culture {
 	}
 	
     public Integer getColonies() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), test);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -56,7 +57,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public String getComments() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
     	
     	if(obs == null) {
     		return null;
@@ -67,7 +68,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public Concept getMethod() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod(), test);
     	
     	if (obs == null) {
     		return null;
@@ -78,7 +79,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public Concept getOrganismType() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
     	
     	if (obs == null) {
     		return null;
@@ -89,7 +90,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public String getOrganismTypeNonCoded() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
     	
     	if (obs == null) {
     		return null;
@@ -100,7 +101,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public Concept getResult() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
     	
     	if (obs == null) {
     		return null;
@@ -111,7 +112,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public void setColonies(Integer colonies) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && colonies == null) {
@@ -137,7 +138,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }   
 
     public void setComments(String comments) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
     	
     	// if this obs has not been created, and there is no data to add, do nothing
     	if (obs == null && StringUtils.isBlank(comments)) {
@@ -158,7 +159,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public void setMethod(Concept method) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureMethod(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
@@ -184,7 +185,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public void setOrganismType(Concept organismType) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
@@ -210,7 +211,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
     
     public void setOrganismTypeNonCoded(String organismType) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
@@ -236,7 +237,7 @@ public class CultureImpl extends TestImpl implements Culture {
     }
 
     public void setResult(Concept result) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptCultureResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && result == null) {

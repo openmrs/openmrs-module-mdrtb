@@ -10,6 +10,7 @@ import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 
 public class DstResultImpl implements DstResult {
@@ -54,7 +55,7 @@ public class DstResultImpl implements DstResult {
 	
 	
     public Integer getColonies() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), dstResult);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -65,7 +66,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public Double getConcentration() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptConcentration());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptConcentration(), dstResult);
     	
     	if (obs == null) {
     		return null;
@@ -104,7 +105,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public void setColonies(Integer colonies) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColonies());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), dstResult);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && colonies == null) {
@@ -130,7 +131,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public void setConcentration(Double concentration) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptConcentration());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptConcentration(), dstResult);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && concentration == null) {
@@ -231,23 +232,8 @@ public class DstResultImpl implements DstResult {
     /**
 	 * Utility methods 
 	 */
+
 	
-	/**
-	 * Iterates through all the obs in the test obs group and
-	 * returns the first one that who concept matches the specified concept
-	 * Returns null if obs not found
-	 */
-    protected Obs getObsFromObsGroup(Concept concept) {
-    	if (dstResult.getGroupMembers() != null) {
-    		for(Obs obs : dstResult.getGroupMembers()) {
-    			if (!obs.isVoided() && obs.getConcept().equals(concept)) {
-    				return obs;
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
     /**
      * Initializes the resultSet property, which stores all the possible result types
      * for a DST result

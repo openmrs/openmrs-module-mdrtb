@@ -2,10 +2,10 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 
-import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
 
@@ -42,7 +42,7 @@ public abstract class TestImpl implements Test {
 	abstract public String getComments();
 	
 	public Date getDateOrdered() {
-		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
+		Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered(), test);
 	    	
 		if (obs == null) {
 			return null;
@@ -53,7 +53,7 @@ public abstract class TestImpl implements Test {
 	}
 	    
 	public Date getDateReceived() {
-	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateReceived(), test);
 	    	
 	    if (obs == null) {
 	    	return null;
@@ -68,7 +68,7 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public Date getResultDate() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptResultDate());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptResultDate(), test);
     	
     	if (obs == null) {
     		return null;
@@ -79,7 +79,7 @@ public abstract class TestImpl implements Test {
     }
 	
 	public Date getStartDate() {
-		Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptStartDate());
+		Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptStartDate(), test);
 		
 		if (obs == null) {
 			return null;
@@ -107,7 +107,7 @@ public abstract class TestImpl implements Test {
 	 abstract public void setComments(String comments);
 	
 	 public void setDateOrdered(Date dateOrdered) {
-	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered());
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered(), test);
 	    
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && dateOrdered == null) {
@@ -134,7 +134,7 @@ public abstract class TestImpl implements Test {
 	}
 	    
 	 public void setDateReceived(Date dateReceived) {
-	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDateReceived());
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateReceived(), test);
 		
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && dateReceived == null) {
@@ -173,7 +173,7 @@ public abstract class TestImpl implements Test {
 	 }
 
 	 public void setResultDate(Date resultDate) {
-	    Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptResultDate());
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptResultDate(), test);
 	    
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && resultDate == null) {
@@ -199,7 +199,7 @@ public abstract class TestImpl implements Test {
 	 }
 	 
 	 public void setStartDate(Date startDate) {
-		 Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptStartDate());
+		 Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptStartDate(), test);
 		 
 		 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && startDate == null) {
@@ -282,23 +282,7 @@ public abstract class TestImpl implements Test {
 	 /**
 	  * Utility methods 
 	  */
-		
-	 /**
-	  * Iterates through all the obs in the test obs group and
-	  * returns the first one that who concept matches the specified concept
-	  * Returns null if obs not found
-	  */
-	 protected Obs getObsFromObsGroup(Concept concept) {
-	    if (test.getGroupMembers() != null) {
-	    	for(Obs obs : test.getGroupMembers()) {
-	    		if (!obs.isVoided() && obs.getConcept().equals(concept)) {
-	    			return obs;
-	    		}
-	    	}
-	    }
-	    return null;
-	 }
-	    
+			    
 	 /**
 	  * Determines the current status of this test by examines the
 	  * values of the various date fields

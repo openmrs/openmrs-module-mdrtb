@@ -911,4 +911,22 @@ public class MdrtbUtil {
               }    
           }
       } 
+      
+      /**
+  	 * Iterates through all the obs in the test obs group and
+  	 * returns the first one that who concept matches the specified concept
+  	 * Returns null if obs not found
+  	 * @param group TODO
+  	 */
+      public static Obs getObsFromObsGroup(Concept concept, Obs group) {
+      	if (group.getGroupMembers() != null) {
+      		for(Obs obs : group.getGroupMembers()) {
+      			// need to check for voided obs here because getGroupMembers returns voided obs
+      			if (!obs.isVoided() && obs.getConcept().equals(concept)) {
+      				return obs;
+      			}
+      		}
+      	}
+      	return null;
+      }
 }

@@ -6,6 +6,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 /**
  * An implementaton of a MdrtbSmear.  This wraps an ObsGroup and provides access to smear
@@ -46,7 +47,7 @@ public class SmearImpl extends TestImpl implements Smear {
 	}
 	
     public Integer getBacilli() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptBacilli(), test);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -57,7 +58,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
     
     public String getComments() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
     	
     	if(obs == null) {
     		return null;
@@ -68,7 +69,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
       
     public Concept getMethod() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod(), test);
     	
     	if (obs == null) {
     		return null;
@@ -79,7 +80,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
     
     public Concept getResult() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
     	
     	if (obs == null) {
     		return null;
@@ -90,7 +91,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
 
     public void setBacilli(Integer bacilli) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptBacilli());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptBacilli(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && bacilli == null) {
@@ -116,7 +117,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }   
 
     public void setComments(String comments) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
     	
     	// if this obs has not been created, and there is no data to add, do nothing
     	if (obs == null && StringUtils.isBlank(comments)) {
@@ -137,7 +138,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
     
     public void setMethod(Concept method) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod(), test);
     	
     	 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
@@ -163,7 +164,7 @@ public class SmearImpl extends TestImpl implements Smear {
     }
 
     public void setResult(Concept result) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptSmearResult());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
     	
     	 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && result == null) {

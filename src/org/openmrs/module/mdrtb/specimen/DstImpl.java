@@ -13,6 +13,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 /**
  * An implementation of a MdrtbDst.  This wraps an ObsGroup and provides access to dst
@@ -68,7 +69,7 @@ public class DstImpl extends TestImpl implements Dst {
 	}
 	
     public Integer getColoniesInControl() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl(), test);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -83,7 +84,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public Boolean getDirect() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect(), test);
     	
     	if (obs == null) {
     		return null;
@@ -94,7 +95,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public Concept getMethod() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod(), test);
     	
     	if (obs == null) {
     		return null;
@@ -105,7 +106,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public Concept getOrganismType() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
     	
     	if (obs == null) {
     		return null;
@@ -116,7 +117,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public String getOrganismTypeNonCoded() {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
     	
     	if (obs == null) {
     		return null;
@@ -182,7 +183,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public void setColoniesInControl(Integer coloniesInControl) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && coloniesInControl == null) {
@@ -212,7 +213,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public void setDirect(Boolean direct) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && direct == null) {
@@ -239,7 +240,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public void setMethod(Concept method) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
@@ -266,7 +267,7 @@ public class DstImpl extends TestImpl implements Dst {
 
 
     public void setOrganismType(Concept organismType) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
@@ -292,7 +293,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 	
     public void setOrganismTypeNonCoded(String organismType) {
-    	Obs obs = getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded());
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
