@@ -65,7 +65,7 @@ public class BinaryDataHandler extends AbstractHandler implements ComplexObsHand
 			obs.setComplexData(new ComplexData(originalFilename, new FileInputStream(file)));
 		}
 		catch (Exception e) {
-			throw new APIException("An error occurred while tryint to get binary complex obs.", e);
+			throw new APIException("An error occurred while trying to get binary complex obs.", e);
 		}
 		return obs;
 	}

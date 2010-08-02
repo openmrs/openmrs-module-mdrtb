@@ -41,8 +41,13 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 	// create a scanned lab report given an existing obs
 	public ScannedLabReportImpl(Obs report) {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
-		// TODO: figure out to handle an error here more gracefully!
-		this.report = Context.getObsService().getComplexObs(report.getId(), OpenmrsConstants.RAW_VIEW);
+		
+		try {
+			this.report = Context.getObsService().getComplexObs(report.getId(), OpenmrsConstants.RAW_VIEW);
+		}
+		catch(Exception e) {
+			throw new RuntimeException ("Unable to retrieve scanned lab report. File may be missing.", e);
+		}
 	}
 
 	public Object getScannedLabReport() {
@@ -63,8 +68,6 @@ public class ScannedLabReportImpl implements ScannedLabReport {
     
     public void setFile(MultipartFile file) {
     	ComplexData data = null;
-    	
-    	log.error("And the filename is " + file.getOriginalFilename().toString());
     	
         try {
 	        data = new ComplexData(file.getOriginalFilename(), file.getInputStream());

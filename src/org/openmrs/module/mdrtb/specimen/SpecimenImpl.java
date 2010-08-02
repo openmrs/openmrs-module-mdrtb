@@ -241,7 +241,13 @@ public class SpecimenImpl implements Specimen {
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
 				if (obs.getConcept().equals(mdrtbFactory.getConceptScannedLabReport())) {
-					reports.add(new ScannedLabReportImpl(obs));
+					// TODO: I've been unable to make this "soft" fail--if a scanned lab report is missing, it hangs the system
+					try {
+						reports.add(new ScannedLabReportImpl(obs));
+					}
+					catch(Exception e) {
+						log.error("Unable to instantiate lab report:", e);
+					}
 				}
 			}
 		}
