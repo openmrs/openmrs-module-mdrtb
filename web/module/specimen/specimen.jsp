@@ -466,7 +466,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:if>
 
 <tr>
-<td><nobr>Comments:</nobr></td><td colspan="3"><nobr>${test.comments}</nobr></td>
+<td><nobr>Comments:</nobr></td><td colspan="3">${test.comments}</td>
 <td width="100%">&nbsp;</td>
 </tr>
 
