@@ -143,20 +143,16 @@
 				<c:if test="${empty model.obj.patientProgram.dateCompleted}">
 					<td colspan="2"></td>
 				</c:if>
-			</tr>	
-		</table>
-		<table>	
-			<tr>
 				<td><spring:message code="mdrtb.treatmentstartdateLC" />:
 				</td>
-				<th colspan="3"><openmrs:formatDate date="${model.obj.treatmentStartDate.valueDatetime}" type="medium" />
+				<th><openmrs:formatDate date="${model.obj.treatmentStartDate.valueDatetime}" type="medium" />
 				</th>
-			</tr>
+ 			</tr>
 		</table>
 		
 			<c:if test="${!empty model.obj.patientProgram}">
 			<table>	
-			<tr>
+			<tr>  
 				<td ><spring:message code="mdrtb.culturestatus" />:
 				</td>
 				<th colspan="3">
