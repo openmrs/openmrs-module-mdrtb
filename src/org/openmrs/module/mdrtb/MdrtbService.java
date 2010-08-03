@@ -22,6 +22,7 @@ import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.SpecimenConstants.BacteriologyResult;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -297,5 +298,16 @@ public interface MdrtbService extends OpenmrsService {
      *
      */
     public void resetColorMapCache();
+    
+    /**
+     * Returns the display associated with a given location
+     * Used to display location codes in the patient chart
+     */
+    public String getDisplayCodeForLocation(Location location);
+    
+    /**
+     * Maps a concept to a specific BacteriologyResult
+     */
+    public BacteriologyResult getBacteriologyResultForConcept(Concept concept);
 }
 

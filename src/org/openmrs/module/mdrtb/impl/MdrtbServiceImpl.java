@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -38,6 +39,7 @@ import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.mdrtb.specimen.SpecimenConstants.BacteriologyResult;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -52,6 +54,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	private static List<Locale> localeSetUsedInDB = new ArrayList<Locale>();
 	
 	private Map<Integer,String> colorMapCache = null;
+	
+	private Map<Integer,String> locationToDisplayCodeCache = null;
+	
+	private Map<Integer,String> conceptToBacteriologyResultCache = null;
+	
 	
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
@@ -468,19 +475,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     }
     
     public String getColorForConcept(Concept concept) {
-    	
     	// initialize the cache if need be
     	if(colorMapCache == null) {
-    		colorMapCache = new HashMap<Integer,String>();
-    		
-    		String colorMap = Context.getAdministrationService().getGlobalProperty("mdrtb.colorMap");
-    	  	
-        	if(colorMap != null) {    	
-        		for(String mapping : colorMap.split("\\|")) {
-        			String[] mappingFields = mapping.split(":");
-        			colorMapCache.put(Integer.valueOf(mappingFields[0]), mappingFields[1]);
-        		}
-        	}
+    		colorMapCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.colorMap"));
     	}
     	
     	return colorMapCache.get(concept.getId());
@@ -490,8 +487,63 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	colorMapCache = null;
     }
     
+    // TODO: should this really run the display code through message.properties for localization (probably not, since locations are proper names)
+    public String getDisplayCodeForLocation(Location location) {
+    	// initialize the cache if need be 
+    	if(locationToDisplayCodeCache == null) {
+    		locationToDisplayCodeCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.locationToDisplayCodeMap"));
+    	}
+    	
+    	return locationToDisplayCodeCache.get(location.getId());
+    }
+    
+    public BacteriologyResult getBacteriologyResultForConcept(Concept concept) {
+    	// initialize the cache if need be 
+    	if(conceptToBacteriologyResultCache == null) {
+    		conceptToBacteriologyResultCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.conceptToBacteriologyResultMap"));
+    	}
+    	
+    	String result = conceptToBacteriologyResultCache.get(concept.getId());
+    	
+    	if("POSITIVE".equals(result)) {
+    		return BacteriologyResult.POSITIVE;
+    	}
+    	else if("NEGATIVE".equals(result)) {
+    		return BacteriologyResult.NEGATIVE;
+    	}
+    	else if("CONTAMINATED".equals(result)) {
+    		return BacteriologyResult.CONTAMINATED;
+    	}
+    	else if("SCANTY".equals(result)) {
+    		return BacteriologyResult.SCANTY;		
+    	}
+    	else if("PENDING".equals(result)) {
+    		return BacteriologyResult.PENDING;
+    	}
+    	else {
+    		return null;
+    	}
+    }
+    
 	/**
 	 * Utility functions
 	 */
 	
+    
+    private Map<Integer,String> loadCache(String mapAsString) {
+    	Map<Integer,String> map = new HashMap<Integer,String>();
+    	
+    	if(StringUtils.isNotBlank(mapAsString)) {    	
+    		for(String mapping : mapAsString.split("\\|")) {
+    			String[] mappingFields = mapping.split(":");
+    			map.put(Integer.valueOf(mappingFields[0]), mappingFields[1]);
+    		}
+    	}
+    	else {
+    		// TODO: make this error catching a little more elegant?
+    		throw new RuntimeException("Unable to load cache, cache string is null. Is required global property missing?");
+    	}
+    	
+    	return map;
+    }
 }

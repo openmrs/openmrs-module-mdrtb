@@ -1,31 +1,33 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
-import org.openmrs.module.mdrtb.specimen.Smear;
+import java.util.List;
+
+import org.openmrs.module.mdrtb.specimen.Bacteriology;
 
 
 public class SmearCellTag extends AbstractBacteriologyCellTag {
 
     private static final long serialVersionUID = 6971553873382451091L;
 
-    private Smear smear;
+    private List<Bacteriology> smears;
 
     public int doStartTag() {
-    	renderCell(smear, smear.getResult());
+    	renderCell(smears);
     	return SKIP_BODY;
     }
     
     
     public int doEndTag() {
-    	smear = null;
+    	smears = null;
     	return EVAL_PAGE;
     }
     
     
-	public void setSmear(Smear smear) {
-	    this.smear = smear;
+	public void setSmears(List<Bacteriology> smears) {
+	    this.smears = smears;
     }
 
-	public Smear getSmear() {
-	    return smear;
+	public List<Bacteriology> getSmears() {
+	    return smears;
     }
 }

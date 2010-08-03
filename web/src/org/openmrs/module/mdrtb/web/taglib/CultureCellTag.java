@@ -1,35 +1,37 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
-import org.openmrs.module.mdrtb.specimen.Culture;
+import java.util.List;
+
+import org.openmrs.module.mdrtb.specimen.Bacteriology;
 
 
 public class CultureCellTag extends AbstractBacteriologyCellTag {
 
     private static final long serialVersionUID = 6971553873382451091L;
 
-    private Culture culture;
+    private List<Bacteriology> cultures;
 
     public int doStartTag() {
-    	renderCell(culture, culture.getResult());
+    	renderCell(cultures);
     	return SKIP_BODY;
     }
     
     
     public int doEndTag() {
-    	culture = null;
+    	cultures = null;
     	return EVAL_PAGE;
     }
 
 
 	
-    public Culture getCulture() {
-    	return culture;
+    public List<Bacteriology> getCultures() {
+    	return cultures;
     }
 
 
 	
-    public void setCulture(Culture culture) {
-    	this.culture = culture;
+    public void setCultures(List<Bacteriology> cultures) {
+    	this.cultures = cultures;
     }
 
 

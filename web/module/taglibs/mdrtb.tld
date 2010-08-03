@@ -450,7 +450,7 @@
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.SmearCellTag</tag-class>
 	<body-content>jsp</body-content>
 	<attribute>
-		<name>smear</name>
+		<name>smears</name>
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
@@ -464,7 +464,7 @@
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.CultureCellTag</tag-class>
 	<body-content>jsp</body-content>
 	<attribute>
-		<name>culture</name>
+		<name>cultures</name>
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>

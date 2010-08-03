@@ -12,7 +12,7 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
  * An implementaton of a MdrtbCulture.  This wraps an ObsGroup and provides access to culture
  * data within the obsgroup.
  */
-public class CultureImpl extends TestImpl implements Culture {
+public class CultureImpl extends BacteriologyImpl implements Culture {
 
 	public CultureImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -97,17 +97,6 @@ public class CultureImpl extends TestImpl implements Culture {
     	}
     	else {
     		return obs.getValueText();
-    	}
-    }
-    
-    public Concept getResult() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
-    	
-    	if (obs == null) {
-    		return null;
-    	}
-    	else {
-    		return obs.getValueCoded();
     	}
     }
     
@@ -234,31 +223,5 @@ public class CultureImpl extends TestImpl implements Culture {
 		
 		// now save the value
 		obs.setValueText(organismType);
-    }
-
-    public void setResult(Concept result) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptCultureResult(), test);
-    	
-    	// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && result == null) {
-			return;
-		}
-    	
-		// if we are trying to set the obs to null, simply void the obs
-		if(result == null && StringUtils.isBlank(obs.getComment())) {  // only void if there are no comments as well
-			obs.setVoided(true);
-			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			return;
-		}
-		
-    	// initialize the obs if we need to
-		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptCultureResult(), test.getObsDatetime(), test.getLocation());
-			obs.setEncounter(test.getEncounter());
-			test.addGroupMember(obs);
-		}
-		
-		// now save the data
-		obs.setValueCoded(result);
     }
 }

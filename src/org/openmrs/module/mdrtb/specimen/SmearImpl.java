@@ -12,7 +12,7 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
  * An implementaton of a MdrtbSmear.  This wraps an ObsGroup and provides access to smear
  * data within the obsgroup.
  */
-public class SmearImpl extends TestImpl implements Smear {
+public class SmearImpl extends BacteriologyImpl implements Smear {
 	
 	public SmearImpl() {
 		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
@@ -70,17 +70,6 @@ public class SmearImpl extends TestImpl implements Smear {
       
     public Concept getMethod() {
     	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod(), test);
-    	
-    	if (obs == null) {
-    		return null;
-    	}
-    	else {
-    		return obs.getValueCoded();
-    	}
-    }
-    
-    public Concept getResult() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
     	
     	if (obs == null) {
     		return null;
@@ -161,32 +150,6 @@ public class SmearImpl extends TestImpl implements Smear {
 		
 		// now save the value
 		obs.setValueCoded(method);
-    }
-
-    public void setResult(Concept result) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
-    	
-    	 // if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && result == null) {
-			return;
-		}
-    	
-		// if we are trying to set the obs to null, simply void the obs
-		if(result == null && StringUtils.isBlank(obs.getComment())) {  // we also need to make sure that there is no comment on the obs in this case
-			obs.setVoided(true);
-			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			return;
-		}
-		
-    	// initialize the obs if we need to
-		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearResult(), test.getObsDatetime(), test.getLocation());
-			obs.setEncounter(test.getEncounter());
-			test.addGroupMember(obs);
-		}
-		
-		// now save the data
-		obs.setValueCoded(result);
     }
 }
 

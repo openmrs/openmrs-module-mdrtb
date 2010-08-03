@@ -124,8 +124,8 @@
 <tr>
 <td class="chartCell">Month</td>
 <td class="chartCell">Date collected</td>
-<td class="chartCell" style="width:50px">Smears</td>
-<td class="chartCell" style="width:50px">Cultures</td>
+<td class="chartCell" style="width:80px">Smears</td>
+<td class="chartCell" style="width:80px">Cultures</td>
 <td class="chartCell">Germ</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
@@ -155,9 +155,7 @@
 			<td class="chartCell"><c:if test="${!empty specimen.smears}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
-				<c:forEach var="smear" items="${specimen.smears}">	
-					<mdrtb:smearCell smear="${smear}"/>
-				</c:forEach>
+					<mdrtb:smearCell smears="${specimen.smears}"/>
 				</tr>
 				</table>
 			</c:if></td> 
@@ -165,9 +163,7 @@
 			<td class="chartCell"><c:if test="${!empty specimen.cultures}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
-				<c:forEach var="culture" items="${specimen.cultures}">	
-					<mdrtb:cultureCell culture="${culture}"/>
-				</c:forEach>
+					<mdrtb:cultureCell cultures="${specimen.cultures}"/>
 				</tr>
 				</table>
 			</c:if></td> 
