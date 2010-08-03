@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,8 +13,6 @@ import org.openmrs.PatientProgram;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Dst;
-import org.openmrs.module.mdrtb.specimen.DstResult;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 
 
@@ -108,37 +105,6 @@ public class PatientChartFactory {
 	
 	private List<Concept> getDrugTypesForChart(PatientChart patientChart) {
 		// get all the possible drug types to display--this method also returns them in the order we want to display them
-		List<Concept> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
-		
-		// in this set we will all the drug types we want to display
-		List<Concept> drugTypesToDisplay = new LinkedList<Concept>();
-		
-		// get all the existing drugs in the specimen
-		Map<String,PatientChartRecord> records = patientChart.getRecords();
-		for(String key : records.keySet()) {
-			for(Specimen specimen : records.get(key).getSpecimens()) {
-				for(Dst dst : specimen.getDsts()) {
-					for(DstResult dstResult : dst.getResults()) {	
-						if(dstResult.getDrug() != null) {
-							drugTypesToDisplay.add(dstResult.getDrug());
-						}
-					}
-				}
-			}
-		}
-	
-		// now get all the first line drugs, because we want to display them no matter what
-		// TODO: move this fetch to the Mdrtb Service?  Something else?
-		Concept firstLineTBDrugs = Context.getService(MdrtbService.class).getMdrtbFactory().getConceptFirstLineTBDrugs();
-		for(Concept drug : Context.getConceptService().getConceptsByConceptSet(firstLineTBDrugs)) {
-			drugTypesToDisplay.add(drug);
-		}
-		
-		
-		// only keep the drug types that are in our drug types to display
-		// note that we need to return this list (and not just the drugTypesToDisplay) because it holds the drugs in the proper order
-		drugTypes.retainAll(drugTypesToDisplay);
-		
-		return drugTypes;
+		return Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
 	}
 }
