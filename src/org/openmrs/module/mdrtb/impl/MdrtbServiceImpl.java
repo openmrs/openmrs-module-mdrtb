@@ -20,7 +20,6 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
 import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
@@ -29,8 +28,7 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.openmrs.module.mdrtb.patientchart.PatientChart;
-import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
+import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -98,6 +96,24 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) {
 		return dao.getConceptWords(phrase, locales);
 	}
+	
+	public MdrtbPatientWrapper getMdrtbPatient(Integer patientId) {
+		if(patientId == null) {
+			log.error("Unable to create MdrtbPatient, patient is null");
+			return null;
+		}
+		
+		Patient patient = Context.getPatientService().getPatient(patientId);
+		
+		if(patient == null) {
+			log.error("Unable to create MdrtbPatient, no Patient with patient ID " + patientId);
+			return null;
+		}
+		else {
+			return new MdrtbPatientWrapper(patient);
+		}
+	}
+    
 	
 	public Specimen createSpecimen(Patient patient) {
 		// return null if the patient is null
@@ -337,39 +353,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 	}
 	
-	public PatientChart getPatientChart(Integer patientId) {
-		
-		Patient patient = Context.getPatientService().getPatient(patientId);
-		
-		if(patient == null) {
-			log.warn("Unable to fetch patient chart, no patient with Id " + patientId);
-			return null;
-		}
-		else {
-			PatientChartFactory factory = new PatientChartFactory();
-			return factory.createPatientChart(patient);
-		}
-	}
-	
-	public List<PatientProgram> getMdrtbPrograms(Integer patientId) {
-		
-		Patient patient = Context.getPatientService().getPatient(patientId);
-		
-		if(patient == null) {
-			log.warn("Unable to fetch patient mdrtb programs, no patient with Id " + patientId);
-			return null;
-		}
-		else {
-			Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
-			return Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtbProgram, null, null, null, null, false);
-		}
-	}
-	
-	public void saveMdrtbPrograms(List<PatientProgram> mdrtbPrograms) {
-		for(PatientProgram program : mdrtbPrograms) {
-			Context.getProgramWorkflowService().savePatientProgram(program);
-		}
-	}
+    public Program getMdrtbProgram() {
+    	return Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+    }
 	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return getMdrtbFactory().getConceptSmearResult().getAnswers();

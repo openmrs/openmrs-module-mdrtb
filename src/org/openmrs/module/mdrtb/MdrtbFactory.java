@@ -1232,9 +1232,10 @@ public final class MdrtbFactory {
     /**
      * 
      * Returns the mdrtb program name from global properties
-     * 
+     * (replaced with getMdrtbProgram in MdrtbService)
      * @return
      */
+    @Deprecated
     public Program getMDRTBProgram(){
         AdministrationService as = Context.getAdministrationService();
         String programString = as.getGlobalProperty("mdrtb.program_name");

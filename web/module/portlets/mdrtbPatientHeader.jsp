@@ -8,11 +8,11 @@
 		<div id="patientHeaderPatientName">${model.patient.personName}</div>
 		<div id="patientHeaderPreferredIdentifier">
 			<c:if test="${fn:length(model.patient.activeIdentifiers) > 0}">
-				<c:if test="${!empty obj.patientIdentifier}">
-					<span class="patientHeaderPatientIdentifier"><span id="patientHeaderPatientIdentifierType">${obj.patientIdentifier.identifierType.name}:</span> ${obj.patientIdentifier.identifier}</span>
-					<c:set var="mdrtbId" scope="page" value="${obj.patientIdentifier}" />
+				<c:if test="${!empty model.obj.patientIdentifier}">
+					<span class="patientHeaderPatientIdentifier"><span id="patientHeaderPatientIdentifierType">${model.obj.patientIdentifier.identifierType.name}:</span> ${model.obj.patientIdentifier.identifier}</span>
+					<c:set var="mdrtbId" scope="page" value="${model.obj.patientIdentifier}" />
 				</c:if>
-				<c:if test="${empty obj.patientIdentifier}">
+				<c:if test="${empty model.obj.patientIdentifier}">
 					<c:forEach var="identifier" items="${model.patient.activeIdentifiers}" begin="0" end="0">
 						<span class="patientHeaderPatientIdentifier"><span id="patientHeaderPatientIdentifierType">${identifier.identifierType.name}<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterPatientHeaderPatientIdentifierType" type="html" parameters="identifierLocation=${identifier.location.name}"/>:</span> ${identifier.identifier}</span>
 					</c:forEach>
@@ -132,15 +132,15 @@
 			<tr>
 				<td><spring:message code="mdrtb.mdrtbprogramstartdateLC" />:
 				</td>
-				<th><openmrs:formatDate date="${obj.patientProgram.dateEnrolled}" type="medium"/>
+				<th><openmrs:formatDate date="${model.obj.patientProgram.dateEnrolled}" type="medium"/>
 				</th>
-				<c:if test="${!empty obj.patientProgram.dateCompleted}">
+				<c:if test="${!empty model.obj.patientProgram.dateCompleted}">
 					<td><spring:message code="mdrtb.mdrtbprogramstopdate" />:
 					</td>
-					<th><openmrs:formatDate date="${obj.patientProgram.dateCompleted}" type="medium"/>
+					<th><openmrs:formatDate date="${model.obj.patientProgram.dateCompleted}" type="medium"/>
 					</th>
 				</c:if>
-				<c:if test="${empty obj.patientProgram.dateCompleted}">
+				<c:if test="${empty model.obj.patientProgram.dateCompleted}">
 					<td colspan="2"></td>
 				</c:if>
 			</tr>	
@@ -149,12 +149,12 @@
 			<tr>
 				<td><spring:message code="mdrtb.treatmentstartdateLC" />:
 				</td>
-				<th colspan="3"><openmrs:formatDate date="${obj.treatmentStartDate.valueDatetime}" type="medium" />
+				<th colspan="3"><openmrs:formatDate date="${model.obj.treatmentStartDate.valueDatetime}" type="medium" />
 				</th>
 			</tr>
 		</table>
 		
-			<c:if test="${!empty obj.patientProgram}">
+			<c:if test="${!empty model.obj.patientProgram}">
 			<table>	
 			<tr>
 				<td ><spring:message code="mdrtb.culturestatus" />:
@@ -162,30 +162,30 @@
 				<th colspan="3">
 					
 					<c:set var="winningDate" scope="page" value="0" />
-					<c:if test="${!empty obj.cultureConversion}">
-							<c:if test="${empty obj.cultureReconversion}">
+					<c:if test="${!empty model.obj.cultureConversion}">
+							<c:if test="${empty model.obj.cultureReconversion}">
 								<c:set var="winningDate" scope="page" value="1" />
 							</c:if>
-							<c:if test="${!empty obj.cultureReconversion}">
-								<c:if test = "${obj.cultureReconversion.valueDatetime.time < obj.cultureConversion.valueDatetime.time}">
+							<c:if test="${!empty model.obj.cultureReconversion}">
+								<c:if test = "${model.obj.cultureReconversion.valueDatetime.time < model.obj.cultureConversion.valueDatetime.time}">
 									<c:set var="winningDate" scope="page" value="1" />
 								</c:if>
-								<c:if test = "${obj.cultureConversion.valueDatetime.time < obj.cultureReconversion.valueDatetime.time }">
+								<c:if test = "${model.obj.cultureConversion.valueDatetime.time < model.obj.cultureReconversion.valueDatetime.time }">
 									<c:set var="winningDate" scope="page" value="2" />
 								</c:if>
 							</c:if>
 					</c:if>
-					<c:if test="${empty obj.cultureConversion}">
-						<c:if test="${!empty obj.cultureReconversion}">
+					<c:if test="${empty model.obj.cultureConversion}">
+						<c:if test="${!empty model.obj.cultureReconversion}">
 							<c:set var="winningDate" scope="page" value="2" />
 						</c:if>	
 					</c:if>
 					
 					<c:if test="${winningDate == 0}">
-						<c:if test="${fn:contains(obj.cultureStatus.state, 'NONE')}">
+						<c:if test="${fn:contains(model.obj.cultureStatus.state, 'NONE')}">
 							<B><spring:message code="mdrtb.none" /></B>
 						</c:if>
-						<c:if test="${!fn:contains(obj.cultureStatus.state, 'NONE')}">
+						<c:if test="${!fn:contains(model.obj.cultureStatus.state, 'NONE')}">
 							<span style="color:red;"><B><spring:message code="mdrtb.unconverted" /></B>	</span>
 						</c:if>
 					</c:if>
@@ -201,22 +201,22 @@
 			</tr>
 			</table>
 			</c:if>
-			<c:if test="${!empty obj.cultureConversion}">
+			<c:if test="${!empty model.obj.cultureConversion}">
 			<table>	
 			<tr>
 				<td ><spring:message code="mdrtb.cultureconversiondate" />:
 				</td>
-				<th colspan="3"><openmrs:formatDate date="${obj.cultureConversion.valueDatetime}" type="medium" />
+				<th colspan="3"><openmrs:formatDate date="${model.obj.cultureConversion.valueDatetime}" type="medium" />
 				</th>
 			</tr>
 			</table>
 			</c:if>
-			<c:if test="${!empty obj.cultureReconversion}">
+			<c:if test="${!empty model.obj.cultureReconversion}">
 			<table>	
 			<tr>
 				<td ><spring:message code="mdrtb.culturereconversiondate" />:
 				</td>
-				<th colspan="3"><openmrs:formatDate date="${obj.cultureReconversion.valueDatetime}" type="medium" />
+				<th colspan="3"><openmrs:formatDate date="${model.obj.cultureReconversion.valueDatetime}" type="medium" />
 				</th>
 			</tr>
 			</table>
@@ -226,22 +226,27 @@
 		    <!-- added this in as a hack solution to allow patient flags to appear on patient dashboard -->
 		    <openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterLastEncounter" type="html" parameters="patientId=${model.patient.patientId}" />
 	</div>
+
+<!--  
 	<div style="" nowrap>		
 		<openmrs:hasPrivilege privilege="Edit Patients">
 			&nbsp;
-			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
-			<a href="${pageContext.request.contextPath}/admin/patients/newPatient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
-			<a href="${pageContext.request.contextPath}/admin/patients/patient.form?patientId=${obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${model.obj.patient.patientId}"><spring:message code="mdrtb.patientdashboardview" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/newPatient.form?patientId=${model.obj.patient.patientId}"><spring:message code="mdrtb.editpatientshortform" /></a>&nbsp;&nbsp;
+			<a href="${pageContext.request.contextPath}/admin/patients/patient.form?patientId=${model.obj.patient.patientId}"><spring:message code="mdrtb.editpatientlongform" /></a>&nbsp;&nbsp;
 		</openmrs:hasPrivilege>
 			 | &nbsp;&nbsp;<spring:message code="mdrtb.nextvisit" />:
 
-							<input type="text" name="nextscheduledvisit" id="nextscheduledvisit" value='<c:if test="${!empty obj.nextScheduledVisit}"><openmrs:formatDate date="${obj.nextScheduledVisit.valueDatetime}" format="${dateFormat}"/></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()" onchange="javascript:showNextVisitDiv(this)"/>
+							<input type="text" name="nextscheduledvisit" id="nextscheduledvisit" value='<c:if test="${!empty model.obj.nextScheduledVisit}"><openmrs:formatDate date="${model.obj.nextScheduledVisit.valueDatetime}" format="${dateFormat}"/></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()" onchange="javascript:showNextVisitDiv(this)"/>
 							<span id="nextVisitDivnextscheduledvisit" class="displayOff">
 								<input type="button" id="nextvisitbutton" value="<spring:message code="mdrtb.savenextvisitdate" />" onClick="javascript:saveNewNextVisit(this)"/>
-								<input type='hidden' id='patientId' name='patientId' value='${obj.patient.patientId}'>
+								<input type='hidden' id='patientId' name='patientId' value='${model.obj.patient.patientId}'>
 							</span><span id="nextVisitMessage" style="vertical-align:bottom;color:red;font-size:80%;"></span>
 
 	</div>	
+	
+	-->
+	
 	<script type="text/javascript">
 		function showMoreIdentifiers() {
 			if (identifierElement.style.display == '') {

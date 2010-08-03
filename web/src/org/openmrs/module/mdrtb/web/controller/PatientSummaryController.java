@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -31,8 +31,7 @@ public class PatientSummaryController {
 
 	@ModelAttribute("mdrtbPatient")
 	public MdrtbPatientWrapper getMdrtbPatient(@RequestParam(required = true, value="patientId") Integer patientId) {
-		Patient patient = Context.getPatientService().getPatient(patientId);
-		return new MdrtbPatientWrapper(patient);
+		return Context.getService(MdrtbService.class).getMdrtbPatient(patientId);
 	} 
 	
 	@InitBinder

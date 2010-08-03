@@ -1646,7 +1646,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
      */
     @Override
-    protected Object formBackingObject(HttpServletRequest request) throws Exception { 
+    public Object formBackingObject(HttpServletRequest request) throws Exception { 
         
         if (Context.isAuthenticated()){
             MdrtbPatient mp = new MdrtbPatient();

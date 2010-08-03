@@ -12,11 +12,11 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
+import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.openmrs.module.mdrtb.patientchart.PatientChart;
+import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
@@ -47,6 +47,13 @@ public interface MdrtbService extends OpenmrsService {
     
     @Transactional(readOnly=true)
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
+    
+    /**
+     * Given a patient ID, return a patient wrapped in a MdrtbPatientWrapper
+     */
+    @Transactional(readOnly=true)
+    public MdrtbPatientWrapper getMdrtbPatient(Integer patientId);
+    
     
     /**
      * Creates a new specimen, associated with the given patient
@@ -179,22 +186,11 @@ public interface MdrtbService extends OpenmrsService {
     public void deleteScannedLabReport(Integer reportId);
     
     /**
-     * Gets the patient chart for a specific patient
+     * Gets the MDR-TB patient program
      */
     @Transactional(readOnly=true)
-    public PatientChart getPatientChart(Integer patientId);
+    public Program getMdrtbProgram();
     
-    /**
-     * Gets the Mdrtb Programs for a specified patient
-     */
-    @Transactional(readOnly=true)
-    public List<PatientProgram> getMdrtbPrograms(Integer patientId);
-    
-    /**
-     * Saves a set of Mdrtb Programs
-     */
-    @Transactional
-    public void saveMdrtbPrograms(List<PatientProgram> mdrtbPrograms);
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result

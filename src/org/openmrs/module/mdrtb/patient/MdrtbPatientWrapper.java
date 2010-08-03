@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
-import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
 
@@ -17,21 +17,18 @@ public class MdrtbPatientWrapper {
     private Patient patient;
     
     private PatientChart chart = null; // cache the patient chart
-  
-    private Program mdrtbProgram; 
     
     public MdrtbPatientWrapper(Patient patient) {
     	this.patient = patient;
-    	this.mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
     }
     
 	public List<PatientProgram> getMdrtbPrograms() {
-		return Context.getProgramWorkflowService().getPatientPrograms(this.patient, this.mdrtbProgram, null, null, null, null, false);
+		return Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 	 }
 	
 	
 	public Boolean everEnrolledInMdrtbProgram() {
-		return (Context.getProgramWorkflowService().getPatientPrograms(this.patient, this.mdrtbProgram, null, null, null, null, false).size() > 0);
+		return (getMdrtbPrograms().size() > 0);
     }
 	
 	public Boolean isEnrolledInMdrtbProgram() {
@@ -51,7 +48,7 @@ public class MdrtbPatientWrapper {
 		// TODO: should I set the program workflow state to none?  see the MdrtbFactory method here?
 		PatientProgram patientProgram = new PatientProgram();
 		patientProgram.setPatient(this.patient);
-		patientProgram.setProgram(this.mdrtbProgram);
+		patientProgram.setProgram(Context.getService(MdrtbService.class).getMdrtbProgram());
 		patientProgram.setDateEnrolled(dateEnrolled);
 		Context.getProgramWorkflowService().savePatientProgram(patientProgram);
     }

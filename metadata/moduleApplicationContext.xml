@@ -35,6 +35,9 @@
             	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
             	<prop key="module/@MODULE_ID@/visits/visits.form">VisitsController</prop>
             	<prop key="module/@MODULE_ID@/status/status.form">StatusController</prop>
+            	
+            	<!-- new controller for patient header portlet -->
+            	<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -108,10 +111,14 @@
 		<property name="formView"><value>/module/@MODULE_ID@/visits/visits</value></property>
 		<property name="successView"><value>visits.form</value></property>
     </bean>
-     	<bean id="StatusController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
+     <bean id="StatusController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/status/status</value></property>
 		<property name="successView"><value>status.form</value></property>
+    </bean>
+    
+    <!-- portlet controllers -->
+    <bean id="mdrtbPatientHeaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbPatientHeaderPortletController">
     </bean>
     
     <bean parent="serviceContext">

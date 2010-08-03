@@ -568,7 +568,7 @@
 
 
 
-<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
+<openmrs:portlet url="mdrtbmdrtbPatientHeader" id="mdrtbmdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
 <!-- <openmrs:portlet url="mdrtbHeaderBox" id="mdrtbHeaderBox" moduleId="mdrtb"  patientId="${obj.patient.patientId}"/>-->
 <br><br>
 <div style="font-size:80%">
