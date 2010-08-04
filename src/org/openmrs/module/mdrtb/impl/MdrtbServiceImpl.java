@@ -56,8 +56,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	private Map<Integer,String> locationToDisplayCodeCache = null;
 	
-	private Map<Integer,String> conceptToBacteriologyResultCache = null;
-	
 	
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
@@ -474,12 +472,27 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     }
     
     public String getColorForConcept(Concept concept) {
+    	if(concept == null) {
+    		log.error("Cannot fetch color for null concept");
+    		return "";
+    	}
+    	
     	// initialize the cache if need be
     	if(colorMapCache == null) {
     		colorMapCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.colorMap"));
     	}
     	
-    	return colorMapCache.get(concept.getId());
+    	String color = "";
+    	
+    	try {
+    		color = colorMapCache.get(concept.getId());
+    	}
+    	catch(Exception e) {
+    		log.error("Unable to get color for concept " + concept.getId());
+    		color = "white";
+    	}
+    	
+    	return color;
     }
 	
     public void resetColorMapCache() {

@@ -1,8 +1,10 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.jsp.JspWriter;
@@ -27,14 +29,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     private static final long serialVersionUID = 6161336882128086538L;
     
 	private final Log log = LogFactory.getLog(getClass());
-	
-	// TODO: extract this and make it configurable once we figure out how we want it done
-	private static final String positiveColor="lightcoral";
-	private static final String negativeColor="lightgreen";
-	private static final String scantyColor="khaki";
-	private static final String contaminatedColor="khaki";
-	private static final String pendingColor="lightgray";
-	
+
     protected void renderCell(List<Bacteriology> bacs) {
     	
     	String titleString = "";
@@ -52,13 +47,16 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     		ret = "<td style=\"padding:0px;border:0px;margin:0px;\"/>";
     	}
     	else {
+    		// initialize the rankings used by calculate what color to display in the cell
+    		Map<Concept,Integer> resultRankings = null;
     		
-    		// since there is at least one bac here, we want the color of the cell to be gray, if nothing else
-    		colorString = pendingColor;
+    		// used to track the "overall" result, which determines how we decide what color to display
+    		Concept overallResult = null;
+    		
+    		// used to keep track of the locations we have already displayed
+    		Set<Location> labs = new HashSet<Location> ();
     		
     		// loop through all the bacteriologies in this set and fetch the result for each of them
-    		Set<Location> labs = new HashSet<Location> ();
-    	
     		for(Bacteriology bac : bacs) {
     			if(bac != null) {		
     				
@@ -97,7 +95,22 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     						+ bac.getLab().getDisplayString() + "<br/>");
     					
     					// now figure the overall result for the purpose of determining the color of the cell
-    					colorString = updateColorToDisplay(colorString, bac.getResult());
+    					// TODO: some error handling here if we get a result we don't expect?
+    					if(overallResult == null) {
+    						overallResult = bac.getResult();
+    					}
+    					else {
+    						// initialize this here so that we only bother doing it if we have more than one result for a cell
+    						if(resultRankings == null) {
+    							resultRankings = initializeRankings();
+    						}
+    						
+    						// replace the overall result if this result is ranked higher (i.e., the rank number is lower)
+    						if(resultRankings.get(overallResult) > resultRankings.get(bac.getResult())) {
+    							overallResult = bac.getResult();
+    						}
+    						
+    					}
     				}
     				// if there isn't a result, add the status here
     				else {
@@ -107,6 +120,15 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     			}		
     		}
     		
+    		// set the color based on the overall result
+    		if(overallResult != null) {
+    			colorString = Context.getService(MdrtbService.class).getColorForConcept(overallResult);
+    		}
+    		else {
+    			// if there is some sort of bac here, set the default color to gray (if there is no actual result)
+				colorString = "lightgray";  // TODO: make this configurable?
+    		}
+    			
     		// now create the actual string to render
     		// TODO: using the ../ is a little sketchy because it relies on directory structure not changing?
     		// TODO: this is operating on the assumption that all the bacs are from the same specimen
@@ -123,6 +145,25 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 		catch (IOException ex) {
 			log.error("Error while starting tag", ex);
 		}
+    }
+    
+    // defines the rankings that determine precedent when decided what color the cell should be
+    // TODO: change this to use new concept mappings method?
+    private static Map<Concept,Integer> initializeRankings() {
+    	
+    	ConceptService conceptService = Context.getConceptService();
+    	Map<Concept,Integer> resultRankings = new HashMap<Concept,Integer> ();
+    	
+    	resultRankings.put(conceptService.getConceptByMapping("stronglyPositive","org.openmrs.module.mdrtb"), 1);
+    	resultRankings.put(conceptService.getConceptByMapping("moderatelyPositive","org.openmrs.module.mdrtb"), 2);
+    	resultRankings.put(conceptService.getConceptByMapping("positive","org.openmrs.module.mdrtb"), 3);
+    	resultRankings.put(conceptService.getConceptByMapping("weaklyPositive","org.openmrs.module.mdrtb"), 4);
+    	resultRankings.put(conceptService.getConceptByMapping("scanty","org.openmrs.module.mdrtb"), 5);
+    	resultRankings.put(conceptService.getConceptByMapping("negative","org.openmrs.module.mdrtb"), 6);
+    	resultRankings.put(conceptService.getConceptByMapping("contaminated","org.openmrs.module.mdrtb"), 7);
+    	resultRankings.put(conceptService.getConceptByMapping("waitingForTestResults","org.openmrs.module.mdrtb"), 8);
+    	
+    	return resultRankings;
     }
     
     private static String getScantyResult(Bacteriology bac) {
@@ -143,39 +184,5 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 			}
 		}
 		return scanty;
-    }
-    
-    private static String updateColorToDisplay(String color, Concept result) {
-    	
-    	ConceptService conceptService = Context.getConceptService();
-    	
-    	if(positiveColor.equals(color)) {
-    		return positiveColor;
-    	}
-    	else {
-    		// TODO: update this to use the new concept mapping service
-			// set it to positive if that's what this result is
-			if(result.equals(conceptService.getConceptByMapping("positive","org.openmrs.module.mdrtb"))
-					|| result.equals(conceptService.getConceptByMapping("weaklyPositive","org.openmrs.module.mdrtb"))
-					|| result.equals(conceptService.getConceptByMapping("moderatelyPositive","org.openmrs.module.mdrtb"))
-					|| result.equals(conceptService.getConceptByMapping("stronglyPositive","org.openmrs.module.mdrtb"))) {
-				return positiveColor;
-			}
-			// a scanty result overrides everything but a positive
-			else if (result.equals(conceptService.getConceptByMapping("scanty","org.openmrs.module.mdrtb"))) {
-				return scantyColor;
-			}
-			// a negative result overrides everything but a positive and a scanty
-			else if (!scantyColor.equals(result) && result.equals(conceptService.getConceptByMapping("negative","org.openmrs.module.mdrtb"))) {
-				return negativeColor;
-			}
-			// a contaminated result only overrides pending
-			else if (!scantyColor.equals(result) && !negativeColor.equals(result) && result.equals(conceptService.getConceptByMapping("contaminated","org.openmrs.module.mdrtb"))) {
-				return contaminatedColor;
-			}
-			else {
-				return pendingColor;
-			}
-		} 
     }
 }

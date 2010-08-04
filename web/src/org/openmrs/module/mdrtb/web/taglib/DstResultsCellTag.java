@@ -59,7 +59,8 @@ public class DstResultsCellTag extends TagSupport {
     		String color = Context.getService(MdrtbService.class).getColorForConcept(result);
     		
     		ret = "<td class=\"chartCell\" title=\"" + title +
-    				"\" style=\"width:30px;padding:0px;border:0px;margin:0px;background-color:" + color + ";\">&nbsp</td>";
+    				"\" style=\"width:30px;padding:0px;border:0px;margin:0px;text-align:center;background-color:" + color + ";\">"+ 
+    				result.getBestShortName(Context.getLocale()) + "</td>";
     	}
     	else {
     		ret = "<td class=\"chartCell\"/>";
