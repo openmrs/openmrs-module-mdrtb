@@ -39,7 +39,6 @@ import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
-import org.openmrs.module.mdrtb.specimen.SpecimenConstants.BacteriologyResult;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -497,33 +496,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	return locationToDisplayCodeCache.get(location.getId());
     }
     
-    public BacteriologyResult getBacteriologyResultForConcept(Concept concept) {
-    	// initialize the cache if need be 
-    	if(conceptToBacteriologyResultCache == null) {
-    		conceptToBacteriologyResultCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.conceptToBacteriologyResultMap"));
-    	}
-    	
-    	String result = conceptToBacteriologyResultCache.get(concept.getId());
-    	
-    	if("POSITIVE".equals(result)) {
-    		return BacteriologyResult.POSITIVE;
-    	}
-    	else if("NEGATIVE".equals(result)) {
-    		return BacteriologyResult.NEGATIVE;
-    	}
-    	else if("CONTAMINATED".equals(result)) {
-    		return BacteriologyResult.CONTAMINATED;
-    	}
-    	else if("SCANTY".equals(result)) {
-    		return BacteriologyResult.SCANTY;		
-    	}
-    	else if("PENDING".equals(result)) {
-    		return BacteriologyResult.PENDING;
-    	}
-    	else {
-    		return null;
-    	}
-    }
     
 	/**
 	 * Utility functions
