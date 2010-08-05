@@ -124,8 +124,8 @@
 <tr>
 <td class="chartCell">Month</td>
 <td class="chartCell">Date collected</td>
-<td class="chartCell" style="width:80px">Smears</td>
-<td class="chartCell" style="width:80px">Cultures</td>
+<td class="chartCell" style="width:100px">Smears</td>
+<td class="chartCell" style="width:100px">Cultures</td>
 <td class="chartCell">Germ</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">

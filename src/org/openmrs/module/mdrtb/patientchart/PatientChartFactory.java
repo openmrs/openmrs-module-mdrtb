@@ -14,6 +14,7 @@ import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.SpecimenUtil;
 
 
 public class PatientChartFactory {
@@ -33,6 +34,10 @@ public class PatientChartFactory {
 		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
+		
+		// now we group the specimens by day
+		// TODO: make this configurable so that we don't always do this?
+		SpecimenUtil.groupSpecimensByDay(specimens);
 		
 		// now fetch the program start date
 		Calendar startDate = Calendar.getInstance();
