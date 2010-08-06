@@ -42,7 +42,7 @@ public class MdrtbUtil {
     	return getMDRTBConceptByName(conceptString, loc, Context.getService(MdrtbService.class).getMdrtbFactory());
     }
         
-    
+    @Deprecated
     public static Concept getMDRTBConceptByName(String conceptString, Locale loc, MdrtbFactory mu){
         
         Concept ret = null;
@@ -116,6 +116,7 @@ public class MdrtbUtil {
     /*
      * faster method to be used by MdrtbFactory
      */
+    @Deprecated
     public static Concept getMDRTBConceptByName(String conceptString, Locale loc, List<ConceptName> cnList){
         Concept ret = null;
         //first, if there's an exact match in the passed-in locale, that's what we want

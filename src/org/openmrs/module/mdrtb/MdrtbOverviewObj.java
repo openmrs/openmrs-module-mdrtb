@@ -11,6 +11,7 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.PersonAttribute;
 
+@Deprecated
 public class MdrtbOverviewObj {
     
     protected final Log log = LogFactory.getLog(getClass());

@@ -18,6 +18,8 @@ import org.openmrs.api.context.Context;
 /**
  * A DST parent object.
  */
+
+@Deprecated
 public class MdrtbDSTObj {
     private Obs drugSensitivityTestComplete = new Obs();
     private Obs dstStartDate = new Obs();

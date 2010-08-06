@@ -14,6 +14,7 @@ import org.openmrs.api.context.Context;
  * mdrtb module.  In other words, this class represents everything that you would want to do with a sputum sample for MDRTB.
  */
 
+@Deprecated
 public class MdrtbNewTestObj {
     private Patient patient;
     private transient List<MdrtbSmearObj> smears = new ArrayList<MdrtbSmearObj>();

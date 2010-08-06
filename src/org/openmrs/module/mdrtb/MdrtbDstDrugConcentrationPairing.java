@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 
+@Deprecated
 public class MdrtbDstDrugConcentrationPairing {
     private Log log = LogFactory.getLog(this.getClass());
     

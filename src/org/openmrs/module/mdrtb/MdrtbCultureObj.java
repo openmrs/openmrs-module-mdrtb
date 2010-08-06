@@ -11,6 +11,7 @@ import org.openmrs.User;
 /**
  * Class representing a TB Culture
  */
+@Deprecated
 public class MdrtbCultureObj {
     
     private Obs cultureResult = new Obs();

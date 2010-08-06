@@ -11,6 +11,7 @@ import org.openmrs.User;
  * A class representing a smear result.  Contains all Obs for all observations containined in a smear result.
  */
 
+@Deprecated
 public class MdrtbSmearObj {
     private Obs smearResult = new Obs();
     private Obs source = new Obs();  // NOTE: not currently using this in new specimen tracking; source is stored at top-level with specimen

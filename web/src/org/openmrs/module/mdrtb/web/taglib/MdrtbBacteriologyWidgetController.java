@@ -30,6 +30,7 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
+@Deprecated
 public class MdrtbBacteriologyWidgetController extends TagSupport {
 
     private static final long serialVersionUID = 14352344444L;

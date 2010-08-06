@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 
+@Deprecated
 public class MdrtbSpecimenRegistrationController extends SimpleFormController {
 
     /** Logger for this class and subclasses */

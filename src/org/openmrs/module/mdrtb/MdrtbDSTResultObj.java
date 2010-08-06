@@ -13,6 +13,8 @@ import org.openmrs.User;
 /**
  * Class representing a single row in a DST result
  */
+
+@Deprecated
 public class MdrtbDSTResultObj {
 
     private Obs colonies = new Obs();
