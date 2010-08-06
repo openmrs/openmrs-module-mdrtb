@@ -94,10 +94,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
     protected Map<String, Object> referenceData(HttpServletRequest request, Object obj, Errors err) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-        	boolean metadataLoaded = MdrtbActivator.isMetadataLoaded();
-        	map.put("metadataLoaded", metadataLoaded);
-        	if (MdrtbActivator.isMetadataLoaded()) {
-
 	            AdministrationService as = Context.getAdministrationService();
 	            FormService fs = Context.getFormService();
 	            ConceptService cs = Context.getConceptService();
@@ -295,7 +291,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 	        	   
 	           mu = null;
         	}
-        }
         return map;
     }
 

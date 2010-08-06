@@ -81,7 +81,6 @@ public class SpecimenGroupImpl implements Specimen {
     	throw new RuntimeException("Illegal attempt to access add or set method of SpecimenGroupImpl. SpecimenGroupImpl should be used for get access only.");
     }
 
-	@Override
     public Smear addSmear() {
 		throw new RuntimeException("Illegal attempt to access add or set method of SpecimenGroupImpl. SpecimenGroupImpl should be used for get access only.");
     }

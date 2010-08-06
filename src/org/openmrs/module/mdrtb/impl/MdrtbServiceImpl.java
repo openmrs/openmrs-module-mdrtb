@@ -1,5 +1,8 @@
 package org.openmrs.module.mdrtb.impl;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -25,10 +30,13 @@ import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
+import org.openmrs.module.mdrtb.exception.MissingConceptException;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
@@ -44,14 +52,19 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
+	// The Concept Map name-space
+    private static final String MDRTB_CONCEPT_MAPPING_CODE = "org.openmrs.module.mdrtb";
+	
 	protected MdrtbDAO dao;
 	
 	private static MdrtbFactory mdrtbFactory;
 	
-	private static List<MdrtbRegimenSuggestion> standardRegimens = new ArrayList<MdrtbRegimenSuggestion>();
+	private static List<MdrtbRegimenSuggestion> standardRegimens = null;
 	
-	private static List<Locale> localeSetUsedInDB = new ArrayList<Locale>();
+	private static List<Locale> localeSetUsedInDB = null;
 	
+	
+	// caches
 	private Map<Integer,String> colorMapCache = null;
 	
 	private Map<Integer,String> locationToDisplayCodeCache = null;
@@ -78,6 +91,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<MdrtbRegimenSuggestion> getStandardRegimens() {
+		if(standardRegimens == null) {
+			setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
+		}
+		
 		return standardRegimens;
 	}
 	
@@ -86,6 +103,21 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<Locale> getLocaleSetUsedInDB() {
+		if(localeSetUsedInDB == null) {
+			List<Locale> locales = new ArrayList<Locale>();
+	        List<List<Object>> rows = Context.getAdministrationService().executeSQL("select distinct locale from concept_word", true);
+	        
+	        //get all used locales in ConceptWord table
+	        for (List<Object> row:rows){
+	            for (Object o : row){
+	                String oTmp = (String) o;
+	                if (oTmp != null && oTmp != "")
+	                    locales.add(new Locale(oTmp));
+	            }
+	        }
+	        setLocaleSetUsedInDB(locales);
+		}
+		
 		return localeSetUsedInDB;
 	}
 	
@@ -99,6 +131,48 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) {
 		return dao.getConceptWords(phrase, locales);
+	}
+	
+	public Concept getConcept(String [] conceptMapping) {
+		Concept concept = null;
+		
+		// test all the mappings in the array
+		for(String mapName : conceptMapping) {
+			concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
+			
+			// if we've found a match, return it
+			if(concept != null) {
+				return null;
+			}
+		}
+		
+		// if we didn't find a match, fail hard
+		throw new MissingConceptException("Can't find concept for mapping " + conceptMapping[0]);
+	}
+	
+	/**
+	 * @return all of the defined Concept Mappings
+	 */
+	public Set<String[]> getAllConceptMappings() {
+		Set<String[]> ret = new TreeSet<String[]>();
+		for (Field f : MdrtbConcepts.class.getFields()) {
+			// TODO: make sure this array reflection works
+			if (f.getType() == Array.class) {
+				int modifier = f.getModifiers();
+				if (Modifier.isFinal(modifier) && Modifier.isStatic(modifier) && Modifier.isPublic(modifier)) {
+					try {
+						Object value = f.get(null);
+						if (value != null) {
+							ret.add((String []) value);
+						}
+					}
+					catch (IllegalAccessException iae) {
+						throw new RuntimeException("Unable to access field: " + f, iae);
+					}
+				}
+			}
+		}
+		return ret;
 	}
 	
 	public MdrtbPatientWrapper getMdrtbPatient(Integer patientId) {
@@ -443,33 +517,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	*/
     }
     
-	public Concept getConceptScanty() {
-		return getMdrtbFactory().getConceptScanty();
-	}
-	
-	public Concept getConceptWaitingForTestResults() {
-		return getMdrtbFactory().getConceptWaitingForTestResults();
-	}
-	
-	public Concept getConceptDstTestContaminated() {
-		return getMdrtbFactory().getConceptDstTestContaminated();
-	}
-	
-	public Concept getConceptOtherMycobacteriaNonCoded() {
-		return getMdrtbFactory().getConceptOtherMycobacteriaNonCoded();
-	}
-	
-	public Concept getConceptSputum() {
-		return getMdrtbFactory().getConceptSputum();
-	}
-	
-	public Concept getConceptIntermediateToTuberculosisDrug() {
-		return getMdrtbFactory().getConceptIntermediateToTuberculosisDrug();
-	}
-	
-    public Concept getConceptNone() {
-    	return getMdrtbFactory().getConceptNone();
-    }
+   
     
     public String getColorForConcept(Concept concept) {
     	if(concept == null) {
@@ -530,5 +578,40 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	}
     	
     	return map;
+    }
+    
+    @Deprecated
+	public Concept getConceptScanty() {
+		return getConcept(MdrtbConcepts.SCANTY);
+	}
+	
+    @Deprecated
+	public Concept getConceptWaitingForTestResults() {
+		return getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
+	}
+	
+    @Deprecated
+	public Concept getConceptDstTestContaminated() {
+    	return getConcept(MdrtbConcepts.DST_CONTAMINATED);
+	}
+	
+    @Deprecated
+	public Concept getConceptOtherMycobacteriaNonCoded() {
+		return getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
+	}
+	
+    @Deprecated
+	public Concept getConceptSputum() {
+		return getConcept(MdrtbConcepts.SPUTUM);
+	}
+	
+    @Deprecated
+	public Concept getConceptIntermediateToTuberculosisDrug() {
+		return getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG);
+	}
+	
+    @Deprecated
+    public Concept getConceptNone() {
+    	return getConcept(MdrtbConcepts.NONE);
     }
 }

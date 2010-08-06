@@ -18,6 +18,10 @@ public class MdrtbPatientHeaderPortletController extends PortletController {
 		
 		// hack to just use the mdrtbPatientOverview controller at this point
 		// (had to make formBackingObject in MdrtbPatientOverviewController visible to make this work)
+		// TODO: eventually we want this to collect the data it needs by adding an MdrtbPatientWrapper instance
+		// to the model instead
+		
+		
 		MdrtbPatientOverviewController controller = new MdrtbPatientOverviewController();
 		
 		Object obj;

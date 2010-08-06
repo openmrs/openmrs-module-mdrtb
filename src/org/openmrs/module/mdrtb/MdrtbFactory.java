@@ -45,7 +45,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
+@Deprecated
 public final class MdrtbFactory {
 
     protected final Log log = LogFactory.getLog(getClass());
@@ -262,7 +262,7 @@ public final class MdrtbFactory {
     
 
 
-    private MdrtbFactory(){readXML();};
+    private MdrtbFactory(){};
     
     private static MdrtbFactory uniqueInstance;
 
@@ -717,11 +717,11 @@ public final class MdrtbFactory {
             }
             
             //TODO: remove these after a while:
-            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
-            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
-            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3024), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TYPE OF ORGANISM");
-            MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3048), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TUBERCULOSIS CULTURE CONSTRUCT"); 
-            MdrtbUtil.repairMdrtrbConceptMapping(Context.getConceptService().getConcept(1565), "DIED - TB", "DIED - TB");
+           // MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(1453), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "MULTIDRUG-RESISTANT TB TREATMENT START DATE");
+            //MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(730), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "CD4 PERCENT");
+            //MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3024), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TYPE OF ORGANISM");
+            //MdrtbUtil.addConceptMapForConcept(Context.getConceptService().getConcept(3048), Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"), "TUBERCULOSIS CULTURE CONSTRUCT"); 
+            //MdrtbUtil.repairMdrtrbConceptMapping(Context.getConceptService().getConcept(1565), "DIED - TB", "DIED - TB");
             
             
             //MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
@@ -769,413 +769,266 @@ public final class MdrtbFactory {
     }
     
     public Concept getConceptAdverseEffectConstruct(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_CONSTRUCT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+        return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_CONSTRUCT);
     }
     public Concept getConceptAdverseEffectMedication(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_MEDICATION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION);
     }
     public Concept getConceptAdverseEffectMedicationNonCoded(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_MEDICATION_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION_NON_CODED);
     }
     public Concept getConceptAdverseEffect(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT);
     }
     public Concept getConceptAdverseEffectNonCoded(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_NON_CODED);
     }
     public Concept getConceptAdverseEffectDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_DATE);
     }
     public Concept getConceptAdverseEffectActionTaken(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_ADVERSE_EFFECT_ACTION_TAKEN, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_ACTION_TAKEN);
     }
     
     public Concept getConceptSmearMicroscopyMethod(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_TB_SMEAR_MICROSCOPY_METHOD, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_METHOD);
     }
     public Concept getConceptResultDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_RESULT_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE);
     }
     public Concept getConceptBacilli(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_BACILLI, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BACILLI);
     }
     public Concept getConceptSampleSource(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_TB_SAMPLE_SOURCE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE);
     }
     public Concept getConceptTreatmentStopDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_TREATMENT_STOP_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_START_DATE);
     }
     public Concept getConceptDSTComplete(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_DST_COMPLETE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_COMPLETE);
     }
     public Concept getConceptDSTMethod(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_DST_METHOD, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_METHOD);
     }
     public Concept getConceptNone(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_NONE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NONE);
     }
 
     public Concept getConceptSputumCollectionDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_SPUTUM_COLLECTION_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPUTUM_COLLECTION_DATE);
     }
     public Concept getConceptDirectIndirect(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_DIRECT_INDIRECT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIRECT_INDIRECT);
     }
     public Concept getConceptColoniesInControl(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_COLONIES_IN_CONTROL, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES_IN_CONTROL);
     }
     
     public Concept getConceptStandardized(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_STANDARDIZED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STANDARDIZED);
     }
     
     public Concept getConceptEmpiric(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_EMPIRIC, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EMPIRIC);
     }
     
     public Concept getConceptIndividualized(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_INDIVIDUALIZED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUALIZED);
     }
     
     public Concept getConceptCurrentRegimenType(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_CURRENT_TREATMENT_TYPE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURRENT_TREATMENT_TYPE);
     }
     
     public Concept getConceptScanty(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SCANTY, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY);
     }
     
     public Concept getConceptOtherMycobacteriaNonCoded(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_OTHER_MYCOBACTERIA_NONCODED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
     }
     
     public Concept getConceptDSTParent(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_DST_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT);
     }
     
     public Concept getConceptCultureParent(){
-        Concept ret = null;
-        ret =  this.getMDRTBConceptByKey(STR_CULTURE_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT);
     }
     
     public Concept getConceptCultureResult(){
-        Concept ret = null;
-        ret =  this.getMDRTBConceptByKey(STR_TB_CULTURE_RESULT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
     }
     
     public Concept getConceptSmearResult(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TB_SMEAR_RESULT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
     }
     
     public Concept getConceptColonies(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_COLONIES, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES);
     }
 
     public Concept getConceptCultureStartDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CULTURE_START_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_START_DATE);
     }
     public Concept getConceptCultureMethod(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TB_CULTURE_METHOD, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_METHOD);
     }
     public Concept getConceptSmearParent(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SMEAR_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT);
     }
     
     public Concept getConceptCultureConversion(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CULTURE_CONVERSION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONVERSION);
     }
     
     public Concept getConceptCultureReconversion(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CULTURE_RECONVERSION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RECONVERSION);
     }
     
     public Concept getConceptSmearConversion(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SMEAR_CONVERSION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONVERSION);
     }
     
     public Concept getConceptSmearReconversion(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SMEAR_RECONVERSION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RECONVERSION);
     }
     //STR_TYPE_OF_ORGANISM
     public Concept getConceptTypeOfOrganism(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TYPE_OF_ORGANISM, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM);
     }
     public Concept getConceptTypeOfOrganismNonCoded(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_TYPE_OF_ORGANISM_NON_CODED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM_NON_CODED);
     }
     //STR_DST_RESULT_PARENT
     public Concept getConceptDSTResultParent(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(this.STR_DST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT);
     }
     public Concept getConceptDateReceived(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_DATE_RECEIVED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_RECEIVED);
     }
     
     public Concept getConceptTreatmentStartDate(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TREATMENT_START_DATE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_START_DATE);
     }
 
-    
     public Concept getConceptConcentration(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CONCENTRATION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONCENTRATION);
     }
     
     public Concept getConceptPatientClassDrugUse(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PREVIOUS_DRUG_USE_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
     }
     public Concept getConceptPatientClassPrevTreatment(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PREVIOUS_TREATMENT_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
     }
     public Concept getConceptTBCaseClassification(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TUBERCULOSIS_CASE_CLASSIFICATION_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_CASE_CLASSIFICATION);
     }
     public Concept getConceptPulmonary(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PULMONARY, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB);
     }
     public Concept getConceptExtraPulmonary(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_EXTRAPULMONARY, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB);
     }
     public Concept getConceptExtraPulmonaryLocation(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_EXTRAPULMONARY_LOCATION, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB_LOCATION);
     }
  
     public Concept getConceptHIVStatus(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_HIV_STATUS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST);
     }
     public Concept getConceptCD4(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CD4_COUNT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CD4_COUNT);
     }
     
     public Concept getConceptContactTestResultParent(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PATIENT_CONTACT_TEST_RESULT_PARENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_TB_TEST_RESULT);
     }
     
     public Concept getConceptSimpleTBResult(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SIMPLE_TB_TEST_RESULT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT);
     }
     
     public Concept getConceptSimpleTBTestType(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SIMPLE_TB_TEST_TYPE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SIMPLE_TB_TEST_TYPE);
     }
       
     public Concept getConceptNextVisit(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_NEXT_VISIT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RETURN_VISIT_DATE);
     }
     public Concept getConceptOnART(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_ON_ANTIRETROVIRALS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COINFECTED_ARVS);
     }
     
     public Concept getConceptPhoneNumber(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PHONE_NUMBER, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER);
     }
     
     public Concept getConceptKnownMDRCase(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PATIENT_CONTACT_KNOWN_MDR_CASE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE);
     }
 
     public Concept getConceptCD4Percent(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_CD4_PERCENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CD4_PERCENT);
     }
    
     public Concept getConceptTreatmentPlanComment(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TREATMENT_PLAN_COMMENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_PLAN_OTHER_REMARKS);
     }
     public Concept getConceptAllergyComment(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_ALLERGY_COMMENT, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ALLERGY_COMMENT);
     }
     
     public Concept getConceptPrevDuration(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PREV_TREATMENT_DURATION_IN_MONTHS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DURATION_OF_PREVIOUS_TX_IN_MONTHS);
     }
     public Concept getConceptPrevRegNum(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PREV_REGISTRATION_NUM, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUS_REGISTRATION_NUMBER);
     }
     public Concept getConceptPrevTreatmentCenter(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_PREV_TREATMENT_CENTER, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUS_TREATMENT_CENTER);
     }
     public Concept getConceptPrevReferredBy(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_REFERRED_BY, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REFERRED_BY);
     }
     public Concept getConceptStartDate(){
-    	return getConceptCultureStartDate();
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_START_DATE);
     }
     
     public Concept getConceptTransferredTo(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TRANSFERRED_TO, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFERRED_TO);
     }
     public Concept getConceptTransferredFrom(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TRANSFERRED_FROM, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFERRED_FROM);
     }
     public Concept getConceptTreatmentSupporterActive(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TREATMENT_SUPPORTER_ACTIVE, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_SUPPORTER_CURRENTLY_ACTIVE);
     }
     
     public Concept getConceptSuspectedMDR(){
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SUSPECTED_MDR_TUBERCULOSIS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSPECTED_MDR_TB);
     }
     
     public Concept getConceptDiedMDR() {
-        Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_DIED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED);
     }
     
     public Concept getConceptSpecimenID() {
-    	Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SPECIMEN_ID, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID);
     }
     
     public Concept getConceptDateOrdered() {
-    	Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TEST_DATE_ORDERED, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_ORDERED);
     }
     
     public Concept getConceptTestComments() {
-    	Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_TEST_COMMENTS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_COMMENTS);
     }
     
     public Concept getConceptSpecimenComments() {
-    	Concept ret = null;
-        ret = this.getMDRTBConceptByKey(STR_SPECIMEN_COMMENTS, new Locale("en", "US"), this.xmlConceptList);
-        return ret;
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS);
     }
     
     /**

@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -30,8 +31,10 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional(readOnly=true)
     public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws APIException ;
     
+    @Deprecated
     public MdrtbFactory getMdrtbFactory();
     
+    @Deprecated
     public void setMdrtbFactory(MdrtbFactory newMdrtbFactory);
 
     public List<MdrtbRegimenSuggestion> getStandardRegimens();
@@ -48,6 +51,18 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional(readOnly=true)
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
     
+    /**
+     * Fetches a concept specified by a MdrtbConcepts mapping
+     */
+    public Concept getConcept(String [] conceptMapping);
+    
+    /**
+     * Returns all the MDR-TB concept mappings
+     * 
+     * **note that this has not yet been tested **
+     */
+    public Set<String[]> getAllConceptMappings();
+   
     /**
      * Given a patient ID, return a patient wrapped in a MdrtbPatientWrapper
      */
@@ -254,36 +269,43 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Returns the concept that represents a Scanty result
      */
+    @Deprecated
     public Concept getConceptScanty();
     
     /**
      * Returns the concept that represents a Waiting For Test Results result
      */
+    @Deprecated
     public Concept getConceptWaitingForTestResults();
     
     /**
      * Returns the concept that represents a DST Test Contaminated result
      */
+    @Deprecated
     public Concept getConceptDstTestContaminated();
     
     /**
      * Returns the concept that represents Other Mycobacteria Non-Coded
      */
+    @Deprecated
     public Concept getConceptOtherMycobacteriaNonCoded();
     
     /**
      * Returns the concept that represents Sputum
      */
+    @Deprecated
     public Concept getConceptSputum();
     
     /**
      * Returns the concept that represents INTERMEDIATE TO TUBERCULOSIS DRUG
      */
+    @Deprecated
     public Concept getConceptIntermediateToTuberculosisDrug();
     
     /**
      * Returns the concept that represents None
      */
+    @Deprecated
     public Concept getConceptNone();
     
 	/**
