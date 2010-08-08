@@ -59,9 +59,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	private static MdrtbFactory mdrtbFactory;
 	
-	private static List<MdrtbRegimenSuggestion> standardRegimens = null;
+	private List<MdrtbRegimenSuggestion> standardRegimens = null;
 	
-	private static List<Locale> localeSetUsedInDB = null;
+	private List<Locale> localeSetUsedInDB = null;
 	
 	
 	// caches
@@ -99,7 +99,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void setStandardRegimens(List<MdrtbRegimenSuggestion> standardRegimens) {
-		MdrtbServiceImpl.standardRegimens.addAll(standardRegimens);
+		if(standardRegimens == null) {
+			standardRegimens = new LinkedList<MdrtbRegimenSuggestion>();
+		}
+		
+		standardRegimens.addAll(standardRegimens);
 	}
 	
 	public List<Locale> getLocaleSetUsedInDB() {
@@ -122,7 +126,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void setLocaleSetUsedInDB(List<Locale> localeSetUsedInDB) {
-		MdrtbServiceImpl.localeSetUsedInDB.addAll(localeSetUsedInDB);
+		localeSetUsedInDB.addAll(localeSetUsedInDB);
 	}
 	
 	public List<Location> getAllMdrtrbLocations(boolean includeRetired) {
@@ -142,7 +146,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			
 			// if we've found a match, return it
 			if(concept != null) {
-				return null;
+				return concept;
 			}
 		}
 		
@@ -265,7 +269,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Obs obs = Context.getObsService().getObs(testId);
 		
 		// the id must refer to a valid obs, which is a smear, culture, or dst construct
-		if (obs == null || !(obs.getConcept().equals(mdrtbFactory.getConceptSmearParent()) || obs.getConcept().equals(mdrtbFactory.getConceptCultureParent()) || obs.getConcept().equals(mdrtbFactory.getConceptDSTParent())) ) {
+		if (obs == null || !(obs.getConcept().equals(this.getConcept(MdrtbConcepts.SMEAR_CONSTRUCT))
+				|| obs.getConcept().equals(this.getConcept(MdrtbConcepts.CULTURE_CONSTRUCT)) 
+				|| obs.getConcept().equals(this.getConcept(MdrtbConcepts.DST_CONSTRUCT)) )) {
 			throw new APIException ("Unable to delete specimen test: invalid test id " + testId);
 		}
 		else {
@@ -394,9 +400,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public void deleteDstResult(Integer dstResultId) {
 		Obs obs = Context.getObsService().getObs(dstResultId);
 		
-		// the id must refer to a valid obs, which is a scanned lab report
-		if (obs == null || ! obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent()) ) {
-			throw new APIException ("Unable to delete scanned lab report: invalid report id " + dstResultId);
+		// the id must refer to a valid obs, which is a dst result
+		if (obs == null || ! obs.getConcept().equals(this.getConcept(MdrtbConcepts.DST_RESULT)) ) {
+			throw new APIException ("Unable to delete dst result: invalid dst ersult id " + dstResultId);
 		}
 		else {
 			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");
@@ -423,7 +429,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Obs obs = Context.getObsService().getObs(reportId);
 		
 		// the id must refer to a valid obs, which is a scanned lab report
-		if (obs == null || ! obs.getConcept().equals(mdrtbFactory.getConceptScannedLabReport()) ) {
+		if (obs == null || ! obs.getConcept().equals(this.getConcept(MdrtbConcepts.SCANNED_LAB_REPORT)) ) {
 			throw new APIException ("Unable to delete scanned lab report: invalid report id " + reportId);
 		}
 		else {
@@ -436,46 +442,46 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     }
 	
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
-		return getMdrtbFactory().getConceptSmearResult().getAnswers();
+		return this.getConcept(MdrtbConcepts.SMEAR_RESULT).getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSmearMethods() {
-		return getMdrtbFactory().getConceptSmearMicroscopyMethod().getAnswers();
+		return this.getConcept(MdrtbConcepts.SMEAR_METHOD).getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleCultureResults() {
-		return getMdrtbFactory().getConceptCultureResult().getAnswers();
+		return this.getConcept(MdrtbConcepts.CULTURE_RESULT).getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleCultureMethods() {
-		return getMdrtbFactory().getConceptCultureMethod().getAnswers();
+		return this.getConcept(MdrtbConcepts.CULTURE_METHOD).getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleDstMethods() {
-		return getMdrtbFactory().getConceptDSTMethod().getAnswers();
+		return this.getConcept(MdrtbConcepts.DST_METHOD).getAnswers();
 	}
 	
 	public Collection<Concept> getPossibleDstResults() {
 		List<Concept> results = new LinkedList<Concept>();
-		results.add(getMdrtbFactory().getConceptSusceptibleToTuberculosisDrug());
-		results.add(getMdrtbFactory().getConceptIntermediateToTuberculosisDrug());
-		results.add(getMdrtbFactory().getConceptResistantToTuberculosisDrug());
-		results.add(getMdrtbFactory().getConceptDstTestContaminated());
-		results.add(getMdrtbFactory().getConceptWaitingForTestResults());
+		results.add(this.getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG));
+		results.add(this.getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG));
+		results.add(this.getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG));
+		results.add(this.getConcept(MdrtbConcepts.DST_CONTAMINATED));
+		results.add(this.getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS));
 		
 		return results;
 	}
 	
 	public Collection<ConceptAnswer> getPossibleOrganismTypes() {
-		return getMdrtbFactory().getConceptTypeOfOrganism().getAnswers();
+		return this.getConcept(MdrtbConcepts.TYPE_OF_ORGANISM).getAnswers();
 	}
 	
-	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {
-		return getMdrtbFactory().getConceptSampleSource().getAnswers();
+	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {	
+		return this.getConcept(MdrtbConcepts.SAMPLE_SOURCE).getAnswers();
 	}
 	
 	public Collection<ConceptAnswer> getPossibleSpecimenAppearances() {
-		return getMdrtbFactory().getConceptAppearanceOfSpecimen().getAnswers();
+		return this.getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE).getAnswers();
 	}
 	
     public List<Concept> getPossibleDrugTypesToDisplay() {

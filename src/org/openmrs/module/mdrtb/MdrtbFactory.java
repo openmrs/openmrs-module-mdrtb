@@ -903,7 +903,7 @@ public final class MdrtbFactory {
     }
     //STR_DST_RESULT_PARENT
     public Concept getConceptDSTResultParent(){
-    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT);
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_RESULT);
     }
     public Concept getConceptDateReceived(){
     	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_RECEIVED);
@@ -2253,9 +2253,16 @@ public final class MdrtbFactory {
           }
       }
 
-    public Map<String, Concept> getXmlConceptList() {
-        return xmlConceptList;
-    }
+      public Map<String, Concept> getXmlConceptList() {
+      	// TODO: adding an initialization of the concept list here
+      	// for legacy code that still uses it
+      
+    	  if(xmlConceptList.isEmpty()) {
+    		  readXML();
+    	  }
+    	  
+    	  return xmlConceptList;
+      }
     
     public void initializeEverythingAboutConcept(Concept c){
         if (c != null){

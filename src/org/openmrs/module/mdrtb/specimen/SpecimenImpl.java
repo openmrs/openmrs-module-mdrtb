@@ -24,8 +24,17 @@ import org.openmrs.module.mdrtb.MdrtbService;
  * An implementation of the MdrtbSpecimen. This wraps an Encounter and provides access to the
  * various specimen-related data in Encounter
  */
-
 public class SpecimenImpl implements Specimen {
+	
+	// TODO: could potentially cache all the get/set variables in private instance variables here...
+	// to make this more like a real "command"; then could create a "initialize" method that
+	// automatically runs all the getters (and thereby loading the cache)
+	// could do this for all the specimen related objects
+	// TODO: or, actually, perhaps the thing to do here is simply to pre-load the concept maps that the module uses?
+	// this is all that would be required to "detach" this object from the business-layer (i think... for 
+	// instance if we wanted to pass this object as a web service?)  (of course, not sure exactly how lazy loading would
+	// affect this)
+	
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
