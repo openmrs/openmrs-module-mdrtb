@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -55,13 +54,6 @@ public interface MdrtbService extends OpenmrsService {
      * Fetches a concept specified by a MdrtbConcepts mapping
      */
     public Concept getConcept(String [] conceptMapping);
-    
-    /**
-     * Returns all the MDR-TB concept mappings
-     * 
-     * **note that this has not yet been tested **
-     */
-    public Set<String[]> getAllConceptMappings();
    
     /**
      * Given a patient ID, return a patient wrapped in a MdrtbPatientWrapper

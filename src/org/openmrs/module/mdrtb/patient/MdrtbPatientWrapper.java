@@ -12,6 +12,8 @@ import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
 
 
+// TODO: should you get specimens and regimens here as well?
+// TODO: turn this into an interface
 public class MdrtbPatientWrapper {
 	
     private Patient patient;

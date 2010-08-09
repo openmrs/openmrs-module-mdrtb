@@ -21,6 +21,7 @@ public class PatientChartFactory {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 
+	// TODO: should this operate on an MDR-TB patient wrapper?
 	public PatientChart createPatientChart(Patient patient) {
 		PatientChart chart = new PatientChart();
 		
@@ -54,6 +55,7 @@ public class PatientChartFactory {
 		}
 		else {
 			// TODO: this is only temporary, not what we want to do long term, doesn't handle patients with more than one; baseline/prior
+			// TODO: this should be driven from the a getDateEnrolled method on the MdrtbPatientWrapper?
 			startDate.setTime(programs.get(0).getDateEnrolled());
 		}
 		

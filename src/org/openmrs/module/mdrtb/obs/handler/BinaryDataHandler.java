@@ -26,7 +26,6 @@ import org.openmrs.api.APIException;
 import org.openmrs.obs.ComplexData;
 import org.openmrs.obs.ComplexObsHandler;
 import org.openmrs.obs.handler.AbstractHandler;
-import org.openmrs.obs.handler.ImageHandler;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 
@@ -37,7 +36,9 @@ import org.openmrs.util.OpenmrsUtil;
  */
 public class BinaryDataHandler extends AbstractHandler implements ComplexObsHandler {
 	
-	public static final Log log = LogFactory.getLog(ImageHandler.class);
+	// TODO: remove this once it gets added to core
+	
+	public static final Log log = LogFactory.getLog(BinaryDataHandler.class);
 	
 	/**
 	 * Constructor initializes formats for alternative file names to protect from unintentionally

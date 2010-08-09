@@ -1,8 +1,5 @@
 package org.openmrs.module.mdrtb.impl;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,8 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -30,11 +25,11 @@ import org.openmrs.Program;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
-import org.openmrs.module.mdrtb.exception.MissingConceptException;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
@@ -59,6 +54,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	private static MdrtbFactory mdrtbFactory;
 	
+	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?
+	
 	private List<MdrtbRegimenSuggestion> standardRegimens = null;
 	
 	private List<Locale> localeSetUsedInDB = null;
@@ -70,6 +67,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	private Map<Integer,String> locationToDisplayCodeCache = null;
 	
 	
+
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
 	}
@@ -99,11 +97,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void setStandardRegimens(List<MdrtbRegimenSuggestion> standardRegimens) {
-		if(standardRegimens == null) {
-			standardRegimens = new LinkedList<MdrtbRegimenSuggestion>();
+		if(this.standardRegimens == null) {
+			this.standardRegimens = new LinkedList<MdrtbRegimenSuggestion>();
 		}
 		
-		standardRegimens.addAll(standardRegimens);
+		this.standardRegimens.addAll(standardRegimens);
 	}
 	
 	public List<Locale> getLocaleSetUsedInDB() {
@@ -119,6 +117,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	                    locales.add(new Locale(oTmp));
 	            }
 	        }
+	        
 	        setLocaleSetUsedInDB(locales);
 		}
 		
@@ -126,57 +125,23 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void setLocaleSetUsedInDB(List<Locale> localeSetUsedInDB) {
-		localeSetUsedInDB.addAll(localeSetUsedInDB);
+		if(this.localeSetUsedInDB == null) {
+			this.localeSetUsedInDB = new LinkedList<Locale>();
+		}
+		
+		this.localeSetUsedInDB.addAll(localeSetUsedInDB);
 	}
 	
 	public List<Location> getAllMdrtrbLocations(boolean includeRetired) {
 		return dao.getAllMdrtrbLocations(includeRetired);
 	}
 	
-	public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) {
+	public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) {		
 		return dao.getConceptWords(phrase, locales);
 	}
 	
 	public Concept getConcept(String [] conceptMapping) {
-		Concept concept = null;
-		
-		// test all the mappings in the array
-		for(String mapName : conceptMapping) {
-			concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
-			
-			// if we've found a match, return it
-			if(concept != null) {
-				return concept;
-			}
-		}
-		
-		// if we didn't find a match, fail hard
-		throw new MissingConceptException("Can't find concept for mapping " + conceptMapping[0]);
-	}
-	
-	/**
-	 * @return all of the defined Concept Mappings
-	 */
-	public Set<String[]> getAllConceptMappings() {
-		Set<String[]> ret = new TreeSet<String[]>();
-		for (Field f : MdrtbConcepts.class.getFields()) {
-			// TODO: make sure this array reflection works
-			if (f.getType() == Array.class) {
-				int modifier = f.getModifiers();
-				if (Modifier.isFinal(modifier) && Modifier.isStatic(modifier) && Modifier.isPublic(modifier)) {
-					try {
-						Object value = f.get(null);
-						if (value != null) {
-							ret.add((String []) value);
-						}
-					}
-					catch (IllegalAccessException iae) {
-						throw new RuntimeException("Unable to access field: " + f, iae);
-					}
-				}
-			}
-		}
-		return ret;
+		return conceptMap.lookup(conceptMapping);
 	}
 	
 	public MdrtbPatientWrapper getMdrtbPatient(Integer patientId) {
