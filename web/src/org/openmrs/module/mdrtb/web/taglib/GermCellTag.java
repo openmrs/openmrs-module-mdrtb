@@ -26,7 +26,7 @@ public class GermCellTag extends TagSupport {
     public int doStartTag() {
     	
     	String ret = "";
-    	
+    		
     	Concept organismType = null;
     	String organismTypeNonCoded = "";
     	

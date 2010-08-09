@@ -444,7 +444,7 @@
 
 <tag>
 	<description>
-		Renders a smear cell for display
+		Renders a smear cell for display in the patient chart
 	</description>
 	<name>smearCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.SmearCellTag</tag-class>
@@ -458,7 +458,7 @@
 
 <tag>
 	<description>
-		Renders a culture cell for display
+		Renders a culture cell for display in the patient chart
 	</description>
 	<name>cultureCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.CultureCellTag</tag-class>
@@ -472,7 +472,7 @@
 	
 <tag>
 	<description>
-		Renders a DST results cell for display
+		Renders a DST results cell for display in the patient chart
 	</description>
 	<name>dstResultsCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.DstResultsCellTag</tag-class>
@@ -486,13 +486,32 @@
 
 <tag>
 	<description>
-		Renders a Germ cell for display
+		Renders a Germ cell for display in the patient chart
 	</description>
 	<name>germCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.GermCellTag</tag-class>
 	<body-content>jsp</body-content>
 	<attribute>
 		<name>cultures</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a Drug cell for display in the patient chart
+	</description>
+	<name>drugCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.DrugCellTag</tag-class>
+	<body-content>jsp</body-content>
+	<attribute>
+		<name>drug</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>regimens</name>
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>

@@ -42,12 +42,11 @@ public class MdrtbConceptMap {
 		
 		// if we've found a concept, return it
 		if(concept != null) {
-			log.error("Loaded concept from cache " + concept);
 			return concept;
 		}
 		
 		// if not, test all the mappings in the array
-		for(String mapName : conceptMapping) {
+		for(String mapName : conceptMapping) {		
 			concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
 			
 			// if we've found a match, initialize it and return it

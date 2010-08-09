@@ -6,17 +6,23 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
+import org.openmrs.util.OpenmrsUtil;
 
 public class RegimenHistory implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;    
+
+    protected final Log log = LogFactory.getLog(getClass());
     
     private List<RegimenComponent> components;
     private transient ListMap<Date, RegimenComponent[]> events;
@@ -100,6 +106,24 @@ public class RegimenHistory implements Serializable {
         return null;
     }
 
+    /**
+     * Gets all the regimens in this history between two dates
+     */
+    public List<Regimen> getRegimensBetweenDates(Date startDate, Date endDate) {
+    	List<Regimen> regimens = new LinkedList<Regimen>();
+    	
+    	for(Regimen regimen : this.getRegimenList()) {
+    		log.error("Test regimen with " + regimen.getStartDate() + " start date and " + regimen.getEndDate() + " end date");
+    		if(OpenmrsUtil.compareWithNullAsEarliest(regimen.getStartDate(), endDate) <= 0 &&
+    				OpenmrsUtil.compareWithNullAsLatest(regimen.getEndDate(), startDate) >= 0)  {
+    			regimens.add(regimen);
+    		}
+    	}
+    	
+    	return regimens;
+    }
+    
+    
     public List<Regimen> getRegimensAfter(Date effectiveDate) {
         List<Regimen> regs = getRegimenList();
         int startFrom = Integer.MAX_VALUE;
