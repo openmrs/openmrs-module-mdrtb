@@ -107,13 +107,19 @@ public class Regimen {
     }
     
     public boolean containsDrugConcept(Concept drug) {
-        if (components == null)
-            return false;
-        for (RegimenComponent c : components) {
-            if (c.getGeneric().equals(drug))
-                return true;
-        }
-        return false;
+       return (getRegimenComponentByDrugConcept(drug) != null);
+    }
+    
+    public RegimenComponent getRegimenComponentByDrugConcept(Concept drug) {
+    	if (components == null) {
+    		return null;
+    	}
+    	for (RegimenComponent c: components) {
+    		if (c.getGeneric().equals(drug)) {
+    			return c;
+    		}
+    	}
+    	return null;
     }
     
     public boolean containsDrugConceptOnDate(Concept concept, Date date) {

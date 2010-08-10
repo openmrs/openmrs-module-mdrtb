@@ -1651,7 +1651,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                 ObsService os = Context.getObsService();    
                 MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
                 MdrtbFactory mu = ms.getMdrtbFactory();
-                try{
+             //   try{
                     Patient patient = patientService.getPatient(Integer.valueOf(patientId));
                     patient.getIdentifiers();
                     mp.setPatient(patient);
@@ -2031,7 +2031,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                    c = mu.getConceptCurrentRegimenType();
                    mp.setStEmpIndObs(os.getObservationsByPersonAndConcept(patient, c));
                    mu = null;
-                } catch (Exception ex){log.warn("formBackingObject passed invalid patientId", ex);}
+                //} catch (Exception ex){log.warn("formBackingObject passed invalid patientId", ex);}
                 
             }
             

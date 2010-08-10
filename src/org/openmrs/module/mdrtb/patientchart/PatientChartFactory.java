@@ -36,6 +36,7 @@ public class PatientChartFactory {
 		}
 		
 		// first, fetch all the specimens for this patient
+		// TODO: change this to call the mdrtb patient wrapper??
 		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
 		
 		// also get the regimen history for the patient
@@ -50,6 +51,9 @@ public class PatientChartFactory {
 		
 		// now fetch the program start date
 		Calendar startDate = Calendar.getInstance();
+	
+		// TODO: this should come from the MdrtbPatient, treatment start date
+		// TODO: should we pass the MdrtbPatient to the factory instead of the patient? (yes)
 		
 		Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
 		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);

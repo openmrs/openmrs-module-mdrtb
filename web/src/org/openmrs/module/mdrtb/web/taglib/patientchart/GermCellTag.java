@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.taglib;
+package org.openmrs.module.mdrtb.web.taglib.patientchart;
 
 import java.io.IOException;
 import java.util.List;

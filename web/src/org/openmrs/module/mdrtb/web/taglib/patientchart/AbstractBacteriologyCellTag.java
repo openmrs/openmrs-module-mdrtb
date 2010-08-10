@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.taglib;
+package org.openmrs.module.mdrtb.web.taglib.patientchart;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Bacteriology;
 import org.openmrs.module.mdrtb.specimen.Culture;
@@ -169,7 +170,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     private static String getScantyResult(Bacteriology bac) {
     	// if this is a scanty result, we need to report the number of bacilli or colonies found with the result
 		String scanty = "";
-		if(bac.getResult().equals(Context.getService(MdrtbService.class).getConceptScanty())) {
+		if(bac.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY))) {
 			if("smear".equals(bac.getTestType())) {
 				Smear smear = (Smear) bac;
 				if(smear.getBacilli() != null) {

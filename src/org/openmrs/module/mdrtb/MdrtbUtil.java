@@ -88,13 +88,8 @@ public class MdrtbUtil {
         //second, check all other locales if still null 
         if (ret == null){
             
-            
             locales = getLocalesFromDB();
-            
-            log.error("After I've fetched the locales they = " + locales);
-            
-            
-            
+                      
             //first, if there's an exact match in the passed-in locale, that's what we want
             //TODO: this is slow...
             //conceptWords = Context.getConceptService().findConcepts(conceptString.trim(), locales, false, null, null, null, null);

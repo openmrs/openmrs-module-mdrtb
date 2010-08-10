@@ -23,7 +23,6 @@ import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.User;
 
-@Deprecated
 public class MdrtbPatient {
     
     private Patient patient;
