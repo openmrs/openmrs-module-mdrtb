@@ -36,7 +36,6 @@ public class DrugCellTag extends TagSupport {
 	    	StringBuffer titleString = new StringBuffer();
 	    	
 	    	if(regimens != null) {
-	    		
 	    		for(Regimen regimen : regimens) {
 	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
 	    			if(component != null) {

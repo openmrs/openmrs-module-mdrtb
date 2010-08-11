@@ -184,13 +184,7 @@
 			<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
 				<c:choose>
 					<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
-						<td class="chartCell">
-						<table style="padding:0px; border:0px; margin0px; width:100%">
-						<tr>
-							<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}"/>	
-						</tr>
-						</table>
-						</td>
+						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
 					</c:when>
 					<!-- handle any regimen info -->
 					<c:otherwise>

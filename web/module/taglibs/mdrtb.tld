@@ -482,6 +482,16 @@
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>regimens</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>drug</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
 
 <tag>

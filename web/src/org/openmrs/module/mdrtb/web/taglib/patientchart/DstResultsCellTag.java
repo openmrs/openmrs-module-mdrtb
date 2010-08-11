@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.specimen.DstResult;
 
 
@@ -22,10 +24,28 @@ public class DstResultsCellTag extends TagSupport {
 	
     private List<DstResult> dstResults;
     
+    private List<Regimen> regimens;
+    
+    private Concept drug;
+    
     public int doStartTag() {
    
     	String ret = null;
     	
+    	String drugColor = "white";
+    	   	
+    	// determine if we need to color the overall cell grey to reflect an active drug order
+    	if(regimens != null) {
+    		for(Regimen regimen : regimens) {
+    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
+    			if(component != null) {
+    				drugColor="gray";
+    				break;
+    			}
+    		}
+    	}
+    	
+    	// now figure out what DST result to display
     	if(dstResults != null && !dstResults.isEmpty()) {
     		String title = "";
     		Concept result = null;
@@ -58,12 +78,12 @@ public class DstResultsCellTag extends TagSupport {
     		
     		String color = Context.getService(MdrtbService.class).getColorForConcept(result);
     		
-    		ret = "<td class=\"chartCell\" title=\"" + title +
-    				"\" style=\"width:30px;padding:0px;border:0px;margin:0px;text-align:center;background-color:" + color + ";\">"+ 
-    				result.getBestShortName(Context.getLocale()) + "</td>";
+    		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\" title=\"" + title +
+    				"\" style=\"width:30px;padding:0px;border:0px;margin:0px;text-align:center;background-color:" + color + ";\">" + 
+    				result.getBestShortName(Context.getLocale()) + "</td></tr></table></td>";
     	}
     	else {
-    		ret = "<td class=\"chartCell\"/>";
+    		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\"/></tr></table></td>";
     	}
     		
     	try {
@@ -90,4 +110,23 @@ public class DstResultsCellTag extends TagSupport {
 	public List<DstResult> getDstResults() {
 	    return dstResults;
     }
+
+
+	public void setRegimens(List<Regimen> regimens) {
+	    this.regimens = regimens;
+    }
+
+
+	public List<Regimen> getRegimens() {
+	    return regimens;
+    }
+	
+    public Concept getDrug() {
+    	return drug;
+    }
+	
+    public void setDrug(Concept drug) {
+    	this.drug = drug;
+    }
+
 }
