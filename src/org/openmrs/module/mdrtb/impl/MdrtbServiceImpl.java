@@ -33,6 +33,7 @@ import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
+import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapperImpl;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -46,9 +47,6 @@ import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
-	
-	// The Concept Map name-space
-    private static final String MDRTB_CONCEPT_MAPPING_CODE = "org.openmrs.module.mdrtb";
 	
 	protected MdrtbDAO dao;
 	
@@ -157,7 +155,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			return null;
 		}
 		else {
-			return new MdrtbPatientWrapper(patient);
+			return new MdrtbPatientWrapperImpl(patient);
 		}
 	}
     

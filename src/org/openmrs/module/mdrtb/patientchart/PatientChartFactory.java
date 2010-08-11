@@ -10,14 +10,11 @@ import java.util.ListIterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
-import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
-import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenUtil;
 
@@ -27,7 +24,7 @@ public class PatientChartFactory {
 	protected final Log log = LogFactory.getLog(getClass());
 
 	// TODO: should this operate on an MDR-TB patient wrapper?
-	public PatientChart createPatientChart(Patient patient) {
+	public PatientChart createPatientChart(MdrtbPatientWrapper patient) {
 		PatientChart chart = new PatientChart();
 		
 		if (patient == null) {
@@ -36,11 +33,7 @@ public class PatientChartFactory {
 		}
 		
 		// first, fetch all the specimens for this patient
-		// TODO: change this to call the mdrtb patient wrapper??
-		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
-		
-		// also get the regimen history for the patient
-		RegimenHistory regimenHistory = RegimenUtils.getRegimenHistory(patient);
+		List<Specimen> specimens = patient.getSpecimens();
 		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
@@ -49,46 +42,48 @@ public class PatientChartFactory {
 		// TODO: make this configurable so that we don't always do this?
 		SpecimenUtil.groupSpecimensByDay(specimens);
 		
-		// now fetch the program start date
-		Calendar startDate = Calendar.getInstance();
+		// also get the regimen history for the patient
+		RegimenHistory regimenHistory = patient.getRegimenHistory();
+		
+		// get the treatment start date to use as the chart start date
+		Date chartStartDate = patient.getTreatmentStartDate();
+		
+		// get the treatment end date
+		Date treatmentEndDate = patient.getTreatmentEndDate();
+		
+		// if there is no treatment end date, but there was a start date, (i.e, treatment is active) set the treatment end date to today
+		if(treatmentEndDate == null && chartStartDate != null) {
+			treatmentEndDate = new Date();
+		}
+		
+		// if there is no treatment start date, set the chart start date to the date of the first specimen
+		if(chartStartDate == null) {
+			chartStartDate = specimens.get(0).getDateCollected();
+		}
+		
+		// now set the start date for the 1st record in the chart (to treatment start date)
+		Calendar recordStartDate = Calendar.getInstance();
+		recordStartDate.setTime(chartStartDate);
 	
-		// TODO: this should come from the MdrtbPatient, treatment start date
-		// TODO: should we pass the MdrtbPatient to the factory instead of the patient? (yes)
-		
-		Program mdrtb = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
-		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, mdrtb, null, null, null, null, false);
-		
-		if(programs == null || programs.size() == 0){
-			if(specimens.size() > 0) {
-				// set some sort of default date?
-				// TODO: use collected date of this first specimen for now
-				startDate.setTime(specimens.get(0).getDateCollected());
-			}
-		}
-		else {
-			// TODO: this is only temporary, not what we want to do long term, doesn't handle patients with more than one; baseline/prior
-			// TODO: this should be driven from the a getDateEnrolled method on the MdrtbPatientWrapper?
-			startDate.setTime(programs.get(0).getDateEnrolled());
-		}
-		
 		// first, we want to get all specimens collected more than a month before treatment start date
-		Calendar endDate = (Calendar) startDate.clone();
-		endDate.add(Calendar.MONTH, 1);
-		chart.getRecords().put("PRIOR", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, startDate, endDate)));
+		recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
+		chart.getRecords().put("PRIOR", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, null, recordStartDate)));
 		
 		// now add all the specimens collected in the month prior to treatment
-		startDate.add(Calendar.MONTH, 1);
-		endDate.add(Calendar.MONTH, 1);
-		chart.getRecords().put("BASELINE", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, startDate, endDate)));
+		Calendar recordEndDate = (Calendar) recordStartDate.clone();
+		recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
+		recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
+		chart.getRecords().put("BASELINE", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
 		
 		// now go through the add all the other specimens
-		startDate.add(Calendar.MONTH, 1);
-		endDate.add(Calendar.MONTH, 1);
+		recordStartDate.add(Calendar.MONTH, 1);
+		recordEndDate.add(Calendar.MONTH, 1);
 		Integer iteration = 0;
-		while(specimens.size() > 0) {
-			chart.getRecords().put(iteration.toString(), new PatientChartRecord(createRecordComponents(specimens, regimenHistory, startDate, endDate)));
-			startDate.add(Calendar.MONTH, 1);
-			endDate.add(Calendar.MONTH, 1);
+		// loop until we are out of specimens, or until we've passed the treatment end date, whatever is later
+		while(specimens.size() > 0 || (treatmentEndDate != null && (recordEndDate.getTime()).before(treatmentEndDate))) {
+			chart.getRecords().put(iteration.toString(), new PatientChartRecord(createRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
+			recordStartDate.add(Calendar.MONTH, 1);
+			recordEndDate.add(Calendar.MONTH, 1);
 			iteration++;
 		}
 		
@@ -108,18 +103,29 @@ public class PatientChartFactory {
 	 * Assembles all the components for a record
 	 */
 	private List<PatientChartRecordComponent> createRecordComponents(List<Specimen> specimens, RegimenHistory regimenHistory, Calendar startDate, Calendar endDate) {
-				
-		//log.error("Testing " + startDate.getTime() + "and " + endDate.getTime());
 		
 		List<PatientChartRecordComponent> components = new LinkedList<PatientChartRecordComponent>();
 		
 		// get all the specimens to include in this record, i.e. all specimens collected during this time period
 		List<Specimen> specimensToAdd = getSpecimensBeforeDate(specimens, endDate);
 		
+		Date dateCounter;
+		if(startDate != null) {
+			dateCounter = startDate.getTime();
+		}
+		else {
+			// if the startdate is null (i.e., this is the "prior" case) set start date to the collection date of the first specimen
+			if(specimensToAdd != null && specimensToAdd.size() > 0) {
+				dateCounter = specimensToAdd.get(0).getDateCollected();
+			}
+			else {
+				// otherwise, return an empty set
+				return components;
+			}
+		}
+		
 		// now create a new record component for each specimen
 		if(specimensToAdd.size() > 0) {
-			Date dateCounter = startDate.getTime();
-			
 			ListIterator<Specimen> i = specimensToAdd.listIterator();
 			
 			while (i.hasNext()) {
@@ -129,11 +135,9 @@ public class PatientChartFactory {
 				// fetch the regimens that we want to display in this component
 				if(!i.hasNext()) {
 					regimens = regimenHistory.getRegimensBetweenDates(dateCounter,endDate.getTime()); 
-					//log.error("Regimens between " + dateCounter + " and " + endDate.getTime() + " = " + regimens);
 				}
 				else{
 					regimens = regimenHistory.getRegimensBetweenDates(dateCounter,specimenToAdd.getDateCollected());
-					//log.error("Regimens between " + dateCounter + " and " + specimenToAdd.getDateCollected() + " = " + regimens);
 					dateCounter = specimenToAdd.getDateCollected();
 				}
 						
@@ -143,8 +147,7 @@ public class PatientChartFactory {
 		}
 		// if there are no specimens, simply gather all the regimens the patient was on during this time period
 		else {
-			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates(startDate.getTime(), endDate.getTime());
-			//log.error("Regimens between " + startDate.getTime() + " and " + endDate.getTime() + " = " + regimens);
+			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates(dateCounter, endDate.getTime());
 			components.add(new PatientChartRecordComponent(null, regimens));
 		}
 		

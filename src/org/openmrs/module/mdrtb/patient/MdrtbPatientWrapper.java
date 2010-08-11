@@ -3,70 +3,68 @@ package org.openmrs.module.mdrtb.patient;
 import java.util.Date;
 import java.util.List;
 
-import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
-import org.openmrs.api.APIException;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
-import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
+import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenHistory;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 
+/**
+ * An interface that provides access to the MDR-TB-specific elements of a patient
+ */
+public interface MdrtbPatientWrapper {
 
-// TODO: should you get specimens and regimens here as well?
-// TODO: turn this into an interface
-public class MdrtbPatientWrapper {
+	/**
+	 * Returns all mdr-tb patient programs associated with this patient
+	 */
+	public List<MdrtbPatientProgram> getMdrtbPrograms();
 	
-    private Patient patient;
-    
-    private PatientChart chart = null; // cache the patient chart
-    
-    public MdrtbPatientWrapper(Patient patient) {
-    	this.patient = patient;
-    }
-    
-	public List<PatientProgram> getMdrtbPrograms() {
-		return Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
-	 }
+	/**
+	 * Return whether or not the patient has ever been enrolled in the MDR-TB program
+	 */
+	public Boolean everEnrolledInMdrtbProgram();
 	
+	/**
+	 * Returns whether or not the patient is currently enrolled in the MDR-TB program
+	 */
+	public Boolean isEnrolledInMdrtbProgram();
 	
-	public Boolean everEnrolledInMdrtbProgram() {
-		return (getMdrtbPrograms().size() > 0);
-    }
+	/**
+	 * Enrolls the patient in the MDR-TB program at the specified data
+	 */
+	public void enrollInMdrtbProgram(Date dateEnrolled);
 	
-	public Boolean isEnrolledInMdrtbProgram() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * Returns the mdrtb patient chart for this patient
+	 */
+	public PatientChart getChart();
 	
-	public void enrollInMdrtbProgram(Date dateEnrolled) {
-		if(dateEnrolled == null) {
-			throw new APIException("Can't enroll patient in program: date enrolled is null.");
-		}
-		else if (dateEnrolled.after(new Date())) {
-			throw new APIException("Can't enroll patient in program: date enrolled cannot be in the future");
-		}
-		
-		// go ahead and enroll the patient in the program
-		// TODO: should I set the program workflow state to none?  see the MdrtbFactory method here?
-		PatientProgram patientProgram = new PatientProgram();
-		patientProgram.setPatient(this.patient);
-		patientProgram.setProgram(Context.getService(MdrtbService.class).getMdrtbProgram());
-		patientProgram.setDateEnrolled(dateEnrolled);
-		Context.getProgramWorkflowService().savePatientProgram(patientProgram);
-    }
-
-	public PatientChart getChart() {
-		
-		if(chart == null) {
-			PatientChartFactory factory = new PatientChartFactory();
-			this.chart = factory.createPatientChart(this.patient);
-		}
-		
-		return this.chart;
-	}
+	/**
+	 * Returns the mdrtb regimen history for this patient
+	 */
+	public RegimenHistory getRegimenHistory();
 	
-    public Object getCultureConversionStatus() {
-	    // TODO Auto-generated method stub
-	    return null;
-    }
+	/**
+	 * Returns the list of all mdrtb regimens for the patinent
+	 * returns null if no regimens
+	 */
+	public List<Regimen> getRegimens();
+	
+	/**
+	 * Returns the list of specimens associated with this patient 
+	 */
+	public List<Specimen> getSpecimens();
+	
+	/**
+	 * Gets the mdrtb treatment start date for this patient
+	 * (Defined as the date of the first TB drug order)
+	 * TODO: add methods to get treatment start date by program?
+	 */
+	public Date getTreatmentStartDate();
+	
+	/**
+	 * Gets the mdrtb treatment stop date for this patient
+	 * (Defined as the date of the end of the last TB order; returns null if there is an open order... i.e., treatment is ongoing)
+	 */
+	public Date getTreatmentEndDate();
+	
 }
