@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
@@ -54,7 +55,7 @@ public class DstResultsCellTag extends TagSupport {
     		for(DstResult dstResult : dstResults) {
     			
     			// need to ignore "none" results here
-    			if(dstResult.getResult() != null && dstResult.getResult() != Context.getService(MdrtbService.class).getConceptNone()) {
+    			if(dstResult.getResult() != null && dstResult.getResult() != Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NONE)) {
     			
     			String concentration = "";
     		
@@ -70,7 +71,7 @@ public class DstResultsCellTag extends TagSupport {
     					result = dstResult.getResult();
     				}
     				else if (!result.equals(dstResult.getResult())) {
-    				    result = Context.getService(MdrtbService.class).getConceptIntermediateToTuberculosisDrug();
+    				    result = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG);
     				    break;
     				}
     			}

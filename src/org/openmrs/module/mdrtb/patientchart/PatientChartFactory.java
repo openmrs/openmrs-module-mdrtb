@@ -56,15 +56,19 @@ public class PatientChartFactory {
 			treatmentEndDate = new Date();
 		}
 		
-		// if there is no treatment start date, set the chart start date to the collected date of the first specimen
+		Calendar recordStartDate = Calendar.getInstance();
+		
+		// if there is no treatment start date, set the first record to a month after the collected date of the first specimen
+		// (so that the first specimen should show up in the baseline row)
 		if(chartStartDate == null) {
 			chartStartDate = specimens.get(0).getDateCollected();
+			recordStartDate.setTime(chartStartDate);
+			recordStartDate.add(Calendar.MONTH, 1);
 		}
-		
-		// now set the start date for the 1st record in the chart
-		Calendar recordStartDate = Calendar.getInstance();
-		recordStartDate.setTime(chartStartDate);
-	
+		else {
+			recordStartDate.setTime(chartStartDate);
+		}
+
 		// first, we want to get all specimens collected more than a month the chart start date (for the prior row)
 		recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
 		chart.getRecords().put("PRIOR", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, null, recordStartDate)));

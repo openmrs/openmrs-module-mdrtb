@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 
@@ -35,7 +36,7 @@ public class GermCellTag extends TagSupport {
     		if(culture.getOrganismType() != null) {
     			if(organismType == null) {
     				organismType = culture.getOrganismType();
-    				if(organismType.equals(Context.getService(MdrtbService.class).getConceptOtherMycobacteriaNonCoded())) {
+    				if(organismType.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED))) {
     					if(StringUtils.isEmpty(organismTypeNonCoded)) {
     						organismTypeNonCoded = culture.getOrganismTypeNonCoded();
     					}
@@ -52,7 +53,7 @@ public class GermCellTag extends TagSupport {
     	}
     	
     	if(organismType != null) {
-    		if(organismType.equals(Context.getService(MdrtbService.class).getConceptOtherMycobacteriaNonCoded())) {
+    		if(organismType.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED))) {
     			ret = organismTypeNonCoded;
     		}
     		else {
