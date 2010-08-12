@@ -74,16 +74,15 @@ public class PatientChartFactory {
 
 		// first, we want to get all specimens collected more than a month the chart start date (for the prior row)
 		recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
-		chart.getRecords().put("PRIOR", new Record(createSpecimenRecordComponents(specimens, regimenHistory, null, recordStartDate)));
-		// TODO: add state change components here? or can we assume that prior and baseline have no state changes?
-		
+		Record record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, null, recordStartDate);
+		chart.getRecords().put("PRIOR", record);
 		
 		// now add all the specimens collected in the month prior to treatment (for the baseline row)
 		Calendar recordEndDate = (Calendar) recordStartDate.clone();
 		recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
 		recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
-		chart.getRecords().put("BASELINE", new Record(createSpecimenRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
-		// TODO: add state change components here? or can we assume that prior and baseline have no state changes?
+		record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
+		chart.getRecords().put("BASELINE", record);
 		
 		
 		// now go through the add all the other specimens
@@ -92,7 +91,7 @@ public class PatientChartFactory {
 		Integer iteration = 0;
 		// loop until we are out of specimens, or until we've passed the treatment end date, whatever is later
 		while(specimens.size() > 0 || (treatmentEndDate != null && (recordEndDate.getTime()).before(treatmentEndDate))) {
-			Record record = createPatientRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
+			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
 			chart.getRecords().put(iteration.toString(), record);
 			
 			// increment
@@ -116,7 +115,7 @@ public class PatientChartFactory {
 	/**
 	 * Creates a record for the patient chart in the specified range
 	 */
-	private Record createPatientRecord(List<Specimen> specimens, List<RecordComponent> stateChangeRecordComponents, RegimenHistory regimenHistory, Calendar recordStartDate, Calendar recordEndDate) {
+	private Record createChartRecord(List<Specimen> specimens, List<RecordComponent> stateChangeRecordComponents, RegimenHistory regimenHistory, Calendar recordStartDate, Calendar recordEndDate) {
 		// get the specimen components for this period
 		List<RecordComponent> components = createSpecimenRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate);
 		
@@ -129,7 +128,7 @@ public class PatientChartFactory {
 		// if there are no components, simply gather all the regimens the patient was on during this time period
 		// and put it on a specimen component
 		if(components.size() == 0) {
-			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates(recordStartDate.getTime(), recordEndDate.getTime());
+			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates((recordStartDate != null ? recordStartDate.getTime() : null), recordEndDate.getTime());
 			components.add(new SpecimenRecordComponent(null, regimens));
 		}
 		
