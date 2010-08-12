@@ -126,7 +126,7 @@
 <td class="chartCell">Date collected</td>
 <td class="chartCell" style="width:100px">Smears</td>
 <td class="chartCell" style="width:100px">Cultures</td>
-<td class="chartCell">Germ</td>
+<td class="chartCell">Bacteria</td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->
@@ -143,6 +143,8 @@
 	<c:set var="componentCount" value="${fn:length(record.value.components)}"/>
 	
 	<c:choose>
+	
+		<!--  HANDLE RECORDS THAT HAVE COMPONENTS -->
 		<c:when test="${componentCount != 0}">
 			<c:forEach var="component" items="${record.value.components}" varStatus="i">
 			<tr>
@@ -150,61 +152,69 @@
 				<td class="chartCell" rowspan="${componentCount}">${record.key}</td>
 			</c:if>
 			
-			<td class="chartCell">
-				<c:if test="${!empty component.specimen}">
-					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}"/></a>
-				</c:if>
-			</td>
+			<!-- HANDLE SPECIMEN COMPONENTS -->
+			<c:if test="${component.type eq 'specimenRecordComponent'}">
+				<td class="chartCell">
+					<c:if test="${!empty component.specimen}">
+						<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.date}"><openmrs:formatDate date="${component.specimen.dateCollected}"/></a>
+					</c:if>
+				</td>
 			
-			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.smears}">
-				<table style="padding:0px; border:0px; margin0px; width:100%">
-				<tr>
-					<mdrtb:smearCell smears="${component.specimen.smears}"/>
-				</tr>
-				</table>
-			</c:if></td> 
+				<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.smears}">
+					<table style="padding:0px; border:0px; margin0px; width:100%">
+					<tr>
+						<mdrtb:smearCell smears="${component.specimen.smears}"/>
+					</tr>
+					</table>
+				</c:if></td> 
 			
-			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.cultures}">
-				<table style="padding:0px; border:0px; margin0px; width:100%">
-				<tr>
-					<mdrtb:cultureCell cultures="${component.specimen.cultures}"/>
-				</tr>
-				</table>
-			</c:if></td> 
+				<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.cultures}">
+					<table style="padding:0px; border:0px; margin0px; width:100%">
+					<tr>
+						<mdrtb:cultureCell cultures="${component.specimen.cultures}"/>
+					</tr>
+					</table>
+				</c:if></td> 
 			
-			<td class="chartCell" style="font-size:60%">
+				<td class="chartCell" style="font-size:60%">
 				<c:if test="${!empty component.specimen && !empty component.specimen.cultures}">
 					<mdrtb:germCell cultures="${component.specimen.cultures}"/>
 				</c:if>
-			</td>
+				</td>
+	
+				<!--  dsts -->
+				<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
+					<c:choose>
+						<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
+							<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
+						</c:when>
+						<!-- handle any regimen info -->
+						<c:otherwise>
+							<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${mdrtbPatient.patient.id}"/>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				</c:if>
 			
-		<!--  	<td class="chartCell" style="border-top:none;border-bottom:none"/>  --> <!-- BLANK COLUMN -->
-				
-			<!--  dsts -->
-			<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
-				<c:choose>
-					<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
-						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
-					</c:when>
-					<!-- handle any regimen info -->
-					<c:otherwise>
-						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}"/>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			
-			</tr>
-			</c:forEach>
+				<!-- HANDLE STATE CHANGE COMPONENTS -->
+				<c:if test="${component.type eq 'stateChangeRecordComponent'}">
+					<td class="chartCell"><openmrs:formatDate date="${component.date}"/></td>
+					<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(mdrtbPatient.chart.drugTypes) + 3}">${component.text}</td>
+				</c:if>
+				<!-- END OF HANDLING STATE CHANGE COMPONENTS -->
+				</tr>
+				</c:forEach>
 		</c:when>
+		
+		<!-- HANDLE RECORDS WITH NO COMPONENTS -->
 		<c:otherwise>
 			<tr>
 			<td class="chartCell">${record.key}</td>
 			<td class="chartCell"/><td class="chartCell"/><td class="chartCell"/><td class="chartCell"/>
-			<!-- <td class="chartCell" style="border-top:none;border-bottom:none"/> -->  <!-- BLANK COLUMN -->
 			
 			<!-- handle any regimen info -->
 			<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
-					<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}"/>
+					<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${mdrtbPatient.patient.id}"/>
 			</c:forEach>
 			
 			</tr>		

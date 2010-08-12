@@ -27,6 +27,8 @@ public class DrugCellTag extends TagSupport {
 	
 	private List<Regimen> regimens;
 
+	private int patientId;
+	
 	  public int doStartTag() {
 		 
 	    	String ret = null;
@@ -40,13 +42,15 @@ public class DrugCellTag extends TagSupport {
 	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
 	    			if(component != null) {
 	    				updateTitle(titleString, component);
-	    				colorString="gray";
+	    				colorString="lightgray";
 	    			}
 	    		}
 	    	}
 	    	
 	    	if(StringUtils.isNotBlank(colorString)) {
-	    		ret = "<td class=\"chartCell\" title=\"" + titleString.toString() + "\" style=\"background-color:" + colorString + "\"/>";
+	    		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\"" +
+	    			"onclick=\"window.location = \'../regimen/regimen.form?patientId=" + this.patientId + "\'\" class=\"chartCell\" title=\""
+	    			+ titleString.toString() + "\" style=\"background-color:" + colorString + "\"/>";
 	    	}
 	    	else {
 	    		ret = "<td class=\"chartCell\"/>";
@@ -129,5 +133,15 @@ public class DrugCellTag extends TagSupport {
 
 	public List<Regimen> getRegimens() {
 	    return regimens;
+    }
+
+	
+    public int getPatientId() {
+    	return patientId;
+    }
+
+	
+    public void setPatientId(int patientId) {
+    	this.patientId = patientId;
     }
 }

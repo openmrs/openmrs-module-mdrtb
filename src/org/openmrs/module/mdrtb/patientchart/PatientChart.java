@@ -10,21 +10,21 @@ import org.openmrs.Concept;
 public class PatientChart {
 
 	// Note: this map should be an ordered (Linked) map because we rely on the order in the implementation
-	private Map<String,PatientChartRecord> records;
+	private Map<String,Record> records;
 	
 	private List<Concept> drugTypes;
 	
 	
 	public PatientChart() {
-		records = new LinkedHashMap<String,PatientChartRecord>();
+		records = new LinkedHashMap<String,Record>();
 	}
 	
 
-	public void setRecords(Map<String,PatientChartRecord> records) {
+	public void setRecords(Map<String,Record> records) {
 	    this.records = records;
     }
 
-	public Map<String,PatientChartRecord> getRecords() {
+	public Map<String,Record> getRecords() {
 	    return records;
     }
 

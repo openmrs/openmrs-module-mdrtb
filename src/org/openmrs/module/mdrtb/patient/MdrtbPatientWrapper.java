@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.patient;
 import java.util.Date;
 import java.util.List;
 
+import org.openmrs.Patient;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
@@ -13,6 +14,11 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
  */
 public interface MdrtbPatientWrapper {
 
+	/**
+	 * Return the patient this wrapper wraps
+	 */
+	public Patient getPatient();
+	
 	/**
 	 * Returns all mdr-tb patient programs associated with this patient
 	 */

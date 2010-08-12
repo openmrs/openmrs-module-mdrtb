@@ -16,9 +16,6 @@ import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 
-
-// TODO: should you get specimens and regimens here as well?
-// TODO: turn this into an interface
 public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 	
     private Patient patient;
@@ -27,6 +24,10 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
     
     public MdrtbPatientWrapperImpl (Patient patient) {
     	this.patient = patient;
+    }
+    
+    public Patient getPatient() {
+    	return patient;
     }
     
 	public List<MdrtbPatientProgram> getMdrtbPrograms() {

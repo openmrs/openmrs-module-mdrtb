@@ -45,6 +45,9 @@ public class PatientChartFactory {
 		// also get the regimen history for the patient
 		RegimenHistory regimenHistory = patient.getRegimenHistory();
 		
+		// calculate all the state change components we need to display on the chart
+		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(patient);
+		
 		// get the treatment start date to use as the chart start date
 		Date chartStartDate = patient.getTreatmentStartDate();
 		
@@ -71,13 +74,17 @@ public class PatientChartFactory {
 
 		// first, we want to get all specimens collected more than a month the chart start date (for the prior row)
 		recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
-		chart.getRecords().put("PRIOR", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, null, recordStartDate)));
+		chart.getRecords().put("PRIOR", new Record(createSpecimenRecordComponents(specimens, regimenHistory, null, recordStartDate)));
+		// TODO: add state change components here? or can we assume that prior and baseline have no state changes?
+		
 		
 		// now add all the specimens collected in the month prior to treatment (for the baseline row)
 		Calendar recordEndDate = (Calendar) recordStartDate.clone();
 		recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
 		recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
-		chart.getRecords().put("BASELINE", new PatientChartRecord(createRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
+		chart.getRecords().put("BASELINE", new Record(createSpecimenRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
+		// TODO: add state change components here? or can we assume that prior and baseline have no state changes?
+		
 		
 		// now go through the add all the other specimens
 		recordStartDate.add(Calendar.MONTH, 1);
@@ -85,7 +92,10 @@ public class PatientChartFactory {
 		Integer iteration = 0;
 		// loop until we are out of specimens, or until we've passed the treatment end date, whatever is later
 		while(specimens.size() > 0 || (treatmentEndDate != null && (recordEndDate.getTime()).before(treatmentEndDate))) {
-			chart.getRecords().put(iteration.toString(), new PatientChartRecord(createRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate)));
+			Record record = createPatientRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
+			chart.getRecords().put(iteration.toString(), record);
+			
+			// increment
 			recordStartDate.add(Calendar.MONTH, 1);
 			recordEndDate.add(Calendar.MONTH, 1);
 			iteration++;
@@ -104,11 +114,36 @@ public class PatientChartFactory {
 	 */
 	
 	/**
-	 * Assembles all the components for a record
+	 * Creates a record for the patient chart in the specified range
 	 */
-	private List<PatientChartRecordComponent> createRecordComponents(List<Specimen> specimens, RegimenHistory regimenHistory, Calendar startDate, Calendar endDate) {
+	private Record createPatientRecord(List<Specimen> specimens, List<RecordComponent> stateChangeRecordComponents, RegimenHistory regimenHistory, Calendar recordStartDate, Calendar recordEndDate) {
+		// get the specimen components for this period
+		List<RecordComponent> components = createSpecimenRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate);
 		
-		List<PatientChartRecordComponent> components = new LinkedList<PatientChartRecordComponent>();
+		// add the state change components for this period
+		components.addAll(getStateChangeRecordComponentsBeforeDate(stateChangeRecordComponents, recordEndDate));
+		
+		// sort the components
+		Collections.sort(components);
+		
+		// if there are no components, simply gather all the regimens the patient was on during this time period
+		// and put it on a specimen component
+		if(components.size() == 0) {
+			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates(recordStartDate.getTime(), recordEndDate.getTime());
+			components.add(new SpecimenRecordComponent(null, regimens));
+		}
+		
+		// create a new record using those components
+		return new Record(components);
+	}
+	
+	
+	/**
+	 * Assembles all the specimen components for a record
+	 */
+	private List<RecordComponent> createSpecimenRecordComponents(List<Specimen> specimens, RegimenHistory regimenHistory, Calendar startDate, Calendar endDate) {
+		
+		List<RecordComponent> components = new LinkedList<RecordComponent>();
 		
 		// get all the specimens to include in this record, i.e. all specimens collected during this time period
 		List<Specimen> specimensToAdd = getSpecimensBeforeDate(specimens, endDate);
@@ -146,16 +181,48 @@ public class PatientChartFactory {
 				}
 						
 				// add the components
-				components.add(new PatientChartRecordComponent(specimenToAdd, regimens));
+				components.add(new SpecimenRecordComponent(specimenToAdd, regimens));
 			}
 		}
-		// if there are no specimens, simply gather all the regimens the patient was on during this time period
-		else {
-			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates(dateCounter, endDate.getTime());
-			components.add(new PatientChartRecordComponent(null, regimens));
+				
+		return components;
+	}
+	
+	/**
+	 * Assembles all state change components for the entire chart
+	 */
+	private List<RecordComponent> createAllStateChangeRecordComponents(MdrtbPatientWrapper patient) {
+		List<RecordComponent> stateChangeRecordComponents = new LinkedList<RecordComponent>();
+		
+		// the only state we are worried about at this point is the treatment start date
+		// TODO: localize
+		stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), "TREATMENT START DATE"));
+		
+		Collections.sort(stateChangeRecordComponents);
+		
+		return stateChangeRecordComponents;
+	}
+	
+	// IMPORTANT: the assumption this method makes is that list is in descending date order
+	// also, this method pulls all the components it returns off the list of component passed to it;
+	// this method is intended to be use with the getPatientChart API method
+	private List<RecordComponent> getStateChangeRecordComponentsBeforeDate(List<RecordComponent> components, Calendar compareDate) {
+		List<RecordComponent> results = new LinkedList<RecordComponent>();
+		Calendar stateChangeDate = Calendar.getInstance();
+		
+		while(!components.isEmpty()) {
+			stateChangeDate.setTime(components.get(0).getDate());
+			if(stateChangeDate.before(compareDate)) {
+				results.add(components.get(0));
+				components.remove(components.get(0));
+			}
+			else {
+				// we don't need to keep checking since the the dates are in order
+				break;
+			}
 		}
 		
-		return components;
+		return results;
 	}
 	
 	// IMPORTANT: the assumption this method makes is that list of specimens are ordered in descending date order
@@ -180,6 +247,9 @@ public class PatientChartFactory {
 		return results;
 	}
 	
+	/**
+	 * Retrieves the drug types to display in the chart from global property
+	 */
 	private List<Concept> getDrugTypesForChart(PatientChart patientChart) {
 		// get all the possible drug types to display--this method also returns them in the order we want to display them
 		return Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();

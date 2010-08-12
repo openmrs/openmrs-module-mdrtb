@@ -36,9 +36,6 @@ public class MdrtbConceptMap {
 	 * Utility method which retrieves a mapped MDR-TB concept by code
 	 */
 	public Concept lookup(String [] conceptMapping) {
-		
-		log.error("Searching for concept with mapping " + conceptMapping[0]);
-		
 		// see if we have have the concept in the cache
 		Concept concept = cache.get(conceptMapping[0]);
 		

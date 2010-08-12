@@ -40,7 +40,7 @@ public class DstResultsCellTag extends TagSupport {
     		for(Regimen regimen : regimens) {
     			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
     			if(component != null) {
-    				drugColor="gray";
+    				drugColor="lightgray";
     				break;
     			}
     		}
