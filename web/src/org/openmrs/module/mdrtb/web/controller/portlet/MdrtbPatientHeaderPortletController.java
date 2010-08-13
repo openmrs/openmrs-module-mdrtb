@@ -17,8 +17,7 @@ public class MdrtbPatientHeaderPortletController extends PortletController {
 		// TODO: eventually we want this to collect the data it needs by adding an MdrtbPatientWrapper instance
 		// to the model instead
 		
-	
-		/**
+
 		MdrtbPatientOverviewController controller = new MdrtbPatientOverviewController();
 		
 		Object obj;
@@ -30,7 +29,6 @@ public class MdrtbPatientHeaderPortletController extends PortletController {
         }
 	
 		model.put("obj", obj);
-		*/
 		
 	}
 }
