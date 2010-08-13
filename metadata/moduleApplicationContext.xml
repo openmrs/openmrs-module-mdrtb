@@ -38,6 +38,7 @@
             	
             	<!-- new controller for patient header portlet -->
             	<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
+            	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -119,6 +120,9 @@
     
     <!-- portlet controllers -->
     <bean id="mdrtbPatientHeaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbPatientHeaderPortletController">
+    </bean>
+    
+    <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController">
     </bean>
     
     <bean parent="serviceContext">

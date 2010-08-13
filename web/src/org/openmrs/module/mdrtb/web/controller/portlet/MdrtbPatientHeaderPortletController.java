@@ -10,10 +10,6 @@ import org.openmrs.web.controller.PortletController;
 
 public class MdrtbPatientHeaderPortletController extends PortletController {
 
-	/**
-	 * Adds Mdrtb Patient wrapper to the data module
-	 */
-	
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
 		
 		// hack to just use the mdrtbPatientOverview controller at this point
