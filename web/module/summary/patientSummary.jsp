@@ -140,16 +140,16 @@
 <tbody>
 <c:forEach var="record" items="${mdrtbPatient.chart.records}">
 
-	<c:set var="componentCount" value="${fn:length(record.value.components)}"/>
+	<c:set var="componentCount" value="${fn:length(record.components)}"/>
 	
 	<c:choose>
 	
 		<!--  HANDLE RECORDS THAT HAVE COMPONENTS -->
 		<c:when test="${componentCount != 0}">
-			<c:forEach var="component" items="${record.value.components}" varStatus="i">
+			<c:forEach var="component" items="${record.components}" varStatus="i">
 			<tr>
 			<c:if test="${i.count == 1}" >
-				<td class="chartCell" rowspan="${componentCount}">${record.key}</td>
+				<td class="chartCell" rowspan="${componentCount}">${record.label}</td>
 			</c:if>
 			
 			<!-- HANDLE SPECIMEN COMPONENTS -->
@@ -209,7 +209,7 @@
 		<!-- HANDLE RECORDS WITH NO COMPONENTS -->
 		<c:otherwise>
 			<tr>
-			<td class="chartCell">${record.key}</td>
+			<td class="chartCell">${record.label}</td>
 			<td class="chartCell"/><td class="chartCell"/><td class="chartCell"/><td class="chartCell"/>
 			
 			<!-- handle any regimen info -->

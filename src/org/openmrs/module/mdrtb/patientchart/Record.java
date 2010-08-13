@@ -8,6 +8,8 @@ public class Record {
 	
 	private List<RecordComponent> components;
 	
+	private String label;
+	
 	public Record() {
 		this.components = new LinkedList<RecordComponent>();
 	}
@@ -22,6 +24,14 @@ public class Record {
 
 	public List<RecordComponent> getComponents() {
 	    return components;
+    }
+
+	public void setLabel(String label) {
+	    this.label = label;
+    }
+
+	public String getLabel() {
+	    return label;
     }
 	
 }

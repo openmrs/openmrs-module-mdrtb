@@ -1,5 +1,7 @@
 package org.openmrs.module.mdrtb.patientchart;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -49,50 +51,79 @@ public class PatientChartFactory {
 		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(patient);
 		
 		// get the treatment start date to use as the chart start date
-		Date chartStartDate = patient.getTreatmentStartDate();
+		Date treatmentStartDate = patient.getTreatmentStartDate();
 		
 		// get the treatment end date
 		Date treatmentEndDate = patient.getTreatmentEndDate();
 		
-		// if there is no treatment end date, but there was a start date, (i.e, treatment is active) set the treatment end date to today
-		if(treatmentEndDate == null && chartStartDate != null) {
+		// determine if the patient have ever been on treatment
+		Boolean hasBeenOnTreatment = (treatmentStartDate != null);
+		
+		// if not on treatment, and no specimens, nothing to chart, return null!
+		if(!hasBeenOnTreatment && (specimens == null || specimens.size() < 0)) {
+			return null;
+		}
+		
+		// if the patient has been on treatment, but there is no treatment end date, (i.e, treatment is active) set the treatment end date to today
+		if(hasBeenOnTreatment && treatmentEndDate == null) {
 			treatmentEndDate = new Date();
 		}
 		
 		Calendar recordStartDate = Calendar.getInstance();
+		Calendar recordEndDate;
+		Record record;
 		
-		// if there is no treatment start date, set the first record to a month after the collected date of the first specimen
-		// (so that the first specimen should show up in the baseline row)
-		if(chartStartDate == null) {
-			chartStartDate = specimens.get(0).getDateCollected();
-			recordStartDate.setTime(chartStartDate);
-			recordStartDate.add(Calendar.MONTH, 1);
+		// if the patient has never been on treatment, the first record start date should be the first day of the month the first specimen was collected
+		if(!hasBeenOnTreatment) {
+			// (we've already tested earlier that specimens is not null)
+			recordStartDate.setTime(specimens.get(0).getDateCollected());
+			recordStartDate.set(Calendar.DAY_OF_MONTH, 1);
+			recordEndDate = (Calendar) recordStartDate.clone();
+			recordEndDate.add(Calendar.MONTH, 1);	
 		}
+		// if there's a treatment start date, that is the start date of the first record (in this case, month 0)
 		else {
-			recordStartDate.setTime(chartStartDate);
-		}
+			recordStartDate.setTime(treatmentStartDate);
 
-		// first, we want to get all specimens collected more than a month the chart start date (for the prior row)
-		recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
-		Record record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, null, recordStartDate);
-		chart.getRecords().put("PRIOR", record);
+			// now we create the PRIOR and BASELINE rows
+			
+			// first, we want to get all specimens collected more than a month before the treatment start date (for the prior row)
+			recordStartDate.add(Calendar.MONTH, -1);  // set the periodStartDate one month back and use it as the endDate parameter to createRecordComponents
+			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, null, recordStartDate);
+			record.setLabel("PRIOR");
+			chart.getRecords().add(record);
 		
-		// now add all the specimens collected in the month prior to treatment (for the baseline row)
-		Calendar recordEndDate = (Calendar) recordStartDate.clone();
-		recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
-		recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
-		record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
-		chart.getRecords().put("BASELINE", record);
-		
+			// now all the specimens collected in the month prior to treatment start date (for the baseline row)
+			recordEndDate = (Calendar) recordStartDate.clone();
+			recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
+			recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
+			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
+			record.setLabel("BASELINE");
+			chart.getRecords().add(record);
+			
+			// increment
+			recordStartDate.add(Calendar.MONTH, 1);
+			recordEndDate.add(Calendar.MONTH, 1);
+		}
 		
 		// now go through the add all the other specimens
-		recordStartDate.add(Calendar.MONTH, 1);
-		recordEndDate.add(Calendar.MONTH, 1);
 		Integer iteration = 0;
+		
 		// loop until we are out of specimens, or until we've passed the treatment end date, whatever is later
 		while(specimens.size() > 0 || (treatmentEndDate != null && (recordEndDate.getTime()).before(treatmentEndDate))) {
 			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
-			chart.getRecords().put(iteration.toString(), record);
+			
+			// label rows by treatment month if has been on treatment, otherwise label by actual month
+			if(hasBeenOnTreatment) {
+				record.setLabel(iteration.toString());
+			}
+			else {
+				DateFormat format = new SimpleDateFormat("MM/yyyy");
+				record.setLabel(format.format(recordStartDate.getTime()));
+			}
+			
+			// add the record to the chart
+			chart.getRecords().add(record);
 			
 			// increment
 			recordStartDate.add(Calendar.MONTH, 1);
@@ -195,8 +226,10 @@ public class PatientChartFactory {
 		
 		// the only state we are worried about at this point is the treatment start date
 		// TODO: localize
-		stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), "TREATMENT START DATE"));
-		
+		if(patient.getTreatmentStartDate() != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), "TREATMENT START DATE"));
+		}
+			
 		Collections.sort(stateChangeRecordComponents);
 		
 		return stateChangeRecordComponents;

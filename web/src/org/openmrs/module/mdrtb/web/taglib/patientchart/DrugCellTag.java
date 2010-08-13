@@ -84,7 +84,7 @@ public class DrugCellTag extends TagSupport {
 	private static void updateTitle(StringBuffer titleString, RegimenComponent component) {
 		
 		// if the component is null or a drug order is missing, do nothing--protect against null pointer crashing everything
-		if(component == null || component.getDrugOrder() == null) {
+		if(component == null || component.getDrugOrder() == null || component.getDrug() == null) {
 			return;
 		}
 		
