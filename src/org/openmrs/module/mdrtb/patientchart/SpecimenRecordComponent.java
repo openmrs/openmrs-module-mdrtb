@@ -14,14 +14,27 @@ public class SpecimenRecordComponent implements RecordComponent {
 	
 	private List<Regimen> regimens;
 	
+	private Date date;
+	
 	public SpecimenRecordComponent() {}
 	
 	public SpecimenRecordComponent(Specimen specimen) {
 		this.specimen = specimen;
+		if(specimen != null) {
+			this.date = specimen.getDateCollected(); // if there is a specimen, date is set to date collected of specime
+		}
 	}
 	
 	public SpecimenRecordComponent(Specimen specimen, List<Regimen> regimens) {
 		this.specimen = specimen;
+		this.regimens = regimens;
+		if(specimen != null) {
+			this.date = specimen.getDateCollected(); // if there is a specimen, date is set to date collected of specimen
+		}
+	}
+	
+	public SpecimenRecordComponent(Date date, List<Regimen> regimens) {
+		this.date = date;  // if there is no specimen, date must be specified
 		this.regimens = regimens;
 	}
 
@@ -33,12 +46,7 @@ public class SpecimenRecordComponent implements RecordComponent {
 	}
 	
 	public Date getDate() {
-		if(specimen != null) {
-			return specimen.getDateCollected();
-		}
-		else {
-			return null;
-		}
+		return date;
     }
 
     public int compareTo(RecordComponent component) {

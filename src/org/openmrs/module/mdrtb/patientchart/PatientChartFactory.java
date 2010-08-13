@@ -150,18 +150,21 @@ public class PatientChartFactory {
 		// get the specimen components for this period
 		List<RecordComponent> components = createSpecimenRecordComponents(specimens, regimenHistory, recordStartDate, recordEndDate);
 		
-		// add the state change components for this period
+		// if there are no specimen components, simply gather all the regimens the patient was on during this time period
+		// and put it on a specimen component
+		if(components.size() == 0) {
+			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates((recordStartDate != null ? recordStartDate.getTime() : null), recordEndDate.getTime());
+			// note that we set the date for this component to be one millisecond after the start date for the record; this way regimen-only components
+			// sort after any other components with a date equal to the record start date (i.e., so that a treatment start date event sorts before any
+			// regimen information)
+			components.add(new SpecimenRecordComponent((recordStartDate != null ? new Date(recordStartDate.getTime().getTime() + 1) : null), regimens));
+		}
+		
+		// now add the state change components for this period
 		components.addAll(getStateChangeRecordComponentsBeforeDate(stateChangeRecordComponents, recordEndDate));
 		
 		// sort the components
 		Collections.sort(components);
-		
-		// if there are no components, simply gather all the regimens the patient was on during this time period
-		// and put it on a specimen component
-		if(components.size() == 0) {
-			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates((recordStartDate != null ? recordStartDate.getTime() : null), recordEndDate.getTime());
-			components.add(new SpecimenRecordComponent(null, regimens));
-		}
 		
 		// create a new record using those components
 		return new Record(components);
@@ -224,12 +227,16 @@ public class PatientChartFactory {
 	private List<RecordComponent> createAllStateChangeRecordComponents(MdrtbPatientWrapper patient) {
 		List<RecordComponent> stateChangeRecordComponents = new LinkedList<RecordComponent>();
 		
-		// the only state we are worried about at this point is the treatment start date
+		// the only state we are worried about at this point is the treatment start date and treatment end date
 		// TODO: localize
 		if(patient.getTreatmentStartDate() != null) {
 			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), "TREATMENT START DATE"));
 		}
 			
+		if(patient.getTreatmentEndDate() != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentEndDate(), "TREATMENT END DATE"));
+		}
+		
 		Collections.sort(stateChangeRecordComponents);
 		
 		return stateChangeRecordComponents;
