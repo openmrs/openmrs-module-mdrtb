@@ -70,15 +70,22 @@ public class MdrtbConcepts {
     public final static String [] TEST_DATE_RECEIVED = {"TUBERCULOSIS TEST DATE RECEIVED"};
     public final static String [] TEST_RESULT_DATE = {"TUBERCULOSIS TEST RESULT DATE"};
     public final static String [] TEST_START_DATE = {"TUBERCULOSIS TEST START DATE"};
-    public final static String [] TEST_COMMENTS = {"TUBERCULOSIS TEST COMMENTS"};
     public final static String [] TYPE_OF_ORGANISM = {"TYPE OF ORGANISM"};
     public final static String [] TYPE_OF_ORGANISM_NON_CODED = {"TYPE OF ORGANISM NON-CODED"};
     public final static String [] SPECIMEN_ID = {"TUBERCULOSIS SPECIMEN ID"};
-    public final static String [] SPECIMEN_APPEARANCE = {"appearanceOfSpecimen"};
+    public final static String [] SPECIMEN_APPEARANCE = {"APPEARANCE OF SPECIMEN"};
     public final static String [] SPECIMEN_COMMENTS =  {"TUBERCULOSIS SPECIMEN COMMENTS"};
-    public final static String [] WAITING_FOR_TEST_RESULTS = {"waitingForTestResults"};
-    public final static String [] DST_CONTAMINATED = {"dstTestContaminated"};
-    public final static String [] SCANNED_LAB_REPORT = {"scannedLabReport"};
+    public final static String [] WAITING_FOR_TEST_RESULTS = {"WAITING FOR TEST RESULTS"};
+    public final static String [] DST_CONTAMINATED = {"DST CONTAMINATED"};
+    public final static String [] SCANNED_LAB_REPORT = {"SCANNED LAB REPORT"};
+    
+    // Lab Results
+    public final static String [] STRONGLY_POSITIVE = {"STRONGLY POSITIVE"};
+    public final static String [] MODERATELY_POSITIVE = {"MODERATELY POSITIVE"};
+    public final static String [] WEAKLY_POSITIVE = {"WEAKLY POSITIVE"};
+    public final static String [] POSITIVE = {"POSITIVE"};
+    public final static String [] NEGATIVE = {"NEGATIVE"};
+    public final static String [] CONTAMINATED = {"CONTAMINATED"};
     
     // MDR-TB Treatment Type
     public final static String [] CURRENT_TREATMENT_TYPE = {"CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE"};

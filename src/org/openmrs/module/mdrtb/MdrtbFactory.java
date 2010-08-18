@@ -1023,10 +1023,6 @@ public final class MdrtbFactory {
     	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_ORDERED);
     }
     
-    public Concept getConceptTestComments() {
-    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_COMMENTS);
-    }
-    
     public Concept getConceptSpecimenComments() {
     	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS);
     }
@@ -1037,39 +1033,35 @@ public final class MdrtbFactory {
      */
     
     public Concept getConceptSusceptibleToTuberculosisDrug() {
-    	return Context.getConceptService().getConceptByMapping("SUSCEPTIBLE TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG);
     }
     
     public Concept getConceptIntermediateToTuberculosisDrug() {
-    	return Context.getConceptService().getConceptByMapping("INTERMEDIATE TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG);
     }
     
     public Concept getConceptResistantToTuberculosisDrug() {
-    	return Context.getConceptService().getConceptByMapping("RESISTANT TO TUBERCULOSIS DRUG", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG);
     }
     
     public Concept getConceptWaitingForTestResults() {
-    	return Context.getConceptService().getConceptByMapping("waitingForTestResults", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
     }
     
     public Concept getConceptDstTestContaminated() {
-    	return Context.getConceptService().getConceptByMapping("dstTestContaminated", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONTAMINATED);
     }
     
     public Concept getConceptScannedLabReport() {
-    	return Context.getConceptService().getConceptByMapping("scannedLabReport", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANNED_LAB_REPORT);
     }
     
     public Concept getConceptAppearanceOfSpecimen() {
-    	return Context.getConceptService().getConceptByMapping("appearanceOfSpecimen", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE);
     }
     
     public Concept getConceptSputum() {
-    	return Context.getConceptService().getConceptByMapping("sputum", "org.openmrs.module.mdrtb");
-    }
-    
-    public Concept getConceptFirstLineTBDrugs() {
-    	return Context.getConceptService().getConceptByMapping("firstLineTBDrugs", "org.openmrs.module.mdrtb");
+    	return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPUTUM);
     }
     
     public Set<Concept> getMdrProgramOutcomeConcepts() {

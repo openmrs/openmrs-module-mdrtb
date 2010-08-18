@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.controller.specimen;
+package org.openmrs.module.mdrtb.web.controller.migration;
 
 import java.util.Collection;
 import java.util.Date;

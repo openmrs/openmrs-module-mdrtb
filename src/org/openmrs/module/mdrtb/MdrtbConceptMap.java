@@ -16,6 +16,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.ErrorFetchingConceptException;
 import org.openmrs.module.mdrtb.exception.MissingConceptException;
 
 /**
@@ -36,24 +37,30 @@ public class MdrtbConceptMap {
 	 * Utility method which retrieves a mapped MDR-TB concept by code
 	 */
 	public Concept lookup(String [] conceptMapping) {
-		// see if we have have the concept in the cache
-		Concept concept = cache.get(conceptMapping[0]);
 		
-		// if we've found a concept, return it
-		if(concept != null) {
-			return concept;
-		}
+		try {
+			// see if we have have the concept in the cache
+			Concept concept = cache.get(conceptMapping[0]);
 		
-		// if not, test all the mappings in the array
-		for(String mapName : conceptMapping) {		
-			concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
-			
-			// if we've found a match, initialize it and return it
+			// if we've found a concept, return it
 			if(concept != null) {
-				initializeEverythingAboutConcept(concept);
-				cache.put(conceptMapping[0], concept);
 				return concept;
 			}
+		
+			// if not, test all the mappings in the array
+			for(String mapName : conceptMapping) {		
+				concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
+			
+				// if we've found a match, initialize it and return it
+				if(concept != null) {
+					initializeEverythingAboutConcept(concept);
+					cache.put(conceptMapping[0], concept);
+					return concept;
+				}
+			}
+		}
+		catch(Exception e) {
+			throw new ErrorFetchingConceptException("Error fetching concept for mapping " + conceptMapping[0], e);
 		}
 		
 		// if we didn't find a match, fail hard
@@ -101,7 +108,7 @@ public class MdrtbConceptMap {
 				Collection<ConceptNameTag> tags = cns.getTags();
 				for (ConceptNameTag cnTag : tags){
 					cnTag.getTag();
-                }
+				}
             }
 			Collection<ConceptAnswer> cas = c.getAnswers();
 			if (cas != null) {

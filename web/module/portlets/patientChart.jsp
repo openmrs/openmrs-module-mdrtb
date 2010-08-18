@@ -39,7 +39,7 @@
 		<c:if test="${component.type eq 'specimenRecordComponent'}">
 			<td class="chartCell">
 				<c:if test="${!empty component.specimen}">
-					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.date}"><openmrs:formatDate date="${component.specimen.dateCollected}"/></a>
+					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}"/></a>
 				</c:if>
 			</td>
 			

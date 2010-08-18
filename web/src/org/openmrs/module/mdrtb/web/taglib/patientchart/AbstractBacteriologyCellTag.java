@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -149,21 +148,20 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     }
     
     // defines the rankings that determine precedent when decided what color the cell should be
-    // TODO: change this to use new concept mappings method?
+    // TODO: move this into a global property?
     private static Map<Concept,Integer> initializeRankings() {
-    	
-    	ConceptService conceptService = Context.getConceptService();
+    
     	Map<Concept,Integer> resultRankings = new HashMap<Concept,Integer> ();
     	
-    	resultRankings.put(conceptService.getConceptByMapping("stronglyPositive","org.openmrs.module.mdrtb"), 1);
-    	resultRankings.put(conceptService.getConceptByMapping("moderatelyPositive","org.openmrs.module.mdrtb"), 2);
-    	resultRankings.put(conceptService.getConceptByMapping("positive","org.openmrs.module.mdrtb"), 3);
-    	resultRankings.put(conceptService.getConceptByMapping("weaklyPositive","org.openmrs.module.mdrtb"), 4);
-    	resultRankings.put(conceptService.getConceptByMapping("scanty","org.openmrs.module.mdrtb"), 5);
-    	resultRankings.put(conceptService.getConceptByMapping("negative","org.openmrs.module.mdrtb"), 6);
-    	resultRankings.put(conceptService.getConceptByMapping("contaminated","org.openmrs.module.mdrtb"), 7);
-    	resultRankings.put(conceptService.getConceptByMapping("waitingForTestResults","org.openmrs.module.mdrtb"), 8);
-    	
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STRONGLY_POSITIVE), 1);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MODERATELY_POSITIVE), 2);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.POSITIVE), 3);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WEAKLY_POSITIVE), 4);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY), 5);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE), 6);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTAMINATED), 7);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS), 8);
+    
     	return resultRankings;
     }
     
