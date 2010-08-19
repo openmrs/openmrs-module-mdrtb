@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -51,24 +52,25 @@ public class SpecimenMigrationController {
 		
 		// create all the new concepts/mappings/etc we need to add for the migration
 		// NOTE THAT WE WILL WANT TO MAKE SURE WE KEEP CONCEPTS IN SYNC BETWEEN SERVERS/DICTIONARYS
-		addAndUpdateConcepts();
+		//addAndUpdateConcepts();
 		
 		// add new global properties		
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("mdrtb.colorMap","1407:lightgrey|1408:lightcoral|1409:lightcoral|1410:lightcoral|2224:lightgrey|3047:khaki|664:lightgreen|703:lightcoral|2474:lightgreen|3017:khaki|1441:lightcoral|1107:none"));
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("mdrtb.locationToDisplayCodeMap","1:N/A|2:CANGE|3:HINCHE|4:N/A|5:MSLI"));
 		
 		// convert smears on Haiti forms
-		convertSmearsOnIntakeAndFollowup();
+		//convertSmearsOnIntakeAndFollowup();
 		
 		// migrate any existing Specimen Collection Encounters in the system
 		// note: this needs to happen first
-		migrateResultatsDeCrachetEncounters();
+		//migrateResultatsDeCrachetEncounters();
 		
 		// migrate any existing BAC and DST encounters in the system
 		migrateBacAndDstEncounters();
 		
 		//deleteUnusedConcepts();
 		// TODO: remove unused AFB Smear result?
+		// TODO: remove Bacteriology and DST encounter-types
 		
 		return new ModelAndView("/module/mdrtb/specimen/specimenMigration",map);
 	}
@@ -220,8 +222,8 @@ public class SpecimenMigrationController {
 		answer.setAnswerConcept(answerConcept);
 		answer.setDateCreated(new Date());
 		answer.setCreator(Context.getAuthenticatedUser());
-		// TODO: ***generate a "real" uuid***
-		answer.setUuid(OpenmrsUtil.generateUid());  
+		// TODO: is this the right way to generate a Uuid?
+		answer.setUuid(UUID.randomUUID().toString()); 
 		concept.addAnswer(answer);
 		Context.getConceptService().saveConcept(concept);
 	}
@@ -353,7 +355,7 @@ public class SpecimenMigrationController {
 		List<EncounterType> specimenEncounter = new LinkedList<EncounterType>();
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.test_result_encounter_type_bacteriology")));
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.test_result_encounter_type_DST")));
-			
+	/**		
 		// loop thru all the bac and dst encounters
 		for(Encounter encounter : Context.getEncounterService().getEncounters(null, null, null, null, null, specimenEncounter, null, false)) {
 			// to handle any test patients where the encounter hasn't been voided for some reason
@@ -512,10 +514,12 @@ public class SpecimenMigrationController {
 			}
 		}
 
+*/
 		// now void all unused encounters
 		// loop thru all the bac and dst encounters
 		
-		// TODO: might need to pull this into a separate call if I can't get this to work properly
+		// TODO: might need to pull this into a separate call if I can't get this to work properly\
+		// TODO: IMPORTANT--for some reason, I need to run this separately in order for it to work
 		for(Encounter encounter : Context.getEncounterService().getEncounters(null, null, null, null, null, specimenEncounter, null, false)) {
 			if (encounter.getAllObs().size() == 0) {
 				Context.getEncounterService().voidEncounter(encounter, "voided as part of mdr-tb migration");
