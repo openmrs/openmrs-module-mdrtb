@@ -71,8 +71,8 @@
 					<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
 						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
 					</c:when>
-					<!-- handle any regimen info -->
 					<c:otherwise>
+						<!-- handle any regimen info -->
 						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${mdrtbPatient.patient.id}"/>
 					</c:otherwise>
 				</c:choose>

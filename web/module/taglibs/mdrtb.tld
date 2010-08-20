@@ -15,7 +15,7 @@
 	</description>
 	<name>bacteriology</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.MdrtbBacteriologyWidgetController</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>obsGroupConcepts</name>
 		<required>true</required>
@@ -119,7 +119,7 @@
 	</description>
 	<name>dst</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.MdrtbDSTWidgetController</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>obsGroupConceptDST</name>
 		<required>true</required> 
@@ -344,7 +344,7 @@
 	</description>
 	<name>bacteriology</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.MdrtbBacteriologyWidgetController</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>obsGroupConcepts</name>
 		<required>true</required>
@@ -448,7 +448,7 @@
 	</description>
 	<name>smearCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.SmearCellTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>smears</name>
 		<required>true</required> 
@@ -462,7 +462,7 @@
 	</description>
 	<name>cultureCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.CultureCellTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>cultures</name>
 		<required>true</required> 
@@ -476,7 +476,7 @@
 	</description>
 	<name>dstResultsCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.DstResultsCellTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>dstResults</name>
 		<required>true</required> 
@@ -500,7 +500,7 @@
 	</description>
 	<name>germCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.GermCellTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>cultures</name>
 		<required>true</required> 
@@ -514,7 +514,7 @@
 	</description>
 	<name>drugCell</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.DrugCellTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>drug</name>
 		<required>true</required> 
@@ -538,7 +538,7 @@
 	</description>
 	<name>testStatus</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.TestStatusTag</tag-class>
-	<body-content>jsp</body-content>
+	<body-content>JSP</body-content>
 	<attribute>
 		<name>test</name>
 		<required>true</required> 
