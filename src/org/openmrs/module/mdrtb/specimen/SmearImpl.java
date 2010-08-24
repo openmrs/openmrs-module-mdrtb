@@ -5,6 +5,7 @@ import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
@@ -15,14 +16,12 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
 public class SmearImpl extends BacteriologyImpl implements Smear {
 	
 	public SmearImpl() {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 
 	// set up a smear object, given an existing obs
 	public SmearImpl(Obs smear) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
-		if(smear == null || !(smear.getConcept().equals(mdrtbFactory.getConceptSmearParent()))) {
+		if(smear == null || !(smear.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT)))) {
 			throw new RuntimeException ("Cannot initialize smear: invalid obs used for initialization.");
 		}
 		
@@ -31,14 +30,13 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
 	
 	// create a new smear object, given an existing patient
 	public SmearImpl(Encounter encounter) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {
 			throw new RuntimeException ("Cannot create smear: encounter can not be null.");
 		}
 		
 		// note that we are setting the location null--tests don't immediately inherit the location of the parent encounter
-		test = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSmearParent(), encounter.getEncounterDatetime(), null);
+		test = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT), encounter.getEncounterDatetime(), null);
 	}
 	
 	@Override
@@ -47,7 +45,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
 	}
 	
     public Integer getBacilli() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptBacilli(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BACILLI), test);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -58,7 +56,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     }
     
     public String getComments() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT), test);
     	
     	if(obs == null) {
     		return null;
@@ -69,7 +67,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     }
       
     public Concept getMethod() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_METHOD), test);
     	
     	if (obs == null) {
     		return null;
@@ -80,7 +78,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     }
 
     public void setBacilli(Integer bacilli) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptBacilli(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BACILLI), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && bacilli == null) {
@@ -96,7 +94,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
 		
     	// initialize the obs if needed
 		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptBacilli(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BACILLI), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -106,7 +104,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     }   
 
     public void setComments(String comments) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearResult(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT), test);
     	
     	// if this obs has not been created, and there is no data to add, do nothing
     	if (obs == null && StringUtils.isBlank(comments)) {
@@ -118,7 +116,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     	
     	// initialize the obs if needed
 		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearResult(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -127,7 +125,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     }
     
     public void setMethod(Concept method) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptSmearMicroscopyMethod(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_METHOD), test);
     	
     	 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
@@ -143,7 +141,7 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
     	
 		// initialize the obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptSmearMicroscopyMethod(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_METHOD), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}

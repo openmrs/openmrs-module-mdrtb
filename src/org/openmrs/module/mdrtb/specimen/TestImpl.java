@@ -4,7 +4,9 @@ import java.util.Date;
 
 import org.openmrs.Location;
 import org.openmrs.Obs;
-import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
@@ -12,8 +14,6 @@ import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 public abstract class TestImpl implements Test {
 	
 	Obs test;  // the top-level obs that holds all the data for this smear
-	
-	MdrtbFactory mdrtbFactory;
 	
 	/** implementing subclasses must override this method to define their type */
 	public abstract String getTestType();
@@ -42,7 +42,7 @@ public abstract class TestImpl implements Test {
 	abstract public String getComments();
 	
 	public Date getDateOrdered() {
-		Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered(), test);
+		Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_ORDERED), test);
 	    	
 		if (obs == null) {
 			return null;
@@ -53,7 +53,7 @@ public abstract class TestImpl implements Test {
 	}
 	    
 	public Date getDateReceived() {
-	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateReceived(), test);
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_RECEIVED), test);
 	    	
 	    if (obs == null) {
 	    	return null;
@@ -68,7 +68,7 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public Date getResultDate() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptResultDate(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE), test);
     	
     	if (obs == null) {
     		return null;
@@ -79,7 +79,7 @@ public abstract class TestImpl implements Test {
     }
 	
 	public Date getStartDate() {
-		Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptStartDate(), test);
+		Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_START_DATE), test);
 		
 		if (obs == null) {
 			return null;
@@ -107,7 +107,7 @@ public abstract class TestImpl implements Test {
 	 abstract public void setComments(String comments);
 	
 	 public void setDateOrdered(Date dateOrdered) {
-	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateOrdered(), test);
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_ORDERED), test);
 	    
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && dateOrdered == null) {
@@ -124,7 +124,7 @@ public abstract class TestImpl implements Test {
 		// create a new obs if needed
 		if (obs == null) {	
 			// now create the new Obs and add it to the encounter
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateOrdered(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_ORDERED), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}		    
@@ -134,7 +134,7 @@ public abstract class TestImpl implements Test {
 	}
 	    
 	 public void setDateReceived(Date dateReceived) {
-	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDateReceived(), test);
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_RECEIVED), test);
 		
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && dateReceived == null) {
@@ -150,7 +150,7 @@ public abstract class TestImpl implements Test {
 		
 	    // create a new obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDateReceived(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_DATE_RECEIVED), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -173,7 +173,7 @@ public abstract class TestImpl implements Test {
 	 }
 
 	 public void setResultDate(Date resultDate) {
-	    Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptResultDate(), test);
+	    Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE), test);
 	    
 	    // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && resultDate == null) {
@@ -189,7 +189,7 @@ public abstract class TestImpl implements Test {
 		
 		// create a new obs if needed
 		if (obs == null) {			
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptResultDate(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -199,7 +199,7 @@ public abstract class TestImpl implements Test {
 	 }
 	 
 	 public void setStartDate(Date startDate) {
-		 Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptStartDate(), test);
+		 Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_START_DATE), test);
 		 
 		 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && startDate == null) {
@@ -215,7 +215,7 @@ public abstract class TestImpl implements Test {
 		
 		// create a new obs if needed
 		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptStartDate(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_START_DATE), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}

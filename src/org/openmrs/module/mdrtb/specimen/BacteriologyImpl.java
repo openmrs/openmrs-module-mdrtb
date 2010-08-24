@@ -3,6 +3,9 @@ package org.openmrs.module.mdrtb.specimen;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 
@@ -50,10 +53,10 @@ public abstract class BacteriologyImpl extends TestImpl implements Bacteriology 
 	
 	private Concept getResultConcept() {
 		if(getTestType() == "smear") {
-			return mdrtbFactory.getConceptSmearResult();
+			return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
 		}
 		else if(getTestType() == "culture") {
-			return mdrtbFactory.getConceptCultureResult();
+			return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
 		}
 		else {
 			throw new RuntimeException("Invalid test type for bacteriology.");

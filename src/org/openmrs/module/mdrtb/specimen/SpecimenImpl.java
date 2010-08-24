@@ -17,7 +17,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 
 /**
@@ -40,23 +40,18 @@ public class SpecimenImpl implements Specimen {
 	
 	Encounter encounter; // the encounter where information about the specimen is stored
 	
-	MdrtbFactory mdrtbFactory;
-	
 	Map<Integer,List<DstResult>> dstResultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
 	
 	public SpecimenImpl() {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
 	// set up a specimen object from an existing encounter
 	public SpecimenImpl(Encounter encounter) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		this.encounter = encounter;
 	}
 	
 	// initialize a new specimen, given a patient
 	public SpecimenImpl(Patient patient) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(patient == null) {
 			throw new RuntimeException("Can't create new specimen if patient is null");
@@ -137,7 +132,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public Concept getAppearance() {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
 		
 		if (obs == null) {
 			return null;
@@ -148,7 +143,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public String getComments() {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
 		if (obs == null) {
 			return null;
 		}
@@ -163,7 +158,7 @@ public class SpecimenImpl implements Specimen {
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if (obs.getConcept().equals(mdrtbFactory.getConceptCultureParent())) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT))) {
 					cultures.add(new CultureImpl(obs));
 				}
 			}
@@ -182,7 +177,7 @@ public class SpecimenImpl implements Specimen {
 		// iterate through all the obs groups, create dsts from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if (obs.getConcept().equals(mdrtbFactory.getConceptDSTParent())) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT))) {
 					dsts.add(new DstImpl(obs));
 				}
 			}
@@ -222,7 +217,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public String getIdentifier() {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
 		if (obs == null) {
 			return null;
 		}
@@ -249,7 +244,7 @@ public class SpecimenImpl implements Specimen {
 		// iterate through top-level obs and create scanned lab reports
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if (obs.getConcept().equals(mdrtbFactory.getConceptScannedLabReport())) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANNED_LAB_REPORT))) {
 					// TODO: I've been unable to make this "soft" fail--if a scanned lab report is missing, it hangs the system
 					try {
 						reports.add(new ScannedLabReportImpl(obs));
@@ -268,7 +263,7 @@ public class SpecimenImpl implements Specimen {
 		// iterate through all the obs groups, create smears from them, and add them to the list
 		if(encounter.getObsAtTopLevel(false) != null) {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if (obs.getConcept().equals(mdrtbFactory.getConceptSmearParent())) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT))) {
 					smears.add(new SmearImpl(obs));
 				}
 			}
@@ -288,7 +283,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public Concept getType() {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
 		
 		if (obs == null) {
 			return null;
@@ -300,7 +295,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public void setAppearance(Concept appearance) {
 		
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && appearance == null) {
@@ -319,7 +314,7 @@ public class SpecimenImpl implements Specimen {
 				
 			// now create the new Obs and add it to the encounter	
 			if(appearance != null) {
-				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptAppearanceOfSpecimen(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(appearance);
 				encounter.addObs(obs);
 			}
@@ -327,7 +322,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public void setComments(String comments) {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && StringUtils.isBlank(comments)) {
@@ -346,7 +341,7 @@ public class SpecimenImpl implements Specimen {
 				
 			// now create the new Obs and add it to the encounter
 			if(StringUtils.isNotBlank(comments)) {
-				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenComments(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(comments);
 				encounter.addObs(obs);
 			}
@@ -363,7 +358,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public void setIdentifier(String id) {
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
 		
 		 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && StringUtils.isEmpty(id)) {
@@ -382,7 +377,7 @@ public class SpecimenImpl implements Specimen {
 				
 			// now create the new Obs and add it to the encounter
 			if(StringUtils.isNotBlank(id)) {
-				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSpecimenID(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(id);
 				encounter.addObs(obs);
 			}
@@ -395,19 +390,19 @@ public class SpecimenImpl implements Specimen {
 		// also propagate this location to the appropriate obs
 		// TODO: remember to add any other obs here that get added!
 		// ** but note that we don't want to propogate location to scanned lab result obs **
-		Obs id = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
+		Obs id = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
 		if (id != null) {
 			id.setLocation(location);
 		}			
-		Obs type = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
+		Obs type = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
 		if (type != null) {
 			type.setLocation(location);
 		}
-		Obs comments = getObsFromEncounter(mdrtbFactory.getConceptSpecimenComments());
+		Obs comments = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
 		if (comments != null) {
 			comments.setLocation(location);
 		}
-		Obs appearance = getObsFromEncounter(mdrtbFactory.getConceptAppearanceOfSpecimen());
+		Obs appearance = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
 		if (appearance != null) {
 			appearance.setLocation(location);
 		}
@@ -417,11 +412,11 @@ public class SpecimenImpl implements Specimen {
 		encounter.setPatient(patient);
 		
 		// also propagate this patient to the appropriate obs
-		Obs id = getObsFromEncounter(mdrtbFactory.getConceptSpecimenID());
+		Obs id = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
 		if (id != null) {
 			id.setPerson(patient);
 		}
-		Obs type = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
+		Obs type = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
 		if (id != null) { 
 			type.setPerson(patient);
 		}
@@ -432,7 +427,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public void setType(Concept type) {
 		
-		Obs obs = getObsFromEncounter(mdrtbFactory.getConceptSampleSource());
+		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -451,7 +446,7 @@ public class SpecimenImpl implements Specimen {
 				
 			// now create the new Obs and add it to the encounter
 			if(type != null) {
-				obs = new Obs (encounter.getPatient(), mdrtbFactory.getConceptSampleSource(), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(type);
 				encounter.addObs(obs);
 			}

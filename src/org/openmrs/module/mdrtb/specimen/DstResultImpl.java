@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
@@ -23,10 +23,7 @@ public class DstResultImpl implements DstResult {
 	
 	Set<Concept> resultSet; // stores all the possible values for the results
 	
-	MdrtbFactory mdrtbFactory;
-	
-	public DstResultImpl() {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();	
+	public DstResultImpl() {	
 		this.resultSet = initResultSet();
 		// also instantiate an empty obs so that we can use this as a backing object
 		dstResult = new Obs();
@@ -34,10 +31,9 @@ public class DstResultImpl implements DstResult {
 	
 	// set up a dst object, given an existing obs, or an existing dst
 	public DstResultImpl(Obs dstResult) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		this.resultSet = initResultSet();
 				
-		if(dstResult != null && dstResult.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
+		if(dstResult != null && dstResult.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_RESULT))) {
 			this.dstResult = dstResult;
 		}	 
 		else {
@@ -55,7 +51,7 @@ public class DstResultImpl implements DstResult {
 	
 	
     public Integer getColonies() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), dstResult);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES), dstResult);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -66,7 +62,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public Double getConcentration() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptConcentration(), dstResult);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONCENTRATION), dstResult);
     	
     	if (obs == null) {
     		return null;
@@ -105,7 +101,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public void setColonies(Integer colonies) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColonies(), dstResult);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES), dstResult);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && colonies == null) {
@@ -121,7 +117,7 @@ public class DstResultImpl implements DstResult {
 		
     	// initialize the obs if needed
 		if (obs == null) {
-			obs = new Obs (dstResult.getPerson(), mdrtbFactory.getConceptColonies(), dstResult.getObsDatetime(), dstResult.getLocation());
+			obs = new Obs (dstResult.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES), dstResult.getObsDatetime(), dstResult.getLocation());
 			obs.setEncounter(dstResult.getEncounter());
 			dstResult.addGroupMember(obs);
 		}
@@ -131,7 +127,7 @@ public class DstResultImpl implements DstResult {
     }
 
     public void setConcentration(Double concentration) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptConcentration(), dstResult);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONCENTRATION), dstResult);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && concentration == null) {
@@ -147,7 +143,7 @@ public class DstResultImpl implements DstResult {
 		
     	// initialize the obs if needed
 		if (obs == null) {
-			obs = new Obs (dstResult.getPerson(), mdrtbFactory.getConceptConcentration(), dstResult.getObsDatetime(), dstResult.getLocation());
+			obs = new Obs (dstResult.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONCENTRATION), dstResult.getObsDatetime(), dstResult.getLocation());
 			obs.setEncounter(dstResult.getEncounter());
 			dstResult.addGroupMember(obs);
 		}
@@ -241,12 +237,12 @@ public class DstResultImpl implements DstResult {
     private Set<Concept> initResultSet() {
     	Set<Concept> resultSet = new HashSet<Concept>();
     	
-    	resultSet.add(mdrtbFactory.getConceptSusceptibleToTuberculosisDrug());
-    	resultSet.add(mdrtbFactory.getConceptIntermediateToTuberculosisDrug());
-    	resultSet.add(mdrtbFactory.getConceptResistantToTuberculosisDrug());
-    	resultSet.add(mdrtbFactory.getConceptWaitingForTestResults());
-    	resultSet.add(mdrtbFactory.getConceptDstTestContaminated());
-    	resultSet.add(mdrtbFactory.getConceptNone());
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG));
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG));
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG));
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS));
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONTAMINATED));
+    	resultSet.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NONE));
     	
     	return resultSet;
     }

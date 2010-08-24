@@ -12,6 +12,7 @@ import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
@@ -26,14 +27,12 @@ public class DstImpl extends TestImpl implements Dst {
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	public DstImpl() {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 	}
 	
 	// set up a dst object, given an existing obs
 	public DstImpl(Obs dst) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
-		if(dst == null || !(dst.getConcept().equals(mdrtbFactory.getConceptDSTParent()))) {
+		if(dst == null || !(dst.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT)))) {
 			throw new RuntimeException ("Cannot initialize dst: invalid obs used for initialization.");
 		}
 		
@@ -42,13 +41,12 @@ public class DstImpl extends TestImpl implements Dst {
 	
 	// create a new culture object, given an existing patient
 	public DstImpl(Encounter encounter) {
-		this.mdrtbFactory = Context.getService(MdrtbService.class).getMdrtbFactory();
 		
 		if(encounter == null) {
 			throw new RuntimeException ("Cannot create culture: encounter can not be null.");
 		}
 		
-		test = new Obs (encounter.getPatient(), mdrtbFactory.getConceptDSTParent(), encounter.getEncounterDatetime(), null);
+		test = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT), encounter.getEncounterDatetime(), null);
 	}
 	
 	@Override
@@ -58,7 +56,7 @@ public class DstImpl extends TestImpl implements Dst {
 
 	public DstResult addResult() {
 		// create a new obs for the result, set to the proper values
-		Obs resultObs = new Obs(this.test.getPerson(), mdrtbFactory.getConceptDSTResultParent(), this.test.getObsDatetime(), this.test.getLocation());
+		Obs resultObs = new Obs(this.test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT), this.test.getObsDatetime(), this.test.getLocation());
 		resultObs.setEncounter(this.test.getEncounter());
 		
 		// add the result to this obs group
@@ -69,7 +67,7 @@ public class DstImpl extends TestImpl implements Dst {
 	}
 	
     public Integer getColoniesInControl() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES_IN_CONTROL), test);
     	
     	if (obs == null || obs.getValueNumeric() == null) {
     		return null;
@@ -84,7 +82,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public Boolean getDirect() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIRECT_INDIRECT), test);
     	
     	if (obs == null) {
     		return null;
@@ -95,7 +93,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public Concept getMethod() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_METHOD), test);
     	
     	if (obs == null) {
     		return null;
@@ -106,7 +104,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public Concept getOrganismType() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM), test);
     	
     	if (obs == null) {
     		return null;
@@ -117,7 +115,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public String getOrganismTypeNonCoded() {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM_NON_CODED), test);
     	
     	if (obs == null) {
     		return null;
@@ -134,7 +132,7 @@ public class DstImpl extends TestImpl implements Dst {
 		if(test.getGroupMembers() != null) {
 			for(Obs obs : test.getGroupMembers()) {
 				// need to filter for voided obs, since get group members returns voided and non-voided
-				if (!obs.isVoided() && obs.getConcept().equals(mdrtbFactory.getConceptDSTResultParent())) {
+				if (!obs.isVoided() && obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_RESULT))) {
 					results.add(new DstResultImpl(obs));
 				}
 			}
@@ -183,7 +181,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public void setColoniesInControl(Integer coloniesInControl) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptColoniesInControl(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES_IN_CONTROL), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && coloniesInControl == null) {
@@ -199,7 +197,7 @@ public class DstImpl extends TestImpl implements Dst {
 		
     	// initialize the obs if needed
 		if (obs == null) {
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptColoniesInControl(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES_IN_CONTROL), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -213,7 +211,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
     
     public void setDirect(Boolean direct) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDirectIndirect(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIRECT_INDIRECT), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && direct == null) {
@@ -229,7 +227,7 @@ public class DstImpl extends TestImpl implements Dst {
 		
 		// initialize the obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDirectIndirect(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIRECT_INDIRECT), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -240,7 +238,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 
     public void setMethod(Concept method) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptDSTMethod(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_METHOD), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && method == null) {
@@ -256,7 +254,7 @@ public class DstImpl extends TestImpl implements Dst {
     	
 		// initialize the obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptDSTMethod(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_METHOD), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -267,7 +265,7 @@ public class DstImpl extends TestImpl implements Dst {
 
 
     public void setOrganismType(Concept organismType) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganism(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
@@ -283,7 +281,7 @@ public class DstImpl extends TestImpl implements Dst {
 		
 		// initialize the obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganism(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
@@ -293,7 +291,7 @@ public class DstImpl extends TestImpl implements Dst {
     }
 	
     public void setOrganismTypeNonCoded(String organismType) {
-    	Obs obs = MdrtbUtil.getObsFromObsGroup(mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test);
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM_NON_CODED), test);
     	
     	// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && organismType == null) {
@@ -309,7 +307,7 @@ public class DstImpl extends TestImpl implements Dst {
     	
 		// initialize the obs if needed
 		if (obs == null) {		
-			obs = new Obs (test.getPerson(), mdrtbFactory.getConceptTypeOfOrganismNonCoded(), test.getObsDatetime(), test.getLocation());
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TYPE_OF_ORGANISM_NON_CODED), test.getObsDatetime(), test.getLocation());
 			obs.setEncounter(test.getEncounter());
 			test.addGroupMember(obs);
 		}
