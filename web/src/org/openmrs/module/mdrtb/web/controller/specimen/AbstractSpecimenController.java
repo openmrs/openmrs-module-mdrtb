@@ -19,6 +19,7 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -159,22 +160,22 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("scanty")
 	Concept getConceptScanty() {
-		return Context.getService(MdrtbService.class).getConceptScanty();
+		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY);
 	}
 	
 	@ModelAttribute("waitingForTestResult")
 	Concept getWaitingForTestResultConcept() {
-		return Context.getService(MdrtbService.class).getConceptWaitingForTestResults();
+		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
 	}
 	
 	@ModelAttribute("dstTestContaminated")
 	Concept getDstTestContaiminated() {
-		return Context.getService(MdrtbService.class).getConceptDstTestContaminated();
+		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONTAMINATED);
 	}
 	
 	@ModelAttribute("otherMycobacteriaNonCoded")
 	Concept getOtherMycobacteriaNonCoded() {
-		return Context.getService(MdrtbService.class).getConceptOtherMycobacteriaNonCoded();
+		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
  }
 

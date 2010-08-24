@@ -548,39 +548,4 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	
     	return map;
     }
-    
-    @Deprecated
-	public Concept getConceptScanty() {
-		return getConcept(MdrtbConcepts.SCANTY);
-	}
-	
-    @Deprecated
-	public Concept getConceptWaitingForTestResults() {
-		return getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
-	}
-	
-    @Deprecated
-	public Concept getConceptDstTestContaminated() {
-    	return getConcept(MdrtbConcepts.DST_CONTAMINATED);
-	}
-	
-    @Deprecated
-	public Concept getConceptOtherMycobacteriaNonCoded() {
-		return getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
-	}
-	
-    @Deprecated
-	public Concept getConceptSputum() {
-		return getConcept(MdrtbConcepts.SPUTUM);
-	}
-	
-    @Deprecated
-	public Concept getConceptIntermediateToTuberculosisDrug() {
-		return getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG);
-	}
-	
-    @Deprecated
-    public Concept getConceptNone() {
-    	return getConcept(MdrtbConcepts.NONE);
-    }
 }

@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.validators.SpecimenValidator;
@@ -23,7 +24,7 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
 		
 		// set the default type to "sputum"
-		specimen.setType(Context.getService(MdrtbService.class).getConceptSputum());
+		specimen.setType(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPUTUM));
 		
 		return specimen;
 	}

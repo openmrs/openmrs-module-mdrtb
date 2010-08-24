@@ -21,7 +21,6 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
-import org.openmrs.User;
 
 public class MdrtbPatient {
     

@@ -258,48 +258,6 @@ public interface MdrtbService extends OpenmrsService {
      */
     public List<Concept> getPossibleDrugTypesToDisplay();
     
-    /**
-     * Returns the concept that represents a Scanty result
-     */
-    @Deprecated
-    public Concept getConceptScanty();
-    
-    /**
-     * Returns the concept that represents a Waiting For Test Results result
-     */
-    @Deprecated
-    public Concept getConceptWaitingForTestResults();
-    
-    /**
-     * Returns the concept that represents a DST Test Contaminated result
-     */
-    @Deprecated
-    public Concept getConceptDstTestContaminated();
-    
-    /**
-     * Returns the concept that represents Other Mycobacteria Non-Coded
-     */
-    @Deprecated
-    public Concept getConceptOtherMycobacteriaNonCoded();
-    
-    /**
-     * Returns the concept that represents Sputum
-     */
-    @Deprecated
-    public Concept getConceptSputum();
-    
-    /**
-     * Returns the concept that represents INTERMEDIATE TO TUBERCULOSIS DRUG
-     */
-    @Deprecated
-    public Concept getConceptIntermediateToTuberculosisDrug();
-    
-    /**
-     * Returns the concept that represents None
-     */
-    @Deprecated
-    public Concept getConceptNone();
-    
 	/**
      * Check to see what color to associate with a given result concept
      */
