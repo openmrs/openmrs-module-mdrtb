@@ -26,7 +26,7 @@
 	<br/>
 </c:if>
 
-<b class="boxHeader">Add a Specimen</b>
+<b class="boxHeader"><spring:message code="mdrtb.addASpecimen" text="Add a Specimen"/></b>
 <div class="box">
 
 <form name="specimen" action="add.form?patientId=${patientId}" method="post">
@@ -38,12 +38,12 @@
 <!-- TODO is answerConcept.name the correct parameter? -->
 
 <tr>
-<td>Sample ID:</td>
+<td><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</td>
 <td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>
 </tr>
  
 <tr>
-<td>Sample Type:</td>
+<td><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</td>
 <td>
 <select name="type">
 <option value=""></option>
@@ -55,14 +55,14 @@
 </tr>
 
 <tr>
-<td>Date Collected:</td>
+<td><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td>
 <td><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></td>
 </tr>
 
 <!--  TODO: need to figure out how to map provider names properly: can we use the custom tags? -->
 
 <tr>
-<td>Collected By:</td>
+<td><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</td>
 <td>
 <select name="provider">
 <c:forEach var="provider" items="${providers}">
@@ -73,7 +73,7 @@
 </tr>
 
 <tr>
-<td>Location Collected:</td>
+<td><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</td>
 <td>
 <select name="location">
 <c:forEach var="location" items="${locations}">
@@ -84,7 +84,7 @@
 </tr>
 
 <tr>
-<td>Appearance:</td>
+<td><spring:message code="mdrtb.appearance" text="Appearance"/>:</td>
 <td>
 <select name="appearance">
 <option value=""></option>
@@ -96,13 +96,13 @@
 </tr>
 
 <tr>
-<td>Comments:</td>
+<td><spring:message code="mdrtb.comments" text="Comments"/>:</td>
 <td><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
 </tr>
 
 </table>
 
-<button type="submit">Save</button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}"><button type="button">Cancel</button></a>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
 
 </form>
 </div>

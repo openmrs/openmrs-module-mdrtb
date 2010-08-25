@@ -9,11 +9,8 @@
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
+<!-- TODO: clean up above paths so they use dynamic reference? -->
 <!-- TODO: add privileges? -->
-<!-- TODO: localize all text -->
-
-<!-- TODO: figure out if I should be using concept.name or concept.name.name or whatever -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
@@ -181,7 +178,7 @@
 <div align="left">
 <ul id="menu">
 <li class="first">
-<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${specimen.patient.patientId}">Return to Specimen List</a>
+<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${specimen.patient.patientId}"><spring:message code="mdrtb.returnToSpecimenList" text="Return to Specimen List"/></a>
 </li>
 </ul>
 </div>
@@ -200,36 +197,35 @@
 
 <div id="details_specimen">
 
-<b class="boxHeader" style="margin:0px">Specimen Details<span style="position: absolute; right:25px;"><a href="#" id="editSpecimen">edit</a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a href="#" id="editSpecimen"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
 <tr>
-<td><nobr>Sample ID:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
-<td><nobr>Collected By:</nobr></td><td><nobr>${specimen.provider.personName}</nobr></td> <!-- TODO: obviously, need to find out proper way to handle names -->
+<td><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</nobr></td><td><nobr>${specimen.identifier}</nobr></td>
+<td><nobr><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</nobr></td><td><nobr>${specimen.provider.personName}</nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Sample Type:</td><td><nobr>${specimen.type.name.name}</nobr></td> 
-<td><nobr>Location Collected:</td><td><nobr>${specimen.location.name}</nobr></td>
-<td width="100%">&nbsp;</td>
-</tr>
-
-<!-- TODO: how should comments wrap properly??? -->
-<tr>
-<td><nobr>Date Collected:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-<td><nobr>Appearance:</td><td>${specimen.appearance.name.name}</td>
+<td><nobr><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</td><td><nobr>${specimen.type.name.name}</nobr></td> 
+<td><nobr><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</td><td><nobr>${specimen.location.name}</nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Comments:</td><td colspan="3">${specimen.comments}</td>
+<td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</td><td>${specimen.appearance.name.name}</td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Scanned Lab Reports:</nobr></td>
+<td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</td><td colspan="3">${specimen.comments}</td>
+<td width="100%">&nbsp;</td>
+</tr>
+
+<tr>
+<td><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
 <a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
@@ -249,17 +245,15 @@
 
 <form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post" enctype="multipart/form-data">
 
-<b class="boxHeader" style="margin:0px">Sample Details</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.sampleDetails" text="Sample Details"/></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
-<!-- TODO localize all text -->
-
 <!-- TODO is answerConcept.name the correct parameter? -->
 <tr>
-<td><nobr>Sample ID:</nobr></td>
+<td><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</nobr></td>
 <td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>
-<td><nobr>Collected By:</nobr></td>
+<td><nobr><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</nobr></td>
 <td>
 <select name="provider">
 <c:forEach var="provider" items="${providers}">
@@ -271,7 +265,7 @@
 </tr>
 
 <tr>
-<td><nobr>Sample Type:</nobr></td>
+<td><nobr><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</nobr></td>
 <td>
 <select name="type">
 <option value=""></option>
@@ -280,7 +274,7 @@
 </c:forEach>
 </select>
 </td>
-<td><nobr>Location Collected:</nobr></td>
+<td><nobr><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</nobr></td>
 <td>
 <select name="location">
 <c:forEach var="location" items="${locations}">
@@ -292,9 +286,9 @@
 </tr>
 
 <tr>
-<td><nobr>Date Collected:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></nobr></td>
-<td><nobr>Appearance:</nobr></td>
+<td><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</nobr></td>
 <td>
 <select name="appearance">
 <option value=""></option>
@@ -307,17 +301,17 @@
 </tr>
 
 <tr>
-<td><nobr>Comments:</nobr></td>
+<td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td>
 <td colspan="3"><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Scanned Lab Reports:</nobr></td>
+<td><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
 <span class="scannedLabReport"><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
-<button class="removeScannedLabReport" value="${report.id}" type="button">X</button>
+<button class="removeScannedLabReport" value="${report.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button>
 <input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/></span>
 <br/>
 </c:forEach>
@@ -327,7 +321,7 @@
 </tr>
 
 <tr>
-<td colspan="5" align="left"><button type="submit">Save</button><button type="reset" id="cancelSpecimen">Cancel</button></td>
+<td colspan="5" align="left"><button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><button type="reset" id="cancelSpecimen"><spring:message code="mdrtb.cancel" text="Cancel"/></button></td>
 </tr>
 
 </table>
@@ -340,7 +334,7 @@
 <br/>
 
 <div id="tests" style="position:relative"> 
-<b class="boxHeader">Tests</b>
+<b class="boxHeader"><spring:message code="mdrtb.tests" text="Tests"/></b>
 
 <!-- TEST SUMMARY SECTION -->
 <div id="summary" style="position:absolute; left:20px; top:30px; width:400px">
@@ -352,24 +346,24 @@ Add a new Lab Test:
 	<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
 </c:forEach>
 </select>
-<button id="addButton" type="button">Add</button>
+<button id="addButton" type="button"><spring:message code="mdrtb.add" text="Add"/></button>
 </span>
 
 <br/><br/>
 
 <c:forEach var="test" items="${specimen.tests}">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view">view</a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view"><spring:message code="mdrtb.view" text="view"/></a></span></b>
 <div class="box" style="margin:0px">
 <table style="width:396px;" cellspacing="0" cellpadding="0">
 
 <tr>
-<td>Status:</td><td><mdrtb:testStatus test="${test}"/></td>
+<td><spring:message code="mdrtb.status" text="Status"/>:</td><td><mdrtb:testStatus test="${test}"/></td>
 </tr>
 
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
 <tr>
-<td>Result:</td><td>${test.result.name.name}</td>
+<td><spring:message code="mdrtb.result" text="Result"/>:</td><td>${test.result.name.name}</td>
 </tr>
 </c:if>
 
@@ -396,63 +390,70 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Detail View<span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit">edit</a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}" class="delete" onclick="return confirm('Are you sure you want to delete this test?')">delete</a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="<spring:message code="mdrtb.delete" text="delete"/>.form?testId=${test.id}&specimenId=${specimen.id}" class="<spring:message code="mdrtb.delete" text="delete"/>" onclick="return confirm('Are you sure you want to <spring:message code="mdrtb.delete" text="delete"/> this test?')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 <tr>
-<td><nobr>Accession #:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
-<td><nobr>Date ordered:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateOrdered}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Laboratory:</nobr></td><td><nobr>${test.lab}</nobr></td>
-<td><nobr>Date sample received:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateReceived}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.lab" text="Lab"/>:</nobr></td><td><nobr>${test.lab}</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Method:</nobr></td><td><nobr>${test.method.name.name}</nobr></td>
-<td><nobr>Date started:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td><td><nobr>${test.method.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 
 <tr>
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
-<td><nobr>Result:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.result" text="Result"/>:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
 </c:if>
 <c:if test="${test.testType eq 'dst'}">
-<td><nobr>Direct/Indirect:</nobr></td><td><nobr>${test.direct ? 'Direct' : 'Indirect'}</nobr></td>
+<td><nobr><spring:message code="mdrtb.directIndirect" text="Direct/Indirect"/>:</nobr></td><td><nobr>
+<c:if test="${test.direct == true}">
+	<spring:message code="mdrtb.direct" text="Direct"/>	
 </c:if>
-<td><nobr>Date completed:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}"/></nobr></td>
+<c:if test="${test.direct == false}">
+	<spring:message code="mdrtb.indirect" text="Indirect"/>
+</c:if>
+</nobr></td>
+</c:if>
+<td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <c:if test="${test.testType eq 'smear' && test.result == scanty}">
 <tr>
-<td><nobr># of Bacilli:</nobr></td><td><nobr>${test.bacilli}</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofbacilli" text="Number of Bacilli"/>:</nobr></td><td><nobr>${test.bacilli}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <c:if test="${test.testType eq 'culture' && test.result == scanty}">
 <tr>
-<td><nobr># of Colonies</nobr></td><td><nobr>${test.colonies}</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofcolonies" text="Number of Colonies"/>:</nobr></td><td><nobr>${test.colonies}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
-<td><nobr>Organism Type:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <c:if test="${(test.testType eq 'culture' || test.testType eq 'dst') && test.organismType == otherMycobacteriaNonCoded}">
 <tr>
-<td><nobr>Organism Type Non-Coded:</nobr></td><td><nobr>${test.organismTypeNonCoded}</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td><td><nobr>${test.organismTypeNonCoded}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -460,13 +461,13 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${test.testType eq 'dst'}">
 <tr>
-<td><nobr>Colonies in control:</nobr></td><td><nobr>${test.coloniesInControl}</nobr></td>
+<td><nobr><spring:message code="mdrtb.coloniesincontrol" text="Colonies in control"/>:</nobr></td><td><nobr>${test.coloniesInControl}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <tr>
-<td><nobr>Comments:</nobr></td><td colspan="3">${test.comments}</td>
+<td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td><td colspan="3">${test.comments}</td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -479,7 +480,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <br/>
 <table cellpadding="0">
 <tr>
-<td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
+<td><u><spring:message code="mdrtb.drug" text="Drug"/></u></td><td><u><spring:message code="mdrtb.concentration" text="Concentration"/></u></td><td><u><spring:message code="mdrtb.result" text="Result"/></u></td><td><u><spring:message code="mdrtb.colonies" text="Colonies"/></u></td>
 </tr>
 <c:forEach var="drugType" items="${drugTypes}">
 <c:if test="${!empty resultsMap[drugType.id]}">
@@ -504,40 +505,40 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <!-- EDIT TESTS SECTION -->
 
-<div id="edit_${test.id}" class="editBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
+<div id="edit_${test.id}" class="editBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
 
 <!--  TODO: how do i bind errors to this? -->
 <!-- TODO: form id should be specified based on test type; get rid of enum, just use a String getTestType? -->
 
 <form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: Edit View</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="mdrtb.editView" text="Edit View"/></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 
 <tr>
-<td><nobr>Accession #:</nobr></td>
+<td><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
 <td><input type="text" name="accessionNumber" value="${test.accessionNumber}"/></td>
-<td><nobr>Date ordered:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td>Laboratory:</td>
+<td><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == test.lab}">selected</c:if> >${location.name}</option>
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date sample received:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Method:</nobr></td>
+<td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td>
 <td><select name="method">
 <option value=""></option>
 <c:forEach var="method" items="${test.testType eq 'smear'? smearMethods : (test.testType eq 'culture' ? cultureMethods : dstMethods)}">
@@ -545,14 +546,14 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date started:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
-<td><nobr>Results:</nobr></td>
+<td><nobr><spring:message code="mdrtb.results" text="Results"/>:</nobr></td>
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${test.testType eq 'smear' ? smearResults : cultureResults}">
@@ -563,22 +564,22 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:if>
 
 <c:if test="${test.testType eq 'dst'}">
-<td><nobr>Direct/Indirect:</nobr></td>
+<td><nobr><spring:message code="mdrtb.directIndirect" text="Direct/Indirect"/>:</nobr></td>
 <td><select name="direct">
 <option value=""></option>
-<option <c:if test="${test.direct}">selected </c:if>value="1">Direct</option>
-<option <c:if test="${!test.direct}">selected </c:if>value="0">Indirect</option>
+<option <c:if test="${test.direct}">selected </c:if>value="1"><spring:message code="mdrtb.direct" text="Direct"/></option>
+<option <c:if test="${!test.direct}">selected </c:if>value="0"><spring:message code="mdrtb.indirect" text="Indirect"/></option>
 </select></td>
 </c:if>
 
-<td><nobr>Date completed:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <c:if test="${test.testType eq 'smear'}">
 <tr class="bacilli" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
-<td><nobr># of Bacilli:</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofbacilli" text="Number of Bacilli"/>:</nobr></td>
 <td><input type="text" name="bacilli" id="bacilli" value="${test.bacilli}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -586,7 +587,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${test.testType eq 'culture'}">
 <tr class="colonies" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
-<td><nobr># of Colonies:</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofcolonies" text="Number of Colonies"/>:</nobr></td>
 <td><input type="text" name="colonies" id="colonies" value="${test.colonies}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -594,7 +595,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
-<td><nobr>Organism Type:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td>
 <td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
@@ -603,7 +604,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td colspan="2">&nbsp;</td>
 </tr>
 <tr class="organismTypeNonCoded" <c:if test="${test.organismType != otherMycobacteriaNonCoded}"> style="display:none;"</c:if>>
-<td><nobr>Organism Type Non-Coded:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td>
 <td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value="${test.organismTypeNonCoded}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -611,14 +612,14 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${test.testType eq 'dst'}">
 <tr>
-<td><nobr>Colonies in control:</nobr></td>
+<td><nobr><spring:message code="mdrtb.coloniesincontrol" text="Colonies in control"/>:</nobr></td>
 <td><input type="text" name="coloniesInControl" value="${test.coloniesInControl}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <tr>
-<td><nobr>Comments:</nobr></td>
+<td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td>
 <td colspan="3"><textarea cols="60" rows="4" name="comments">${test.comments}</textarea></td>
 <td width="100%">&nbsp;</td>
 </tr>
@@ -631,7 +632,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <table cellpadding="0">
 
 <tr>
-<td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
+<td><u><spring:message code="mdrtb.drug" text="Drug"/></u></td><td><u><spring:message code="mdrtb.concentration" text="Concentration"/></u></td><td><u><spring:message code="mdrtb.result" text="Result"/></u></td><td><u><spring:message code="mdrtb.colonies" text="Colonies"/></u></td>
 </tr>
 <c:forEach var="drugType" items="${drugTypes}">
 	<c:if test="${!empty resultsMap[drugType.id]}">
@@ -641,7 +642,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 			<td><nobr>${dstResult.concentration}</nobr></td>
 			<td><nobr>${dstResult.result.name}</nobr></td>
 			<td><nobr>${dstResult.colonies}</nobr></td>
-			<td><button class="removeDstResult" value="${dstResult.id}" type="button">X</button>
+			<td><button class="removeDstResult" value="${dstResult.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button>
 				<input type="hidden" id="removeDstResult${dstResult.id}" name="removeDstResult" value=""/></td>
 			</tr>
 		</c:forEach>
@@ -676,7 +677,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:forEach>
 
 	<tr>
-	<td><button class="addDstResultRow" value="${test.id}" type="button">Add DST result</button></td>
+	<td><button class="addDstResultRow" value="${test.id}" type="button"><spring:message code="mdrtb.addDSTResult" text="Add DST result"/></button></td>
 	<td colspan="4"/>
 	</tr>
 	
@@ -685,7 +686,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:if>
 <!-- end of the DST table -->
 
-<button type="submit">Save</button><button type="reset" id="${test.id}" class="cancel">Cancel</button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><button type="reset" id="${test.id}" class="cancel"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 
 </form>
 
@@ -706,33 +707,33 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: Add</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: <spring:message code="mdrtb.add" text="Add"/></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 
 <tr>
-<td><nobr>Accession #:</nobr></td>
+<td><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
 <td><input type="text" name="accessionNumber"/></td>
-<td><nobr>Date ordered:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td>Laboratory:</td>
+<td><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}">${location.name}</option>
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date sample received:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
-<td><nobr>Method:</nobr></td>
+<td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td>
 <td><select name="method">
 <option value=""></option>
 <c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
@@ -740,14 +741,14 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:forEach>
 </select>
 </td>
-<td><nobr>Date started:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <c:if test="${type eq 'smear' || type eq 'culture'}">
-<td><nobr>Results:</nobr></td>
+<td><nobr><spring:message code="mdrtb.results" text="Results"/>:</nobr></td>
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
@@ -758,22 +759,22 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:if>
 
 <c:if test="${type eq 'dst'}">
-<td><nobr>Direct/Indirect:</nobr></td>
+<td><nobr><spring:message code="mdrtb.directIndirect" text="Direct/Indirect"/>:</nobr></td>
 <td><select name="direct">
 <option value=""></option>
-<option value="1">Direct</option>
-<option value="0">Indirect</option>
+<option value="1"><spring:message code="mdrtb.direct" text="Direct"/></option>
+<option value="0"><spring:message code="mdrtb.indirect" text="Indirect"/></option>
 </select></td>
 </c:if>
 
-<td><nobr>Date completed:</nobr></td>
+<td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <c:if test="${type eq 'smear'}">
 <tr class="bacilli" style="display:none;">
-<td><nobr># of Bacilli:</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofbacilli" text="Number of Bacilli"/>:</nobr></td>
 <td><input type="text" name="bacilli" id="bacilli" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -781,7 +782,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${type eq 'culture'}">
 <tr class="colonies" style="display:none;">
-<td><nobr># of Colonies:</nobr></td>
+<td><nobr><spring:message code="mdrtb.numberofcolonies" text="Number of Colonies"/>:</nobr></td>
 <td><input type="text" name="colonies" id="colonies" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -790,7 +791,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${type eq 'culture' || type eq 'dst'}">
 <tr>
-<td><nobr>Organism Type:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td>
 <td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
@@ -801,7 +802,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td colspan="2">&nbsp;</td>
 </tr>
 <tr class="organismTypeNonCoded" style="display:none;">
-<td><nobr>Organism Type Non-Coded:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td>
 <td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -809,14 +810,14 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${type eq 'dst'}">
 <tr>
-<td><nobr>Colonies in control:</nobr></td>
+<td><nobr><spring:message code="mdrtb.coloniesincontrol" text="Colonies in control"/>:</nobr></td>
 <td><input type="text" name="coloniesInControl" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <tr>
-<td><nobr>Comments:</nobr></td>
+<td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td>
 <td colspan="3"><textarea cols="60" rows="4" name="comments"></textarea></td>
 <td width="100%">&nbsp;</td>
 </tr>
@@ -829,7 +830,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <table cellpadding="0">
 
 <tr>
-<td><u>Drug</u></td><td><u>Concentration</u></td><td><u>Result</u></td><td><u>Colonies</u></td>
+<td><u><spring:message code="mdrtb.drug" text="Drug"/></u></td><td><u><spring:message code="mdrtb.concentration" text="Concentration"/></u></td><td><u><spring:message code="mdrtb.result" text="Result"/></u></td><td><u><spring:message code="mdrtb.colonies" text="Colonies"/></u></td>
 </tr>
 	
 	<!-- now the rows to add a new table -->
@@ -852,12 +853,12 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 			</select>
 		</td>
 		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
-		<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
+		<td><button class="removeDstResultRow" value="${i.count}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></td>
 		</tr>
 	</c:forEach>
 
 	<tr>
-	<td><button class="addDstResultRow" value="" type="button">Add DST result</button></td>
+	<td><button class="addDstResultRow" value="" type="button"><spring:message code="mdrtb.addDSTResult" text="Add DST result"/></button></td>
 	<td colspan="4"/>
 	</tr>
 	
@@ -866,7 +867,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </c:if>
 <!-- end of the DST table -->
 
-<button type="submit">Save</button><button class="cancel" type="reset">Cancel</button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><button class="cancel" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 </div>
 </div>

@@ -9,11 +9,11 @@
 <!-- START HEADER ROW -->
 <thead>
 <tr>
-<td class="chartCell">Month</td>
-<td class="chartCell">Date collected</td>
-<td class="chartCell" style="width:100px">Smears</td>
-<td class="chartCell" style="width:100px">Cultures</td>
-<td class="chartCell">Bacteria</td>
+<td class="chartCell"><spring:message code="mdrtb.month" text="Month"/></td>
+<td class="chartCell"><spring:message code="mdrtb.dateCollected" text="Date collected"/></td>
+<td class="chartCell" style="width:100px"><spring:message code="mdrtb.smears" text="Smears"/></td>
+<td class="chartCell" style="width:100px"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
+<td class="chartCell"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->

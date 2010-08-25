@@ -19,12 +19,12 @@
 <!-- ENROLLMENT DIV -->
 <div align="center" id="enroll">
 
-<b class="boxHeader" style="margin:0px">Program Enrollment</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.enrollment" text="Program Enrollment"/></b>
 <div class="box" style="margin:0px">
 
 <form action="summary.form?patientId=${patientId}" method="post">
 MDR-TB Program Enrollment Date: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue=""/>
-<button type="submit">Enroll</button>
+<button type="submit"><spring:message code="mdrtb.enroll" text="Enroll"/></button>
 </form>
 
 </div>

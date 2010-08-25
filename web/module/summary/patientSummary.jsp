@@ -61,11 +61,11 @@
 
 <div id="summary">
 
-<b class="boxHeader" style="margin:0px">Patient Overview<span style="position: absolute; right:25px;"><a href="#" id="editSummary">edit</a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientOverview" text="Patient Overview"/><span style="position: absolute; right:25px;"><a href="#" id="editSummary"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 <tr>
-<td>Patient Enrollment Date:</td>
+<td><spring:message code="mdrtb.patientEnrollmentDate" text="Patient Enrollment Date"/>:</td>
 <td>
 <c:forEach var="program" items="${mdrtbPatient.mdrtbPrograms}">
 	<openmrs:formatDate date="${program.dateEnrolled}"/><br/>
@@ -75,9 +75,9 @@
 </table>
 
 <div align="center">
-<a href="<%= request.getContextPath() %>/patientDashboard.form?patientId=${patientId}">View Main Patient Dashboard</a> |
-<a href="<%= request.getContextPath() %>/admin/patients/newPatient.form?patientId=${patientId}">Edit Patient Information (Short Form)</a> |
-<a href="<%= request.getContextPath() %>/admin/patients/patient.form?patientId=${patientId}">Edit Patient Information (Long Form)</a>
+<a href="<%= request.getContextPath() %>/patientDashboard.form?patientId=${patientId}"><spring:message code="mdrtb.viewMainPatientDashboard" text="View Main Patient Dashboard"/></a> |
+<a href="<%= request.getContextPath() %>/admin/patients/newPatient.form?patientId=${patientId}"><spring:message code="mdrtb.editPatientInformationShortForm" text="Edit Patient Information (Short Form)"/></a> |
+<a href="<%= request.getContextPath() %>/admin/patients/patient.form?patientId=${patientId}"><spring:message code="mdrtb.editPatientInformationLongForm" text="Edit Patient Information (Long Form)"/></a>
 </div>
 
 </div>
@@ -89,12 +89,12 @@
 <!-- PATIENT SUMMARY - EDIT -->
 <div id="edit_summary" style="display:none">
 
-<b class="boxHeader" style="margin:0px">Patient Overview</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientOverview" text="Patient Overview"/></b>
 <div class="box" style="margin:0px">
 <form name="mdrtbPatient" action="summary.form?patientId=${patientId}" method="post">
 <table cellspacing="0" cellpadding="0">
 <tr>
-<td>Patient Enrollment Date:</td>
+<td><spring:message code="mdrtb.patientEnrollmentDate" text="Patient Enrollment Date"/>:</td>
 <td>
 <c:forEach var="program" items="${mdrtbPatient.mdrtbPrograms}" varStatus="i">
 	<openmrs_tag:dateField formFieldName="mdrtbPrograms[${i.count - 1}].dateEnrolled" startValue="${program.dateEnrolled}"/><br/>
@@ -102,7 +102,7 @@
 </td>
 </tr>
 </table>
-<button type="submit">Save</button><button id="cancelSummary" type="reset">Cancel</button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><button id="cancelSummary" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 
 </div>

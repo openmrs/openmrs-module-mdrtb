@@ -17,16 +17,16 @@
 	td {padding-left:8px; padding-right:8px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
-<b class="boxHeader">Specimen List</b>
+<b class="boxHeader"><spring:message code="mdrtb.specimenList" text="Specimen List"/></b>
 <div class="box">
-<a href="add.form?patientId=${patientId}">Add a new Specimen</a>
+<a href="add.form?patientId=${patientId}"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></a>
 <br/><br/>
 <table>
 <tr>
-<td><u><nobr>Date Collected</nobr></u></td>
-<td><u><nobr>Sample ID</nobr></u></td>
-<td><u><nobr>Location Collected</nobr></u></td>
-<td><u><nobr>Collected By</nobr></u></td>
+<td><u><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/></nobr></u></td>
+<td><u><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/></nobr></u></td>
+<td><u><nobr><spring:message code="mdrtb.locationCollected" text="Location Collected"/></nobr></u></td>
+<td><u><nobr><spring:message code="mdrtb.collectedBy" text="Collected By"/></nobr></u></td>
 <td colspan="2">&nbsp;</td>
 <td width="99%">&nbsp;</td>
 </tr>
@@ -37,8 +37,8 @@
 	<td><nobr><a href="specimen.form?specimenId=${specimen.id}">${specimen.identifier}</a></nobr></td>
 	<td><nobr>${specimen.location.name}</nobr></td>
 	<td><nobr>${specimen.provider.personName}</nobr></td>  <!-- TODO: fix/use proper name? -->
-	<td><a href="specimen.form?specimenId=${specimen.id}">view</a></td>
-	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('Are you sure you want to delete this specimen?')">delete</a></td>
+	<td><a href="specimen.form?specimenId=${specimen.id}"><spring:message code="mdrtb.view" text="View"/></a></td>
+	<td><a href="<spring:message code="mdrtb.delete" text="Delete"/>.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('Are you sure you want to <spring:message code="mdrtb.delete" text="delete"/> this specimen?')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 	<td width="99%">&nbsp;</td>
 	</tr>
 </c:forEach>

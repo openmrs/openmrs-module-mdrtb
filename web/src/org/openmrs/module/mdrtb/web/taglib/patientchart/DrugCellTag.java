@@ -42,7 +42,7 @@ public class DrugCellTag extends TagSupport {
 	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
 	    			if(component != null) {
 	    				updateTitle(titleString, component);
-	    				colorString="mistyrose";
+	    				colorString="skyblue";
 	    			}
 	    		}
 	    	}
