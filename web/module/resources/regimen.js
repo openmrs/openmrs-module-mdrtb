@@ -44,7 +44,7 @@
  	
  	function clearOrder(){
  		if (action == 1){ 
- 			if (orderDateTmp >= stopDateTmp){
+ 			if (buildJavascriptDateObject(orderDateTmp) >= buildJavascriptDateObject(stopDateTmp)){
 				alert('<spring:message code="mdrtb.orderenddatebeforestopdate" />');
 			} else {
 	 			if (reasonTmp != null && reasonTmp != "" && stopDateTmp != null && stopDateTmp != ""){
