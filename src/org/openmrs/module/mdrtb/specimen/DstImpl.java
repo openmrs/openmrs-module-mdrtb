@@ -56,7 +56,7 @@ public class DstImpl extends TestImpl implements Dst {
 
 	public DstResult addResult() {
 		// create a new obs for the result, set to the proper values
-		Obs resultObs = new Obs(this.test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT), this.test.getObsDatetime(), this.test.getLocation());
+		Obs resultObs = new Obs(this.test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_RESULT), this.test.getObsDatetime(), this.test.getLocation());
 		resultObs.setEncounter(this.test.getEncounter());
 		
 		// add the result to this obs group
