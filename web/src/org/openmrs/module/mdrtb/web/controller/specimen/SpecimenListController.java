@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
-import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,8 +29,7 @@ public class SpecimenListController {
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		if(patient == null) {
-			// TODO: replace with the proper exception to throw here?
-			throw new APIException("Invalid patient id");
+			throw new MdrtbAPIException("Invalid patient id");
 		}
 		
 		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);

@@ -21,7 +21,7 @@ public class SpecimenRecordComponent implements RecordComponent {
 	public SpecimenRecordComponent(Specimen specimen) {
 		this.specimen = specimen;
 		if(specimen != null) {
-			this.date = specimen.getDateCollected(); // if there is a specimen, date is set to date collected of specime
+			this.date = specimen.getDateCollected(); // if there is a specimen, date is set to date collected of specimen
 		}
 	}
 	

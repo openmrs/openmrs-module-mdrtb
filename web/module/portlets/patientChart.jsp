@@ -16,7 +16,7 @@
 <td class="chartCell"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
-	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated? -->
+	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
 </c:forEach>
 </tr>
 </thead>

@@ -23,7 +23,7 @@
 <div class="box" style="margin:0px">
 
 <form action="summary.form?patientId=${patientId}" method="post">
-MDR-TB Program Enrollment Date: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue=""/>
+<spring:message code="mdrtb.enrollment.date" text="MDR-TB Program Enrollment Date"/>: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue=""/>
 <button type="submit"><spring:message code="mdrtb.enroll" text="Enroll"/></button>
 </form>
 

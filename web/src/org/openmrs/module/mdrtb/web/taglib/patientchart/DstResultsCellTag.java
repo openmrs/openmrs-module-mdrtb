@@ -35,12 +35,12 @@ public class DstResultsCellTag extends TagSupport {
     	
     	String drugColor = "white";
     	   	
-    	// determine if we need to color the overall cell grey to reflect an active drug order
+    	// determine if we need to color the overall cell to reflect an active drug order
     	if(regimens != null) {
     		for(Regimen regimen : regimens) {
     			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
     			if(component != null) {
-    				drugColor="mistyrose";
+    				drugColor="skyblue";  // TODO: make this a global prop, make sure it's in sync with color in dst results cell
     				break;
     			}
     		}

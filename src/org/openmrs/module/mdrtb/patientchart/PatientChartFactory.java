@@ -25,7 +25,6 @@ public class PatientChartFactory {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 
-	// TODO: should this operate on an MDR-TB patient wrapper?
 	public PatientChart createPatientChart(MdrtbPatientWrapper patient) {
 		PatientChart chart = new PatientChart();
 		
@@ -228,13 +227,12 @@ public class PatientChartFactory {
 		List<RecordComponent> stateChangeRecordComponents = new LinkedList<RecordComponent>();
 		
 		// the only state we are worried about at this point is the treatment start date and treatment end date
-		// TODO: localize
 		if(patient.getTreatmentStartDate() != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), "TREATMENT START DATE"));
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), Context.getMessageSourceService().getMessage("mdrtb.treatmentstartdate")));
 		}
 			
 		if(patient.getTreatmentEndDate() != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentEndDate(), "TREATMENT END DATE"));
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentEndDate(), Context.getMessageSourceService().getMessage("mdrtb.treatmentEndDate")));
 		}
 		
 		Collections.sort(stateChangeRecordComponents);
@@ -242,7 +240,7 @@ public class PatientChartFactory {
 		return stateChangeRecordComponents;
 	}
 	
-	// IMPORTANT: the assumption this method makes is that list is in descending date order
+	// TODO: IMPORTANT: the assumption this method makes is that list is in descending date order
 	// also, this method pulls all the components it returns off the list of component passed to it;
 	// this method is intended to be use with the getPatientChart API method
 	private List<RecordComponent> getStateChangeRecordComponentsBeforeDate(List<RecordComponent> components, Calendar compareDate) {

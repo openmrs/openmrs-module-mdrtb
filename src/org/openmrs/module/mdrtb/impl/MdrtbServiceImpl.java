@@ -516,7 +516,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	colorMapCache = null;
     }
     
-    // TODO: should this really run the display code through message.properties for localization (probably not, since locations are proper names)
+    // TODO: should this really run the display code through message.properties for localization (probably not, since locations are proper names?)
     public String getDisplayCodeForLocation(Location location) {
     	// initialize the cache if need be 
     	if(locationToDisplayCodeCache == null) {

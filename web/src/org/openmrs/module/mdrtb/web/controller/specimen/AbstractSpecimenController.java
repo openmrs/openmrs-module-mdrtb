@@ -16,11 +16,13 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Person;
+import org.openmrs.PersonName;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -120,12 +122,8 @@ public abstract class AbstractSpecimenController {
 		Role provider = Context.getUserService().getRole("Provider");
 		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
 			
-		// add all the persons to a sorted set sorted by family name
-		SortedSet<Person> persons = new TreeSet<Person>(new Comparator<Person>() {
-			public int compare(Person person1, Person person2) {
-			    return person1.getPersonName().getFamilyName().compareTo(person2.getPersonName().getFamilyName());
-		    }
-		});
+		// add all the persons to a sorted set sorted by name
+		SortedSet<Person> persons = new TreeSet<Person>(new PersonComparatorByName()); 
 		
 		for(User user : providers) {
 			persons.add(user.getPerson());
@@ -177,6 +175,46 @@ public abstract class AbstractSpecimenController {
 	Concept getOtherMycobacteriaNonCoded() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
+	
+	/**
+	 * Utility methods
+	 */
+	
+	/**
+	 * A simple person comparator for sorting providers by name
+	 */
+	private class PersonComparatorByName implements Comparator<Person> {
+		// TODO: remove this class if/when it gets added to core
+		public int compare(Person person1, Person person2) {
+
+			PersonName name1 = person1.getPersonName();
+			PersonName name2 = person2.getPersonName();
+			
+			int ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyName(), name2.getFamilyName());
+			
+			if (ret == 0) {
+				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyName2(), name2.getFamilyName2());
+			}
+			
+			if (ret == 0) {
+				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getGivenName(), name2.getGivenName());
+			}
+			
+			if (ret == 0) {
+				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getMiddleName(), name2.getMiddleName());
+			}
+			
+			if (ret == 0) {
+				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyNamePrefix(), name2.getFamilyNamePrefix());
+			}
+			
+			if (ret == 0) {
+				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyNameSuffix(), name2.getFamilyNameSuffix());
+			}
+		
+			return ret;
+		}
+	}
  }
 
 

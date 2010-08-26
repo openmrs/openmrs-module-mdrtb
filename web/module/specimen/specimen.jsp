@@ -249,7 +249,6 @@
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
-<!-- TODO is answerConcept.name the correct parameter? -->
 <tr>
 <td><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</nobr></td>
 <td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>
@@ -340,7 +339,7 @@
 <div id="summary" style="position:absolute; left:20px; top:30px; width:400px">
 
 <span id="add"  style="font-size:0.9em">
-Add a new Lab Test:
+<spring:message code="mdrtb.addANewLabTest" text="Add a new Lab Test:"/>:
 <select id="addSelect">
 <c:forEach var="test" items="${testTypes}">
 	<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
@@ -353,7 +352,7 @@ Add a new Lab Test:
 
 <c:forEach var="test" items="${specimen.tests}">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view"><spring:message code="mdrtb.view" text="view"/></a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view"><spring:message code="mdrtb.view" text="View"/></a></span></b>
 <div class="box" style="margin:0px">
 <table style="width:396px;" cellspacing="0" cellpadding="0">
 
@@ -390,7 +389,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="<spring:message code="mdrtb.delete" text="delete"/>.form?testId=${test.id}&specimenId=${specimen.id}" class="<spring:message code="mdrtb.delete" text="delete"/>" onclick="return confirm('Are you sure you want to <spring:message code="mdrtb.delete" text="delete"/> this test?')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 <tr>
@@ -453,7 +452,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${(test.testType eq 'culture' || test.testType eq 'dst') && test.organismType == otherMycobacteriaNonCoded}">
 <tr>
-<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td><td><nobr>${test.organismTypeNonCoded}</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNonCoded" text="Organism Type Non-Coded"/>:</nobr></td><td><nobr>${test.organismTypeNonCoded}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -508,7 +507,6 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <div id="edit_${test.id}" class="editBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
 
 <!--  TODO: how do i bind errors to this? -->
-<!-- TODO: form id should be specified based on test type; get rid of enum, just use a String getTestType? -->
 
 <form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
 
@@ -604,7 +602,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td colspan="2">&nbsp;</td>
 </tr>
 <tr class="organismTypeNonCoded" <c:if test="${test.organismType != otherMycobacteriaNonCoded}"> style="display:none;"</c:if>>
-<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNonCoded" text="Organism Type Non-Coded"/>:</nobr></td>
 <td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value="${test.organismTypeNonCoded}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -802,7 +800,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td colspan="2">&nbsp;</td>
 </tr>
 <tr class="organismTypeNonCoded" style="display:none;">
-<td><nobr><spring:message code="mdrtb.organismTypeNon-Coded" text="Organism Type Non-Coded"/>:</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismTypeNonCoded" text="Organism Type Non-Coded"/>:</nobr></td>
 <td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
 <td colspan="2">&nbsp;</td>
 </tr>

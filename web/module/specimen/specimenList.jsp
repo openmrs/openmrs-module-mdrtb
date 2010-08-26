@@ -38,7 +38,7 @@
 	<td><nobr>${specimen.location.name}</nobr></td>
 	<td><nobr>${specimen.provider.personName}</nobr></td>  <!-- TODO: fix/use proper name? -->
 	<td><a href="specimen.form?specimenId=${specimen.id}"><spring:message code="mdrtb.view" text="View"/></a></td>
-	<td><a href="<spring:message code="mdrtb.delete" text="Delete"/>.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('Are you sure you want to <spring:message code="mdrtb.delete" text="delete"/> this specimen?')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 	<td width="99%">&nbsp;</td>
 	</tr>
 </c:forEach>

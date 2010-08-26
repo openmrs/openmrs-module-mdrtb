@@ -42,6 +42,7 @@ public class DrugCellTag extends TagSupport {
 	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
 	    			if(component != null) {
 	    				updateTitle(titleString, component);
+	    				// TODO: make this a global prop, make sure it's in sync with color in dstresultscell
 	    				colorString="skyblue";
 	    			}
 	    		}

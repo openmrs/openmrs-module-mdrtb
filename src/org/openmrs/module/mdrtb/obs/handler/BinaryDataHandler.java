@@ -36,7 +36,7 @@ import org.openmrs.util.OpenmrsUtil;
  */
 public class BinaryDataHandler extends AbstractHandler implements ComplexObsHandler {
 	
-	// TODO: remove this once it gets added to core
+	// TODO: remove this once it gets added to core--it should be in 1.8?
 	
 	public static final Log log = LogFactory.getLog(BinaryDataHandler.class);
 	

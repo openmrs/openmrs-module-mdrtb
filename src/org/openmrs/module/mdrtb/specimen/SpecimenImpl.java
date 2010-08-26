@@ -27,7 +27,7 @@ import org.openmrs.module.mdrtb.MdrtbService;
 public class SpecimenImpl implements Specimen {
 	
 	// TODO: could potentially cache all the get/set variables in private instance variables here...
-	// to make this more like a real "command"; then could create a "initialize" method that
+	// to make this more like a real "command object"; then could create a "initialize" method that
 	// automatically runs all the getters (and thereby loading the cache)
 	// could do this for all the specimen related objects
 	// TODO: or, actually, perhaps the thing to do here is simply to pre-load the concept maps that the module uses?
@@ -40,7 +40,9 @@ public class SpecimenImpl implements Specimen {
 	
 	Encounter encounter; // the encounter where information about the specimen is stored
 	
-	Map<Integer,List<DstResult>> dstResultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
+	// TODO: we cache the result map; do we need to worry about resetting the cache ?
+	// (right now it isn't much of an issue because in the web model a new specimen is instantiated during each request)
+	Map<Integer,List<DstResult>> dstResultsMap = null; 
 	
 	public SpecimenImpl() {
 	}
@@ -62,9 +64,6 @@ public class SpecimenImpl implements Specimen {
 		encounter.setPatient(patient);
 		encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
 	
-		// add appropriate top-level obs to the encounter
-		// encounter.addObs(new Obs(patient, mdrtbFactory.getConceptSpecimenID(), null, null));
-		// encounter.addObs(new Obs(patient, mdrtbFactory.getConceptSampleSource(), null, null));
 	}
 	
 	public Object getSpecimen() {

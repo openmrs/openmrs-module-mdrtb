@@ -33,10 +33,6 @@
 
 <table>
 
-<!-- TODO localize all text -->
-
-<!-- TODO is answerConcept.name the correct parameter? -->
-
 <tr>
 <td><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</td>
 <td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>

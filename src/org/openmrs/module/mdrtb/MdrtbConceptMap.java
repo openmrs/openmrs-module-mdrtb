@@ -80,7 +80,9 @@ public class MdrtbConceptMap {
 	public Set<String[]> getAllConceptMappings() {
 		Set<String[]> ret = new TreeSet<String[]>();
 		for (Field f : MdrtbConcepts.class.getFields()) {
-			// TODO: make sure this array reflection works
+			
+			// TODO: make sure this array reflection works--this has not yet been used or tested
+			
 			if (f.getType() == Array.class) {
 				int modifier = f.getModifiers();
 				if (Modifier.isFinal(modifier) && Modifier.isStatic(modifier) && Modifier.isPublic(modifier)) {

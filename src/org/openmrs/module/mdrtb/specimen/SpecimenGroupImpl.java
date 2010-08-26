@@ -28,7 +28,9 @@ public class SpecimenGroupImpl implements Specimen {
 
 	List<Specimen> specimens;
 	
-	Map<Integer,List<DstResult>> dstResultsMap = null; // TODO: we need to cache the results map... do we need to worry about timing it out? 
+	// TODO: we cache the result map; do we need to worry about resetting the cache ?
+	// (right now it isn't much of an issue because in the web model a new specimen is instantiated during each request)
+	Map<Integer,List<DstResult>> dstResultsMap = null; 
 	
 	public SpecimenGroupImpl() {
 		this.specimens = new LinkedList<Specimen>();
