@@ -44,7 +44,7 @@
 <select name="type">
 <option value=""></option>
 <c:forEach var="type" items="${types}">
-	<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.name}</option>
+	<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -73,7 +73,7 @@
 <td>
 <select name="location">
 <c:forEach var="location" items="${locations}">
-	<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.name}</option>
+	<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
 </select>		
 </td>
@@ -85,7 +85,7 @@
 <select name="appearance">
 <option value=""></option>
 <c:forEach var="appearance" items="${appearances}">
-	<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.name}</option>
+	<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>

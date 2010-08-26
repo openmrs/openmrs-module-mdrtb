@@ -208,14 +208,14 @@
 </tr>
 
 <tr>
-<td><nobr><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</td><td><nobr>${specimen.type.name.name}</nobr></td> 
-<td><nobr><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</td><td><nobr>${specimen.location.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</td><td><nobr>${specimen.type.displayString}</nobr></td> 
+<td><nobr><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</td><td><nobr>${specimen.location.displayString}</nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-<td><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</td><td>${specimen.appearance.name.name}</td>
+<td><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</td><td>${specimen.appearance.displayString}</td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -269,7 +269,7 @@
 <select name="type">
 <option value=""></option>
 <c:forEach var="type" items="${types}">
-<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.name}</option>
+<option value="${type.answerConcept.id}" <c:if test="${specimen.type == type.answerConcept}">selected</c:if> >${type.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -277,7 +277,7 @@
 <td>
 <select name="location">
 <c:forEach var="location" items="${locations}">
-<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.name}</option>
+<option value="${location.locationId}" <c:if test="${location == specimen.location}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
 </select>	
 </td>
@@ -292,7 +292,7 @@
 <select name="appearance">
 <option value=""></option>
 <c:forEach var="appearance" items="${appearances}">
-<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.name}</option>
+<option value="${appearance.answerConcept.id}" <c:if test="${specimen.appearance == appearance.answerConcept}">selected</c:if> >${appearance.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -362,7 +362,7 @@
 
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
 <tr>
-<td><spring:message code="mdrtb.result" text="Result"/>:</td><td>${test.result.name.name}</td>
+<td><spring:message code="mdrtb.result" text="Result"/>:</td><td>${test.result.displayString}</td>
 </tr>
 </c:if>
 
@@ -405,7 +405,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </tr>
 
 <tr>
-<td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td><td><nobr>${test.method.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td><td><nobr>${test.method.displayString}</nobr></td>
 <td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
@@ -413,7 +413,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <tr>
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
-<td><nobr><spring:message code="mdrtb.result" text="Result"/>:</nobr></td><td><nobr>${test.result.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.result" text="Result"/>:</nobr></td><td><nobr>${test.result.displayString}</nobr></td>
 </c:if>
 <c:if test="${test.testType eq 'dst'}">
 <td><nobr><spring:message code="mdrtb.directIndirect" text="Direct/Indirect"/>:</nobr></td><td><nobr>
@@ -445,7 +445,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
-<td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td><td><nobr>${test.organismType.name.name}</nobr></td>
+<td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td><td><nobr>${test.organismType.displayString}</nobr></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -485,9 +485,9 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <c:if test="${!empty resultsMap[drugType.id]}">
 	<c:forEach var="dstResult" items="${resultsMap[drugType.id]}">
 		<tr>
-		<td><nobr>${dstResult.drug.name}</nobr></td>
+		<td><nobr>${dstResult.drug.displayString}</nobr></td>
 		<td><nobr>${dstResult.concentration}</nobr></td>
-		<td><nobr>${dstResult.result.name}</nobr></td>
+		<td><nobr>${dstResult.result.displayString}</nobr></td>
 		<td><nobr>${dstResult.colonies}</nobr></td>
 		</tr>
 	</c:forEach>
@@ -526,7 +526,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
-<option value="${location.locationId}" <c:if test="${location == test.lab}">selected</c:if> >${location.name}</option>
+<option value="${location.locationId}" <c:if test="${location == test.lab}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -540,7 +540,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="method">
 <option value=""></option>
 <c:forEach var="method" items="${test.testType eq 'smear'? smearMethods : (test.testType eq 'culture' ? cultureMethods : dstMethods)}">
-<option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.name}</option>
+<option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -555,7 +555,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${test.testType eq 'smear' ? smearResults : cultureResults}">
-<option value="${result.answerConcept.id}" <c:if test="${result.answerConcept == test.result}">selected</c:if> >${result.answerConcept.name}</option>
+<option value="${result.answerConcept.id}" <c:if test="${result.answerConcept == test.result}">selected</c:if> >${result.answerConcept.displayString}</option>
 </c:forEach></td>
 </select>
 </td>
@@ -597,7 +597,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
-<option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.name}</option>
+<option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.displayString}</option>
 </c:forEach></td>
 <td colspan="2">&nbsp;</td>
 </tr>
@@ -636,9 +636,9 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 	<c:if test="${!empty resultsMap[drugType.id]}">
 		<c:forEach var="dstResult" items="${resultsMap[drugType.id]}">
 			<tr class="dstResult">
-			<td><nobr>${dstResult.drug.name}</nobr></td>
+			<td><nobr>${dstResult.drug.displayString}</nobr></td>
 			<td><nobr>${dstResult.concentration}</nobr></td>
-			<td><nobr>${dstResult.result.name}</nobr></td>
+			<td><nobr>${dstResult.result.displayString}</nobr></td>
 			<td><nobr>${dstResult.colonies}</nobr></td>
 			<td><button class="removeDstResult" value="${dstResult.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button>
 				<input type="hidden" id="removeDstResult${dstResult.id}" name="removeDstResult" value=""/></td>
@@ -657,7 +657,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 	<td><select name="addDstResult${i.count}.drug">
 		<option value=""></option>
 		<c:forEach var="drug" items="${drugTypes}">
-			<option value="${drug.id}">${drug.name}</option>
+			<option value="${drug.id}">${drug.displayString}</option>
 		</c:forEach>
 		</select>
 	</td>
@@ -665,7 +665,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 	<td><select name="addDstResult${i.count}.result" class="dstResult">
 		<option value=""></option>
 		<c:forEach var="possibleResult" items="${dstResults}">
-			<option value="${possibleResult.id}">${possibleResult.name}</option>
+			<option value="${possibleResult.id}">${possibleResult.displayString}</option>
 		</c:forEach></td>
 		</select>
 	</td>
@@ -721,7 +721,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
-<option value="${location.locationId}">${location.name}</option>
+<option value="${location.locationId}">${location.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -735,7 +735,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="method">
 <option value=""></option>
 <c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
-<option value="${method.answerConcept.id}">${method.answerConcept.name}</option>
+<option value="${method.answerConcept.id}">${method.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -750,7 +750,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
-<option value="${result.answerConcept.id}">${result.answerConcept.name}</option>
+<option value="${result.answerConcept.id}">${result.answerConcept.displayString}</option>
 </c:forEach></td>
 </select>
 </td>
@@ -793,7 +793,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
-<option value="${organismType.answerConcept.id}">${organismType.answerConcept.name}</option>
+<option value="${organismType.answerConcept.id}">${organismType.answerConcept.displayString}</option>
 </c:forEach></td>
 </select>
 </td>
@@ -838,7 +838,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 		<td><select name="addDstResult${i.count}.drug">
 			<option value=""></option>
 			<c:forEach var="drug" items="${drugTypes}">
-				<option value="${drug.id}">${drug.name}</option>
+				<option value="${drug.id}">${drug.displayString}</option>
 			</c:forEach>
 			</select>
 		</td>
@@ -846,7 +846,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 		<td><select name="addDstResult${i.count}.result" class="dstResult">
 			<option value=""></option>
 			<c:forEach var="possibleResult" items="${dstResults}">
-				<option value="${possibleResult.id}">${possibleResult.name}</option>
+				<option value="${possibleResult.id}">${possibleResult.displayString}</option>
 			</c:forEach></td>
 			</select>
 		</td>
