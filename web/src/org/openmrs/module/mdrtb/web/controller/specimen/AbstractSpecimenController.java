@@ -123,7 +123,7 @@ public abstract class AbstractSpecimenController {
 		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
 			
 		// add all the persons to a sorted set sorted by name
-		SortedSet<Person> persons = new TreeSet<Person>(new PersonComparatorByName()); 
+		SortedSet<Person> persons = new TreeSet<Person>(new PersonByNameComparator()); 
 		
 		for(User user : providers) {
 			persons.add(user.getPerson());
@@ -183,7 +183,7 @@ public abstract class AbstractSpecimenController {
 	/**
 	 * A simple person comparator for sorting providers by name
 	 */
-	private class PersonComparatorByName implements Comparator<Person> {
+	private class PersonByNameComparator implements Comparator<Person> {
 		// TODO: remove this class if/when it gets added to core
 		public int compare(Person person1, Person person2) {
 
