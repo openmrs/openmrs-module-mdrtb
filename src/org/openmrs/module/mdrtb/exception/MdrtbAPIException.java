@@ -5,7 +5,7 @@ import org.openmrs.api.APIException;
 
 public class MdrtbAPIException extends APIException{
 
-    private static final long serialVersionUID = 6401121898067897747L;
+    private static final long serialVersionUID = 1L;
 
 	/**
 	 * Default empty constructor. If at all possible, don't use this one, but use the

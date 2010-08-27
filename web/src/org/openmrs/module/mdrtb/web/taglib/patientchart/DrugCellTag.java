@@ -19,7 +19,7 @@ import org.openmrs.util.OpenmrsUtil;
 
 public class DrugCellTag extends TagSupport {
 
-    private static final long serialVersionUID = 6323202853285105042L;
+    private static final long serialVersionUID = 1L;
 
 	private final Log log = LogFactory.getLog(getClass());
 	

@@ -3,7 +3,7 @@ package org.openmrs.module.mdrtb.exception;
 
 public class MissingConceptException extends MdrtbAPIException {
 
-    private static final long serialVersionUID = 6892823511104805843L;
+    private static final long serialVersionUID = 1L;
 	/**
 	 * Default empty constructor. If at all possible, don't use this one, but use the
 	 * {@link #MissingConceptException(String)} constructor to specify a helpful message to the end user

@@ -10,6 +10,7 @@ import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.obs.ComplexData;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,7 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 	public ScannedLabReportImpl(Encounter encounter) {
 	
 		if(encounter == null) {
-			throw new RuntimeException ("Cannot create scanned lab report: encounter can not be null.");
+			throw new MdrtbAPIException ("Cannot create scanned lab report: encounter can not be null.");
 		}
 		
 		report = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANNED_LAB_REPORT), encounter.getEncounterDatetime(), null);
@@ -41,7 +42,7 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 			this.report = Context.getObsService().getComplexObs(report.getId(), OpenmrsConstants.RAW_VIEW);
 		}
 		catch(Exception e) {
-			throw new RuntimeException ("Unable to retrieve scanned lab report. File may be missing.", e);
+			throw new MdrtbAPIException ("Unable to retrieve scanned lab report. File may be missing.", e);
 		}
 	}
 

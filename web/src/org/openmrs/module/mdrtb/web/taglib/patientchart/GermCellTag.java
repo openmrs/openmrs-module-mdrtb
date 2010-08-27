@@ -18,7 +18,7 @@ import org.openmrs.module.mdrtb.specimen.Culture;
 
 public class GermCellTag extends TagSupport {
 
-    private static final long serialVersionUID = 8556285484514497788L;
+    private static final long serialVersionUID = 1L;
     
 	private final Log log = LogFactory.getLog(getClass());
 

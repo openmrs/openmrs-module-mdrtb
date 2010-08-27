@@ -19,7 +19,7 @@ import org.openmrs.module.mdrtb.specimen.DstResult;
 
 public class DstResultsCellTag extends TagSupport {
 	
-    private static final long serialVersionUID = -1694368107155244376L;
+    private static final long serialVersionUID = 1L;
     
 	private final Log log = LogFactory.getLog(getClass());
 	

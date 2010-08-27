@@ -13,7 +13,7 @@ import org.openmrs.module.mdrtb.web.util.TestStatusRenderer;
 
 public class TestStatusTag extends TagSupport {
 
-    private static final long serialVersionUID = -447249746150313189L;
+    private static final long serialVersionUID = 1L;
 
 	private final Log log = LogFactory.getLog(getClass());
 	

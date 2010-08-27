@@ -7,7 +7,7 @@ import org.openmrs.module.mdrtb.specimen.Bacteriology;
 
 public class SmearCellTag extends AbstractBacteriologyCellTag {
 
-    private static final long serialVersionUID = 6971553873382451091L;
+    private static final long serialVersionUID = 1L;
 
     private List<Bacteriology> smears;
 

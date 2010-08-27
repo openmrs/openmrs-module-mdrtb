@@ -26,7 +26,7 @@ import org.openmrs.module.mdrtb.web.util.TestStatusRenderer;
 
 public abstract class AbstractBacteriologyCellTag extends TagSupport {
 
-    private static final long serialVersionUID = 6161336882128086538L;
+    private static final long serialVersionUID = 1L;
     
 	private final Log log = LogFactory.getLog(getClass());
 
