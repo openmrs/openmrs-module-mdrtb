@@ -59,7 +59,7 @@ public class PatientChartFactory {
 		Boolean hasBeenOnTreatment = (treatmentStartDate != null);
 		
 		// if not on treatment, and no specimens, nothing to chart, return null!
-		if(!hasBeenOnTreatment && (specimens == null || specimens.size() < 0)) {
+		if(!hasBeenOnTreatment && (specimens == null || specimens.isEmpty())) {
 			return null;
 		}
 		
