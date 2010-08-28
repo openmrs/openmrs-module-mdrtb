@@ -291,7 +291,10 @@ border-collapse:collapse;
 	color:white;
 }
 	
-
+.activeRegimenRow {
+	background-color: #FFFF99;
+	height:20px;
+}
 
 .oddRow {
 	background-color: white;

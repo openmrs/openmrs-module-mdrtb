@@ -150,7 +150,7 @@
 		</jar>
 	</target>
 	
-	<target name="deploy-web" depends="package-module" description="Copy web files to webapp">
+	<target name="deploy-web" depends="init" description="Copy web files to webapp">
 		<copy todir="${tomcat.home}/webapps/openmrs/WEB-INF/view/module/${module.id}">
 			<fileset dir="web/module" includes="**/*" />
 		</copy>

@@ -139,8 +139,10 @@
 			}
 		}
 		$j("#newOrdersTBody").append(clonedRow);
-		if (newRowsToBeAdded > 0)
-		$j("#submitSpan").html("<br><input type=submit name='submit' value='<spring:message code="mdrtb.saveneworders" />' id='submit'>");
+		if (newRowsToBeAdded > 0) {
+			$j("#submitSpan").html("<br><input type=submit name='submit' value='<spring:message code="mdrtb.saveneworders" />' id='submit'>");
+			$j("#newOrderSection").show();
+		}
 		$j("#newRowTemplate:first").attr("id", "replace");	
 	}
 
@@ -150,8 +152,10 @@
 	 	var length = $j("#newOrdersTBody").children().length; 
 	 	if (length == 1){
 	 		$j("#newOrdersTBody").empty();
-	 		if (newRowsToBeAdded == 0)
-	 		$j("#submitSpan").empty();
+	 		if (newRowsToBeAdded == 0) {
+	 			$j("#submitSpan").empty();
+	 			$j("#newOrderSection").hide();
+	 		}
 	 	}
 	}
 	

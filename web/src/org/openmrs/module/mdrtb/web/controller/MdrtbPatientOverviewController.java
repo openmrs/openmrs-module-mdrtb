@@ -57,7 +57,6 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Extension;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.mdrtb.MdrtbActivator;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
@@ -1691,15 +1690,18 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             if (next.isCurrent()) currentDrugOrders.add(next);
                             if (next.isFuture()) futureDrugOrders.add(next);
                             if (next.isDiscontinuedRightNow()) discontinuedDrugOrders.add(next); 
-                            if (next.getDiscontinuedDate() == null && next.getAutoExpireDate() != null && next.getAutoExpireDate().before(new Date()))
+                            if (next.getDiscontinuedDate() == null && next.getAutoExpireDate() != null && next.getAutoExpireDate().before(new Date())) {
                                 discontinuedDrugOrders.add(next);
+                            }
                         }
                         mp.setCurrentDrugOrders(currentDrugOrders);
                         mp.setCompletedDrugOrders(discontinuedDrugOrders);
                         mp.setFutureDrugOrders(futureDrugOrders);
-
                     }
-
+                    
+                    // TODO: Compute resistance probability here
+                    int probability = (int)(Math.random() * 100);
+                    mp.getExtra().put("resistanceProbability", probability);
                     
                     List<Encounter> encs = Context.getEncounterService().getEncountersByPatient(patient);
                     if (encs.size() > 0){

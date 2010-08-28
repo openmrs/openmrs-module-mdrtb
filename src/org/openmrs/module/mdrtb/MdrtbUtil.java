@@ -430,7 +430,7 @@ public class MdrtbUtil {
        
           List<Obs> dstRes = getPositiveDSTResultObs(minDate, dstParent, dstResultParent, dstDrugList, positiveConcepts, patient, considerOnlyLatestDst);
           for (Obs o: dstRes){
-              if (!ret.contains(o.getValueCoded())){
+              if (!o.isVoided() && !ret.contains(o.getValueCoded())){
                   ret.add(o.getValueCoded());
               }
           }

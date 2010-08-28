@@ -340,7 +340,21 @@
 		hidden using this method will be displayed at the end of the tab list. For instance "BAC|FORM|STATUS:hide|CONTACTS:hide" would 
 		display the following tabs BAC,FORM,REG,DST, in that order. To use the default display order, keep this property empty.</description>
 	</globalProperty>
-	
+	<globalProperty>
+		<property>@MODULE_ID@.dstContradicatesDrugWarningColor</property>
+		<defaultValue>#FF0000</defaultValue>
+		<description>Color to display active regimens which are contra-indicated by DST results</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.probableResistanceWarningColor</property>
+		<defaultValue>#FF8000</defaultValue>
+		<description>Color to display active regimens for which the patient has a high probability of resistance</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.probableResistanceThreshold</property>
+		<defaultValue>-1</defaultValue>
+		<description>Numeric threshold for probable resistance warnings. A value of -1 disables this (default)</description>
+	</globalProperty>
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">

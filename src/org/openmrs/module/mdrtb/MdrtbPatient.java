@@ -73,6 +73,7 @@ public class MdrtbPatient {
     private List<Obs> stEmpIndObs = new ArrayList<Obs>();
     private List<Encounter> htmlEncList = new ArrayList<Encounter>();
     private Obs causeOfDeath;
+    private Map<Object, Object> extra = new HashMap<Object, Object>();
     
     public List<Encounter> getHtmlEncList() {
         return htmlEncList;
@@ -138,6 +139,14 @@ public class MdrtbPatient {
 
 	public void setCauseOfDeath(Obs causeOfDeath) {
 		this.causeOfDeath = causeOfDeath;
+	}
+
+	public Map<Object, Object> getExtra() {
+		return extra;
+	}
+
+	public void setExtra(Map<Object, Object> extra) {
+		this.extra = extra;
 	}
 
 	public Obs getDurationOfPreviousTreatment() {

@@ -217,6 +217,11 @@
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 	<attribute>
+		<name>includeAllOrderedDrugs</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>	
+	<attribute>
 		<name>drugTitleString</name>
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
@@ -241,6 +246,11 @@
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>timeDescending</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>	
 	<attribute>
 		<name>stEmpIndObs</name>
 		<required>false</required>

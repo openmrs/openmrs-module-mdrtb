@@ -81,8 +81,7 @@
     
     //Simple popup:
    
-	$j(document).ready(function(){ 		
-		cssTables();		 
+	$j(document).ready(function(){ 				 
   		 var viewport = {
         o: function() {
             if (self.innerHeight) {
