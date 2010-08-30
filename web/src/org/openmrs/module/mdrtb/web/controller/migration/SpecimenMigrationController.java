@@ -169,13 +169,6 @@ public class SpecimenMigrationController {
 		dstResults.getConceptSets().add(new ConceptSet(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS), new Double(dstResults.getConceptSets().size())));
 		Context.getConceptService().saveConcept(dstResults);
 		
-		// TUBERCULOSIS SMEAR MICROSOPY METHOD
-		Concept smearMethod = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_METHOD);
-		smearMethod.setSet(false);
-		smearMethod.setDatatype(Context.getConceptService().getConceptDatatypeByName("Coded"));
-		Context.getConceptService().saveConcept(smearMethod);
-		addAnswerConcept(smearMethod, Context.getConceptService().getConceptByName("FLUOROCHROME (250X)"));
-		
 		// TUBERCULOSIS CULTURE RESULT
 		Concept cultureResult  = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
 		addAnswerConcept(cultureResult, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS));
