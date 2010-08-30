@@ -35,7 +35,9 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 		
 		List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 		
-		Collections.sort(mdrtbPrograms, new PatientProgramComparator());
+		// TODO: figure out a way to add sorting back in; unfortunately, sorting screws up spring bindings/validation
+		// TODO: because spring expects the fields to come back in the same order on submission
+		// Collections.sort(mdrtbPrograms, new PatientProgramComparator());
 		
 		return mdrtbPrograms;
 	}

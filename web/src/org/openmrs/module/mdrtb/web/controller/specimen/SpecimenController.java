@@ -29,7 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/module/mdrtb/specimen/specimen.form")
 public class SpecimenController extends AbstractSpecimenController {
 	
-protected final Log log = LogFactory.getLog(getClass());
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * Returns the smear that should be used to bind a form posting to

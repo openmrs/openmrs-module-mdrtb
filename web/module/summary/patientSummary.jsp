@@ -58,7 +58,7 @@
 
 <!-- PATIENT SUMMARY - VIEW -->
 
-<div id="summary">
+<div id="summary" <c:if test="${fn:length(errors.allErrors) > 0}">style="display:none"</c:if>>
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientOverview" text="Patient Overview"/><span style="position: absolute; right:25px;"><a href="#" id="editSummary"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
 <div class="box" style="margin:0px">
@@ -86,7 +86,7 @@
 <!-- END PATIENT SUMMARY - VIEW -->
 
 <!-- PATIENT SUMMARY - EDIT -->
-<div id="edit_summary" style="display:none">
+<div id="edit_summary" <c:if test="${fn:length(errors.allErrors) == 0}">style="display:none"</c:if>>
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientOverview" text="Patient Overview"/></b>
 <div class="box" style="margin:0px">

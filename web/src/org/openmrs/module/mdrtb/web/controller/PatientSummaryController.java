@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.patient.MdrtbPatientValidator;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -73,7 +74,7 @@ public class PatientSummaryController {
 	                                      @RequestParam(required = true, value="dateEnrolled") Date dateEnrolled,
 	                                      @RequestParam(required = true, value="patientId") Integer patientId,
 	                                      ModelMap map) {
-		
+			
 		map.put("patientId", patientId);
 		
 		// validate the enrollment date
@@ -105,17 +106,19 @@ public class PatientSummaryController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("mdrtbPatient") MdrtbPatientWrapper mdrtbPatient,
-	                                  BindingResult result, SessionStatus status, HttpServletRequest request,
+	                                  BindingResult errors, SessionStatus status, HttpServletRequest request,
 	                                  @RequestParam(required = true, value="patientId") Integer patientId, ModelMap map) {
 		 
 		map.put("patientId", patientId);
 		
 		if(mdrtbPatient != null) {
-    		// TODO: create a new validator here
+			new MdrtbPatientValidator().validate(mdrtbPatient, errors);
     	}
 		
-		if (result.hasErrors()) {
-			// TODO: handle the error case
+		if (errors.hasErrors()) {
+			map.put("errors", errors);
+			log.error("There are errors.");
+			return new ModelAndView("/module/mdrtb/summary/patientSummary", map);
 		}
 		 
 		// save any changes to the mdrtb patient programs
