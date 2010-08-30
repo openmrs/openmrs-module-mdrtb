@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
@@ -117,6 +118,13 @@ public class PatientSummaryController {
 			// TODO: handle the error case
 		}
 		 
+		// save any changes to the mdrtb patient programs
+		for(PatientProgram mdrtbProgram : mdrtbPatient.getMdrtbPrograms()) {
+			Context.getProgramWorkflowService().savePatientProgram(mdrtbProgram);
+		}
+		
+		// TODO: need to save any other fields that may get added to this form
+		
 		// clears the command object from the session
 		status.setComplete();
 		

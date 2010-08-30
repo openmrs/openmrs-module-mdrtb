@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.module.mdrtb.patientchart.PatientChart;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
@@ -22,7 +23,7 @@ public interface MdrtbPatientWrapper {
 	/**
 	 * Returns all mdr-tb patient programs associated with this patient
 	 */
-	public List<MdrtbPatientProgram> getMdrtbPrograms();
+	public List<PatientProgram> getMdrtbPrograms();
 	
 	/**
 	 * Return whether or not the patient has ever been enrolled in the MDR-TB program

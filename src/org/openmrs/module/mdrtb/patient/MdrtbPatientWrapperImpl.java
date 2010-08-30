@@ -1,7 +1,8 @@
 package org.openmrs.module.mdrtb.patient;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Patient;
@@ -30,17 +31,11 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
     	return patient;
     }
     
-	public List<MdrtbPatientProgram> getMdrtbPrograms() {
-		List<MdrtbPatientProgram> mdrtbPrograms = new LinkedList<MdrtbPatientProgram>();
+	public List<PatientProgram> getMdrtbPrograms() {
 		
-		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
+		List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 		
-		if(programs != null) {
-		
-			for(PatientProgram program : programs) {
-				mdrtbPrograms.add(new MdrtbPatientProgramImpl(program));
-			}
-		}
+		Collections.sort(mdrtbPrograms, new PatientProgramComparator());
 		
 		return mdrtbPrograms;
 	}
@@ -63,7 +58,7 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 		}
 		
 		// go ahead and enroll the patient in the program
-		// TODO: should I set the program workflow state to none?  see the MdrtbFactory method here?
+		// TODO: do we want to set the patient in some specific states here? in the old MDR-TB factory all states are set to None?
 		PatientProgram patientProgram = new PatientProgram();
 		patientProgram.setPatient(this.patient);
 		patientProgram.setProgram(Context.getService(MdrtbService.class).getMdrtbProgram());
@@ -127,5 +122,22 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 	
     public List<Specimen> getSpecimens() {
 	    return Context.getService(MdrtbService.class).getSpecimens(this.patient);
+    }
+    
+    /**
+     * Utility classes
+     */
+    
+    private class PatientProgramComparator implements Comparator<PatientProgram> {
+
+    	public int compare(PatientProgram program1, PatientProgram program2) {
+    		if(program1 == null || program1.getDateEnrolled() == null) {
+    			return 1;
+    		} else if (program2 == null || program2.getDateEnrolled() == null) {
+    			return -1;
+    		} else {
+    			return program1.getDateEnrolled().compareTo(program2.getDateEnrolled());
+    		}
+    	}
     }
 }
