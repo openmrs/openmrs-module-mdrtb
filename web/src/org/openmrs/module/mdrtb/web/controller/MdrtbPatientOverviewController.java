@@ -63,6 +63,7 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.PredictionModel;
 import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbPatientDashboardTabs;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
@@ -1699,9 +1700,13 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         mp.setFutureDrugOrders(futureDrugOrders);
                     }
                     
-                    // TODO: Compute resistance probability here
-                    int probability = (int)(Math.random() * 100);
-                    mp.getExtra().put("resistanceProbability", probability);
+                    // Resistance Probability: Experimental for Hamish
+                    if ("true".equals(Context.getAdministrationService().getGlobalProperty("mdrtb.enableResistanceProbabilityWarning"))) {
+	                    Map<PredictionModel.RiskFactor, Boolean> riskFactors = PredictionModel.getRiskFactors(mp.getPatient());
+	                    mp.getExtra().put("resistanceRiskFactors", riskFactors);
+	                    double probability = PredictionModel.calculateRiskProbability(riskFactors, 1);
+	                    mp.getExtra().put("resistanceProbability", probability);
+                    }
                     
                     List<Encounter> encs = Context.getEncounterService().getEncountersByPatient(patient);
                     if (encs.size() > 0){

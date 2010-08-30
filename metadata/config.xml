@@ -351,9 +351,9 @@
 		<description>Color to display active regimens for which the patient has a high probability of resistance</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.probableResistanceThreshold</property>
-		<defaultValue>-1</defaultValue>
-		<description>Numeric threshold for probable resistance warnings. A value of -1 disables this (default)</description>
+		<property>@MODULE_ID@.enableResistanceProbabilityWarning</property>
+		<defaultValue>false</defaultValue>
+		<description>If true, shows resistance probability warnings.  Currently experimental.</description>
 	</globalProperty>
 	<dwr>
 		<allow>

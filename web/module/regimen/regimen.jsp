@@ -13,7 +13,7 @@
 
 <openmrs:globalProperty key="mdrtb.dstContradicatesDrugWarningColor" var="contraDstColor"/>
 <openmrs:globalProperty key="mdrtb.probableResistanceWarningColor" var="probableResistanceColor"/>
-<openmrs:globalProperty key="mdrtb.probableResistanceThreshold" var="probabilityThreshold"/>
+<openmrs:globalProperty key="mdrtb.enableResistanceProbabilityWarning" var="enableResistanceProbabilityWarning"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
@@ -38,12 +38,16 @@
 <div style="font-size:70%">
 
 	<c:set var="showResistanceProbability" value="false"/>
-	<c:if test="${empty resistanceDrugConcepts && probabilityThreshold >= 0 && obj.extra.resistanceProbability > probabilityThreshold}">
+	<c:if test="${empty resistanceDrugConcepts && enableResistanceProbabilityWarning}">
 		<c:set var="showResistanceProbability" value="true"/>
 		<span style="font-weight:bold; color:red;">
-			<spring:message code="mdrtb.probabilityOfResistance" arguments="${obj.extra.resistanceProbability}%" />
+			<spring:message code="mdrtb.probabilityOfResistance" arguments="${obj.extra.resistanceProbability}%" /><br/>
 		</span>
-		<br/>
+		<table style="margin-left:20px; margin-top:5px;">
+			<c:forEach items="${obj.extra.resistanceRiskFactors}" var="riskFactorEntry">
+				<tr><th align="left">${riskFactorEntry.key.name}:</th><td>${riskFactorEntry.value}</td></tr>
+			</c:forEach>
+		</table>
 	</c:if>
 	
 	<c:if test="${!empty obj.currentDrugOrders || !empty obj.futureDrugOrders || !empty obj.completedDrugOrders}">	
