@@ -142,7 +142,7 @@ public class SpecimenController extends AbstractSpecimenController {
 		
 		if (specimenErrors.hasErrors()) {
 			map.put("testId", testId);
-			map.put("errors", specimenErrors);
+			map.put("specimenErrors", specimenErrors);
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
 		

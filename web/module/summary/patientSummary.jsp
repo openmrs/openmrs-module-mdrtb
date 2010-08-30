@@ -25,20 +25,36 @@
 
 	var $j = jQuery.noConflict();	
 
+	function switchToEditMode() {
+		$j('#summary').hide();  // hide the specimen details box
+		$j('#edit_summary').show();  // show the edit speciment box
+	}
+
+	function switchToViewMode() {
+		$j('#edit_summary').hide();  // hide the edit specimen box
+		$j('#summary').show();  // show the specimen details box
+	}
+	
 	$j(document).ready(function(){
 
 		// add the custom tooltip
 	    $j("td").tooltip();
 
+		// if we are here because of a validation error, show the edit box and hide the cancel buttom
+		if(${fn:length(errors.allErrors) > 0}) {
+			switchToEditMode();
+			// TODO: rethink this cancel functionality when working on the rest of the validation?
+			$j('#cancelSummary').hide(); // a user shouldn't be able to cancel, should have to fix the error
+						
+		}
+		
 	 	// event handlers to hide and show summary edit box
 		$j('#editSummary').click(function(){
-			$j('#summary').hide();  // hide the specimen details box
-			$j('#edit_summary').show();  // show the edit speciment box
+			switchToEditMode();
 		});
 
 		$j('#cancelSummary').click(function(){
-			$j('#edit_summary').hide();  // hide the edit specimen box
-			$j('#summary').show();  // show the specimen details box
+			switchToViewMode();
 		});
 
     });

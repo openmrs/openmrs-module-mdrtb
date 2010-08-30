@@ -56,7 +56,17 @@
 		
 		// show the proper detail windows if it has been specified
 		$j('#details_' + ${testId}).show();
-	
+
+		// switch to edit specimen if we are here because of specimen validation error
+		if(${fn:length(specimenErrors.allErrors) > 0}) {
+			hideViewEditAddLinks();
+			$j('#details_specimen').hide();  // hide the specimen details box
+			$j('#edit_specimen').show();  // show the edit speciment box
+			// TODO: rethink this cancel functionality when working on the rest of the validation?
+			$j('#cancelSpecimen').hide(); // a user shouldn't be able to cancel, should have to fix the error
+						
+		}
+		
 		// event handlers to hide and show specimen edit box
 		$j('#editSpecimen').click(function(){
 			hideViewEditAddLinks();
@@ -185,8 +195,8 @@
 -->
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
-<c:if test="${fn:length(errors.allErrors) > 0}">
-	<c:forEach var="error" items="${errors.allErrors}">
+<c:if test="${fn:length(specimenErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${specimenErrors.allErrors}">
 		<span class="error"><spring:message code="${error.code}"/></span><br/>
 	</c:forEach>
 	<br/>
@@ -245,7 +255,7 @@
 
 <form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post" enctype="multipart/form-data">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.sampleDetails" text="Sample Details"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
