@@ -37,7 +37,7 @@
 
 <div style="font-size:70%">
 	<c:set var="showResistanceProbability" value="false"/>
-	<c:if test="${empty obj.resistanceDrugConcepts && enableResistanceProbabilityWarning}">
+	<c:if test="${empty obj.extra.dstResults && enableResistanceProbabilityWarning}">
 		<c:set var="showResistanceProbability" value="true"/>
 		<span style="font-weight:bold; color:red;">
 			<spring:message code="mdrtb.probabilityOfResistance" arguments="${obj.extra.resistanceProbability}%" /><br/>

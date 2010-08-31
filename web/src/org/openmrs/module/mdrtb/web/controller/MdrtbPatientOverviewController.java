@@ -1893,6 +1893,15 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                        if (o.getConcept().equals(causeOfDeathConcept)) {
                     	   mp.setCauseOfDeath(o);
                        }
+                       
+                       if (o.getConcept().equals(mu.getConceptDSTResultParent())) {
+                    	   List<Obs> dstResults = (List<Obs>)mp.getExtra().get("dstResults");
+                    	   if (dstResults == null) {
+                    		   dstResults = new ArrayList<Obs>();
+                    		   mp.getExtra().put("dstResults", dstResults);
+                    	   }
+                    	   dstResults.add(o);
+                       }
                    
                    }
                    
