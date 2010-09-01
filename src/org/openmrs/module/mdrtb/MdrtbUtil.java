@@ -437,6 +437,7 @@ public class MdrtbUtil {
        return ret;
    }
    
+   @Deprecated
    public static Concept getConceptFromMDRTBConceptMaps(String name, MdrtbFactory mu){
        return mu.getMDRTBConceptByKey(name, new Locale("en", "US"), mu.getXmlConceptList());
    }

@@ -20,17 +20,10 @@
            		<prop key="module/@MODULE_ID@/mdrtbTSAdmin.list">MdrtbAdmiList</prop> 		
 				<prop key="module/@MODULE_ID@/mdrtbTSAdmin.form">MdrtbAdmiForm</prop> 
             	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
-            	
-            <!--  	<prop key="module/@MODULE_ID@/mdrtbPatientOverview.form">MdrtbPatientOverviewController</prop> -->
-            	
-            	<prop key="module/@MODULE_ID@/mdrtbAddNewTestContainer.form">MdrtbAddNewTestContainer</prop>
             	<prop key="module/@MODULE_ID@/mdrtbAddPatientForm.form">MdrtbAddPatientFormController</prop>
-            	<prop key="module/@MODULE_ID@/mdrtbEditTestContainer.form">MdrtbEditTestContainerController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
-            	<prop key="module/@MODULE_ID@/mdrtbSpecimenRegistration.form">MdrtbSpecimenRegistrationController</prop>
-            	<prop key="module/@MODULE_ID@/mdrtbSpecimenTracking.form">MdrtbSpecimenTrackingController</prop>
-            	
             	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop>
+            	
             	<!-- hacky way to handle existing tabs until we substitute them out -->
             	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
             	<prop key="module/@MODULE_ID@/visits/visits.form">VisitsController</prop>
@@ -53,27 +46,12 @@
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
 		<property name="successView"><value>mdrtbIndex.form</value></property>
     </bean>
-    <bean id="MdrtbPatientOverviewController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientOverview</value></property>
-		<property name="successView"><value>mdrtbPatientOverview.form</value></property>
-    </bean>
-    <bean id="MdrtbAddNewTestContainer" class="@MODULE_PACKAGE@.web.controller.MdrtbAddNewTestContainerController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbAddNewTestContainer</value></property>
-		<property name="successView"><value>mdrtbPatientOverview.form</value></property>
-    </bean>
 	<bean id="MdrtbAddPatientFormController" class="@MODULE_PACKAGE@.web.controller.MdrtbAddPatientFormController">
 		<property name="sessionForm"><value>true</value></property>
 		<property name="commandName"><value>patient</value></property>
 		<property name="commandClass"><value>org.openmrs.web.controller.patient.ShortPatientModel</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbAddPatientForm</value></property>
 		<property name="successView"><value>summary/summary.form</value></property>
-    </bean>
-    <bean id="MdrtbEditTestContainerController" class="@MODULE_PACKAGE@.web.controller.MdrtbEditTestContainerController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbEditTestContainer</value></property>
-		<property name="successView"><value>mdrtbPatientOverview.form</value></property>
     </bean>
      <bean id="MdrtbAdmiList" class="@MODULE_PACKAGE@.web.controller.MdrtbTSAdmListController">
 		<property name="commandName"><value>listObj</value></property>
@@ -90,16 +68,6 @@
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
 		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
     </bean> 
-	<bean id="MdrtbSpecimenRegistrationController" class="@MODULE_PACKAGE@.web.controller.MdrtbSpecimenRegistrationController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbSpecimenRegistration</value></property>
-		<property name="successView"><value>mdrtbSpecimenTracking.form</value></property>
-    </bean>
-	<bean id="MdrtbSpecimenTrackingController" class="@MODULE_PACKAGE@.web.controller.MdrtbSpecimenTrackingController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbSpecimenTracking</value></property>
-		<property name="successView"><value>mdrtbSpecimenTracking.form</value></property>
-    </bean>
     
     <!-- hacky way to handle existing tabs until we substitute them out -->
     <bean id="RegimenController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
