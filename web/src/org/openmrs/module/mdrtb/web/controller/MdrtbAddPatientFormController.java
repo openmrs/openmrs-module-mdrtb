@@ -78,20 +78,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
     
     /** Logger for this class and subclasses */
     protected final Log log = LogFactory.getLog(getClass());
-    private final Integer patLocation =  7;
-            
-    /** Parameters passed in view request object **/
-    private String name = "";
-    private String birthdate = "";
-    private String age = "";
-    private String gender = "";
-    private String personType = "patient";
-    private String personId = "";
-    private String viewType = "view";
-    
-    
-    Set<PatientIdentifier> newIdentifiers = new HashSet<PatientIdentifier>();
-    String pref = "";
     
     @Override
     protected Map<String, Object> referenceData(HttpServletRequest request, Object obj, Errors err) throws Exception {
@@ -155,99 +141,11 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
         log.debug("\nNOW GOING THROUGH PROCESSFORMSUBMISSION METHOD.......................................\n\n");
         
         if (Context.isAuthenticated()) {
-            PatientService ps = Context.getPatientService();
-            EncounterService es = Context.getEncounterService();
             MessageSourceAccessor msa = getMessageSourceAccessor();
             
             String action = request.getParameter("action");
             if (action == null || action.equals(msa.getMessage("general.save"))) {
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name.familyName", "error.name");
-                
-                String[] identifiers = request.getParameterValues("identifier");
-                String[] types = request.getParameterValues("identifierType");
-                String[] locs = request.getParameterValues("location");
-                pref = request.getParameter("preferred");
-                
-                
-                if (pref == null)
-                    pref = "";
-                
-                if (log.isDebugEnabled()) {
-                    log.debug("identifiers: " + identifiers);
-                    for (String s : identifiers)
-                        log.debug(s);
-                    log.debug("types: " + types);
-                    for (String s : types)
-                        log.debug(s);
-                    log.debug("locations: " + locs);
-                    for (String s : locs)
-                        log.debug(s);
-                    log.debug("preferred: " + pref);
-                }
-                
-                // loop over the identifiers to create the patient.identifiers set
-                if (identifiers != null) {
-                    for (int i=0; i<identifiers.length;i++) {
-                        // arguments for the spring error messages
-                        String[] args = {identifiers[i]};
-                        
-                        // add the new identifier only if they put in some identifier string
-                        if (identifiers[i].length() > 0) {
-                            
-                            // set up the actual identifier java object
-                            PatientIdentifierType pit = null;
-                            if (types[i] == null || types[i].equals("")) {
-                                String msg = getMessageSourceAccessor().getMessage("PatientIdentifier.identifierType.null", args);
-                                errors.reject(msg);
-                            }
-                            else
-                                pit = ps.getPatientIdentifierType(Integer.valueOf(types[i]));
-                            
-                            Location loc = null;
-                            if (locs[i] == null || locs[i].equals("")) {
-                                String msg = getMessageSourceAccessor().getMessage("PatientIdentifier.location.null", args);
-                                errors.reject(msg);
-                            }
-                            else
-                                loc = Context.getLocationService().getLocation(Integer.valueOf(locs[i]));
-                            
-                            
-                            PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
-                            pi.setPreferred(pref.equals(identifiers[i]+types[i]));
-                          
-                            if (pi.getIdentifier() != null && !pi.getIdentifier().equals("") && pi.getLocation() != null)
-                            newIdentifiers.add(pi);
-                            
-                            
-                            
-                            
-                            if (log.isDebugEnabled()) {
-                                log.debug("Creating patient identifier with identifier: " + identifiers[i]);
-                                log.debug("and type: " + types[i]);
-                                log.debug("and location: " + locs[i]);
-                            }
-                        
-                            try {
-                                if (pit.hasCheckDigit() && !OpenmrsUtil.isValidCheckDigit(identifiers[i])) {
-                                    log.error("hasCheckDigit and is not valid: " + pit.getName() + " " + identifiers[i]);
-                                    String msg = getMessageSourceAccessor().getMessage("error.checkdigits.verbose", args);
-                                    errors.rejectValue("identifier", msg);
-                                }
-    //                          else if (pit.hasCheckDigit() == false && identifiers[i].contains("-")) {
-    //                              log.error("hasn't CheckDigit and contains '-': " + pit.getName() + " " + identifiers[i]);
-    //                              String[] args2 = {"-", identifiers[i]}; 
-    //                              String msg = getMessageSourceAccessor().getMessage("error.character.invalid", args2);
-    //                              errors.rejectValue("identifier", msg);
-    //                          }
-                            } catch (Exception e) {
-                                log.error("exception thrown with: " + pit.getName() + " " + identifiers[i]);
-                                log.error("Error while adding patient identifiers to savedIdentifier list", e);
-                                String msg = getMessageSourceAccessor().getMessage("error.checkdigits", args);
-                                errors.rejectValue("identifier", msg);
-                            }
-                        }
-                    }
-                }
             }
             
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "gender", "error.null");
@@ -283,10 +181,96 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
         HttpSession httpSession = request.getSession();
 
         log.debug("\nNOW GOING THROUGH ONSUBMIT METHOD.......................................\n\n");
-
+        
         if (Context.isAuthenticated()) {
             PatientService ps = Context.getPatientService();
             PersonService personService = Context.getPersonService();
+            
+            // first handle adding any identifiers
+          	Set<PatientIdentifier> newIdentifiers = new HashSet<PatientIdentifier>();
+            String pref = "";
+            String[] identifiers = request.getParameterValues("identifier");
+            String[] types = request.getParameterValues("identifierType");
+            String[] locs = request.getParameterValues("location");
+            pref = request.getParameter("preferred");
+            
+            
+            if (pref == null)
+                pref = "";
+            
+            if (log.isDebugEnabled()) {
+                log.debug("identifiers: " + identifiers);
+                for (String s : identifiers)
+                    log.debug(s);
+                log.debug("types: " + types);
+                for (String s : types)
+                    log.debug(s);
+                log.debug("locations: " + locs);
+                for (String s : locs)
+                    log.debug(s);
+                log.debug("preferred: " + pref);
+            }
+            
+            // loop over the identifiers to create the patient.identifiers set
+            if (identifiers != null) {
+                for (int i=0; i<identifiers.length;i++) {
+                    // arguments for the spring error messages
+                    String[] args = {identifiers[i]};
+                    
+                    // add the new identifier only if they put in some identifier string
+                    if (identifiers[i].length() > 0) {
+                        
+                        // set up the actual identifier java object
+                        PatientIdentifierType pit = null;
+                        if (types[i] == null || types[i].equals("")) {
+                            String msg = getMessageSourceAccessor().getMessage("PatientIdentifier.identifierType.null", args);
+                            errors.reject(msg);
+                        }
+                        else
+                            pit = ps.getPatientIdentifierType(Integer.valueOf(types[i]));
+                        
+                        Location loc = null;
+                        if (locs[i] == null || locs[i].equals("")) {
+                            String msg = getMessageSourceAccessor().getMessage("PatientIdentifier.location.null", args);
+                            errors.reject(msg);
+                        }
+                        else
+                            loc = Context.getLocationService().getLocation(Integer.valueOf(locs[i]));
+                        
+                        
+                        PatientIdentifier pi = new PatientIdentifier(identifiers[i], pit, loc);
+                        pi.setPreferred(pref.equals(identifiers[i]+types[i]));
+                      
+                        if (pi.getIdentifier() != null && !pi.getIdentifier().equals("") && pi.getLocation() != null)
+                        newIdentifiers.add(pi);
+                        
+                        if (log.isDebugEnabled()) {
+                            log.debug("Creating patient identifier with identifier: " + identifiers[i]);
+                            log.debug("and type: " + types[i]);
+                            log.debug("and location: " + locs[i]);
+                        }
+                    
+                        try {
+                            if (pit.hasCheckDigit() && !OpenmrsUtil.isValidCheckDigit(identifiers[i])) {
+                                log.error("hasCheckDigit and is not valid: " + pit.getName() + " " + identifiers[i]);
+                                String msg = getMessageSourceAccessor().getMessage("error.checkdigits.verbose", args);
+                                errors.rejectValue("identifier", msg);
+                            }
+//                          else if (pit.hasCheckDigit() == false && identifiers[i].contains("-")) {
+//                              log.error("hasn't CheckDigit and contains '-': " + pit.getName() + " " + identifiers[i]);
+//                              String[] args2 = {"-", identifiers[i]}; 
+//                              String msg = getMessageSourceAccessor().getMessage("error.character.invalid", args2);
+//                              errors.rejectValue("identifier", msg);
+//                          }
+                        } catch (Exception e) {
+                            log.error("exception thrown with: " + pit.getName() + " " + identifiers[i]);
+                            log.error("Error while adding patient identifiers to savedIdentifier list", e);
+                            String msg = getMessageSourceAccessor().getMessage("error.checkdigits", args);
+                            errors.rejectValue("identifier", msg);
+                        }
+                    }
+                }
+            }
             
             ShortPatientModel shortPatient = (ShortPatientModel)obj;
             String view = getSuccessView();
@@ -503,7 +487,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 isError = true;
             } catch ( IdentifierNotUniqueException inue ) {
                 log.error(inue);
-                patient.removeIdentifier(inue.getPatientIdentifier());
+                patient.removeIdentifier(inue.getPatientIdentifier());  
                 httpSession.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "PatientIdentifier.error.notUnique");
                 //errors = new BindException(new IdentifierNotUniqueException(msa.getMessage("PatientIdentifier.error.notUnique")), "givenName");
                 isError = true;
@@ -530,7 +514,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
             // update patient's relationships and death reason
             if ( !isError ) {
                 String[] personAs = request.getParameterValues("personA");
-                String[] types = request.getParameterValues("relationshipType");
+                String[] relationshipTypes = request.getParameterValues("relationshipType");
                 Person person = personService.getPerson(patient);
                 List<Relationship> relationships;
                 List<Person> newPersonAs = new Vector<Person>(); //list of all persons specifically selected in the form
@@ -543,7 +527,7 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
                 if ( personAs != null ) {
                     for (int x = 0 ; x < personAs.length; x++ ) {
                         String personAString = personAs[x];
-                        String typeString = types[x];
+                        String typeString = relationshipTypes[x];
                         
                         if (personAString != null && personAString.length() > 0 && typeString != null && typeString.length() > 0) {
                             Person personA = personService.getPerson(Integer.valueOf(personAString));
@@ -699,8 +683,6 @@ public class MdrtbAddPatientFormController extends SimpleFormController  {
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
      */
     protected Object formBackingObject(HttpServletRequest request) throws ServletException {
-        newIdentifiers = new HashSet<PatientIdentifier>();
-
         Patient p = null;
         Integer id = null;
         
