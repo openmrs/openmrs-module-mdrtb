@@ -23,6 +23,7 @@ import org.openmrs.ConceptNameTag;
 import org.openmrs.ConceptSet;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
@@ -293,6 +294,18 @@ public class SpecimenMigrationController {
 	// Note: this is a PIH-specific use case
 	private void migrateResultatsDeCrachetEncounters() {
 					
+		// first we need to create a new dummy form that we will use to keep track of these encounters so that we can redisplay them in 
+		// a similar format in the new system
+		Form dummyMSPPForm = new Form();
+		dummyMSPPForm.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));
+		dummyMSPPForm.setName("Dummy MSPP Form");
+		dummyMSPPForm.setPublished(true);
+		dummyMSPPForm.setVersion("1.0");
+		Context.getFormService().saveForm(dummyMSPPForm);
+		
+		// get the form id and also save it in a global property
+		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("pihhaiti.dummyMSPPFormId", dummyMSPPForm.getId().toString()));
+		
 		// fetch the specimen collection encounter type
 		List<EncounterType> specimenEncounter = new LinkedList<EncounterType>();
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
@@ -328,6 +341,14 @@ public class SpecimenMigrationController {
 				for(Obs smearResult : smearResults) {		
 					Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(encounter.getPatient());
 				
+					// set the form id of the underlying encounter to the dummy MSPP form so that we can pull out this encounters
+					((Encounter) specimen.getSpecimen()).setForm(dummyMSPPForm);
+					
+					// set the date created of the encounter underlying the specimen to the date created of the existing encounter
+					// so that we can continue to group the specimens from this encounter together if need be
+					((Encounter) specimen.getSpecimen()).setDateCreated(encounter.getDateCreated());
+					
+					
 					// set the type to sputum
 					specimen.setType(Context.getConceptService().getConceptByName("SPUTUM")); // NOTE: this is a PIH-specific concept
 				
@@ -369,6 +390,11 @@ public class SpecimenMigrationController {
 				Context.getEncounterService().voidEncounter(encounter, "voided as part of mdr-tb migration");
 			}
 		}
+		
+		// now retire the old crachet form
+		Form toRetire = Context.getFormService().getForm("Resultats de Crachat (MSPP)");
+		Context.getFormService().retireForm(toRetire, "retired as part of mdr-tb migration");
+		
 	}
 	
 	public void migrateBacAndDstEncounters() {
