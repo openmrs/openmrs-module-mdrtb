@@ -30,3 +30,5 @@
 </div>
 
 </div>
+
+<%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>

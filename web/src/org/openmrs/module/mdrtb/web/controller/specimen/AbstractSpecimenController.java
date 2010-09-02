@@ -1,6 +1,5 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
-import java.beans.PropertyEditorSupport;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Comparator;
@@ -11,7 +10,6 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
@@ -22,6 +20,10 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
+import org.openmrs.propertyeditor.ConceptEditor;
+import org.openmrs.propertyeditor.LocationEditor;
+import org.openmrs.propertyeditor.PersonEditor;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -39,41 +41,10 @@ public abstract class AbstractSpecimenController {
     	dateFormat.setLenient(false);
     	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
 		
-		// bind a concept id to an actual concept
-		binder.registerCustomEditor(Concept.class, new PropertyEditorSupport() {
-			public void setAsText(String type) {
-				if(StringUtils.isNotEmpty(type)) {
-					setValue(Context.getConceptService().getConcept(Integer.valueOf(type)));
-				}
-				else {
-					setValue(null);
-				}
-			}
-		});
-		
-		// bind a location id to an actual location
-		binder.registerCustomEditor(Location.class, new PropertyEditorSupport() {
-			public void setAsText(String location) {
-				if(StringUtils.isNotEmpty(location)) {
-					setValue(Context.getLocationService().getLocation(Integer.valueOf(location)));
-				}
-				else {
-					setValue(null);
-				}
-			}	
-		});
-		
-		// bind a person id to an actual person
-		binder.registerCustomEditor(Person.class, new PropertyEditorSupport() {
-			public void setAsText(String person) {
-				if(StringUtils.isNotEmpty(person)) {
-					setValue(Context.getPersonService().getPerson(Integer.valueOf(person)));
-				}
-				else {
-					setValue(null);
-				}
-			}
-		});
+		// register binders for concepts, locations, and persons
+		binder.registerCustomEditor(Concept.class, new ConceptEditor()); 
+		binder.registerCustomEditor(Location.class, new LocationEditor());
+		binder.registerCustomEditor(Person.class, new PersonEditor());
 	}
 	
 	@ModelAttribute("types")
@@ -175,54 +146,6 @@ public abstract class AbstractSpecimenController {
 	Concept getOtherMycobacteriaNonCoded() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
-	
-	/**
-	 * Utility methods
-	 */
-	
-	/**
-	 * A simple person comparator for sorting providers by name
-	 */
-	private class PersonByNameComparator implements Comparator<Person> {
-		// TODO: remove this class if/when it gets added to core
-		public int compare(Person person1, Person person2) {
-
-			// test for null cases (sorting them to be last in a list)
-			if(person1 == null || person1.getPersonName() == null) {
-				return 1;
-			} else if (person2 == null || person2.getPersonName() == null) {
-				return -1;
-			}
-			
-			// if neither are null, do the actual comparisons
-			PersonName name1 = person1.getPersonName();
-			PersonName name2 = person2.getPersonName();
-			
-			int ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyName(), name2.getFamilyName());
-			
-			if (ret == 0) {
-				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyName2(), name2.getFamilyName2());
-			}
-			
-			if (ret == 0) {
-				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getGivenName(), name2.getGivenName());
-			}
-			
-			if (ret == 0) {
-				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getMiddleName(), name2.getMiddleName());
-			}
-			
-			if (ret == 0) {
-				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyNamePrefix(), name2.getFamilyNamePrefix());
-			}
-			
-			if (ret == 0) {
-				ret = OpenmrsUtil.compareWithNullAsGreatest(name1.getFamilyNameSuffix(), name2.getFamilyNameSuffix());
-			}
-		
-			return ret;
-		}
-	}
  }
 
 
