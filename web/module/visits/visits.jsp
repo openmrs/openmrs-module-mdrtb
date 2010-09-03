@@ -74,7 +74,16 @@
 									<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 								</c:set>
 						<tr class="${rowClass}">
-							<td class="${rowClass}" nowrap><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${enc.form.name}</a></td>
+						<c:choose>
+							<!--  hack to include custom tag for the dummy MSPP form we are recreating -->
+							<c:when test="${enc.form.formId == dummyMSPPFormId}">
+								<td class="${rowClass}" nowrap><a href='${pageContext.request.contextPath}/module/mdrtb/pihhaiti/MSPPForm.form?patientId=${obj.patient.patientId}&encounterId=${enc.encounterId}'>${enc.form.name}</a></td>
+							</c:when>
+							<c:otherwise>
+								<td class="${rowClass}" nowrap><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${enc.form.name}</a></td>
+							</c:otherwise>
+						</c:choose>
+							
 							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
 							<td class="${rowClass}" nowrap>${enc.provider.personName}</td>
 							<td class="${rowClass}" nowrap>${enc.location}</td>

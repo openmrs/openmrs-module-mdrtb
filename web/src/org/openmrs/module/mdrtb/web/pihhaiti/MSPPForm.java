@@ -18,7 +18,6 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 public class MSPPForm {
 	
 	List<Specimen> specimens;
-
 	
 	/**
 	 * Generic construct
@@ -33,22 +32,28 @@ public class MSPPForm {
 		Collections.sort(this.specimens, new SpecimenComparator());
 	}
 	
-	// initialize with empty obs
-	public void initialize(Patient patient) {
-		if(patient == null) {
+	// initialize with empty specimens
+	public void initialize(Patient patient, Boolean overwrite) {
+		if (patient == null) {
 			throw new MdrtbAPIException("Person cannot be null when initializing MSPPForm");
 		}
 		
-		// add three empty specimens with a single smear
-		for(int i = 1; i < 4; i++) {
+		// remove any existing specimens
+		if (overwrite) {
+			this.specimens = new LinkedList<Specimen>();
+		}
+		
+		// add empty specimens with a single smear until their are 3 specimens associated with the form
+		while (this.getSpecimens().size() < 3) {
 			Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(patient);
 			specimen.addSmear();
 			this.addSpecimen(specimen);
 		}
+		
 	}
 	
 	public void addSpecimen(Specimen specimen) {
-		if(specimen != null) {
+		if (specimen != null) {
 			this.specimens.add(specimen);
 			Collections.sort(specimens, new SpecimenComparator());
 		}
@@ -58,105 +63,100 @@ public class MSPPForm {
 		return this.specimens;
 	}
 	
-    public Location getLocation() {
-    	if(specimens.size() == 0) {
-    		return null;
-    	} else {
-    		return specimens.get(0).getLocation();
-    	}
-    }
-
-    public void setLocation(Location location) {
-    	for(Specimen specimen : this.getSpecimens()) {
-    		specimen.setLocation(location);
-    	}
-    }
-
+	public Location getLocation() {
+		if (specimens.size() == 0) {
+			return null;
+		} else {
+			return specimens.get(0).getLocation();
+		}
+	}
 	
-    public Person getProvider() {
-    	if(specimens.size() == 0) {
-    		return null;
-    	} else {
-    		return specimens.get(0).getProvider();
-    	}
-    }
-
+	public void setLocation(Location location) {
+		for (Specimen specimen : this.getSpecimens()) {
+			specimen.setLocation(location);
+		}
+	}
 	
-    public void setProvider(Person provider) {
-    	for(Specimen specimen : this.getSpecimens()) {
-    		specimen.setProvider(provider);
-    	}
-    }
-
+	public Person getProvider() {
+		if (specimens.size() == 0) {
+			return null;
+		} else {
+			return specimens.get(0).getProvider();
+		}
+	}
 	
-    public Date getDateCollected() {
-    	if(specimens.size() == 0) {
-    		return null;
-    	} else {
-    		return specimens.get(0).getDateCollected();
-    	}
-    }
-
+	public void setProvider(Person provider) {
+		for (Specimen specimen : this.getSpecimens()) {
+			specimen.setProvider(provider);
+		}
+	}
 	
-    public void setDateCollected(Date dateCollected) {
-    	for(Specimen specimen : this.getSpecimens()) {
-    		specimen.setDateCollected(dateCollected);
-    	}
-    }
+	public Date getDateCollected() {
+		if (specimens.size() == 0) {
+			return null;
+		} else {
+			return specimens.get(0).getDateCollected();
+		}
+	}
 	
-    public Concept getAppearance() {
-    	if(specimens.size() == 0) {
-    		return null;
-    	}
-    	
-    	return specimens.get(0).getAppearance();
-    }
-
+	public void setDateCollected(Date dateCollected) {
+		for (Specimen specimen : this.getSpecimens()) {
+			specimen.setDateCollected(dateCollected);
+		}
+	}
 	
-    public void setAppearance(Concept appearance) {
-    	for(Specimen specimen : this.getSpecimens()) {
-    		specimen.setAppearance(appearance);
-    	}
-    }
-    
-    /**
-     * Utility methods
-     */
+	public Concept getAppearance() {
+		if (specimens.size() == 0) {
+			return null;
+		}
+		
+		return specimens.get(0).getAppearance();
+	}
 	
-    // sort by encounter id
-    private class SpecimenComparator implements Comparator<Specimen> {
-
-        public int compare(Specimen specimen1, Specimen specimen2) {
-        	if(specimen1 == null) {
-        		return 1;
-        	} 
-        	if(specimen2 == null) {
-        		return -1;
-        	}
-        	
-        	// compare first by encounter date, and then by encounter id
-        	if(specimen1.getDateCollected() == null) {
-        		return 1;
-        	} 
-        	if(specimen2.getDateCollected() == null) {
-        		return -1;
-        	}
-       
-        	int dateCompare = specimen1.getDateCollected().compareTo(specimen2.getDateCollected());
-        	
-        	if(dateCompare != 0) {
-        		return dateCompare;
-        	}
-        	
-        	if(specimen1.getId() == null) {
-        		return 1;
-        	}
-        	if(specimen2.getId() == null) {
-        		return -1;
-        	}
-        	
-        	return specimen1.getId().compareTo(specimen2.getId());
-        }
-    }
-    
+	public void setAppearance(Concept appearance) {
+		for (Specimen specimen : this.getSpecimens()) {
+			specimen.setAppearance(appearance);
+		}
+	}
+	
+	/**
+	 * Utility methods
+	 */
+	
+	// sort by encounter id
+	private class SpecimenComparator implements Comparator<Specimen> {
+		
+		public int compare(Specimen specimen1, Specimen specimen2) {
+			if (specimen1 == null) {
+				return 1;
+			}
+			if (specimen2 == null) {
+				return -1;
+			}
+			
+			// compare first by encounter date, and then by encounter id
+			if (specimen1.getDateCollected() == null) {
+				return 1;
+			}
+			if (specimen2.getDateCollected() == null) {
+				return -1;
+			}
+			
+			int dateCompare = specimen1.getDateCollected().compareTo(specimen2.getDateCollected());
+			
+			if (dateCompare != 0) {
+				return dateCompare;
+			}
+			
+			if (specimen1.getId() == null) {
+				return 1;
+			}
+			if (specimen2.getId() == null) {
+				return -1;
+			}
+			
+			return specimen1.getId().compareTo(specimen2.getId());
+		}
+	}
+	
 }

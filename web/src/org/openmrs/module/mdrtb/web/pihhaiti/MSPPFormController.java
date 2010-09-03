@@ -21,10 +21,6 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
-import org.openmrs.module.mdrtb.specimen.Culture;
-import org.openmrs.module.mdrtb.specimen.Dst;
-import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -41,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -79,7 +74,7 @@ public class MSPPFormController {
 		} else {
 			// create a new form and initialize it
 			MSPPForm form = new MSPPForm();
-			form.initialize(Context.getPatientService().getPatient(patientId));
+			form.initialize(Context.getPatientService().getPatient(patientId), true);
 			return form;
 		}
 	}
@@ -125,11 +120,12 @@ public class MSPPFormController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("msppForm") MSPPForm form, BindingResult errors, SessionStatus status,
-	                                  @RequestParam(required = true, value = "encounterId") Integer encounterId,  
-	                                  @RequestParam(required = true, value = "patientId") Integer patientId, 
+	                                  @RequestParam(required = true, value = "encounterId") Integer encounterId,
+	                                  @RequestParam(required = true, value = "patientId") Integer patientId,
 	                                  HttpServletRequest request, ModelMap map) {
 		
 		map.put("encounterId", encounterId);
+		map.put("patientId", patientId);
 		
 		// first perform validation
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "provider", "mdrtb.specimen.errors.noProvider");
@@ -145,6 +141,13 @@ public class MSPPFormController {
 		    Integer.valueOf(Context.getAdministrationService().getGlobalProperty("pihhaiti.dummyMSPPFormId")));
 		
 		Date dateCreated = null;
+		Date resultDate = null;
+		
+		// get the result date off the first smear result so that we can copy it to all the rest
+		if (form.getSpecimens().get(0) != null && form.getSpecimens().get(0).getSmears() != null
+		        && form.getSpecimens().get(0).getSmears().get(0) != null) {
+			resultDate = form.getSpecimens().get(0).getSmears().get(0).getResultDate();
+		}
 		
 		for (Specimen specimen : form.getSpecimens()) {
 			if (specimen.getSmears().get(0).getResult() != null) {
@@ -162,7 +165,10 @@ public class MSPPFormController {
 				// set the lab of the smear to the location of the encounter
 				// TODO: is this correct? is the smear always tested at the encounter location
 				specimen.getSmears().get(0).setLab(specimen.getLocation());
-		
+				
+				// set the result date
+				specimen.getSmears().get(0).setResultDate(resultDate);
+				
 				// set the form of the underlying encounter to the dummy MSPP form so that we can pull out this encounters
 				((Encounter) specimen.getSpecimen()).setForm(dummyMSPPForm);
 				

@@ -298,7 +298,7 @@ public class SpecimenMigrationController {
 		// a similar format in the new system
 		Form dummyMSPPForm = new Form();
 		dummyMSPPForm.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));
-		dummyMSPPForm.setName("Dummy MSPP Form");
+		dummyMSPPForm.setName("Resultats de Crachat");
 		dummyMSPPForm.setPublished(true);
 		dummyMSPPForm.setVersion("1.0");
 		Context.getFormService().saveForm(dummyMSPPForm);
@@ -379,6 +379,9 @@ public class SpecimenMigrationController {
 					
 					// now set the result
 					smear.setResult(smearResult.getValueCoded());
+					
+					// set the result date based on the date of the original encounter
+					smear.setResultDate(encounter.getEncounterDatetime());
 					
 					// then save the specimen
 					Context.getService(MdrtbService.class).saveSpecimen(specimen);

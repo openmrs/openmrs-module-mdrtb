@@ -67,6 +67,7 @@ import org.openmrs.module.mdrtb.PredictionModel;
 import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbPatientDashboardTabs;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
+import org.openmrs.module.mdrtb.web.pihhaiti.MSPPFormUtil;
 import org.openmrs.module.web.extension.PatientDashboardTabExt;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -114,14 +115,16 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 	                for (Form form : forms) {
 	                    if (formName.equals(form.getName().trim()))
 	                        mdrtbForms.add(form);
-	                    if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim()))
+	                    if (formName.contains(":html") && formName.replaceAll(":html", "").equals(form.getName().trim()) && !form.getRetired())
 	                        htmlForms.add(form);
 	                }
 	            }
 	            map.put("htmlForms", htmlForms);
 	            map.put("mdrtbForms", mdrtbForms);
 	            
-	           
+	            // add the id of the dummy MSPP form
+	            map.put("dummyMSPPFormId", Integer.valueOf(Context.getAdministrationService().getGlobalProperty("pihhaiti.dummyMSPPFormId")));
+	       
 	            
 	//            List<Drug> tbDrugs = new ArrayList<Drug>();
 	//            try {
@@ -1733,6 +1736,10 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                         }
 
                     }
+                    
+                    // add the dummy MSPP forms to the encounter
+                    mp.getHtmlEncList().addAll(MSPPFormUtil.getMSPPEncounters(mp.getPatient()));
+                                    
                     mp.sortHtmlEncListByEncounterDatetime();
                     
                     
