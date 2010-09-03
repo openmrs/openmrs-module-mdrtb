@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.controller.migration;
+package org.openmrs.module.mdrtb.web.pihhaiti;
 
 import java.util.Collection;
 import java.util.Date;
@@ -45,7 +45,7 @@ public class SpecimenMigrationController {
 	private Set<Concept> testConstructConcepts;
 	private Map<String,Specimen> specimenMap = new HashMap<String,Specimen>();
 	
-    @RequestMapping("/module/mdrtb/specimen/migration/migrate.form")
+    @RequestMapping("/module/mdrtb/pihhaiti/migration/migrate.form")
 	public ModelAndView migrateSpecimenData() {
 		
 		ModelMap map = new ModelMap();
@@ -73,10 +73,10 @@ public class SpecimenMigrationController {
 		// clean up old concepts
 		cleanUpConcepts();
 		
-		return new ModelAndView("/module/mdrtb/specimen/specimenMigration",map);
+		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration",map);
 	}
 	
-    @RequestMapping("/module/mdrtb/specimen/migrate/voidEncounters.form")
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/voidEncounters.form")
 	public ModelAndView voidEncounters() {
 	
 		// this migration controller is meant to run AFTER the specimen migration controller, to void all the BAC and DST encounters
@@ -103,7 +103,7 @@ public class SpecimenMigrationController {
 		Context.getEncounterService().retireEncounterType(Context.getEncounterService().getEncounterType("DST Result"), "retired as part of MDR-TB migration");
 		
 		
-		 return new ModelAndView("/module/mdrtb/specimen/specimenMigration");
+		 return new ModelAndView("/module/mdrtb/pihaiti/specimenMigration");
 	}
     
 	private void initialize() {
@@ -171,7 +171,7 @@ public class SpecimenMigrationController {
 		Context.getConceptService().saveConcept(dstResults);
 		
 		// TUBERCULOSIS CULTURE RESULT
-		Concept cultureResult  = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
+		Concept cultureResult  = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
 		addAnswerConcept(cultureResult, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS));
 		addAnswerConcept(cultureResult, Context.getConceptService().getConceptByName("POSITIVE"));
 		

@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.controller.migration;
+package org.openmrs.module.mdrtb.web.pihhaiti;
 
 import java.util.Collection;
 import java.util.Date;
@@ -70,7 +70,7 @@ public class SpecimenMigrationValidationController {
 	private String results = "";
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/specimen/validate.form") 
+    @RequestMapping("/module/mdrtb/pihhaiti/validate.form") 
 	public ModelAndView validateSpecimenData() {
 		
 		ModelMap map = new ModelMap();
@@ -146,7 +146,7 @@ public class SpecimenMigrationValidationController {
 		
 		map.put("results", results);
 		
-		return new ModelAndView("/module/mdrtb/specimen/specimenMigrationValidation",map);
+		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigrationValidation",map);
 	}
 	
 	// TODO: do I need to check for doubles of anything--ie, too many of a obs type on a construct
