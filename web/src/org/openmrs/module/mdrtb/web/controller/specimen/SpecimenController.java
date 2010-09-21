@@ -137,6 +137,8 @@ public class SpecimenController extends AbstractSpecimenController {
 	public ModelAndView showSpecimen(@RequestParam(required = false, value = "testId") String testId, ModelMap map) {
 		
 		// add the testId to the model map if there is one (this is used to make sure the proper detail page is shown after an edit)
+		// TODO: unfortunately, this does not currently work since whenever an obs is saved it gets voided and recreated, so this
+		// test id is no longer valid
 		if (StringUtils.isEmpty(testId)) {
 			testId = "-1";
 		}
@@ -230,8 +232,7 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=smear")
 	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult smearErrors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") String specimenId,
-	                                  @RequestParam(required = false, value = "testId") String testId) {
+	                                  @RequestParam(required = true, value="specimenId") String specimenId) {
 	                     
 		// validate
     	if(smear != null) {
@@ -244,7 +245,7 @@ public class SpecimenController extends AbstractSpecimenController {
 		// clears the command object from the session
 		status.setComplete();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + smear.getId());
 		
 	}
     
@@ -263,8 +264,7 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=culture")
 	public ModelAndView processSubmit(@ModelAttribute("culture") Culture culture, BindingResult cultureErrors,
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") String specimenId,
-	                                  @RequestParam(required = false, value = "testId") String testId) {
+	                                  @RequestParam(required = true, value="specimenId") String specimenId) {
 	                     
 		// validate
     	if(culture != null) {
@@ -277,7 +277,7 @@ public class SpecimenController extends AbstractSpecimenController {
 		// clears the command object from the session
 		status.setComplete();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + culture.getId());
 		
 	}
     
@@ -355,7 +355,7 @@ public class SpecimenController extends AbstractSpecimenController {
 		// clears the command object from the session
 		status.setComplete();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId());
 		
 	}
     
