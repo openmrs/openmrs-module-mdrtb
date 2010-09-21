@@ -216,6 +216,10 @@ public class SpecimenGroupImpl implements Specimen {
 	    return this.specimens.get(0).getType();
     }
 
+    public void removeScannedLabReport(ScannedLabReport report) {
+    	throw new RuntimeException("Illegal attempt to access removeScannedLabReport method of SpecimenGroupImpl. SpecimenGroupImpl should be used for get access only.");
+    }
+    
     public void setAppearance(Concept appearance) {
     	throw new RuntimeException("Illegal attempt to access add or set method of SpecimenGroupImpl. SpecimenGroupImpl should be used for get access only.");
     }

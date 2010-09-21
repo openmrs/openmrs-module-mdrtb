@@ -23,7 +23,12 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public String getId() {
-		return this.test.getId().toString();
+		if(this.test.getId() != null ) {
+			return this.test.getId().toString();
+		}
+		else {
+			return null;
+		}
 	}
 
 	public TestStatus getStatus() {

@@ -43,5 +43,6 @@ public interface Dst extends Test {
 	public List<DstResult> getResults();
 	public Map<Integer,List<DstResult>> getResultsMap();
 	public DstResult addResult();
+	public void removeResult(DstResult result);
 }
 

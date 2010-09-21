@@ -71,7 +71,12 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public String getId() {
-		return this.encounter.getId().toString();
+		if (this.encounter.getId() != null) {
+			return this.encounter.getId().toString();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	public Culture addCulture() {
@@ -290,6 +295,10 @@ public class SpecimenImpl implements Specimen {
 		else {
 			return obs.getValueCoded();
 		}
+	}
+	
+	public void removeScannedLabReport(ScannedLabReport report) {
+		((ScannedLabReportImpl) report).voidScannedLabReport();
 	}
 	
 	public void setAppearance(Concept appearance) {

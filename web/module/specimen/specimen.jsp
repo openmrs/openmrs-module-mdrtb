@@ -253,7 +253,7 @@
 
 <div id="edit_specimen"  style="display:none">
 
-<form name="specimen" action="specimen.form?specimenId=${specimen.id}&testId=-1" method="post" enctype="multipart/form-data">
+<form id="specimen" action="specimen.form?submissionType=specimen&specimenId=${specimen.id}&testId=-1" method="post" enctype="multipart/form-data">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/></b>
 <div class="box" style="margin:0px">
@@ -518,7 +518,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <!--  TODO: how do i bind errors to this? -->
 
-<form name="${test.testType}" action="specimen.form?${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
+<form id="${test.testType}" action="specimen.form?submissionType=${test.testType}&${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}" method="post">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="mdrtb.editView" text="Edit View"/></b>
 <div class="box" style="margin:0px">
@@ -680,7 +680,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 		</select>
 	</td>
 	<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
-	<td><button class="removeDstResultRow" value="${i.count}" type="button">X</button></td>
+	<td><button class="removeDstResultRow" value="${i.count}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></td>	
 	</tr>
 </c:forEach>
 
@@ -713,7 +713,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <div id="add_${type}" class="addBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
 
-<form name="${type}" action="specimen.form?${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
+<form id="${type}" action="specimen.form?submissionType=${type}&${type}Id=-1&testId=-1&specimenId=${specimen.id}" method="post">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: <spring:message code="mdrtb.add" text="Add"/></b>
 <div class="box" style="margin:0px">

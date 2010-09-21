@@ -85,7 +85,6 @@ public interface Specimen extends Comparable<Specimen>{
 	public Map<Integer,List<DstResult>> getDstResultsMap();
 	
 	public ScannedLabReport addScannedLabReport();
-	
-	
-	
+	public void removeScannedLabReport(ScannedLabReport report);
+		
 }

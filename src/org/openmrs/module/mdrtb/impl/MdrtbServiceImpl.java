@@ -365,7 +365,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		// the id must refer to a valid obs, which is a dst result
 		if (obs == null || ! obs.getConcept().equals(this.getConcept(MdrtbConcepts.DST_RESULT)) ) {
-			throw new APIException ("Unable to delete dst result: invalid dst ersult id " + dstResultId);
+			throw new APIException ("Unable to delete dst result: invalid dst result id " + dstResultId);
 		}
 		else {
 			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");

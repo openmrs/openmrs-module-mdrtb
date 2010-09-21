@@ -1,5 +1,9 @@
 package org.openmrs.module.mdrtb.web.controller.specimen;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -59,6 +63,13 @@ public class SpecimenController extends AbstractSpecimenController {
 		return smear;
 	}
 	
+	/**
+	 * Returns the culture that should be used to bind a form posting to
+	 * 
+	 * @param cultureId
+	 * @param specimenId
+	 * @return
+	 */
 	@ModelAttribute("culture")
 	public Culture getCulture(@RequestParam(required = false, value="cultureId") Integer cultureId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
 		Culture culture = null;
@@ -80,6 +91,13 @@ public class SpecimenController extends AbstractSpecimenController {
 		return culture;
 	}
 	
+	/**
+	 * Returns the dst that should be used to bind a form posting to
+	 * 
+	 * @param dstId
+	 * @param specimenId
+	 * @return
+	 */
 	@ModelAttribute("dst")
 	public Dst getDst(@RequestParam(required = false, value="dstId") Integer dstId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
 		Dst dst = null;
@@ -101,6 +119,13 @@ public class SpecimenController extends AbstractSpecimenController {
 		return dst;
 	}
 	
+	
+	/**
+	 * Returns the specimen that should be used to bind a form posting to
+	 * 
+	 * @param specimenId
+	 * @return
+	 */
 	@ModelAttribute("specimen")
 	public Specimen getSpecimen(@RequestParam(required = true, value="specimenId") Integer specimenId) {
 		return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
@@ -121,19 +146,27 @@ public class SpecimenController extends AbstractSpecimenController {
 	}
 	
 	
+	/** 
+	 * Handles the submission of a specimen form
+	 * 
+	 * @param specimen
+	 * @param specimenErrors
+	 * @param status
+	 * @param request
+	 * @param map
+	 * @param testId
+	 * @param scannedLabReport
+	 * @param removeScannedLabReports
+	 * @return
+	 */
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=specimen")
 	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult specimenErrors, 
-	                                  @ModelAttribute("smear") Smear smear, BindingResult smearErrors, 
-	                                  @ModelAttribute("culture") Culture culture, BindingResult cultureErrors,
-	                                  @ModelAttribute("dst") Dst dst, BindingResult dstErrors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
 	                                  @RequestParam(required = false, value = "testId") String testId, 
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
-	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports,
-	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
-	                     
-
+	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
+	  
 		// validate
     	// TODO: add validation of other model objects
     	if(specimen != null) {
@@ -145,6 +178,133 @@ public class SpecimenController extends AbstractSpecimenController {
 			map.put("specimenErrors", specimenErrors);
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
+		
+		// remove scanned lab reports if necessary
+		if (removeScannedLabReports != null) {
+			Set<String> removeScannedLabReportSet = new HashSet<String>(Arrays.asList(removeScannedLabReports));
+			
+			for (ScannedLabReport report : specimen.getScannedLabReports()) {
+				if (report.getId() != null && removeScannedLabReportSet.contains(report.getId())) {
+					specimen.removeScannedLabReport(report);
+					// TODO: we don't actually remove the underlying PDF file--is this a problem?
+				}
+			}
+		}
+		
+		// save the actual update
+		Context.getService(MdrtbService.class).saveSpecimen(specimen);
+		
+		// (somewhat) hacky way to manually handle the addition of new scanned lab report
+		// (this has to happen after the specimen is saved for some reason)
+		if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
+			// create the new result
+			ScannedLabReport report = specimen.addScannedLabReport();
+			
+			// TODO: hack for now, we are assuming that the location must be MSLI!
+			report.setLab(Context.getLocationService().getLocation("MSLI"));
+			report.setFile(scannedLabReport);
+		
+			// need to save this explicitly for the obs handler to pick it up and handle it properly
+			Context.getService(MdrtbService.class).saveScannedLabReport(report);
+		}
+			
+		// clears the command object from the session
+		status.setComplete();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId);
+		
+	}
+    
+    /**
+     * Handles the submission of a smear form
+     *
+     * @param smear
+     * @param smearErrors
+     * @param status
+     * @param request
+     * @param map
+     * @param specimenId
+     * @param testId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=smear")
+	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult smearErrors, 
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
+	                                  @RequestParam(required = true, value="specimenId") String specimenId,
+	                                  @RequestParam(required = false, value = "testId") String testId) {
+	                     
+		// validate
+    	if(smear != null) {
+    		// TODO: add smear validation
+    	}
+				
+		// save the actual update
+		Context.getService(MdrtbService.class).saveSmear(smear);
+			
+		// clears the command object from the session
+		status.setComplete();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
+		
+	}
+    
+    /**
+     * Handles the submission of a culture form
+     * 
+     * @param culture
+     * @param cultureErrors
+     * @param status
+     * @param request
+     * @param map
+     * @param specimenId
+     * @param testId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=culture")
+	public ModelAndView processSubmit(@ModelAttribute("culture") Culture culture, BindingResult cultureErrors,
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
+	                                  @RequestParam(required = true, value="specimenId") String specimenId,
+	                                  @RequestParam(required = false, value = "testId") String testId) {
+	                     
+		// validate
+    	if(culture != null) {
+    		// TODO: add culture validation
+    	}
+		
+		// save the actual update
+		Context.getService(MdrtbService.class).saveCulture(culture);
+			
+		// clears the command object from the session
+		status.setComplete();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
+		
+	}
+    
+    /**
+     * Handles the submission of a DST form
+     * 
+     * @param dst
+     * @param dstErrors
+     * @param status
+     * @param request
+     * @param map
+     * @param specimenId
+     * @param testId
+     * @param removeDstResults
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=dst")
+	public ModelAndView processSubmit(@ModelAttribute("dst") Dst dst, BindingResult dstErrors, 
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
+	                                  @RequestParam(required = true, value="specimenId") String specimenId,
+	                                  @RequestParam(required = false, value = "testId") String testId, 
+	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
+	                     
+		// validate
+    	if(dst != null) {
+    		// TODO: add DST validation
+    	}
 		
 		// hacky way to manually handle the addition of new dsts
 		int i = 1;
@@ -178,47 +338,28 @@ public class SpecimenController extends AbstractSpecimenController {
 			i++;
 		} 
 		
-		// save the actual update
-		// NOTE: for some reason we need to make sure we save the specimen here (i.e. commit the changes) before
-		// moving on to additions and deletions that we handle manually; otherwise hibernate throws an error
-		Context.getService(MdrtbService.class).saveSpecimen(specimen);
-		
-		// (somewhat) hacky way to manually handle the addition of new scanned lab report
-		if(scannedLabReport != null && !scannedLabReport.isEmpty()) {
-			// create the new result
-			ScannedLabReport report = specimen.addScannedLabReport();
-			
-			// TODO: hack for now, we are assuming that the location must be MSLI!
-			report.setLab(Context.getLocationService().getLocation("MSLI"));
-			report.setFile(scannedLabReport);
-		
-			// need to save this explicitly for the obs handler to pick it up and handle it properly
-			Context.getService(MdrtbService.class).saveScannedLabReport(report);
-		}
-	
-		// (somewhat) hacky method to manually remove dst results
+		// remove dst results
 		if(removeDstResults != null) {
-			for(String dstResultId : removeDstResults) {
-				if(StringUtils.isNotEmpty(dstResultId)) {
-					Context.getService(MdrtbService.class).deleteDstResult(Integer.valueOf(dstResultId));
-				}
-			}
-		}
-		
-		// (somewhat) hacky method to manually remove lab reports
-		if(removeScannedLabReports != null) {
-			for(String reportId : removeScannedLabReports) {
-				if(StringUtils.isNotEmpty(reportId)) {
-					Context.getService(MdrtbService.class).deleteScannedLabReport(Integer.valueOf(reportId));
+			Set<String> removeDstResultSet = new HashSet<String>(Arrays.asList(removeDstResults));
+			
+			for(DstResult result : dst.getResults()) {
+				if(result.getId() != null && removeDstResultSet.contains(result.getId())) {
+					dst.removeResult(result);
 				}
 			}
 		}
 			
+		// save the actual update
+		Context.getService(MdrtbService.class).saveDst(dst);
+		
 		// clears the command object from the session
 		status.setComplete();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + testId);
 		
 	}
+    
+    
+    
 	
 }

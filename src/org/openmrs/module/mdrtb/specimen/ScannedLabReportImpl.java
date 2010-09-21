@@ -82,6 +82,11 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 	  * Protected methods used for interacting with the matching MdrSpecimenImpl
 	  */
 
+    protected void voidScannedLabReport() {	
+    	this.report.setVoided(true);
+    	this.report.setVoidReason("voided by ScannedLabReportImpl class");
+	}
+    
 	 protected Obs getObs() {
 		 return report;
 	 }

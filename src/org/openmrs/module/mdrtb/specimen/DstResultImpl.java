@@ -46,7 +46,12 @@ public class DstResultImpl implements DstResult {
 	}
 	
 	public String getId() {
-		return this.dstResult.getId().toString();
+		if (this.dstResult.getId() != null) {
+			return this.dstResult.getId().toString();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	
@@ -225,10 +230,27 @@ public class DstResultImpl implements DstResult {
 		}
 	 }
     
+	/**
+	 * Protected methods
+	 */
+	
+	/**
+	 * Used by DstImpl to "remove" a result from a DST
+	 */
+	protected void voidResult() {	
+		for(Obs obs : this.dstResult.getGroupMembers()) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by DstResultImpl class");
+		}
+		
+		this.dstResult.setVoided(true);
+		this.dstResult.setVoidReason("voided by DstResultImpl class");
+	}
+	
     /**
 	 * Utility methods 
 	 */
-
+	
 	
     /**
      * Initializes the resultSet property, which stores all the possible result types

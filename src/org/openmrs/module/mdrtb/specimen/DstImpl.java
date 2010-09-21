@@ -180,6 +180,10 @@ public class DstImpl extends TestImpl implements Dst {
     	return resultsMap;
     }
     
+    public void removeResult(DstResult result) {
+    	((DstResultImpl) result).voidResult();
+    }
+    
     public void setColoniesInControl(Integer coloniesInControl) {
     	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.COLONIES_IN_CONTROL), test);
     	
