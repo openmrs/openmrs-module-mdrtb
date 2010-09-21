@@ -57,7 +57,8 @@
 		// show the proper detail windows if it has been specified
 		// TODO: this does not work as currently implemented since the test id of a test gets changes whenever it is saved since
 		// all the obs get voided and recreated
-		$j('#details_${testId}').show();
+		//$j('#details_${testId}').show();
+		$j('#details_-1').show();
 
 		// switch to edit specimen if we are here because of specimen validation error
 		if(${fn:length(specimenErrors.allErrors) > 0}) {
