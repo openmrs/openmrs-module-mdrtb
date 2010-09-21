@@ -178,6 +178,7 @@ public class DstResultImpl implements DstResult {
     	// initialize the obs if needed
     	if (getResult() == null) {
     		Obs obs = new Obs (dstResult.getPerson(), result, dstResult.getObsDatetime(), dstResult.getLocation());
+    		obs.setEncounter(dstResult.getEncounter());
     		
     		// set the drug if it has already been defined
     		if (this.drug != null) {
