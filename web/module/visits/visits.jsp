@@ -51,10 +51,15 @@
 							<c:set var="rowClass" scope="page">
 								<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 							</c:set>
-								
-								<Tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${form.name} </a></td></Tr>
-
-						
+								<c:choose>
+									<!--  hack to include custom tag for the dummy MSPP form we are recreating -->
+									<c:when test="${form.formId == dummyMSPPFormId}">
+										<tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/mdrtb/pihhaiti/MSPPForm.form?patientId=${obj.patient.patientId}&encounterId=-1'>${form.name} </a></td></Tr>
+									</c:when>
+									<c:otherwise>
+										<tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${form.name} </a></td></Tr>
+									</c:otherwise>
+								</c:choose>
 						</c:forEach>
 						
 						

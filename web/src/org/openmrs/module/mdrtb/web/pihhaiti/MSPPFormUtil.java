@@ -79,6 +79,11 @@ public class MSPPFormUtil {
 	 */
 	public static List<Encounter> getMSPPEncounters(Patient patient) {
 		
+		// if there is no pihhaiti.dummyMSPPFormId defined, return null
+		if (Context.getAdministrationService().getGlobalProperty("pihhaiti.dummyMSPPFormId") == null) {
+			return null;
+		}
+		
 		// first, get all the possible encounters
 		List<Encounter> encounters = Context.getEncounterService().getEncounters(
 		    patient, null, null, null,

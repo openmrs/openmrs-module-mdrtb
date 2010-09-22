@@ -119,12 +119,18 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 	                        htmlForms.add(form);
 	                }
 	            }
+	            
+	            // add the dummy MSPP form and it's id for the haiti use case
+	            String dummyMSPPFormId = Context.getAdministrationService().getGlobalProperty("pihhaiti.dummyMSPPFormId");
+	            if (dummyMSPPFormId != null) {
+	            	htmlForms.add(Context.getFormService().getForm(Integer.valueOf(dummyMSPPFormId)));
+	            	map.put("dummyMSPPFormId", Integer.valueOf(dummyMSPPFormId));
+	            }
+	            
 	            map.put("htmlForms", htmlForms);
 	            map.put("mdrtbForms", mdrtbForms);
 	            
-	            // add the id of the dummy MSPP form
-	            map.put("dummyMSPPFormId", Integer.valueOf(Context.getAdministrationService().getGlobalProperty("pihhaiti.dummyMSPPFormId")));
-	       
+	            
 	            
 	//            List<Drug> tbDrugs = new ArrayList<Drug>();
 	//            try {
@@ -1737,9 +1743,11 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 
                     }
                     
-                    // add the dummy MSPP forms to the encounter
-                    mp.getHtmlEncList().addAll(MSPPFormUtil.getMSPPEncounters(mp.getPatient()));
-                                    
+                    // add the dummy MSPP forms to the encounter for the PIH Haiti use case
+                    List<Encounter> msppEncounters = MSPPFormUtil.getMSPPEncounters(mp.getPatient());
+                    if (msppEncounters != null) {
+                    	mp.getHtmlEncList().addAll(msppEncounters);
+                    }            
                     mp.sortHtmlEncListByEncounterDatetime();
                     
                     

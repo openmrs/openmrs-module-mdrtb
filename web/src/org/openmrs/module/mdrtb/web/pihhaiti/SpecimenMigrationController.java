@@ -306,6 +306,11 @@ public class SpecimenMigrationController {
 		// get the form id and also save it in a global property
 		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("pihhaiti.dummyMSPPFormId", dummyMSPPForm.getId().toString()));
 		
+		// also, we need to modify the existing mdrtb forms list to reference this new form
+		GlobalProperty forms = Context.getAdministrationService().getGlobalPropertyObject("mdrtb.mdrtb_forms_list");
+		forms.setPropertyValue("MDR-TB Rendezvous:html|MDR-TB Donnees de Base:html");
+		Context.getAdministrationService().saveGlobalProperty(forms);
+		
 		// fetch the specimen collection encounter type
 		List<EncounterType> specimenEncounter = new LinkedList<EncounterType>();
 		specimenEncounter.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
