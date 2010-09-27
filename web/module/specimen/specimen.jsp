@@ -55,10 +55,9 @@
 		var addDstResultCounter = 1;
 		
 		// show the proper detail windows if it has been specified
-		// TODO: this does not work as currently implemented since the test id of a test gets changes whenever it is saved since
-		// all the obs get voided and recreated
-		//$j('#details_${testId}').show();
-		$j('#details_-1').show();
+		// TODO: this does not work when a test is saved as the test id of a test gets changes whenever it is saved since
+		// all the obs get voided and recreated;
+		$j('#details_${testId}').show();
 
 		// switch to edit specimen if we are here because of specimen validation error
 		if(${fn:length(specimenErrors.allErrors) > 0}) {

@@ -233,6 +233,20 @@
 	</attribute>
 </tag>
 
+<tag>
+	<description>
+		Renders a flag for a StatusItem if applicable
+	</description>
+	<name>flag</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.FlagTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>item</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
 <function>
     <description>
       Tests if a collection contains a specified object

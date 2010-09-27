@@ -41,7 +41,6 @@
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/stax/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/velocity/velocity-1.6-beta1.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/commons-lang/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/benerator/databene-benerator-0.5.5.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/benerator/databene-commons-0.4.5.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/benerator/databene-webdecs-0.4.5.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/commons-io/commons-io-1.4.jar"/>
