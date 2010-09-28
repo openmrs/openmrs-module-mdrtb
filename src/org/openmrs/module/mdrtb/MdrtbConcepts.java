@@ -14,6 +14,25 @@ public class MdrtbConcepts {
 	public final static String [] CAPREOMYCIN = {"CAPREOMYCIN"};
 	public final static String [] KANAMYCIN = {"KANAMYCIN"};
 	public final static String [] AMIKACIN = {"AMIKACIN"};
+	public final static String [] CLOFAZIMINE = {"CLOFAZIMINE"};
+	public final static String [] CYCLOSERINE = {"CYCLOSERINE"};
+	public final static String [] ETHIONAMIDE = {"ETHIONAMIDE"};
+	public final static String [] PROTHIONAMIDE = {"PROTHIONAMIDE"};
+	public final static String [] GATIFLOXACIN = {"GATIFLOXACIN"};
+	public final static String [] OFLOXACIN = {"OFLOXACIN"};
+	public final static String [] P_AMINOSALICYLIC_ACID = {"P-AMINOSALICYLIC ACID "};
+	public final static String [] TERIZIDONE = {"TERIZIDONE"};
+	public final static String [] VIOMYCIN = {"VIOMYCIN"};
+	public final static String [] CLARITHROMYCIN = {"CLARITHROMYCIN"};
+	public final static String [] RIFABUTINE = {"RIFABUTINE"};
+	public final static String [] STREPTOMYCIN = {"STREPTOMYCIN"};
+	public final static String [] PYRAZINAMIDE = {"PYRAZINAMIDE"};
+	public final static String [] CIPROFLOXACIN = {"CIPROFLOXACIN"};
+	public final static String [] ETHAMBUTOL = {"ETHAMBUTOL"};
+	public final static String [] LEVOFLOXACIN = {"LEVOFLOXACIN"};
+	public final static String [] PYRIDOXINE = {"PYRIDOXINE"};
+	public final static String [] MOXIFLOXACIN = {"MOXIFLOXACIN"};
+	
 	public final static String [] QUINOLONES = {"QUINOLONES"};
 
     // Adverse Effects

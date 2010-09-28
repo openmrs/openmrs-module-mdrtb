@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Test;
@@ -15,7 +16,7 @@ import org.openmrs.web.WebConstants;
 
 public class DashboardLabResultsStatusRenderer implements LabResultsStatusRenderer {
 	
-	public String renderMostRecentSmearDisplayString(Smear smear) {
+	public String renderSmear(Smear smear) {
 		
 		if (smear != null) {
 			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
@@ -29,14 +30,15 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			        + "&testId="
 			        + smear.getId()
 			        + "\">"
-			        + Context.getMessageSourceService().getMessage("mdrtb.mostRecentSmearFormatter", params,
+			        + Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params,
 			            "{0} on {1} at {2}", Context.getLocale()) + "</a>";
 		} else {
-			return Context.getMessageSourceService().getMessage("mdrtb.noSmears");
+			return "";
+			//return Context.getMessageSourceService().getMessage("mdrtb.noSmears");
 		}
 	}
 	
-	public String renderMostRecentCultureDisplayString(Culture culture) {
+	public String renderCulture(Culture culture) {
 		
 		if (culture != null) {
 			String[] params = {
@@ -51,10 +53,11 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			        + "&testId="
 			        + culture.getId()
 			        + "\">"
-			        + Context.getMessageSourceService().getMessage("mdrtb.mostRecentCultureFormatter", params,
+			        + Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params,
 			            "{0} on {1} at {2}", Context.getLocale()) + "</a>";
 		} else {
-			return Context.getMessageSourceService().getMessage("mdrtb.noCultures");
+			return "";
+			//return Context.getMessageSourceService().getMessage("mdrtb.noCultures");
 		}
 	}
 	
@@ -111,6 +114,31 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		
 		return displayString.toString();
 	}
+
+    public String renderTbClassification(TbClassification classification) {
+	   
+    	StringBuffer displayString = new StringBuffer();
+    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.confirmed") + " ");
+	    
+	    if (classification == TbClassification.MONO_RESISTANT_TB) {
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.monoResistantTb"));
+	    } 
+	    else if (classification == TbClassification.POLY_RESISTANT_TB){
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.polyResistantTb"));
+	    } 
+	    else if (classification == TbClassification.MDR_TB) {
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.mdrtb"));
+	    }
+	    else if (classification == TbClassification.XDR_TB) {
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.xdrtb"));
+	    }
+	    else {
+	    	displayString = new StringBuffer();
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.none"));
+	    }
+	    
+	    return displayString.toString();
+    }
 	
 	public StatusFlag createNoSmearsFlag() {
 		StatusFlag flag = new StatusFlag();
@@ -123,5 +151,5 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		flag.setMessage(Context.getMessageSourceService().getMessage("mdrtb.noCultureResults"));
 		return flag;
 	}
-	
+
 }

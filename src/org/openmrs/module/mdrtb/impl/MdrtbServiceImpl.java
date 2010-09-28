@@ -449,6 +449,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
     public List<Concept> getPossibleDrugTypesToDisplay() {
     	// TODO: do we want to start pulling this from somewhere else?
+    	// TODO: update this method so that it can handle drugs referenced by mdr-tb map?
+    	
     	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
     	
     	List<Concept> drugTypes = new LinkedList<Concept>();

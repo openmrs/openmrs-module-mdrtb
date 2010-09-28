@@ -35,9 +35,25 @@
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/></b>
 <div class="box" style="margin:0px">
+
+<table cellspacing="0" cellpadding="0">
+<tr><td><spring:message code="mdrtb.controlSmear" text="Control Smear"/>: ${status.labResultsStatus.controlSmear.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>: ${status.labResultsStatus.diagnosticCulture.displayString}</td></tr>
+</table>
+
+<br/>
+
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: ${status.labResultsStatus.mostRecentSmear.displayString}</td></tr>
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>: ${status.labResultsStatus.mostRecentCulture.displayString}</td></tr>
+</table>
+
+<br/>
+
+<table cellspacing="0" cellpadding="0">
+<tr><td>
+<spring:message code="mdrtb.tbclassifcation" text="TB Classification"/>: ${status.labResultsStatus.tbClassification.displayString}
+</td></tr>
 </table>
 
 <br/>
@@ -54,6 +70,8 @@
 <tr><td><spring:message code="mdrtb.pendingLabResults" text="Pending Lab Results"/></td></tr>
 ${status.labResultsStatus.pendingLabResults.displayString}
 </table>
+
+
 
 </div> <!-- end of page div -->
 
