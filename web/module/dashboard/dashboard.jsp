@@ -33,35 +33,44 @@
 
 <br/>
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.treatmentStatus" text="Treatment Status"/></b>
+<div class="box" style="margin:0px">
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.regimen" text="Regimen"/></td>
+<td><spring:message code="mdrtb.startdate" text="Start Date"/></td>
+<td><spring:message code="mdrtb.enddate" text="End Date"/></td>
+<td><spring:message code="mdrtb.endReason" text="End Reason"/></td>
+<td><spring:message code="mdrtb.type" text="Type"/></td>
+</tr>
+<c:forEach var="regimen" items="${status.treatmentStatus.regimens.value}">
+${regimen.displayString}
+</c:forEach>
+</table>
+</div>
+
+<br/>
+
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.mdrtbDiagnosis" text="MDR-TB Diagnosis"/></b>
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><spring:message code="mdrtb.controlSmear" text="Control Smear"/>: ${status.labResultsStatus.controlSmear.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>: ${status.labResultsStatus.diagnosticSmear.displayString}</td></tr>
 <tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>: ${status.labResultsStatus.diagnosticCulture.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.resistanceType" text="Resistance Type"/>: ${status.labResultsStatus.tbClassification.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>: ${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
 </table>
 
+</div>
+
 <br/>
+
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</b>
+<div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: ${status.labResultsStatus.mostRecentSmear.displayString}</td></tr>
-<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>: ${status.labResultsStatus.mostRecentCulture.displayString}</td></tr>
-</table>
-
-<br/>
-
-<table cellspacing="0" cellpadding="0">
-<tr><td>
-<spring:message code="mdrtb.tbclassifcation" text="TB Classification"/>: ${status.labResultsStatus.tbClassification.displayString}
-</td></tr>
-</table>
-
-<br/>
-
-<table cellspacing="0" cellpadding="0">
-<tr><td>
-<spring:message code="mdrtb.resistanceProfile" text="Drug Resistance Profile"/>: ${status.labResultsStatus.drugResistanceProfile.displayString}
-</td></tr>
+<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>: ${status.labResultsStatus.mostRecentCulture.displayString}</td></tr>
 </table>
 
 <br/>
@@ -71,7 +80,7 @@
 ${status.labResultsStatus.pendingLabResults.displayString}
 </table>
 
-
+</div>
 
 </div> <!-- end of page div -->
 

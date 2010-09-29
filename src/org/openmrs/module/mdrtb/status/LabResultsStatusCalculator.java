@@ -1,8 +1,11 @@
 package org.openmrs.module.mdrtb.status;
 
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.PatientProgram;
@@ -22,7 +25,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	
 	// TODO: if there are performance issues, we can combine some of the calculation methods, 
 	// to avoid iterating over specimens multiple times
-	// however, I doubt that adds much overhead, so I opted for cleaner code
+	// however, for now, I opted for cleaner code
 	
 	private LabResultsStatusRenderer renderer;
 	
@@ -37,10 +40,10 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		LabResultsStatus status = new LabResultsStatus(program);
 		
 		// get the specimens for this patient program, because these will be used for multiple calculations
-		List<Specimen> specimens = StatusUtil.getSpecimensForProgram(program);
+		List<Specimen> specimens = StatusUtil.getSpecimensDuringProgram(program);
 		
 		// get the control smear and diagnostic culture
-		findControlSmearAndDiagnosticCulture(specimens, status);
+		findDiagnosticSmearAndCulture(specimens, status);
 		
 		// determine any pending lab results
 		status.addItem("pendingLabResults", findPendingLabResults(specimens));
@@ -56,11 +59,12 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		Collections.reverse(specimens);
 		status.addItem("mostRecentSmear", findMostRecentSmear(specimens));
 		status.addItem("mostRecentCulture", findMostRecentCulture(specimens));
+		status.addItem("cultureConversion", calculateCultureConversion(specimens));
 		
 		return status;
 		
 	}
-	
+
 	public void setRenderer(LabResultsStatusRenderer renderer) {
 		this.renderer = renderer;
 	}
@@ -93,17 +97,10 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		}
 		
 		// sort the drugs in the standard order
-		List<Concept> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
-		List<Concept> sortedDrugs = new LinkedList<Concept>();
+		drugs = StatusUtil.sortDrugs(drugs);
 		
-		for (Concept drug : drugTypes) {
-			if (drugs.contains(drug)) {
-				sortedDrugs.add(drug);
-			}
-		}
-		
-		resistanceProfile.setValue(sortedDrugs);
-		resistanceProfile.setDisplayString(renderer.renderDrugResistanceProfile(sortedDrugs));
+		resistanceProfile.setValue(drugs);
+		resistanceProfile.setDisplayString(renderer.renderDrugResistanceProfile(drugs));
 		
 		return resistanceProfile;
 	}
@@ -145,12 +142,95 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 			}
 		}
 		
-		// TODO: handle the determine/rendering of classication date
+		// TODO: handle the determine/rendering of classification date
 		
 		tbClassification.setValue(classification);
 		tbClassification.setDisplayString(renderer.renderTbClassification(classification));
 		
 		return tbClassification;
+	}
+
+	// defined as two consecutive negative cultures more than 30 days apart (with no positive smears in the meantime)
+	// note that this method expects to work on a specimen list in reverse chronological order
+	// TODO: should smears be included in this test?
+	private StatusItem calculateCultureConversion(List<Specimen> specimens) {	
+	
+		// get a set of all concepts that represent positive results
+		Set<Concept> positiveResults = StatusUtil.getPositiveResultConcepts();
+			
+		StatusItem cultureConversion = new StatusItem();
+		List<Date> negativeCultureDates = new LinkedList<Date>();
+	    
+		// loop through all the specimens until we hit one with a positive smear or culture
+	    for (Specimen specimen : specimens) {
+	    	Boolean possibleConversion = calculateCultureConversionHelper(specimen, positiveResults);
+	    
+	    	if (possibleConversion != null) {
+	    		if (!possibleConversion) {
+	    			break;
+	    		}
+	    		else if (possibleConversion){
+	    			negativeCultureDates.add(specimen.getDateCollected());
+	    		}
+	    	}
+	    }
+	    
+	    // there need to be at least two negative cultures for this to be a conversion
+	    if (negativeCultureDates.size() > 1) {
+	    	
+	    	// now compare to make sure that the conversions are at least 30 days apart
+	    	Calendar lastNegativeCulture = Calendar.getInstance();
+	    	Calendar firstNegativeCulture = Calendar.getInstance();
+	    	
+	    	lastNegativeCulture.setTime(negativeCultureDates.get(0));
+	    	firstNegativeCulture.setTime(negativeCultureDates.get(negativeCultureDates.size() - 1));
+	    	
+	    	firstNegativeCulture.add(Calendar.DAY_OF_MONTH, 29);
+	    	
+	    	if (firstNegativeCulture.before(lastNegativeCulture)) {
+	    		// we have a successful conversion
+	    		cultureConversion.setValue(new Boolean(true));
+	    		
+	    		// determine what the conversion date should be reported as
+	    		Collections.sort(negativeCultureDates, Collections.reverseOrder());
+	    		for (Date date : negativeCultureDates) {
+	    			if (date.after(firstNegativeCulture.getTime())) {
+	    				cultureConversion.setDate(date);
+	    			}
+	    		}
+	    		cultureConversion.setDisplayString(renderer.renderCultureConversion(cultureConversion));
+	    		return cultureConversion;
+	    	}
+	    }
+	    
+	    // if we've got here, not converted
+	    cultureConversion.setValue(new Boolean(false));
+	    cultureConversion.setDisplayString(renderer.renderCultureConversion(cultureConversion));
+	    
+	    return cultureConversion;
+    }
+	
+	// if this specimen has any positive smears/cultures, returns null
+	// if not, and it has a negative culture, return the specimen collection date
+	private Boolean calculateCultureConversionHelper(Specimen specimen, Set<Concept> positiveResults) {
+				
+		for (Smear smear : specimen.getSmears()) {
+			if (positiveResults.contains(smear.getResult())) {
+				return false;
+			}
+		}
+		
+		for (Culture culture : specimen.getCultures()) {
+			if (positiveResults.contains(culture.getResult())) {
+				return false;
+			}
+			else if (culture.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
+				return true;
+			}
+		}
+	
+		// if we've gotten here, this specimen has no positive results, but no negative culture, so we haven't gotten any useful into from it
+		return null;
 	}
 	
 	private StatusItem findPendingLabResults(List<Specimen> specimens) {
@@ -173,19 +253,19 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	}
 	
 	// diagnostic smear and culture defined as first smear and culture results from the specimens associated with the program
-	private void findControlSmearAndDiagnosticCulture(List<Specimen> specimens, LabResultsStatus status) {
+	private void findDiagnosticSmearAndCulture(List<Specimen> specimens, LabResultsStatus status) {
 
 		Smear smear = findFirstCompletedSmearInList(specimens);
-		StatusItem controlSmear = new StatusItem();
-		controlSmear.setValue(smear);
-		controlSmear.setDisplayString(renderer.renderSmear(smear));
+		StatusItem diagnosticSmear = new StatusItem();
+		diagnosticSmear.setValue(smear);
+		diagnosticSmear.setDisplayString(renderer.renderSmear(smear));
 		
 		Culture culture = findFirstCompletedCultureInList(specimens);
 		StatusItem diagnosticCulture = new StatusItem();
 		diagnosticCulture.setValue(culture);
 		diagnosticCulture.setDisplayString(renderer.renderCulture(culture));
 		
-		status.addItem("controlSmear", controlSmear);
+		status.addItem("diagnosticSmear", diagnosticSmear);
 		status.addItem("diagnosticCulture", diagnosticCulture);
     }
 	

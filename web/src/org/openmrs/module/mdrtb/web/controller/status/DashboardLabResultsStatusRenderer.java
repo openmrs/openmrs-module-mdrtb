@@ -12,6 +12,7 @@ import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 import org.openmrs.module.mdrtb.status.LabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusFlag;
+import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.web.WebConstants;
 
 public class DashboardLabResultsStatusRenderer implements LabResultsStatusRenderer {
@@ -62,18 +63,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 	}
 	
     public String renderDrugResistanceProfile(List<Concept> drugs) {
-    	StringBuffer profile = new StringBuffer();
-    	
-    	for (Concept drug : drugs) {
-    		profile.append(drug.getBestShortName(Context.getLocale()).toString() + " + ");
-    	}
-    	
-    	// remove the last plus sign and spaces
-    	if(profile.length() > 3) {
-    		profile.delete(profile.length() - 3, profile.length());
-    	}
-    	
-	    return profile.toString();
+    	return DashboardStatusRendererUtil.renderDrugList(drugs);
     }
 	
 	public String renderPendingLabResults(List<Test> tests) {
@@ -140,6 +130,19 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 	    return displayString.toString();
     }
 	
+    public String renderCultureConversion(StatusItem cultureConversion) {
+    DateFormat df = DateFormat.getDateInstance();
+    	
+	   if ( ((Boolean) cultureConversion.getValue()) == false) {
+		   return Context.getMessageSourceService().getMessage("mdrtb.notConverted");
+	   }
+	   else {
+		   String[] params = { df.format(cultureConversion.getDate()) };
+		   return Context.getMessageSourceService().getMessage("mdrtb.converted", params,
+			    "Converted on {0}", Context.getLocale());
+	   }
+    }
+    
 	public StatusFlag createNoSmearsFlag() {
 		StatusFlag flag = new StatusFlag();
 		flag.setMessage(Context.getMessageSourceService().getMessage("mdrtb.noSmearResults"));

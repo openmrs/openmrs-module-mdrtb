@@ -20,8 +20,9 @@ public interface LabResultsStatusRenderer {
 	
 	public String renderTbClassification(TbClassification classification);
 	
+	public String renderCultureConversion(StatusItem cultureConversion);
+	
 	public StatusFlag createNoSmearsFlag();
 	
-	public StatusFlag createNoCulturesFlag();
-	
+	public StatusFlag createNoCulturesFlag();	
 }

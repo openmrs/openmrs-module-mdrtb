@@ -15,7 +15,9 @@ import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.module.mdrtb.status.StatusUtil;
+import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
+import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,10 @@ public class PatientDashboardController {
 		// lab reports status
 		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program);
 		statusMap.put("labResultsStatus", labReportsStatus);
+		
+		// treatment status
+		Status treatmentStatus = new TreatmentStatusCalculator(new DashboardTreatmentStatusRenderer()).calculate(program);
+		statusMap.put("treatmentStatus", treatmentStatus);
 		
 		return statusMap;
 		

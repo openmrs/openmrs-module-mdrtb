@@ -9,8 +9,12 @@ public class LabResultsStatus extends Status {
 	    super(program);
     }
 
-	public StatusItem getControlSmear() {
-		return getItem("controlSmear");
+	public StatusItem getCultureConversion() {
+		return getItem("cultureConversion");
+	}
+	
+	public StatusItem getDiagnosticSmear() {
+		return getItem("diagnosticSmear");
 	}
 	
 	public StatusItem getDiagnosticCulture() {

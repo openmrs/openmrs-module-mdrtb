@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptSet;
 import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
@@ -469,44 +470,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
     public List<Concept> getPossibleDrugTypesToDisplay() {
-    	// TODO: do we want to start pulling this from somewhere else?
-    	// TODO: update this method so that it can handle drugs referenced by mdr-tb map?
     	
-    	String drugList = Context.getAdministrationService().getGlobalProperty("mdrtb.DST_drug_list");
+    	Concept tbDrugs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
+    	List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(tbDrugs);
     	
-    	List<Concept> drugTypes = new LinkedList<Concept>();
+    	List<Concept> drugs = new LinkedList<Concept>();
     	
-    	// we are simply making a list out of drugs, not drugs/concentration
-    	for(String drugEntry : drugList.split("\\|")) {
-    		String[] drugFields = drugEntry.split(":");
-    		
-    		Concept drug = Context.getConceptService().getConceptByName(drugFields[0]);
-    		
-    		if(!drugTypes.contains(drug)) {
-    			drugTypes.add(drug);
-    		}
+    	for (ConceptSet drug : drugSet) {
+    		drugs.add(drug.getConcept());
     	}
     	
-    	return drugTypes;
+    	return drugs;
     	
-    	// TODO: delete this stuff below when we are sure we don't need it
-    	/** 
-    	List<DrugType> drugTypes = new LinkedList<DrugType>();
-    	
-    	for(String drugEntry : drugList.split("\\|")) {
-    		String[] drugFields = drugEntry.split(":");
-    	   		
-    		Concept drug = Context.getConceptService().getConceptByName(drugFields[0]);
-    		if(drugFields.length == 1 || StringUtils.isEmpty(drugFields[1])) {
-    			drugTypes.add(new DrugType(drug));
-    		}
-    		else {
-    			drugTypes.add(new DrugType(drug, Double.valueOf(drugFields[1])));
-    		}
-    	}
-    	
-    	return drugTypes;
-    	*/
     }
     
    

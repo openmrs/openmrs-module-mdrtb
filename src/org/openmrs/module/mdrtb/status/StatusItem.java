@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.status;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import java.util.List;
 public class StatusItem {
 
 	private Object value;
+	
+	private Date date;
 	
 	private String displayString;
 	
@@ -21,7 +24,15 @@ public class StatusItem {
     	this.value = value;
     }
 
-    public String getDisplayString() {
+    public void setDate(Date date) {
+	    this.date = date;
+    }
+
+	public Date getDate() {
+	    return date;
+    }
+
+	public String getDisplayString() {
     	return displayString;
     }
 	

@@ -115,6 +115,7 @@ public class RegimenHistory implements Serializable {
     	for(Regimen regimen : this.getRegimenList()) {
     		if(OpenmrsUtil.compareWithNullAsEarliest(regimen.getStartDate(), endDate) <= 0 &&
     				OpenmrsUtil.compareWithNullAsLatest(regimen.getEndDate(), startDate) >= 0)  {
+    		
     			regimens.add(regimen);
     		}
     	}

@@ -13,11 +13,8 @@ public class TreatmentStatus extends Status {
 		return getItem("treatmentStatus");
 	}
 	
-	public StatusItem getCurrentRegimen() {
-		return getItem("getCurrentRegimen");
+	public StatusItem getRegimens() {
+		return getItem("regimens");
 	}
 	
-	public StatusItem getInitialRegimen() {
-		return getItem("getInitialRegimen");
-	}
 }

@@ -9,6 +9,7 @@ public class MdrtbConcepts {
 	// TODO: figure out if we still use all these mappings?
 	
 	// Drugs
+	public final static String [] TUBERCULOSIS_DRUGS = {"TUBERCULOSIS DRUGS"};
 	public final static String [] ISONIAZID = {"ISONIAZID"};
 	public final static String [] RIFAMPICIN = {"RIFAMPICIN"};
 	public final static String [] CAPREOMYCIN = {"CAPREOMYCIN"};
