@@ -1,12 +1,12 @@
 package org.openmrs.module.mdrtb.status;
 
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 
 
 public class TreatmentStatus extends Status {
 
-	public TreatmentStatus(Patient patient) {
-	    super(patient);
+	public TreatmentStatus(PatientProgram program) {
+	    super(program);
     }
 
 	public StatusItem getTreatmentStatus() {

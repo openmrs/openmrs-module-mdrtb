@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapperImpl;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -20,15 +21,14 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 		this.renderer = renderer;
 	}
 	
-    public Status calculate(Patient patient) { 	
-	    MdrtbPatientWrapper mdrtbPatient = new MdrtbPatientWrapperImpl(patient);
-	    
-	    RegimenHistory regimenHistory = mdrtbPatient.getRegimenHistory();
+    public Status calculate(PatientProgram program) { 	
+	    //MdrtbPatientWrapper mdrtbPatient = new MdrtbPatientWrapperImpl(patient);
+	    //RegimenHistory regimenHistory = mdrtbPatient.getRegimenHistory();
     	
-    	TreatmentStatus status = new TreatmentStatus(patient);
+    	TreatmentStatus status = new TreatmentStatus(program);
 	    
 	    // get the current regimen
-	    status.addItem("currentRegimen", findCurrentRegimen(regimenHistory));
+	   // status.addItem("currentRegimen", findCurrentRegimen(regimenHistory));
 	    
 	    return status;
     }

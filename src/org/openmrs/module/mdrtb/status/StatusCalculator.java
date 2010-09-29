@@ -1,18 +1,15 @@
 package org.openmrs.module.mdrtb.status;
 
-import java.util.List;
-
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 
 
 public interface StatusCalculator {
 
-	public Status calculate(Patient patient);
-
+	public Status calculate(PatientProgram patient);
 	
-	// TODO: do we reall want/need these
-	public List<Status> calculate(List<Patient> patients);
+	// TODO: do we really want/need these
+	//public List<Status> calculate(List<Patient> patients);
 
-	public List<Status> calculateFlagged(List<Patient> patients);
+	// public List<Status> calculateFlagged(List<Patient> patients);
 
 }

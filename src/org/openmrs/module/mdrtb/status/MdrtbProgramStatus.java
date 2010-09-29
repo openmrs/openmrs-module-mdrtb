@@ -1,12 +1,12 @@
 package org.openmrs.module.mdrtb.status;
 
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 
 
 public class MdrtbProgramStatus extends Status {
 	
-	public MdrtbProgramStatus(Patient patient) {
-	    super(patient);
+	public MdrtbProgramStatus(PatientProgram program) {
+	    super(program);
     }
 
 	public StatusItem getEnrollmentDate() {
@@ -14,7 +14,7 @@ public class MdrtbProgramStatus extends Status {
 	}
 	
 	public void setEnrollmentDate(StatusItem enrollmentDate) {		
-		new MdrtbProgramStatusEditor().updateEnrollmentDate(this.patient, enrollmentDate);
+		new MdrtbProgramStatusEditor().updateEnrollmentDate(this.program.getPatient(), enrollmentDate);
 	}
 	
 }

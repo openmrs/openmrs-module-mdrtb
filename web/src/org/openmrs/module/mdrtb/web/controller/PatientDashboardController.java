@@ -8,11 +8,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
 import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
+import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -40,8 +42,11 @@ public class PatientDashboardController {
 		
 		Map<String,Status> statusMap = new HashMap<String,Status>();
 		
-		// mdrtb program status
-		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(patient);
+		// for now, just operate on the most recent program
+		PatientProgram program = StatusUtil.getMostRecentMdrtbProgram(patient);
+		
+		// lab reports status
+		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program);
 		statusMap.put("labResultsStatus", labReportsStatus);
 		
 		return statusMap;

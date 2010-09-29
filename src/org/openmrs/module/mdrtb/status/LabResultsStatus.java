@@ -1,12 +1,12 @@
 package org.openmrs.module.mdrtb.status;
 
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 
 
 public class LabResultsStatus extends Status {
 
-	public LabResultsStatus(Patient patient) {
-	    super(patient);
+	public LabResultsStatus(PatientProgram program) {
+	    super(program);
     }
 
 	public StatusItem getControlSmear() {
@@ -14,7 +14,7 @@ public class LabResultsStatus extends Status {
 	}
 	
 	public StatusItem getDiagnosticCulture() {
-		return getItem("diagnosisCulture");
+		return getItem("diagnosticCulture");
 	}
 	
 	public StatusItem getMostRecentSmear() {
@@ -31,5 +31,9 @@ public class LabResultsStatus extends Status {
 	
 	public StatusItem getPendingLabResults() {
 		return getItem("pendingLabResults");
+	}
+	
+	public StatusItem getTbClassification() {
+		return getItem("tbClassification");
 	}
 }

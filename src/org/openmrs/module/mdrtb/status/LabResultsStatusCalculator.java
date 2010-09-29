@@ -1,19 +1,15 @@
 package org.openmrs.module.mdrtb.status;
 
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Concept;
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapperImpl;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
@@ -35,22 +31,16 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Status calculate(Patient patient) {
-		
-		// create the mdr-tb patient so we can query mdr-tb specific data
-		MdrtbPatientWrapper mdrtbPatient = new MdrtbPatientWrapperImpl(patient);
+	public Status calculate(PatientProgram program) {
 		
 		// create the Status
-		LabResultsStatus status = new LabResultsStatus(patient);
+		LabResultsStatus status = new LabResultsStatus(program);
 		
-		// get the specimens for this patient, because these will be used for multiple calculations
-		List<Specimen> specimens = mdrtbPatient.getSpecimens();
-		
-		// get the treatment start date for the patient
-		Date treatmentStartDate = mdrtbPatient.getTreatmentStartDate();
+		// get the specimens for this patient program, because these will be used for multiple calculations
+		List<Specimen> specimens = StatusUtil.getSpecimensForProgram(program);
 		
 		// get the control smear and diagnostic culture
-		findControlSmearAndDiagnosticCulture(treatmentStartDate, specimens, status);
+		findControlSmearAndDiagnosticCulture(specimens, status);
 		
 		// determine any pending lab results
 		status.addItem("pendingLabResults", findPendingLabResults(specimens));
@@ -60,7 +50,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		status.addItem("drugResistanceProfile", resistanceProfile);
 		
 		// now use the resistance profile to determine the mdr-tb classification
-		status.addItem("tbClassication", calculateTbClassication((List<Concept>) resistanceProfile.getValue()));
+		status.addItem("tbClassification", calculateTbClassication((List<Concept>) resistanceProfile.getValue()));
 		
 		// we want to to reverse the order of the specimens here so that first=most recent
 		Collections.reverse(specimens);
@@ -69,16 +59,6 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		
 		return status;
 		
-	}
-
-	public List<Status> calculate(List<Patient> patients) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public List<Status> calculateFlagged(List<Patient> patients) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public void setRenderer(LabResultsStatusRenderer renderer) {
@@ -192,37 +172,15 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		return pendingLabResults;
 	}
 	
-	// control smear defined, somewhat arbitrarily at this point, as the first smear within-in a four-month window with treatment start date as the midpoint 
-	private void findControlSmearAndDiagnosticCulture(Date treatmentStartDate, List<Specimen> specimens, LabResultsStatus status) {
+	// diagnostic smear and culture defined as first smear and culture results from the specimens associated with the program
+	private void findControlSmearAndDiagnosticCulture(List<Specimen> specimens, LabResultsStatus status) {
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(treatmentStartDate);
-		calendar.add(Calendar.MONTH, -2);
-		
-		Date startDate = calendar.getTime();
-		calendar.add(Calendar.MONTH, 4);
-		Date endDate = calendar.getTime();
-		
-		List<Specimen> possibleControlSpecimens = new LinkedList<Specimen>();
-		
-		// assumes that the specimens are in order
-		for (Specimen specimen : specimens) {
-			if (specimen.getDateCollected().after(endDate)) {
-				break;
-			}
-			else {
-				if (specimen.getDateCollected().after(startDate)) {
-					possibleControlSpecimens.add(specimen);
-				}
-			}
-		}
-	
-		Smear smear = findFirstCompletedSmearInList(possibleControlSpecimens);
+		Smear smear = findFirstCompletedSmearInList(specimens);
 		StatusItem controlSmear = new StatusItem();
 		controlSmear.setValue(smear);
 		controlSmear.setDisplayString(renderer.renderSmear(smear));
 		
-		Culture culture = findFirstCompletedCultureInList(possibleControlSpecimens);
+		Culture culture = findFirstCompletedCultureInList(specimens);
 		StatusItem diagnosticCulture = new StatusItem();
 		diagnosticCulture.setValue(culture);
 		diagnosticCulture.setDisplayString(renderer.renderCulture(culture));

@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.patient;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -34,11 +35,21 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 		
 		List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(this.patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 		
-		// TODO: figure out a way to add sorting back in; unfortunately, sorting screws up spring bindings/validation
-		// TODO: because spring expects the fields to come back in the same order on submission
-		// Collections.sort(mdrtbPrograms, new PatientProgramComparator());
+		// TODO: sorting screws up spring bindings because spring expects the fields to come back in the same order on submission
+		 Collections.sort(mdrtbPrograms, new PatientProgramComparator());
 		
 		return mdrtbPrograms;
+	}
+	
+	public PatientProgram getMostRecentMdrtbProgram() {
+		List<PatientProgram> programs = getMdrtbPrograms();
+		
+		if (programs.size() > 0) {
+			return programs.get(programs.size() - 1);
+		} 
+		else {
+			return null;
+		}
 	}
 	
 	public Boolean everEnrolledInMdrtbProgram() {
@@ -46,7 +57,7 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
     }
 	
 	public Boolean isEnrolledInMdrtbProgram() {
-		// TODO Auto-generated method stub
+		// TODO: not yet implemented
 		return null;
 	}
 	

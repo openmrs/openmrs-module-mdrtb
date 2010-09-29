@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -201,6 +202,26 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimens;
 	}
 	
+	public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate) {
+		
+		if (startDate == null) {
+			return null;
+		}
+		
+		List<Specimen> specimens = getSpecimens(patient);
+		List<Specimen> programSpecimens = new LinkedList<Specimen>();
+		
+		for (Specimen specimen : specimens) {
+			if (endDate != null && specimen.getDateCollected().after(endDate)) {
+				break;
+			} else if (specimen.getDateCollected().after(startDate)) {
+				programSpecimens.add(specimen);
+			}
+		}
+		
+		return programSpecimens;
+	}
+	 
 	public void saveSpecimen(Specimen specimen) {
 		if (specimen == null) {
 			log.warn("Unable to save specimen: specimen object is null");

@@ -26,6 +26,11 @@ public interface MdrtbPatientWrapper {
 	public List<PatientProgram> getMdrtbPrograms();
 	
 	/**
+	 * Returns the most recent mdr-tb patient progam associated with this patietn
+	 */
+	public PatientProgram getMostRecentMdrtbProgram();
+	
+	/**
 	 * Return whether or not the patient has ever been enrolled in the MDR-TB program
 	 */
 	public Boolean everEnrolledInMdrtbProgram();

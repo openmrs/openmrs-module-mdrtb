@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,6 +77,11 @@ public interface MdrtbService extends OpenmrsService {
      * Fetches all specimens for a patient (i.e., all Specimen Collection encounters)
      */
     public List<Specimen> getSpecimens(Patient patient);
+    
+    /**
+     * Fetches all specimens for a patient within a certain date range
+     */
+    public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate);
     
     /**
      * Deletes a specimen, referenced by specimen Id

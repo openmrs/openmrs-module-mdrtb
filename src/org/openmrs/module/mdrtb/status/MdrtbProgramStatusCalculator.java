@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb.status;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 
 
 public class MdrtbProgramStatusCalculator implements StatusCalculator {
@@ -19,13 +19,13 @@ public class MdrtbProgramStatusCalculator implements StatusCalculator {
 		this.setRenderer(renderer);
 	}
 	
-    public Status calculate(Patient patient) {
+    public Status calculate(PatientProgram program) {
 
     	// create the status element to return
-    	MdrtbProgramStatus status = new MdrtbProgramStatus(patient);
+    	MdrtbProgramStatus status = new MdrtbProgramStatus(program);
     	
     	// first set the most recent mdrtb program associated with this person
-    	List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
+    	List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(program.getPatient(), Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 		Collections.sort(mdrtbPrograms, new PatientProgramComparator());
 		
 		if (mdrtbPrograms == null || mdrtbPrograms.isEmpty()) {
@@ -35,7 +35,7 @@ public class MdrtbProgramStatusCalculator implements StatusCalculator {
 			return status;
 		}
 		
-		PatientProgram program = mdrtbPrograms.get(mdrtbPrograms.size() - 1);
+		//PatientProgram program = mdrtbPrograms.get(mdrtbPrograms.size() - 1);
 		
     	// set enrollment date
     	StatusItem enrollmentDate = new StatusItem();
@@ -81,20 +81,4 @@ public class MdrtbProgramStatusCalculator implements StatusCalculator {
 	    return renderer;
     }
 
-	/**
-     * Utility classes
-     */
-    
-    private class PatientProgramComparator implements Comparator<PatientProgram> {
-
-    	public int compare(PatientProgram program1, PatientProgram program2) {
-    		if(program1 == null || program1.getDateEnrolled() == null) {
-    			return 1;
-    		} else if (program2 == null || program2.getDateEnrolled() == null) {
-    			return -1;
-    		} else {
-    			return program1.getDateEnrolled().compareTo(program2.getDateEnrolled());
-    		}
-    	}
-    }
 }

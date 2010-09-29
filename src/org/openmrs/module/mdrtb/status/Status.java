@@ -5,27 +5,27 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 
 
 abstract public class Status {
 
-	Patient patient;
+	PatientProgram program;
 	
 	Map<String,StatusItem> items = new HashMap<String,StatusItem>();
 	
 	List<StatusFlag> flags = new LinkedList<StatusFlag>();
 	
-	public Status(Patient patient) {
-		this.patient = patient;
+	public Status(PatientProgram program) {
+		this.program = program;
 	}
 	
-    public Patient getPatient() {
-    	return patient;
+    public PatientProgram getPatient() {
+    	return program;
     }
 
-    public void setPatient(Patient patient) {
-    	this.patient = patient;
+    public void setPatient(PatientProgram program) {
+    	this.program = program;
     }
 	
     protected void addItem(String name, StatusItem item) {
