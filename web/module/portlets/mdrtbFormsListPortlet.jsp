@@ -45,7 +45,7 @@
 								<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 							</c:set>
 								
-								<Tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/summary/summary.form?view=FORM'$>${form.name} </a></td></Tr>
+								<Tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?view=FORM'$>${form.name} </a></td></Tr>
 
 						
 						</c:forEach>
@@ -67,7 +67,7 @@
 									<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
 								</c:set>
 						<tr class="${rowClass}">
-							<td class="${rowClass}" nowrap><a href="${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/summary/summary.form?view=FORM">${enc.form.name}</a></td>
+							<td class="${rowClass}" nowrap><a href="${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?view=FORM">${enc.form.name}</a></td>
 							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
 							<td class="${rowClass}" nowrap>${enc.provider}</td>
 							<td class="${rowClass}" nowrap>${enc.location}</td>

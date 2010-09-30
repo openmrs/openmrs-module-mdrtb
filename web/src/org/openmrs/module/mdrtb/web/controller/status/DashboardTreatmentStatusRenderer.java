@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.status.StatusUtil;
@@ -39,6 +40,19 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
 	        + endReason + "</td><td>type</td></tr>";
 	    
 	    return displayString;
+    }
+
+    public String renderTreatmentState(TreatmentState state) {
+	   if (state == TreatmentState.ON_TREATMENT) { 
+		   return Context.getMessageSourceService().getMessage("mdrtb.onTreatment");
+		   
+	   }
+	   else if (state == TreatmentState.NOT_ON_TREATMENT) {
+		   return Context.getMessageSourceService().getMessage("mdrtb.notOnTreatment");	   
+	   }
+	   else {
+		   return "";
+	   }
     }
 
 }

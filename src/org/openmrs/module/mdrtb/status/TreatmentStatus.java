@@ -9,8 +9,8 @@ public class TreatmentStatus extends Status {
 	    super(program);
     }
 
-	public StatusItem getTreatmentStatus() {
-		return getItem("treatmentStatus");
+	public StatusItem getTreatmentState() {
+		return getItem("treatmentState");
 	}
 	
 	public StatusItem getRegimens() {

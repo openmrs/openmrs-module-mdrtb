@@ -8,6 +8,8 @@ public class MdrtbConstants {
     
     public static enum TbClassification {MONO_RESISTANT_TB, POLY_RESISTANT_TB, MDR_TB, XDR_TB}; // TODO: add suspected mdr-tb?
     
+    public static enum TreatmentState {NOT_ON_TREATMENT, ON_TREATMENT};
+    
     public static enum MdrtbPatientDashboardTabs{
     	STATUS("status","mdrtb.status"),
     	FORM("formEntry","mdrtb.formentry"),

@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
-
 <!-- PATIENT CHART -->
 <div id="patientChart" align="center">
 <table style="border:2px solid #8FABC7; font-size: .9em;">
@@ -15,7 +14,7 @@
 <td class="chartCell" style="width:100px"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
 <td class="chartCell"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
-<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
+<c:forEach var="drugType" items="${model.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
 </c:forEach>
 </tr>
@@ -25,7 +24,7 @@
 
 <!-- START ROWS -->
 <tbody>
-<c:forEach var="record" items="${mdrtbPatient.chart.records}">
+<c:forEach var="record" items="${model.chart.records}">
 
 	<c:set var="componentCount" value="${fn:length(record.components)}"/>
 	
@@ -66,14 +65,14 @@
 			</td>
 	
 			<!--  dsts -->
-			<c:forEach var="drugType" items="${mdrtbPatient.chart.drugTypes}">
+			<c:forEach var="drugType" items="${model.chart.drugTypes}">
 				<c:choose>
 					<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
 						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
 					</c:when>
 					<c:otherwise>
 						<!-- handle any regimen info -->
-						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${mdrtbPatient.patient.id}"/>
+						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${patient.id}"/>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -82,7 +81,7 @@
 			<!-- HANDLE STATE CHANGE COMPONENTS -->
 			<c:if test="${component.type eq 'stateChangeRecordComponent'}">
 				<td class="chartCell"><openmrs:formatDate date="${component.date}"/></td>
-				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(mdrtbPatient.chart.drugTypes) + 3}">${component.text}</td>
+				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(model.chart.drugTypes) + 3}">${component.text}</td>
 			</c:if>
 			<!-- END OF HANDLING STATE CHANGE COMPONENTS -->
 			</tr>
