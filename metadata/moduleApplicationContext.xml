@@ -51,7 +51,7 @@
 		<property name="commandName"><value>patient</value></property>
 		<property name="commandClass"><value>org.openmrs.web.controller.patient.ShortPatientModel</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbAddPatientForm</value></property>
-		<property name="successView"><value>summary/summary.form</value></property>
+		<property name="successView"><value>dashboard/dashboard.form</value></property>
     </bean>
      <bean id="MdrtbAdmiList" class="@MODULE_PACKAGE@.web.controller.MdrtbTSAdmListController">
 		<property name="commandName"><value>listObj</value></property>
