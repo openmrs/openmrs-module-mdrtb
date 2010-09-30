@@ -74,6 +74,35 @@ public class StatusUtil {
 			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
 	}
 	
+	public static Date getTreatmentStartDateDuringProgram(PatientProgram program) {
+		Date startDate = null;
+		List<Regimen> regimens = getRegimensDuringProgram(program);
+			
+		// TODO: confirm that regimen history sorts regimens in order
+		// return the start date of the first regimen 
+		if(regimens != null && regimens.size() > 0) {
+			startDate = regimens.get(0).getStartDate();
+		}
+		
+		// if no regimens, this will return null for a treatment start date	
+		return startDate;
+	}
+	
+	public static Date getTreatmentEndDateDuringProgram(PatientProgram program) {
+		Date endDate = null;
+		List<Regimen> regimens = getRegimensDuringProgram(program);
+			
+		// TODO: confirm that regimen history sorts regimens in order
+		// return the end date of the last regimen 
+		if(regimens != null && regimens.size() > 0) {
+			endDate = regimens.get(regimens.size()-1).getEndDate();
+		}
+		
+		// if no regimens, this will return null for a treatment end date	
+		return endDate;
+		
+	}
+	
 	// returns a list of concepts that represent a positive result for a smear or culture
 	public static Set<Concept> getPositiveResultConcepts() {
 		MdrtbService service = Context.getService(MdrtbService.class);
