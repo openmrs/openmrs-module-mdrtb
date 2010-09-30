@@ -82,7 +82,7 @@ public class MdrtbPatientWrapperImpl implements MdrtbPatientWrapper {
 		
 		if(chart == null) {
 			PatientChartFactory factory = new PatientChartFactory();
-			this.chart = factory.createPatientChart(this);
+			//this.chart = factory.createPatientChart(this);
 		}
 		
 		return this.chart;
