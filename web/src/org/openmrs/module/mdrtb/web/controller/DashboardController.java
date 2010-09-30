@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.web.controller;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,9 +8,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
 import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
@@ -18,6 +20,7 @@ import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
+import org.openmrs.PatientProgram;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Controller;
@@ -32,7 +35,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/module/mdrtb/dashboard/dashboard.form")
-public class PatientDashboardController {
+public class DashboardController {
+	
+	@ModelAttribute("locations")
+	Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+	
+	
 	@ModelAttribute("status")
 	public Map<String,Status> getStatusMap(@RequestParam(required = true, value = "patientId") String patientId) {
 		
@@ -65,9 +75,30 @@ public class PatientDashboardController {
 	}
 	
 	
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showStatus(@ModelAttribute("status") Map<String,Status> statusMap, ModelMap map) {
+	public ModelAndView showStatus(@ModelAttribute("status") Map<String,Status> statusMap, 
+	                               @RequestParam(required = true, value = "patientId") String patientId, ModelMap map) {
 
+    	// fetch the patient
+    	Patient patient = Context.getPatientService().getPatient(Integer.valueOf(patientId));
+    	
+    	if (patient == null) {
+			// TODO: do something
+		}
+		
+    	// for now, we are just showing data from the most recent program
+    	// TODO: expand this to handle multiple programs
+    	PatientProgram program = StatusUtil.getMostRecentMdrtbProgram(patient);
+    	
+    	if (program == null) {
+    		// TODO: skip to an enroll-in-program status
+    	}
+    	else {
+    		map.put("program", new MdrtbPatientProgram(program));
+    	}
+    	
+    	// add any flags
 		addFlags(statusMap, map);
 		
 		return new ModelAndView("/module/mdrtb/dashboard/dashboard", map);

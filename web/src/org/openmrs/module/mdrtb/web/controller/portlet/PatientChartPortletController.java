@@ -4,21 +4,24 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.patientchart.PatientChart;
+import org.openmrs.module.mdrtb.patientchart.PatientChartFactory;
 import org.openmrs.web.controller.PortletController;
 
 
 public class PatientChartPortletController extends PortletController {
 	
-	/**
-	 * Adds mdrtbPatientWrapper object to the model, if necessary
-	 */
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
-			// only add the Mdrtb Patient Header if it's not already in the map
-			if(!model.containsKey("mdrtbPatient")) {
-				model.put("mdrtbPatient", Context.getService(MdrtbService.class).getMdrtbPatient((Integer) model.get("patientId")));
-			}
+		
+			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(Integer.valueOf((String) model.get("patientProgramId")));
+		
+			PatientChart chart = new PatientChartFactory().createPatientChart(program);
+			
+			model.put("test", 123);
+			
+			model.put("chart", chart);
 	}
 
 }

@@ -15,7 +15,7 @@ public class MdrtbRedirectController {
 	public String redirect(@RequestParam(required=false, value="patientId") Integer patientId){
 		
 		if(patientId != null) {
-			return "redirect:/module/mdrtb/summary/summary.form?patientId=" + patientId;
+			return "redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId;
 		}
 		
 		return "redirect:/module/mdrtb/mdrtbIndex.form";
