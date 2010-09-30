@@ -12,20 +12,25 @@ import java.util.ListIterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenUtil;
+import org.openmrs.module.mdrtb.status.StatusUtil;
 
 
 public class PatientChartFactory {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 
-	public PatientChart createPatientChart(MdrtbPatientWrapper patient) {
+	public PatientChart createPatientChart(PatientProgram program) {
+		
+		Patient patient = program.getPatient();
 		PatientChart chart = new PatientChart();
 		
 		if (patient == null) {
@@ -34,7 +39,7 @@ public class PatientChartFactory {
 		}
 		
 		// first, fetch all the specimens for this patient
-		List<Specimen> specimens = patient.getSpecimens();
+		List<Specimen> specimens = StatusUtil.getSpecimensDuringProgram(program);
 		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
@@ -44,16 +49,16 @@ public class PatientChartFactory {
 		SpecimenUtil.groupSpecimensByDay(specimens);
 		
 		// also get the regimen history for the patient
-		RegimenHistory regimenHistory = patient.getRegimenHistory();
+		RegimenHistory regimenHistory = RegimenUtils.getRegimenHistory(patient);
 		
 		// calculate all the state change components we need to display on the chart
-		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(patient);
+		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(program);
 		
 		// get the treatment start date to use as the chart start date
-		Date treatmentStartDate = patient.getTreatmentStartDate();
+		Date treatmentStartDate = StatusUtil.getTreatmentStartDateDuringProgram(program);
 		
 		// get the treatment end date
-		Date treatmentEndDate = patient.getTreatmentEndDate();
+		Date treatmentEndDate = StatusUtil.getTreatmentEndDateDuringProgram(program);
 		
 		// determine if the patient have ever been on treatment
 		Boolean hasBeenOnTreatment = (treatmentStartDate != null);
@@ -223,16 +228,16 @@ public class PatientChartFactory {
 	/**
 	 * Assembles all state change components for the entire chart
 	 */
-	private List<RecordComponent> createAllStateChangeRecordComponents(MdrtbPatientWrapper patient) {
+	private List<RecordComponent> createAllStateChangeRecordComponents(PatientProgram program) {
 		List<RecordComponent> stateChangeRecordComponents = new LinkedList<RecordComponent>();
 		
 		// the only state we are worried about at this point is the treatment start date and treatment end date
-		if(patient.getTreatmentStartDate() != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentStartDate(), Context.getMessageSourceService().getMessage("mdrtb.treatmentstartdate")));
+		if(StatusUtil.getTreatmentStartDateDuringProgram(program) != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(StatusUtil.getTreatmentStartDateDuringProgram(program), Context.getMessageSourceService().getMessage("mdrtb.treatmentstartdate")));
 		}
 			
-		if(patient.getTreatmentEndDate() != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(patient.getTreatmentEndDate(), Context.getMessageSourceService().getMessage("mdrtb.treatmentEndDate")));
+		if(StatusUtil.getTreatmentEndDateDuringProgram(program) != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(StatusUtil.getTreatmentEndDateDuringProgram(program), Context.getMessageSourceService().getMessage("mdrtb.treatmentEndDate")));
 		}
 		
 		Collections.sort(stateChangeRecordComponents);
