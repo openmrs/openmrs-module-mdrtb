@@ -15,6 +15,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.specimen.Specimen;
@@ -22,17 +23,24 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 
 public class StatusUtil {
 	
-	public static List<PatientProgram> getMdrtbPrograms(Patient patient) {
+	public static List<MdrtbPatientProgram> getMdrtbPrograms(Patient patient) {
 		
-		List<PatientProgram> mdrtbPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
+		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getService(MdrtbService.class).getMdrtbProgram(), null, null, null, null, false);
 		
-		 Collections.sort(mdrtbPrograms, new PatientProgramComparator());
+		Collections.sort(programs, new PatientProgramComparator());
+		
+		List<MdrtbPatientProgram> mdrtbPrograms = new LinkedList<MdrtbPatientProgram>();
+		
+		// convert to mdrtb patient programs
+		for (PatientProgram program : programs) {
+			mdrtbPrograms.add(new MdrtbPatientProgram(program));
+		}
 		
 		return mdrtbPrograms;
 	}
 	
-	public static PatientProgram getMostRecentMdrtbProgram(Patient patient) {
-		List<PatientProgram> programs = getMdrtbPrograms(patient);
+	public static MdrtbPatientProgram getMostRecentMdrtbProgram(Patient patient) {
+		List<MdrtbPatientProgram> programs = getMdrtbPrograms(patient);
 		
 		if (programs.size() > 0) {
 			return programs.get(programs.size() - 1);

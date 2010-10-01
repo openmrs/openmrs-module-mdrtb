@@ -26,6 +26,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 public abstract class AbstractSpecimenController {
@@ -42,6 +43,11 @@ public abstract class AbstractSpecimenController {
 		binder.registerCustomEditor(Concept.class, new ConceptEditor()); 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(Person.class, new PersonEditor());
+	}
+	
+	@ModelAttribute("patientProgramId")
+	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		return patientProgramId;
 	}
 	
 	@ModelAttribute("types")

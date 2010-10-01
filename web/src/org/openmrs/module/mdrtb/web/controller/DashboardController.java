@@ -9,18 +9,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Location;
-import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
 import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
-import org.openmrs.PatientProgram;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Controller;
@@ -44,18 +42,16 @@ public class DashboardController {
 	
 	
 	@ModelAttribute("status")
-	public Map<String,Status> getStatusMap(@RequestParam(required = true, value = "patientId") String patientId) {
+	public Map<String,Status> getStatusMap(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
-		Patient patient = Context.getPatientService().getPatient(Integer.valueOf(patientId));
-		
-		if (patient == null) {
+		if (patientProgramId == null) {
 			// TODO: do something
 		}
 		
 		Map<String,Status> statusMap = new HashMap<String,Status>();
 		
-		// for now, just operate on the most recent program
-		PatientProgram program = StatusUtil.getMostRecentMdrtbProgram(patient);
+		// get the program that we are operating on
+		PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		
 		// lab reports status
 		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program);
@@ -70,26 +66,28 @@ public class DashboardController {
 	}
 	
 	@ModelAttribute("patientId")
-	public String getPatientId(@RequestParam(required = true, value = "patientId") String patientId) {
+	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
 		return patientId;
+	}
+	
+	@ModelAttribute("patientProgramId")
+	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		return patientProgramId;
 	}
 	
 	
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
 	public ModelAndView showStatus(@ModelAttribute("status") Map<String,Status> statusMap, 
-	                               @RequestParam(required = true, value = "patientId") String patientId, ModelMap map) {
+	                               @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
 
-    	// fetch the patient
-    	Patient patient = Context.getPatientService().getPatient(Integer.valueOf(patientId));
-    	
-    	if (patient == null) {
+    	if (patientProgramId == null) {
 			// TODO: do something
 		}
 		
     	// for now, we are just showing data from the most recent program
     	// TODO: expand this to handle multiple programs
-    	PatientProgram program = StatusUtil.getMostRecentMdrtbProgram(patient);
+    	PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
     	
     	if (program == null) {
     		// TODO: skip to an enroll-in-program status

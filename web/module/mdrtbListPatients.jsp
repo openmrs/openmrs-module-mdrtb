@@ -176,7 +176,7 @@
 							<c:forEach items="${patients}" var="p">
 								<tr class="patientRow patientRow${p.patientId}">
 									<td class="patientTable" style="white-space:nowrap; width:20px;">
-										<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${p.patientId}">
+										<a href="${pageContext.request.contextPath}/module/mdrtb/program/programList.form?patientId=${p.patientId}">
 											<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
 										</a>						
 										<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDetailPortlets" type="html">

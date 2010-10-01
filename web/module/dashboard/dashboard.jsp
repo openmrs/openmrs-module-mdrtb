@@ -20,6 +20,11 @@
 <!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
+<!--  these are to make sure that the datepicker appears above the popup -->
+<style type="text/css">
+	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
+    .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
+</style>
 
 <!-- JQUERY FOR THIS PAGE -->
 
@@ -32,28 +37,38 @@
 		$j('#programEditPopup').dialog({
 			autoOpen: false,
 			modal: true,
+			draggable: false,
 			title: '<spring:message code="mdrtb.editProgram" text="Edit Program"/>',
 			width: '30%',
-			position: 'left'
+			position: 'left',
 		});
 
+		$j('#programEditButton').click(function() {
+			$j('#programEditPopup').dialog('open');
+		});
+
+		$j('#programEditCancelButton').click(function() {
+			$j('#programEditPopup').dialog('close');
+		});
+		
 		$j('#programClosePopup').dialog({
 			autoOpen: false,
 			modal: true,
+			draggable: false,
 			title: '<spring:message code="mdrtb.closeProgram" text="Close Program"/>',
 			width: '30%',
 			position: 'left'
-		});
-				
-		$j('#programEditButton').click(function() {
-			$j('#programEditPopup').dialog('open');
 		});
 
 		$j('#programCloseButton').click(function() {
 			$j('#programClosePopup').dialog('open');
 		});
-		
- 	});
+	
+		$j('#dateEnrolled').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
+
+	});
 -->
 </script>
 <!-- END JQUERY -->
@@ -77,20 +92,20 @@
 -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.programStatus" text="MDR-TB Program Status"/></b>
-<div class="box" style="margin:0px">
+<div class="box" style="margin:0px;">
 <table cellpadding="0" cellspacing="0">
 <tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <openmrs:formatDate date="${program.dateEnrolled}"/></td></tr>
 <tr><td><spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>: ${program.location.displayString}</td></tr>
 </table>
 
-<button id="programEditButton"><spring:message code="mdrtb.edit" text="Edit"/></button>  <button id="programCloseButton"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button>
+<button id="programEditButton"><spring:message code="mdrtb.editProgram" text="Edit Program"/></button>  <button id="programCloseButton"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button>
 </div>
 
 <div id="programEditPopup">
-<form id="programEdit" action="editProgram.form?patientProgramId=${program.id}" method="post" >
+<form id="programEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/programEdit.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <input id="dateEnrolled" type="text" size="14" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:
@@ -102,7 +117,7 @@
 </select>	
 </td></tr>
 </table>
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 </div>
 

@@ -196,7 +196,7 @@
 	}
 	
 	function selectPatient(input){
-		window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=' + input + '&view=BAC';
+		window.location='${pageContext.request.contextPath}/module/mdrtb/program/programList.form?patientId=' + input + '&view=BAC';
 	}
 	function mouseOver(input){
 		classTmp = this.className;

@@ -10,7 +10,7 @@
 <table class="indexTable">
 	<tr>
 		<td width=60% valign='top'>
-			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=${pageContext.request.contextPath}/module/mdrtb/program/programList.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 			<openmrs:hasPrivilege privilege="Add Patients">
 				<br/><br/>
 					<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbAddPatientForm.form|viewType=shortEdit" moduleId="mdrtb" />

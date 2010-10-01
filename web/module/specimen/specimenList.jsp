@@ -19,7 +19,7 @@
 
 <b class="boxHeader"><spring:message code="mdrtb.specimenList" text="Specimen List"/></b>
 <div class="box">
-<a href="add.form?patientId=${patientId}"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></a>
+<a href="add.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></a>
 <br/><br/>
 <table>
 <tr>
@@ -34,11 +34,11 @@
 <c:forEach var="specimen" items="${specimens}">
 	<tr>
 	<td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-	<td><nobr><a href="specimen.form?specimenId=${specimen.id}">${specimen.identifier}</a></nobr></td>
+	<td><nobr><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}">${specimen.identifier}</a></nobr></td>
 	<td><nobr>${specimen.location.displayString}</nobr></td>
 	<td><nobr>${specimen.provider.personName}</nobr></td>  <!-- TODO: fix/use proper name? -->
-	<td><a href="specimen.form?specimenId=${specimen.id}"><spring:message code="mdrtb.view" text="View"/></a></td>
-	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+	<td><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
+	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 	<td width="99%">&nbsp;</td>
 	</tr>
 </c:forEach>

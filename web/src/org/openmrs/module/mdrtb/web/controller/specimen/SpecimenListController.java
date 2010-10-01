@@ -24,7 +24,8 @@ public class SpecimenListController {
 	
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimenList(@RequestParam(required = true, value="patientId") int patientId, ModelMap map) {
+	public ModelAndView showSpecimenList(@RequestParam(required = true, value="patientId") Integer patientId,
+	                                     @RequestParam(required = true, value="patientProgramId") Integer patientProgramId, ModelMap map) {
 				
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		
@@ -34,6 +35,7 @@ public class SpecimenListController {
 		
 		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(patient);
 		
+		map.put("patientProgramId", patientProgramId);
 		map.put("patientId", patientId);
 		map.put("specimens", specimens);
 		

@@ -56,9 +56,10 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		
 		// clears the command object from the session
 		status.setComplete();
+		map.clear();
 		
 		// redirect to the new detail patient for this specimen
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId(), map);
 		
 	}
 }

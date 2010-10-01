@@ -12,19 +12,23 @@ public class SpecimenDeleteController {
 
 	// method to delete a test
 	@RequestMapping(params="testId")
-	public String deleteTest(@RequestParam("testId") Integer testId, @RequestParam("specimenId") Integer specimenId) {
+	public String deleteTest(@RequestParam(value = "testId", required = true) Integer testId, 
+	                         @RequestParam(value = "specimenId", required = true) Integer specimenId,
+	                         @RequestParam(value = "patientProgramId", required = true) Integer patientProgramId) {
 		
 		Context.getService(MdrtbService.class).deleteTest(testId);
 
-		return "redirect:specimen.form?specimenId=" + specimenId;
+		return "redirect:specimen.form?specimenId=" + specimenId + "&patientProgramId=" + patientProgramId;
 	}
 	
 	// method to delete a specimen
 	@RequestMapping(params = {"specimenId", "!testId"})
-	public String deleteSpecimen(@RequestParam("specimenId") Integer specimenId, @RequestParam("patientId") Integer patientId) {
+	public String deleteSpecimen(@RequestParam(value = "specimenId", required = true) Integer specimenId, 
+	                             @RequestParam(value = "patientId", required = true) Integer patientId,
+	                             @RequestParam(value = "patientProgramId", required = true) Integer patientProgramId) {
 		
 		Context.getService(MdrtbService.class).deleteSpecimen(specimenId);
 		
-		return "redirect:list.form?patientId=" + patientId;
+		return "redirect:list.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
 	}
 }

@@ -165,7 +165,8 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=specimen")
 	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult specimenErrors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = false, value = "testId") String testId, 
+	                                  @RequestParam(required = false, value = "testId") Integer testId, 
+	                                  @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
 	  
@@ -212,8 +213,9 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 		// clears the command object from the session
 		status.setComplete();
+		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId + "&patientProgramId=" + patientProgramId, map);
 		
 	}
     
@@ -232,7 +234,8 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=smear")
 	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult smearErrors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") String specimenId) {
+	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
+	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {
 	                     
 		// validate
     	if(smear != null) {
@@ -244,8 +247,9 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 		// clears the command object from the session
 		status.setComplete();
+		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + smear.getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + smear.getId() + "&patientProgramId=" + patientProgramId, map);
 		
 	}
     
@@ -264,7 +268,8 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=culture")
 	public ModelAndView processSubmit(@ModelAttribute("culture") Culture culture, BindingResult cultureErrors,
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") String specimenId) {
+	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
+	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {
 	                     
 		// validate
     	if(culture != null) {
@@ -276,8 +281,9 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 		// clears the command object from the session
 		status.setComplete();
+		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + culture.getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + culture.getId() + "&patientProgramId=" + patientProgramId, map);
 		
 	}
     
@@ -297,8 +303,9 @@ public class SpecimenController extends AbstractSpecimenController {
     @RequestMapping(method = RequestMethod.POST, params = "submissionType=dst")
 	public ModelAndView processSubmit(@ModelAttribute("dst") Dst dst, BindingResult dstErrors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") String specimenId,
-	                                  @RequestParam(required = false, value = "testId") String testId, 
+	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
+	                                  @RequestParam(required = false, value = "testId") Integer testId, 
+	                                  @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, 
 	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
 	                     
 		// validate
@@ -354,8 +361,9 @@ public class SpecimenController extends AbstractSpecimenController {
 		
 		// clears the command object from the session
 		status.setComplete();
+		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId());
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId() + "&patientProgramId=" + patientProgramId, map);
 		
 	}
     
