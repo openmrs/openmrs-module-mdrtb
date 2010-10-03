@@ -234,9 +234,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		if(!(specimen.getSpecimen() instanceof Encounter)){
 			throw new APIException("Not a valid specimen implementation for this service implementation.");
 		}
-				
+		//We need the specimen encounters to potentially be viewable by a bacteriology htmlform:
+		Encounter enc = (Encounter) specimen.getSpecimen();
+		String formIdWithWhichToViewEncounter = Context.getAdministrationService().getGlobalProperty("mdrtb.formIdToAttachToBacteriologyEntry");
+		try {
+		    if (formIdWithWhichToViewEncounter != null && !formIdWithWhichToViewEncounter.equals(""))
+		        enc.setForm(Context.getFormService().getForm(Integer.valueOf(formIdWithWhichToViewEncounter)));
+		} catch (Exception ex){
+		    log.error("Invalid formId found in global property mdrtb.formIdToAttachToBacteriologyEntry");
+		}
+		
 		// otherwise, go ahead and do the save
-		Context.getEncounterService().saveEncounter((Encounter) specimen.getSpecimen());
+		Context.getEncounterService().saveEncounter(enc);
 	}
 	
 	public void deleteSpecimen(Integer specimenId) {
