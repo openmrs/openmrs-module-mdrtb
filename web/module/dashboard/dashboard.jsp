@@ -39,7 +39,7 @@
 			modal: true,
 			draggable: false,
 			title: '<spring:message code="mdrtb.editProgram" text="Edit Program"/>',
-			width: '30%',
+			width: '50%',
 			position: 'left',
 		});
 
@@ -63,8 +63,20 @@
 		$j('#programCloseButton').click(function() {
 			$j('#programClosePopup').dialog('open');
 		});
-	
+
+		$j('#programCloseCancelButton').click(function() {
+			$j('#programClosePopup').dialog('close');
+		});
+
 		$j('#dateEnrolled').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
+		
+		$j('#dateCompleted').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
+
+		$j('#dateToClose').datepicker({		
 			dateFormat: 'dd/mm/yy',
 		 });
 
@@ -91,15 +103,36 @@
 <br/>
 -->
 
+<!--  MDR-TB PROGRAM STATUS BOX -->
+
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.programStatus" text="MDR-TB Program Status"/></b>
 <div class="box" style="margin:0px;">
+
 <table cellpadding="0" cellspacing="0">
 <tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <openmrs:formatDate date="${program.dateEnrolled}"/></td></tr>
 <tr><td><spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>: ${program.location.displayString}</td></tr>
 </table>
 
-<button id="programEditButton"><spring:message code="mdrtb.editProgram" text="Edit Program"/></button>  <button id="programCloseButton"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button>
+<br/>
+
+<table>
+<tr><td><spring:message code="mdrtb.previousDrugClassification" text="Registration Group - Previous Drug Use"/>:<br/>${program.classificationAccordingToPreviousDrugUse.concept.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/>${program.classificationAccordingToPreviousTreatment.concept.displayString}</td></tr>
+</table>
+
+<br/>
+
+<table>
+<c:if test="${!program.active}">
+<tr><td><spring:message code="mdrtb.completionDate" text="Completion Date"/>: <openmrs:formatDate date="${program.dateCompleted}"/></td></tr>
+<tr><td><spring:message code="mdrtb.outcome" text="Outcome"/>: ${program.outcome.concept.displayString}</td></tr>
+</c:if>
+</table>
+
+<button id="programEditButton"><spring:message code="mdrtb.editProgram" text="Edit Program"/></button> <c:if test="${program.active}"><button id="programCloseButton"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button></c:if>
 </div>
+
+<!--  EDIT PROGRAM POPUP -->
 
 <div id="programEditPopup">
 <form id="programEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/programEdit.form?patientProgramId=${program.id}" method="post" >
@@ -116,16 +149,76 @@
 </c:forEach>
 </select>	
 </td></tr>
+
+<tr><td>
+<spring:message code="mdrtb.previousDrugClassification" text="Registration Group - Previous Drug Use"/>:<br/>
+<select name="classificationAccordingToPreviousDrugUse">
+<option value=""/>
+<c:forEach var="classificationAccordingToPreviousDrugUse" items="${classificationsAccordingToPreviousDrugUse}">
+<option value="${classificationAccordingToPreviousDrugUse.id}" <c:if test="${classificationAccordingToPreviousDrugUse == program.classificationAccordingToPreviousDrugUse}">selected</c:if> >${classificationAccordingToPreviousDrugUse.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+
+<tr><td>
+<spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/>
+<select name="classificationAccordingToPreviousTreatment">
+<option value=""/>
+<c:forEach var="classificationAccordingToPreviousTreatment" items="${classificationsAccordingToPreviousTreatment}">
+<option value="${classificationAccordingToPreviousTreatment.id}" <c:if test="${classificationAccordingToPreviousTreatment == program.classificationAccordingToPreviousTreatment}">selected</c:if> >${classificationAccordingToPreviousTreatment.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+
+<c:if test="${!program.active}">
+<tr><td>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>: <input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>"/>
+</td></tr>
+<tr><td>
+<spring:message code="mdrtb.outcome" text="Outcome"/>:
+<select name="outcome">
+<c:forEach var="outcome" items="${outcomes}">
+<option value="${outcome.id}" <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+</c:if>
 </table>
+
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 </div>
 
-<div id="programClosePopup">
+<!-- END EDIT PROGRAM POPUP-->
 
+<!-- CLOSE PROGRAM POPUP -->
+
+<div id="programClosePopup">
+<form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
+<table cellspacing="2" cellpadding="2">
+<tr><td>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>: <input id="dateToClose" type="text" size="14" name="dateCompleted" value=""/>
+</td></tr>
+<tr><td>
+<spring:message code="mdrtb.outcome" text="Outcome"/>:
+<select name="outcome">
+<c:forEach var="outcome" items="${outcomes}">
+<option value="${outcome.id}">${outcome.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+</table>
+<button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> <button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+</form>
 </div>
 
+<!-- END CLOSE PROGRAM POPUP -->
+
+<!--  END MDR-TB PROGRAM STATUS BOX -->
+
 <br/>
+
+<!-- TREATMENT STATUS BOX -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.treatmentStatus" text="Treatment Status"/>: ${status.treatmentStatus.treatmentState.displayString}</b>
 <div class="box" style="margin:0px">
@@ -143,7 +236,11 @@ ${regimen.displayString}
 </table>
 </div>
 
+<!-- END TREATMENT STATUS BOX -->
+
 <br/>
+
+<!-- MDR-TB DIAGNOSIS BOX -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.mdrtbDiagnosis" text="MDR-TB Diagnosis"/></b>
 <div class="box" style="margin:0px">
@@ -157,7 +254,11 @@ ${regimen.displayString}
 
 </div>
 
+<!-- END MDR-TB DIAGNOSIS BOX -->
+
 <br/>
+
+<!-- LAB RESULTS STATUS BOX -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</b>
 <div class="box" style="margin:0px">
@@ -175,6 +276,8 @@ ${status.labResultsStatus.pendingLabResults.displayString}
 </table>
 
 </div>
+
+<!-- END LAB RESULTS STATUS BOX -->
 
 </div> <!-- end of page div -->
 

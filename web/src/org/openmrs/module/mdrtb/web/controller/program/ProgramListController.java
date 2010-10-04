@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,16 @@ public class ProgramListController {
 	@ModelAttribute("locations")
 	Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
+	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousTreatment")
+	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
 	@RequestMapping("/module/mdrtb/program/programList.form")

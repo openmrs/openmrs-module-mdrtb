@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,6 +25,8 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -493,7 +496,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	
     }
     
-   
+    public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes() {
+    	return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME));
+    }
+
+    public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousDrugUse() {
+    	return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE));
+    }
+  
+    public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousTreatment() {
+    	return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
+    }
+    
     
     public String getColorForConcept(Concept concept) {
     	if(concept == null) {
@@ -538,6 +552,19 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	 * Utility functions
 	 */
 	
+    private Set<ProgramWorkflowState> getPossibleWorkflowStates(Concept workflowConcept) {
+    	// get the mdrtb program via the name listed in global properties
+    	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+    	
+    	// get the workflow via the concept name
+    	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
+    		if (workflow.getConcept().equals(workflowConcept)) {
+    			return workflow.getSortedStates();
+    		}
+    	}
+    	return null;
+    }
+    
     
     private Map<Integer,String> loadCache(String mapAsString) {
     	Map<Integer,String> map = new HashMap<Integer,String>();

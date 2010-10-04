@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -14,6 +15,7 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
@@ -263,6 +265,21 @@ public interface MdrtbService extends OpenmrsService {
      * Returns all the possible drug to display in a DST result, in the order we want to display them
      */
     public List<Concept> getPossibleDrugTypesToDisplay();
+    
+    /**
+     * Returns all possible outcomes for the MDR-TB program
+     */
+    public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes();
+    
+    /**
+     * Returns all possible MDR-TB previous drug use classifications
+     */
+    public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousDrugUse();
+    
+    /**
+     * Returns all possible MDR-TB previous treatment classifications
+     */
+    public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousTreatment();
     
 	/**
      * Check to see what color to associate with a given result concept

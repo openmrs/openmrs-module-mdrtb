@@ -26,6 +26,9 @@ import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Obs;
+import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -102,8 +105,91 @@ public class SpecimenMigrationController {
 		Context.getEncounterService().retireEncounterType(Context.getEncounterService().getEncounterType("DST Result"), "retired as part of MDR-TB migration");
 		
 		
-		 return new ModelAndView("/module/mdrtb/pihaiti/specimenMigration");
+		 return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
 	}
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addWorkflows.form")
+    public ModelAndView addWorkflows() {
+    
+    	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+    	
+    	ProgramWorkflow previousDrug = new ProgramWorkflow();
+    	previousDrug.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE));
+    	previousDrug.setProgram(mdrtbProgram);
+    	
+    	ProgramWorkflowState newPatient = new ProgramWorkflowState();
+    	newPatient.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
+    	newPatient.setInitial(false);
+    	newPatient.setTerminal(false);
+    	previousDrug.addState(newPatient);
+    	
+    	ProgramWorkflowState previousFirstLine = new ProgramWorkflowState();
+    	previousFirstLine.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY));
+    	previousFirstLine.setInitial(false);
+    	previousFirstLine.setTerminal(false);
+    	previousDrug.addState(previousFirstLine);
+    	
+      	ProgramWorkflowState previousSecondLine = new ProgramWorkflowState();
+      	previousSecondLine.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS));
+      	previousSecondLine.setInitial(false);
+      	previousSecondLine.setTerminal(false);
+    	previousDrug.addState(previousSecondLine);
+    	
+    	mdrtbProgram.addWorkflow(previousDrug);
+    	
+    	ProgramWorkflow previousTreatment = new ProgramWorkflow();
+    	previousTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
+    	previousTreatment.setProgram(mdrtbProgram);
+    	
+    	ProgramWorkflowState newPatientTreatment = new ProgramWorkflowState();
+    	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
+    	newPatientTreatment.setInitial(false);
+    	newPatientTreatment.setTerminal(false);
+    	previousTreatment.addState(newPatientTreatment);
+    	
+    	ProgramWorkflowState relapse = new ProgramWorkflowState();
+    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT));
+    	relapse.setInitial(false);
+    	relapse.setTerminal(false);
+    	previousTreatment.addState(relapse);
+    	
+      	ProgramWorkflowState afterDefault = new ProgramWorkflowState();
+      	afterDefault.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_DEFAULT));
+      	afterDefault.setInitial(false);
+      	afterDefault.setTerminal(false);
+    	previousTreatment.addState(afterDefault);
+    	
+     	ProgramWorkflowState afterFailiureCat1 = new ProgramWorkflowState();
+     	afterFailiureCat1.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT));
+     	afterFailiureCat1.setInitial(false);
+     	afterFailiureCat1.setTerminal(false);
+    	previousTreatment.addState(afterFailiureCat1);
+    	
+    	ProgramWorkflowState afterFailiureCat2 = new ProgramWorkflowState();
+     	afterFailiureCat2.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT));
+     	afterFailiureCat2.setInitial(false);
+     	afterFailiureCat2.setTerminal(false);
+    	previousTreatment.addState(afterFailiureCat2);
+    	
+    	ProgramWorkflowState transfer = new ProgramWorkflowState();
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT));
+    	transfer.setInitial(false);
+    	transfer.setTerminal(false);
+    	previousTreatment.addState(transfer);
+    	
+    	ProgramWorkflowState other = new ProgramWorkflowState();
+    	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDR_TB_PATIENT));
+    	other.setInitial(false);
+    	other.setTerminal(false);
+    	previousTreatment.addState(other);
+    	
+    	mdrtbProgram.addWorkflow(previousTreatment);
+    	
+    	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     
 	private void initialize() {
 		testConstructConcepts = new HashSet<Concept>();

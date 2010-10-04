@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Location;
 import org.openmrs.PatientProgram;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
 import org.openmrs.module.mdrtb.status.Status;
@@ -38,6 +40,21 @@ public class DashboardController {
 	@ModelAttribute("locations")
 	Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
+	}
+	
+	@ModelAttribute("outcomes")
+	Collection<ProgramWorkflowState> getOutcomes() {		
+		return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
+	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousTreatment")
+	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
 	

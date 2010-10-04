@@ -17,6 +17,11 @@
 <!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
+<!--  these are to make sure that the datepicker appears above the popup -->
+<style type="text/css">
+	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
+    .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
+</style>
 
 <!-- CUSTOM JQUERY  -->
 <script type="text/javascript"><!--
@@ -37,6 +42,10 @@
 			$j('#programEnrollPopup').dialog('open');
 		});
 
+		$j('#dateEnrolled').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
+		
  	});
 -->
 </script>
@@ -62,11 +71,12 @@
 
 <!-- pop up for enrolling in a program -->
 <div id="programEnrollPopup">
-<form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patient.id}" method="post" >
+<form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
 <spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/>
 </td></tr>
+
 <tr><td>
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:
 <select name="location">
@@ -76,6 +86,27 @@
 </c:forEach>
 </select>	
 </td></tr>
+
+<tr><td>
+<spring:message code="mdrtb.previousDrugClassification" text="Registration Group - Previous Drug Use"/>:<br/>
+<select name="classificationAccordingToPreviousDrugUse">
+<option value=""/>
+<c:forEach var="classificationAccordingToPreviousDrugUse" items="${classificationsAccordingToPreviousDrugUse}">
+<option value="${classificationAccordingToPreviousDrugUse.id}" <c:if test="${classificationAccordingToPreviousDrugUse == program.classificationAccordingToPreviousDrugUse}">selected</c:if> >${classificationAccordingToPreviousDrugUse.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+
+<tr><td>
+<spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/>
+<select name="classificationAccordingToPreviousTreatment">
+<option value=""/>
+<c:forEach var="classificationAccordingToPreviousTreatment" items="${classificationsAccordingToPreviousTreatment}">
+<option value="${classificationAccordingToPreviousTreatment.id}" <c:if test="${classificationAccordingToPreviousTreatment == program.classificationAccordingToPreviousTreatment}">selected</c:if> >${classificationAccordingToPreviousTreatment.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+
 </table>
 <button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button>
 </form>
@@ -100,7 +131,7 @@
 <td><openmrs:formatDate date="${program.dateEnrolled}"/></td>
 <td><openmrs:formatDate date="${program.dateCompleted}"/></td>
 <td>${program.location.displayString}</td>
-<td>${!empty program.outcome ? program.outcome.displayString : '&nbsp;'}</td>
+<td>${!empty program.outcome ? program.outcome.concept.displayString : '&nbsp;'}</td>
 <td><a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${program.id}&patientId=${patientId}">
 <spring:message code="mdrtb.view" text="view" /></a></td>
 </tr>
