@@ -359,6 +359,21 @@
 		<defaultValue>false</defaultValue>
 		<description>If true, shows resistance probability warnings.  Currently experimental.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
+		<defaultValue>Specimen Collection</defaultValue>
+		<description>Name of the specimen collection encounter type.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.intake_encounter_type</property>
+		<defaultValue>MDR-TB Intake</defaultValue>
+		<description>Name of the intake encounter type.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.follow_up_encounter_type</property>
+		<defaultValue>MDR-TB Follow Up</defaultValue>
+		<description>Name of the follow-up encounter type.</description>
+	</globalProperty>
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">

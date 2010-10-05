@@ -240,6 +240,25 @@ ${regimen.displayString}
 
 <br/>
 
+<!--  VISIT STATUS BOX -->
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.visitStatus" text="Visit Status"/></b>
+<div class="box" style="margin:0px">
+
+<table cellspacing="0" cellpadding="0">
+<tr><td><spring:message code="mdrtb.intake" text="Intake"/>: ${! empty status.visitStatus.intakeVisits.value ? status.visitStatus.intakeVisits.value[0].displayString : ''}</td></tr>
+<tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>: ${! empty status.visitStatus.followUpVisits.value ? status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString : ''}</td></tr>
+<tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Recent Specimen Collection"/>: ${! empty status.visitStatus.specimenCollectionVisits.value ? status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString : ''}</td></tr>
+<tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>: ${! empty status.visitStatus.scheduledFollowUpVisits.value ? status.visitStatus.scheduledFollowUpVisits.value[0].displayString : ''}</td></tr>
+</table>
+
+</div>
+
+<!--  END VISIT STATUS BOX -->
+
+<!-- VISIT STATUS POP-UP -->
+
+<br/>
+
 <!-- MDR-TB DIAGNOSIS BOX -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.mdrtbDiagnosis" text="MDR-TB Diagnosis"/></b>

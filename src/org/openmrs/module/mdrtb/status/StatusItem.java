@@ -15,6 +15,12 @@ public class StatusItem {
 	
 	private List<StatusFlag> flags = new LinkedList<StatusFlag>();
 
+	public StatusItem() {
+	}
+	
+	public StatusItem(Object value) {
+		this.value = value;
+	}
 	
     public Object getValue() {
     	return value;

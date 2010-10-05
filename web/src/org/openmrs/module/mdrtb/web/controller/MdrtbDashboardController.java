@@ -19,8 +19,10 @@ import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
+import org.openmrs.module.mdrtb.status.VisitStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
+import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Controller;
@@ -78,6 +80,10 @@ public class MdrtbDashboardController {
 		Status treatmentStatus = new TreatmentStatusCalculator(new DashboardTreatmentStatusRenderer()).calculate(program);
 		statusMap.put("treatmentStatus", treatmentStatus);
 		
+		// visits status
+		Status visitStatus = new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program);
+		statusMap.put("visitStatus", visitStatus);
+		
 		return statusMap;
 		
 	}
@@ -119,9 +125,8 @@ public class MdrtbDashboardController {
 		return new ModelAndView("/module/mdrtb/dashboard/dashboard", map);
 
 	}
-	
-	
-	
+    
+    // TODO: this most likely will not be needed... it is not currently used
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST)
 	public String updateStatus(@ModelAttribute("status") Map<String, Status> statusMap,  BindingResult errors, 

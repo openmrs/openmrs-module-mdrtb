@@ -13,7 +13,7 @@ import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
 public abstract class TestImpl implements Test {
 	
-	Obs test;  // the top-level obs that holds all the data for this smear
+	protected Obs test;  // the top-level obs that holds all the data for this smear
 	
 	/** implementing subclasses must override this method to define their type */
 	public abstract String getTestType();

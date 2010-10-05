@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
@@ -80,6 +82,28 @@ public class StatusUtil {
 		
 		return RegimenUtils.getRegimenHistory(program.getPatient()).getRegimensBetweenDates(calendar.getTime(), 
 			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
+	}
+	
+	public static List<Encounter> getMdrtbEncountersDuringProgram(PatientProgram program) {
+	
+		if (program == null || program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(program.getDateEnrolled());
+		
+		// TODO: do we need to fix this to be only one month before enrollment?  how do we define enrollment?
+		calendar.add(Calendar.MONTH, -2);
+		
+		// only get MDR-TB specific encounters
+		List<EncounterType> types = new LinkedList<EncounterType>();
+		types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
+    	
+		
+		return Context.getEncounterService().getEncounters(program.getPatient(), null, calendar.getTime(), program.getDateCompleted(), null, types, null, false);
 	}
 	
 	public static Date getTreatmentStartDateDuringProgram(PatientProgram program) {

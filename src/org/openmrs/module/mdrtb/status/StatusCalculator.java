@@ -5,7 +5,7 @@ import org.openmrs.PatientProgram;
 
 public interface StatusCalculator {
 
-	public Status calculate(PatientProgram patient);
+	public Status calculate(PatientProgram program);
 	
 	// TODO: do we really want/need these
 	//public List<Status> calculate(List<Patient> patients);
