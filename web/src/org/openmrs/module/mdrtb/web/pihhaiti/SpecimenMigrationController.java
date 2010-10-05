@@ -119,19 +119,19 @@ public class SpecimenMigrationController {
     	
     	ProgramWorkflowState newPatient = new ProgramWorkflowState();
     	newPatient.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
-    	newPatient.setInitial(false);
+    	newPatient.setInitial(true);
     	newPatient.setTerminal(false);
     	previousDrug.addState(newPatient);
     	
     	ProgramWorkflowState previousFirstLine = new ProgramWorkflowState();
     	previousFirstLine.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY));
-    	previousFirstLine.setInitial(false);
+    	previousFirstLine.setInitial(true);
     	previousFirstLine.setTerminal(false);
     	previousDrug.addState(previousFirstLine);
     	
       	ProgramWorkflowState previousSecondLine = new ProgramWorkflowState();
       	previousSecondLine.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS));
-      	previousSecondLine.setInitial(false);
+      	previousSecondLine.setInitial(true);
       	previousSecondLine.setTerminal(false);
     	previousDrug.addState(previousSecondLine);
     	
@@ -143,43 +143,43 @@ public class SpecimenMigrationController {
     	
     	ProgramWorkflowState newPatientTreatment = new ProgramWorkflowState();
     	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
-    	newPatientTreatment.setInitial(false);
+    	newPatientTreatment.setInitial(true);
     	newPatientTreatment.setTerminal(false);
     	previousTreatment.addState(newPatientTreatment);
     	
     	ProgramWorkflowState relapse = new ProgramWorkflowState();
     	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT));
-    	relapse.setInitial(false);
+    	relapse.setInitial(true);
     	relapse.setTerminal(false);
     	previousTreatment.addState(relapse);
     	
       	ProgramWorkflowState afterDefault = new ProgramWorkflowState();
       	afterDefault.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_DEFAULT));
-      	afterDefault.setInitial(false);
+      	afterDefault.setInitial(true);
       	afterDefault.setTerminal(false);
     	previousTreatment.addState(afterDefault);
     	
      	ProgramWorkflowState afterFailiureCat1 = new ProgramWorkflowState();
      	afterFailiureCat1.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT));
-     	afterFailiureCat1.setInitial(false);
+     	afterFailiureCat1.setInitial(true);
      	afterFailiureCat1.setTerminal(false);
     	previousTreatment.addState(afterFailiureCat1);
     	
     	ProgramWorkflowState afterFailiureCat2 = new ProgramWorkflowState();
      	afterFailiureCat2.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT));
-     	afterFailiureCat2.setInitial(false);
+     	afterFailiureCat2.setInitial(true);
      	afterFailiureCat2.setTerminal(false);
     	previousTreatment.addState(afterFailiureCat2);
     	
     	ProgramWorkflowState transfer = new ProgramWorkflowState();
     	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT));
-    	transfer.setInitial(false);
+    	transfer.setInitial(true);
     	transfer.setTerminal(false);
     	previousTreatment.addState(transfer);
     	
     	ProgramWorkflowState other = new ProgramWorkflowState();
     	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDR_TB_PATIENT));
-    	other.setInitial(false);
+    	other.setInitial(true);
     	other.setTerminal(false);
     	previousTreatment.addState(other);
     	
@@ -214,6 +214,8 @@ public class SpecimenMigrationController {
 		addConceptMapping("NEGATIVE", "NEGATIVE");
 		addConceptMapping("CONTAMINATED", "CONTAMINATED");
 		
+		
+		// TODO: probably should add all the drug concepts that I mapped manually here...
 		
 		// add new concepts
 		// NOTE: need to add french names as well!
