@@ -19,7 +19,6 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
@@ -58,13 +57,6 @@ public interface MdrtbService extends OpenmrsService {
      */
     public Concept getConcept(String [] conceptMapping);
    
-    /**
-     * Given a patient ID, return a patient wrapped in a MdrtbPatientWrapper
-     */
-    @Transactional(readOnly=true)
-    public MdrtbPatientWrapper getMdrtbPatient(Integer patientId);
-    
-    
     /**
      * Creates a new specimen, associated with the given patient
      */

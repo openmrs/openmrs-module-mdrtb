@@ -37,8 +37,6 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapper;
-import org.openmrs.module.mdrtb.patient.MdrtbPatientWrapperImpl;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -146,24 +144,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public Concept getConcept(String [] conceptMapping) {
 		return conceptMap.lookup(conceptMapping);
 	}
-	
-	public MdrtbPatientWrapper getMdrtbPatient(Integer patientId) {
-		if(patientId == null) {
-			log.error("Unable to create MdrtbPatient, patient is null");
-			return null;
-		}
-		
-		Patient patient = Context.getPatientService().getPatient(patientId);
-		
-		if(patient == null) {
-			log.error("Unable to create MdrtbPatient, no Patient with patient ID " + patientId);
-			return null;
-		}
-		else {
-			return new MdrtbPatientWrapperImpl(patient);
-		}
-	}
-    
 	
 	public Specimen createSpecimen(Patient patient) {
 		// return null if the patient is null
