@@ -35,7 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/module/mdrtb/dashboard/dashboard.form")
-public class DashboardController {
+public class MdrtbDashboardController {
 	
 	@ModelAttribute("locations")
 	Collection<Location> getPossibleLocations() {

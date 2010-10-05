@@ -95,6 +95,10 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
     protected Map<String, Object> referenceData(HttpServletRequest request, Object obj, Errors err) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
+        	
+        		// hack to add in the program id until we get rid of this controller
+        		map.put("patientProgramId", request.getParameter("patientProgramId")); 	
+        	
 	            AdministrationService as = Context.getAdministrationService();
 	            FormService fs = Context.getFormService();
 	            ConceptService cs = Context.getConceptService();

@@ -34,7 +34,7 @@
 			autoOpen: false,
 			modal: true,
 			title: '<spring:message code="mdrtb.enrollmentEnroll" text="Enroll in Program"/>',
-			width: '30%',
+			width: '50%',
 			position: 'left'
 		});
 				
