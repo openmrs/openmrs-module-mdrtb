@@ -73,7 +73,7 @@
 			modal: true,
 			draggable: false,
 			title: '<spring:message code="mdrtb.visits" text="Visits"/>',
-			width: '75%',
+			width: '60%',
 			position: 'left'
 		});
 
@@ -368,8 +368,8 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>: ${status.labResultsStatus.diagnosticSmear.displayString}</td></tr>
-<tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>: ${status.labResultsStatus.diagnosticCulture.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>: <a href="${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</a></td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>: <a href="${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</a></td></tr>
 <tr><td><spring:message code="mdrtb.resistanceType" text="Resistance Type"/>: ${status.labResultsStatus.tbClassification.displayString}</td></tr>
 <tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>: ${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
 </table>
@@ -386,15 +386,17 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: ${status.labResultsStatus.mostRecentSmear.displayString}</td></tr>
-<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>: ${status.labResultsStatus.mostRecentCulture.displayString}</td></tr>
+<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: <a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</a></td></tr>
+<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>: <a href="${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</a></td></tr>
 </table>
 
 <br/>
 
 <table cellspacing="0" cellpadding="0">
 <tr><td><spring:message code="mdrtb.pendingLabResults" text="Pending Lab Results"/></td></tr>
-${status.labResultsStatus.pendingLabResults.displayString}
+<c:forEach var="pendingLabResult" items="${status.labResultsStatus.pendingLabResults.value}">
+<tr><td><a href="${pendingLabResult.link}">${pendingLabResult.displayString}</a></td></tr>
+</c:forEach>
 </table>
 
 </div>

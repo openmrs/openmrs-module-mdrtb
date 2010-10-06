@@ -10,6 +10,7 @@ import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
+import org.openmrs.module.mdrtb.status.LabResultsStatus;
 import org.openmrs.module.mdrtb.status.LabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
@@ -17,29 +18,29 @@ import org.openmrs.web.WebConstants;
 
 public class DashboardLabResultsStatusRenderer implements LabResultsStatusRenderer {
 	
-	public String renderSmear(Smear smear) {
+	public void renderSmear(StatusItem item, LabResultsStatus status) {
+		
+		Smear smear = (Smear) item.getValue();
 		
 		if (smear != null) {
 			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
 			        smear.getResultDate() != null ? DateFormat.getDateInstance().format(smear.getResultDate()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
-			return "<a href=\"/"
-			        + WebConstants.WEBAPP_NAME
-			        + "/module/mdrtb/specimen/specimen.form?specimenId="
-			        + smear.getSpecimenId()
-			        + "&testId="
-			        + smear.getId()
-			        + "\">"
-			        + Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params,
-			            "{0} on {1} at {2}", Context.getLocale()) + "</a>";
+			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
+			        + smear.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
+			
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
+			
+			
 		} else {
-			return "";
-			//return Context.getMessageSourceService().getMessage("mdrtb.noSmears");
+			// TODO: do we want to set a "No smears" message?
 		}
 	}
 	
-	public String renderCulture(Culture culture) {
+	public void renderCulture(StatusItem item, LabResultsStatus status) {
+		
+		Culture culture = (Culture) item.getValue();
 		
 		if (culture != null) {
 			String[] params = {
@@ -47,18 +48,12 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			        culture.getResultDate() != null ? DateFormat.getDateInstance().format(culture.getResultDate()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			
-			return "<a href=\"/"
-			        + WebConstants.WEBAPP_NAME
-			        + "/module/mdrtb/specimen/specimen.form?specimenId="
-			        + culture.getSpecimenId()
-			        + "&testId="
-			        + culture.getId()
-			        + "\">"
-			        + Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params,
-			            "{0} on {1} at {2}", Context.getLocale()) + "</a>";
+			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
+				+ culture.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
+			     
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
 		} else {
-			return "";
-			//return Context.getMessageSourceService().getMessage("mdrtb.noCultures");
+			 // TODO: do we want to set a "No cultures" message
 		}
 	}
 	
@@ -66,43 +61,40 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
     	return DashboardStatusRendererUtil.renderDrugList(drugs);
     }
 	
-	public String renderPendingLabResults(List<Test> tests) {
-		StringBuffer displayString = new StringBuffer();
+	@SuppressWarnings("unchecked")
+    public void renderPendingLabResults(StatusItem pendingLabResults, LabResultsStatus status) {
 		DateFormat df = DateFormat.getDateInstance();
 		
-		for (Test test : tests) {
-			TestStatus status = test.getStatus();
+		List<StatusItem> tests = (List<StatusItem>) pendingLabResults.getValue();
+		
+		for (StatusItem item : tests) {
+			Test test = (Test) item.getValue();
+			TestStatus testStatus = test.getStatus();
 			
-			// kind of hacky to include the a href and tr/td here
-			displayString.append("<tr><td><a href=\"/" + WebConstants.WEBAPP_NAME
-			        + "/module/mdrtb/specimen/specimen.form?specimenId=" + test.getSpecimenId() + "&testId=" + test.getId()
-			        + "\">");
-			
+			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" 
+						+ test.getSpecimenId() + "&testId=" + test.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
+			 
 			// get the test type and capitalize the first character
 			String testType = Character.toUpperCase(test.getTestType().charAt(0)) + test.getTestType().substring(1);
 			
-			if (status == TestStatus.STARTED) {
+			if (testStatus == TestStatus.STARTED) {
 				String[] params = { test.getLab().getDisplayString(), df.format(test.getStartDate()), testType };
-				displayString.append(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.started", params,
+				item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.started", params,
 				    "{2} started on {1} at {0}", Context.getLocale()));
-			} else if (status == TestStatus.RECEIVED) {
+			} else if (testStatus == TestStatus.RECEIVED) {
 				String[] params = { test.getLab().getDisplayString(), df.format(test.getDateReceived()), testType };
-				displayString.append(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.received", params,
+				item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.received", params,
 				    "{2} received by {0} at {1}", Context.getLocale()));
-			} else if (status == TestStatus.ORDERED) {
+			} else if (testStatus == TestStatus.ORDERED) {
 				String[] params = { test.getLab().getDisplayString(), df.format(test.getDateOrdered()), testType };
-				displayString.append(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.ordered", params,
+				item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.ordered", params,
 				    "{2} ordered on {1} from {0}", Context.getLocale()));
 			} else {
 				String[] params = { testType };
-				displayString.append(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.unknown", params,
+				item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.labResultsStatus.unknown", params,
 				    "{0} with status unknown", Context.getLocale()));
 			}
-			
-			displayString.append("</a></td></tr>");
 		}
-		
-		return displayString.toString();
 	}
 
     public String renderTbClassification(TbClassification classification) {

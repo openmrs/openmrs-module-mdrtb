@@ -46,7 +46,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		findDiagnosticSmearAndCulture(specimens, status);
 		
 		// determine any pending lab results
-		status.addItem("pendingLabResults", findPendingLabResults(specimens));
+		findPendingLabResults(specimens, status);
 		
 		// determine the resistance profile
 		StatusItem resistanceProfile = calculateResistanceProfile(specimens);
@@ -57,8 +57,8 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		
 		// we want to to reverse the order of the specimens here so that first=most recent
 		Collections.reverse(specimens);
-		status.addItem("mostRecentSmear", findMostRecentSmear(specimens));
-		status.addItem("mostRecentCulture", findMostRecentCulture(specimens));
+		findMostRecentSmear(specimens, status);
+		findMostRecentCulture(specimens, status);
 		status.addItem("cultureConversion", calculateCultureConversion(specimens));
 		
 		return status;
@@ -233,23 +233,23 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		return null;
 	}
 	
-	private StatusItem findPendingLabResults(List<Specimen> specimens) {
+	private void findPendingLabResults(List<Specimen> specimens, LabResultsStatus status) {
 		StatusItem pendingLabResults = new StatusItem();
 		
-		List<Test> tests = new LinkedList<Test>();
+		List<StatusItem> tests = new LinkedList<StatusItem>();
 		
 		for (Specimen specimen : specimens) {
 			for (Test test : specimen.getTests()) {
 				if (test.getStatus() != TestStatus.COMPLETED) { // TODO: do I need to test if date equals "0" or something like that?
-					tests.add(test);
+					tests.add(new StatusItem(test));
 				}
 			}
 		}
 		
 		pendingLabResults.setValue(tests);
-		pendingLabResults.setDisplayString(renderer.renderPendingLabResults(tests));
+		renderer.renderPendingLabResults(pendingLabResults, status);
 		
-		return pendingLabResults;
+		status.addItem("pendingLabResults", pendingLabResults);
 	}
 	
 	// diagnostic smear and culture defined as first smear and culture results from the specimens associated with the program
@@ -258,43 +258,48 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		Smear smear = findFirstCompletedSmearInList(specimens);
 		StatusItem diagnosticSmear = new StatusItem();
 		diagnosticSmear.setValue(smear);
-		diagnosticSmear.setDisplayString(renderer.renderSmear(smear));
+		renderer.renderSmear(diagnosticSmear, status);
 		
 		Culture culture = findFirstCompletedCultureInList(specimens);
 		StatusItem diagnosticCulture = new StatusItem();
 		diagnosticCulture.setValue(culture);
-		diagnosticCulture.setDisplayString(renderer.renderCulture(culture));
+		renderer.renderCulture(diagnosticCulture, status);
 		
 		status.addItem("diagnosticSmear", diagnosticSmear);
 		status.addItem("diagnosticCulture", diagnosticCulture);
     }
 	
-    private StatusItem findMostRecentSmear(List<Specimen> specimens) {
+    private void findMostRecentSmear(List<Specimen> specimens, LabResultsStatus status) {
     	StatusItem mostRecentCompletedSmear = new StatusItem();
 	
 		Smear smear = findFirstCompletedSmearInList(specimens);
 		mostRecentCompletedSmear.setValue(smear);
-		mostRecentCompletedSmear.setDisplayString(renderer.renderSmear(smear));
+		renderer.renderSmear(mostRecentCompletedSmear, status);
 		
+		status.addItem("mostRecentSmear", mostRecentCompletedSmear);
+		
+		/**
 		if (smear == null) {
 			mostRecentCompletedSmear.addFlag(renderer.createNoSmearsFlag());
 		}
-			
-		return mostRecentCompletedSmear;
+		*/
+
     }
 	
-    private StatusItem findMostRecentCulture(List<Specimen> specimens) {
+    private void findMostRecentCulture(List<Specimen> specimens, LabResultsStatus status) {
     	StatusItem mostRecentCompletedCulture = new StatusItem();
     	
 		Culture culture = findFirstCompletedCultureInList(specimens);
 		mostRecentCompletedCulture.setValue(culture);
-		mostRecentCompletedCulture.setDisplayString(renderer.renderCulture(culture));
+		renderer.renderCulture(mostRecentCompletedCulture, status);
 		
+		status.addItem("mostRecentCulture", mostRecentCompletedCulture);
+		
+		/**
 		if (culture == null) {
 			mostRecentCompletedCulture.addFlag(renderer.createNoCulturesFlag());
 		}
-			
-		return mostRecentCompletedCulture;
+		*/
     }
     
 	private Smear findFirstCompletedSmearInList(List<Specimen> specimens) {

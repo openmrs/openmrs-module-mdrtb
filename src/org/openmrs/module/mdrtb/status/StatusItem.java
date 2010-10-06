@@ -13,6 +13,8 @@ public class StatusItem {
 	
 	private String displayString;
 	
+	private String link;
+	
 	private List<StatusFlag> flags = new LinkedList<StatusFlag>();
 
 	public StatusItem() {
@@ -46,7 +48,15 @@ public class StatusItem {
     	this.displayString = displayString;
     }
 
-    public void setFlags(List<StatusFlag> flags) {
+    public void setLink(String link) {
+	    this.link = link;
+    }
+
+	public String getLink() {
+	    return link;
+    }
+
+	public void setFlags(List<StatusFlag> flags) {
 	    this.flags = flags;
     }
 

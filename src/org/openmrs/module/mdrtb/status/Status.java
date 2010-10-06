@@ -20,11 +20,11 @@ abstract public class Status {
 		this.program = program;
 	}
 	
-    public PatientProgram getPatient() {
+    public PatientProgram getPatientProgram() {
     	return program;
     }
 
-    public void setPatient(PatientProgram program) {
+    public void setPatientProgram(PatientProgram program) {
     	this.program = program;
     }
 	
