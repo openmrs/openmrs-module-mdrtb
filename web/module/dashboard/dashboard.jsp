@@ -68,6 +68,19 @@
 			$j('#programClosePopup').dialog('close');
 		});
 
+		$j('#visitStatusPopup').dialog({
+			autoOpen: false,
+			modal: true,
+			draggable: false,
+			title: '<spring:message code="mdrtb.visits" text="Visits"/>',
+			width: '75%',
+			position: 'left'
+		});
+
+		$j('#visitStatusButton').click(function() {
+			$j('#visitStatusPopup').dialog('open');
+		});
+		
 		$j('#dateEnrolled').datepicker({		
 			dateFormat: 'dd/mm/yy',
 		 });
@@ -251,11 +264,101 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>: ${! empty status.visitStatus.scheduledFollowUpVisits.value ? status.visitStatus.scheduledFollowUpVisits.value[0].displayString : ''}</td></tr>
 </table>
 
+<button id="visitStatusButton"><spring:message code="mdrtb.viewAllVisits" text="View All Visits"/></button>
+
 </div>
 
 <!--  END VISIT STATUS BOX -->
 
-<!-- VISIT STATUS POP-UP -->
+<!-- VISIT STATUS POPUP -->
+<div id="visitStatusPopup">
+
+<c:if test="${fn:length(status.visitStatus.intakeVisits.value) > 0}">
+<b><spring:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+</tr>
+<c:forEach var="encounterStatus" items="${status.visitStatus.intakeVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+
+<c:if test="${fn:length(status.visitStatus.followUpVisits.value) > 0}">
+<b><spring:message code="mdrtb.followUpVisits" text="Follow Up Visits"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+</tr>
+<c:forEach var="encounterStatus" items="${status.visitStatus.followUpVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+
+<c:if test="${fn:length(status.visitStatus.scheduledFollowUpVisits.value) > 0}">
+<b><spring:message code="mdrtb.scheduledFollowUpVisits" text="Future Follow-up Visits Scheduled"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+</tr>
+<c:forEach var="encounterStatus" items="${status.visitStatus.scheduledFollowUpVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+
+<c:if test="${fn:length(status.visitStatus.specimenCollectionVisits.value) > 0}">
+<b><spring:message code="mdrtb.specimenCollections" text="Specimen Collections"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+</tr>
+<c:forEach var="encounterStatus" items="${status.visitStatus.specimenCollectionVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+</div>
+
+<!--  END VISIT STATUS POPUP -->
+
 
 <br/>
 
