@@ -258,10 +258,31 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><spring:message code="mdrtb.intake" text="Intake"/>: ${! empty status.visitStatus.intakeVisits.value ? status.visitStatus.intakeVisits.value[0].displayString : ''}</td></tr>
-<tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>: ${! empty status.visitStatus.followUpVisits.value ? status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString : ''}</td></tr>
-<tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Recent Specimen Collection"/>: ${! empty status.visitStatus.specimenCollectionVisits.value ? status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString : ''}</td></tr>
-<tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>: ${! empty status.visitStatus.scheduledFollowUpVisits.value ? status.visitStatus.scheduledFollowUpVisits.value[0].displayString : ''}</td></tr>
+
+<tr><td><spring:message code="mdrtb.intake" text="Intake"/>: 
+<c:if test="${! empty status.visitStatus.intakeVisits.value}">
+<a href="${status.visitStatus.intakeVisits.value[0].link}">${status.visitStatus.intakeVisits.value[0].displayString}</a>
+</c:if>
+</td></tr>
+
+<tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>: 
+<c:if test="${! empty status.visitStatus.followUpVisits.value}">
+<a href="${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].link}">${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString}</a>
+</c:if>
+</td></tr>
+
+<tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Specimen Collection"/>: 
+<c:if test="${! empty status.visitStatus.specimenCollectionVisits.value}">
+<a href="${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].link}">${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString}</a>
+</c:if>
+</td></tr>
+
+<tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>: 
+<c:if test="${! empty status.visitStatus.scheduledFollowUpVisits.value}">
+<a href="${status.visitStatus.scheduledFollowUpVisits.value[0].link}">${status.visitStatus.scheduledFollowUpVisits.value[0].displayString}</a>
+</c:if>
+</td></tr>
+
 </table>
 
 <button id="visitStatusButton"><spring:message code="mdrtb.viewAllVisits" text="View All Visits"/></button>
@@ -287,6 +308,7 @@ ${regimen.displayString}
 <td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
 <td>${encounterStatus.value.location.displayString}</td>
 <td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
 </tr>
 </c:forEach>
 </table>
@@ -308,6 +330,7 @@ ${regimen.displayString}
 <td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
 <td>${encounterStatus.value.location.displayString}</td>
 <td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
 </tr>
 </c:forEach>
 </table>
@@ -329,6 +352,7 @@ ${regimen.displayString}
 <td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
 <td>${encounterStatus.value.location.displayString}</td>
 <td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
 </tr>
 </c:forEach>
 </table>
@@ -350,6 +374,7 @@ ${regimen.displayString}
 <td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
 <td>${encounterStatus.value.location.displayString}</td>
 <td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
 </tr>
 </c:forEach>
 </table>

@@ -47,8 +47,8 @@ public class VisitStatusCalculator implements StatusCalculator {
     		StatusItem visit = new StatusItem();
     		visit.setValue(encounter);
     		visit.setDate(encounter.getEncounterDatetime());
-    		visit.setDisplayString(this.renderer.renderVisit(encounter));
-    		
+    		renderer.renderVisit(visit, status);
+    	
     		// now place the visit in the appropriate "bucket"
     		if (encounter.getEncounterType().equals(intakeType)) {
     			intakeVisits.add(visit);
