@@ -1,6 +1,9 @@
+/**
 table,div,td, thead,tbody {
 border-collapse: collapse;
 }
+*/
+
 input {
 autocomplete:off;	
 }	
