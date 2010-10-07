@@ -285,6 +285,8 @@ ${regimen.displayString}
 
 </table>
 
+<button onClick="window.location='${status.visitStatus.newIntakeVisit.link}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+<button onClick="window.location='${status.visitStatus.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 <button id="visitStatusButton"><spring:message code="mdrtb.viewAllVisits" text="View All Visits"/></button>
 
 </div>
@@ -302,6 +304,7 @@ ${regimen.displayString}
 <td><spring:message code="mdrtb.date" text="Date"/></td>
 <td><spring:message code="mdrtb.location" text="Location"/></td>
 <td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
 </tr>
 <c:forEach var="encounterStatus" items="${status.visitStatus.intakeVisits.value}">
 <tr>
@@ -324,6 +327,7 @@ ${regimen.displayString}
 <td><spring:message code="mdrtb.date" text="Date"/></td>
 <td><spring:message code="mdrtb.location" text="Location"/></td>
 <td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
 </tr>
 <c:forEach var="encounterStatus" items="${status.visitStatus.followUpVisits.value}">
 <tr>
@@ -379,6 +383,10 @@ ${regimen.displayString}
 </c:forEach>
 </table>
 </c:if>
+<br/>
+<button onClick="window.location='${status.visitStatus.newIntakeVisit.link}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+<button onClick="window.location='${status.visitStatus.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+
 
 </div>
 

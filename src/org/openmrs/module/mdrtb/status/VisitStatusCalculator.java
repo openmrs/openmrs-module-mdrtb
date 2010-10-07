@@ -72,6 +72,16 @@ public class VisitStatusCalculator implements StatusCalculator {
     	status.addItem("scheduledFollowUpVisits", new StatusItem(scheduledFollowUpVisits));
     	status.addItem("followUpVisits", new StatusItem(followUpVisits));
     	
+    	// now handle adding the links that we should use for the new intake and follow-up visits
+    	// (the logic to determine these links is basically delegated to the renderer
+    	StatusItem newIntakeVisit = new StatusItem();
+    	renderer.renderNewIntakeVisit(newIntakeVisit, status);
+    	status.addItem("newIntakeVisit", newIntakeVisit);
+    	
+     	StatusItem newFollowUpVisit = new StatusItem();
+    	renderer.renderNewFollowUpVisit(newFollowUpVisit, status);
+    	status.addItem("newFollowUpVisit", newFollowUpVisit);
+    	
     	return status;
     }
 
