@@ -4,6 +4,10 @@ border-collapse: collapse;
 }
 */
 
+table,div,td,thead,tbody {
+	border-color: #8FABC7
+}
+
 input {
 autocomplete:off;	
 }	

@@ -1,9 +1,15 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
+<style type="text/css">
+	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+	.chartCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+</style>
+
+
 <!-- PATIENT CHART -->
 <div id="patientChart" align="center">
-<table style="border:2px solid #8FABC7; font-size: .9em;">
+<table style="border:2px solid #8FABC7; font-size: .9em; border-spacing:0px;">
 
 <!-- START HEADER ROW -->
 <thead>

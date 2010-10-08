@@ -1,9 +1,8 @@
 
 <br />
 </div>
-</div>
 
-<div id="footer">
+<div id="footer" style="clear:both">
 <div id="footerInner"><span id="localeOptions"> <%  //removes last instance of lang= from querystring
 					String qs = request.getQueryString();
 					if (qs == null)
@@ -37,6 +36,8 @@ ${databaseVersion}</span>
 		src="${pageContext.request.contextPath}/images/problem.gif"
 		align="top"> Expected: ${databaseVersionExpected}</span>
 </c:if></div>
+</div>
+
 </div>
 
 </body>

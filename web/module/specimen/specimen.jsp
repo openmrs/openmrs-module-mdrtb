@@ -889,3 +889,6 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </div> <!-- END OF TEST DIV -->
 
 </div> <!-- END OF SPECIMEN DIV -->
+
+
+<!--  TODO: add footer back in once alignment is fixed -->

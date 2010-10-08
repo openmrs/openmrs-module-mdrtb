@@ -36,12 +36,9 @@
 		<li <c:if test='<%= request.getRequestURI().contains("chart") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/chart/chart.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.chart" text="Chart"/></a></li>
 		
-		
-	<!-- 	
 		<li <c:if test='<%= request.getRequestURI().contains("visits") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.visits" text="Visits"/></a></li>
-		-->
-		
+			
 				
 		<li <c:if test='<%= request.getRequestURI().contains("regimen") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.regimens" text="Regimens"/></a></li>

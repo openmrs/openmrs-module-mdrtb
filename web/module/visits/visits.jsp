@@ -3,104 +3,130 @@
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
-<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
-		
-<table class="portletTable" style="border-spacing:20px;border-collapse:separate;border-style:none;">
-<tr><td style="vertical-align:top;">	
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${patientId}"/>
 
-			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.formsPortlet.links" type="html">
-				<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
-					<div style="font-size:80%;">
-							<c:forEach items="${extension.links}" var="link">
-								<c:choose>
-									<c:when test="${fn:startsWith(link.key, 'module/')}">
-										<%-- Added for backwards compatibility for most links --%>
-										<a href="${pageContext.request.contextPath}/${link.key}?patientId=${obj.patient.patientId}"><spring:message code="${link.value}"/></a><br/>
-									</c:when>
-									<c:otherwise>
-										<%-- Allows for external absolute links  --%>
-										<a href='<c:url value="${link.key}?patientId=${obj.patient.patientId}"/>'><spring:message code='${link.value}'/></a><br/>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-					</div>
-				</openmrs:hasPrivilege>
-			</openmrs:extensionPoint>
-			<br/>		
-			<c:if test="${!empty mdrtbForms}">
-				<table class="widgetOut" style="font-size:80%;">
-						<tr nowrap><th nowrap style="background-color:white;"><spring:message code="mdrtb.availablemdrtbforms" /></th></tr>
-						<c:forEach items="${mdrtbForms}" var="form" varStatus="varStatus">
-							<c:set var="rowClass" scope="page">
-								<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
-							</c:set>
-								<Tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/moduleServlet/formentry/formDownload?target=formentry&patientId=${obj.patient.patientId}&formId=${form.formId}'>${form.name}</a></td></Tr>
-								
+<!-- TODO: clean up above paths so they use dynamic reference -->
+<!-- TODO: add privileges? -->
 
-						
-						</c:forEach>
-				</table>
-			</c:if>
-			<c:if test="${!empty htmlForms}">		
-				<table class="widgetOut" style="font-size:80%;">
-						<tr><th nowrap style="background-color:white;"><spring:message code="mdrtb.availablemdrtbforms" /></th></tr>
-						<c:forEach items="${htmlForms}" var="form" varStatus="varStatus">
-							<c:set var="rowClass" scope="page">
-								<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
-							</c:set>
-								<c:choose>
-									<!--  hack to include custom tag for the dummy MSPP form we are recreating -->
-									<c:when test="${form.formId == dummyMSPPFormId}">
-										<tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/mdrtb/pihhaiti/MSPPForm.form?patientId=${obj.patient.patientId}&encounterId=-1'>${form.name} </a></td></Tr>
-									</c:when>
-									<c:otherwise>
-										<tr><td class="${rowClass}"><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${form.formId}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${form.name} </a></td></Tr>
-									</c:otherwise>
-								</c:choose>
-						</c:forEach>
-						
-						
-				</table>
-			</c:if>	
-			<c:if test="${empty mdrtbForms && empty htmlForms}">
-				<span style="font-size:90%;">&nbsp;&nbsp;&nbsp;<i><spring:message code="mdrtb.none" /></i></span>
-			</c:if>
-			
-			
-</td><td style="vertical-align:top;">
-			<c:if test="${!empty obj.htmlEncList}">
-				<table class="widgetOut" style="font-size:80%;">
-					<tr><th colspan="4" nowrap style="background-color:white;"><spring:message code="Patient.encounters" /></th></tr>
-					<c:forEach items="${obj.htmlEncList}" var="enc" varStatus="varStatus">
-						<c:set var="rowClass" scope="page">
-									<c:choose><c:when test="${varStatus.index % 2 == 0}">evenRow</c:when><c:otherwise>oddRow</c:otherwise></c:choose>
-								</c:set>
-						<tr class="${rowClass}">
-						<c:choose>
-							<!--  hack to include custom tag for the dummy MSPP form we are recreating -->
-							<c:when test="${enc.form.formId == dummyMSPPFormId}">
-								<td class="${rowClass}" nowrap><a href='${pageContext.request.contextPath}/module/mdrtb/pihhaiti/MSPPForm.form?patientId=${obj.patient.patientId}&encounterId=${enc.encounterId}'>${enc.form.name}</a></td>
-							</c:when>
-							<c:otherwise>
-								<td class="${rowClass}" nowrap><a href='${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${obj.patient.patientId}'>${enc.form.name}</a></td>
-							</c:otherwise>
-						</c:choose>
-							
-							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
-							<td class="${rowClass}" nowrap>${enc.provider.personName}</td>
-							<td class="${rowClass}" nowrap>${enc.location}</td>
-						</tr>
-					</c:forEach>
-				</table>
-			</c:if>
-			<!--<c:if test="${empty obj.htmlEncList}">
-				<span style="font-size:90%;">&nbsp;&nbsp;&nbsp;<i><spring:message code="mdrtb.none" /></i></span>
-			</c:if>-->
-</td></tr></table>
-			
+<!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
+<!-- CUSTOM JQUERY  -->
+
+<div align="center"> <!-- start of page div -->
+
+<!-- VISITS -->
+
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.visits" text="Visits"/></b>
+<div class="box" style="margin:0px">
+
+<c:if test="${fn:length(visits.intakeVisits.value) > 0}">
+<b><spring:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
+</tr>
+<c:forEach var="encounterStatus" items="${visits.intakeVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+<a href="${visits.newIntakeVisit.link}"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></a>
+<br/>
+
+
+<c:if test="${fn:length(visits.followUpVisits.value) > 0}">
+<b><spring:message code="mdrtb.followUpVisits" text="Follow Up Visits"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
+</tr>
+<c:forEach var="encounterStatus" items="${visits.followUpVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+<a href="${visits.newFollowUpVisit.link}"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></a>
+<br/>
+
+<c:if test="${fn:length(visits.scheduledFollowUpVisits.value) > 0}">
+<b><spring:message code="mdrtb.scheduledFollowUpVisits" text="Future Follow-up Visits Scheduled"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
+</tr>
+<c:forEach var="encounterStatus" items="${visits.scheduledFollowUpVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+
+<c:if test="${fn:length(visits.specimenCollectionVisits.value) > 0}">
+<b><spring:message code="mdrtb.specimenCollections" text="Specimen Collections"/></b>
+<br/><br/>
+<table cellspacing="5" cellpadding="5" border="3">
+<tr>
+<td><spring:message code="mdrtb.date" text="Date"/></td>
+<td><spring:message code="mdrtb.location" text="Location"/></td>
+<td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
+</tr>
+<c:forEach var="encounterStatus" items="${visits.specimenCollectionVisits.value}">
+<tr>
+<td><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></td>
+<td>${encounterStatus.value.location.displayString}</td>
+<td>${encounterStatus.value.provider.personName}</td>
+<td><a href="${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+<br/>
+
+</div>
+
+<!--  END VISIT STATUS POPUP -->
+
+
+
+</div> <!-- end of page div -->
 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>

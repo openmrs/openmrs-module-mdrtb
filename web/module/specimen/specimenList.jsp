@@ -14,14 +14,14 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
-	td {padding-left:8px; padding-right:8px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+	td {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
 <b class="boxHeader"><spring:message code="mdrtb.labs" text="Labs"/></b>
 <div class="box">
 <a href="add.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></a>
 <br/><br/>
-<table border="1" cellspacing="3">
+<table style="border:2px solid #8FABC7; border-spacing:0px;">
 <tr>
 <td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/></nobr></td>
 <td><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/></nobr></td>
@@ -44,4 +44,5 @@
 </table>
 </div>
 
+<%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>
 
