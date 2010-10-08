@@ -68,7 +68,7 @@ public class StatusUtil {
     }
 	
 
-	public static List<Regimen> getRegimensDuringProgram(PatientProgram program) {
+	public static List<Regimen> getMdrtbRegimensDuringProgram(PatientProgram program) {
 		
 		if (program == null || program.getDateEnrolled() == null) {
 			return null;
@@ -80,8 +80,17 @@ public class StatusUtil {
 		// TODO: do we need to fix this to be only one month before enrollment?  how do we define enrollment?
 		calendar.add(Calendar.MONTH, -2);
 		
-		return RegimenUtils.getRegimenHistory(program.getPatient()).getRegimensBetweenDates(calendar.getTime(), 
+		return RegimenUtils.getMdrtbRegimenHistory(program.getPatient()).getRegimensBetweenDates(calendar.getTime(), 
 			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
+	}
+
+	public static List<Regimen> getAntiretroviralRegimens(Patient patient) {
+		
+		if (patient == null) {
+			return null;
+		}
+		
+		return RegimenUtils.getAntiretroviralRegimenHistory(patient).getRegimenList();
 	}
 	
 	public static List<Encounter> getMdrtbEncountersDuringProgram(PatientProgram program) {
@@ -108,7 +117,7 @@ public class StatusUtil {
 	
 	public static Date getTreatmentStartDateDuringProgram(PatientProgram program) {
 		Date startDate = null;
-		List<Regimen> regimens = getRegimensDuringProgram(program);
+		List<Regimen> regimens = getMdrtbRegimensDuringProgram(program);
 			
 		// TODO: confirm that regimen history sorts regimens in order
 		// return the start date of the first regimen 
@@ -122,7 +131,7 @@ public class StatusUtil {
 	
 	public static Date getTreatmentEndDateDuringProgram(PatientProgram program) {
 		Date endDate = null;
-		List<Regimen> regimens = getRegimensDuringProgram(program);
+		List<Regimen> regimens = getMdrtbRegimensDuringProgram(program);
 			
 		// TODO: confirm that regimen history sorts regimens in order
 		// return the end date of the last regimen 
@@ -150,12 +159,24 @@ public class StatusUtil {
 		return positiveResults;
 	}
 	
-	public static List<Concept> sortDrugs(List<Concept> drugs) {
-		List<Concept> drugTypes = Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
+	// given a list of concepts, sorts them in the same order as the list of MDR-TB drugs 
+	// returns by getMdrtbDrugs(); all non-MDR-TB drug are ignored
+	public static List<Concept> sortMdrtbDrugs(List<Concept> drugs) {
+		return sortDrugs(drugs, Context.getService(MdrtbService.class).getMdrtbDrugs());
+	}
+	
+	public static List<Concept> sortAntiretrovirals(List<Concept> drugs) {
+		return sortDrugs(drugs, Context.getService(MdrtbService.class).getAntiretrovirals());
+	}
+	
+	// give a list of drugs to sort and a drug list, sorts the first list so that the
+	// drugs are in the same order as the second list; any drugs in the list to sort not
+	// found in the drug list are discarded
+	public static List<Concept> sortDrugs(List<Concept> drugsToSort, List<Concept> drugList) {
 		List<Concept> sortedDrugs = new LinkedList<Concept>();
 		
-		for (Concept drug : drugTypes) {
-			if (drugs.contains(drug)) {
+		for (Concept drug : drugList) {
+			if (drugsToSort.contains(drug)) {
 				sortedDrugs.add(drug);
 			}
 		}

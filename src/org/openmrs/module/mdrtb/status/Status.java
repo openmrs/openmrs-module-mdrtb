@@ -16,6 +16,9 @@ abstract public class Status {
 	
 	List<StatusFlag> flags = new LinkedList<StatusFlag>();
 	
+	public Status() {
+	}
+	
 	public Status(PatientProgram program) {
 		this.program = program;
 	}

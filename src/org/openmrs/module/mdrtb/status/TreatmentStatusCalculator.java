@@ -25,8 +25,8 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	// get the list of regimens for this patient within the program period
     	List<StatusItem> regimenList = new LinkedList<StatusItem>();
     	
-	    for (Regimen regimen : StatusUtil.getRegimensDuringProgram(program)) {
-	
+	    for (Regimen regimen : StatusUtil.getMdrtbRegimensDuringProgram(program)) {
+	 	
 	    	if (regimen.isActive()) {
 	    		treatmentState = TreatmentState.ON_TREATMENT;
 	    	}
@@ -42,9 +42,7 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 	    // reverse the list so that the most current regimen is first
 	    Collections.reverse(regimenList);
     
-	    StatusItem regimens = new StatusItem();
-	    regimens.setValue(regimenList);
-	    status.addItem("regimens", regimens);
+	    status.addItem("regimens", new StatusItem(regimenList));
 	    
 	    // if the treatment state has not been set to "On treatment" (i.e., if one of the regimens was active)
 	    // set the state to not on treatment ONLY if the program is currently active (whether a treatment is active for

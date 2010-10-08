@@ -14,12 +14,14 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.status.HivStatusCalculator;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
 import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
 import org.openmrs.module.mdrtb.status.VisitStatusCalculator;
+import org.openmrs.module.mdrtb.web.controller.status.DashboardHivStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
@@ -83,6 +85,10 @@ public class MdrtbDashboardController {
 		// visits status
 		Status visitStatus = new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program);
 		statusMap.put("visitStatus", visitStatus);
+		
+		// hiv status
+		Status hivStatus = new HivStatusCalculator(new DashboardHivStatusRenderer()).calculate(program.getPatient());
+		statusMap.put("hivStatus", hivStatus);
 		
 		return statusMap;
 		

@@ -350,6 +350,7 @@ ${regimen.displayString}
 <td><spring:message code="mdrtb.date" text="Date"/></td>
 <td><spring:message code="mdrtb.location" text="Location"/></td>
 <td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
 </tr>
 <c:forEach var="encounterStatus" items="${status.visitStatus.scheduledFollowUpVisits.value}">
 <tr>
@@ -372,6 +373,7 @@ ${regimen.displayString}
 <td><spring:message code="mdrtb.date" text="Date"/></td>
 <td><spring:message code="mdrtb.location" text="Location"/></td>
 <td><spring:message code="mdrtb.provider" text="Provider"/></td>
+<td>&nbsp;</td>
 </tr>
 <c:forEach var="encounterStatus" items="${status.visitStatus.specimenCollectionVisits.value}">
 <tr>
@@ -414,9 +416,10 @@ ${regimen.displayString}
 <br/>
 
 <!-- LAB RESULTS STATUS BOX -->
-
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</b>
 <div class="box" style="margin:0px">
+
+<!--  TODO: get rid of these flags if they aren't being used -->
 
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: <a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</a></td></tr>
@@ -435,6 +438,22 @@ ${regimen.displayString}
 </div>
 
 <!-- END LAB RESULTS STATUS BOX -->
+
+<br/>
+
+<!-- HIV STATUS BOX -->
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.hivStatus" text="HIV Status"/>: ${status.hivStatus.hivStatus.displayString}</b>
+<div class="box" style="margin:0px">
+
+<table cellspacing cellpadding="0">
+<tr><td><spring:message code="mdrtb.mostRecentTestResult" text="Most Recent Test Result"/>: ${status.hivStatus.mostRecentTestResult.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.artTreatment" text="ART Treatment"/>: ${status.hivStatus.artTreatment.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.currentRegimen" text="Current Regimen"/>: ${status.hivStatus.currentRegimen.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.mostRecentCd4Count" text="Most Recent CD4 Count"/>: ${status.hivStatus.mostRecentCd4Count.displayString}</td></tr>
+</table>
+
+</div>
+<!-- END HIV STATUS BOX -->
 
 </div> <!-- end of page div -->
 

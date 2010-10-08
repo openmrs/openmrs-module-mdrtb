@@ -97,7 +97,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		}
 		
 		// sort the drugs in the standard order
-		drugs = StatusUtil.sortDrugs(drugs);
+		drugs = StatusUtil.sortMdrtbDrugs(drugs);
 		
 		resistanceProfile.setValue(drugs);
 		resistanceProfile.setDisplayString(renderer.renderDrugResistanceProfile(drugs));

@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.regimen;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -14,6 +15,7 @@ import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.util.OpenmrsUtil;
 
 public class RegimenUtils {
@@ -24,6 +26,30 @@ public class RegimenUtils {
         return new RegimenHistory(Context.getOrderService().getDrugOrdersByPatient(patient));
     }
     
+    public static RegimenHistory getMdrtbRegimenHistory(Patient patient) {   	
+    	return getRegimenHistoryForDrugList(patient, Context.getService(MdrtbService.class).getMdrtbDrugs());
+    }
+    
+    public static RegimenHistory getAntiretroviralRegimenHistory(Patient patient) {
+    	return getRegimenHistoryForDrugList(patient, Context.getService(MdrtbService.class).getAntiretrovirals()); 	
+    }
+    
+    /**
+	 * Creates a regimen history for a specific patient, but including only the
+	 * drugs in the specified list
+     */
+    public static RegimenHistory getRegimenHistoryForDrugList(Patient patient, List<Concept> drugs) {
+    	List<DrugOrder> drugOrders = new LinkedList<DrugOrder>();
+
+    	// loop through all the drug orders for this patient, but only keep orders for MDR-TB drugs
+    	for (DrugOrder drugOrder: Context.getOrderService().getDrugOrdersByPatient(patient)) {
+    		if (drugs.contains(drugOrder.getConcept())) {
+    			drugOrders.add(drugOrder);
+    		}
+    	}
+    	
+    	return new RegimenHistory(drugOrders);
+    }
     
     /* here's the logic for what happens if there is a future regimen:
      * 

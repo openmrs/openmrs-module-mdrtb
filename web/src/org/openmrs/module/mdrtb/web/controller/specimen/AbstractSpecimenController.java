@@ -127,7 +127,7 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("drugTypes")
 	Collection<Concept> getPossibleDrugTypes() {
-		return Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
+		return Context.getService(MdrtbService.class).getMdrtbDrugs();
 	}
 	
 	@ModelAttribute("scanty")

@@ -213,6 +213,7 @@ public class SpecimenMigrationController {
 		addConceptMapping("POSITIVE", "POSITIVE");
 		addConceptMapping("NEGATIVE", "NEGATIVE");
 		addConceptMapping("CONTAMINATED", "CONTAMINATED");
+		addConceptMapping("ANTIRETROVIRAL DRUGS", "ANTIRETROVIRAL DRUGS");
 		
 		
 		// TODO: probably should add all the drug concepts that I mapped manually here...

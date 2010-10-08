@@ -294,6 +294,6 @@ public class PatientChartFactory {
 	 */
 	private List<Concept> getDrugTypesForChart(PatientChart patientChart) {
 		// get all the possible drug types to display--this method also returns them in the order we want to display them
-		return Context.getService(MdrtbService.class).getPossibleDrugTypesToDisplay();
+		return Context.getService(MdrtbService.class).getMdrtbDrugs();
 	}
 }

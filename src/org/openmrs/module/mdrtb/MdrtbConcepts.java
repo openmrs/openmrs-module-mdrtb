@@ -8,7 +8,7 @@ public class MdrtbConcepts {
 	
 	// TODO: figure out if we still use all these mappings?
 	
-	// Drugs
+	// MDR-TB Drugs
 	public final static String [] TUBERCULOSIS_DRUGS = {"TUBERCULOSIS DRUGS"};
 	public final static String [] ISONIAZID = {"ISONIAZID"};
 	public final static String [] RIFAMPICIN = {"RIFAMPICIN"};
@@ -183,6 +183,9 @@ public class MdrtbConcepts {
     public final static String [] WAITING_FOR_TREATMENT = {"WAITING FOR TREATMENT"};
     public final static String [] SUSPENDED = {"SUSPENDED"};
     public final static String [] ON_TREATMENT = {"ON TREATMENT"};
+    
+    // Antiretrovirals (for HIV status section)
+    public final static String [] ANTIRETROVIRALS = {"ANTIRETROVIRAL DRUGS"};
     
     // Other
     public final static String [] RETURN_VISIT_DATE = {"RETURN VISIT DATE"};

@@ -22,11 +22,14 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     	// first we need to pull out all the drugs in this regimen
     	List<Concept> drugs = new LinkedList<Concept>();
     	for (RegimenComponent component : regimen.getComponents()) {
-    		drugs.add(component.getDrug().getConcept());
+    		// should this ever be null?  there are cases in the haiti system where this is true
+    		if (component.getDrug() != null) {
+    			drugs.add(component.getDrug().getConcept());
+    		}
     	}
     	
     	// sort the drug list
-    	drugs = StatusUtil.sortDrugs(drugs);
+    	drugs = StatusUtil.sortMdrtbDrugs(drugs);
     	
     	// get end reason, if there is one
     	String endReason = "";

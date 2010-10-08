@@ -254,9 +254,14 @@ public interface MdrtbService extends OpenmrsService {
     public Collection<ConceptAnswer> getPossibleSpecimenAppearances();
   
     /**
-     * Returns all the possible drug to display in a DST result, in the order we want to display them
+     * Returns all the possible drugs to display in a DST result, in the order we want to display them
      */
-    public List<Concept> getPossibleDrugTypesToDisplay();
+    public List<Concept> getMdrtbDrugs();
+    
+    /**
+     * Returns all the possible antiretrovirals
+     */
+    public List<Concept> getAntiretrovirals();
     
     /**
      * Returns all possible outcomes for the MDR-TB program

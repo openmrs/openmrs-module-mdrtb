@@ -461,7 +461,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return this.getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE).getAnswers();
 	}
 	
-    public List<Concept> getPossibleDrugTypesToDisplay() {
+    public List<Concept> getMdrtbDrugs() {
     	
     	Concept tbDrugs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
     	List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(tbDrugs);
@@ -474,6 +474,19 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	
     	return drugs;
     	
+    }
+    
+    public List<Concept> getAntiretrovirals() {
+    	Concept antiretrovirals = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANTIRETROVIRALS);
+    	List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(antiretrovirals);
+    	
+    	List<Concept> drugs = new LinkedList<Concept>();
+    	
+    	for (ConceptSet drug : drugSet) {
+    		drugs.add(drug.getConcept());
+    	}
+    	
+    	return drugs;
     }
     
     public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes() {
