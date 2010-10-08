@@ -106,6 +106,7 @@ public class MdrtbConceptMap {
 	 */
 	protected void initializeEverythingAboutConcept(Concept c) {
 		if (c != null) {
+			c.getDatatype().getHl7Abbreviation();
 			for (ConceptName cns : c.getNames()){
 				Collection<ConceptNameTag> tags = cns.getTags();
 				for (ConceptNameTag cnTag : tags){
