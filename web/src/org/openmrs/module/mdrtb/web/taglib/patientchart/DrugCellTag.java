@@ -26,8 +26,8 @@ public class DrugCellTag extends TagSupport {
 	private Concept drug;
 	
 	private List<Regimen> regimens;
-
-	private int patientId;
+	
+	private String style;
 	
 	  public int doStartTag() {
 		 
@@ -49,9 +49,7 @@ public class DrugCellTag extends TagSupport {
 	    	}
 	    	
 	    	if(StringUtils.isNotBlank(colorString)) {
-	    		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\"" +
-	    			"onclick=\"window.location = \'../regimen/regimen.form?patientId=" + this.patientId + "\'\" class=\"chartCell\" title=\""
-	    			+ titleString.toString() + "\" style=\"background-color:" + colorString + "\"/>";
+	    		ret = "<td class=\"chartCell\" title=\"" + titleString.toString() + "\" style=\"background-color:" + colorString + "\"/>";
 	    	}
 	    	else {
 	    		ret = "<td class=\"chartCell\"/>";
@@ -136,13 +134,11 @@ public class DrugCellTag extends TagSupport {
 	    return regimens;
     }
 
-	
-    public int getPatientId() {
-    	return patientId;
+	public void setStyle(String style) {
+	    this.style = style;
     }
 
-	
-    public void setPatientId(int patientId) {
-    	this.patientId = patientId;
+	public String getStyle() {
+	    return style;
     }
 }

@@ -18,6 +18,7 @@ public class CultureCellTag extends AbstractBacteriologyCellTag {
     
     
     public int doEndTag() {
+    	clearParameters();
     	cultures = null;
     	return EVAL_PAGE;
     }

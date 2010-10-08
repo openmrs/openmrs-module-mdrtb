@@ -18,6 +18,7 @@ public class SmearCellTag extends AbstractBacteriologyCellTag {
     
     
     public int doEndTag() {
+    	clearParameters();
     	smears = null;
     	return EVAL_PAGE;
     }

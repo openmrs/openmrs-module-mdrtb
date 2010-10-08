@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Location;
+import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -30,6 +31,10 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     
 	private final Log log = LogFactory.getLog(getClass());
 
+	private String style;
+	
+	private String parameters;
+	
     protected void renderCell(List<Bacteriology> bacs) {
     	
     	String titleString = "";
@@ -44,7 +49,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     	
     	if(bacs == null || bacs.isEmpty()) {
     		// handle the null case
-    		ret = "<td style=\"padding:0px;border:0px;margin:0px;\"/>";
+    		ret = "<td style=\"" + this.getStyle() + "\"/>";
     	}
     	else {
     		// initialize the rankings used by calculate what color to display in the cell
@@ -132,10 +137,10 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     		// now create the actual string to render
     		// TODO: using the ../ is a little sketchy because it relies on directory structure not changing?
     		// TODO: this is operating on the assumption that all the bacs are from the same specimen
-    		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\" " +
-    				"onclick=\"window.location = \'../specimen/specimen.form?specimenId=" + bacs.get(0).getSpecimenId() + "&testId=" + bacs.get(0).getId() +
-    				"\'\" title=\"" + titleString + "\" style=\"text-align:center;font-style:bold;padding:0px;border:0px;margin:0px;background-color:" + 
-    				colorString + ";\">&nbsp;" + resultString + " " + labString + "&nbsp;</td>";
+    		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\" " 
+    				+ "onclick=\"window.location = \'../specimen/specimen.form?specimenId=" + bacs.get(0).getSpecimenId() + "&testId=" + bacs.get(0).getId()
+    				+ this.getParameters() + "\'\" title=\"" + titleString + "\" style=\";background-color:" + colorString 
+    				+ ";" + this.getStyle() + "\">&nbsp;" + resultString + " " + labString + "&nbsp;</td>";
     	}
     
     	try {
@@ -147,7 +152,38 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 		}
     }
     
-    // defines the rankings that determine precedent when decided what color the cell should be
+    protected void clearParameters() {
+    	this.style = null;
+    	this.parameters = null;
+    }
+    
+    /**
+     * Getters and Setters
+     */
+    
+    public void setStyle(String style) {
+	    this.style = style;
+    }
+
+	public String getStyle() {
+	    return style;
+    }
+
+	
+    public String getParameters() {
+    	return parameters;
+    }
+
+	
+    public void setParameters(String parameters) {
+    	this.parameters = parameters;
+    }
+
+	/**
+	 * Utility methods
+	 */
+	
+	// defines the rankings that determine precedent when decided what color the cell should be
     // TODO: move this into a global property?
     private static Map<Concept,Integer> initializeRankings() {
     

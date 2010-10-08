@@ -45,7 +45,7 @@
 			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.smears}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
-					<mdrtb:smearCell smears="${component.specimen.smears}"/>
+					<mdrtb:smearCell smears="${component.specimen.smears}" parameters="&patientProgramId=${patientProgramId}" style="text-align:center;font-style:bold;padding:0px;border:0px;margin:0px;"/>
 				</tr>
 				</table>
 			</c:if></td> 
@@ -53,7 +53,7 @@
 			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.cultures}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
 				<tr>
-					<mdrtb:cultureCell cultures="${component.specimen.cultures}"/>
+					<mdrtb:cultureCell cultures="${component.specimen.cultures}" parameters="&patientProgramId=${patientProgramId}" style="text-align:center;font-style:bold;padding:0px;border:0px;margin:0px;"/>
 				</tr>
 				</table>
 			</c:if></td> 
@@ -68,11 +68,11 @@
 			<c:forEach var="drugType" items="${model.chart.drugTypes}">
 				<c:choose>
 					<c:when test="${!empty component.specimen.dstResultsMap[drugType.id]}">
-						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}"/>	
+						<mdrtb:dstResultsCell dstResults="${component.specimen.dstResultsMap[drugType.id]}" drug="${drugType}" regimens="${component.regimens}" style="width:30px;padding:0px;border:0px;margin:0px;text-align:center;"/>	
 					</c:when>
 					<c:otherwise>
 						<!-- handle any regimen info -->
-						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" patientId="${patient.id}"/>
+						<mdrtb:drugCell drug="${drugType}" regimens="${component.regimens}" style=""/>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>

@@ -19,7 +19,7 @@ public class PatientChartPortletController extends PortletController {
 		
 			PatientChart chart = new PatientChartFactory().createPatientChart(program);
 			
-			model.put("test", 123);
+			model.put("patientProgramId", program.getId());
 			
 			model.put("chart", chart);
 	}

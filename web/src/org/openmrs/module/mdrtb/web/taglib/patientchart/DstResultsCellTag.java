@@ -27,6 +27,8 @@ public class DstResultsCellTag extends TagSupport {
     
     private List<Regimen> regimens;
     
+    private String style;
+    
     private Concept drug;
     
     public int doStartTag() {
@@ -80,7 +82,7 @@ public class DstResultsCellTag extends TagSupport {
     		String color = Context.getService(MdrtbService.class).getColorForConcept(result);
     		
     		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\" title=\"" + title +
-    				"\" style=\"width:30px;padding:0px;border:0px;margin:0px;text-align:center;background-color:" + color + ";\">" + 
+    				"\" style=\"background-color:" + color + ";" + style + "\">" + 
     				result.getBestShortName(Context.getLocale()) + "</td></tr></table></td>";
     	}
     	else {
@@ -128,6 +130,16 @@ public class DstResultsCellTag extends TagSupport {
 	
     public void setDrug(Concept drug) {
     	this.drug = drug;
+    }
+
+
+	public void setStyle(String style) {
+	    this.style = style;
+    }
+
+
+	public String getStyle() {
+	    return style;
     }
 
 }
