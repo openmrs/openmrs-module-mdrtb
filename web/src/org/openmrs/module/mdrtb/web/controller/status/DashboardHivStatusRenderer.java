@@ -58,16 +58,14 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	   		// first we need to pull out all the drugs in this regimen
    			List<Concept> generics = new LinkedList<Concept>();
    			for (RegimenComponent component : regimen.getComponents()) {
-   				// should this ever be null?  there are cases in the Haiti system where this is true
-   				if (component.getDrug() != null) {
-   					drugs.add(component.getDrug().getConcept());
-   				}
+   				// TODO: note that we are operating on generics, not the drug itself
+   				generics.add(component.getGeneric());
    			}
    	
    			// sort the drug list
-   			drugs = StatusUtil.sortAntiretrovirals(drugs);
+   			generics = StatusUtil.sortAntiretrovirals(generics);
 	   
-   			regimenItem.setDisplayString(DashboardStatusRendererUtil.renderDrugList(drugs));
+   			regimenItem.setDisplayString(DashboardStatusRendererUtil.renderDrugList(generics));
 	   }
     }
     
