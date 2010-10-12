@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -33,6 +32,8 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 
 	private String style;
 	
+	private String clazz;
+	
 	private String parameters;
 	
     protected void renderCell(List<Bacteriology> bacs) {
@@ -49,7 +50,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     	
     	if(bacs == null || bacs.isEmpty()) {
     		// handle the null case
-    		ret = "<td style=\"" + this.getStyle() + "\"/>";
+    		ret = "<td style=\"" + this.style + "\"" + ((this.clazz !=null && !this.clazz.isEmpty()) ? "class=\"" + this.clazz + "\"" : "") + "/>";
     	}
     	else {
     		// initialize the rankings used by calculate what color to display in the cell
@@ -139,8 +140,8 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     		// TODO: this is operating on the assumption that all the bacs are from the same specimen
     		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\" " 
     				+ "onclick=\"window.location = \'../specimen/specimen.form?specimenId=" + bacs.get(0).getSpecimenId() + "&testId=" + bacs.get(0).getId()
-    				+ this.getParameters() + "\'\" title=\"" + titleString + "\" style=\";background-color:" + colorString 
-    				+ ";" + this.getStyle() + "\">&nbsp;" + resultString + " " + labString + "&nbsp;</td>";
+    				+ this.parameters + "\'\" title=\"" + titleString + "\" style=\";background-color:" + colorString 
+    				+ ";" + this.style + "\" " + ((this.clazz !=null && !this.clazz.isEmpty()) ? "class=\"" + this.clazz + "\"" : "") + ">&nbsp;" + resultString + " " + labString + "&nbsp;</td>";
     	}
     
     	try {
@@ -154,6 +155,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     
     protected void clearParameters() {
     	this.style = null;
+    	this.clazz = null;
     	this.parameters = null;
     }
     
@@ -170,7 +172,15 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     }
 
 	
-    public String getParameters() {
+    public void setClazz(String clazz) {
+	    this.clazz = clazz;
+    }
+
+	public String getClazz() {
+	    return clazz;
+    }
+
+	public String getParameters() {
     	return parameters;
     }
 

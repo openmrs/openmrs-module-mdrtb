@@ -14,7 +14,7 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
-	td {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+	.tableCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
 <b class="boxHeader"><spring:message code="mdrtb.labs" text="Labs"/></b>
@@ -23,21 +23,21 @@
 <br/><br/>
 <table style="border:2px solid #8FABC7; border-spacing:0px;">
 <tr>
-<td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/></nobr></td>
-<td><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/></nobr></td>
-<td><nobr><spring:message code="mdrtb.smears" text="Smears"/></nobr></td>
-<td><nobr><spring:message code="mdrtb.cultures" text="Cultures"/></nobr></td>
-<td colspan="2">&nbsp;</td>
+<td class="tableCell"><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/></nobr></td>
+<td class="tableCell"><nobr><spring:message code="mdrtb.sampleid" text="Sample ID"/></nobr></td>
+<td class="tableCell"><nobr><spring:message code="mdrtb.smears" text="Smears"/></nobr></td>
+<td class="tableCell"><nobr><spring:message code="mdrtb.cultures" text="Cultures"/></nobr></td>
+<td  class="tableCell" colspan="2">&nbsp;</td>
 </tr>
 
 <c:forEach var="specimen" items="${specimens}">
 	<tr>
-	<td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-	<td><nobr><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}">${specimen.identifier}</a></nobr></td>
-	<mdrtb:smearCell smears="${specimen.smears}" parameters="&patientProgramId=${patientProgramId}"/>
-	<mdrtb:cultureCell cultures="${specimen.cultures}" parameters="&patientProgramId=${patientProgramId}"/>
-	<td><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
-	<td><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+	<td class="tableCell"><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
+	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}">${specimen.identifier}</a></nobr></td>
+	<mdrtb:smearCell smears="${specimen.smears}" parameters="&patientProgramId=${patientProgramId}" clazz="tableCell"/>
+	<mdrtb:cultureCell cultures="${specimen.cultures}" parameters="&patientProgramId=${patientProgramId}" clazz="tableCell"/>
+	<td class="tableCell"><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
+	<td class="tableCell"><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 	</tr>
 </c:forEach>
 
