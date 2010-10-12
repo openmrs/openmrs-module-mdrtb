@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.util;
 
 import java.text.DateFormat;
+import java.util.List;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.specimen.Test;
@@ -47,6 +48,39 @@ public class TestStatusRenderer {
 		}
 		else {
 			return Context.getMessageSourceService().getMessage("mdrtb.unknown");
+		}
+	}
+	
+	
+	/**
+	 * Renders a "short" status for a group of tests. 
+	 */
+	public static String renderGroupShortStatus(List<Test> tests) {
+		
+		Boolean complete = false;
+		Boolean pending = false;
+		
+		for (Test test : tests) {
+			TestStatus status = test.getStatus();
+			if(status == TestStatus.ORDERED || status == TestStatus.RECEIVED || status == TestStatus.STARTED) {
+				pending = true;
+			}
+			else if (status == TestStatus.COMPLETED) {
+				complete = true;
+			}
+		}
+		
+		if (complete & pending) {
+			return Context.getMessageSourceService().getMessage("mdrtb.completePending");
+		}
+		else if (!complete & pending) {
+			return Context.getMessageSourceService().getMessage("mdrtb.pending");
+		}
+		else if (complete & !pending) {
+			return Context.getMessageSourceService().getMessage("mdrtb.complete");
+		}
+		else {
+			return "";
 		}
 	}
 }

@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.web.controller.status;
 import java.text.DateFormat;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
@@ -34,7 +35,8 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			
 			
 		} else {
-			// TODO: do we want to set a "No smears" message?
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.none"));
+			item.setLink(null);
 		}
 	}
 	
@@ -53,12 +55,19 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			     
 			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
 		} else {
-			 // TODO: do we want to set a "No cultures" message
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.none"));
+			item.setLink(null);
 		}
 	}
 	
     public String renderDrugResistanceProfile(List<Concept> drugs) {
-    	return DashboardStatusRendererUtil.renderDrugList(drugs);
+    	String drugList = DashboardStatusRendererUtil.renderDrugList(drugs);
+    	
+    	if (StringUtils.isBlank(drugList)) {
+    		drugList = Context.getMessageSourceService().getMessage("mdrtb.none");
+    	}
+    	
+    	return drugList;
     }
 	
 	@SuppressWarnings("unchecked")

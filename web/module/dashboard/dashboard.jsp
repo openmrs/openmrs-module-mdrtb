@@ -142,11 +142,11 @@
 <form id="programEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/programEdit.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td></td><input id="dateEnrolled" type="text" size="14" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:</td><td>
-<select name="location">
+<select id="location" name="location">
 <option value=""/>
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == program.location}">selected</c:if> >${location.displayString}</option>
@@ -201,7 +201,7 @@
 <form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" name="dateCompleted" value=""/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" value=""/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
@@ -226,6 +226,8 @@
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.treatmentStatus" text="Treatment Status"/>: ${status.treatmentStatus.treatmentState.displayString}</b>
 <div class="box" style="margin:0px">
+
+<c:if test="${fn:length(status.treatmentStatus.regimens.value) > 0 }">
 <table cellspacing="0" cellpadding="0" border="2px">
 <tr>
 <td><spring:message code="mdrtb.regimen" text="Regimen"/></td>
@@ -237,6 +239,8 @@
 ${regimen.displayString}
 </c:forEach>
 </table>
+</c:if>
+
 </div>
 
 <!-- END TREATMENT STATUS BOX -->
@@ -249,28 +253,48 @@ ${regimen.displayString}
 
 <table cellspacing="0" cellpadding="0">
 
-<tr><td><spring:message code="mdrtb.intake" text="Intake"/>:</td><td> 
-<c:if test="${! empty status.visitStatus.intakeVisits.value}">
-<a href="${status.visitStatus.intakeVisits.value[0].link}">${status.visitStatus.intakeVisits.value[0].displayString}</a>
-</c:if>
+<tr><td><spring:message code="mdrtb.intake" text="Intake"/>:</td><td>
+<c:choose> 
+	<c:when test="${! empty status.visitStatus.intakeVisits.value}">
+		<a href="${status.visitStatus.intakeVisits.value[0].link}">${status.visitStatus.intakeVisits.value[0].displayString}</a>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.none" text="None"/>
+	</c:otherwise>
+</c:choose>
 </td></tr>
 
 <tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>:</td><td> 
-<c:if test="${! empty status.visitStatus.followUpVisits.value}">
-<a href="${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].link}">${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString}</a>
-</c:if>
+<c:choose>
+	<c:when test="${! empty status.visitStatus.followUpVisits.value}">
+		<a href="${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].link}">${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString}</a>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.none" text="None"/>
+	</c:otherwise>
+</c:choose>
 </td></tr>
 
 <tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Specimen Collection"/>:</td><td> 
-<c:if test="${! empty status.visitStatus.specimenCollectionVisits.value}">
-<a href="${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].link}">${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString}</a>
-</c:if>
+<c:choose>
+	<c:when test="${! empty status.visitStatus.specimenCollectionVisits.value}">
+		<a href="${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].link}">${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString}</a>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.none" text="None"/>
+	</c:otherwise>
+</c:choose>
 </td></tr>
 
 <tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>:</td><td> 
-<c:if test="${! empty status.visitStatus.scheduledFollowUpVisits.value}">
-<a href="${status.visitStatus.scheduledFollowUpVisits.value[0].link}">${status.visitStatus.scheduledFollowUpVisits.value[0].displayString}</a>
-</c:if>
+<c:choose>
+	<c:when test="${! empty status.visitStatus.scheduledFollowUpVisits.value}">
+		<a href="${status.visitStatus.scheduledFollowUpVisits.value[0].link}">${status.visitStatus.scheduledFollowUpVisits.value[0].displayString}</a>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.none" text="None"/>
+	</c:otherwise>
+</c:choose>
 </td></tr>
 
 </table>
@@ -293,8 +317,8 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>:</td><td><a href="${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</a></td></tr>
-<tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>:</td><td><a href="${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</a></td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>:</td><td><mdrtb:a href="${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</mdrtb:a></td></tr>
+<tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>:</td><td><mdrtb:a href="${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</mdrtb:a></td></tr>
 <tr><td><spring:message code="mdrtb.resistanceType" text="Resistance Type"/>:</td><td>${status.labResultsStatus.tbClassification.displayString}</td></tr>
 <tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>:</td><td>${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
 </table>
@@ -313,20 +337,20 @@ ${regimen.displayString}
 
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: 
-</td><td><a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</a></td></tr>
+</td><td><mdrtb:a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</mdrtb:a></td></tr>
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>:
-</td><td><a href="${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</a></td></tr>
+</td><td><mdrtb:a href="${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</mdrtb:a></td></tr>
 </table>
 
+<c:if test="${fn:length(status.labResultsStatus.pendingLabResults.value) > 0}"> 
 <br/>
-
 <table cellspacing="0" cellpadding="0">
 <tr><td><spring:message code="mdrtb.pendingLabResults" text="Pending Lab Results"/></td></tr>
 <c:forEach var="pendingLabResult" items="${status.labResultsStatus.pendingLabResults.value}">
 <tr><td><a href="${pendingLabResult.link}">${pendingLabResult.displayString}</a></td></tr>
 </c:forEach>
 </table>
-
+</c:if>
 </div>
 
 <!-- END LAB RESULTS STATUS BOX -->

@@ -21,6 +21,7 @@
 <style type="text/css">
 	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
     .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
+    td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
 <!-- CUSTOM JQUERY  -->
@@ -69,12 +70,12 @@
 </c:choose>
 </div>
 
-<!-- pop up for enrolling in a program -->
+<!-- PROGRAM ENROLLMENT POPUP -->
 <div id="programEnrollPopup">
 <form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" />
 </td></tr>
 
 <tr><td>
@@ -111,12 +112,13 @@
 <button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button>
 </form>
 </div>
+<!--  END OF POPUP -->
 
 <br/>
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.previousProrgams" text="Previous MDR-TB Programs"/></b>
 <div class="box" style="margin:0px">
-<table cellspacing="5" cellpadding="5" border="3">
+<table cellspacing="0" cellpadding="0" border="2">
 <tr>
 <td><spring:message code="mdrtb.startdate" text="Start Date" /></td>
 <td><spring:message code="mdrtb.endDate" text="End Date" /></td>

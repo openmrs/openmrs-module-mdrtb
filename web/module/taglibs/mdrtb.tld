@@ -251,14 +251,19 @@
 
 <tag>
 	<description>
-		Renders display text for the status of a Test
+		Renders display text for the status of a Test, or a set of Tests
 	</description>
 	<name>testStatus</name>
 	<tag-class>org.openmrs.module.mdrtb.web.taglib.TestStatusTag</tag-class>
 	<body-content>JSP</body-content>
 	<attribute>
 		<name>test</name>
-		<required>true</required> 
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>tests</name>
+		<required>false</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 	<attribute>
@@ -277,6 +282,20 @@
 	<body-content>JSP</body-content>
 	<attribute>
 		<name>item</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Custom "a" tag that only renders the tag if the href is not blank
+	</description>
+	<name>a</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.ATag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>href</name>
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
