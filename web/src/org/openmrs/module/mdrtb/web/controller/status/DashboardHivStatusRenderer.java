@@ -56,7 +56,7 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	
 	   if(regimen != null) {
 	   		// first we need to pull out all the drugs in this regimen
-   			List<Concept> drugs = new LinkedList<Concept>();
+   			List<Concept> generics = new LinkedList<Concept>();
    			for (RegimenComponent component : regimen.getComponents()) {
    				// should this ever be null?  there are cases in the Haiti system where this is true
    				if (component.getDrug() != null) {
