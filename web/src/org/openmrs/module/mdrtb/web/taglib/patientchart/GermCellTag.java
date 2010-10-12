@@ -57,7 +57,7 @@ public class GermCellTag extends TagSupport {
     			ret = organismTypeNonCoded;
     		}
     		else {
-    			ret = organismType.getBestName(Context.getLocale()).toString();
+    			ret = organismType.getBestShortName(Context.getLocale()).toString();
     		}
     	}
     	
