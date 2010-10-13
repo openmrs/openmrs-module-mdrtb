@@ -18,10 +18,13 @@
 	.tableCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 </style>
 
+<!-- START OF PAGE DIV -->
+<div align="center" style="position:relative">
+
 <b class="boxHeader"><spring:message code="mdrtb.labs" text="Labs"/></b>
 <div class="box">
 
-<div id="specimenList" align="center">
+<div id="specimenList">
 <button onclick="window.location='add.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
 <br/><br/>
 <table cellspacing="0" cellpadding="0" border="2px">
@@ -56,8 +59,10 @@
 
 </table>
 </div>
+</div>
 
 </div>
+<!-- END OF PAGE DIV -->
 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>
 

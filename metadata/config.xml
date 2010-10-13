@@ -30,6 +30,12 @@
 		<class>@MODULE_PACKAGE@.extension.html.MdrtbGutterItem</class>
 	</extension>
 
+	<!--  AOP advice points -->
+	<advice>
+		<point>org.openmrs.api.ConceptService</point>
+		<class>@MODULE_PACKAGE@.advice.ConceptServiceAdvice</class>
+	</advice>
+
 	<globalProperty>
 		<property>@MODULE_ID@.program_name</property>
 		<defaultValue>MDR-TB PROGRAM</defaultValue>

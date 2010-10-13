@@ -140,6 +140,15 @@
         </property>
 	</bean>
 
+	<!-- Add an event listener -->
+	<bean id="mdrtbEventListeners" class="org.openmrs.api.EventListeners">
+		<property name="globalPropertyListeners">
+			<list value-type="org.openmrs.api.GlobalPropertyListener" merge="true">
+				<bean class="org.openmrs.module.mdrtb.CacheResetListener" />
+			</list>
+		</property>
+	</bean>
+
 	<!--  Enable annotation-driven Spring MVC -->    
     <context:component-scan base-package="@MODULE_PACKAGE@" />
     

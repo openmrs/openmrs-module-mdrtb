@@ -58,6 +58,11 @@ public interface MdrtbService extends OpenmrsService {
     public Concept getConcept(String [] conceptMapping);
    
     /**
+     * Resets the concept map cache
+     */
+    public void resetConceptMapCache();
+    
+    /**
      * Creates a new specimen, associated with the given patient
      */
     public Specimen createSpecimen(Patient patient);
@@ -285,8 +290,6 @@ public interface MdrtbService extends OpenmrsService {
 
     /**
      * Resets the color map cache to null to force cache reload
-     * Auto generated method comment
-     *
      */
     public void resetColorMapCache();
     
@@ -295,5 +298,10 @@ public interface MdrtbService extends OpenmrsService {
      * Used to display location codes in the patient chart
      */
     public String getDisplayCodeForLocation(Location location);
+    
+    /**
+     * Resets the display code for location to null to force cache relod
+     */
+    public void resetLocationToDisplayCodeCache();
 }
 

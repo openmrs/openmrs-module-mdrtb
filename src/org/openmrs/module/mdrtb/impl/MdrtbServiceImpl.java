@@ -145,6 +145,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return conceptMap.lookup(conceptMapping);
 	}
 	
+	public void resetConceptMapCache() {
+		this.conceptMap.resetCache();
+	}
+	
 	public Specimen createSpecimen(Patient patient) {
 		// return null if the patient is null
 		if(patient == null) {
@@ -527,7 +531,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     }
 	
     public void resetColorMapCache() {
-    	colorMapCache = null;
+    	this.colorMapCache = null;
     }
     
     // TODO: should this really run the display code through message.properties for localization (probably not, since locations are proper names?)
@@ -540,6 +544,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	return locationToDisplayCodeCache.get(location.getId());
     }
     
+    
+    public void resetLocationToDisplayCodeCache() {
+    	this.locationToDisplayCodeCache = null;
+    }
     
 	/**
 	 * Utility functions
