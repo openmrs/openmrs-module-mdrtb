@@ -40,13 +40,15 @@ public class SpecimenAddController extends AbstractSpecimenController {
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result, SessionStatus status, ModelMap map,
-	                                  @RequestParam(required = true, value = "patientId") Integer patientId) {
+	                                  @RequestParam(required = true, value = "patientId") Integer patientId,
+	                                  @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
 		// validate
 		new SpecimenValidator().validate(specimen, result);
 		
     	if (result.hasErrors()) {
 			map.put("patientId", patientId);
+			map.put("patientProgramId", patientProgramId);
 			map.put("errors", result);
 			return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
 		}
@@ -59,7 +61,7 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		map.clear();
 		
 		// redirect to the new detail patient for this specimen
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId(), map);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&patientProgramId=" + patientProgramId, map);
 		
 	}
 }

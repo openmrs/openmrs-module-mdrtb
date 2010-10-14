@@ -52,7 +52,7 @@
 								if (!ret)
 									alert('<spring:message code="mdrtb.DWRunabletodiscontinueorder" />');
 								else
-									window.location="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${obj.patient.patientId}";
+									window.location="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${obj.patient.patientId}&patientProgramId=${patientProgramId}";
 							});
 	 				
 	 			} else {
@@ -66,7 +66,7 @@
 							if (!ret)
 								alert("<spring:message code="mdrtb.DWRnotabletovoidorder" />");
 							else 
-			 					window.location="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${obj.patient.patientId}";
+			 					window.location="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${obj.patient.patientId}&patientProgramId=${patientProgramId}";
 						});
 						
 				} else {

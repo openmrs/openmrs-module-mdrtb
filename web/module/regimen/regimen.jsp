@@ -367,6 +367,7 @@
 		<br/><br/>
 		<input type="hidden" name="numberOfNewOrders" id="numberOfNewOrders" value="0">
 		<input type="hidden" name="patientId" value="${obj.patient.patientId}">
+		<input type="hidden" name="patientProgramId" value="${patientProgramId}"/>
 	</form>
 
 </div>

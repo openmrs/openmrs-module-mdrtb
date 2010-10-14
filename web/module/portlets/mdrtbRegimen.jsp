@@ -62,7 +62,7 @@
 								if (!ret)
 									alert('<spring:message code="mdrtb.DWRunabletodiscontinueorder" />');
 								else
-									window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${obj.patient.patientId}&view=REG";
+									window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${obj.patient.patientId}&view=REG&patientProgramId=${patientProgramId}";
 							});
 	 				
 	 			} else {
@@ -76,7 +76,7 @@
 							if (!ret)
 								alert("<spring:message code="mdrtb.DWRnotabletovoidorder" />");
 							else 
-			 					window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${obj.patient.patientId}&view=REG";
+			 					window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${obj.patient.patientId}&view=REG&patientProgramId=${patientProgramId}";
 						});
 						
 				} else {

@@ -310,9 +310,12 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 
     @Override
     protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object object, BindException exceptions) throws Exception {       
-        RedirectView rv = new RedirectView(getSuccessView());
+       
+    	RedirectView rv = new RedirectView(getSuccessView());
         String patientId = request.getParameter("patientId");
         String action = request.getParameter("submit");
+        String patientProgramId = request.getParameter("patientProgramId");
+        
         MessageSourceAccessor msa = this.getMessageSourceAccessor();
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
         MdrtbFactory mu = ms.getMdrtbFactory();
@@ -1641,6 +1644,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
       
         rv.addStaticAttribute("patientId", patientId);
         rv.addStaticAttribute("view", view);
+        rv.addStaticAttribute("patientProgramId", patientProgramId);
+        
         return new ModelAndView(rv); 
         
        
