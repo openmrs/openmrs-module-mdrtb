@@ -27,6 +27,8 @@
 <div id="specimenList">
 <button onclick="window.location='add.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
 <br/><br/>
+
+<c:if test="${fn:length(specimens) > 0}">
 <table cellspacing="0" cellpadding="0" border="2px">
 <tr>
 <td class="tableCell"><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/></nobr></td>
@@ -56,8 +58,9 @@
 	<td class="tableCell"><a href="delete.form?specimenId=${specimen.id}&patientId=${patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 	</tr>
 </c:forEach>
-
 </table>
+</c:if>
+
 </div>
 </div>
 

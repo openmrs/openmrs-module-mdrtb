@@ -891,4 +891,10 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </div> <!-- END OF SPECIMEN DIV -->
 
 
-<!--  TODO: add footer back in once alignment is fixed -->
+<!-- HACK TO MADE FOOTER APPEAR PROPERLY ON THIS PAGE -->
+<br/><br/>
+<style type="text/css">
+	#footer {position:fixed}
+</style>
+
+<%@ include file="/WEB-INF/view/module/mdrtb/mdrtbFooter.jsp"%>
