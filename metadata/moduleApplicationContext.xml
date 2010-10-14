@@ -26,14 +26,12 @@
             	
             	<!-- hacky way to handle existing tabs until we substitute them out -->
             	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
-            	
             	<!--  
             	<prop key="module/@MODULE_ID@/visits/visits.form">VisitsController</prop>
             	<prop key="module/@MODULE_ID@/status/status.form">StatusController</prop>
             	-->
             	
-            	<!-- new controller for patient header portlet -->
-            	<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
+     			<!--  portlets -->
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
 	    	</props>
 		</property>
@@ -91,12 +89,8 @@
 		<property name="successView"><value>status.form</value></property>
     </bean> -->
     
-    <!-- portlet controllers -->
-    <bean id="mdrtbPatientHeaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbPatientHeaderPortletController">
-    </bean>
-    
-    <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController">
-    </bean>
+    <!-- portlet controllers -->    
+    <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController"/>
     
     <bean parent="serviceContext">
 		<property name="moduleService">
