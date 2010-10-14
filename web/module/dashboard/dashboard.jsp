@@ -240,6 +240,8 @@ ${regimen.displayString}
 </c:forEach>
 </table>
 </c:if>
+<br/>
+<button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addRegimens" text="Add Regimens"/></button>
 
 </div>
 
@@ -264,6 +266,14 @@ ${regimen.displayString}
 </c:choose>
 </td></tr>
 
+<c:if test="${empty status.visitStatus.intakeVisits.value}">
+<tr><td colspan="2">
+	<button onclick="window.location='${status.visitStatus.newIntakeVisit.link}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+</td></tr>
+</c:if>
+
+
+
 <tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>:</td><td> 
 <c:choose>
 	<c:when test="${! empty status.visitStatus.followUpVisits.value}">
@@ -275,6 +285,7 @@ ${regimen.displayString}
 </c:choose>
 </td></tr>
 
+<!-- 
 <tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Specimen Collection"/>:</td><td> 
 <c:choose>
 	<c:when test="${! empty status.visitStatus.specimenCollectionVisits.value}">
@@ -285,6 +296,7 @@ ${regimen.displayString}
 	</c:otherwise>
 </c:choose>
 </td></tr>
+-->
 
 <tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>:</td><td> 
 <c:choose>
@@ -295,6 +307,10 @@ ${regimen.displayString}
 		<spring:message code="mdrtb.none" text="None"/>
 	</c:otherwise>
 </c:choose>
+</td></tr>
+
+<tr><td colspan="2">
+	<button onclick="window.location='${status.visitStatus.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </td></tr>
 
 </table>
@@ -319,9 +335,18 @@ ${regimen.displayString}
 <table cellspacing="0" cellpadding="0">
 <tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>:</td><td><mdrtb:a href="${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</mdrtb:a></td></tr>
 <tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>:</td><td><mdrtb:a href="${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</mdrtb:a></td></tr>
-<tr><td><spring:message code="mdrtb.resistanceType" text="Resistance Type"/>:</td><td>${status.labResultsStatus.tbClassification.displayString}</td></tr>
-<tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>:</td><td>${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
+
+<c:if test="${empty status.labResultsStatus.diagnosticSmear.value || empty status.labResultsStatus.diagnosticCulture.value}">
+	<tr><td><button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addTestResults" text="Add Test Results"/></button></td></tr>
+</c:if>
+
+<c:if test="${!empty status.labResultsStatus.tbClassification.value ||  !empty status.labResultsStatus.drugResistanceProfile.value}">
+	<tr><td><spring:message code="mdrtb.resistanceType" text="Resistance Type"/>:</td><td>${status.labResultsStatus.tbClassification.displayString}</td></tr>
+	<tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>:</td><td>${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
+</c:if>
+
 </table>
+
 
 </div>
 
@@ -336,10 +361,11 @@ ${regimen.displayString}
 <!--  TODO: get rid of these flags if they aren't being used -->
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>: 
-</td><td><mdrtb:a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</mdrtb:a></td></tr>
-<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>:
-</td><td><mdrtb:a href="${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</mdrtb:a></td></tr>
+<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>:</td>
+<td><mdrtb:a href="${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</mdrtb:a></td></tr>
+<tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentCulture}"/><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/>:</td>
+<td><mdrtb:a href="${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</mdrtb:a></td></tr>
+<tr><td colspan="2"><button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addTestResults" text="Add Test Results"/></button></td></tr>
 </table>
 
 <c:if test="${fn:length(status.labResultsStatus.pendingLabResults.value) > 0}"> 
