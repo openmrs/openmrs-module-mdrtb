@@ -15,6 +15,7 @@ import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
@@ -77,10 +78,10 @@ public class PatientChartFactory {
 		Calendar recordEndDate;
 		Record record;
 		
-		// if the patient has never been on treatment, the first record start date should be the first day of the month the first specimen was collected
+		// if the patient has never been on treatment, start at program start date
 		if(!hasBeenOnTreatment) {
-			// (we've already tested earlier that specimens is not null)
-			recordStartDate.setTime(specimens.get(0).getDateCollected());
+			recordStartDate.setTime(program.getDateEnrolled());
+			recordStartDate.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
 			recordStartDate.set(Calendar.DAY_OF_MONTH, 1);
 			recordEndDate = (Calendar) recordStartDate.clone();
 			recordEndDate.add(Calendar.MONTH, 1);	

@@ -6,6 +6,9 @@ public class MdrtbConstants {
     public static final String ROLES_TO_REDIRECT_GLOBAL_PROPERTY = moduleName + ".roles_to_redirect_from_openmrs_homepage";
     public static final String MDRTB_PATIENT_IDENTIFIER_TYPES = moduleName + ".patient_identifier_type_list";    
     
+    // TODO: do we need to fix this to be only one month before enrollment?  how do we define enrollment?
+    public static final Integer NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY = 60;
+    
     public static enum TbClassification {MONO_RESISTANT_TB, POLY_RESISTANT_TB, MDR_TB, XDR_TB}; // TODO: add suspected mdr-tb?
     
     public static enum TreatmentState {NOT_ON_TREATMENT, ON_TREATMENT};
