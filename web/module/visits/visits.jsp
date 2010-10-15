@@ -23,7 +23,7 @@
 <!-- VISITS -->
 
 <!-- START LEFT-HAND COLUMN -->
-<div id="leftColumn" style="float: left; width:50%;  padding:0px 4px 4px 4px">
+<div id="leftColumn" style="float: left; width:49%;  padding:0px 4px 4px 4px">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
 <div class="box" style="margin:0px">
@@ -67,7 +67,7 @@
 
 <!--  START OF RIGHT-HAND COLUMN -->
 
-<div id="rightColumn" style="float:right; width:50%; padding:0px 4px 4px 4px">
+<div id="rightColumn" style="float:right; width:49%; padding:0px 4px 4px 4px">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenCollections" text="Specimen Collections"/></b>
 <div class="box" style="margin:0px">
