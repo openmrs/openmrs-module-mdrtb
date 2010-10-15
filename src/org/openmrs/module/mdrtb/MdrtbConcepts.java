@@ -187,6 +187,11 @@ public class MdrtbConcepts {
     // Antiretrovirals (for HIV status section)
     public final static String [] ANTIRETROVIRALS = {"ANTIRETROVIRAL DRUGS"};
     
+    // Hospitalization states
+    public final static String [] HOSPITALIZATION_WORKFLOW = {"HOSPITALIZATION WORKFLOW"};
+    public final static String [] HOSPITALIZED = {"HOSPITALIZED"};
+    public final static String [] AMBULATORY = {"AMBULATORY"};
+    
     // Other
     public final static String [] RETURN_VISIT_DATE = {"RETURN VISIT DATE"};
     public final static String [] TELEPHONE_NUMBER = {"TELEPHONE NUMBER"};

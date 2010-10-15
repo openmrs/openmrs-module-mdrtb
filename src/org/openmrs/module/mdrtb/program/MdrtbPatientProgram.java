@@ -1,9 +1,11 @@
 package org.openmrs.module.mdrtb.program;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -14,6 +16,7 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
 
 
 public class MdrtbPatientProgram {
@@ -96,7 +99,7 @@ public class MdrtbPatientProgram {
 	
 	public ProgramWorkflowState getOutcome() {		
 		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
-		return getWorkflowState(outcome);
+		return getPatientWorkflowState(outcome);
 	}
 	
 	public void setOutcome (ProgramWorkflowState programOutcome) {
@@ -122,7 +125,7 @@ public class MdrtbPatientProgram {
 	
 	public ProgramWorkflowState getClassificationAccordingToPreviousDrugUse() {		
 		Concept previousDrug = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
-		return getWorkflowState(previousDrug);
+		return getPatientWorkflowState(previousDrug);
 	}
 	
 	public void setClassificationAccordingToPreviousDrugUse (ProgramWorkflowState classification) {
@@ -148,7 +151,7 @@ public class MdrtbPatientProgram {
 	
 	public ProgramWorkflowState getClassificationAccordingToPreviousTreatment() {		
 		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
-		return getWorkflowState(previousTreatment);
+		return getPatientWorkflowState(previousTreatment);
 	}
 	
 	public void setClassificationAccordingToPreviousTreatment (ProgramWorkflowState classification) {
@@ -172,17 +175,58 @@ public class MdrtbPatientProgram {
 		this.program.getStates().add(previousTreatmentState);	
 	}
 	
+	public ProgramWorkflowState getCurrentHospitalizationState() {
+		Concept hospitalizationWorkflow = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW);
+		return getCurrentPatientWorkflowState(hospitalizationWorkflow);
+	} 
+	
+	public Boolean getCurrentlyHospitalized() {
+		Concept hospitalizationWorkflow = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW);
+		
+		ProgramWorkflowState currentState = getCurrentPatientWorkflowState(hospitalizationWorkflow);
+		
+		if (currentState == null) {
+			return false;
+		}
+		else {
+			return currentState.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+		}
+	}
+	
+	public List<PatientState> getAllHospitalizations() {
+		List<PatientState> states = getAllPatientStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW),
+								   						Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+		
+		Collections.sort(states, Collections.reverseOrder(new PatientStateComparator()));
+		return states;
+	}
+	
+	public void addHospitalization(Date admissionDate, Date dischargeDate) {
+		PatientState hospitalization = new PatientState();
+		hospitalization.setState(getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)));
+		hospitalization.setStartDate(admissionDate);
+		hospitalization.setEndDate(dischargeDate);
+		this.program.getStates().add(hospitalization);
+	}
+	
+	public void removeHospitalization(PatientState hospitalizations) {
+		// void this state
+		hospitalizations.setVoided(true);
+		hospitalizations.setVoidReason("voided by mdr-tb module");
+	}
+	
+	
 	/**
 	 * Utility functions
 	 */
 	
 	
 	/**
-	 * Gets the current state for a workflow 
+	 * Gets the state for a workflow 
 	 * 
 	 * Note that this method operates under the assumption that there is only one non-voided
 	 * state per workflow at any one time.  For a generic workflow, this would not be a valid
-	 * assumption, but for the workflows we are working with, this should be true.
+	 * assumption, but for the Classification and Outcome workflows we are working with, this should be true.
 	 */
 	private PatientState getPatientState (Concept workflowConcept) {
 		for (PatientState state : this.program.getStates()) {
@@ -194,7 +238,7 @@ public class MdrtbPatientProgram {
 		return null;
 	}
 	
-	private ProgramWorkflowState getWorkflowState(Concept workflowConcept) {
+	private ProgramWorkflowState getPatientWorkflowState(Concept workflowConcept) {
 		PatientState state = getPatientState(workflowConcept);
 		
 		if (state == null) {
@@ -203,6 +247,72 @@ public class MdrtbPatientProgram {
 		else {
 			return state.getState();
 		}
+	}
+	
+	
+	/**
+	 * Gets all the non-voided PatientStates for a specificed workflow
+	 * This is used for workflows like Hospitalization State which will have
+	 * more than one non-voided states
+	 */
+	private List<PatientState> getAllPatientStates (Concept workflowConcept, Concept patientStateConcept) {
+		
+		List<PatientState> states = new LinkedList<PatientState>();
+		
+		for (PatientState state : this.program.getStates()) {
+			if (state.getState().getConcept().equals(patientStateConcept)
+					&& state.getState().getProgramWorkflow().getConcept().equals(workflowConcept) 
+					&& !state.getVoided()) {
+				states.add(state);
+			}
+		}
+		
+		return states;
+	}
+	
+	
+	/**
+	 * Gets the current state for a workflow
+	 * 
+	 * This method is meant to operate on workflows like the the Hospitalization Workflow
+	 * that we will be using to state chanes over time
+	 */
+	
+	private PatientState getCurrentPatientState (Concept workflowConcept) {
+		for (PatientState state : this.program.getStates()) {
+			// this assumes that there is only one active state per workflow
+			if (state.getActive() && state.getState().getProgramWorkflow().getConcept().equals(workflowConcept)) {
+				return state;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	private ProgramWorkflowState getCurrentPatientWorkflowState(Concept workflowConcept) {
+		PatientState state = getCurrentPatientState(workflowConcept);
+		
+		if (state == null) {
+			return null;
+		}
+		else {
+			return state.getState();
+		}
+		
+	}
+	
+	/**
+	 * Gets a specific ProgramWorkflowState
+	 */
+	@SuppressWarnings("deprecation")
+    private ProgramWorkflowState getProgramWorkflowState(Concept programWorkflowStateConcept) {
+		for (ProgramWorkflowState state : Context.getProgramWorkflowService().getStates()) {
+			if (state.getConcept().equals(programWorkflowStateConcept)) {
+				return state;
+			}
+		}
+		return null;
 	}
 	
 	

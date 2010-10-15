@@ -190,6 +190,54 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addHospitalizationWorkflow.form")
+    public ModelAndView addHospitalizationWorkflow() {
+    
+    	// create the hospitalizaton workflow construct
+    	Concept hospitalizationWorkflowConcept = new Concept();
+    	hospitalizationWorkflowConcept.addName(new ConceptName("HOSPITALIZATION WORKFLOW", Context.getLocale()));
+    	hospitalizationWorkflowConcept.setConceptClass(Context.getConceptService().getConceptClassByName("Workflow"));
+    	hospitalizationWorkflowConcept.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+    	Context.getConceptService().saveConcept(hospitalizationWorkflowConcept);
+    	
+    	// add the appropriate concept mappings
+    	addConceptMapping("HOSPITALIZATION WORKFLOW", "HOSPITALIZATION WORKFLOW");
+    	addConceptMapping("AMBULATORY","AMBULATORY");
+    	
+    	// need to add patient hospitalized manually since there are two in the dictionary!
+    	Concept hospitalizedConcept = Context.getConceptService().getConcept(3389);
+    	ConceptMap map = new ConceptMap();
+		map.setSource(Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"));
+		map.setSourceCode("HOSPITALIZED");
+		hospitalizedConcept.addConceptMapping(map);
+		Context.getConceptService().saveConcept(hospitalizedConcept);
+    	
+    	
+    	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
+    	
+    	ProgramWorkflow hospitalizationWorkflow = new ProgramWorkflow();
+    	hospitalizationWorkflow.setConcept(hospitalizationWorkflowConcept);
+    	hospitalizationWorkflow.setProgram(mdrtbProgram);
+    	
+    	ProgramWorkflowState hospitalized = new ProgramWorkflowState();
+    	hospitalized.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+    	hospitalized.setInitial(true);
+    	hospitalized.setTerminal(false);
+    	hospitalizationWorkflow.addState(hospitalized);
+    	
+    	ProgramWorkflowState ambulatory = new ProgramWorkflowState();
+    	ambulatory.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AMBULATORY));
+    	ambulatory.setInitial(true);
+    	ambulatory.setTerminal(false);
+    	hospitalizationWorkflow.addState(ambulatory);
+    	
+    	mdrtbProgram.addWorkflow(hospitalizationWorkflow);
+    	
+    	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     
 	private void initialize() {
 		testConstructConcepts = new HashSet<Concept>();

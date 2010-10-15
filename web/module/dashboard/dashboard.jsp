@@ -68,6 +68,34 @@
 		$j('#programCloseCancelButton').click(function() {
 			$j('#programClosePopup').dialog('close');
 		});
+
+		$j('#hospitalizationsEditPopup').dialog({
+			autoOpen: false,
+			position: 'right',
+			modal: true,
+			draggable: false,
+			title: '<spring:message code="mdrtb.editHospitalization" text="Edit Hospitalization"/>',
+			width: '30%',
+			position: 'left',
+		});
+
+		// opens the pop-up to edit a hospitalization and populates the fill-ins with the appropriate dates
+		$j('.hospitalizationsEditLink').click(function() {
+			$j('#startDate').val($j(this).closest('tr').find('.admissionDate').html());
+			$j('#endDate').val($j(this).closest('tr').find('.dischargeDate').html());
+			$j('#hospitalizationStateId').val($j(this).attr('id'));
+			$j('#hospitalizationsEditPopup').dialog('open');
+		});
+		
+		$j('#hospitalizationsAddButton').click(function() {
+			$j('#startDate').val('');
+			$j('#endDate').val('');
+			$j('#hospitalizationsEditPopup').dialog('open');
+		});
+
+		$j('#hospitalizationsEditCancelButton').click(function() {
+			$j('#hospitalizationsEditPopup').dialog('close');
+		});
 		
 		$j('#dateEnrolled').datepicker({		
 			dateFormat: 'dd/mm/yy',
@@ -81,6 +109,13 @@
 			dateFormat: 'dd/mm/yy',
 		 });
 
+		$j('#startDate').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
+
+		$j('#endDate').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
 	});
 -->
 </script>
@@ -318,6 +353,69 @@ ${regimen.displayString}
 </div>
 
 <!--  END VISIT STATUS BOX -->
+
+<br/>
+
+<!--  START HOSPITALIZATIONS STATUS BOX -->
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.hospitalizations" text="Hospitalizations"/>: 
+<c:choose>
+	<c:when test="${program.currentlyHospitalized}">
+		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.notCurrentlyHospitalized" text="Not currently hospitalized"/>
+	</c:otherwise>
+</c:choose></b>
+<div class="box" style="margin:0px">
+
+<c:if test="${!empty program.allHospitalizations}">
+
+<table cellspacing="0" cellpadding="0" border="2px">
+<tr>
+<td><spring:message code="mdrtb.admisssionDate" text="Admission Date"/></td>
+<td><spring:message code="mdrtb.dischareDate" text="Discharge Date"/></td>
+<td><spring:message code="mdrtb.duration" text="Duration"/></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<c:forEach var="hospitalization" items="${program.allHospitalizations}">
+<tr>
+<td class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}"/></td>
+<td class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}"/></td>
+<td><mdrtb:duration startDate="${hospitalization.startDate}" endDate="${hospitalization.endDate}" format="days"/> 
+<spring:message code="mdrtb.days" text="days"/></td>
+<td><a id="${hospitalization.id}" class="hospitalizationsEditLink" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a></td>
+<td><a href="${pageContext.request.contextPath}/module/mdrtb/program/hospitalizationsDelete.form?patientProgramId=${program.id}&hospitalizationStateId=${hospitalization.id}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteHospitalization" text="Are you sure you want to delete this hospitalization?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+</tr>
+</c:forEach>
+</table>
+</c:if>
+
+<br/>
+<button id="hospitalizationsAddButton"><spring:message code="mdrtb.addHospitalization" text="Add Hospitalization"/></button> 
+
+</div>
+
+<!-- END HOSPITALIZATIONS STATUS BOX -->
+
+
+<!--  EDIT HOSPITALIZATIONS POPUP -->
+<div id="hospitalizationsEditPopup">
+<form id="hospitalizationsEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/hospitalizationsEdit.form?patientProgramId=${program.id}" method="post" >
+<input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value=""/>
+<table cellspacing="2" cellpadding="2">
+<tr><td>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate"/>
+</td></tr>
+<tr><td>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate"/>
+</td></tr>
+</table>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+</form>
+</div>
+<!-- END EDIT HOSPITALIZATION POPUP-->
 
 </div>
 
