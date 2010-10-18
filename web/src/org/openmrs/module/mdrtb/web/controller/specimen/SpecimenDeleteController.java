@@ -29,6 +29,6 @@ public class SpecimenDeleteController {
 		
 		Context.getService(MdrtbService.class).deleteSpecimen(specimenId);
 		
-		return "redirect:list.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+		return "redirect:specimen.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
 	}
 }

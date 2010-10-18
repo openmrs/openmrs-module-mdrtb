@@ -40,6 +40,10 @@ public class MdrtbPatientProgram {
 		return this.program.getActive();
 	}
 	
+	public Boolean getActive(Date onDate) {
+		return this.program.getActive(onDate);
+	}
+	
 	public Integer getId() {
 		return this.program.getId();
 	}
@@ -305,7 +309,6 @@ public class MdrtbPatientProgram {
 	/**
 	 * Gets a specific ProgramWorkflowState
 	 */
-	@SuppressWarnings("deprecation")
     private ProgramWorkflowState getProgramWorkflowState(Concept programWorkflowStateConcept) {
 		for (ProgramWorkflowState state : Context.getProgramWorkflowService().getStates()) {
 			if (state.getConcept().equals(programWorkflowStateConcept)) {

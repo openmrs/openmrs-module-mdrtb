@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
@@ -127,8 +129,21 @@ public class SpecimenController extends AbstractSpecimenController {
 	 * @return
 	 */
 	@ModelAttribute("specimen")
-	public Specimen getSpecimen(@RequestParam(required = true, value="specimenId") Integer specimenId) {
-		return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
+	public Specimen getSpecimen(@RequestParam(required = false, value="patientId") Integer patientId, 
+	                            @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		// for now, if no specimen is specified, default to the most recent specimen
+		if (specimenId == null) {
+			if (patientId == null) {
+				throw new MdrtbAPIException("No patient Id or specimen Id specified");
+			}
+			else {
+				List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(Context.getPatientService().getPatient(patientId));
+				return specimens.get(specimens.size() - 1);
+			}
+		}
+		else {
+			return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
+		}
 	}
 		
 	

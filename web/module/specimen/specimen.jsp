@@ -90,6 +90,7 @@
 			$j('#add_' + $j('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
+		// TODO: is this method used anymore?
 		// event handler to display view detail boxes
 		$j('.view').click(function(){
 			hideDisplayBoxes();
@@ -98,17 +99,21 @@
 
 		// event handler to display edit detail boxes
 		$j('.edit').click(function(){
-			hideDisplayBoxes();
+			//hideDisplayBoxes();
 			hideViewEditAddLinks();
+			$j('#details_' + this.id).hide();  // hide the selected details box
 			$j('#edit_' + this.id).show();  // show the selected edit box
 		});
 
 		// event handler to cancel an edit or add
 		$j('.cancel').click(function(){	
 			hideDisplayBoxes();
+			//$j('#edit_' + this.id).hide();  // hide the selected edit box
+			$j('.detailBox').show();  // show all the detail boxes
+			//$j('#details_' + this.id).show(); // display the details box for the test that was just being edited
+			
 			showViewEditAddLinks();
 			$j('.dstResult').show(); // show any dst results that may have been deleted
-			$j('#details_' + this.id).show(); // display the details box for the test that was just being edited
 			$j('.addDstResult').hide().find('input,select').attr('value',''); // hide all the add dst result rows and reset their values
 			addDstResultCounter = 1; // reset the add dst result counter
 		});
@@ -190,7 +195,7 @@
 <div align="left">
 <ul id="menu">
 <li class="first">
-<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.returnToSpecimenList" text="Return to Specimen List"/></a>
+<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.returnToSpecimenList" text="Return to Specimen List"/></a>
 </li>
 </ul>
 </div>
@@ -204,12 +209,54 @@
 	<br/>
 </c:if>
 
+
+<!-- LEFT-HAND COLUMN START -->
+<div id="leftColumn" style="float: left; width:29%;  padding:0px 4px 4px 4px">
+
+<b class="boxHeader"><spring:message code="mdrtb.specimens" text="Specimens"/></b>
+<div class="box">
+
+<div id="specimenList">
+<button onclick="window.location='add.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
+<br/><br/>
+
+<c:if test="${fn:length(specimens) > 0}">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+<td class="tableCell"><nobr><u><spring:message code="mdrtb.dateCollected" text="Date Collected"/></u></nobr></td>
+<td class="tableCell"><nobr><u><spring:message code="mdrtb.sampleid" text="Sample ID"/></u></nobr></td>
+<td class="tableCell" colspan="2">&nbsp;</td>
+</tr>
+
+<c:forEach var="specimen" items="${specimens}">
+	<tr>
+	<td class="tableCell"><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
+	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}">${specimen.identifier}</a></nobr></td>
+	<td class="tableCell"><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
+	<td class="tableCell"><a href="delete.form?specimenId=${specimen.id}&patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+	</tr>
+</c:forEach>
+</table>
+</c:if>
+
+</div>
+</div>
+
+
+</div>
+
+<!-- END OF LEFT-HAND COLUMN -->
+
+<!-- START OF RIGHT-HAND COLUMN -->
+
+<div id="leftColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
+
 <!--  SPECIMEN SECTION -->
 <div id="specimen" align="center">
 
 <div id="details_specimen">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a href="#" id="editSpecimen"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a  id="editSpecimen"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0">
 
@@ -346,62 +393,29 @@
 
 <div id="tests" style="position:relative"> 
 <b class="boxHeader"><spring:message code="mdrtb.tests" text="Tests"/></b>
+<br/>
 
-<!-- TEST SUMMARY SECTION -->
-<div id="summary" style="position:absolute; left:20px; top:30px; width:400px">
 
-<span id="add"  style="font-size:0.9em">
-<spring:message code="mdrtb.addANewLabTest" text="Add a new Lab Test:"/>:
+<div align="left" id="add"  style="font-size:0.9em">
+&nbsp;&nbsp;<spring:message code="mdrtb.addANewLabTest" text="Add a new Lab Test:"/>:
 <select id="addSelect">
 <c:forEach var="test" items="${testTypes}">
 	<option value="${test}"><spring:message code="mdrtb.${test}"/></option>
 </c:forEach>
 </select>
 <button id="addButton" type="button"><spring:message code="mdrtb.add" text="Add"/></button>
-</span>
-
-<br/><br/>
-
-<c:forEach var="test" items="${specimen.tests}">
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:25px;"><a href="#" id="${test.id}" class="view"><spring:message code="mdrtb.view" text="View"/></a></span></b>
-<div class="box" style="margin:0px">
-<table style="width:396px;" cellspacing="0" cellpadding="0">
-
-<tr>
-<td><spring:message code="mdrtb.status" text="Status"/>:</td><td><mdrtb:testStatus test="${test}"/></td>
-</tr>
-
-<c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
-<tr>
-<td><spring:message code="mdrtb.result" text="Result"/>:</td><td>${test.result.displayString}</td>
-</tr>
-</c:if>
-
-</table> 
 </div>
 
 <br/>
 
-</c:forEach>
-
-</div> <!--  end summary div -->
-
-<!-- END OF TEST SUMMARY SECTION -->
-
-<!-- BLANK DIV FOR VIEWING/EDITING PANE -->
-<div id="details_-1" class="box" style="position:absolute; left:450px; top:30px; height:400px; width: 700px; font-size:0.9em; text-align:center; display:none;">
-<br/><br/>
-Select a smear, culture, or DST  from the list on the left to view it's details.
-</div>
 
 <c:forEach var="test" items="${specimen.tests}" varStatus="testIteration">
 
 <!--  TEST DETAILS SECTION -->
 
-<div id="details_${test.id}" class="detailBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
+<div id="details_${test.id}" class="detailBox" style="font-size:0.9em">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a href="#" id="${test.id}" class="edit"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a id="${test.id}" class="edit"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 <tr>
@@ -510,13 +524,14 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 <!-- end of the DST table -->
 
 </div>
+<br/>
 </div> <!-- end of details div -->
 
 <!-- END OF TEST DETAILS SECTION -->
 
 <!-- EDIT TESTS SECTION -->
 
-<div id="edit_${test.id}" class="editBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em">
+<div id="edit_${test.id}" class="editBox" style="display:none; font-size:0.9em">
 
 <!--  TODO: how do i bind errors to this? -->
 
@@ -701,6 +716,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 </form>
 
 </div>
+<br/>
 </div>
 
 </c:forEach>
@@ -713,7 +729,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 <c:forEach var="type" items="${testTypes}">
 
-<div id="add_${type}" class="addBox" style="position:absolute; left:450px; top:30px; display:none; font-size:0.9em"">
+<div id="add_${type}" class="addBox" style="display:none; font-size:0.9em"">
 
 <form id="${type}" action="specimen.form?submissionType=${type}&${type}Id=-1&testId=-1&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
@@ -890,6 +906,7 @@ Select a smear, culture, or DST  from the list on the left to view it's details.
 
 </div> <!-- END OF SPECIMEN DIV -->
 
+</div> <!-- END OF RIGHT HAND COLUMN -->
 
 <!--  TODO: figure out footer alignment and add footer back in  -->
 <!--  

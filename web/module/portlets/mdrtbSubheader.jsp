@@ -45,13 +45,13 @@
 	
 		
 		<li <c:if test='<%= request.getRequestURI().contains("specimen") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>
 		
 		
 	<!--
 		<c:if test='<%= request.getRequestURI().contains("specimen") %>'>
 			<li style="font-size:60%;" <c:if test='<%= request.getRequestURI().contains("list") %>'>class="active"</c:if>>
-			<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/list.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.listSpecimens" text="List Specimens"/></a></li>
+			<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.listSpecimens" text="List Specimens"/></a></li>
 			<li style="font-size:60%;" <c:if test='<%= request.getRequestURI().contains("add") %>'>class="active"</c:if>>
 			<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/add.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.addASpecimen" text="Add a Specimen"/></a></li>
 		</c:if>

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
+import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
@@ -19,6 +22,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
+import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -43,6 +48,25 @@ public abstract class AbstractSpecimenController {
 		binder.registerCustomEditor(Concept.class, new ConceptEditor()); 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(Person.class, new PersonEditor());
+	}
+	
+	@ModelAttribute("specimens")
+	public Collection<Specimen> getSpecimens(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		// to explain the logic here--if the patient has been enrolled in the MDR-TB program more than once, only show the
+		// specimens that apply to this program; if the patient has only been enrolled in one MDR-TB program show all the
+		// specimens here; this is just to make sure we don't "miss" a specimen due to a faulty program enrollment date
+		
+		PatientProgram patientProgram = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+		Patient patient = patientProgram.getPatient();
+		
+		List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")), null, null, null, null, false);
+
+		if (patientPrograms.size() > 1) {
+			return StatusUtil.getSpecimensDuringProgram(patientProgram);
+		}
+		else {
+			return Context.getService(MdrtbService.class).getSpecimens(patient);
+		}
 	}
 	
 	@ModelAttribute("patientProgramId")
