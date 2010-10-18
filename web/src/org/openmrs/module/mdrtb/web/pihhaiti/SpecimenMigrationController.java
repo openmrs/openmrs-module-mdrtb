@@ -1,6 +1,8 @@
 package org.openmrs.module.mdrtb.web.pihhaiti;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,15 +28,18 @@ import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Obs;
+import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -238,6 +243,89 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrationHospitalizations.form")
+	public ModelAndView createHospitalizationReport() {
+
+		Concept typeOfPatientConcept = Context.getConceptService().getConcept(3289);
+		Concept hospitalizedConcept = Context.getConceptService().getConcept(3389);
+		Concept ambulatoryConcept = Context.getConceptService().getConcept(1664);
+		Concept hospitalizedSinceLastVisitConcept = Context.getConceptService().getConcept(1715);
+		
+		Concept [] conceptParams = {typeOfPatientConcept, hospitalizedSinceLastVisitConcept};
+		
+		// loop through all patients
+		for (Person patient : Context.getPatientService().getAllPatients(false)) {
+			
+			Person [] patientArray = {patient};				
+			
+			// get all the possible hospitalization obs from the database
+			List<Obs> status = Context.getObsService().getObservations(Arrays.asList(patientArray), null, Arrays.asList(conceptParams), null, null, null, null, null, null, null, null, false);
+	
+			Collections.reverse(status);
+			
+			if (status.size() > 0) {
+			
+				// get all the programs for this patient
+				List<MdrtbPatientProgram> programs = StatusUtil.getMdrtbPrograms(Context.getPatientService().getPatient(patient.getId()));
+				
+				Boolean isHospitalized = false;
+				Date hospitalizationDate = null;
+				
+				// now loop thru all the status obs
+				for (Obs obs : status) {
+						
+					// see if this is ambulatory/hospitalized phase
+					if ((obs.getConcept().equals(typeOfPatientConcept) && obs.getValueCoded().equals(hospitalizedConcept)) 
+							|| (obs.getConcept().equals(hospitalizedSinceLastVisitConcept) && obs.getValueAsBoolean() == true)) {
+					
+						// set the patient as hospitalized if necessary
+						if (!isHospitalized) {
+							isHospitalized = true;
+							hospitalizationDate = obs.getObsDatetime();
+						}
+						// if the patient is already hospitalized, we don't need to do anything in this case
+	
+					}
+					// if the patient is ambulatory
+					else if ((obs.getConcept().equals(typeOfPatientConcept) && obs.getValueCoded().equals(ambulatoryConcept))
+							|| (obs.getConcept().equals(hospitalizedSinceLastVisitConcept) && obs.getValueAsBoolean() == false)) {
+						
+						if (isHospitalized) {								
+							createHospitalization(programs, patient, hospitalizationDate, obs.getObsDatetime());
+							
+							// set the patient as not hospitalized, and set the hospitalization date back to null
+							isHospitalized = false;
+							hospitalizationDate = null;
+						}	
+					}	
+				}
+				
+				// handle a current hospitalization
+				if (isHospitalized) {
+					createHospitalization(programs, patient, hospitalizationDate, null);
+				}
+			}
+		}
+		
+		
+		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+	}
+    
+    
+    private void createHospitalization(List<MdrtbPatientProgram> programs, Person patient, Date admissionDate, Date dischargeDate) {
+    	
+    	for(MdrtbPatientProgram program : programs) {
+    		if (program.getDateCompleted() == null || admissionDate.before(program.getDateCompleted()) 
+    				&& (dischargeDate == null || dischargeDate.after(program.getDateEnrolled()))) {
+    			program.addHospitalization(admissionDate, dischargeDate);
+    			log.error("Creating hospitalization for patient # " + patient.getId() +" from " + admissionDate + " to " + dischargeDate);
+    			Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+    			return;
+    		}
+    	}
+    	
+    	log.error("Unable to add hospitalization for patient # " + patient.getId() + " from " + admissionDate + " to " + dischargeDate);
+    }
     
 	private void initialize() {
 		testConstructConcepts = new HashSet<Concept>();
