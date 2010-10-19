@@ -32,7 +32,9 @@
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}<br/>
 </c:forEach>
 <br/>
+<c:if test="${empty visits.intakeVisits.value}">
 <button onclick="window.location='${pageContext.request.contextPath}${visits.newIntakeVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+</c:if>
 </div>
 
 <br/>
