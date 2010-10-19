@@ -2,12 +2,15 @@ package org.openmrs.module.mdrtb.program;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
@@ -15,8 +18,12 @@ import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
+import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.specimen.Specimen;
 
 
 public class MdrtbPatientProgram {
@@ -219,6 +226,95 @@ public class MdrtbPatientProgram {
 		hospitalizations.setVoidReason("voided by mdr-tb module");
 	}
 	
+	/**
+	 * Methods that get certain patient data during the time of this program
+	 */
+	
+	public List<Specimen> getSpecimensDuringProgram() {
+		
+		if (program == null || program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(program.getDateEnrolled());
+		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
+		
+		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), calendar.getTime(), program.getDateCompleted());
+    }
+	
+	public List<Regimen> getMdrtbRegimensDuringProgram() {
+		
+		if (program == null || program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(program.getDateEnrolled());
+		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
+		
+		return RegimenUtils.getMdrtbRegimenHistory(program.getPatient()).getRegimensBetweenDates(calendar.getTime(), 
+			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
+	}
+	
+	public List<Encounter> getMdrtbEncountersDuringProgram() {
+		
+		if (program == null || program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(program.getDateEnrolled());
+		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
+		
+		// only get MDR-TB specific encounters
+		List<EncounterType> types = new LinkedList<EncounterType>();
+		types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
+    	
+		
+		return Context.getEncounterService().getEncounters(program.getPatient(), null, calendar.getTime(), program.getDateCompleted(), null, types, null, false);
+	}
+	
+	public Date getTreatmentStartDateDuringProgram() {
+		Date startDate = null;
+		List<Regimen> regimens = getMdrtbRegimensDuringProgram();
+			
+		// TODO: confirm that regimen history sorts regimens in order
+		// return the start date of the first regimen 
+		if(regimens != null && regimens.size() > 0) {
+			startDate = regimens.get(0).getStartDate();
+		
+			// if the treatment start date is prior to the program start date, this is an invalid start date
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(program.getDateEnrolled());
+			calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
+		
+			if (startDate.before(calendar.getTime())) {
+				startDate = null;
+			}
+		
+		}
+		
+		// if no regimens, this will return null for a treatment start date	
+		return startDate;
+	}
+	
+	public Date getTreatmentEndDateDuringProgram() {
+		Date endDate = null;
+		List<Regimen> regimens = getMdrtbRegimensDuringProgram();
+			
+		// TODO: confirm that regimen history sorts regimens in order
+		// return the end date of the last regimen 
+		if(regimens != null && regimens.size() > 0) {
+			endDate = regimens.get(regimens.size()-1).getEndDate();
+		}
+		
+		// if no regimens, this will return null for a treatment end date	
+		return endDate;
+		
+	}
 	
 	/**
 	 * Utility functions

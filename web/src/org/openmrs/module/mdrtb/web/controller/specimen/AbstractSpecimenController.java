@@ -22,8 +22,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Specimen;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -57,12 +57,13 @@ public abstract class AbstractSpecimenController {
 		// specimens here; this is just to make sure we don't "miss" a specimen due to a faulty program enrollment date
 		
 		PatientProgram patientProgram = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+		MdrtbPatientProgram mdrtbPatientProgram = new MdrtbPatientProgram(patientProgram);
 		Patient patient = patientProgram.getPatient();
 		
 		List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")), null, null, null, null, false);
 
 		if (patientPrograms.size() > 1) {
-			return StatusUtil.getSpecimensDuringProgram(patientProgram);
+			return mdrtbPatientProgram.getSpecimensDuringProgram();
 		}
 		else {
 			return Context.getService(MdrtbService.class).getSpecimens(patient);

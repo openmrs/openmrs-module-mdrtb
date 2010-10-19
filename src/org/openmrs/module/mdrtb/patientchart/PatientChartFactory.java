@@ -17,12 +17,12 @@ import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenUtil;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 
 
 public class PatientChartFactory {
@@ -39,8 +39,10 @@ public class PatientChartFactory {
 			return null;
 		}
 		
+		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+		
 		// first, fetch all the specimens for this patient
-		List<Specimen> specimens = StatusUtil.getSpecimensDuringProgram(program);
+		List<Specimen> specimens = mdrtbProgram.getSpecimensDuringProgram();
 		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
@@ -56,10 +58,10 @@ public class PatientChartFactory {
 		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(program);
 		
 		// get the treatment start date to use as the chart start date
-		Date treatmentStartDate = StatusUtil.getTreatmentStartDateDuringProgram(program);
+		Date treatmentStartDate = mdrtbProgram.getTreatmentStartDateDuringProgram();
 		
 		// get the treatment end date
-		Date treatmentEndDate = StatusUtil.getTreatmentEndDateDuringProgram(program);
+		Date treatmentEndDate = mdrtbProgram.getTreatmentEndDateDuringProgram();
 		
 		// determine if the patient have ever been on treatment
 		Boolean hasBeenOnTreatment = (treatmentStartDate != null);
@@ -230,15 +232,18 @@ public class PatientChartFactory {
 	 * Assembles all state change components for the entire chart
 	 */
 	private List<RecordComponent> createAllStateChangeRecordComponents(PatientProgram program) {
+		
+		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+		
 		List<RecordComponent> stateChangeRecordComponents = new LinkedList<RecordComponent>();
 		
 		// the only state we are worried about at this point is the treatment start date and treatment end date
-		if(StatusUtil.getTreatmentStartDateDuringProgram(program) != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(StatusUtil.getTreatmentStartDateDuringProgram(program), Context.getMessageSourceService().getMessage("mdrtb.treatmentstartdate")));
+		if(mdrtbProgram.getTreatmentStartDateDuringProgram() != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(mdrtbProgram.getTreatmentStartDateDuringProgram(), Context.getMessageSourceService().getMessage("mdrtb.treatmentstartdate")));
 		}
 			
-		if(StatusUtil.getTreatmentEndDateDuringProgram(program) != null) {
-			stateChangeRecordComponents.add(new StateChangeRecordComponent(StatusUtil.getTreatmentEndDateDuringProgram(program), Context.getMessageSourceService().getMessage("mdrtb.treatmentEndDate")));
+		if(mdrtbProgram.getTreatmentEndDateDuringProgram() != null) {
+			stateChangeRecordComponents.add(new StateChangeRecordComponent(mdrtbProgram.getTreatmentEndDateDuringProgram(), Context.getMessageSourceService().getMessage("mdrtb.treatmentEndDate")));
 		}
 		
 		Collections.sort(stateChangeRecordComponents);

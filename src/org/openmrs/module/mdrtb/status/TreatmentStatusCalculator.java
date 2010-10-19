@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openmrs.PatientProgram;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 
 public class TreatmentStatusCalculator implements StatusCalculator {
@@ -18,6 +19,8 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 	
     public Status calculate(PatientProgram program) { 	
 	   
+    	MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    	
     	TreatmentStatus status = new TreatmentStatus(program);
     	
     	TreatmentState treatmentState = null;
@@ -25,7 +28,7 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	// get the list of regimens for this patient within the program period
     	List<StatusItem> regimenList = new LinkedList<StatusItem>();
     	
-	    for (Regimen regimen : StatusUtil.getMdrtbRegimensDuringProgram(program)) {
+	    for (Regimen regimen : mdrtbProgram.getMdrtbRegimensDuringProgram()) {
 	 	
 	    	if (regimen.isActive()) {
 	    		treatmentState = TreatmentState.ON_TREATMENT;

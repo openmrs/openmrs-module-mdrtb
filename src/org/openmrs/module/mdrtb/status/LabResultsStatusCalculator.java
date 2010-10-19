@@ -13,6 +13,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
@@ -36,11 +37,13 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	@SuppressWarnings("unchecked")
 	public Status calculate(PatientProgram program) {
 		
+		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+		
 		// create the Status
 		LabResultsStatus status = new LabResultsStatus(program);
 		
 		// get the specimens for this patient program, because these will be used for multiple calculations
-		List<Specimen> specimens = StatusUtil.getSpecimensDuringProgram(program);
+		List<Specimen> specimens = mdrtbProgram.getSpecimensDuringProgram();
 		
 		// get the control smear and diagnostic culture
 		findDiagnosticSmearAndCulture(specimens, status);

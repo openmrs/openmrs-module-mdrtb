@@ -8,6 +8,7 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 
 
 public class VisitStatusCalculator implements StatusCalculator {
@@ -24,6 +25,9 @@ public class VisitStatusCalculator implements StatusCalculator {
 	
 	
     public Status calculate(PatientProgram program) {
+    	
+    	MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    	
 	   // create the new status
     	VisitStatus status = new VisitStatus(program);
     	
@@ -40,7 +44,7 @@ public class VisitStatusCalculator implements StatusCalculator {
     	
     	
     	// get all the encounters during the program
-    	List<Encounter> encounters = StatusUtil.getMdrtbEncountersDuringProgram(program);
+    	List<Encounter> encounters = mdrtbProgram.getMdrtbEncountersDuringProgram();
    
     	for (Encounter encounter : encounters) {
     		// create a new status item for this encounter
