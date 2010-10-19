@@ -12,7 +12,6 @@ import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.module.mdrtb.status.VisitStatus;
 import org.openmrs.module.mdrtb.status.VisitStatusRenderer;
-import org.openmrs.web.WebConstants;
 
 
 public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
@@ -33,9 +32,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	if(encounter.getForm() != null) {
     		visit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" + encounter.getPatientId() 
     			+ "&formId=" + encounter.getForm().getId() + "&encounterId=" + encounter.getId() + 
-    			"&mode=VIEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 
-    			+ "/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + status.getPatientProgram().getId() 
-    			+ "&patientId=" + encounter.getPatientId());
+    			"&mode=VIEW");
     	}
     	// otherwise, create the link based on the encounter type of the visit
     	else {
@@ -49,7 +46,10 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
         			+ "&encounterId=" + encounter.getId());
     		}
     		else if (type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")))) {
-    			// TODO: add proper link
+    			visit.setLink("/module/mdrtb/form/followup.form?patientId="
+        			+ status.getPatientProgram().getPatient().getPatientId()
+        			+ "&patientProgramId=" + status.getPatientProgram().getId() 
+        			+ "&encounterId=" + encounter.getId());
     		}
     		else if(type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")))) {
     			visit.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + encounter.getId()
@@ -80,33 +80,30 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     		newIntakeVisit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" 
     			+ status.getPatientProgram().getPatient().getPatientId() 
     			+ "&formId=" + intakeForm.get(0).getFormId() + 
-    			"&mode=NEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 
-    			+ "/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + status.getPatientProgram().getId() 
-    			+ "&patientId=" + status.getPatientProgram().getPatient().getPatientId());
+    			"&mode=NEW");
     	}
     	else {
     		throw new MdrtbAPIException("More than one form associated with MDR-TB intake encounter.");
     	}	
     }
 
-    public void renderNewFollowUpVisit(StatusItem newFollowUpVisit, VisitStatus status) {
+    public void renderNewFollowUpVisit(StatusItem newfollowUpVisit, VisitStatus status) {
     	EncounterType [] followUp = {Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"))};
         
     	// see if there are any forms associated with the intake encounter type
     	List<Form> followUpForm = Context.getFormService().getForms(null, true, Arrays.asList(followUp), false, null, null, null);
     	
     	if (followUpForm == null || followUpForm.isEmpty()) {
-    		// if there is no form associated with an intake encounter, return the link to the built-in jsp page
-    		// TODO: implement this
+    		newfollowUpVisit.setLink("/module/mdrtb/form/followup.form?patientId="
+    			+ status.getPatientProgram().getPatient().getPatientId()
+    			+ "&patientProgramId=" + status.getPatientProgram().getId() 
+    			+ "&encounterId=-1");
     	}
     	else if (followUpForm.size() == 1) {
     		// if there is exactly one form, assume it is an html form and create a link to it
-    		newFollowUpVisit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" 
+    		newfollowUpVisit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" 
     			+ status.getPatientProgram().getPatient().getPatientId() 
-    			+ "&formId=" + followUpForm.get(0).getFormId() + 
-    			"&mode=NEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 
-    			+ "/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + status.getPatientProgram().getId() 
-    			+ "&patientId=" + status.getPatientProgram().getPatient().getPatientId());
+    			+ "&formId=" + followUpForm.get(0).getFormId() + "&mode=NEW");
     	}
     	else {
     		throw new MdrtbAPIException("More than one form associated with MDR-TB follow-up encounter.");

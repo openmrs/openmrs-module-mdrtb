@@ -7,7 +7,6 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
-import org.openmrs.api.context.Context;
 
 
 public abstract class AbstractForm {
@@ -15,12 +14,10 @@ public abstract class AbstractForm {
 	
 	public AbstractForm() {
 		this.encounter = new Encounter();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));		
 	}
 	
 	public AbstractForm(Patient patient) {
 		this.encounter = new Encounter();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));		
 		this.encounter.setPatient(patient);
 	}
 	

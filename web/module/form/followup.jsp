@@ -20,17 +20,17 @@
 
 <div align="center"> <!-- start of page div -->
 
-<b class="boxHeader"><spring:message code="mdrtb.intakeForm" text="Intake Form"/></b>
+<b class="boxHeader"><spring:message code="mdrtb.followupForm" text="Follow-Up Form"/></b>
 <div class="box">
 
-<form name="intake" action="intake.form?patientId=${patientId}&patientProgramId=${patientProgramId}&encounterId=${!empty intake.id ? intake.id : -1}" method="post">
+<form name="followup" action="followup.form?patientId=${patientId}&patientProgramId=${patientProgramId}&encounterId=${!empty followup.id ? followup.id : -1}" method="post">
 <input type="hidden" name="returnUrl" value="${returnUrl}" />
 
 <table>
  
 <tr>
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
-<td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${intake.encounterDatetime}"/></td>
+<td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${followup.encounterDatetime}"/></td>
 </tr>
  
 <tr>
@@ -39,7 +39,7 @@
 <select name="location">
 <option value=""></option>
 <c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${intake.location == location}">selected</c:if>>${location.displayString}</option>
+	<option value="${location.id}" <c:if test="${followup.location == location}">selected</c:if>>${location.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -51,19 +51,7 @@
 <select name="provider">
 <option value=""></option>
 <c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${intake.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr>
- 
-<tr>
-<td><spring:message code="mdrtb.anatomicaltype" text="Anatomical Type"/>:</td>
-<td>
-<select name="anatomicalSite">
-<option value=""></option>
-<c:forEach var="site" items="${sites}">
-	<option value="${site.answerConcept.id}" <c:if test="${intake.anatomicalSite == site.answerConcept}">selected</c:if> >${site.answerConcept.displayString}</option>
+	<option value="${provider.id}" <c:if test="${followup.provider == provider}">selected</c:if>>${provider.personName}</option>
 </c:forEach>
 </select>
 </td>

@@ -10,14 +10,17 @@ import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 
 
-public class SimpleIntakeForm extends AbstractForm implements IntakeForm {
+public class SimpleIntakeForm extends AbstractForm {
 
 	public SimpleIntakeForm() {
 		super();
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));		
+		
 	}
 	
 	public SimpleIntakeForm(Patient patient) {
 		super(patient);
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));		
 	}
 	
 	public SimpleIntakeForm(Encounter encounter) {

@@ -293,7 +293,7 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.intake" text="Intake"/>:</td><td>
 <c:choose> 
 	<c:when test="${! empty status.visitStatus.intakeVisits.value}">
-		<a href="${pageContext.request.contextPath}${status.visitStatus.intakeVisits.value[0].link}&redirect=/module/mdrtb/dashboard/dashboard.form">${status.visitStatus.intakeVisits.value[0].displayString}</a>
+		<a href="${pageContext.request.contextPath}${status.visitStatus.intakeVisits.value[0].link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}">${status.visitStatus.intakeVisits.value[0].displayString}</a>
 	</c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.none" text="None"/>
@@ -303,7 +303,7 @@ ${regimen.displayString}
 
 <c:if test="${empty status.visitStatus.intakeVisits.value}">
 <tr><td colspan="2">
-	<button onclick="window.location='${pageContext.request.contextPath}${status.visitStatus.newIntakeVisit.link}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+	<button onclick="window.location='${pageContext.request.contextPath}${status.visitStatus.newIntakeVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
 </td></tr>
 </c:if>
 
@@ -312,7 +312,7 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.mostRecentFollowUp" text="Most Recent Follow-up"/>:</td><td> 
 <c:choose>
 	<c:when test="${! empty status.visitStatus.followUpVisits.value}">
-		<a href="${pageContext.request.contextPath}${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].link}">${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString}</a>
+		<a href="${pageContext.request.contextPath}${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}">${status.visitStatus.followUpVisits.value[fn:length(status.visitStatus.followUpVisits.value) - 1].displayString}</a>
 	</c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.none" text="None"/>
@@ -324,7 +324,7 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.mostRecentSpecimenCollection" text="Most Specimen Collection"/>:</td><td> 
 <c:choose>
 	<c:when test="${! empty status.visitStatus.specimenCollectionVisits.value}">
-		<a href="${pageContext.request.contextPath}${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].link}">${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString}</a>
+		<a href="${pageContext.request.contextPath}${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}">${status.visitStatus.specimenCollectionVisits.value[fn:length(status.visitStatus.specimenCollectionVisits.value) - 1].displayString}</a>
 	</c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.none" text="None"/>
@@ -336,7 +336,7 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.nextScheduledFollowUp" text="Next Scheduled Follow-up"/>:</td><td> 
 <c:choose>
 	<c:when test="${! empty status.visitStatus.scheduledFollowUpVisits.value}">
-		<a href="${pageContext.request.contextPath}${status.visitStatus.scheduledFollowUpVisits.value[0].link}">${status.visitStatus.scheduledFollowUpVisits.value[0].displayString}</a>
+		<a href="${pageContext.request.contextPath}${status.visitStatus.scheduledFollowUpVisits.value[0].link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}">${status.visitStatus.scheduledFollowUpVisits.value[0].displayString}</a>
 	</c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.none" text="None"/>
@@ -345,7 +345,7 @@ ${regimen.displayString}
 </td></tr>
 
 <tr><td colspan="2">
-	<button onclick="window.location='${pageContext.request.contextPath}${status.visitStatus.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+	<button onclick="window.location='${pageContext.request.contextPath}${status.visitStatus.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </td></tr>
 
 </table>

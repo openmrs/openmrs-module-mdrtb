@@ -28,11 +28,11 @@
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
 <div class="box" style="margin:0px">
 <c:forEach var="encounterStatus" items="${visits.intakeVisits.value}">
-<a href="${encounterStatus.link}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
+<a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}<br/>
 </c:forEach>
 <br/>
-<button onclick="window.location='${visits.newIntakeVisit.link}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newIntakeVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
 </div>
 
 <br/>
@@ -40,11 +40,11 @@
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.followUpVisits" text="Follow Up Visits"/></b>
 <div class="box" style="margin:0px">
 <c:forEach var="encounterStatus" items="${visits.followUpVisits.value}">
-<a href="${encounterStatus.link}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
+<a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}<br/>
 </c:forEach>
 <br/>
-<button onclick="window.location='${visits.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </div>
 
 <br/>
@@ -53,11 +53,11 @@
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.scheduledFollowUpVisits" text="Future Follow-up Visits Scheduled"/></b>
 <div class="box" style="margin:0px">
 <c:forEach var="encounterStatus" items="${visits.scheduledFollowUpVisits.value}">
-<a href="${encounterStatus.link}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
+<a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}<br/>
 </c:forEach>
 <br/>
-<button onclick="window.location='${visits.newFollowUpVisit.link}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </div>
 </c:if>
 
