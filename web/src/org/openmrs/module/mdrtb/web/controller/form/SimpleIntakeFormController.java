@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.web.controller.form;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.form.SimpleIntakeForm;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -50,9 +52,21 @@ public class SimpleIntakeFormController {
 	
 	@ModelAttribute("intake")
 	public SimpleIntakeForm getIntakeForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                                      @RequestParam(required = true, value = "patientId") Integer patientId) {
+	                                      @RequestParam(required = true, value = "patientId") Integer patientId,
+	                                      @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
+		// if no form is specified, create a new one
 		if (encounterId == -1) {
-			return new SimpleIntakeForm(Context.getPatientService().getPatient(patientId));
+			SimpleIntakeForm form = new SimpleIntakeForm(Context.getPatientService().getPatient(patientId));
+		
+			// prepopulate the form with information that has been specified
+			if (patientProgramId != null) {
+				MdrtbPatientProgram program = new MdrtbPatientProgram(Context.getProgramWorkflowService().getPatientProgram(patientProgramId));
+				form.setEncounterDatetime(program.getDateEnrolled());
+				form.setLocation(program.getLocation());
+			}
+				
+			return form;
 		}
 		else {
 			return new SimpleIntakeForm(Context.getEncounterService().getEncounter(encounterId));
@@ -67,6 +81,11 @@ public class SimpleIntakeFormController {
 	@ModelAttribute("patientProgramId")
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
+	}
+	
+	@ModelAttribute("redirect")
+	public String getRedirect(@RequestParam(required = true, value = "redirect") String redirect) {
+		return redirect;
 	}
 	
 	@ModelAttribute("providers")

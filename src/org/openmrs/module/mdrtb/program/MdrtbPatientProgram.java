@@ -21,7 +21,7 @@ import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
 
 public class MdrtbPatientProgram {
 
-	PatientProgram program;
+	private PatientProgram program;
 	
 	public MdrtbPatientProgram() {
 		this.program = new PatientProgram();

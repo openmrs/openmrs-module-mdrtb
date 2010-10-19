@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.web.controller.program;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,6 +13,10 @@ import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.status.Status;
+import org.openmrs.module.mdrtb.status.VisitStatus;
+import org.openmrs.module.mdrtb.status.VisitStatusCalculator;
+import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -107,7 +112,7 @@ public class ProgramEditController {
 	@RequestMapping(value = "/module/mdrtb/program/programEnroll.form", method = RequestMethod.POST)
 	public ModelAndView processEnroll(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors, 
 	                                  @RequestParam(required = true, value = "patientId") Integer patientId,
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map) {
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		  
 		// TODO: validate
 		// date should not be in future
@@ -120,16 +125,20 @@ public class ProgramEditController {
 		
 		// set the patient
 		program.setPatient(patient);
-		
+				
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-				
+
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
 			
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + program.getPatient().getId() + "&patientProgramId=" + program.getId());
-			
+		// when we enroll in a program, we want to jump immediately to the intake for this patient
+		// TODO: hacky to have to create a whole new visit status here just to determine the proper link?
+		// TODO: modeling visit as a status probably wasn't the best way to go on my part
+		VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program.getPatientProgram());
+		
+		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink());		
 	}
 	
 	@RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)

@@ -48,8 +48,8 @@ public class ProgramListController {
 		// first get all the MDR-TB programs for this patient
 		List<MdrtbPatientProgram> programs = StatusUtil.getMdrtbPrograms(patient);
 	
-		// if there is exactly one patient program, we can just default to use that one and proceed directly to the dashboard
-		if (programs.size() == 1) {
+		// if there is exactly one patient program, and it is active, we can just default to use that one and proceed directly to the dashboard
+		if (programs.size() == 1 && programs.get(0).getActive()) {
 			return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + programs.get(0).getId() 
 				+ "&patientId=" + patientId);
 		}

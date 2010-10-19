@@ -31,7 +31,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	// now determine where to link to
     	// if there is a form linked to this encounter, assume it is an HTML Form Entry form
     	if(encounter.getForm() != null) {
-    		visit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/htmlFormEntry.form?personId=" + encounter.getPatientId() 
+    		visit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" + encounter.getPatientId() 
     			+ "&formId=" + encounter.getForm().getId() + "&encounterId=" + encounter.getId() + 
     			"&mode=VIEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 
     			+ "/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + status.getPatientProgram().getId() 
@@ -43,7 +43,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     		EncounterType type = encounter.getEncounterType();
     	
     		if (type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")))) {
-    			visit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/form/intake.form?patientId="
+    			visit.setLink("/module/mdrtb/form/intake.form?patientId="
         			+ status.getPatientProgram().getPatient().getPatientId()
         			+ "&patientProgramId=" + status.getPatientProgram().getId() 
         			+ "&encounterId=" + encounter.getId());
@@ -52,7 +52,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     			// TODO: add proper link
     		}
     		else if(type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")))) {
-    			visit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" + encounter.getId()
+    			visit.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + encounter.getId()
     							+ "&patientProgramId=" + status.getPatientProgram().getId());
     		}
     		else {
@@ -69,7 +69,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	
     	// if there is no custom intake form, link to the default one
     	if (intakeForm == null || intakeForm.isEmpty()) {
-    		newIntakeVisit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/form/intake.form?patientId="
+    		newIntakeVisit.setLink("/module/mdrtb/form/intake.form?patientId="
     			+ status.getPatientProgram().getPatient().getPatientId()
     			+ "&patientProgramId=" + status.getPatientProgram().getId() 
     			+ "&encounterId=-1");
@@ -77,7 +77,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	// if there is a custom HTML form, use it
     	else if (intakeForm.size() == 1) {
     		// if there is exactly one form, assume it is an html form and create a link to it
-    		newIntakeVisit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/htmlFormEntry.form?personId=" 
+    		newIntakeVisit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" 
     			+ status.getPatientProgram().getPatient().getPatientId() 
     			+ "&formId=" + intakeForm.get(0).getFormId() + 
     			"&mode=NEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 
@@ -101,7 +101,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	}
     	else if (followUpForm.size() == 1) {
     		// if there is exactly one form, assume it is an html form and create a link to it
-    		newFollowUpVisit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/htmlFormEntry.form?personId=" 
+    		newFollowUpVisit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" 
     			+ status.getPatientProgram().getPatient().getPatientId() 
     			+ "&formId=" + followUpForm.get(0).getFormId() + 
     			"&mode=NEW&returnUrl=" + "/" + WebConstants.WEBAPP_NAME 

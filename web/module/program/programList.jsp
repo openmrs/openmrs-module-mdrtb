@@ -80,12 +80,13 @@
 
 <tr><td>
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:
-<select name="location">
+Not currently implemented
+<!--  <select name="location">
 <option value=""/>
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == program.location}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
-</select>	
+</select> -->
 </td></tr>
 
 <tr><td>
@@ -116,7 +117,7 @@
 
 <br/>
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.previousProrgams" text="Previous MDR-TB Programs"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.previousPrograms" text="Previous MDR-TB Programs"/></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0" border="2">
 <tr>

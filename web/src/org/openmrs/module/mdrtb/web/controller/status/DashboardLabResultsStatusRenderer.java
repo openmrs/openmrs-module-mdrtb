@@ -28,7 +28,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			        smear.getResultDate() != null ? DateFormat.getDateInstance().format(smear.getResultDate()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
-			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
+			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
 			        + smear.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
 			
 			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
@@ -50,7 +50,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			        culture.getResultDate() != null ? DateFormat.getDateInstance().format(culture.getResultDate()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			
-			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
+			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
 				+ culture.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
 			     
 			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
@@ -80,7 +80,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			Test test = (Test) item.getValue();
 			TestStatus testStatus = test.getStatus();
 			
-			item.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/specimen/specimen.form?specimenId=" 
+			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" 
 						+ test.getSpecimenId() + "&testId=" + test.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
 			 
 			// get the test type and capitalize the first character
