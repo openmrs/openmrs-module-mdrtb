@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.program;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -12,9 +13,11 @@ import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
+import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
@@ -232,7 +235,7 @@ public class MdrtbPatientProgram {
 	
 	public List<Specimen> getSpecimensDuringProgram() {
 		
-		if (program == null || program.getDateEnrolled() == null) {
+		if (program.getDateEnrolled() == null) {
 			return null;
 		}
 		
@@ -245,7 +248,7 @@ public class MdrtbPatientProgram {
 	
 	public List<Regimen> getMdrtbRegimensDuringProgram() {
 		
-		if (program == null || program.getDateEnrolled() == null) {
+		if (program.getDateEnrolled() == null) {
 			return null;
 		}
 		
@@ -259,7 +262,7 @@ public class MdrtbPatientProgram {
 	
 	public List<Encounter> getMdrtbEncountersDuringProgram() {
 		
-		if (program == null || program.getDateEnrolled() == null) {
+		if (program.getDateEnrolled() == null) {
 			return null;
 		}
 		
@@ -276,6 +279,28 @@ public class MdrtbPatientProgram {
 		
 		return Context.getEncounterService().getEncounters(program.getPatient(), null, calendar.getTime(), program.getDateCompleted(), null, types, null, false);
 	}
+	
+	public Concept getCurrentAnatomicalSiteDuringProrgram() {
+		if (program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(program.getDateEnrolled());
+		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
+		
+		Concept [] anatomicalSiteConcept = {Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB)};
+		Person [] person = {program.getPatient()};
+		
+		List<Obs> anatomicalSites = Context.getObsService().getObservations(Arrays.asList(person), null, Arrays.asList(anatomicalSiteConcept), null, null, null, null, null, null, calendar.getTime(), program.getDateCompleted(), false);
+	
+		if (anatomicalSites.size() > 0) {
+			return anatomicalSites.get(0).getValueCoded();
+		}
+		else {
+			return null;
+		}
+	}	
 	
 	public Date getTreatmentStartDateDuringProgram() {
 		Date startDate = null;
@@ -315,6 +340,7 @@ public class MdrtbPatientProgram {
 		return endDate;
 		
 	}
+	
 	
 	/**
 	 * Utility functions

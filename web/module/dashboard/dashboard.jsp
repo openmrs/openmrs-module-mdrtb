@@ -431,6 +431,7 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
+<tr><td><spring:message code="mdrtb.site" text="Site"/>:</td><td>${status.labResultsStatus.anatomicalSite.displayString}</td></tr>
 <tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>:</td><td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</mdrtb:a></td></tr>
 <tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>:</td><td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</mdrtb:a></td></tr>
 

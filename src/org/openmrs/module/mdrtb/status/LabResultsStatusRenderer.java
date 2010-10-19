@@ -19,7 +19,9 @@ public interface LabResultsStatusRenderer {
 	
 	public String renderCultureConversion(StatusItem cultureConversion);
 	
+	public String renderAnatomicalSite(StatusItem anatomicalStatus);	
+	
 	public StatusFlag createNoSmearsFlag();
 	
-	public StatusFlag createNoCulturesFlag();	
+	public StatusFlag createNoCulturesFlag();
 }

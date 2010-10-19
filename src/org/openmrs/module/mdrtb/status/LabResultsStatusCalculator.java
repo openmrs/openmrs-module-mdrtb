@@ -62,7 +62,13 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		Collections.reverse(specimens);
 		findMostRecentSmear(specimens, status);
 		findMostRecentCulture(specimens, status);
+		
+		// calculate whether or not the culture has been converted
 		status.addItem("cultureConversion", calculateCultureConversion(specimens));
+		
+		// figure out the anatomical site, if know
+		status.addItem("anatomicalSite", findAnatomicalSite(mdrtbProgram));
+		
 		
 		return status;
 		
@@ -234,6 +240,15 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	
 		// if we've gotten here, this specimen has no positive results, but no negative culture, so we haven't gotten any useful into from it
 		return null;
+	}
+	
+	private StatusItem findAnatomicalSite(MdrtbPatientProgram program) {
+		StatusItem anatomicalSite = new StatusItem();
+		
+		anatomicalSite.setValue(program.getCurrentAnatomicalSiteDuringProrgram());
+		anatomicalSite.setDisplayString(renderer.renderAnatomicalSite(anatomicalSite));
+		
+		return anatomicalSite;
 	}
 	
 	private void findPendingLabResults(List<Specimen> specimens, LabResultsStatus status) {

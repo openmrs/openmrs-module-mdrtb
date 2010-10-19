@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Smear;
@@ -15,7 +17,6 @@ import org.openmrs.module.mdrtb.status.LabResultsStatus;
 import org.openmrs.module.mdrtb.status.LabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusFlag;
 import org.openmrs.module.mdrtb.status.StatusItem;
-import org.openmrs.web.WebConstants;
 
 public class DashboardLabResultsStatusRenderer implements LabResultsStatusRenderer {
 	
@@ -131,6 +132,23 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 	    return displayString.toString();
     }
 	
+    public String renderAnatomicalSite(StatusItem anatomicalStatus) {
+    	Concept anatomicalSite = (Concept) anatomicalStatus.getValue();
+    	
+    	if (anatomicalSite == null) {
+    		return Context.getMessageSourceService().getMessage("mdrtb.unknown");
+    	}
+    	else if (anatomicalSite.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB))) {
+    		return Context.getMessageSourceService().getMessage("mdrtb.pulmonary");
+    	}
+    	else if (anatomicalSite.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB))) {
+    		return Context.getMessageSourceService().getMessage("mdrtb.extrapulmonary");
+    	}
+    	else {
+    		return Context.getMessageSourceService().getMessage("mdrtb.unknown");
+    	}
+    }
+    
     public String renderCultureConversion(StatusItem cultureConversion) {
     DateFormat df = DateFormat.getDateInstance();
     	

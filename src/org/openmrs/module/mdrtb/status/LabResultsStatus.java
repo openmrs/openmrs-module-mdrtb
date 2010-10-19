@@ -40,4 +40,8 @@ public class LabResultsStatus extends Status {
 	public StatusItem getTbClassification() {
 		return getItem("tbClassification");
 	}
+
+	public StatusItem getAnatomicalSite() {
+		return getItem("anatomicalSite");
+	}
 }
