@@ -138,6 +138,8 @@ public class MdrtbConcepts {
     // TB Type
     public final static String [] PULMONARY_TB = {"PULMONARY TUBERCULOSIS"};
     public final static String [] EXTRA_PULMONARY_TB = {"EXTRA-PULMONARY TUBERCULOSIS"};
+    public final static String [] ANATOMICAL_SITE_OF_TB = {"ANATOMICAL SITE OF TUBERCULOSIS"};
+    // TODO: what is the difference between EXTRA PULMONARY TB and EXTRA-PULONARY TB LOCATION?
     public final static String [] EXTRA_PULMONARY_TB_LOCATION = {"EXTRA-PULMONARY TUBERCULOSIS LOCATION"};
     
     // HIV Co-infection

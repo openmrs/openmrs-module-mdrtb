@@ -14,6 +14,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
@@ -203,6 +204,11 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional(readOnly=true)
     public Program getMdrtbProgram();
     
+    /**
+     * Gets the possible providers
+     */
+    @Transactional(readOnly=true)
+    public Collection<Person> getProviders();
     
     /**
      * Returns all the concepts that are possible coded answers for the Tuberculosis Smear Test Result
@@ -257,6 +263,12 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleSpecimenAppearances();
+    
+    /**
+     * Returns all possible TB Anatomical sites
+     */
+    @Transactional(readOnly=true)
+    public Collection<ConceptAnswer> getPossibleAnatomicalSites();
   
     /**
      * Returns all the possible drugs to display in a DST result, in the order we want to display them

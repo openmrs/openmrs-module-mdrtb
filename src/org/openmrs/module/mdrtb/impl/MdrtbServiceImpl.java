@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,9 +26,12 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
@@ -34,6 +39,7 @@ import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
@@ -422,6 +428,21 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	return Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
     }
 	
+   public Collection<Person> getProviders() {
+		// TODO: this should be customizable, so that other installs can define there own provider lists?
+		Role provider = Context.getUserService().getRole("Provider");
+		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
+		
+		// add all the persons to a sorted set sorted by name
+		SortedSet<Person> persons = new TreeSet<Person>(new PersonByNameComparator());
+		
+		for (User user : providers) {
+			persons.add(user.getPerson());
+		}
+		
+		return persons;
+	}
+    
 	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return this.getConcept(MdrtbConcepts.SMEAR_RESULT).getAnswers();
 	}
@@ -465,6 +486,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return this.getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE).getAnswers();
 	}
 	
+	   
+    public Collection<ConceptAnswer> getPossibleAnatomicalSites() {
+    	return this.getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getAnswers();
+    }
+	
     public List<Concept> getMdrtbDrugs() {
     	
     	Concept tbDrugs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
@@ -503,8 +529,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
   
     public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousTreatment() {
     	return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
-    }
-    
+    }    
     
     public String getColorForConcept(Concept concept) {
     	if(concept == null) {

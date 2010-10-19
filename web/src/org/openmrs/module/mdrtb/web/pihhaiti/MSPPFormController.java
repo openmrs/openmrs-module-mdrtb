@@ -81,18 +81,7 @@ public class MSPPFormController {
 	
 	@ModelAttribute("providers")
 	Collection<Person> getPossibleProviders() {
-		// TODO: this should be customizable, so that other installs can define there own provider lists?
-		Role provider = Context.getUserService().getRole("Provider");
-		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
-		
-		// add all the persons to a sorted set sorted by name
-		SortedSet<Person> persons = new TreeSet<Person>(new PersonByNameComparator());
-		
-		for (User user : providers) {
-			persons.add(user.getPerson());
-		}
-		
-		return persons;
+		return Context.getService(MdrtbService.class).getProviders();
 	}
 	
 	@ModelAttribute("locations")

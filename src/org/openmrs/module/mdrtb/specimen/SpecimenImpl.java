@@ -19,6 +19,7 @@ import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 /**
  * An implementation of the MdrtbSpecimen. This wraps an Encounter and provides access to the
@@ -136,7 +137,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public Concept getAppearance() {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -147,7 +148,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public String getComments() {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS), encounter);
 		if (obs == null) {
 			return null;
 		}
@@ -221,7 +222,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public String getIdentifier() {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		if (obs == null) {
 			return null;
 		}
@@ -287,7 +288,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public Concept getType() {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -303,7 +304,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public void setAppearance(Concept appearance) {
 		
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && appearance == null) {
@@ -330,7 +331,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public void setComments(String comments) {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && StringUtils.isBlank(comments)) {
@@ -366,7 +367,7 @@ public class SpecimenImpl implements Specimen {
 	}
 	
 	public void setIdentifier(String id) {
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		
 		 // if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && StringUtils.isEmpty(id)) {
@@ -398,19 +399,19 @@ public class SpecimenImpl implements Specimen {
 		// also propagate this location to the appropriate obs
 		// TODO: remember to add any other obs here that get added!
 		// ** but note that we don't want to propogate location to scanned lab result obs **
-		Obs id = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
+		Obs id = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		if (id != null) {
 			id.setLocation(location);
 		}			
-		Obs type = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
+		Obs type = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE), encounter);
 		if (type != null) {
 			type.setLocation(location);
 		}
-		Obs comments = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS));
+		Obs comments = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_COMMENTS), encounter);
 		if (comments != null) {
 			comments.setLocation(location);
 		}
-		Obs appearance = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE));
+		Obs appearance = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_APPEARANCE), encounter);
 		if (appearance != null) {
 			appearance.setLocation(location);
 		}
@@ -420,11 +421,11 @@ public class SpecimenImpl implements Specimen {
 		encounter.setPatient(patient);
 		
 		// also propagate this patient to the appropriate obs
-		Obs id = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID));
+		Obs id = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		if (id != null) {
 			id.setPerson(patient);
 		}
-		Obs type = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
+		Obs type = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE), encounter);
 		if (id != null) { 
 			type.setPerson(patient);
 		}
@@ -435,7 +436,7 @@ public class SpecimenImpl implements Specimen {
 	
 	public void setType(Concept type) {
 		
-		Obs obs = getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE));
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAMPLE_SOURCE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -466,25 +467,5 @@ public class SpecimenImpl implements Specimen {
 	 */
 	public int compareTo(Specimen specimenToCompare) {
 		return this.getDateCollected().compareTo(specimenToCompare.getDateCollected());
-	}
-	
-	/**
-	 * Utility methods 
-	 */
-	
-	/**
-	 * Iterates through all the top-level obs in the encounter and
-	 * returns the first one that who concept matches the specified concept
-	 * Returns null if obs not found
-	 */
-	Obs getObsFromEncounter(Concept concept) {
-		if (encounter.getObsAtTopLevel(false) != null) {
-			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-				if(!obs.isVoided() && obs.getConcept().equals(concept)) {
-					return obs;
-				}
-			}
-		}
-		return null;
 	}
 }

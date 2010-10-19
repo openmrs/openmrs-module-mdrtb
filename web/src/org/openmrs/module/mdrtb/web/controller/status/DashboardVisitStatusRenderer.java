@@ -43,7 +43,10 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     		EncounterType type = encounter.getEncounterType();
     	
     		if (type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")))) {
-    			// TODO: add proper link
+    			visit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/form/intake.form?patientId="
+        			+ status.getPatientProgram().getPatient().getPatientId()
+        			+ "&patientProgramId=" + status.getPatientProgram().getId() 
+        			+ "&encounterId=" + encounter.getId());
     		}
     		else if (type.equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")))) {
     			// TODO: add proper link
@@ -64,10 +67,14 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	// see if there are any forms associated with the intake encounter type
     	List<Form> intakeForm = Context.getFormService().getForms(null, true, Arrays.asList(intake), false, null, null, null);
     	
+    	// if there is no custom intake form, link to the default one
     	if (intakeForm == null || intakeForm.isEmpty()) {
-    		// if there is no form associated with an intake encounter, return the link to the built-in jsp page
-    		// TODO: implement this
+    		newIntakeVisit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/mdrtb/form/intake.form?patientId="
+    			+ status.getPatientProgram().getPatient().getPatientId()
+    			+ "&patientProgramId=" + status.getPatientProgram().getId() 
+    			+ "&encounterId=-1");
     	}
+    	// if there is a custom HTML form, use it
     	else if (intakeForm.size() == 1) {
     		// if there is exactly one form, assume it is an html form and create a link to it
     		newIntakeVisit.setLink("/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/htmlFormEntry.form?personId=" 

@@ -311,6 +311,24 @@ public class SpecimenMigrationController {
 		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
 	}
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addPulmonary.form")
+    public ModelAndView createPulmonary() {
+    	Concept site = Context.getConceptService().getConcept(1452);
+    	
+    	for (ConceptAnswer answer : site.getAnswers()) {
+    		site.removeAnswer(answer);
+    	}
+    	
+    	site.addAnswer(new ConceptAnswer(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB)));
+    	site.addAnswer(new ConceptAnswer(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB)));
+    	
+    	Context.getConceptService().saveConcept(site);
+    	
+    	addConceptMapping("SITE OF TB DISEASE", "ANATOMICAL SITE OF TUBERCULOSIS");
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     
     private void createHospitalization(List<MdrtbPatientProgram> programs, Person patient, Date admissionDate, Date dischargeDate) {
     	

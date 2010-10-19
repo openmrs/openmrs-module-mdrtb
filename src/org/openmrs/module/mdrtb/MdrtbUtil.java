@@ -930,4 +930,20 @@ public class MdrtbUtil {
       	}
       	return null;
       }
+      
+     /**
+  	 * Iterates through all the top-level obs in the encounter and
+  	 * returns the first one that who concept matches the specified concept
+  	 * Returns null if obs not found
+  	 */
+  	public static Obs getObsFromEncounter(Concept concept, Encounter encounter) {
+  		if (encounter.getObsAtTopLevel(false) != null) {
+  			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+  				if(!obs.isVoided() && obs.getConcept().equals(concept)) {
+  					return obs;
+  				}
+  			}
+  		}
+  		return null;
+  	}
 }
