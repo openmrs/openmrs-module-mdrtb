@@ -135,7 +135,7 @@
 	</bean>
 
 	<!-- Add an event listener -->
-	<bean id="mdrtbEventListeners" class="org.openmrs.api.EventListeners">
+	<bean id="mdrtbEventListeners" parent="openmrsEventListeners">
 		<property name="globalPropertyListeners">
 			<list value-type="org.openmrs.api.GlobalPropertyListener" merge="true">
 				<bean class="org.openmrs.module.mdrtb.CacheResetListener" />
