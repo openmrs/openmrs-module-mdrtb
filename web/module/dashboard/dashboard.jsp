@@ -90,6 +90,7 @@
 		$j('#hospitalizationsAddButton').click(function() {
 			$j('#startDate').val('');
 			$j('#endDate').val('');
+			$j('#hospitalizationStateId').val('');
 			$j('#hospitalizationsEditPopup').dialog('open');
 		});
 
@@ -382,9 +383,22 @@ ${regimen.displayString}
 <c:forEach var="hospitalization" items="${program.allHospitalizations}">
 <tr>
 <td class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}"/></td>
-<td class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}"/></td>
-<td><mdrtb:duration startDate="${hospitalization.startDate}" endDate="${hospitalization.endDate}" format="days"/> 
-<spring:message code="mdrtb.days" text="days"/></td>
+<td class="dischargeDate">
+<c:choose>
+	<c:when test="${!empty hospitalization.endDate}">
+		<openmrs:formatDate date="${hospitalization.endDate}"/>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
+	</c:otherwise>
+</c:choose>
+</td>
+<td>
+<c:if test="${!empty hospitalization.endDate}">
+	<mdrtb:duration startDate="${hospitalization.startDate}" endDate="${hospitalization.endDate}" format="days"/> 
+	<spring:message code="mdrtb.days" text="days"/>
+</c:if>
+</td>
 <td><a id="${hospitalization.id}" class="hospitalizationsEditLink" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a></td>
 <td><a href="${pageContext.request.contextPath}/module/mdrtb/program/hospitalizationsDelete.form?patientProgramId=${program.id}&hospitalizationStateId=${hospitalization.id}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteHospitalization" text="Are you sure you want to delete this hospitalization?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 </tr>
