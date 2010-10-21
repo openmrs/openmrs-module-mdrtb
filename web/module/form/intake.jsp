@@ -8,7 +8,7 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
@@ -72,7 +72,8 @@
 
 </table>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${returnUrl}&patientId=${patientId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
+<c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}"/>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><button type="reset" onclick="window.location='${!empty returnUrl ? returnUrl : defaultReturnUrl}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 
 </form>
 

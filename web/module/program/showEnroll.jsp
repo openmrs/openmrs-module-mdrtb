@@ -11,7 +11,7 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${patientId}"/>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
@@ -86,7 +86,7 @@ Not currently implemented
 </td></tr>
 
 </table>
-<button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button><button onclick=window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patientId}'><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+<button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button><button type="reset" onclick=window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patientId}'><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 </div>
 <!-- END PROGRAM ENROLLMENT BOX -->

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.form.SimpleIntakeForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
@@ -26,19 +27,17 @@ public class SimpleIntakeFormController extends AbstractFormController {
 	
 	@ModelAttribute("intake")
 	public SimpleIntakeForm getIntakeForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                                      @RequestParam(required = true, value = "patientId") Integer patientId,
-	                                      @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	                                      @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
-			SimpleIntakeForm form = new SimpleIntakeForm(Context.getPatientService().getPatient(patientId));
-		
-			// prepopulate the form with information that has been specified
-			if (patientProgramId != null) {
-				MdrtbPatientProgram program = new MdrtbPatientProgram(Context.getProgramWorkflowService().getPatientProgram(patientProgramId));
-				form.setEncounterDatetime(program.getDateEnrolled());
-				form.setLocation(program.getLocation());
-			}
+			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+			
+			SimpleIntakeForm form = new SimpleIntakeForm(program.getPatient());
+			
+			// prepopulate the intake form with any program information
+			form.setEncounterDatetime(program.getDateEnrolled());
+			form.setLocation(program.getLocation());
 				
 			return form;
 		}
@@ -55,7 +54,6 @@ public class SimpleIntakeFormController extends AbstractFormController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processIntakeForm (@ModelAttribute("intake") SimpleIntakeForm intake, BindingResult errors, 
-	                                       @RequestParam(required = true, value = "patientId") Integer patientId,
 	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
 	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
 	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
@@ -74,7 +72,7 @@ public class SimpleIntakeFormController extends AbstractFormController {
 			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";
 		}
 		
-		returnUrl = MdrtbWebUtil.appendParameters(returnUrl, patientId, patientProgramId);
+		returnUrl = MdrtbWebUtil.appendParameters(returnUrl, null, patientProgramId);
 		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}

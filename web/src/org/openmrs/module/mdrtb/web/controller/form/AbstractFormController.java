@@ -12,6 +12,7 @@ import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -39,18 +40,18 @@ public class AbstractFormController {
 		
 	}
 	
-	@ModelAttribute("patientId")
-	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		return patientId;
-	}
-	
 	@ModelAttribute("patientProgramId")
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
 	
+	@ModelAttribute("program")
+	public MdrtbPatientProgram getPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+	}
+	
 	@ModelAttribute("returnUrl")
-	public String getreturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {
+	public String getReturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {
 		return returnUrl;
 	}
 	

@@ -54,11 +54,6 @@ public class HivStatusCalculator implements StatusCalculator {
     	
     	Obs mostRecentTestResult = null;
     	
-    	for (Obs result : testResults) {
-    		System.out.println(result.getValueCoded().getDisplayString() + " = " + result.getObsDatetime().toString());
-    	}
-    		
-    	
     	if (testResults !=null && !testResults.isEmpty()) {
     		mostRecentTestResult = testResults.get(0);
     	}

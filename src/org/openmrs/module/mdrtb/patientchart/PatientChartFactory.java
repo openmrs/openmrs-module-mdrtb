@@ -44,6 +44,11 @@ public class PatientChartFactory {
 		// first, fetch all the specimens for this patient
 		List<Specimen> specimens = mdrtbProgram.getSpecimensDuringProgram();
 		
+		// if no specimens, operate on the an empty set
+		if (specimens == null) {
+			specimens = new LinkedList<Specimen>();
+		}
+		
 		// the getSpecimen method should return the specimens sorted, but just in case it is changed
 		Collections.sort(specimens);
 		

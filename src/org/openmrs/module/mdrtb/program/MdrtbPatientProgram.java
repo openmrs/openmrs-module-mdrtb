@@ -348,11 +348,6 @@ public class MdrtbPatientProgram {
 	 */
 	private Date getPreviousProgramDateCompleted() {
 		MdrtbPatientProgram previousProgram = getPreviousProgram();
-		
-		if(previousProgram != null) {
-			System.out.println("previous program " + previousProgram.getDateCompleted());
-		}
-		
 		return (previousProgram != null ? previousProgram.getDateCompleted() : null);
 	}
 	
