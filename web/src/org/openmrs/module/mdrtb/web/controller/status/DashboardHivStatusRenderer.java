@@ -8,11 +8,11 @@ import java.util.List;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.status.HivStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusItem;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 
 
 public class DashboardHivStatusRenderer implements HivStatusRenderer {
@@ -63,7 +63,7 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
    			}
    	
    			// sort the drug list
-   			generics = StatusUtil.sortAntiretrovirals(generics);
+   			generics = MdrtbUtil.sortAntiretrovirals(generics);
 	   
    			regimenItem.setDisplayString(DashboardStatusRendererUtil.renderDrugList(generics));
 	   }

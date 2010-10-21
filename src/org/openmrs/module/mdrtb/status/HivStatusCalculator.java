@@ -10,6 +10,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 
 
@@ -113,7 +114,7 @@ public class HivStatusCalculator implements StatusCalculator {
     	
 		List<StatusItem> regimenList = new LinkedList<StatusItem>();
 		
-		for (Regimen regimen : StatusUtil.getAntiretroviralRegimens(patient)) {
+		for (Regimen regimen : MdrtbUtil.getAntiretroviralRegimens(patient)) {
 	    	
 	    	StatusItem item = new StatusItem();
 	    	

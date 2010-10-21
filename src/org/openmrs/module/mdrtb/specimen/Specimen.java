@@ -20,7 +20,8 @@ public interface Specimen extends Comparable<Specimen>{
 	/**
 	 * Data points this interface provides access to
 	 * 
-	 * id: the id code of the specimen
+	 * id: the id code of the specimen (primary key in the database)
+	 * identifier: an idenifier that has been assigned to the sample for trackin purposes
 	 * type: the concept that represents the type of the specimen (sputum, etc...)
 	 * patient: the patient associated with the specimen
 	 * location: the location where the specimen was collected

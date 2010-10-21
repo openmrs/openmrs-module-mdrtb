@@ -9,8 +9,8 @@ import org.openmrs.Patient;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,7 +46,7 @@ public class ProgramListController {
 		}
 		
 		// first get all the MDR-TB programs for this patient
-		List<MdrtbPatientProgram> programs = StatusUtil.getMdrtbPrograms(patient);
+		List<MdrtbPatientProgram> programs = MdrtbUtil.getMdrtbPrograms(patient);
 	
 		// if there is exactly one patient program, and it is active, we can just default to use that one and proceed directly to the dashboard
 		if (programs.size() == 1 && programs.get(0).getActive()) {

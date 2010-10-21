@@ -33,6 +33,7 @@
             	
      			<!--  portlets -->
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
+            	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -91,6 +92,7 @@
     
     <!-- portlet controllers -->    
     <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController"/>
+     <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/>
     
     <bean parent="serviceContext">
 		<property name="moduleService">

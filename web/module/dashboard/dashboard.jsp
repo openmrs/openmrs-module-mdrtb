@@ -145,11 +145,11 @@
 
 <!--  MDR-TB PROGRAM STATUS BOX -->
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.programStatus" text="MDR-TB Program Status"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.programStatus" text="Program Status"/></b>
 <div class="box" style="margin:0px;">
 
 <table cellpadding="0" cellspacing="0">
-<tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><openmrs:formatDate date="${program.dateEnrolled}"/></td></tr>
+<tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td width="75%"><openmrs:formatDate date="${program.dateEnrolled}"/></td></tr>
 <tr><td><spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>:</td><td>${program.location.displayString}</td></tr>
 </table>
 

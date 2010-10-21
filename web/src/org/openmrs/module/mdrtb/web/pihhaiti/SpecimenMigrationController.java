@@ -35,11 +35,11 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -266,7 +266,7 @@ public class SpecimenMigrationController {
 			if (status.size() > 0) {
 			
 				// get all the programs for this patient
-				List<MdrtbPatientProgram> programs = StatusUtil.getMdrtbPrograms(Context.getPatientService().getPatient(patient.getId()));
+				List<MdrtbPatientProgram> programs = MdrtbUtil.getMdrtbPrograms(Context.getPatientService().getPatient(patient.getId()));
 				
 				Boolean isHospitalized = false;
 				Date hospitalizationDate = null;

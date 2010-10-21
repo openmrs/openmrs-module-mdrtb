@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
-import org.openmrs.module.mdrtb.status.StatusUtil;
 import org.openmrs.module.mdrtb.status.TreatmentStatusRenderer;
 
 
@@ -27,7 +27,7 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     	}
     	
     	// sort the drug list
-    	generics = StatusUtil.sortMdrtbDrugs(generics);
+    	generics = MdrtbUtil.sortMdrtbDrugs(generics);
     	
     	// get end reason, if there is one
     	String endReason = "";

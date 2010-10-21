@@ -12,6 +12,7 @@ import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
@@ -106,7 +107,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		}
 		
 		// sort the drugs in the standard order
-		drugs = StatusUtil.sortMdrtbDrugs(drugs);
+		drugs = MdrtbUtil.sortMdrtbDrugs(drugs);
 		
 		resistanceProfile.setValue(drugs);
 		resistanceProfile.setDisplayString(renderer.renderDrugResistanceProfile(drugs));
@@ -165,7 +166,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	private StatusItem calculateCultureConversion(List<Specimen> specimens) {	
 	
 		// get a set of all concepts that represent positive results
-		Set<Concept> positiveResults = StatusUtil.getPositiveResultConcepts();
+		Set<Concept> positiveResults = MdrtbUtil.getPositiveResultConcepts();
 			
 		StatusItem cultureConversion = new StatusItem();
 		List<Date> negativeCultureDates = new LinkedList<Date>();
