@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.form.SimpleIntakeForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
@@ -55,7 +56,7 @@ public class SimpleIntakeFormController extends AbstractFormController {
 	public ModelAndView processIntakeForm (@ModelAttribute("intake") SimpleIntakeForm intake, BindingResult errors, 
 	                                       @RequestParam(required = true, value = "patientId") Integer patientId,
 	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                       @RequestParam(required = true, value = "returnUrl") String returnUrl,
+	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
 	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
 
 		// TODO: validate
@@ -67,7 +68,14 @@ public class SimpleIntakeFormController extends AbstractFormController {
 		status.setComplete();
 		map.clear();
 
-		// TODO: add a redirect handle here to handle proper redirect?
-		return new ModelAndView(new RedirectView(returnUrl + "&patientId=" + patientId));
+		// if there is no return URL, default to the patient dashboard
+		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
+			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+		}
+		else {
+			returnUrl = returnUrl + "&patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+		}
+		
+		return new ModelAndView(new RedirectView(returnUrl));
 	}
 }

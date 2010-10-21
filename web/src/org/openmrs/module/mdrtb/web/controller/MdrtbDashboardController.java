@@ -9,10 +9,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Location;
-import org.openmrs.PatientProgram;
+import org.openmrs.Patient;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.HivStatusCalculator;
 import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
@@ -61,19 +62,50 @@ public class MdrtbDashboardController {
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
+	@ModelAttribute("patientId")
+	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
+		return patientId;
+	}
 	
-	@ModelAttribute("status")
-	public Map<String,Status> getStatusMap(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		
-		if (patientProgramId == null) {
-			// TODO: do something
-		}
-		
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET) 
+	public ModelAndView showStatus(@RequestParam(required = true, value = "patientId") Integer patientId,
+	                               @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
+
+    	MdrtbPatientProgram program = null;
+    	
+    	// if there is no patient program selected, we want to show the most recent program
+    	if (patientProgramId == null) {
+			Patient patient = Context.getPatientService().getPatient(patientId);
+			
+			if (patient == null) {
+				throw new MdrtbAPIException("Invalid patient id passed to dashboard controller");
+			}
+			else {
+				program = Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient);
+			}
+			
+    	}
+    	// fetch the program that is being requested
+    	else {
+    		program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+    	}
+    		
+    	if (program == null) {
+    		// if the patient has no program, redirect to the enroll-in-program
+    		map.clear();
+    		return new ModelAndView("redirect:/module/mdrtb/program/showEnroll.form?patientId=" + patientId); 
+    	}
+    	else {
+    		map.put("program", program);
+    	}
+
+    	// add the patient program ID
+    	map.put("patientProgramId", program.getId());
+    	
+    	// now add the status items
 		Map<String,Status> statusMap = new HashMap<String,Status>();
-		
-		// get the program that we are operating on
-		PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-		
+	
 		// lab reports status
 		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program);
 		statusMap.put("labResultsStatus", labReportsStatus);
@@ -90,40 +122,7 @@ public class MdrtbDashboardController {
 		Status hivStatus = new HivStatusCalculator(new DashboardHivStatusRenderer()).calculate(program.getPatient());
 		statusMap.put("hivStatus", hivStatus);
 		
-		return statusMap;
-		
-	}
-	
-	@ModelAttribute("patientId")
-	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		return patientId;
-	}
-	
-	@ModelAttribute("patientProgramId")
-	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return patientProgramId;
-	}
-	
-	
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showStatus(@ModelAttribute("status") Map<String,Status> statusMap, 
-	                               @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
-
-    	if (patientProgramId == null) {
-			// TODO: do something
-		}
-		
-    	// for now, we are just showing data from the most recent program
-    	// TODO: expand this to handle multiple programs
-    	PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-    	
-    	if (program == null) {
-    		// TODO: skip to an enroll-in-program status
-    	}
-    	else {
-    		map.put("program", new MdrtbPatientProgram(program));
-    	}
+		map.put("status", statusMap);
     	
     	// add any flags
 		addFlags(statusMap, map);

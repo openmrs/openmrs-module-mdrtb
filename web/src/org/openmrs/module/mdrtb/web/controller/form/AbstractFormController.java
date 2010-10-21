@@ -50,7 +50,7 @@ public class AbstractFormController {
 	}
 	
 	@ModelAttribute("returnUrl")
-	public String getreturnUrl(@RequestParam(required = true, value = "returnUrl") String returnUrl) {
+	public String getreturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {
 		return returnUrl;
 	}
 	

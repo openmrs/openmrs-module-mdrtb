@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openmrs.PatientProgram;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -17,30 +16,32 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 		this.renderer = renderer;
 	}
 	
-    public Status calculate(PatientProgram program) { 	
-	   
-    	MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    public Status calculate(MdrtbPatientProgram mdrtbProgram) { 	
     	
-    	TreatmentStatus status = new TreatmentStatus(program);
+    	TreatmentStatus status = new TreatmentStatus(mdrtbProgram);
     	
     	TreatmentState treatmentState = null;
     
     	// get the list of regimens for this patient within the program period
     	List<StatusItem> regimenList = new LinkedList<StatusItem>();
     	
-	    for (Regimen regimen : mdrtbProgram.getMdrtbRegimensDuringProgram()) {
+    	List<Regimen> regimensDuringProgram = mdrtbProgram.getMdrtbRegimensDuringProgram();
+    	
+    	if (regimensDuringProgram != null) {
+    		for (Regimen regimen : mdrtbProgram.getMdrtbRegimensDuringProgram()) {
 	 	
-	    	if (regimen.isActive()) {
-	    		treatmentState = TreatmentState.ON_TREATMENT;
-	    	}
+    			if (regimen.isActive()) {
+    				treatmentState = TreatmentState.ON_TREATMENT;
+    			}
 	    	
-	    	StatusItem item = new StatusItem();
+    			StatusItem item = new StatusItem();
 	    	
-	    	item.setValue(regimen);
-	    	item.setDisplayString(renderer.renderRegimen(regimen));
+    			item.setValue(regimen);
+    			item.setDisplayString(renderer.renderRegimen(regimen));
 	    	
-	    	regimenList.add(item);
-	    }
+    			regimenList.add(item);
+    		}
+    	}
 	    
 	    // reverse the list so that the most current regimen is first
 	    Collections.reverse(regimenList);
@@ -51,7 +52,7 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 	    // set the state to not on treatment ONLY if the program is currently active (whether a treatment is active for
 	    // a closed program doesn't make much sense
 	    // TODO: in the future, for closed programs this status should display some sort of summary for that program (never treated, treatment complete, etc)
-	    if (treatmentState == null && program.getActive()) {
+	    if (treatmentState == null && mdrtbProgram.getActive()) {
 	    	treatmentState = TreatmentState.NOT_ON_TREATMENT;
 	    }
 	 

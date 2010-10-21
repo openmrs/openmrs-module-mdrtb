@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.program;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +13,8 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.status.Status;
 import org.openmrs.module.mdrtb.status.VisitStatus;
 import org.openmrs.module.mdrtb.status.VisitStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
@@ -49,16 +50,42 @@ public class ProgramEditController {
 		
 	}
 	
+	@ModelAttribute("locations")
+	public Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
+	}
+	
+	@ModelAttribute("classificationsAccordingToPreviousTreatment")
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
+		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
+	}
+	
+	@ModelAttribute("patientId")
+	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
+		return patientId;
+	}
+	
 	@ModelAttribute("program")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		// if -1 has been specified, create a new patient program for spring to bind the results to
-		if (patientProgramId == -1) {
-			return new MdrtbPatientProgram();
+	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
+		
+		if (patientProgramId != null) {
+			// if -1 has been specified, create a new patient program for spring to bind the results to
+			if (patientProgramId == -1) {
+				return new MdrtbPatientProgram();
+			}
+			// otherwise, load the program
+			else {	
+				PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+				return new MdrtbPatientProgram(program);
+			}
 		}
-		// otherwise, load the program
-		else {	
-			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-			return new MdrtbPatientProgram(program);
+		else {
+			return null;
 		}
 	}
 	
@@ -70,6 +97,11 @@ public class ProgramEditController {
 		else {
 			return Context.getProgramWorkflowService().getPatientState(hospitalizationStateId);
 		}
+	}
+	
+	@RequestMapping("/module/mdrtb/program/showEnroll.form")
+	public ModelAndView showEnrollInPrograms() {
+			return new ModelAndView("/module/mdrtb/program/showEnroll");
 	}
 	
 	@RequestMapping(value = "/module/mdrtb/program/programEdit.form", method = RequestMethod.POST)
@@ -136,7 +168,7 @@ public class ProgramEditController {
 		// when we enroll in a program, we want to jump immediately to the intake for this patient
 		// TODO: hacky to have to create a whole new visit status here just to determine the proper link?
 		// TODO: modeling visit as a status probably wasn't the best way to go on my part
-		VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program.getPatientProgram());
+		VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program);
 		
 		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink());		
 	}

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmrs.Concept;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
@@ -36,15 +35,18 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Status calculate(PatientProgram program) {
-		
-		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+	public Status calculate(MdrtbPatientProgram mdrtbProgram) {
 		
 		// create the Status
-		LabResultsStatus status = new LabResultsStatus(program);
+		LabResultsStatus status = new LabResultsStatus(mdrtbProgram);
 		
 		// get the specimens for this patient program, because these will be used for multiple calculations
 		List<Specimen> specimens = mdrtbProgram.getSpecimensDuringProgram();
+		
+		// just create an empty list of specimens if no specimens during the program
+		if (specimens == null) {
+			specimens = new LinkedList<Specimen>();
+		}
 		
 		// get the control smear and diagnostic culture
 		findDiagnosticSmearAndCulture(specimens, status);
@@ -94,12 +96,14 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		
 		Concept resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG);
 		
-		for (Specimen specimen : specimens) {
-			for (Dst dst : specimen.getDsts()) {
-				for (DstResult result : dst.getResults()) {
-					if (resistant.equals(result.getResult())) {
-						if (!drugs.contains(result.getDrug())) {
-							drugs.add(result.getDrug());
+		if(specimens != null) {
+			for (Specimen specimen : specimens) {
+				for (Dst dst : specimen.getDsts()) {
+					for (DstResult result : dst.getResults()) {
+						if (resistant.equals(result.getResult())) {
+							if (!drugs.contains(result.getDrug())) {
+								drugs.add(result.getDrug());
+							}
 						}
 					}
 				}
@@ -257,10 +261,12 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		
 		List<StatusItem> tests = new LinkedList<StatusItem>();
 		
-		for (Specimen specimen : specimens) {
-			for (Test test : specimen.getTests()) {
-				if (test.getStatus() != TestStatus.COMPLETED) { // TODO: do I need to test if date equals "0" or something like that?
-					tests.add(new StatusItem(test));
+		if (specimens != null) {
+			for (Specimen specimen : specimens) {
+				for (Test test : specimen.getTests()) {
+					if (test.getStatus() != TestStatus.COMPLETED) { // TODO: do I need to test if date equals "0" or something like that?
+						tests.add(new StatusItem(test));
+					}
 				}
 			}
 		}
@@ -322,6 +328,10 @@ public class LabResultsStatusCalculator implements StatusCalculator {
     }
     
 	private Smear findFirstCompletedSmearInList(List<Specimen> specimens) {
+
+		if (specimens == null) {
+			return null;
+		}
 		
 		for (Specimen specimen : specimens) {
 			List<Smear> smears = specimen.getSmears();
@@ -342,6 +352,10 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	
 	private Culture findFirstCompletedCultureInList(List<Specimen> specimens) {
 	
+		if (specimens == null) {
+			return null;
+		}
+		
 		for (Specimen specimen : specimens) {
 			List<Culture> cultures = specimen.getCultures();
 			

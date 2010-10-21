@@ -35,7 +35,6 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
@@ -266,7 +265,7 @@ public class SpecimenMigrationController {
 			if (status.size() > 0) {
 			
 				// get all the programs for this patient
-				List<MdrtbPatientProgram> programs = MdrtbUtil.getMdrtbPrograms(Context.getPatientService().getPatient(patient.getId()));
+				List<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(Context.getPatientService().getPatient(patient.getId()));
 				
 				Boolean isHospitalized = false;
 				Date hospitalizationDate = null;

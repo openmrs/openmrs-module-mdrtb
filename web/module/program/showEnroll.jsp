@@ -31,18 +31,6 @@
 
 	$j(document).ready(function(){
 
-		$j('#programEnrollPopup').dialog({
-			autoOpen: false,
-			modal: true,
-			title: '<spring:message code="mdrtb.enrollmentEnroll" text="Enroll in Program"/>',
-			width: '50%',
-			position: 'left'
-		});
-				
-		$j('#programEnrollButton').click(function() {
-			$j('#programEnrollPopup').dialog('open');
-		});
-
 		$j('#dateEnrolled').datepicker({		
 			dateFormat: 'dd/mm/yy',
 		 });
@@ -57,21 +45,9 @@
 
 <div align="center"> <!-- start of page div -->
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.activeProgram" text="Active MDR-TB Program"/></b>
+<!-- PROGRAM ENROLLMENT BOX-->
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.enrollment.enrollMdrtb" text="Enroll in MDR-TB Program"/></b>
 <div class="box" style="margin:0px">
-<c:choose>
-<c:when test="${programs[0].active}">
-<spring:message code="mdrtb.enrollment.enrolledOn" text="Enrolled on" /> <openmrs:formatDate date="${programs[0].dateEnrolled}"/>
-<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${programs[0].id}&patientId=${patientId}"><spring:message code="mdrtb.view" text="View"/></a>
-</c:when>
-<c:otherwise>
-<spring:message code="mdrtb.enrollment.notEnrolled" text="Not currently enrolled" /> <button id="programEnrollButton"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program" /></button>
-</c:otherwise>
-</c:choose>
-</div>
-
-<!-- PROGRAM ENROLLMENT POPUP -->
-<div id="programEnrollPopup">
 <form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
@@ -110,40 +86,10 @@ Not currently implemented
 </td></tr>
 
 </table>
-<button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button>
+<button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button><button onclick=window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patientId}'><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 </form>
 </div>
-<!--  END OF POPUP -->
-
-<br/>
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.previousPrograms" text="Previous MDR-TB Programs"/></b>
-<div class="box" style="margin:0px">
-<table cellspacing="0" cellpadding="0" border="2">
-<tr>
-<td><spring:message code="mdrtb.startdate" text="Start Date" /></td>
-<td><spring:message code="mdrtb.endDate" text="End Date" /></td>
-<td><spring:message code="mdrtb.location" text="Location" /></td>
-<td><spring:message code="mdrtb.outcome" text="outcome" /></td>
-<td><spring:message code="mdrtb.view" text="view" /></td>
-</tr>
-
-<c:forEach var="program" items="${programs}"  varStatus="iteration">
-<c:if test="${!program.active || iteration.count > 1}">
-<tr>
-<td><openmrs:formatDate date="${program.dateEnrolled}"/></td>
-<td><openmrs:formatDate date="${program.dateCompleted}"/></td>
-<td>${program.location.displayString}</td>
-<td>${!empty program.outcome ? program.outcome.concept.displayString : '&nbsp;'}</td>
-<td><a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${program.id}&patientId=${patientId}">
-<spring:message code="mdrtb.view" text="view" /></a></td>
-</tr>
-</c:if>
-</c:forEach>
-
-</table>
-
-</div>
+<!-- END PROGRAM ENROLLMENT BOX -->
 
 </div> <!-- end of page div -->
 

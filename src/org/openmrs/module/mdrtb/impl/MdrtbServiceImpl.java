@@ -26,6 +26,7 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
@@ -39,10 +40,13 @@ import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.db.MdrtbDAO;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -153,6 +157,52 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public void resetConceptMapCache() {
 		this.conceptMap.resetCache();
+	}
+	
+	public List<MdrtbPatientProgram> getMdrtbPatientPrograms(Patient patient) {
+    	
+    	List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, getMdrtbProgram(), null, null, null, null, false);
+    	
+    	// sort the programs so oldest is first and most recent is last
+    	Collections.sort(programs, new PatientProgramComparator());
+    	
+    	List<MdrtbPatientProgram> mdrtbPrograms = new LinkedList<MdrtbPatientProgram>();
+    	
+    	// convert to mdrtb patient programs
+    	for (PatientProgram program : programs) {
+    		mdrtbPrograms.add(new MdrtbPatientProgram(program));
+    	}
+    	
+    	return mdrtbPrograms;
+    }
+
+	
+	public MdrtbPatientProgram getMostRecentMdrtbPatientProgram(Patient patient) {
+    	List<MdrtbPatientProgram> programs = getMdrtbPatientPrograms(patient);
+    	
+    	if (programs.size() > 0) {
+    		return programs.get(programs.size() - 1);
+    	} 
+    	else {
+    		return null;
+    	}
+    }
+	
+	public MdrtbPatientProgram getMdrtbPatientProgram(Integer patientProgramId) {
+		if (patientProgramId == null) {
+			throw new MdrtbAPIException("Patient program Id cannot be null.");
+		}
+		else {
+			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+			
+			if (program == null || !program.getProgram().equals(getMdrtbProgram())) {
+				throw new MdrtbAPIException(patientProgramId + " does not reference an MDR-TB patient program");
+			}
+			
+			else {
+				return new MdrtbPatientProgram(program);
+			}
+		}
 	}
 	
 	public Specimen createSpecimen(Patient patient) {

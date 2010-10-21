@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 
@@ -24,12 +23,10 @@ public class VisitStatusCalculator implements StatusCalculator {
 	// if there is no scheduled follow up?
 	
 	
-    public Status calculate(PatientProgram program) {
-    	
-    	MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    public Status calculate(MdrtbPatientProgram mdrtbProgram) {
     	
 	   // create the new status
-    	VisitStatus status = new VisitStatus(program);
+    	VisitStatus status = new VisitStatus(mdrtbProgram);
     	
     	EncounterType intakeType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"));
     	EncounterType followUpType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"));
@@ -46,26 +43,28 @@ public class VisitStatusCalculator implements StatusCalculator {
     	// get all the encounters during the program
     	List<Encounter> encounters = mdrtbProgram.getMdrtbEncountersDuringProgram();
    
-    	for (Encounter encounter : encounters) {
-    		// create a new status item for this encounter
-    		StatusItem visit = new StatusItem();
-    		visit.setValue(encounter);
-    		visit.setDate(encounter.getEncounterDatetime());
-    		renderer.renderVisit(visit, status);
+    	if (encounters != null) {
+    		for (Encounter encounter : encounters) {
+    			// create a new status item for this encounter
+    			StatusItem visit = new StatusItem();
+    			visit.setValue(encounter);
+    			visit.setDate(encounter.getEncounterDatetime());
+    			renderer.renderVisit(visit, status);
     	
-    		// now place the visit in the appropriate "bucket"
-    		if (encounter.getEncounterType().equals(intakeType)) {
-    			intakeVisits.add(visit);
-    		}
-    		else if (encounter.getEncounterType().equals(specimenType)) {
-    			specimenCollectionVisits.add(visit);
-    		}
-    		else if (encounter.getEncounterType().equals(followUpType)) {
-    			if (encounter.getEncounterDatetime().after(new Date())) {
-    				scheduledFollowUpVisits.add(visit);
+    			// now place the visit in the appropriate "bucket"
+    			if (encounter.getEncounterType().equals(intakeType)) {
+    				intakeVisits.add(visit);
     			}
-    			else {
-    				followUpVisits.add(visit);
+    			else if (encounter.getEncounterType().equals(specimenType)) {
+    				specimenCollectionVisits.add(visit);
+    			}
+    			else if (encounter.getEncounterType().equals(followUpType)) {
+    				if (encounter.getEncounterDatetime().after(new Date())) {
+    					scheduledFollowUpVisits.add(visit);
+    				}
+    				else {
+    					followUpVisits.add(visit);
+    				}
     			}
     		}
     	}

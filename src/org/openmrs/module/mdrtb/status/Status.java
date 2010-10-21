@@ -5,12 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.openmrs.PatientProgram;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 
 
 abstract public class Status {
 
-	PatientProgram program;
+	MdrtbPatientProgram program;
 	
 	Map<String,StatusItem> items = new HashMap<String,StatusItem>();
 	
@@ -19,15 +19,15 @@ abstract public class Status {
 	public Status() {
 	}
 	
-	public Status(PatientProgram program) {
+	public Status(MdrtbPatientProgram program) {
 		this.program = program;
 	}
 	
-    public PatientProgram getPatientProgram() {
+    public MdrtbPatientProgram getPatientProgram() {
     	return program;
     }
 
-    public void setPatientProgram(PatientProgram program) {
+    public void setPatientProgram(MdrtbPatientProgram program) {
     	this.program = program;
     }
 	

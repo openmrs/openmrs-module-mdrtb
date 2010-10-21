@@ -2,8 +2,9 @@ package org.openmrs.module.mdrtb.web.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.VisitStatusCalculator;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class VisitsController {
 	public ModelAndView showVisits(@RequestParam(required = true, value="patientId") Integer patientId, 
 	                               @RequestParam(required = true, value="patientProgramId") Integer patientProgramId, ModelMap map) {
 		
-		PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+		MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
 		
 		map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program));
 		

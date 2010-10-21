@@ -20,6 +20,7 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
@@ -62,6 +63,21 @@ public interface MdrtbService extends OpenmrsService {
      * Resets the concept map cache
      */
     public void resetConceptMapCache();
+    
+  	/**
+  	 * Returns all the mdrtb programs for a given patient
+  	 */
+	public List<MdrtbPatientProgram> getMdrtbPatientPrograms(Patient patient);
+	
+	/**
+	 * Returns the most recent mdrtb program for a given patient
+	 */
+	public MdrtbPatientProgram getMostRecentMdrtbPatientProgram(Patient patient);
+	
+	/**
+	 * Returns a specific MdrtbPatientProgram by id
+	 */
+	public MdrtbPatientProgram getMdrtbPatientProgram(Integer patientProgramId);
     
     /**
      * Creates a new specimen, associated with the given patient
@@ -199,7 +215,7 @@ public interface MdrtbService extends OpenmrsService {
     public void deleteScannedLabReport(Integer reportId);
     
     /**
-     * Gets the MDR-TB patient program
+     * Gets the MDR-TB program
      */
     @Transactional(readOnly=true)
     public Program getMdrtbProgram();

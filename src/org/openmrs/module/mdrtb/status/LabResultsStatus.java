@@ -1,11 +1,11 @@
 package org.openmrs.module.mdrtb.status;
 
-import org.openmrs.PatientProgram;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 
 
 public class LabResultsStatus extends Status {
 
-	public LabResultsStatus(PatientProgram program) {
+	public LabResultsStatus(MdrtbPatientProgram program) {
 	    super(program);
     }
 

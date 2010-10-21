@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.form.SimpleFollowUpForm;
-import org.openmrs.module.mdrtb.form.SimpleIntakeForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,7 +55,7 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 	public ModelAndView processFollowupForm (@ModelAttribute("followup") SimpleFollowUpForm followup, BindingResult errors, 
 	                                         @RequestParam(required = true, value = "patientId") Integer patientId,
 	                                         @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                         @RequestParam(required = true, value = "returnUrl") String returnUrl,
+	                                         @RequestParam(required = false, value = "returnUrl") String returnUrl,
 	                                         SessionStatus status, HttpServletRequest request, ModelMap map) {
 
 		// TODO: validate
@@ -67,7 +67,14 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 		status.setComplete();
 		map.clear();
 
-		// TODO: add a redirect handle here to handle proper redirect?
-		return new ModelAndView(new RedirectView(returnUrl + "&patientId=" + patientId));
+		// if there is no return URL, default to the patient dashboard
+		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
+			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+		}
+		else {
+			returnUrl = returnUrl + "&patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+		}
+		
+		return new ModelAndView(new RedirectView(returnUrl));
 	}
 }

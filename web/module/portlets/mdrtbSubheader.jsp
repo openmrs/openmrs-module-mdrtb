@@ -8,10 +8,14 @@
 
 	$j(document).ready(function(){
 		$j('#programSelector').change(function(){
-			// TODO: test for the -add- option
-	
-			// reload the proper page when the selector changes
-			$j(window).attr('location','?patientId=${model.patient.patientId}&patientProgramId=' + $j(this).val());
+			// test for the add option--i.e., if the selector has no value	
+			if ($j(this).val() == -1) {
+				$j(window).attr('location','${pageContext.request.contextPath}/module/mdrtb/program/showEnroll.form?patientId=${model.patient.patientId}');
+			}
+			else {
+				// reload the proper page when the selector changes
+				$j(window).attr('location','?patientId=${model.patient.patientId}&patientProgramId=' + $j(this).val());
+			}
 		});
 	});		
 	
@@ -62,7 +66,7 @@
 </td>
 <!-- patient search box -->
 <td align="right">
-	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/program/programList.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
+	<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=mini|resultStyle=right:0|postURL=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 </td>
 </tr>
 </table>
