@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
@@ -239,11 +241,7 @@ public class MdrtbPatientProgram {
 			return null;
 		}
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(program.getDateEnrolled());
-		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
-		
-		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), calendar.getTime(), program.getDateCompleted());
+		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), getPreviousProgramDateCompleted(), program.getDateCompleted());
     }
 	
 	public List<Regimen> getMdrtbRegimensDuringProgram() {
@@ -252,11 +250,7 @@ public class MdrtbPatientProgram {
 			return null;
 		}
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(program.getDateEnrolled());
-		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
-		
-		return RegimenUtils.getMdrtbRegimenHistory(program.getPatient()).getRegimensBetweenDates(calendar.getTime(), 
+		return RegimenUtils.getMdrtbRegimenHistory(program.getPatient()).getRegimensBetweenDates(getPreviousProgramDateCompleted(), 
 			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
 	}
 	
@@ -265,11 +259,7 @@ public class MdrtbPatientProgram {
 		if (program.getDateEnrolled() == null) {
 			return null;
 		}
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(program.getDateEnrolled());
-		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
-		
+
 		// only get MDR-TB specific encounters
 		List<EncounterType> types = new LinkedList<EncounterType>();
 		types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));
@@ -277,22 +267,18 @@ public class MdrtbPatientProgram {
     	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
     	
 		
-		return Context.getEncounterService().getEncounters(program.getPatient(), null, calendar.getTime(), program.getDateCompleted(), null, types, null, false);
+		return Context.getEncounterService().getEncounters(program.getPatient(), null, getPreviousProgramDateCompleted(), program.getDateCompleted(), null, types, null, false);
 	}
 	
-	public Concept getCurrentAnatomicalSiteDuringProrgram() {
+	public Concept getCurrentAnatomicalSiteDuringProgram() {
 		if (program.getDateEnrolled() == null) {
 			return null;
 		}
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(program.getDateEnrolled());
-		calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
-		
 		Concept [] anatomicalSiteConcept = {Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB)};
 		Person [] person = {program.getPatient()};
 		
-		List<Obs> anatomicalSites = Context.getObsService().getObservations(Arrays.asList(person), null, Arrays.asList(anatomicalSiteConcept), null, null, null, null, null, null, calendar.getTime(), program.getDateCompleted(), false);
+		List<Obs> anatomicalSites = Context.getObsService().getObservations(Arrays.asList(person), null, Arrays.asList(anatomicalSiteConcept), null, null, null, null, null, null, getPreviousProgramDateCompleted(), program.getDateCompleted(), false);
 	
 		if (anatomicalSites.size() > 0) {
 			return anatomicalSites.get(0).getValueCoded();
@@ -311,12 +297,9 @@ public class MdrtbPatientProgram {
 		if(regimens != null && regimens.size() > 0) {
 			startDate = regimens.get(0).getStartDate();
 		
-			// if the treatment start date is prior to the program start date, this is an invalid start date
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(program.getDateEnrolled());
-			calendar.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
-		
-			if (startDate.before(calendar.getTime())) {
+			Date previousProgramDateCompleted = getPreviousProgramDateCompleted();
+			
+			if (previousProgramDateCompleted != null && startDate.before(previousProgramDateCompleted)) {
 				startDate = null;
 			}
 		
@@ -341,10 +324,61 @@ public class MdrtbPatientProgram {
 		
 	}
 	
+	/**
+	 * Equality test
+	 * 
+	 * The two programs are considered equal if the underlying patient programs are equal
+	 */
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MdrtbPatientProgram)) {
+			return false;
+		}
+		else {
+			return program.equals(((MdrtbPatientProgram) obj).getPatientProgram());
+		}
+	}	
 	
 	/**
 	 * Utility functions
 	 */
+	
+	/**
+	 * Gets the end date of the program before the previous program
+	 * (Returns null if this is the first program)
+	 */
+	private Date getPreviousProgramDateCompleted() {
+		MdrtbPatientProgram previousProgram = getPreviousProgram();
+		
+		if(previousProgram != null) {
+			System.out.println("previous program " + previousProgram.getDateCompleted());
+		}
+		
+		return (previousProgram != null ? previousProgram.getDateCompleted() : null);
+	}
+	
+	
+	/**
+	 * Get the program directly before this program
+	 * (Returns null if this is the first program
+	 */
+	private MdrtbPatientProgram getPreviousProgram() {
+		
+		ListIterator<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient()).listIterator();
+		
+		while (programs.hasNext()) {
+			if (programs.next().equals(this)) {
+				programs.previous();
+				if (programs.hasPrevious()) {
+					return programs.previous();
+				}
+				else {
+					return null;
+				}
+			}
+		}
+		
+		return null;
+	}
 	
 	
 	/**

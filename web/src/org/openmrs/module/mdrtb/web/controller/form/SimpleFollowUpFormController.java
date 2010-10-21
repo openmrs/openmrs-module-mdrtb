@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.form.SimpleFollowUpForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -69,11 +70,10 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
-			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId + "&patientProgramId=" + patientProgramId;
+			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";
 		}
-		else {
-			returnUrl = returnUrl + "&patientId=" + patientId + "&patientProgramId=" + patientProgramId;
-		}
+		
+		returnUrl = MdrtbWebUtil.appendParameters(returnUrl, patientId, patientProgramId);
 		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}

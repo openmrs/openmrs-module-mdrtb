@@ -65,11 +65,6 @@ public class ProgramEditController {
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
-	@ModelAttribute("patientId")
-	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		return patientId;
-	}
-	
 	@ModelAttribute("program")
 	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
 		
@@ -99,9 +94,12 @@ public class ProgramEditController {
 		}
 	}
 	
-	@RequestMapping("/module/mdrtb/program/showEnroll.form")
-	public ModelAndView showEnrollInPrograms() {
-			return new ModelAndView("/module/mdrtb/program/showEnroll");
+	@SuppressWarnings("unchecked")
+    @RequestMapping("/module/mdrtb/program/showEnroll.form")
+	public ModelAndView showEnrollInPrograms(@RequestParam(required = true, value = "patientId") Integer patientId,
+	                                         ModelMap map) {
+			map.put("patientId", patientId);
+			return new ModelAndView("/module/mdrtb/program/showEnroll", map);
 	}
 	
 	@RequestMapping(value = "/module/mdrtb/program/programEdit.form", method = RequestMethod.POST)
@@ -118,7 +116,7 @@ public class ProgramEditController {
 		status.setComplete();
 		map.clear();
 			
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + program.getPatient().getId() + "&patientProgramId=" + program.getId());
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
 			
 	}
 	
@@ -137,7 +135,7 @@ public class ProgramEditController {
 		status.setComplete();
 		map.clear();
 			
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + program.getPatient().getId() + "&patientProgramId=" + program.getId());
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
 			
 	}
 	
@@ -195,7 +193,7 @@ public class ProgramEditController {
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + program.getPatient().getId() + "&patientProgramId=" + program.getId());
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
 		
 	}
 	
@@ -216,7 +214,7 @@ public class ProgramEditController {
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + program.getPatient().getId() + "&patientProgramId=" + program.getId());
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
 		
 	}
 	

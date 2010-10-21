@@ -248,22 +248,18 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate) {
 		
-		if (startDate == null) {
-			return null;
-		}
-		
 		List<Specimen> specimens = getSpecimens(patient);
-		List<Specimen> programSpecimens = new LinkedList<Specimen>();
+		List<Specimen> specimensInRange = new LinkedList<Specimen>();
 		
 		for (Specimen specimen : specimens) {
 			if (endDate != null && specimen.getDateCollected().after(endDate)) {
 				break;
-			} else if (specimen.getDateCollected().after(startDate)) {
-				programSpecimens.add(specimen);
+			} else if (startDate == null || specimen.getDateCollected().after(startDate)) {
+				specimensInRange.add(specimen);
 			}
 		}
 		
-		return programSpecimens;
+		return specimensInRange;
 	}
 	 
 	public void saveSpecimen(Specimen specimen) {

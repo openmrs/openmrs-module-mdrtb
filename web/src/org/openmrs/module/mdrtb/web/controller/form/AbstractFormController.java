@@ -68,4 +68,5 @@ public class AbstractFormController {
 	public Collection<ConceptAnswer> getAnatomicalSites() {
 		return Context.getService(MdrtbService.class).getPossibleAnatomicalSites();
 	}
+
 }

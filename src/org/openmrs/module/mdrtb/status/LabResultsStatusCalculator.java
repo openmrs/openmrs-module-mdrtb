@@ -250,7 +250,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 	private StatusItem findAnatomicalSite(MdrtbPatientProgram program) {
 		StatusItem anatomicalSite = new StatusItem();
 		
-		anatomicalSite.setValue(program.getCurrentAnatomicalSiteDuringProrgram());
+		anatomicalSite.setValue(program.getCurrentAnatomicalSiteDuringProgram());
 		anatomicalSite.setDisplayString(renderer.renderAnatomicalSite(anatomicalSite));
 		
 		return anatomicalSite;

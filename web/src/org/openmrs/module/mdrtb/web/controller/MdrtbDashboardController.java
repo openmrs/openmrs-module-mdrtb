@@ -62,14 +62,9 @@ public class MdrtbDashboardController {
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
-	@ModelAttribute("patientId")
-	public Integer getPatientId(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		return patientId;
-	}
-	
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showStatus(@RequestParam(required = true, value = "patientId") Integer patientId,
+	public ModelAndView showStatus(@RequestParam(required = false, value = "patientId") Integer patientId,
 	                               @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
 
     	MdrtbPatientProgram program = null;
@@ -102,6 +97,9 @@ public class MdrtbDashboardController {
 
     	// add the patient program ID
     	map.put("patientProgramId", program.getId());
+    	
+    	// add the patientId
+    	map.put("patientId", program.getPatient().getId());
     	
     	// now add the status items
 		Map<String,Status> statusMap = new HashMap<String,Status>();

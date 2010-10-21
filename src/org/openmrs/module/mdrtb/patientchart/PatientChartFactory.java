@@ -83,7 +83,6 @@ public class PatientChartFactory {
 		// if the patient has never been on treatment, start at program start date
 		if(!hasBeenOnTreatment) {
 			recordStartDate.setTime(program.getDateEnrolled());
-			recordStartDate.add(Calendar.DAY_OF_YEAR, -MdrtbConstants.NUMBER_OF_DAYS_PRIOR_TO_PROGRAM_ENROLLMENT_TO_INCLUDE_IN_PROGRAM_SUMMARY);
 			recordStartDate.set(Calendar.DAY_OF_MONTH, 1);
 			recordEndDate = (Calendar) recordStartDate.clone();
 			recordEndDate.add(Calendar.MONTH, 1);	
