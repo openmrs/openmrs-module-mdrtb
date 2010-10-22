@@ -48,6 +48,22 @@
 		$j('#editSpecimen').fadeIn(); // show the edit specimen link
 		$j('#add').fadeIn(); // show the "add a test" selector
 	}
+
+	// resets the dst results boxes in the "add dst" section
+	function resetAddDstResults() {
+		// reset all the results		
+		$j('.addDstResult').hide().find('input,select').attr('value',''); // reset all the dst result values except drug type
+
+		// hide the colony input boxes
+		$j('.dstColonies').hide()	
+		
+		// now reshow the boxes that contain the default drugs
+		for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
+			$j('#addDstResult_' + i).show();	
+		}
+			
+		addDstResultCounter = 1; // reset the add dst result counter
+	}
 	
 	$j(document).ready(function(){
 
@@ -87,6 +103,10 @@
 		$j('#addButton').click(function(){
 			hideDisplayBoxes();
 			hideViewEditAddLinks();
+		
+			// set the dst counter based on how many default drugs we have 
+			addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1;
+				
 			$j('#add_' + $j('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
@@ -99,7 +119,6 @@
 
 		// event handler to display edit detail boxes
 		$j('.edit').click(function(){
-			//hideDisplayBoxes();
 			hideViewEditAddLinks();
 			$j('#details_' + this.id).hide();  // hide the selected details box
 			$j('#edit_' + this.id).show();  // show the selected edit box
@@ -108,14 +127,12 @@
 		// event handler to cancel an edit or add
 		$j('.cancel').click(function(){	
 			hideDisplayBoxes();
-			//$j('#edit_' + this.id).hide();  // hide the selected edit box
 			$j('.detailBox').show();  // show all the detail boxes
-			//$j('#details_' + this.id).show(); // display the details box for the test that was just being edited
 			
 			showViewEditAddLinks();
 			$j('.dstResult').show(); // show any dst results that may have been deleted
-			$j('.addDstResult').hide().find('input,select').attr('value',''); // hide all the add dst result rows and reset their values
-			addDstResultCounter = 1; // reset the add dst result counter
+
+			resetAddDstResults();
 		});
 
 		// event handler to hide/show bacilli and colonies selector, and reset the value if needed
@@ -469,6 +486,13 @@
 </tr>
 </c:if>
 
+<c:if test="${test.testType eq 'culture'}">
+<tr>
+<td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days to Positivity"/>:</nobr></td><td><nobr>${test.daysToPositivity}</nobr></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
 <c:if test="${test.testType eq 'culture' || test.testType eq 'dst'}">
 <tr>
 <td><nobr><spring:message code="mdrtb.organismType" text="Organism Type"/>:</nobr></td><td><nobr>${test.organismType.displayString}</nobr></td>
@@ -614,6 +638,14 @@
 <tr class="colonies" <c:if test="${test.result != scanty}"> style="display:none;"</c:if>>
 <td><nobr><spring:message code="mdrtb.numberofcolonies" text="Number of Colonies"/>:</nobr></td>
 <td><input type="text" name="colonies" id="colonies" value="${test.colonies}"/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
+
+<c:if test="${test.testType eq 'culture'}">
+<tr class="daysToPositivity">
+<td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days To Positivity"/>:</nobr></td>
+<td><input type="text" size="6" name="daysToPositivity" id="daysToPositivity" value="${test.daysToPositivity}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -814,6 +846,13 @@
 </tr>
 </c:if>
 
+<c:if test="${type eq 'culture'}">
+<tr class="daysToPositivity">
+<td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days To Positivity"/>:</nobr></td>
+<td><input type="text" size="6" name="daysToPositivity" id="daysToPositivity" value="${test.daysToPositivity}"/></td>
+<td colspan="2">&nbsp;</td>
+</tr>
+</c:if>
 
 <c:if test="${type eq 'culture' || type eq 'dst'}">
 <tr>
@@ -854,19 +893,17 @@
 <c:if test="${type eq 'dst'}">
 <br/>
 <table cellpadding="0">
-
+<!-- note that we are simply adding 30 rows here, and populating and showing any default drugs in the first rows in the list -->
 <tr>
 <td><u><spring:message code="mdrtb.drug" text="Drug"/></u></td><td><u><spring:message code="mdrtb.concentration" text="Concentration"/></u></td><td><u><spring:message code="mdrtb.result" text="Result"/></u></td><td><u><spring:message code="mdrtb.colonies" text="Colonies"/></u></td>
-</tr>
-	
-	<!-- now the rows to add a new table -->
-	<!-- note that we just add thirty, blank, hidden rows here, which is kind of hacky, but makes the code simplier! :) -->
+</tr>	
 	<c:forEach begin="1" end="30" varStatus="i">
-		<tr id="addDstResult_${i.count}" class="addDstResult" style="display:none">
-		<td><select name="addDstResult${i.count}.drug">
+		<tr id="addDstResult_${i.count}" class="addDstResult" <c:if test="${i.count > fn:length(defaultDstDrugs)}">style="display:none"</c:if> >
+		<td><select id="addDstResult${i.count}.drug" name="addDstResult${i.count}.drug">
 			<option value=""></option>
 			<c:forEach var="drug" items="${drugTypes}">
-				<option value="${drug.id}">${drug.displayString}</option>
+				<!-- the test here is used to set the default drugs from the list as required -->
+				<option value="${drug.id}" <c:if test="${(i.count <= fn:length(defaultDstDrugs)) && defaultDstDrugs[i.count - 1].id == drug.id}">selected</c:if> >${drug.displayString}</option>
 			</c:forEach>
 			</select>
 		</td>

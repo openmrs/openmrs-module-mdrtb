@@ -16,6 +16,7 @@ public interface Culture extends Bacteriology {
 	 * colonies: the # of colonies present
 	 * method: the Concept that represents the method used when performing the test
 	 * organism: the type of organism present
+	 * daysToPosiivity: the number of days for a culture to show a positive result
 	 * 
 	 */
 	
@@ -30,5 +31,8 @@ public interface Culture extends Bacteriology {
 
 	public String getOrganismTypeNonCoded();
 	public void setOrganismTypeNonCoded(String organismType);
+
+	public Integer getDaysToPositivity();
+	public void setDaysToPositivity(Integer daysToPositivity);
 
 }

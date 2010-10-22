@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.web.pihhaiti;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,8 +28,12 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
+import org.openmrs.Location;
 import org.openmrs.Obs;
+import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -328,6 +333,75 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addDaysToPositivity.form")
+    public ModelAndView addDaysToPositivity() {
+    	addConcept("TUBERCULOSIS CULTURE DAYS TO POSITIVITY", "Question", "Numeric", "DAYS TO POSITIVITY", "org.openmrs.module.mdrtb");
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateLocations.form")
+    public ModelAndView migrateLocations() throws IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    	
+    	PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
+    	
+    	// loop thru all persons and see if we can identify a location for them
+    	for (Patient patient : Context.getPatientService().getAllPatients()) {
+    		Location location = null;
+    		
+    		// first see if this person has a healthcenter
+    		PersonAttribute healthCenter = patient.getAttribute(healthCenterType);
+    		
+    		if (healthCenter != null) {
+    			location = (Location) healthCenter.getHydratedObject();
+    		}
+    		// if no health center, see if all the persons encounters are at the same location
+    		else {
+    			List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
+    			
+    			if (encounters != null && encounters.size() > 0) {
+    				Boolean singleLocation = false;
+        			Location currentLocation = null;
+        			
+    				for (Encounter encounter : encounters) {
+    					if (encounter.getLocation() != null) {
+    						if (currentLocation != null && encounter.getLocation() != currentLocation) {
+    							singleLocation = false;
+    							break;
+    						}
+    						else {
+    							singleLocation = true;
+    							currentLocation = encounter.getLocation();
+    						}
+    					}
+    				}
+    				
+    				if (singleLocation) {
+    					location = currentLocation;
+    				}
+    			}
+    		}
+    		
+    		// now, if we've determined a location for this patient, assign this location to all patient programs without a location
+    		if (location != null) {
+    			
+    			// is there a screwy location?
+    			if (location.getId() == null) {
+    				System.out.println("location " + location.getDisplayString());
+    			}
+    			else {
+    				for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+    					if (program.getLocation() == null) {
+    						program.setLocation(location); // yes, this seems pointless, but I'm doin it to avoid a hiberate error
+    						Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+    						log.error("Set location for patient " + patient.getId() + " and patient program " + program.getId() + " to " + location.getDisplayString());
+    					}
+    				}
+    			}
+    		}
+    	} 	
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
     
     private void createHospitalization(List<MdrtbPatientProgram> programs, Person patient, Date admissionDate, Date dischargeDate) {
     	

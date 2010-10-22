@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -985,6 +986,51 @@ public class MdrtbUtil {
     	return positiveResults;
     }
 
+    /**
+     * Loads and sorts the drugs stored in the global property mdtrb.defaultDstDrugs
+     */
+    public static List<Concept> getDefaultDstDrugs() {
+    	List<Concept> drugs = new LinkedList<Concept>();
+    	
+    	String drugString = Context.getAdministrationService().getGlobalProperty("mdrtb.defaultDstDrugs");
+    	
+    	if(StringUtils.isNotBlank(drugString)) {
+    		// split on the pipe
+    		for (String drug : drugString.split("\\|")) {
+    			try {
+    				// see if this is a concept id
+    				Integer conceptId = Integer.valueOf(drug);
+    				Concept concept = Context.getConceptService().getConcept(conceptId);
+    				
+    				if (concept == null) {
+    					log.error("Unable to find concept referenced by id " + conceptId);
+    				}
+    				// add the concept to the list
+    				else {
+    					drugs.add(concept);
+    				}
+    			}    	
+    			catch (NumberFormatException e) {
+    				// if not a concept id, must be a cocnept name
+    				Concept concept = Context.getConceptService().getConcept(drug);
+    				
+    				if (concept == null) {
+    					log.error("Unable to find concept referenced by id " + drug);
+    				}
+    				// add the concept to the list
+    				else {
+    					drugs.add(concept);
+    				}
+    			}
+    		}
+    	}
+    	
+    	// now sort the drugs in the standard order for consistency
+    	sortMdrtbDrugs(drugs);
+    	
+    	return drugs;
+    }
+    
 	/**
 	 * Given a list of concepts, sorts them in the same order as the list of MDR-TB drugs
 	 * (All non-MDR-TB drugs are ignored) 

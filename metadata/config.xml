@@ -381,6 +381,11 @@
 		<defaultValue>MDR-TB Follow Up</defaultValue>
 		<description>Name of the follow-up encounter type.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.defaultDstDrugs</property>
+		<defaultValue>ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN</defaultValue>
+		<description>The list of default drugs to display in the specimen "Add Dst" list</description>
+	</globalProperty>
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">

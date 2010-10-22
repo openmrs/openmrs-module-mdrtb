@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.openmrs.Concept;
@@ -13,6 +14,7 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -62,12 +64,17 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		status.addItem("tbClassification", calculateTbClassication((List<Concept>) resistanceProfile.getValue()));
 		
 		// we want to to reverse the order of the specimens here so that first=most recent
+		// NOTE: the find most recent smear/culture and the calculate conversions methods
+		// both rely on the specimens being in reverse order
 		Collections.reverse(specimens);
+		
+		// find the most recent smear and culture
 		findMostRecentSmear(specimens, status);
 		findMostRecentCulture(specimens, status);
 		
 		// calculate whether or not the culture has been converted
-		status.addItem("cultureConversion", calculateCultureConversion(specimens));
+		status.addItem("smearConversion", calculateConversion(specimens, "smear"));
+		status.addItem("cultureConversion", calculateConversion(specimens, "culture"));
 		
 		// figure out the anatomical site, if know
 		status.addItem("anatomicalSite", findAnatomicalSite(mdrtbProgram));
@@ -163,89 +170,118 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		
 		return tbClassification;
 	}
-
-	// defined as two consecutive negative cultures more than 30 days apart (with no positive smears in the meantime)
+	
+	// defined as two consecutive negative smears/cultures more than 30 days apart (with no positives in the meantime)
 	// note that this method expects to work on a specimen list in reverse chronological order
-	// TODO: should smears be included in this test?
-	private StatusItem calculateCultureConversion(List<Specimen> specimens) {	
+	private StatusItem calculateConversion(List<Specimen> specimens, String type) {	
 	
 		// get a set of all concepts that represent positive results
 		Set<Concept> positiveResults = MdrtbUtil.getPositiveResultConcepts();
 			
-		StatusItem cultureConversion = new StatusItem();
-		List<Date> negativeCultureDates = new LinkedList<Date>();
+		StatusItem conversion = new StatusItem();
+		List<Date> negativeDates = new LinkedList<Date>();
 	    
 		// loop through all the specimens until we hit one with a positive smear or culture
 	    for (Specimen specimen : specimens) {
-	    	Boolean possibleConversion = calculateCultureConversionHelper(specimen, positiveResults);
-	    
+	    	Boolean possibleConversion;
+	    	
+	    	if (type.matches("smear")) {
+	    		possibleConversion = calculateSmearConversionHelper(specimen, positiveResults);
+	    	}
+	    	else if (type.matches("culture")) {
+	    		possibleConversion = calculateCultureConversionHelper(specimen, positiveResults);
+	    	}
+	    	else {
+	    		throw new MdrtbAPIException("Can't calculate conversion on invalid test type " + type);
+	    	}
+	    		
 	    	if (possibleConversion != null) {
 	    		if (!possibleConversion) {
 	    			break;
 	    		}
 	    		else if (possibleConversion){
-	    			negativeCultureDates.add(specimen.getDateCollected());
+	    			negativeDates.add(specimen.getDateCollected());
 	    		}
 	    	}
 	    }
 	    
 	    // there need to be at least two negative cultures for this to be a conversion
-	    if (negativeCultureDates.size() > 1) {
+	    if (negativeDates.size() > 1) {
 	    	
 	    	// now compare to make sure that the conversions are at least 30 days apart
-	    	Calendar lastNegativeCulture = Calendar.getInstance();
-	    	Calendar firstNegativeCulture = Calendar.getInstance();
+	    	Calendar lastNegative = Calendar.getInstance();
+	    	Calendar firstNegative = Calendar.getInstance();
 	    	
-	    	lastNegativeCulture.setTime(negativeCultureDates.get(0));
-	    	firstNegativeCulture.setTime(negativeCultureDates.get(negativeCultureDates.size() - 1));
+	    	lastNegative.setTime(negativeDates.get(0));
+	    	firstNegative.setTime(negativeDates.get(negativeDates.size() - 1));
 	    	
-	    	firstNegativeCulture.add(Calendar.DAY_OF_MONTH, 29);
+	    	firstNegative.add(Calendar.DAY_OF_MONTH, 29);
 	    	
-	    	if (firstNegativeCulture.before(lastNegativeCulture)) {
+	    	if (firstNegative.before(lastNegative)) {
 	    		// we have a successful conversion
-	    		cultureConversion.setValue(new Boolean(true));
+	    		conversion.setValue(new Boolean(true));
 	    		
 	    		// determine what the conversion date should be reported as
-	    		Collections.sort(negativeCultureDates, Collections.reverseOrder());
-	    		for (Date date : negativeCultureDates) {
-	    			if (date.after(firstNegativeCulture.getTime())) {
-	    				cultureConversion.setDate(date);
+	    		Collections.sort(negativeDates, Collections.reverseOrder());
+	    		for (Date date : negativeDates) {
+	    			if (date.after(firstNegative.getTime())) {
+	    				conversion.setDate(date);
 	    			}
 	    		}
-	    		cultureConversion.setDisplayString(renderer.renderCultureConversion(cultureConversion));
-	    		return cultureConversion;
+	    		conversion.setDisplayString(renderer.renderConversion(conversion));
+	    		return conversion;
 	    	}
 	    }
 	    
 	    // if we've got here, not converted
-	    cultureConversion.setValue(new Boolean(false));
-	    cultureConversion.setDisplayString(renderer.renderCultureConversion(cultureConversion));
+	    conversion.setValue(new Boolean(false));
+	    conversion.setDisplayString(renderer.renderConversion(conversion));
 	    
-	    return cultureConversion;
+	    return conversion;
     }
 	
-	// if this specimen has any positive smears/cultures, returns null
-	// if not, and it has a negative culture, return the specimen collection date
-	private Boolean calculateCultureConversionHelper(Specimen specimen, Set<Concept> positiveResults) {
-				
+	// if this specimen has any positive smears, returns null
+	// if not, and it has a negative smear, return true
+	private Boolean calculateSmearConversionHelper(Specimen specimen, Set<Concept> positiveResults) {
+	
+		Boolean result = null;
+		
 		for (Smear smear : specimen.getSmears()) {
 			if (positiveResults.contains(smear.getResult())) {
-				return false;
+				result = false;
+				break;
+			}
+			else if (smear.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
+				result = true;
 			}
 		}
+	
+		// note that if there are no cultures for this specimen, this will return null
+		return result;
+	}
+	
+	
+	// if this specimen has any positive cultures, returns null
+	// if not, and it has a negative culture, return true
+	private Boolean calculateCultureConversionHelper(Specimen specimen, Set<Concept> positiveResults) {
+	
+		Boolean result = null;
 		
 		for (Culture culture : specimen.getCultures()) {
 			if (positiveResults.contains(culture.getResult())) {
-				return false;
+				result = false;
+				break;
 			}
 			else if (culture.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
-				return true;
+				result = true;
 			}
 		}
 	
-		// if we've gotten here, this specimen has no positive results, but no negative culture, so we haven't gotten any useful into from it
-		return null;
+		// note that if there are no cultures for this specimen, this will return null
+		return result;
 	}
+	
+	
 	
 	private StatusItem findAnatomicalSite(MdrtbPatientProgram program) {
 		StatusItem anatomicalSite = new StatusItem();
@@ -294,6 +330,8 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		status.addItem("diagnosticCulture", diagnosticCulture);
     }
 	
+	
+	// note that this method expects the specimen list to be in reverse chronilogical order
     private void findMostRecentSmear(List<Specimen> specimens, LabResultsStatus status) {
     	StatusItem mostRecentCompletedSmear = new StatusItem();
 	
@@ -310,7 +348,8 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		*/
 
     }
-	
+
+    // note that this method expects the specimen list to be in reverse chronilogical order
     private void findMostRecentCulture(List<Specimen> specimens, LabResultsStatus status) {
     	StatusItem mostRecentCompletedCulture = new StatusItem();
     	
@@ -332,7 +371,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		if (specimens == null) {
 			return null;
 		}
-		
+			
 		for (Specimen specimen : specimens) {
 			List<Smear> smears = specimen.getSmears();
 			

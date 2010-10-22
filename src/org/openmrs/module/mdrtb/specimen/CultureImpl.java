@@ -65,6 +65,17 @@ public class CultureImpl extends BacteriologyImpl implements Culture {
     	}
     }
     
+    public Integer getDaysToPositivity() {
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DAYS_TO_POSITIVITY), test);
+    	
+    	if(obs == null) {
+    		return null;
+    	}
+    	else {
+    		return obs.getValueNumeric().intValue();
+    	}
+    }
+    
     public Concept getMethod() {
     	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_METHOD), test);
     	
@@ -144,6 +155,32 @@ public class CultureImpl extends BacteriologyImpl implements Culture {
 		
 		obs.setComment(comments);
     }
+    
+    public void setDaysToPositivity(Integer daysToPositivity) {
+    	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DAYS_TO_POSITIVITY), test);
+    	
+    	// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && daysToPositivity == null) {
+			return;
+		}
+    	
+		// if we are trying to set the obs to null, simply void the obs
+		if(daysToPositivity == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
+    	// initialize the obs if needed
+		if (obs == null) {
+			obs = new Obs (test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DAYS_TO_POSITIVITY), test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
+		
+		// now set the value
+		obs.setValueNumeric(daysToPositivity.doubleValue());
+    }   
     
     public void setMethod(Concept method) {
     	Obs obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_METHOD), test);

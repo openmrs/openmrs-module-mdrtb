@@ -149,7 +149,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
     	}
     }
     
-    public String renderCultureConversion(StatusItem cultureConversion) {
+    public String renderConversion(StatusItem cultureConversion) {
     DateFormat df = DateFormat.getDateInstance();
     	
 	   if ( ((Boolean) cultureConversion.getValue()) == false) {

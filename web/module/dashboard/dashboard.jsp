@@ -468,10 +468,15 @@ ${regimen.displayString}
 <br/>
 
 <!-- LAB RESULTS STATUS BOX -->
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Lab Results Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.labResultsStatus" text="Bacteriology Status"/></b>
 <div class="box" style="margin:0px">
 
 <!--  TODO: get rid of these flags if they aren't being used -->
+
+<table cellspacing="0" cellpadding="0">
+<tr><td><spring:message code="mdrtb.smearStatus" text="Smear Status"/>: ${status.labResultsStatus.smearConversion.displayString}</td></tr>
+<tr><td><spring:message code="mdrtb.culturestatus" text="Culture Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</td></tr>
+</table>
 
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>:</td>

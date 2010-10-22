@@ -17,7 +17,7 @@ public interface LabResultsStatusRenderer {
 	
 	public String renderTbClassification(TbClassification classification);
 	
-	public String renderCultureConversion(StatusItem cultureConversion);
+	public String renderConversion(StatusItem cultureConversion);
 	
 	public String renderAnatomicalSite(StatusItem anatomicalStatus);	
 	

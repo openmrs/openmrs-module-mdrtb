@@ -9,6 +9,10 @@ public class LabResultsStatus extends Status {
 	    super(program);
     }
 
+	public StatusItem getSmearConversion() {
+		return getItem("smearConversion");
+	}
+	
 	public StatusItem getCultureConversion() {
 		return getItem("cultureConversion");
 	}

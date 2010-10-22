@@ -100,6 +100,7 @@ public class MdrtbConcepts {
     public final static String [] WAITING_FOR_TEST_RESULTS = {"WAITING FOR TEST RESULTS"};
     public final static String [] DST_CONTAMINATED = {"DST CONTAMINATED"};
     public final static String [] SCANNED_LAB_REPORT = {"SCANNED LAB REPORT"};
+    public final static String [] DAYS_TO_POSITIVITY = {"DAYS TO POSITIVITY"};
     
     // Lab Results
     public final static String [] STRONGLY_POSITIVE = {"STRONGLY POSITIVE"};

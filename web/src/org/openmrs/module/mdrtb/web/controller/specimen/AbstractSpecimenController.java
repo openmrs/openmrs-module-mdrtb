@@ -21,8 +21,10 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -52,22 +54,9 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("specimens")
 	public Collection<Specimen> getSpecimens(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		// to explain the logic here--if the patient has been enrolled in the MDR-TB program more than once, only show the
-		// specimens that apply to this program; if the patient has only been enrolled in one MDR-TB program show all the
-		// specimens here; this is just to make sure we don't "miss" a specimen due to a faulty program enrollment date
-		
 		PatientProgram patientProgram = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		MdrtbPatientProgram mdrtbPatientProgram = new MdrtbPatientProgram(patientProgram);
-		Patient patient = patientProgram.getPatient();
-		
-		List<PatientProgram> patientPrograms = Context.getProgramWorkflowService().getPatientPrograms(patient, Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")), null, null, null, null, false);
-
-		if (patientPrograms.size() > 1) {
-			return mdrtbPatientProgram.getSpecimensDuringProgram();
-		}
-		else {
-			return Context.getService(MdrtbService.class).getSpecimens(patient);
-		}
+		return mdrtbPatientProgram.getSpecimensDuringProgram();
 	}
 	
 	@ModelAttribute("patientProgramId")
@@ -76,47 +65,47 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("types")
-	Collection<ConceptAnswer> getPossibleSpecimenTypes() {
+	public Collection<ConceptAnswer> getPossibleSpecimenTypes() {
 		return Context.getService(MdrtbService.class).getPossibleSpecimenTypes();
 	}
 	
 	@ModelAttribute("smearResults")
-	Collection<ConceptAnswer> getPossibleSmearResults() {
+	public Collection<ConceptAnswer> getPossibleSmearResults() {
 		return Context.getService(MdrtbService.class).getPossibleSmearResults();
 	}
 	
 	@ModelAttribute("smearMethods")
-	Collection<ConceptAnswer> getPossibleSmearMethods() {
+	public Collection<ConceptAnswer> getPossibleSmearMethods() {
 		return Context.getService(MdrtbService.class).getPossibleSmearMethods();
 	}
 	
 	@ModelAttribute("cultureResults")
-	Collection<ConceptAnswer> getPossibleCultureResults() {
+	public Collection<ConceptAnswer> getPossibleCultureResults() {
 		return Context.getService(MdrtbService.class).getPossibleCultureResults();
 	}
 	
 	@ModelAttribute("cultureMethods")
-	Collection<ConceptAnswer> getPossibleCultureMethods() {
+	public Collection<ConceptAnswer> getPossibleCultureMethods() {
 		return Context.getService(MdrtbService.class).getPossibleCultureMethods();
 	}
 	
 	@ModelAttribute("dstMethods")
-	Collection<ConceptAnswer> getPossibleDstMethods() {
+	public Collection<ConceptAnswer> getPossibleDstMethods() {
 		return Context.getService(MdrtbService.class).getPossibleDstMethods();
 	}
 	
 	@ModelAttribute("dstResults")
-	Collection<Concept> getPossibleDstResults() {
+	public Collection<Concept> getPossibleDstResults() {
 		return Context.getService(MdrtbService.class).getPossibleDstResults();
 	}
 	
 	@ModelAttribute("organismTypes")
-	Collection<ConceptAnswer> getPossibleOrganismTypes() {
+	public Collection<ConceptAnswer> getPossibleOrganismTypes() {
 		return Context.getService(MdrtbService.class).getPossibleOrganismTypes();
 	}
 	
 	@ModelAttribute("providers")
-	Collection<Person> getPossibleProviders() {
+	public Collection<Person> getPossibleProviders() {
 		// TODO: this should be customizable, so that other installs can define there own provider lists?
 		Role provider = Context.getUserService().getRole("Provider");
 		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
@@ -132,17 +121,17 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("locations")
-	Collection<Location> getPossibleLocations() {
+	public Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
 	}
 	
 	@ModelAttribute("appearances")
-	Collection<ConceptAnswer> getPossibleSpecimenAppearances() {
+	public Collection<ConceptAnswer> getPossibleSpecimenAppearances() {
 		return Context.getService(MdrtbService.class).getPossibleSpecimenAppearances();
 	}
 	
 	@ModelAttribute("testTypes")
-	Collection<String> getPossibleTestTypes() {
+	public Collection<String> getPossibleTestTypes() {
 		Collection<String> testTypes = new LinkedList<String>();
 		testTypes.add("smear");
 		testTypes.add("culture");
@@ -151,27 +140,32 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("drugTypes")
-	Collection<Concept> getPossibleDrugTypes() {
+	public Collection<Concept> getPossibleDrugTypes() {
 		return Context.getService(MdrtbService.class).getMdrtbDrugs();
 	}
 	
+	@ModelAttribute("positiveResults")
+	public Collection<Concept> getPositiveResults() {
+		return MdrtbUtil.getPositiveResultConcepts();
+	}
+	
 	@ModelAttribute("scanty")
-	Concept getConceptScanty() {
+	public Concept getConceptScanty() {		
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY);
 	}
 	
 	@ModelAttribute("waitingForTestResult")
-	Concept getWaitingForTestResultConcept() {
+	public Concept getWaitingForTestResultConcept() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
 	}
 	
 	@ModelAttribute("dstTestContaminated")
-	Concept getDstTestContaiminated() {
+	public Concept getDstTestContaiminated() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONTAMINATED);
 	}
 	
 	@ModelAttribute("otherMycobacteriaNonCoded")
-	Concept getOtherMycobacteriaNonCoded() {
+	public Concept getOtherMycobacteriaNonCoded() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
  }

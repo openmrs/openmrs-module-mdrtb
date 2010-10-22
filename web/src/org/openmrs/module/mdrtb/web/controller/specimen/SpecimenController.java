@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -36,6 +38,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class SpecimenController extends AbstractSpecimenController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
+	
+	/**
+	 * Returns the default list of drugs to display in the DST add test results box
+	 */
+	@ModelAttribute("defaultDstDrugs")
+	public List<Concept> getDefaultDstDrugs() {
+		return MdrtbUtil.getDefaultDstDrugs();
+	}
 	
 	/**
 	 * Returns the smear that should be used to bind a form posting to
@@ -329,10 +339,11 @@ public class SpecimenController extends AbstractSpecimenController {
     	}
 		
 		// hacky way to manually handle the addition of new dsts
+    	// note that we only add dsts that have a result specified
 		int i = 1;
 		while(i<=30) {
 			
-			if(StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".drug")) ) {
+			if(StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".result")) ) {
 				// create the new result
 				DstResult dstResult = dst.addResult();
 			
