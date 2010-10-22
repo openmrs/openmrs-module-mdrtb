@@ -15,6 +15,7 @@
 	
 	<require_modules>
 		<require_module>org.openmrs.module.programlocation</require_module>
+		<require_module>org.openmrs.module.reporting</require_module>
 	</require_modules>
 		
 	<extension>

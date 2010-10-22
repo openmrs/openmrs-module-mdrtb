@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>WHO Form 05</title>
+	</head>
+	<body>
+		<style>
+			th {vertical-align:top; text-align:left;}
+			th, td {font-size:smaller;}
+		</style>
+		<div style="font-size:smaller; width:980px;">
+			<table width="100%"><tr>
+				<td width="10%">&nbsp;</td>
+				<td width="50%" align="center" style="font-size:14px; font-weight:bold;">Quarterly report on MDR-TB detection and Category IV treatment start</td>
+				<td width="10%" align="right">FORM 05</td>
+			</tr></table>
+			<br/><br/>
+			<table width="100%">
+				<tr>
+					<td>Name of area:  #locationName#</td>
+					<td>Name of area coordinator:  ________________</td>
+				</tr>
+				<tr>
+					<td>Patients identified during Q#quarter# #year# (#startDate|dd/MMM/yyyy# - #endDate|dd/MMM/yyyy#)</td>
+					<td>Date: #generationDate|dd/MMM/yyyy#</td>
+				</tr>
+			</table>
+			<br/>
+			<br/>
+			<span style="font-weight:bold;">
+				1. Number of patients detected with MDR-TB/XDR-TB in the lab (by date of result of MDR-TB/XDR-TB in laboratory register) during the quarter:<br/><br/>
+				<table>
+					<tr>
+						<td>MDR-TB</td>
+						<td style="border: 1px solid black; width: 50px; height: 20px; text-align:center;">
+							#labDetections.mdr#
+						</td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td>XDR-TB</td>
+						<td style="border: 1px solid black; width: 50px; height: 20px; text-align:center;">
+							#labDetections.xdr#
+						</td>
+					</tr>
+				</table>
+			</span>
+			<br/><br/>
+			
+			<span style="font-weight:bold;">
+				2. Number of MDR-TB patients who started Category IV treatment during the quarter
+			</span>
+			<br/><br/>
+			<table border="1" cellpadding="5" width="100%">
+				<tr>
+					<td></td>
+					<td>New Case</td>
+					<td>Previously treated with first-line drugs</td>
+					<td>Previously treated with second-line drugs</td>
+				</tr>
+				<tr>
+					<td>Confirmed Cases</td>
+					<td>#startedTreatment.confirmed.new#</td>
+					<td>#startedTreatment.confirmed.previousFirstLine#</td>
+					<td>#startedTreatment.confirmed.previousSecondLine#</td>
+				</tr>
+				<tr>
+					<td>Suspected Cases</td>
+					<td>#startedTreatment.suspected.new#</td>
+					<td>#startedTreatment.suspected.previousFirstLine#</td>
+					<td>#startedTreatment.suspected.previousSecondLine#</td>
+				</tr>
+			</table>
+			<br/><br/>
+			1st quarter:  1st January-31 March<br/>
+			2nd quarter:  1er April-30 June<br/>
+			3rd quarter:  1er July-30 September<br/>
+			4th quarter:  1er October-31 December<br/>
+			<table width="100%"><tr><td align="right">Signature ______________________________</td></tr></table>
+		</div>
+	</body>
+</html>

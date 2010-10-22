@@ -16,8 +16,8 @@ package org.openmrs.module.mdrtb.web.controller;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -31,6 +31,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.reporting.ReportSpecification;
+import org.openmrs.module.mdrtb.reporting.data.MOHReport;
+import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
+import org.openmrs.module.mdrtb.reporting.data.WHOForm05;
+import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
@@ -49,7 +54,6 @@ public class MdrtbFormController extends SimpleFormController {
     protected final Log log = LogFactory.getLog(getClass());
         	   
     private String personType = "patient";
-    private String viewType = "shortEdit";
     private String personId = "";
     private String name = "";
     private String birthdate = "";
@@ -67,24 +71,27 @@ public class MdrtbFormController extends SimpleFormController {
         Map<String,Object> map = new HashMap<String,Object>();
         if (Context.isAuthenticated()){
             
-        	List brList = new ArrayList();
+        	Map reports = new LinkedHashMap();
         	if (ModuleFactory.getStartedModulesMap().containsKey("birt")) {
 	        	String str = Context.getAdministrationService().getGlobalProperty("mdrtb.birt_report_list");
 	        	if (StringUtils.isNotEmpty(str)) {
+	        		String birtPrefix = "module/birt/generateReport.form?reportId=";
 		            try { 
 		            	Class birtServiceClass = OpenmrsClassLoader.getInstance().loadClass("org.openmrs.module.birt.BirtReportService");
 		            	Object reportService = Context.getService(birtServiceClass);
 		            	Method getReportsMethod = birtServiceClass.getDeclaredMethod("getReports");	            	
 		            	Class birtReportClass = OpenmrsClassLoader.getInstance().loadClass("org.openmrs.module.birt.BirtReport");
 		            	Method getNameMethod = birtReportClass.getDeclaredMethod("getName");
+		            	Method getIdMethod = birtReportClass.getDeclaredMethod("getReportId");
 	
 		            	List allReports = (List)getReportsMethod.invoke(reportService);
 		                for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens(); ) {
 		                    String s = st.nextToken().trim();
 		                    for (Object br : allReports) {
+		                    	Object id = getIdMethod.invoke(br);
 		                    	Object name = getNameMethod.invoke(br);
-		                    	if (name.equals(s)) {
-		                    		brList.add(br);
+		                    	if (name.equals(s) || id.equals(s)) {
+		                    		reports.put(birtPrefix + id, name);
 		                    	}
 		                    }
 		                }
@@ -92,9 +99,15 @@ public class MdrtbFormController extends SimpleFormController {
 		            catch (Exception ex){
 		                log.error("Unable to setup birt reports in reference data in MdrtbFormController.", ex);
 		            }
-		            map.put("reports", brList); 
 	        	}
         	}
+        	
+        	ReportSpecification[] rpts = {new WHOForm05(), new WHOForm07(), new OutcomeReport(), new MOHReport()};
+        	for (ReportSpecification spec : rpts) {
+            	reports.put("module/mdrtb/reporting/reports.form?type=" + spec.getClass().getName(), spec.getName());
+            }
+        	
+        	map.put("reports", reports); 
              
             String httpBase = request.getRequestURL().toString();
             String httpURI = request.getRequestURI();

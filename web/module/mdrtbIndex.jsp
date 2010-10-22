@@ -96,10 +96,10 @@
 					</b>
 				</td></tr>
 				<tr class="${rowClass}"><td>
-					<c:forEach var="report" items="${reports}" varStatus="varStatus">
+					<c:forEach var="entry" items="${reports}" varStatus="varStatus">
 						<c:set var="reportsFound" value="t"/>
-						<a href="${pageContext.request.contextPath}/module/birt/generateReport.form?reportId=${report.reportDefinition.reportObjectId}">
-							${report.reportDefinition.name}
+						<a href="${pageContext.request.contextPath}/${entry.key}">
+							${entry.value}
 						</a><br/>
 					</c:forEach>
 					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.reportLinks" type="html">
