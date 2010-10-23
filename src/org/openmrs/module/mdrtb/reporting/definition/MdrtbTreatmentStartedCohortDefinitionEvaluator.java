@@ -17,7 +17,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.reporting.PihHaitiQueryService;
+import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -41,6 +41,6 @@ public class MdrtbTreatmentStartedCohortDefinitionEvaluator implements CohortDef
     	MdrtbTreatmentStartedCohortDefinition cd = (MdrtbTreatmentStartedCohortDefinition) cohortDefinition;
     	String mdrtbDrugs = Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs");
     	Concept tbDrugSet = Context.getConceptService().getConceptByName(mdrtbDrugs);
-    	return PihHaitiQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
+    	return MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
 	}
 }

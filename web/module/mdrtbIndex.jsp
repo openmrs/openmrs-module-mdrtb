@@ -78,6 +78,11 @@
 						<spring:message code="mdrtb.viewListPatientPage"/>
 					</a>
 					<br/><br/>
+					<c:forEach var="entry" items="${patientLists}" varStatus="varStatus">
+						<a href="${pageContext.request.contextPath}/${entry.key}">
+							${entry.value}
+						</a><br/>
+					</c:forEach>
 					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.listPatientLinks" type="html">
 						<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
 							<spring:message code="${extension.title}"/>:

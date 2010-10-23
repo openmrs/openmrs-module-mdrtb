@@ -22,7 +22,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptSet;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.reporting.PihHaitiQueryService;
+import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -55,11 +55,11 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
 
     		// Must be resistant to INH
     		Concept inh = Context.getConceptService().getConcept(656); // TODO: Refactor
-    		c = PihHaitiQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, inh);
+    		c = MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, inh);
 	    	
 	    	// Must be resistant to RIF
 	    	Concept rif = Context.getConceptService().getConcept(767); // TODO: Refactor
-	    	c = Cohort.intersect(c, PihHaitiQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, rif));
+	    	c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, rif));
 	    	
 	    	if (!cd.getIncludeMdr()) {
 	    		
@@ -70,18 +70,18 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
 	    			quinolones.add(set.getConcept());
 	    		}
 	    		Concept[] quins = quinolones.toArray(new Concept[quinolones.size()]);
-	    		c = Cohort.intersect(c, PihHaitiQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, quins));
+	    		c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, quins));
 	    		
 	    		// Must be resistant to at least one of capreomycin, kanamycin, and amikacin
 	    		Concept cap = Context.getConceptService().getConcept(1411); // TODO: Refactor
 	    		Concept kan = Context.getConceptService().getConcept(1417); // TODO: Refactor
 	    		Concept amk = Context.getConceptService().getConcept(1406); // TODO: Refactor
-	    		c = Cohort.intersect(c, PihHaitiQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, cap, kan, amk));
+	    		c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, cap, kan, amk));
 	    	}
     	}
     	
     	if (cd.getSpecificProfile() != null) {
-    		Cohort profileCohort = PihHaitiQueryService.getCohortWithResistanceProfile(context, ed, cd.getSpecificProfile());
+    		Cohort profileCohort = MdrtbQueryService.getCohortWithResistanceProfile(context, ed, cd.getSpecificProfile());
     		if (c == null) {
     			c = profileCohort;
     		}

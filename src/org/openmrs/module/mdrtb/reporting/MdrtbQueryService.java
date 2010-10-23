@@ -24,11 +24,11 @@ import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
- * Queries to support PIH Haiti Reporting
+ * Queries to support MDR-TB Module Reporting
  */
-public class PihHaitiQueryService {
+public class MdrtbQueryService {
 
-    protected static final Log log = LogFactory.getLog(PihHaitiQueryService.class);
+    protected static final Log log = LogFactory.getLog(MdrtbQueryService.class);
 
     /**
      * @return the Cohort of patients whose test results indicate resistance to at least one of the passed drugs

@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
@@ -36,6 +37,7 @@ import org.openmrs.module.mdrtb.reporting.data.MOHReport;
 import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
 import org.openmrs.module.mdrtb.reporting.data.WHOForm05;
 import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
+import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
@@ -108,6 +110,18 @@ public class MdrtbFormController extends SimpleFormController {
             }
         	
         	map.put("reports", reports); 
+        	
+        	// TODO: Limit these only to locations with active program enrollments
+            Map<String, String> patientLists = new LinkedHashMap<String, String>();
+            String activeBase = "module/mdrtb/mdrtbListPatients.form?locationMethod=PATIENT_HEALTH_CENTER&displayMode=mdrtbShortSummary&enrollment=current&locations=";
+            String glcBase = "module/mdrtb/reporting/glcReport.form?location=";
+            String summaryBase = "module/reporting/mdrPatientList.list?locationId=";
+            for (Location l : Context.getLocationService().getAllLocations()) {
+            	patientLists.put(activeBase + l.getLocationId(), MessageUtil.translate("mdrtb.activePatients") + " (" + l.getName() + ")");
+            	patientLists.put(glcBase + l.getLocationId(), MessageUtil.translate("mdrtb.glcReport") + " (" + l.getName() + ")");
+            	patientLists.put(summaryBase + l.getLocationId(), MessageUtil.translate("mdrtb.mdrtbSummary") + " (" + l.getName() + ")");
+            }
+            map.put("patientLists", patientLists);
              
             String httpBase = request.getRequestURL().toString();
             String httpURI = request.getRequestURI();

@@ -34,6 +34,9 @@
      			<!--  portlets -->
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
             	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
+            	<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
+            	<prop key="**/mdrtbShortSummary.portlet">shortSummaryPortletController</prop>
+            	<prop key="**/mdrtbCustomList.portlet">customSummaryPortletController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -92,7 +95,10 @@
     
     <!-- portlet controllers -->    
     <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController"/>
-     <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/>
+    <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/>
+    <bean id="patientSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.PatientSummaryPortletController" />
+	<bean id="shortSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.ShortSummaryPortletController" />
+	<bean id="customSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.CustomSummaryPortletController" />
     
     <bean parent="serviceContext">
 		<property name="moduleService">

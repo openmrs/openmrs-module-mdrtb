@@ -15,6 +15,8 @@ package org.openmrs.module.mdrtb.web.taglib;
 
 import java.util.Collection;
 
+import org.openmrs.api.context.Context;
+
 public class Functions {
 	
 	/**
@@ -42,5 +44,21 @@ public class Functions {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns true if the passed collection contains the passed object
+	 * @param c
+	 * @param o
+	 * @return
+	 */
+	public static boolean instanceOf(Object o, String className) {
+		try {
+			Class<?> c = Context.loadClass(className);
+			return o != null && c.isAssignableFrom(o.getClass());
+		}
+		catch (ClassNotFoundException e) {
+			throw new RuntimeException("Unable to load class " + className);
+		}
 	}
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.openmrs.Cohort;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.reporting.PihHaitiQueryService;
+import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
@@ -152,7 +152,7 @@ public class MOHReport implements ReportSpecification {
 		
 		CohortCrossTabDataSetDefinition s4 = new CohortCrossTabDataSetDefinition();
 		report.addDataSetDefinition("IV. Repartition des patients selon leur profil de resistance", s4, null);
-		Map<String, Cohort> profiles = PihHaitiQueryService.getResistanceProfiles(context, endDate);
+		Map<String, Cohort> profiles = MdrtbQueryService.getResistanceProfiles(context, endDate);
 		for (Map.Entry<String, Cohort> e : profiles.entrySet()) {
 			DstResultCohortDefinition cd = new DstResultCohortDefinition();
 			cd.setMaxResultDate(endDate);
