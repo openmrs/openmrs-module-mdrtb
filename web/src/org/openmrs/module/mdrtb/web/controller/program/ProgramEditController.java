@@ -13,7 +13,7 @@ import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.status.VisitStatus;
 import org.openmrs.module.mdrtb.status.VisitStatusCalculator;

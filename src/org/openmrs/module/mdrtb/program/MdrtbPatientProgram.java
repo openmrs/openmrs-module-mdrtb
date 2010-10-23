@@ -21,10 +21,10 @@ import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 
 

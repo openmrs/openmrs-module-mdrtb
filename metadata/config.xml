@@ -34,7 +34,7 @@
 	<!--  AOP advice points -->
 	<advice>
 		<point>org.openmrs.api.ConceptService</point>
-		<class>@MODULE_PACKAGE@.advice.ConceptServiceAdvice</class>
+		<class>@MODULE_PACKAGE@.service.ConceptServiceAdvice</class>
 	</advice>
 
 	<globalProperty>

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.web.controller.PortletController;
 

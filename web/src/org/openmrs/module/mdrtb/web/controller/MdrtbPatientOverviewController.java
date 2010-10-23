@@ -61,7 +61,7 @@ import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.PredictionModel;
 import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbPatientDashboardTabs;

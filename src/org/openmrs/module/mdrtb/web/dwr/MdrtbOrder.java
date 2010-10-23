@@ -11,8 +11,8 @@ import org.openmrs.Order;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class MdrtbOrder {
     protected final Log log = LogFactory.getLog(getClass());

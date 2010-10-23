@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.db;
+package org.openmrs.module.mdrtb.service.db;
 
 import java.util.List;
 import java.util.Locale;

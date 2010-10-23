@@ -35,7 +35,7 @@ import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbOverviewObj;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;

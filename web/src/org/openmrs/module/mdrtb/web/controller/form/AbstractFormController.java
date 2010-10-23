@@ -11,7 +11,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;

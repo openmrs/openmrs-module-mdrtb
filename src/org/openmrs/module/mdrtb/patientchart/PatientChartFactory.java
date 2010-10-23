@@ -15,12 +15,11 @@ import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenUtil;
 

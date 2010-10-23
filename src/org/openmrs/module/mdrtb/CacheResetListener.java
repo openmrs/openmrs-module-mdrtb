@@ -6,6 +6,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.api.GlobalPropertyListener;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 
 public class CacheResetListener implements GlobalPropertyListener {

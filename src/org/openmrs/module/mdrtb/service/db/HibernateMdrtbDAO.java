@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.db.hibernate;
+package org.openmrs.module.mdrtb.service.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +27,6 @@ import org.openmrs.ConceptNameTag;
 import org.openmrs.ConceptWord;
 import org.openmrs.Location;
 import org.openmrs.api.db.DAOException;
-import org.openmrs.module.mdrtb.db.MdrtbDAO;
 
 public class HibernateMdrtbDAO implements MdrtbDAO {
 

@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 
 public class MSPPFormUtil {

@@ -39,6 +39,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

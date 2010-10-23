@@ -15,7 +15,7 @@ import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.util.OpenmrsUtil;
 
 public class RegimenUtils {

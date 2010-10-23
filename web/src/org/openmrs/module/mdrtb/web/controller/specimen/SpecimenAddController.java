@@ -2,7 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.validators.SpecimenValidator;
 import org.springframework.stereotype.Controller;

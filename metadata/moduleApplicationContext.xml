@@ -103,22 +103,20 @@
     <bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.module.mdrtb.MdrtbService</value> <!-- service interface name -->
+				<value>org.openmrs.module.mdrtb.service.MdrtbService</value> <!-- service interface name -->
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.module.mdrtb.impl.MdrtbServiceImpl">
+						<bean class="org.openmrs.module.mdrtb.service.MdrtbServiceImpl">
 							<property name="mdrtbDAO">
-								<bean class="org.openmrs.module.mdrtb.db.hibernate.HibernateMdrtbDAO">
+								<bean class="org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
 								</bean>
 							</property>	
 						</bean>
 					</property>
 					<property name="preInterceptors">
-						<list>
-							<ref bean="authorizationInterceptor"/>
-						</list>
+						<ref bean="serviceInterceptors" />
 					</property>
 					<property name="transactionAttributeSource">
 						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>

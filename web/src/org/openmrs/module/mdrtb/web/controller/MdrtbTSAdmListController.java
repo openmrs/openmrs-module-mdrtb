@@ -22,7 +22,7 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbTreatmentSupporter;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
 import org.openmrs.propertyeditor.ConceptClassEditor;

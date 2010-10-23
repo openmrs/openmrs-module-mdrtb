@@ -18,8 +18,8 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
  * An implementation of the MdrtbSpecimen. This wraps an Encounter and provides access to the

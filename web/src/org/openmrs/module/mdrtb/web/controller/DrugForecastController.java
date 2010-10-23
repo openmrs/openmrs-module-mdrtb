@@ -13,7 +13,7 @@ import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.drugneeds.DrugForecastUtil;
 import org.openmrs.propertyeditor.ConceptEditor;

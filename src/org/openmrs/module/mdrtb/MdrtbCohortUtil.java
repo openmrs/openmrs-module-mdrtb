@@ -12,6 +12,7 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.PatientLocationMethod;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.springframework.util.StringUtils;
 
 public class MdrtbCohortUtil {

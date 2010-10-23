@@ -1,9 +1,8 @@
-package org.openmrs.module.mdrtb.advice;
+package org.openmrs.module.mdrtb.service;
 
 import java.lang.reflect.Method;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.springframework.aop.AfterReturningAdvice;
 
 

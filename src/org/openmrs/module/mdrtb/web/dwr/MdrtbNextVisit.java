@@ -11,7 +11,7 @@ import org.openmrs.Obs;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class MdrtbNextVisit {
     protected final Log log = LogFactory.getLog(getClass());

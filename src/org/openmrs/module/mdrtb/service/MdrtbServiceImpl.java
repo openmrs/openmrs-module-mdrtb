@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.impl;
+package org.openmrs.module.mdrtb.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,14 +39,13 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
-import org.openmrs.module.mdrtb.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;

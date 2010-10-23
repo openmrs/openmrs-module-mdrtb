@@ -13,8 +13,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
  * An implementation of a MdrtbDst.  This wraps an ObsGroup and provides access to dst

@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb;
+package org.openmrs.module.mdrtb.service;
 
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +19,7 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;

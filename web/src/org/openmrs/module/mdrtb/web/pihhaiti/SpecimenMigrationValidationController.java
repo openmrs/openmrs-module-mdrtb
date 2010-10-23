@@ -18,7 +18,7 @@ import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

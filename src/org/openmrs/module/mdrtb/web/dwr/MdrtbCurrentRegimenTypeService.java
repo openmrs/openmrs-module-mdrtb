@@ -12,8 +12,8 @@ import org.openmrs.Patient;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class MdrtbCurrentRegimenTypeService {
     protected final Log log = LogFactory.getLog(getClass());

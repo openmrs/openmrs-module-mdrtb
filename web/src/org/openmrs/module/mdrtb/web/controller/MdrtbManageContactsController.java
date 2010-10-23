@@ -42,7 +42,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
-import org.openmrs.module.mdrtb.MdrtbService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
