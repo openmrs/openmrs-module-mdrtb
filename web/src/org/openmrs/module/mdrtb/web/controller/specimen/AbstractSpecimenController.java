@@ -3,8 +3,9 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Role;
@@ -24,7 +24,6 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -147,6 +146,18 @@ public abstract class AbstractSpecimenController {
 	@ModelAttribute("positiveResults")
 	public Collection<Concept> getPositiveResults() {
 		return MdrtbUtil.getPositiveResultConcepts();
+	}
+	
+	// used in the jquery in specimen.jsp to trigger hide/show of days of positivity field
+	@ModelAttribute("positiveResultsIds")
+	public Collection<String> getPositiveResultsIds() {
+		Set<String> positiveResultsIds = new HashSet<String>();
+		
+		for (Concept positiveResult : MdrtbUtil.getPositiveResultConcepts()) {
+			positiveResultsIds.add(positiveResult.getConceptId().toString());
+		}
+		
+		return positiveResultsIds;
 	}
 	
 	@ModelAttribute("scanty")

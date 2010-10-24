@@ -70,13 +70,13 @@ public class TestStatusRenderer {
 			}
 		}
 		
-		if (complete & pending) {
+		if (complete && pending) {
 			return Context.getMessageSourceService().getMessage("mdrtb.completePending");
 		}
-		else if (!complete & pending) {
+		else if (!complete && pending) {
 			return Context.getMessageSourceService().getMessage("mdrtb.pending");
 		}
-		else if (complete & !pending) {
+		else if (complete && !pending) {
 			return Context.getMessageSourceService().getMessage("mdrtb.complete");
 		}
 		else {

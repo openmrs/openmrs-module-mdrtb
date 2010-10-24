@@ -39,13 +39,14 @@ public class SpecimenImpl implements Specimen {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	Encounter encounter; // the encounter where information about the specimen is stored
+	private Encounter encounter; // the encounter where information about the specimen is stored
 	
 	// TODO: we cache the result map; do we need to worry about resetting the cache ?
 	// (right now it isn't much of an issue because in the web model a new specimen is instantiated during each request)
-	Map<Integer,List<DstResult>> dstResultsMap = null; 
+	private Map<Integer,List<DstResult>> dstResultsMap = null; 
 	
 	public SpecimenImpl() {
+		// empty constructor
 	}
 	
 	// set up a specimen object from an existing encounter

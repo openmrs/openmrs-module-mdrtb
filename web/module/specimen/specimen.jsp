@@ -23,6 +23,18 @@
 
 	var $j = jQuery.noConflict();	
 
+	// tests to see if a set contains a an object
+	// TODO: is there an existing javascript function to do this?
+	// TODO: if nothing else, should move this into some library file
+	function contains(set, item) {
+		for (var i in set) {
+			if (set[i] == item) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// hides all add, edit, and view details boxes
 	function hideDisplayBoxes(){
 		$j('.addBox').hide();
@@ -135,8 +147,11 @@
 			resetAddDstResults();
 		});
 
-		// event handler to hide/show bacilli and colonies selector, and reset the value if needed
+		// event handler to:
+		// 1) hide/show bacilli and colonies input boxes, and reset the value if needed
+		// 2) hide/show the days to positivity input boxes, and reset the value if needed
 		$j('.result').change(function() {
+				// handle bacilli/colonies
 				if ($j(this).attr('value') == ${scanty.id}) {
 					// show the bacilli or colonies row in the same div as this element
 					$j(this).closest('div').find('.bacilli').show();
@@ -147,6 +162,18 @@
 					// then find the bacilli/colonies input element and set it's value to empty
 					$j(this).closest('div').find('.bacilli').hide().find('#bacilli').attr('value','');
 					$j(this).closest('div').find('.colonies').hide().find('#colonies').attr('value','');
+				}
+
+			if (contains(${positiveResultsIds}, $j(this).attr('value'))) {
+				// handle days to positivity (tests if the current value is within the set of positiveResults
+				//if (${positiveResultsIds}.indexOf($j(this).attr('value')) != -1) {
+					// show the days of positivity row in the same div as this element
+					$j(this).closest('div').find('.daysToPositivity').show();
+				}
+				else {
+					// hide the days of positivity row int he same div as the element
+					// then find the days of positivity input element and set it's value to empty
+					$j(this).closest('div').find('.daysToPositivity').hide().find('#daysToPositivity').attr('value','');
 				}
 		});
 		
@@ -486,7 +513,7 @@
 </tr>
 </c:if>
 
-<c:if test="${test.testType eq 'culture'}">
+<c:if test="${test.testType eq 'culture' && mdrtb:collectionContains(positiveResults, test.result)}">
 <tr>
 <td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days to Positivity"/>:</nobr></td><td><nobr>${test.daysToPositivity}</nobr></td>
 <td colspan="2">&nbsp;</td>
@@ -643,7 +670,7 @@
 </c:if>
 
 <c:if test="${test.testType eq 'culture'}">
-<tr class="daysToPositivity">
+<tr class="daysToPositivity" <c:if test="${!mdrtb:collectionContains(positiveResults, test.result)}"> style="display:none;"</c:if>>
 <td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days To Positivity"/>:</nobr></td>
 <td><input type="text" size="6" name="daysToPositivity" id="daysToPositivity" value="${test.daysToPositivity}"/></td>
 <td colspan="2">&nbsp;</td>
@@ -847,7 +874,7 @@
 </c:if>
 
 <c:if test="${type eq 'culture'}">
-<tr class="daysToPositivity">
+<tr class="daysToPositivity" style="display:none;">
 <td><nobr><spring:message code="mdrtb.daysToPositivity" text="Days To Positivity"/>:</nobr></td>
 <td><input type="text" size="6" name="daysToPositivity" id="daysToPositivity" value="${test.daysToPositivity}"/></td>
 <td colspan="2">&nbsp;</td>
