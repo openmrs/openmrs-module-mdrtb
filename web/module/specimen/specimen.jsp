@@ -35,7 +35,7 @@
 		return false;
 	}
 
-	// hides all add, edit, and view details boxes
+	// hides all add and edit details boxes
 	function hideDisplayBoxes(){
 		$j('.addBox').hide();
 		$j('.editBox').hide();
@@ -43,18 +43,16 @@
 		$j('#details_-1').hide();
 	}
 
-	// hides all view, edit, and add elements (used to stop used from navigating away from an edit)
-	function hideViewEditAddLinks() {
-		$j('.view').fadeOut();  // hide all the view links
+	// hides all edit, add, and delete link elements (used to stop used from navigating away from an edit)
+	function hideLinks() {
 		$j('.edit').fadeOut();  // hide all the edit tests links
 		$j('.delete').fadeOut(); // hide all the delete links 
 		$j('#editSpecimen').fadeOut(); // hide the edit specimen link
 		$j('#add').fadeOut(); // hide the "add a test" selector
 	}
 
-	// shows all view, edit, and add elements (called when an edit is complete)
-	function showViewEditAddLinks() {
-		$j('.view').fadeIn();  // show all the view links
+	// shows all edit, add, and delete elements (called when an edit is complete)
+	function showLinks() {
 		$j('.edit').fadeIn();  // show all the edit tests links
 		$j('.delete').fadeIn(); // show all the delete links 
 		$j('#editSpecimen').fadeIn(); // show the edit specimen link
@@ -70,7 +68,6 @@
 		for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
 			$j('#addDstResult_' + i).show();	
 		}
-			
 		addDstResultCounter = 1; // reset the add dst result counter
 	}
 	
@@ -85,47 +82,45 @@
 		$j('#details_${testId}').show();
 
 		// switch to edit specimen if we are here because of specimen validation error
-		if(${fn:length(specimenErrors.allErrors) > 0}) {
-			hideViewEditAddLinks();
+		if (${fn:length(specimenErrors.allErrors) > 0}) {
+			hideLinks();
 			$j('#details_specimen').hide();  // hide the specimen details box
-			$j('#edit_specimen').show();  // show the edit speciment box
-			// TODO: rethink this cancel functionality when working on the rest of the validation?
-			$j('#cancelSpecimen').hide(); // a user shouldn't be able to cancel, should have to fix the error
-						
+			$j('#edit_specimen').show();  // show the edit speciment box		
 		}
 		
 		// event handlers to hide and show specimen edit box
 		$j('#editSpecimen').click(function(){
-			hideViewEditAddLinks();
+			hideLinks();
 			$j('#details_specimen').hide();  // hide the specimen details box
 			$j('#edit_specimen').show();  // show the edit speciment box
 		});
 
 		$j('#cancelSpecimen').click(function(){
-			showViewEditAddLinks();
-			$j('#edit_specimen').hide();  // hide the edit specimen box
-			$j('#details_specimen').show();  // show the specimen details box
-			$j('.scannedLabReport').show(); // show any scanned lab reports that may have been deleted
+			// if this a cancel during a reload due to validation error, we need to reload
+			// the entire page to "reset" the specimen model attribute, which is in a transient state
+			if (${fn:length(specimenErrors.allErrors) > 0}) {
+				window.location="specimen.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}";
+			}
+			else {
+				// otherwise, just do a standard "cancel"		
+				showLinks();
+				$j('#edit_specimen').hide();  // hide the edit specimen box
+				$j('#details_specimen').show();  // show the specimen details box
+				$j('.scannedLabReport').show(); // show any scanned lab reports that may have been deleted
+			}
 		});
 
 		// event handlers to display add boxes
 		$j('#addButton').click(function(){
 			hideDisplayBoxes();
-			hideViewEditAddLinks();
+			hideLinks();
 			addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1;   // set the dst counter based on how many default drugs we have 
 			$j('#add_' + $j('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
-		// TODO: is this method used anymore?
-		// event handler to display view detail boxes
-		$j('.view').click(function(){
-			hideDisplayBoxes();
-			$j('#details_' + this.id).show();  // show the selected details box
-		});
-
 		// event handler to display edit detail boxes
 		$j('.edit').click(function(){
-			hideViewEditAddLinks();
+			hideLinks();
 			$j('#details_' + this.id).hide();  // hide the selected details box
 			$j('#edit_' + this.id).show();  // show the selected edit box
 		});
@@ -134,7 +129,7 @@
 		$j('.cancel').click(function(){	
 			hideDisplayBoxes();
 			$j('.detailBox').show();  // show all the detail boxes
-			showViewEditAddLinks();
+			showLinks();
 			$j('.dstResult').show(); // show any dst results that may have been deleted
 			resetAddDstResults();
 		});
@@ -194,18 +189,14 @@
 
 		//event handler to handle removing lab reports
 		$j('.removeScannedLabReport').click(function() {
-			// hide the lab report
-			$j(this).closest('.scannedLabReport').hide();
-			// set it's hidden input to the id of this scanned lab report
-			$j('#removeScannedLabReport' + $j(this).attr('value')).attr('value',$j(this).attr('value'));
+			$j(this).closest('.scannedLabReport').hide();    		// hide the lab report
+			$j('#removeScannedLabReport' + $j(this).attr('value')).attr('value',$j(this).attr('value'));  	// set it's hidden input to the id of this scanned lab report
 		});
 
 		//event handler to handle removing dst results
 		$j('.removeDstResult').click(function() {
-			// hide the dst result
-			$j(this).closest('.dstResult').hide();
-			// set it's hidden input to the id of this dst report
-			$j('#removeDstResult' + $j(this).attr('value')).attr('value',$j(this).attr('value'));
+			$j(this).closest('.dstResult').hide();   	// hide the dst result
+			$j('#removeDstResult' + $j(this).attr('value')).attr('value',$j(this).attr('value'));  	// set it's hidden input to the id of this dst report
 		});
 
 		// event handle to handle adding dst results
@@ -226,16 +217,6 @@
 -->
 </script>
 <!-- END JQUERY -->
-
-<!--  
-<div align="left">
-<ul id="menu">
-<li class="first">
-<a style="font-size:70%;" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.returnToSpecimenList" text="Return to Specimen List"/></a>
-</li>
-</ul>
-</div>
--->
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(specimenErrors.allErrors) > 0}">
