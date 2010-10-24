@@ -1,7 +1,5 @@
 package org.openmrs.module.mdrtb.program;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -30,15 +28,15 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 
 public class MdrtbPatientProgram {
 
-	private PatientProgram program;
+	private org.openmrs.module.programlocation.PatientProgram program;
 	
 	public MdrtbPatientProgram() {
-		this.program = new PatientProgram();
+		this.program = new org.openmrs.module.programlocation.PatientProgram();
 		this.program.setProgram(Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")));
 	}
 	
 	public MdrtbPatientProgram(PatientProgram program) {
-		this.program = program;
+		this.program = (org.openmrs.module.programlocation.PatientProgram) program;
 	}
 	
 	public PatientProgram getPatientProgram() {
@@ -98,17 +96,27 @@ public class MdrtbPatientProgram {
 		}
 	}
 	
+	public Location getLocation() {
+		return this.program.getLocation();
+	}
+	
+	public void setLocation(Location location) {
+		this.program.setLocation(location);
+	}
+	
+	/**
 	public Location getLocation() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		// doing this instead of simply casting program to org.module.programlocation.PatientProgram to avoid pesky classloading bug
 		Method getLocation = this.program.getClass().getMethod("getLocation");
 		return (Location) getLocation.invoke(this.program);
-	}
+	} 
 	
 	public void setLocation(Location location) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		// doing this instead of simply casting program to org.module.programlocation.PatientProgram to avoid pesky classloading bug
 		Method setLocation = this.program.getClass().getMethod("setLocation", Location.class);
 		setLocation.invoke(this.program, location);
 	}
+	*/
 	
 	public ProgramWorkflowState getOutcome() {		
 		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);

@@ -61,13 +61,10 @@
 		$j('#add').fadeIn(); // show the "add a test" selector
 	}
 
-	// resets the dst results boxes in the "add dst" section
-	function resetAddDstResults() {
-		// reset all the results		
+	// resets the default dst results boxes in the "add dst" section
+	function resetAddDstResults() {		
 		$j('.addDstResult').hide().find('input,.dstResult').attr('value',''); // reset all the dst result values except drug type
-
-		// hide the colony input boxes
-		$j('.dstColonies').hide()	
+		$j('.dstColonies').hide()	  // hide the colony input boxes
 		
 		// now reshow the boxes that contain the default drugs
 		for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
@@ -115,10 +112,7 @@
 		$j('#addButton').click(function(){
 			hideDisplayBoxes();
 			hideViewEditAddLinks();
-		
-			// set the dst counter based on how many default drugs we have 
-			addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1;
-				
+			addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1;   // set the dst counter based on how many default drugs we have 
 			$j('#add_' + $j('#addSelect').attr('value')).show(); // show the proper add a test box
 		});
 
@@ -140,10 +134,8 @@
 		$j('.cancel').click(function(){	
 			hideDisplayBoxes();
 			$j('.detailBox').show();  // show all the detail boxes
-			
 			showViewEditAddLinks();
 			$j('.dstResult').show(); // show any dst results that may have been deleted
-
 			resetAddDstResults();
 		});
 

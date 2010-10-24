@@ -56,13 +56,12 @@
 
 <tr><td>
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:
-Not currently implemented
-<!--  <select name="location">
+<select name="location">
 <option value=""/>
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == program.location}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
-</select> -->
+</select>
 </td></tr>
 
 <tr><td>
