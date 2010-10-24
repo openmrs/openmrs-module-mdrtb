@@ -64,7 +64,7 @@
 	// resets the dst results boxes in the "add dst" section
 	function resetAddDstResults() {
 		// reset all the results		
-		$j('.addDstResult').hide().find('input,select').attr('value',''); // reset all the dst result values except drug type
+		$j('.addDstResult').hide().find('input,.dstResult').attr('value',''); // reset all the dst result values except drug type
 
 		// hide the colony input boxes
 		$j('.dstColonies').hide()	
