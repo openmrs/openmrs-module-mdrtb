@@ -137,12 +137,14 @@ public class MdrtbPatientProgram {
 		// void any existing states tied to the the outcome workflow
 		voidStates(outcome);
 		
-		// now add the new state
-		PatientState outcomeState = new PatientState();
-		outcomeState.setState(programOutcome);
-		// the outcome state start date is always the completed date of the program
-		outcomeState.setStartDate(program.getDateCompleted()); 
-		this.program.getStates().add(outcomeState);	
+		// now add the new state, if one has been specified
+		if (programOutcome != null) {
+			PatientState outcomeState = new PatientState();
+			outcomeState.setState(programOutcome);
+			// the outcome state start date is always the completed date of the program
+			outcomeState.setStartDate(program.getDateCompleted()); 
+			this.program.getStates().add(outcomeState);
+		}
 	}
 	
 	public ProgramWorkflowState getClassificationAccordingToPreviousDrugUse() {		
@@ -168,12 +170,14 @@ public class MdrtbPatientProgram {
 		// void any existing states tied to the the outcome workflow
 		voidStates(previousDrug);
 		
-		// now add the new state
-		PatientState previousDrugState = new PatientState();
-		previousDrugState.setState(classification);
-		// the start date for the state should be the program enrollment date
-		previousDrugState.setStartDate(program.getDateEnrolled()); 
-		this.program.getStates().add(previousDrugState);	
+		// now add the new state, if one has been specified
+		if (classification != null) {
+			PatientState previousDrugState = new PatientState();
+			previousDrugState.setState(classification);
+			// the start date for the state should be the program enrollment date
+			previousDrugState.setStartDate(program.getDateEnrolled()); 
+			this.program.getStates().add(previousDrugState);	
+		}
 	}
 	
 	public ProgramWorkflowState getClassificationAccordingToPreviousTreatment() {		
@@ -199,12 +203,14 @@ public class MdrtbPatientProgram {
 		// void any existing states tied to the the outcome workflow
 		voidStates(previousTreatment);
 		
-		// now add the new state
-		PatientState previousTreatmentState = new PatientState();
-		previousTreatmentState.setState(classification);
-		// the start date for the state should be the program enrollment date
-		previousTreatmentState.setStartDate(program.getDateEnrolled()); 
-		this.program.getStates().add(previousTreatmentState);	
+		// now add the new state, if one has been specified
+		if (classification != null) {
+			PatientState previousTreatmentState = new PatientState();
+			previousTreatmentState.setState(classification);
+			// the start date for the state should be the program enrollment date
+			previousTreatmentState.setStartDate(program.getDateEnrolled()); 
+			this.program.getStates().add(previousTreatmentState);	
+		}
 	}
 	
 	public ProgramWorkflowState getCurrentHospitalizationState() {

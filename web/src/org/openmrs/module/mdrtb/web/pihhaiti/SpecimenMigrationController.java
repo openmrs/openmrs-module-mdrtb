@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +31,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
@@ -45,6 +45,15 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.mdrtb.status.HivStatus;
+import org.openmrs.module.mdrtb.status.HivStatusCalculator;
+import org.openmrs.module.mdrtb.status.LabResultsStatus;
+import org.openmrs.module.mdrtb.status.LabResultsStatusCalculator;
+import org.openmrs.module.mdrtb.status.NullHivStatusRenderer;
+import org.openmrs.module.mdrtb.status.NullLabResultsStatusRenderer;
+import org.openmrs.module.mdrtb.status.NullTreatmentStatusRenderer;
+import org.openmrs.module.mdrtb.status.TreatmentStatus;
+import org.openmrs.module.mdrtb.status.TreatmentStatusCalculator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -468,20 +477,102 @@ public class SpecimenMigrationController {
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireOldWorkflows.form")
     public ModelAndView retireOldWorkflows() {
+    	
+    	// retire the patient status and culture status workflows
     	Concept cultureStatus = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_STATUS);
     	Concept patientStatus = Context.getConceptService().getConceptByName("MULTI-DRUG RESISTANT TUBERCULOSIS PATIENT STATUS");
     	
     	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName("MDR-TB PROGRAM");
    
-    	// retire the patient status and culture status workflows
     	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
     		if (workflow.getConcept().equals(cultureStatus) || workflow.getConcept().equals(patientStatus)) {
+    			// retire the workflow
     			mdrtbProgram.retireWorkflow(workflow);
+    			// also retire all states associated with that workflow
+    			for (ProgramWorkflowState state : workflow.getStates()) {
+    				workflow.retireState(state);
+    			}
     		}
     	}
+     	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
+ 
+     	// now void all culture status patient states
+     	for (Patient patient : Context.getPatientService().getAllPatients(true)) {
+     		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+     			for (PatientState state : program.getPatientProgram().getStates()) {
+     				if (state.getState().getProgramWorkflow().getConcept().equals(cultureStatus)) {
+     					state.setVoided(true);
+     					state.setVoidReason("voided as part of mdr-tb migration");
+     					state.setVoidedBy(Context.getUserContext().getAuthenticatedUser());
+     				}
+     			}
+     			Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+     		}
+     	}
+     	
+     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+	}
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireStillOnTreatmentState.form")
+    public ModelAndView retireStillOnTreatmentState() {
+
+    	Concept stillOnTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STILL_ON_TREATMENT);
+    	
+     	// we are getting rid of the "still on treatment" workflow state; for all patients with the "outcome" workflow set to this state,
+     	// the workflow should be set to null
+     	for (Patient patient : Context.getPatientService().getAllPatients(true)) {
+     		for (MdrtbPatientProgram mdrtbProgram : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+     			if (mdrtbProgram.getOutcome() != null && mdrtbProgram.getOutcome().getConcept().equals(stillOnTreatment)) {
+     				mdrtbProgram.setOutcome(null);
+     				Context.getProgramWorkflowService().savePatientProgram(mdrtbProgram.getPatientProgram());
+     			}
+     		}
+     	}
+     	
+     	// now retire the "still on treatment" state
+     	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+     
+    	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName("MDR-TB PROGRAM");
    
+    	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
+    		if (workflow.getConcept().equals(outcome)) {
+    			// also retire all states associated with that workflow
+    			for (ProgramWorkflowState state : workflow.getStates()) {
+    				if (state.getConcept().equals(stillOnTreatment)) {
+    					workflow.retireState(state);
+    				}
+    			}
+    		}
+    	}
+     	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
+     	
+     	
+     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	
+    }
+    
+    // just a hacky test
+    @RequestMapping("/module/mdrtb/pihhaiti/test/loadStatus.form")
+    public ModelAndView loadStatus() {
+    	List<LabResultsStatus> labResultsStatus = new LinkedList<LabResultsStatus>();
+    	List<TreatmentStatus> treatmentStatus = new LinkedList<TreatmentStatus>();
+    	List<HivStatus> hivStatus = new LinkedList<HivStatus>();
+    	
+    	LabResultsStatusCalculator labResultsCalc = new LabResultsStatusCalculator(new NullLabResultsStatusRenderer());
+    	TreatmentStatusCalculator treatmentCalc = new TreatmentStatusCalculator(new NullTreatmentStatusRenderer());
+    	HivStatusCalculator hivCalc = new HivStatusCalculator(new NullHivStatusRenderer());
+    	
+    	for (Patient patient : Context.getPatientService().getAllPatients()) {
+    		hivStatus.add((HivStatus) hivCalc.calculate(patient));
+    		
+    		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+    			labResultsStatus.add((LabResultsStatus) labResultsCalc.calculate(program));
+    			treatmentStatus.add((TreatmentStatus) (treatmentCalc.calculate(program)));
+    		}
+    	}
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
+  
     
     private void createHospitalization(List<MdrtbPatientProgram> programs, Person patient, Date admissionDate, Date dischargeDate) {
     	
