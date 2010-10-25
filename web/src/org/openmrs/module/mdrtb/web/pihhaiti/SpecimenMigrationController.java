@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -39,8 +40,8 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
@@ -400,6 +401,85 @@ public class SpecimenMigrationController {
     		}
     	} 	
     	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroups.form")
+    public ModelAndView migrateRegistrationGroups() {
+    	Concept previousDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
+    	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	
+    	Collection<ProgramWorkflowState> previousDrugUseStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
+    	Collection<ProgramWorkflowState> previousTreatmentStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
+    	
+    	// loop thru all persons and see if they have obs for either registration group options
+    	for (Patient patient : Context.getPatientService().getAllPatients()) {
+    		
+    		// loop thru all the category 4 previous drug group registration group for this patient
+    		for (Obs previousDrugUseObs : Context.getObsService().getObservationsByPersonAndConcept(patient, previousDrugUse)) {
+    			
+    			// find out the proper patient program (if any) to set this state on
+    			Date previousProgramEndDate = null;
+    			for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+    				if ( (program.getDateCompleted() == null || previousDrugUseObs.getObsDatetime().before(program.getDateCompleted()) &&
+        				(previousProgramEndDate == null || previousDrugUseObs.getObsDatetime().after(previousProgramEndDate)))) {
+    					
+    					// set the appropriate state for this patient
+    					for (ProgramWorkflowState state : previousDrugUseStates) {
+    						if (state.getConcept().equals(previousDrugUseObs.getValueCoded())) {
+    							program.setClassificationAccordingToPreviousDrugUse(state);
+    	    					Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+    	    					log.info("Set previous workflow state previous drug use to " + state.toString() + " for program " + program.getPatientProgram().toString() + " of patient " + patient.toString());
+    						}
+    					}
+        			}
+    				previousProgramEndDate = program.getDateCompleted();
+    			}
+    			// now void this obs
+    			Context.getObsService().voidObs(previousDrugUseObs, "voided as part of mdrtb-migration");
+    		}
+    		
+    		// loop thru all the category 4 previous treatment  registration group for this patient
+    		for (Obs previousTreatmentObs : Context.getObsService().getObservationsByPersonAndConcept(patient, previousTreatment)) {
+    			
+    			// find out the proper patient program (if any) to set this state on
+    			Date previousProgramEndDate = null;
+    			for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+    				if ( (program.getDateCompleted() == null || previousTreatmentObs.getObsDatetime().before(program.getDateCompleted()) &&
+        				(previousProgramEndDate == null || previousTreatmentObs.getObsDatetime().after(previousProgramEndDate)))) {
+    					
+    					// set the appropriate state for this patient
+    					for (ProgramWorkflowState state : previousTreatmentStates) {
+    						if (state.getConcept().equals(previousTreatmentObs.getValueCoded())) {
+    							program.setClassificationAccordingToPreviousTreatment(state);
+    	    					Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+    	    					log.info("Set previous workflow state previous treatment to " + state.toString() + " for program " + program.getPatientProgram().toString() + " of patient " + patient.toString());
+    						}
+    					}
+        			}
+    				previousProgramEndDate = program.getDateCompleted();
+    			}
+    			// now void this obs
+    			Context.getObsService().voidObs(previousTreatmentObs, "voided as part of mdrtb-migration");
+    		}
+    	}
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireOldWorkflows.form")
+    public ModelAndView retireOldWorkflows() {
+    	Concept cultureStatus = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_STATUS);
+    	Concept patientStatus = Context.getConceptService().getConceptByName("MULTI-DRUG RESISTANT TUBERCULOSIS PATIENT STATUS");
+    	
+    	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName("MDR-TB PROGRAM");
+   
+    	// retire the patient status and culture status workflows
+    	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
+    		if (workflow.getConcept().equals(cultureStatus) || workflow.getConcept().equals(patientStatus)) {
+    			mdrtbProgram.retireWorkflow(workflow);
+    		}
+    	}
+   
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     

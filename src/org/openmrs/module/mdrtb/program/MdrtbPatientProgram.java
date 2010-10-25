@@ -20,6 +20,7 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -150,12 +151,17 @@ public class MdrtbPatientProgram {
 	}
 	
 	public void setClassificationAccordingToPreviousDrugUse (ProgramWorkflowState classification) {
+		// first make sure that this program workflow state is valid
+		if (!Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse().contains(classification)) {
+			throw new MdrtbAPIException(classification.toString() + " is not a valid state for Classification According To Previous Drug Use workflow");
+		}
+		
 		// if the state hasn't changed, we don't need to bother doing the update
 		ProgramWorkflowState currentClassification = getClassificationAccordingToPreviousDrugUse();
 		if ( (currentClassification == null && classification == null) || (currentClassification != null && currentClassification.equals(classification)) ){
 			return;
 		}
-
+		
 		// otherwise, do the update
 		Concept previousDrug = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
 		
@@ -176,6 +182,11 @@ public class MdrtbPatientProgram {
 	}
 	
 	public void setClassificationAccordingToPreviousTreatment (ProgramWorkflowState classification) {
+		// first make sure that the program workflow state is valid
+		if (!Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment().contains(classification)) {
+			throw new MdrtbAPIException(classification.toString() + " is not a valid state for Classification According To Previous Treatment workflow");
+		}
+		
 		// if the state hasn't changed, we don't need to bother doing the update
 		ProgramWorkflowState currentClassification = getClassificationAccordingToPreviousTreatment();
 		if ( (currentClassification == null && classification == null) || (currentClassification != null && currentClassification.equals(classification)) ){
