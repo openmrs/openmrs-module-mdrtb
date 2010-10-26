@@ -10,7 +10,7 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
 
-public class SimpleIntakeForm extends AbstractForm {
+public class SimpleIntakeForm extends AbstractSimpleForm {
 
 	public SimpleIntakeForm() {
 		super();

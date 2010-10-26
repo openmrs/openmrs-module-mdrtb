@@ -9,19 +9,19 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 
 
-public abstract class AbstractForm {
+public abstract class AbstractSimpleForm implements SimpleForm {
 	protected Encounter encounter;
 	
-	public AbstractForm() {
+	public AbstractSimpleForm() {
 		this.encounter = new Encounter();
 	}
 	
-	public AbstractForm(Patient patient) {
+	public AbstractSimpleForm(Patient patient) {
 		this.encounter = new Encounter();
 		this.encounter.setPatient(patient);
 	}
 	
-	public AbstractForm(Encounter encounter) {
+	public AbstractSimpleForm(Encounter encounter) {
 		this.encounter = encounter;
 	}
 	

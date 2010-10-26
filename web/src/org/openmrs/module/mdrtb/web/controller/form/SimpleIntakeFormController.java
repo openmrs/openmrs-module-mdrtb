@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.form.SimpleFormValidator;
 import org.openmrs.module.mdrtb.form.SimpleIntakeForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
@@ -52,13 +53,22 @@ public class SimpleIntakeFormController extends AbstractFormController {
 		return new ModelAndView("/module/mdrtb/form/intake", map);	
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processIntakeForm (@ModelAttribute("intake") SimpleIntakeForm intake, BindingResult errors, 
 	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
 	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
 	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
 
-		// TODO: validate
+		// perform validation and check for errors
+		if (intake != null) {
+    		new SimpleFormValidator().validate(intake, errors);
+    	}
+		
+		if (errors.hasErrors()) {
+			map.put("errors", errors);
+			return new ModelAndView("/module/mdrtb/form/intake", map);
+		}
 		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(intake.getEncounter());

@@ -222,8 +222,8 @@
 <c:if test="${fn:length(specimenErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${specimenErrors.allErrors}">
 		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
 	</c:forEach>
-	<br/>
 </c:if>
 
 

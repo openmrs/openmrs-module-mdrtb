@@ -1,8 +1,7 @@
-package org.openmrs.module.mdrtb.specimen.validators;
+package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 
-import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

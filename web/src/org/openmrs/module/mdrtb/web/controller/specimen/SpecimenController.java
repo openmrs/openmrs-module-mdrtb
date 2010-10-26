@@ -21,7 +21,7 @@ import org.openmrs.module.mdrtb.specimen.DstResult;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
-import org.openmrs.module.mdrtb.specimen.validators.SpecimenValidator;
+import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

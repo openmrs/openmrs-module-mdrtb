@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.openmrs.module.mdrtb.form.SimpleFollowUpForm;
+import org.openmrs.module.mdrtb.form.SimpleFormValidator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
 import org.springframework.stereotype.Controller;
@@ -51,13 +53,22 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 		return new ModelAndView("/module/mdrtb/form/followup", map);	
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processFollowupForm (@ModelAttribute("followup") SimpleFollowUpForm followup, BindingResult errors, 
 	                                         @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
 	                                         @RequestParam(required = false, value = "returnUrl") String returnUrl,
 	                                         SessionStatus status, HttpServletRequest request, ModelMap map) {
 
-		// TODO: validate
+		// perform validation and check for errors
+		if (followup != null) {
+    		new SimpleFormValidator().validate(followup, errors);
+    	}
+		
+		if (errors.hasErrors()) {
+			map.put("errors", errors);
+			return new ModelAndView("/module/mdrtb/form/followup", map);
+		}
 		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(followup.getEncounter());

@@ -40,11 +40,19 @@
 
 <div> <!-- start of page div -->
 
-&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.returnToVisits" text="Return to Visits"/></a>
+&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Back"/></a>
 <br/><br/>
 
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
+	</c:forEach>
+</c:if>
+
 <!-- VIEW BOX -->
-<div id="viewVisit" <c:if test="${(empty intake.id) || (intake.id == -1)}"> style="display:none" </c:if>>
+<div id="viewVisit" <c:if test="${(empty intake.id) || (intake.id == -1) || fn:length(errors.allErrors) > 0}"> style="display:none" </c:if>>
 <b class="boxHeader"><spring:message code="mdrtb.intakeForm" text="Intake Form"/>
 <span style="position: absolute; right:30px;"><a id="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="${pageContext.request.contextPath}/module/mdrtb/visits/delete.form?visitId=${intake.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span>
 </b>
@@ -79,7 +87,7 @@
 <!-- END VIEW BOX -->
 
 <!-- EDIT BOX -->
-<div id="editVisit" <c:if test="${(!empty intake.id) && (intake.id != -1)}"> style="display:none" </c:if>>
+<div id="editVisit" <c:if test="${(!empty intake.id) && (intake.id != -1) && fn:length(errors.allErrors) == 0}"> style="display:none" </c:if>>
 <b class="boxHeader"><spring:message code="mdrtb.intakeForm" text="Intake Form"/></b>
 <div class="box">
 
@@ -136,7 +144,7 @@
 
 <!-- different button depending on whether not this is an add or edit form -->
 <c:choose>
-	<c:when test="${(!empty intake.id) && (intake.id != -1)}">
+	<c:when test="${(!empty intake.id) && (intake.id != -1) && fn:length(errors.allErrors) == 0}">
 		<button id="cancel" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 	</c:when>
 	<c:otherwise>

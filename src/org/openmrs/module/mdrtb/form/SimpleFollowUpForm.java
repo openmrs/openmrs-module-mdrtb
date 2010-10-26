@@ -5,7 +5,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 
 
-public class SimpleFollowUpForm extends AbstractForm {
+public class SimpleFollowUpForm extends AbstractSimpleForm {
 
 	public SimpleFollowUpForm() {
 		super();
