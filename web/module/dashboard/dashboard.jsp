@@ -217,6 +217,7 @@
 <tr><td>
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
 <select name="outcome">
+<option value=""/>
 <c:forEach var="outcome" items="${outcomes}">
 <option value="${outcome.id}" <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
 </c:forEach>

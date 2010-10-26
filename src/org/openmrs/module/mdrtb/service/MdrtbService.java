@@ -68,17 +68,33 @@ public interface MdrtbService extends OpenmrsService {
   	/**
   	 * Returns all the mdrtb programs for a given patient
   	 */
+    @Transactional(readOnly=true)
 	public List<MdrtbPatientProgram> getMdrtbPatientPrograms(Patient patient);
 	
 	/**
 	 * Returns the most recent mdrtb program for a given patient
 	 */
+    @Transactional(readOnly=true)
 	public MdrtbPatientProgram getMostRecentMdrtbPatientProgram(Patient patient);
 	
+    /**
+     * Returns all the patient programs that fall within a specific date range
+     */
+    @Transactional(readOnly=true)
+    public List<MdrtbPatientProgram> getMdrtbPatientProgramsInDateRange(Patient patient, Date startDate, Date endDate);
+    
+    /**
+     * Return the specific MdrtbPatientProgram the patient was enrolled in on the specified date (if any)
+     * (This assumes that a patient is only enrolled in one MDR-TB patient program at a time)
+     */
+    @Transactional(readOnly=true)
+    public MdrtbPatientProgram getMdrtbPatientProgramOnDate(Patient patient, Date date);
+    
 	/**
 	 * Returns a specific MdrtbPatientProgram by id
 	 */
-	public MdrtbPatientProgram getMdrtbPatientProgram(Integer patientProgramId);
+    @Transactional(readOnly=true)
+	public MdrtbPatientProgram getMdrtbPatientProgram(Integer patientProgramId);   
     
     /**
      * Creates a new specimen, associated with the given patient

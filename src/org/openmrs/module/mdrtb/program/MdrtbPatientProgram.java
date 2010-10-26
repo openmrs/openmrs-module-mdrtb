@@ -154,7 +154,7 @@ public class MdrtbPatientProgram {
 	
 	public void setClassificationAccordingToPreviousDrugUse (ProgramWorkflowState classification) {
 		// first make sure that this program workflow state is valid
-		if (!Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse().contains(classification)) {
+		if (classification != null && !Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse().contains(classification)) {
 			throw new MdrtbAPIException(classification.toString() + " is not a valid state for Classification According To Previous Drug Use workflow");
 		}
 		
@@ -187,7 +187,7 @@ public class MdrtbPatientProgram {
 	
 	public void setClassificationAccordingToPreviousTreatment (ProgramWorkflowState classification) {
 		// first make sure that the program workflow state is valid
-		if (!Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment().contains(classification)) {
+		if (classification != null && !Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment().contains(classification)) {
 			throw new MdrtbAPIException(classification.toString() + " is not a valid state for Classification According To Previous Treatment workflow");
 		}
 		

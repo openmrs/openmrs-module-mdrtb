@@ -187,6 +187,31 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	}
     }
 	
+	public List<MdrtbPatientProgram> getMdrtbPatientProgramsInDateRange(Patient patient, Date startDate, Date endDate) {
+		List<MdrtbPatientProgram> programs = new LinkedList<MdrtbPatientProgram>();
+		
+		for (MdrtbPatientProgram program : getMdrtbPatientPrograms(patient)) {
+			if( (endDate == null || program.getDateEnrolled().before(endDate)) &&
+	    			(program.getDateCompleted() == null || startDate == null || !program.getDateCompleted().before(startDate)) ) {
+	    			programs.add(program);
+	    	}
+		}
+		
+		return programs;
+	}
+	
+	// TODO: this method has not be used/tested
+	public MdrtbPatientProgram getMdrtbPatientProgramOnDate(Patient patient, Date date) {
+		for (MdrtbPatientProgram program : getMdrtbPatientPrograms(patient)) {
+			if (program.getDateEnrolled().before(date) && (program.getDateCompleted() == null || program.getDateCompleted().after(date)) ) {
+				return program;
+			}
+		}
+		
+		// if we've got here, there's no program on this date
+		return null;
+	}
+	
 	public MdrtbPatientProgram getMdrtbPatientProgram(Integer patientProgramId) {
 		if (patientProgramId == null) {
 			throw new MdrtbAPIException("Patient program Id cannot be null.");

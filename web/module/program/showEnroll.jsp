@@ -34,14 +34,24 @@
 		$j('#dateEnrolled').datepicker({		
 			dateFormat: 'dd/mm/yy',
 		 });
+
+		$j('#dateCompleted').datepicker({		
+			dateFormat: 'dd/mm/yy',
+		 });
 		
  	});
 -->
 </script>
 
-<!--  DISPLAY ANY ERROR MESSAGES -->
-
 <br/><br/>
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
+	</c:forEach>
+</c:if>
 
 <div align="center"> <!-- start of page div -->
 
@@ -51,11 +61,11 @@
 <form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>: <input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" />
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
 </td></tr>
 
 <tr><td>
-<spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:
+<spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:</td><td>
 <select name="location">
 <option value=""/>
 <c:forEach var="location" items="${locations}">
@@ -64,7 +74,7 @@
 </select>
 </td></tr>
 
-<tr><td>
+<tr><td colspan="2">
 <spring:message code="mdrtb.previousDrugClassification" text="Registration Group - Previous Drug Use"/>:<br/>
 <select name="classificationAccordingToPreviousDrugUse">
 <option value=""/>
@@ -74,7 +84,7 @@
 </select>	
 </td></tr>
 
-<tr><td>
+<tr><td colspan="2">
 <spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/>
 <select name="classificationAccordingToPreviousTreatment">
 <option value=""/>
@@ -83,6 +93,21 @@
 </c:forEach>
 </select>	
 </td></tr>
+
+<c:if test="${hasActiveProgram}">
+<tr><td>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>"/>
+</td></tr>
+<tr><td>
+<spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
+<select name="outcome">
+<option value=""/>
+<c:forEach var="outcome" items="${outcomes}">
+<option value="${outcome.id}">${outcome.concept.displayString}</option>
+</c:forEach>
+</select>	
+</td></tr>
+</c:if>
 
 </table>
 <button type="submit"><spring:message code="mdrtb.enrollment.enroll" text="Enroll in Program"/></button><button type="reset" onclick=window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patientId}'><spring:message code="mdrtb.cancel" text="Cancel"/></button>
