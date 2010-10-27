@@ -25,6 +25,7 @@
 	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
     .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+	.ui-dialog-titlebar-close{display: none;}  <!--hides the close button on the pop-ups -->
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
@@ -36,9 +37,10 @@
 	$j(document).ready(function(){
 
 		$j('#programEditPopup').dialog({
-			autoOpen: false,
+			autoOpen: ${(fn:length(programEditErrors.allErrors) > 0 ? true : false)},
 			modal: true,
 			draggable: false,
+			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.editProgram" text="Edit Program"/>',
 			width: '50%',
 			position: 'left',
@@ -53,12 +55,13 @@
 		});
 		
 		$j('#programClosePopup').dialog({
-			autoOpen: false,
+			autoOpen: ${(fn:length(programCloseErrors.allErrors) > 0 ? true : false)},
 			modal: true,
 			draggable: false,
+			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.closeProgram" text="Close Program"/>',
-			width: '30%',
-			position: 'left'
+			width: '50%',
+			position: 'left',
 		});
 
 		$j('#programCloseButton').click(function() {
@@ -74,6 +77,7 @@
 			position: 'right',
 			modal: true,
 			draggable: false,
+			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.editHospitalization" text="Edit Hospitalization"/>',
 			width: '30%',
 			position: 'left',
@@ -173,8 +177,16 @@
 </div>
 
 <!--  EDIT PROGRAM POPUP -->
+<div id="programEditPopup" style="display:none">
 
-<div id="programEditPopup">
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(programEditErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${programEditErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
+	</c:forEach>
+</c:if>
+
 <form id="programEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/programEdit.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
@@ -226,7 +238,18 @@
 </c:if>
 </table>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> 
+
+<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
+<c:choose>
+	<c:when test="${fn:length(programEditErrors.allErrors) == 0}">
+		<button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:when>
+	<c:otherwise>
+		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:otherwise>
+</c:choose>
+
 </form>
 </div>
 
@@ -234,23 +257,41 @@
 
 <!-- CLOSE PROGRAM POPUP -->
 
-<div id="programClosePopup">
+<div id="programClosePopup" style="display:none">
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(programCloseErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${programCloseErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
+	</c:forEach>
+</c:if>
+
 <form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" value=""/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
 <select name="outcome">
 <c:forEach var="outcome" items="${outcomes}">
-<option value="${outcome.id}">${outcome.concept.displayString}</option>
+<option value="${outcome.id}"  <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
 </c:forEach>
 </select>	
 </td></tr>
 </table>
-<button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> <button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-</form>
+<button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> 
+
+<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
+<c:choose>
+	<c:when test="${fn:length(programCloseErrors.allErrors) == 0}">
+		<button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:when>
+	<c:otherwise>
+		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:otherwise>
+</c:choose></form>
 </div>
 
 <!-- END CLOSE PROGRAM POPUP -->
