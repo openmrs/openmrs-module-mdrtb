@@ -105,20 +105,6 @@ public class MdrtbPatientProgram {
 		this.program.setLocation(location);
 	}
 	
-	/**
-	public Location getLocation() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		// doing this instead of simply casting program to org.module.programlocation.PatientProgram to avoid pesky classloading bug
-		Method getLocation = this.program.getClass().getMethod("getLocation");
-		return (Location) getLocation.invoke(this.program);
-	} 
-	
-	public void setLocation(Location location) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		// doing this instead of simply casting program to org.module.programlocation.PatientProgram to avoid pesky classloading bug
-		Method setLocation = this.program.getClass().getMethod("setLocation", Location.class);
-		setLocation.invoke(this.program, location);
-	}
-	*/
-	
 	public ProgramWorkflowState getOutcome() {		
 		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
 		return getPatientWorkflowState(outcome);

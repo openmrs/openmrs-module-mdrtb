@@ -80,7 +80,8 @@ public class ProgramController {
 			}
 		
 			// we need to determine if this patient currently in active in an mdr-tb program to determine what fields to display
-			map.put("hasActiveProgram", Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient).getActive() ? true : false);
+			MdrtbPatientProgram mostRecentProgram = Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient);
+			map.put("hasActiveProgram", (mostRecentProgram != null && mostRecentProgram.getActive()) ? true : false);
 			map.put("patientId", patientId);
 			return new ModelAndView("/module/mdrtb/program/showEnroll", map);
 	}

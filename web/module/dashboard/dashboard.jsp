@@ -73,13 +73,13 @@
 		});
 
 		$j('#hospitalizationsEditPopup').dialog({
-			autoOpen: false,
+			autoOpen: ${(fn:length(hospitalizationErrors.allErrors) > 0 ? true : false)},
 			position: 'right',
 			modal: true,
 			draggable: false,
 			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.editHospitalization" text="Edit Hospitalization"/>',
-			width: '30%',
+			width: '40%',
 			position: 'left',
 		});
 
@@ -410,13 +410,12 @@ ${regimen.displayString}
 	</c:otherwise>
 </c:choose></b>
 <div class="box" style="margin:0px">
-
 <c:if test="${!empty program.allHospitalizations}">
 
 <table cellspacing="0" cellpadding="0" border="2px">
 <tr>
 <td><spring:message code="mdrtb.admisssionDate" text="Admission Date"/></td>
-<td><spring:message code="mdrtb.dischareDate" text="Discharge Date"/></td>
+<td><spring:message code="mdrtb.dischargeDate" text="Discharge Date"/></td>
 <td><spring:message code="mdrtb.duration" text="Duration"/></td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -424,12 +423,12 @@ ${regimen.displayString}
 
 <c:forEach var="hospitalization" items="${program.allHospitalizations}">
 <tr>
-<td class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}"/></td>
-<td class="dischargeDate">
+<td><span class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}"/></span></td>
+<td>
 <c:choose>
-	<c:when test="${!empty hospitalization.endDate}">
-		<openmrs:formatDate date="${hospitalization.endDate}"/>
-	</c:when>
+ 	<c:when test="${!empty hospitalization.endDate}"> 
+		<span class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}"/></span>
+    </c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
 	</c:otherwise>
@@ -458,17 +457,37 @@ ${regimen.displayString}
 
 <!--  EDIT HOSPITALIZATIONS POPUP -->
 <div id="hospitalizationsEditPopup">
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(hospitalizationErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${hospitalizationErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/>
+		<br/>
+	</c:forEach>
+</c:if>
+
 <form id="hospitalizationsEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/hospitalizationsEdit.form?patientProgramId=${program.id}" method="post" >
-<input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value=""/>
+<input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value="${hospitalizationStateId}"/>
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate"/>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" value="<openmrs:formatDate date='${admissionDate}'/>"/>
 </td></tr>
 <tr><td>
-<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate"/>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>"/>
 </td></tr>
 </table>
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> 
+
+<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
+<c:choose>
+	<c:when test="${fn:length(hospitalizationErrors.allErrors) == 0}">
+		<button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:when>
+	<c:otherwise>
+		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	</c:otherwise>
+</c:choose>
+
 </form>
 </div>
 <!-- END EDIT HOSPITALIZATION POPUP-->

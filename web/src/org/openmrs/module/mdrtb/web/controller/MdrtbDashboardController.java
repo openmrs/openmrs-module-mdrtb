@@ -17,6 +17,7 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgramHospitalizationValidator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgramValidator;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.status.HivStatusCalculator;
@@ -79,6 +80,16 @@ public class MdrtbDashboardController {
 	@ModelAttribute("classificationsAccordingToPreviousTreatment")
 	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
+	}
+	
+	@ModelAttribute("hospitalizationState")
+	public PatientState getHospitalizationState(@RequestParam(required = false, value = "hospitalizationStateId") Integer hospitalizationStateId) {
+		if (hospitalizationStateId == null) {
+			return null;
+		}
+		else {
+			return Context.getProgramWorkflowService().getPatientState(hospitalizationStateId);
+		}
 	}
 	
 	@ModelAttribute("program")
@@ -203,21 +214,38 @@ public class MdrtbDashboardController {
 			
 	}
 	
-	@RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)
 	public ModelAndView editHospitalization(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
 	                                        @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,
 	                                        @RequestParam(required = false, value = "startDate") Date admissionDate,
 	                                        @RequestParam(required = false, value = "endDate") Date dischargeDate,
 	                                        SessionStatus status, HttpServletRequest request, ModelMap map) {
 		
-		// validation
-		// TODO: make sure admission date is before discharge date
-		
 		// add the hospitalization if necessary
 		if (hospitalizationState == null) {
 			program.addHospitalization(admissionDate, dischargeDate);
 		}
-			
+		
+		// perform validation 
+		if (program != null) {
+			MdrtbPatientProgramHospitalizationValidator validator = new MdrtbPatientProgramHospitalizationValidator();
+    		validator.validate(program, errors);
+    		
+    		// also validate that the new date is accurate
+    	}
+	
+		if (errors.hasErrors()) {	
+			// add the errors to the map
+			map.put("hospitalizationErrors", errors);
+			// add the current values to the map
+			map.put("admissionDate", admissionDate);
+			map.put("dischargeDate", dischargeDate);
+			map.put("hospitalizationStateId", (hospitalizationState != null ? hospitalizationState.getId() : ""));
+			// call the show status method to redisplay the page with errors
+			return showStatus(program, null, program.getId(), map);
+		}  
+
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
 				
@@ -233,8 +261,6 @@ public class MdrtbDashboardController {
 	public ModelAndView deleteHospitalization(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult programErrors,
 		                                      @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,
 	                                          SessionStatus status, HttpServletRequest request, ModelMap map) {
-		
-		// TODO: validation
 		
 		// remove the hospitalizations
 		program.removeHospitalization(hospitalizationState);
