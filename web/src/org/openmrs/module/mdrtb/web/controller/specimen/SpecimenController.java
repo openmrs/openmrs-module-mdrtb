@@ -148,7 +148,13 @@ public class SpecimenController extends AbstractSpecimenController {
 			}
 			else {
 				List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(Context.getPatientService().getPatient(patientId));
-				return specimens.get(specimens.size() - 1);
+				
+				if (specimens != null && specimens.size() > 0) {
+					return specimens.get(specimens.size() - 1);
+				}
+				else {
+					return null;
+				}
 			}
 		}
 		else {

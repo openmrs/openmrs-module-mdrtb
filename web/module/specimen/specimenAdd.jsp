@@ -61,6 +61,7 @@
 <td><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</td>
 <td>
 <select name="provider">
+<option value=""/>
 <c:forEach var="provider" items="${providers}">
 	<option value="${provider.id}" <c:if test="${specimen.provider == provider}">selected</c:if> >${provider.personName}</option>
 </c:forEach>

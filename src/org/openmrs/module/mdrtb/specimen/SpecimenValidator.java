@@ -18,7 +18,8 @@ public class SpecimenValidator implements Validator {
 	    Specimen specimen = (Specimen) target;
 	    
 	    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dateCollected", "mdrtb.specimen.errors.noDateCollected", "Please specify a date collected.");
-		
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "provider", "mdrtb.specimen.errors.noCollector","Please specify who collected this sample.");
+	    
 	    if(specimen.getDateCollected() != null && specimen.getDateCollected().after(new Date())) {
 	    	errors.rejectValue("dateCollected", "mdrtb.specimen.errors.dateCollectedInFuture", "The date collected cannot be in the future.");
 	    }

@@ -58,6 +58,11 @@ public abstract class AbstractSpecimenController {
 		return mdrtbPatientProgram.getSpecimensDuringProgram();
 	}
 	
+	@ModelAttribute("patientId")
+	public Integer getPatientId(@RequestParam(required = false, value = "patientId") Integer patientId) {
+		return patientId;
+	}
+	
 	@ModelAttribute("patientProgramId")
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;

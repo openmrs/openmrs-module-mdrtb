@@ -6,8 +6,8 @@
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
-<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${specimen.patient.patientId}"/>
+<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}"/>
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference? -->
 <!-- TODO: add privileges? -->
@@ -234,7 +234,7 @@
 <div class="box">
 
 <div id="specimenList">
-<button onclick="window.location='add.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
+<button onclick="window.location='add.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
 <br/><br/>
 
 <c:if test="${fn:length(specimens) > 0}">
@@ -267,6 +267,8 @@
 <!-- START OF RIGHT-HAND COLUMN -->
 
 <div id="leftColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
+
+<c:if test="${! empty specimen}">
 
 <!--  SPECIMEN SECTION -->
 <div id="specimen" align="center">
@@ -331,6 +333,7 @@
 <td><nobr><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</nobr></td>
 <td>
 <select name="provider">
+<option value=""/>
 <c:forEach var="provider" items="${providers}">
 <option value="${provider.id}" <c:if test="${specimen.provider == provider}">selected</c:if> >${provider.personName}</option>
 </c:forEach>
@@ -942,6 +945,8 @@
 </div> <!-- END OF TEST DIV -->
 
 </div> <!-- END OF SPECIMEN DIV -->
+
+</c:if> <!-- close tag to ${! empty specimen} -->
 
 </div> <!-- END OF RIGHT HAND COLUMN -->
 
