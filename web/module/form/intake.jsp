@@ -25,8 +25,15 @@
 		});
 
 		$j('#cancel').click(function(){
-			$j('#editVisit').hide();
-			$j('#viewVisit').show();
+			if (${(empty intake.id) || (intake.id == -1) || fn:length(errors.allErrors) > 0}) {
+				// if we are in the middle of a validation error, or doing an "add" we need to do a page reload on cancel
+				window.location="${!empty returnUrl ? returnUrl : defaultReturnUrl}";
+			} 
+			else {
+				// otherwise, just hide the edit popup and show the view one	
+				$j('#editVisit').hide();
+				$j('#viewVisit').show();
+			}
 		});
 		
 	});
@@ -140,18 +147,8 @@
 </table>
 
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}"/>
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button>
-
-<!-- different button depending on whether not this is an add or edit form -->
-<c:choose>
-	<c:when test="${(!empty intake.id) && (intake.id != -1) && fn:length(errors.allErrors) == 0}">
-		<button id="cancel" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:when>
-	<c:otherwise>
-		<button type="reset" onclick="window.location='${!empty returnUrl ? returnUrl : defaultReturnUrl}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:otherwise>
-</c:choose>
-
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button id="cancel" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	
 </form>
 
 </div>

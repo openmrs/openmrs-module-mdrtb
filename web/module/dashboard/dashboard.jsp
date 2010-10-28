@@ -51,7 +51,14 @@
 		});
 
 		$j('#programEditCancelButton').click(function() {
-			$j('#programEditPopup').dialog('close');
+			if (${fn:length(programEditErrors.allErrors) > 0}) {
+				// if we are in the middle of a validation error, we need to do a page reload on cancel
+				window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}";
+			} 
+			else {
+				// otherwise, just close the popup
+				$j('#programEditPopup').dialog('close');
+			}
 		});
 		
 		$j('#programClosePopup').dialog({
@@ -69,7 +76,14 @@
 		});
 
 		$j('#programCloseCancelButton').click(function() {
-			$j('#programClosePopup').dialog('close');
+			if (${fn:length(programCloseErrors.allErrors) > 0}) {
+				// if we are in the middle of a validation error, we need to do a page reload on cancel
+				window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}";
+			} 
+			else {
+				// otherwise, just close the popup
+				$j('#programClosePopup').dialog('close');
+			}
 		});
 
 		$j('#hospitalizationsEditPopup').dialog({
@@ -99,7 +113,14 @@
 		});
 
 		$j('#hospitalizationsEditCancelButton').click(function() {
-			$j('#hospitalizationsEditPopup').dialog('close');
+			if (${fn:length(hospitalizationErrors.allErrors) > 0}) {
+				// if we are in the middle of a validation error, we need to do a page reload on cancel
+				window.location="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}";
+			} 
+			else {
+				// otherwise, just close the popup
+				$j('#hospitalizationsEditPopup').dialog('close');
+			}
 		});
 		
 		$j('#dateEnrolled').datepicker({		
@@ -125,9 +146,6 @@
 -->
 </script>
 <!-- END JQUERY -->
-
-<!--  DISPLAY ANY ERROR MESSAGES -->
-
 
 <div align="center" style="position:relative"> <!-- start of page div -->
 
@@ -183,7 +201,6 @@
 <c:if test="${fn:length(programEditErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${programEditErrors.allErrors}">
 		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
-		<br/>
 	</c:forEach>
 </c:if>
 
@@ -238,17 +255,7 @@
 </c:if>
 </table>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> 
-
-<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
-<c:choose>
-	<c:when test="${fn:length(programEditErrors.allErrors) == 0}">
-		<button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:when>
-	<c:otherwise>
-		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:otherwise>
-</c:choose>
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 
 </form>
 </div>
@@ -263,7 +270,6 @@
 <c:if test="${fn:length(programCloseErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${programCloseErrors.allErrors}">
 		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
-		<br/>
 	</c:forEach>
 </c:if>
 
@@ -281,17 +287,9 @@
 </select>	
 </td></tr>
 </table>
-<button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> 
+<button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> <button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 
-<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
-<c:choose>
-	<c:when test="${fn:length(programCloseErrors.allErrors) == 0}">
-		<button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:when>
-	<c:otherwise>
-		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:otherwise>
-</c:choose></form>
+</form>
 </div>
 
 <!-- END CLOSE PROGRAM POPUP -->
@@ -462,7 +460,6 @@ ${regimen.displayString}
 <c:if test="${fn:length(hospitalizationErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${hospitalizationErrors.allErrors}">
 		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
-		<br/>
 	</c:forEach>
 </c:if>
 
@@ -476,18 +473,8 @@ ${regimen.displayString}
 <spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>"/>
 </td></tr>
 </table>
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> 
-
-<!-- different button depending on whether not there are errors (we need to force a page reload on cancel if there are errors to reset the model object -->
-<c:choose>
-	<c:when test="${fn:length(hospitalizationErrors.allErrors) == 0}">
-		<button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:when>
-	<c:otherwise>
-		<button type="reset" onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
-	</c:otherwise>
-</c:choose>
-
+<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+	
 </form>
 </div>
 <!-- END EDIT HOSPITALIZATION POPUP-->
