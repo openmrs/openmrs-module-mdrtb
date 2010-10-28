@@ -54,13 +54,12 @@ td {
 <div align="center"><span class="sectionHeader">FORMULAIRE
 DE DEMANDE D'EXAMENS D'EXPECTORATION</span></div>
 
-<!--  DISPLAY ANY ERROR MESSAGES --> <c:if
-	test="${fn:length(errors.allErrors) > 0}">
+<!--  DISPLAY ANY ERROR MESSAGES --> 
+<c:if test="${fn:length(errors.allErrors) > 0}">
 	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}" /></span>
-		<br />
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
-	<br />
+	<br/>
 </c:if>
 
 <form name="msppForm"

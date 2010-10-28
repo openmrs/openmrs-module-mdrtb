@@ -250,7 +250,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 				result = false;
 				break;
 			}
-			else if (smear.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
+			else if (smear.getResult() != null && smear.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
 				result = true;
 			}
 		}
@@ -271,7 +271,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 				result = false;
 				break;
 			}
-			else if (culture.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
+			else if (culture.getResult() != null && culture.getResult().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE))) {
 				result = true;
 			}
 		}

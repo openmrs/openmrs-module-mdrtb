@@ -68,24 +68,53 @@
 		for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
 			$j('#addDstResult_' + i).show();	
 		}
-		addDstResultCounter = 1; // reset the add dst result counter
+		addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1; // reset the add dst result counter
+	}
+
+	function showAddDstResultsWithData() {
+		for (var i = 1; i < 31; i++) {
+			if ($j('#addDstResult${testId}_' + i).find('.dstResult').val() != ''
+				|| $j('#addDstResult${testId}_' + i).find('select').val() != '') {
+
+				$j('#addDstResult${testId}_' + i).show();
+				addDstResultCounter = i + 1;
+			}
+		}
 	}
 	
 	$j(document).ready(function(){
 
 		// set the add dst count to 1
-		var addDstResultCounter = 1;
+		addDstResultCounter = 1;
 		
-		// show the proper detail windows if it has been specified
-		// TODO: this does not work when a test is saved as the test id of a test gets changes whenever it is saved since
-		// all the obs get voided and recreated;
-		$j('#details_${testId}').show();
-
-		// switch to edit specimen if we are here because of specimen validation error
 		if (${fn:length(specimenErrors.allErrors) > 0}) {
+			// switch to edit specimen if we are here because of specimen validation error
 			hideLinks();
 			$j('#details_specimen').hide();  // hide the specimen details box
 			$j('#edit_specimen').show();  // show the edit speciment box		
+		}
+		else if (${fn:length(testErrors.allErrors) > 0}) {
+			// switch to edit test if we are here because of a test validation error
+			if(${! empty testId}) {
+				// handle the "edit" case
+				hideLinks();
+				$j('#details_${testId}').hide();  // hide the selected details box
+				$j('#edit_${testId}').show(); // show the selected edit box
+				showAddDstResultsWithData(); // show any dst result rows that may have transitory data
+			} 
+			else {
+				// handle the "add" case
+				hideDisplayBoxes();
+				hideLinks();
+				$j('#add_${testType}').show(); // show the proper add a test box
+				showAddDstResultsWithData(); // show any dst result rows thay may have transitory data
+			}
+		}
+		else {
+			// show the proper detail windows if it has been specified
+			// TODO: this does not work when a test is saved as the test id of a test gets changes whenever it is saved since
+			// all the obs get voided and recreated;
+			$j('#details_${testId}').show();
 		}
 		
 		// event handlers to hide and show specimen edit box
@@ -127,11 +156,18 @@
 
 		// event handler to cancel an edit or add
 		$j('.cancel').click(function(){	
-			hideDisplayBoxes();
-			$j('.detailBox').show();  // show all the detail boxes
-			showLinks();
-			$j('.dstResult').show(); // show any dst results that may have been deleted
-			resetAddDstResults();
+			// if this a cancel during a reload due to validation error, we need to reload
+			// the entire page to "reset" the specimen model attribute, which is in a transient state
+			if (${fn:length(testErrors.allErrors) > 0}) {
+				window.location="specimen.form?patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}";
+			}
+			else {			
+				hideDisplayBoxes();
+				$j('.detailBox').show();  // show all the detail boxes
+				showLinks();
+				$j('.dstResult').show(); // show any dst results that may have been deleted
+				resetAddDstResults();
+			}
 		});
 
 		// event handler to:
@@ -218,15 +254,6 @@
 </script>
 <!-- END JQUERY -->
 
-<!--  DISPLAY ANY ERROR MESSAGES -->
-<c:if test="${fn:length(specimenErrors.allErrors) > 0}">
-	<c:forEach var="error" items="${specimenErrors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/>
-		<br/>
-	</c:forEach>
-</c:if>
-
-
 <!-- LEFT-HAND COLUMN START -->
 <div id="leftColumn" style="float: left; width:29%;  padding:0px 4px 4px 4px">
 
@@ -266,7 +293,7 @@
 
 <!-- START OF RIGHT-HAND COLUMN -->
 
-<div id="leftColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
+<div id="rightColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
 
 <c:if test="${! empty specimen}">
 
@@ -277,6 +304,7 @@
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a id="editSpecimen" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
 <div class="box" style="margin:0px">
+
 <table cellspacing="0" cellpadding="0">
 
 <tr>
@@ -325,6 +353,15 @@
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/></b>
 <div class="box" style="margin:0px">
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(specimenErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${specimenErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+	</c:forEach>
+	<br/>
+</c:if>
+
 <table cellspacing="0" cellpadding="0">
 
 <tr>
@@ -428,12 +465,14 @@
 
 <br/>
 
-
 <c:forEach var="test" items="${specimen.tests}" varStatus="testIteration">
+<c:if test="${! empty test.id}"> <!--  hack to fix glitch that occurs when a validation error occurs when adding a test  -->
 
 <!--  TEST DETAILS SECTION -->
 
 <div id="details_${test.id}" class="detailBox" style="font-size:0.9em">
+
+<!-- TEST ID = ${test.id} -->
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a id="${test.id}" class="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
@@ -560,12 +599,19 @@
 
 <div id="edit_${test.id}" class="editBox" style="display:none; font-size:0.9em">
 
-<!--  TODO: how do i bind errors to this? -->
-
 <form id="${test.testType}" action="specimen.form?submissionType=${test.testType}&${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="mdrtb.editView" text="Edit View"/></b>
 <div class="box" style="margin:0px">
+
+<!-- DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(testErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${testErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+	</c:forEach>
+	<br/>
+</c:if>
+
 <table cellpadding="0">
 
 <tr>
@@ -719,19 +765,19 @@
 	<td><select name="addDstResult${i.count}.drug">
 		<option value=""></option>
 		<c:forEach var="drug" items="${drugTypes}">
-			<option value="${drug.id}">${drug.displayString}</option>
+			<option value="${drug.id}" <c:if test="${! empty addDstResultDrug && addDstResultDrug[i.count - 1] == drug.id}">selected</c:if>>${drug.displayString}</option>
 		</c:forEach>
 		</select>
 	</td>
-	<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
+	<td><input type="input" size="6" name="addDstResult${i.count}.concentration" value="${! empty addDstResultConcentration ? addDstResultConcentration[i.count - 1] : ''}"/></td>
 	<td><select name="addDstResult${i.count}.result" class="dstResult">
 		<option value=""></option>
 		<c:forEach var="possibleResult" items="${dstResults}">
-			<option value="${possibleResult.id}">${possibleResult.displayString}</option>
+			<option value="${possibleResult.id}" <c:if test="${! empty addDstResultResult && addDstResultResult[i.count - 1] == possibleResult.id}">selected</c:if>>${possibleResult.displayString}</option>
 		</c:forEach></td>
 		</select>
 	</td>
-	<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
+	<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="${! empty addDstResultColonies ? addDstResultColonies[i.count - 1] : ''}" class="dstColonies" style="display:none"/></td>
 	<td><button class="removeDstResultRow" value="${i.count}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></td>	
 	</tr>
 </c:forEach>
@@ -754,6 +800,7 @@
 <br/>
 </div>
 
+</c:if> <!--  hack to fix glitch that occurs when a validation error occurs when adding a test  -->
 </c:forEach>
 
 <!--  END OF EDIT TESTS SECTION -->
@@ -770,13 +817,22 @@
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${type}"/>: <spring:message code="mdrtb.add" text="Add"/></b>
 <div class="box" style="margin:0px">
+
+<!-- DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(testErrors.allErrors) > 0}">
+	<c:forEach var="error" items="${testErrors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+	</c:forEach>
+	<br/>
+</c:if>
+
 <table cellpadding="0">
 
 <tr>
 <td><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
-<td><input type="text" name="accessionNumber"/></td>
+<td><input type="text" name="accessionNumber" value="${test.accessionNumber}"/></td>
 <td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue=""/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -784,12 +840,12 @@
 <td><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
-<option value="${location.locationId}">${location.displayString}</option>
+<option value="${location.locationId}" <c:if test="${location == test.lab}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
 </select>
 </td>
 <td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue=""/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -798,12 +854,12 @@
 <td><select name="method">
 <option value=""></option>
 <c:forEach var="method" items="${type eq 'smear'? smearMethods : (type eq 'culture' ? cultureMethods : dstMethods)}">
-<option value="${method.answerConcept.id}">${method.answerConcept.displayString}</option>
+<option value="${method.answerConcept.id}" <c:if test="${method.answerConcept == test.method}">selected</c:if> >${method.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
 <td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue=""/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -813,7 +869,7 @@
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${type eq 'smear' ? smearResults : cultureResults}">
-<option value="${result.answerConcept.id}">${result.answerConcept.displayString}</option>
+<option value="${result.answerConcept.id}" <c:if test="${result.answerConcept == test.result}">selected</c:if> >${result.answerConcept.displayString}</option>
 </c:forEach></td>
 </select>
 </td>
@@ -823,20 +879,20 @@
 <td><nobr><spring:message code="mdrtb.directIndirect" text="Direct/Indirect"/>:</nobr></td>
 <td><select name="direct">
 <option value=""></option>
-<option value="1"><spring:message code="mdrtb.direct" text="Direct"/></option>
-<option value="0"><spring:message code="mdrtb.indirect" text="Indirect"/></option>
+<option <c:if test="${test.direct}">selected </c:if>value="1"><spring:message code="mdrtb.direct" text="Direct"/></option>
+<option <c:if test="${!test.direct}">selected </c:if>value="0"><spring:message code="mdrtb.indirect" text="Indirect"/></option>
 </select></td>
 </c:if>
 
 <td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue=""/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldName="resultDate"  startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <c:if test="${type eq 'smear'}">
 <tr class="bacilli" style="display:none;">
 <td><nobr><spring:message code="mdrtb.numberofbacilli" text="Number of Bacilli"/>:</nobr></td>
-<td><input type="text" name="bacilli" id="bacilli" value=""/></td>
+<td><input type="text" name="bacilli" id="bacilli" value="${test.bacilli}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -844,7 +900,7 @@
 <c:if test="${type eq 'culture'}">
 <tr class="colonies" style="display:none;">
 <td><nobr><spring:message code="mdrtb.numberofcolonies" text="Number of Colonies"/>:</nobr></td>
-<td><input type="text" name="colonies" id="colonies" value=""/></td>
+<td><input type="text" name="colonies" id="colonies" value="${test.colonies}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -863,7 +919,7 @@
 <td><select name="organismType" class="organismType">
 <option value=""></option>
 <c:forEach var="organismType" items="${organismTypes}">
-<option value="${organismType.answerConcept.id}">${organismType.answerConcept.displayString}</option>
+<option value="${organismType.answerConcept.id}" <c:if test="${organismType.answerConcept == test.organismType}">selected</c:if> >${organismType.answerConcept.displayString}</option>
 </c:forEach></td>
 </select>
 </td>
@@ -871,7 +927,7 @@
 </tr>
 <tr class="organismTypeNonCoded" style="display:none;">
 <td><nobr><spring:message code="mdrtb.organismTypeNonCoded" text="Organism Type Non-Coded"/>:</nobr></td>
-<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value=""/></td>
+<td><input type="text" name="organismTypeNonCoded" id="organismTypeNonCoded" value="${test.organismTypeNonCoded}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
@@ -879,14 +935,14 @@
 <c:if test="${type eq 'dst'}">
 <tr>
 <td><nobr><spring:message code="mdrtb.coloniesincontrol" text="Colonies in control"/>:</nobr></td>
-<td><input type="text" name="coloniesInControl" value=""/></td>
+<td><input type="text" name="coloniesInControl" value="${test.coloniesInControl}"/></td>
 <td colspan="2">&nbsp;</td>
 </tr>
 </c:if>
 
 <tr>
 <td><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td>
-<td colspan="3"><textarea cols="60" rows="4" name="comments"></textarea></td>
+<td colspan="3"><textarea cols="60" rows="4" name="comments">${test.comments}</textarea></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -906,19 +962,19 @@
 			<option value=""></option>
 			<c:forEach var="drug" items="${drugTypes}">
 				<!-- the test here is used to set the default drugs from the list as required -->
-				<option value="${drug.id}" <c:if test="${(i.count <= fn:length(defaultDstDrugs)) && defaultDstDrugs[i.count - 1].id == drug.id}">selected</c:if> >${drug.displayString}</option>
+				<option value="${drug.id}" <c:if test="${((i.count <= fn:length(defaultDstDrugs)) && defaultDstDrugs[i.count - 1].id == drug.id) || (! empty addDstResultDrug && addDstResultDrug[i.count - 1] == drug.id)}">selected</c:if> >${drug.displayString}</option>
 			</c:forEach>
 			</select>
 		</td>
-		<td><input type="input" size="6" name="addDstResult${i.count}.concentration"/></td>
+		<td><input type="input" size="6" name="addDstResult${i.count}.concentration" value="${! empty addDstResultConcentration ? addDstResultConcentration[i.count - 1] : ''}"/></td>
 		<td><select name="addDstResult${i.count}.result" class="dstResult">
 			<option value=""></option>
 			<c:forEach var="possibleResult" items="${dstResults}">
-				<option value="${possibleResult.id}">${possibleResult.displayString}</option>
+				<option value="${possibleResult.id}" <c:if test="${! empty addDstResultResult && addDstResultResult[i.count - 1] == possibleResult.id}">selected</c:if>>${possibleResult.displayString}</option>
 			</c:forEach></td>
 			</select>
 		</td>
-		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="" class="dstColonies" style="display:none"/></td>
+		<td><input type="text" size="6" name="addDstResult${i.count}.colonies" value="${! empty addDstResultColonies ? addDstResultColonies[i.count - 1] : ''}" class="dstColonies" style="display:none"/></td>
 		<td><button class="removeDstResultRow" value="${i.count}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></td>
 		</tr>
 	</c:forEach>

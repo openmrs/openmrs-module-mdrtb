@@ -43,14 +43,6 @@
 &nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Back"/></a>
 <br/><br/>
 
-<!--  DISPLAY ANY ERROR MESSAGES -->
-<c:if test="${fn:length(errors.allErrors) > 0}">
-	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/>
-		<br/>
-	</c:forEach>
-</c:if>
-
 <!-- VIEW BOX -->
 <div id="viewVisit" <c:if test="${(empty intake.id) || (intake.id == -1) || fn:length(errors.allErrors) > 0}"> style="display:none" </c:if>>
 <b class="boxHeader"><spring:message code="mdrtb.intakeForm" text="Intake Form"/>
@@ -90,6 +82,14 @@
 <div id="editVisit" <c:if test="${(!empty intake.id) && (intake.id != -1) && fn:length(errors.allErrors) == 0}"> style="display:none" </c:if>>
 <b class="boxHeader"><spring:message code="mdrtb.intakeForm" text="Intake Form"/></b>
 <div class="box">
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+	</c:forEach>
+	<br/>
+</c:if>
 
 <form name="intake" action="intake.form?patientId=${patientId}&patientProgramId=${patientProgramId}&encounterId=${!empty intake.id ? intake.id : -1}" method="post">
 <input type="hidden" name="returnUrl" value="${returnUrl}" />

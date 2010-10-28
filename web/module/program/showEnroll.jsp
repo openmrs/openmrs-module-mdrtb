@@ -45,19 +45,20 @@
 
 <br/><br/>
 
-<!--  DISPLAY ANY ERROR MESSAGES -->
-<c:if test="${fn:length(errors.allErrors) > 0}">
-	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/>
-		<br/>
-	</c:forEach>
-</c:if>
-
 <div align="center"> <!-- start of page div -->
 
 <!-- PROGRAM ENROLLMENT BOX-->
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.enrollment.enrollMdrtb" text="Enroll in MDR-TB Program"/></b>
 <div class="box" style="margin:0px">
+
+<!--  DISPLAY ANY ERROR MESSAGES -->
+<c:if test="${fn:length(errors.allErrors) > 0}">
+	<c:forEach var="error" items="${errors.allErrors}">
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+	</c:forEach>
+	<br/>
+</c:if>
+
 <form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
