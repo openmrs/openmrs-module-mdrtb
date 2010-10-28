@@ -86,6 +86,12 @@
 			}
 		});
 
+		$j('#programDeleteButton').click(function() {
+			if (confirm('<spring:message code="mdrtb.confirmDeleteProgram" text="Are you sure you want to delete this program?"/>')) {
+				window.location="${pageContext.request.contextPath}/module/mdrtb/program/programDelete.form?patientProgramId=${patientProgramId}";
+			}
+		});
+ 		
 		$j('#hospitalizationsEditPopup').dialog({
 			autoOpen: ${(fn:length(hospitalizationErrors.allErrors) > 0 ? true : false)},
 			position: 'right',
@@ -256,6 +262,7 @@
 </table>
 
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="programEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+<button type="reset" id="programDeleteButton"><spring:message code="mdrtb.deleteProgram" text="Delete Program"/></button>
 
 </form>
 </div>

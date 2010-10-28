@@ -127,4 +127,25 @@ public class ProgramController {
 		
 		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink());		
 	}
+	
+	@RequestMapping("/module/mdrtb/program/programDelete.form")
+	public ModelAndView processDelete(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	                                  SessionStatus status, ModelMap map){
+
+		MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+		
+		// we need to save the patient id so that we know where to redirect to
+		Integer patientId = program.getPatient().getId();
+		
+		// now void the program
+		Context.getProgramWorkflowService().voidPatientProgram(program.getPatientProgram(), "voided by mdr-tb module");
+
+		// clear the command object
+		status.setComplete();
+		map.clear();
+		
+		//return new ModelAndView("redirect:http://www.google.com/");
+		
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId);
+	}
 }
