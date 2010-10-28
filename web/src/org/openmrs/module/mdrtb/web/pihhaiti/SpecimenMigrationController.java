@@ -31,6 +31,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
@@ -549,6 +550,23 @@ public class SpecimenMigrationController {
      	
      	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     	
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/setEmptyProgramLocationsToUnknown.form")
+    public ModelAndView setEmptyProgramLocationsToUnknown() {
+    	Location unknown = Context.getLocationService().getLocation("Unknown Location");
+    	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
+    	
+    	for (PatientProgram program : Context.getProgramWorkflowService().getPatientPrograms(null, mdrtb, null, null, null, null, false)) {
+    		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    		
+    		if (mdrtbProgram.getLocation() == null) {
+    			mdrtbProgram.setLocation(unknown);
+    			Context.getProgramWorkflowService().savePatientProgram(mdrtbProgram.getPatientProgram());
+    		}
+    	}
+    	
+     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
     // just a hacky test
