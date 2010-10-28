@@ -412,7 +412,6 @@ public class SpecimenController extends AbstractSpecimenController {
 			map.put("addDstResultConcentration", addDstResultConcentration);
 			map.put("addDstResultResult", addDstResultResult);
 			map.put("addDstResultDrug", addDstResultDrug);
-			map.put("removeDstResult", removeDstResults);
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}

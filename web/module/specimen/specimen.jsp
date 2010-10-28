@@ -101,6 +101,7 @@
 				$j('#details_${testId}').hide();  // hide the selected details box
 				$j('#edit_${testId}').show(); // show the selected edit box
 				showAddDstResultsWithData(); // show any dst result rows that may have transitory data
+				$j(document).scrollTop($j('#edit_${testId}').offset().top - 50); // jump to the edit box that has the error
 			} 
 			else {
 				// handle the "add" case
@@ -108,6 +109,7 @@
 				hideLinks();
 				$j('#add_${testType}').show(); // show the proper add a test box
 				showAddDstResultsWithData(); // show any dst result rows thay may have transitory data
+				$j(document).scrollTop($j('#add_${testType}').offset().top - 50); // jump to the edit box that has the error
 			}
 		}
 		else {
