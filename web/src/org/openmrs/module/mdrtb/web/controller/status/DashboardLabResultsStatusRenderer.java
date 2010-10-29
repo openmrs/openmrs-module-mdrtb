@@ -65,7 +65,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
     	String drugList = DashboardStatusRendererUtil.renderDrugList(drugs);
     	
     	if (StringUtils.isBlank(drugList)) {
-    		drugList = Context.getMessageSourceService().getMessage("mdrtb.none");
+    		drugList = Context.getMessageSourceService().getMessage("mdrtb.unknown");
     	}
     	
     	return drugList;
@@ -126,7 +126,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 	    }
 	    else {
 	    	displayString = new StringBuffer();
-	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.none"));
+	    	displayString.append(Context.getMessageSourceService().getMessage("mdrtb.unknown"));
 	    }
 	    
 	    return displayString.toString();

@@ -35,10 +35,10 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     		endReason = regimen.getEndReason().getDisplayString();
     	}
     	
-	    String displayString = "<tr><td>" + DashboardStatusRendererUtil.renderDrugList(generics) + "</td><td>" 
-	    	+ df.format(regimen.getStartDate()) + "</td><td>" 
-	    	+ (regimen.getEndDate() != null ? df.format(regimen.getEndDate()) : Context.getMessageSourceService().getMessage("mdrtb.present")) + "</td><td>"
-	        + endReason + "</td></tr>";
+	    String displayString = "<tr><td><nobr>" + DashboardStatusRendererUtil.renderDrugList(generics) + "</nobr></td><td><nobr>" 
+	    	+ df.format(regimen.getStartDate()) + "</nobr></td><td>" 
+	    	+ (regimen.getEndDate() != null ? df.format(regimen.getEndDate()) : Context.getMessageSourceService().getMessage("mdrtb.present")) + "</nobr></td><td><nobr>"
+	        + endReason + "</nobr></td></tr>";
 	    
 	    return displayString;
     }
