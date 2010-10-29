@@ -256,30 +256,34 @@
 </script>
 <!-- END JQUERY -->
 
+<!-- PAGE START -->
+<div>
+
+<button onclick="window.location='add.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
+<br/><br/>
+
+
 <!-- LEFT-HAND COLUMN START -->
-<div id="leftColumn" style="float: left; width:29%;  padding:0px 4px 4px 4px">
+<div id="leftColumn" style="float: left; width:19%;  padding:0px 4px 4px 4px">
 
 <b class="boxHeader"><spring:message code="mdrtb.specimens" text="Specimens"/></b>
 <div class="box">
 
 <div id="specimenList">
-<button onclick="window.location='add.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
-<br/><br/>
 
 <c:if test="${fn:length(specimens) > 0}">
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
 <td class="tableCell"><nobr><u><spring:message code="mdrtb.dateCollected" text="Date Collected"/></u></nobr></td>
 <td class="tableCell"><nobr><u><spring:message code="mdrtb.sampleid" text="Sample ID"/></u></nobr></td>
-<td class="tableCell" colspan="2">&nbsp;</td>
+<td width="99%">&nbsp;</td>
 </tr>
 
-<c:forEach var="specimen" items="${specimens}">
-	<tr>
-	<td class="tableCell"><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
-	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}">${specimen.identifier}</a></nobr></td>
-	<td class="tableCell"><a href="specimen.form?specimenId=${specimen.id}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
-	<td class="tableCell"><a href="delete.form?specimenId=${specimen.id}&patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
+<c:forEach var="specimenListItem" items="${specimens}">
+	<tr <c:if test="${specimenListItem.id == specimen.id}"> style="background-color : gold"</c:if>>
+	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}"><openmrs:formatDate date="${specimenListItem.dateCollected}"/></a></nobr></td>
+	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}">${specimenListItem.identifier}</a></nobr></td>
+	<td width="99%">&nbsp;</td>
 	</tr>
 </c:forEach>
 </table>
@@ -295,17 +299,19 @@
 
 <!-- START OF RIGHT-HAND COLUMN -->
 
-<div id="rightColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
+<div id="rightColumn" style="float: right; width:79%;  padding:0px 4px 4px 4px">
 
 <c:if test="${! empty specimen}">
 
 <!--  SPECIMEN SECTION -->
 <div id="specimen" align="center">
 
+<!-- START OF SPECIMEN DETAILS DIV -->
 <div id="details_specimen">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a id="editSpecimen" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a></span></b>
-<div class="box" style="margin:0px">
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a id="editSpecimen" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>
+<a href="delete.form?specimenId=${specimen.id}&patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
+<div style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
 
@@ -354,7 +360,7 @@
 <form id="specimen" action="specimen.form?submissionType=specimen&specimenId=${specimen.id}&patientProgramId=${patientProgramId}&testId=-1" method="post" enctype="multipart/form-data">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/></b>
-<div class="box" style="margin:0px">
+<div style="margin:0px">
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(specimenErrors.allErrors) > 0}">
@@ -1007,6 +1013,8 @@
 </c:if> <!-- close tag to ${! empty specimen} -->
 
 </div> <!-- END OF RIGHT HAND COLUMN -->
+
+</div> <!--  END OF PAGE -->
 
 <!--  TODO: figure out footer alignment and add footer back in  -->
 <!--  
