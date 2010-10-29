@@ -304,14 +304,13 @@
 <c:if test="${! empty specimen}">
 
 <!--  SPECIMEN SECTION -->
-<div id="specimen" align="center">
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:40px;"><a id="editSpecimen" class="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>
+<a class="delete" href="delete.form?specimenId=${specimen.id}&patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
+
+<div class="box" id="specimen" style="margin:0px">
 
 <!-- START OF SPECIMEN DETAILS DIV -->
-<div id="details_specimen">
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/><span style="position: absolute; right:25px;"><a id="editSpecimen" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>
-<a href="delete.form?specimenId=${specimen.id}&patientId=${specimen.patient.patientId}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteSpecimen" text="Are you sure you want to delete this specimen?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
-<div style="margin:0px">
+<div id="details_specimen" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
 
@@ -350,17 +349,13 @@
 
 </table>
 </div>
-</div>
 <!--  END OF SPECIMEN SECTION -->
 
 <!--  EDIT SPECIMEN SECTION -->
 
-<div id="edit_specimen"  style="display:none">
+<div id="edit_specimen"  style="display:none;margin:0px">
 
 <form id="specimen" action="specimen.form?submissionType=specimen&specimenId=${specimen.id}&patientProgramId=${patientProgramId}&testId=-1" method="post" enctype="multipart/form-data">
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenDetails" text="Specimen Details"/></b>
-<div style="margin:0px">
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(specimenErrors.allErrors) > 0}">
@@ -451,7 +446,6 @@
 
 </form>
 </div>
-</div>
 <!-- END OF EDIT SPECIMEN SECTION -->
 
 <br/>
@@ -478,11 +472,9 @@
 
 <!--  TEST DETAILS SECTION -->
 
-<div id="details_${test.id}" class="detailBox" style="font-size:0.9em">
+<div align="center" id="details_${test.id}" class="detailBox" style="font-size:0.9em">
 
-<!-- TEST ID = ${test.id} -->
-
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="detailView" text="Detail View"/><span style="position: absolute; right:30px;"><a id="${test.id}" class="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:30px;"><a id="${test.id}" class="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0">
 <tr>
@@ -605,11 +597,11 @@
 
 <!-- EDIT TESTS SECTION -->
 
-<div id="edit_${test.id}" class="editBox" style="display:none; font-size:0.9em">
+<div align="center" id="edit_${test.id}" class="editBox" style="display:none; font-size:0.9em">
 
 <form id="${test.testType}" action="specimen.form?submissionType=${test.testType}&${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if>: <spring:message code="mdrtb.editView" text="Edit View"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if></b>
 <div class="box" style="margin:0px">
 
 <!-- DISPLAY ANY ERROR MESSAGES -->
@@ -819,7 +811,7 @@
 
 <c:forEach var="type" items="${testTypes}">
 
-<div id="add_${type}" class="addBox" style="display:none; font-size:0.9em"">
+<div align="center" id="add_${type}" class="addBox" style="display:none; font-size:0.9em"">
 
 <form id="${type}" action="specimen.form?submissionType=${type}&${type}Id=-1&testId=-1&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
