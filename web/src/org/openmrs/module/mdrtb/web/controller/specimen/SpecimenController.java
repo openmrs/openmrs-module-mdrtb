@@ -147,24 +147,11 @@ public class SpecimenController extends AbstractSpecimenController {
 	public Specimen getSpecimen(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId, 
 	                            @RequestParam(required = false, value="specimenId") Integer specimenId) {
 		// for now, if no specimen is specified, default to the most recent specimen within the program
-		if (specimenId == null) {
-			if (patientProgramId == null) {
-				throw new MdrtbAPIException("No patient program Id or specimen Id specified");
-			}
-			else {
-				MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-				List<Specimen> specimens = program.getSpecimensDuringProgram();
-				
-				if (specimens != null && specimens.size() > 0) {
-					return specimens.get(specimens.size() - 1);
-				}
-				else {
-					return null;
-				}
-			}
+		if (specimenId != null) {
+			return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
 		}
 		else {
-			return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
+			return null;
 		}
 	}
 		
