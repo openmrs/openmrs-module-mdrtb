@@ -258,7 +258,7 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrationHospitalizations.form")
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateHospitalizations.form")
 	public ModelAndView createHospitalizationReport() {
 
 		Concept typeOfPatientConcept = Context.getConceptService().getConcept(3289);
