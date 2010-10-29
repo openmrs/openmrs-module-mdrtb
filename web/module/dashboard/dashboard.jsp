@@ -500,9 +500,10 @@ ${regimen.displayString}
 <div class="box" style="margin:0px">
 
 <table cellspacing="0" cellpadding="0">
-<tr><td><spring:message code="mdrtb.site" text="Site"/>:</td><td>${status.labResultsStatus.anatomicalSite.displayString}</td></tr>
+<!-- 
 <tr><td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/>:</td><td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.displayString}</mdrtb:a></td></tr>
 <tr><td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/>:</td><td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.displayString}</mdrtb:a></td></tr>
+-->
 
 <c:if test="${empty status.labResultsStatus.diagnosticSmear.value || empty status.labResultsStatus.diagnosticCulture.value}">
 	<tr><td><button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addTestResults" text="Add Test Results"/></button></td></tr>
@@ -513,8 +514,47 @@ ${regimen.displayString}
 	<tr><td><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/>:</td><td>${status.labResultsStatus.drugResistanceProfile.displayString}</td></tr>
 </c:if>
 
+<tr><td><spring:message code="mdrtb.site" text="Site"/>:</td><td>${status.labResultsStatus.anatomicalSite.displayString}</td></tr>
 </table>
 
+<br/>
+
+<table cellspacing="0" cellpadding="0" border="2px">
+<tr>
+<td>&nbsp;</td>
+<td><spring:message code="mdrtb.result"/></td>
+<td><spring:message code="mdrtb.dateCollected"/></td>
+<td><spring:message code="mdrtb.lab"/></td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/></td>
+<c:choose>
+	<c:when test="${! empty status.labResultsStatus.diagnosticSmear}">
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}"/></td>
+		<td>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</td>
+	</c:when>
+	<c:otherwise>
+		<td colspan="3"><spring:message code="mdrtb.none" text="None"/></td>
+	</c:otherwise>
+</c:choose>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/></td>
+<c:choose>
+	<c:when test="${! empty status.labResultsStatus.diagnosticCulture}">
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.dateCollected}"/></td>
+		<td>${status.labResultsStatus.diagnosticCulture.value.lab.displayString}</td>
+	</c:when>
+	<c:otherwise>
+		<td colspan="3"><spring:message code="mdrtb.none" text="None"/></td>
+	</c:otherwise>
+</c:choose>
+</tr>
+</table>
 
 </div>
 
@@ -533,6 +573,51 @@ ${regimen.displayString}
 <tr><td><spring:message code="mdrtb.culturestatus" text="Culture Status"/>: ${status.labResultsStatus.cultureConversion.displayString}</td></tr>
 </table>
 
+<br/>
+
+<table cellspacing="0" cellpadding="0" border="2px">
+<tr>
+<td>&nbsp;</td>
+<td><spring:message code="mdrtb.result"/></td>
+<td><spring:message code="mdrtb.dateCollected"/></td>
+<td><spring:message code="mdrtb.lab"/></td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/></td>
+<c:choose>
+	<c:when test="${! empty status.labResultsStatus.mostRecentSmear}">
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.dateCollected}"/></td>
+		<td>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</td>
+	</c:when>
+	<c:otherwise>
+		<td colspan="3"><spring:message code="mdrtb.none" text="None"/></td>
+	</c:otherwise>
+</c:choose>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/></td>
+<c:choose>
+	<c:when test="${! empty status.labResultsStatus.mostRecentCulture}">
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.dateCollected}"/></td>
+		<td>${status.labResultsStatus.mostRecentCulture.value.lab.displayString}</td>
+	</c:when>
+	<c:otherwise>
+		<td colspan="3"><spring:message code="mdrtb.none" text="None"/></td>
+	</c:otherwise>
+</c:choose>
+</tr>
+</table>
+
+<br/>
+<button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addTestResults" text="Add Test Results"/></button>
+<br/>
+
+  
+ <!--  
 <table cellspacing="0" cellpadding="0">
 <tr><td><mdrtb:flag item="${status.labResultsStatus.mostRecentSmear}"/><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/>:</td>
 <td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.displayString}</mdrtb:a></td></tr>
@@ -540,6 +625,7 @@ ${regimen.displayString}
 <td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.displayString}</mdrtb:a></td></tr>
 <tr><td colspan="2"><button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addTestResults" text="Add Test Results"/></button></td></tr>
 </table>
+-->
 
 <c:if test="${fn:length(status.labResultsStatus.pendingLabResults.value) > 0}"> 
 <br/>

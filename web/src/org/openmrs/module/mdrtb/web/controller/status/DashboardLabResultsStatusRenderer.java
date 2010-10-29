@@ -26,13 +26,13 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		
 		if (smear != null) {
 			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
-			        smear.getResultDate() != null ? DateFormat.getDateInstance().format(smear.getResultDate()) : "(N/A)",
+			        smear.getDateCollected() != null ? DateFormat.getDateInstance().format(smear.getDateCollected()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
 			        + smear.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
 			
-			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.smearFormatter", params, "{0} on {1}, tested at {2}", Context.getLocale()));
 			
 			
 		} else {
@@ -48,13 +48,13 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		if (culture != null) {
 			String[] params = {
 			        culture.getResult().getBestShortName(Context.getLocale()).toString(),
-			        culture.getResultDate() != null ? DateFormat.getDateInstance().format(culture.getResultDate()) : "(N/A)",
+			        culture.getDateCollected() != null ? DateFormat.getDateInstance().format(culture.getDateCollected()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
 				+ culture.getId() + "&patientProgramId=" + status.getPatientProgram().getId());
 			     
-			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params, "{0} on {1} at {2}", Context.getLocale()));
+			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.cultureFormatter", params, "{0} on {1}, tested at {2}", Context.getLocale()));
 		} else {
 			item.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.none"));
 			item.setLink(null);

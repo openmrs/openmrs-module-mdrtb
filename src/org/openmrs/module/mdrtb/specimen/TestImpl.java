@@ -40,7 +40,11 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public String getAccessionNumber() {
-		return test.getAccessionNumber();
+		return this.test.getAccessionNumber();
+	}
+	
+	public Date getDateCollected() {
+		return this.test.getObsDatetime();
 	}
 	
 	// unfortunately we have to implement this separately for each test type since they handle comments differently

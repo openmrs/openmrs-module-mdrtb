@@ -32,6 +32,7 @@ public interface Test extends Comparable<Test> {
 	 * type: the type of the test (smear,culture,dst)
 	 * specimen: the id used to reference the specimen (i.e., in our current implementation, the encounter_id of the parent encounter)
 	 * status: the current status of the test (i.e., ordered, received, completed, etc) (this should be a calculated based on the existing datas and some set of rules)
+	 * dateCollected: the date collected of the underlying specimen
 	 */
 	
 	public Object getTest();
@@ -39,6 +40,7 @@ public interface Test extends Comparable<Test> {
 	public TestStatus getStatus();	
 	public String getTestType();
 	public String getSpecimenId();
+	public Date getDateCollected();
 	
 	public String getAccessionNumber();
 	public void setAccessionNumber(String accessionNumber);

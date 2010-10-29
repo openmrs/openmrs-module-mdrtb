@@ -467,7 +467,7 @@
 <br/>
 
 
-<div align="left" id="add"  style="font-size:0.9em">
+<div align="left" id="add">
 &nbsp;&nbsp;<spring:message code="mdrtb.addANewLabTest" text="Add a new Lab Test:"/>:
 <select id="addSelect">
 <c:forEach var="test" items="${testTypes}">
@@ -484,7 +484,7 @@
 
 <!--  TEST DETAILS SECTION -->
 
-<div align="center" id="details_${test.id}" class="detailBox" style="font-size:0.9em">
+<div align="center" id="details_${test.id}" class="detailBox">
 
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.${test.testType}"/><c:if test="${!empty test.accessionNumber}"> (${test.accessionNumber}) </c:if><span style="position: absolute; right:30px;"><a id="${test.id}" class="edit" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a>&nbsp;&nbsp;<a href="delete.form?testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" class="delete" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteTest" text="Are you sure you want to delete this test?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></span></b>
 <div class="box" style="margin:0px">
@@ -609,7 +609,7 @@
 
 <!-- EDIT TESTS SECTION -->
 
-<div align="center" id="edit_${test.id}" class="editBox" style="display:none; font-size:0.9em">
+<div align="center" id="edit_${test.id}" class="editBox" style="display:none">
 
 <form id="${test.testType}" action="specimen.form?submissionType=${test.testType}&${test.testType}Id=${test.id}&testId=${test.id}&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
@@ -823,7 +823,7 @@
 
 <c:forEach var="type" items="${testTypes}">
 
-<div align="center" id="add_${type}" class="addBox" style="display:none; font-size:0.9em"">
+<div align="center" id="add_${type}" class="addBox" style="display:none">
 
 <form id="${type}" action="specimen.form?submissionType=${type}&${type}Id=-1&testId=-1&specimenId=${specimen.id}&patientProgramId=${patientProgramId}" method="post">
 
