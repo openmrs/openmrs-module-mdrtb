@@ -17,6 +17,7 @@ import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -143,15 +144,16 @@ public class SpecimenController extends AbstractSpecimenController {
 	 * @return
 	 */
 	@ModelAttribute("specimen")
-	public Specimen getSpecimen(@RequestParam(required = false, value="patientId") Integer patientId, 
+	public Specimen getSpecimen(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId, 
 	                            @RequestParam(required = false, value="specimenId") Integer specimenId) {
-		// for now, if no specimen is specified, default to the most recent specimen
+		// for now, if no specimen is specified, default to the most recent specimen within the program
 		if (specimenId == null) {
-			if (patientId == null) {
-				throw new MdrtbAPIException("No patient Id or specimen Id specified");
+			if (patientProgramId == null) {
+				throw new MdrtbAPIException("No patient program Id or specimen Id specified");
 			}
 			else {
-				List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(Context.getPatientService().getPatient(patientId));
+				MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+				List<Specimen> specimens = program.getSpecimensDuringProgram();
 				
 				if (specimens != null && specimens.size() > 0) {
 					return specimens.get(specimens.size() - 1);
