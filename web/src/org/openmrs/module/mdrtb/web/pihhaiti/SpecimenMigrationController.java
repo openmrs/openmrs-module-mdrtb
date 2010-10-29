@@ -569,6 +569,8 @@ public class SpecimenMigrationController {
      	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    // TODO: add script to retire the forms
+    
     // just a hacky test
     @RequestMapping("/module/mdrtb/pihhaiti/test/loadStatus.form")
     public ModelAndView loadStatus() {

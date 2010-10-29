@@ -29,7 +29,9 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	
     	// now determine where to link to
     	// if there is a form linked to this encounter, assume it is an HTML Form Entry form
-    	if(encounter.getForm() != null) {
+    	// (note, however, that we exclude specimen collection encounters--they can't have forms linked to them)
+    	if(encounter.getForm() != null 
+    			&& !encounter.getEncounterType().equals(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")))) {
     		visit.setLink("/module/htmlformentry/htmlFormEntry.form?personId=" + encounter.getPatientId() 
     			+ "&formId=" + encounter.getForm().getId() + "&encounterId=" + encounter.getId() + 
     			"&mode=VIEW");
