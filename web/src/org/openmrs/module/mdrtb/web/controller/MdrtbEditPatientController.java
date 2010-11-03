@@ -1,0 +1,275 @@
+package org.openmrs.module.mdrtb.web.controller;
+
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.Location;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.PersonAddress;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.PersonName;
+import org.openmrs.api.APIException;
+import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.propertyeditor.LocationEditor;
+import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
+import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
+import org.openmrs.validator.PatientValidator;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+@RequestMapping("/module/mdrtb/mdrtbEditPatient.form")
+public class MdrtbEditPatientController {
+
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	PatientValidator validator = new PatientValidator();
+	
+	@InitBinder
+	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+		//bind dates
+		SimpleDateFormat dateFormat = Context.getDateFormat();
+    	dateFormat.setLenient(false);
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    	
+		// register binders for locations
+		binder.registerCustomEditor(Location.class, new LocationEditor());
+		binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
+	}
+	
+	@ModelAttribute("locations")
+	public Collection<Location> getPossibleLocations() {
+		return Context.getLocationService().getAllLocations();
+	}
+
+	// checks to see if the "fixedIdentifierLocation" global prop has been specified, which is used to determine if we
+	// should show the location selector for identifiers
+	@ModelAttribute("showIdentifierLocationSelector")
+	public boolean getShowIdentifierLocationSelector() {
+		return StringUtils.isBlank(Context.getAdministrationService().getGlobalProperty("mdrtb.fixedIdentifierLocation"));
+	}
+	
+	@ModelAttribute("patientIdentifierMap")
+	public Map<Integer, PatientIdentifier> getPatientIdentifierMap(@RequestParam(required = true, value="patientId") Integer patientId) {
+		
+		final Map<Integer,PatientIdentifier> map = new HashMap<Integer,PatientIdentifier>();
+		
+		if (patientId != -1) {
+			Patient patient = Context.getPatientService().getPatient(patientId);
+		
+			if (patient != null) {
+				for (PatientIdentifierType type : Context.getPatientService().getAllPatientIdentifierTypes()) {			
+					map.put(type.getId(), patient.getPatientIdentifier(type));
+				}
+			}
+		}
+		
+		return map;
+	}	
+	
+	@SuppressWarnings("unchecked")
+    @ModelAttribute("patientIdentifierTypesAutoAssigned")
+	public List<PatientIdentifierType> getPatientIdentifierTypesAutoAssigned() {
+		// this is only relevant if we are using the idgen module
+		if(!ModuleFactory.getStartedModulesMap().containsKey("idgen")) {
+			return new LinkedList<PatientIdentifierType>();  // return an empty list
+		}
+		else {
+			// access the idgen module via reflection
+			try {
+				Class identifierSourceServiceClass = Context.loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
+				Object idgen = Context.getService(identifierSourceServiceClass);
+				Method getPatientIdentifierTypesByAutoGenerationOption = identifierSourceServiceClass.getMethod("getPatientIdentifierTypesByAutoGenerationOption", Boolean.class, Boolean.class);
+				
+				return (List<PatientIdentifierType>) getPatientIdentifierTypesByAutoGenerationOption.invoke(idgen, false, true);
+			}
+			catch(Exception e) {
+				log.error("Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?", e);
+				return new LinkedList<PatientIdentifierType>();  // return an empty list
+			}
+		}
+	}
+	
+    @SuppressWarnings("unchecked")
+    @ModelAttribute("patientIdentifierTypes")
+	public List<PatientIdentifierType> getPatientIdentifierTypes() {
+		return ListUtils.subtract(Context.getPatientService().getAllPatientIdentifierTypes(),  getPatientIdentifierTypesAutoAssigned());	
+	}
+	
+	@ModelAttribute("patient")
+	public Patient getPatient(@RequestParam(required = true, value="patientId") Integer patientId) {
+		
+		Patient patient = null;
+		
+		if (patientId != -1) {  // signifies adding a new patient
+			patient = Context.getPatientService().getPatient(patientId);
+			
+			if (patient == null) {
+				throw new APIException("Invalid patient id passed to edit patient controller");
+			}
+		}
+		else {
+			patient = new Patient();
+		}
+		
+		// if there is no default address for this patient, create one
+		if (patient.getPersonAddress() == null) {
+			PersonAddress address = new PersonAddress();
+			patient.addAddress(address);
+		}
+		
+		// if there is no default name for this patient, create one
+		if (patient.getPersonName() == null) {
+			PersonName name = new PersonName();
+			patient.addName(name);
+		}
+		
+		// if all the standard attributes haven't been configured, configure them
+		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
+			if (patient.getAttribute(attr) == null) {
+				patient.addAttribute(new PersonAttribute(attr, null));
+			}
+		}
+		
+		return patient;
+	}
+
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showForm() {
+		return new ModelAndView("/module/mdrtb/mdrtbEditPatient");
+	}
+	
+
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST)
+	public ModelAndView submitForm(@ModelAttribute("patient") Patient patient, BindingResult result,
+	                               @RequestParam("identifierValue") String [] identifierValue,
+	                               @RequestParam("identifierId") String [] identifierId, 
+	                               @RequestParam(required = false, value = "identifierLocation") Location [] identifierLocation,
+	                               @RequestParam("identifierType") PatientIdentifierType [] identifierType,
+	                               SessionStatus status, ModelMap map) {
+		
+		// first, we need to set the patient id to null if it's been set to -1
+		if (patient.getId() == -1) {
+			patient.setId(null);
+		}
+		
+		// if a fixed patient identifier location has been set, get it
+		Location fixedLocation = null;
+		String fixedLocationName = Context.getAdministrationService().getGlobalProperty("mdrtb.fixedIdentifierLocation");
+		if (StringUtils.isNotBlank(fixedLocationName)) {
+			fixedLocation = Context.getLocationService().getLocation(fixedLocationName);
+			if (fixedLocation == null) {
+				throw new MdrtbAPIException("Location referenced by mdrtb.fixedIdentifierLocation global prop does not exist.");
+			}
+		}
+		
+		// handle patient identifiers
+		for (Integer i=0; i<identifierValue.length; i++) {	
+			if (ModuleFactory.getStartedModulesMap().containsKey("idgen") && StringUtils.isBlank(identifierValue[i])) {
+				identifierValue[i] = assignIdentifier(identifierType[i]);
+			}
+			
+			// first update any existing identifiers (ones with ids)
+			if (StringUtils.isNotBlank(identifierId[i])) {
+				PatientIdentifier identifier = getIdentifierById(Integer.valueOf(identifierId[i]), patient);
+				
+				// if there is a value, update it
+				if (StringUtils.isNotBlank(identifierValue[i])) {
+					identifier.setIdentifier(identifierValue[i]);
+					
+					// only update the location if it hasn't been set to be fixed
+					if (fixedLocation == null) {
+						identifier.setLocation(identifierLocation[i]);
+					}
+				}
+				else {
+					// otherwise, remove it
+					patient.removeIdentifier(identifier);
+				}
+			}
+			// now add any identifiers that have a value, but no id
+			else if (StringUtils.isNotBlank(identifierValue[i])) {
+				PatientIdentifier identifier = new PatientIdentifier(identifierValue[i], identifierType[i], (fixedLocation == null ? identifierLocation[i] : fixedLocation));
+				identifier.setPreferred(true);
+				patient.addIdentifier(identifier);	
+			}
+		}
+		
+		// perform validation
+		validator.validate(patient, result);
+		if (result.hasErrors()) {
+			map.put("errors", result);
+			return new ModelAndView("/module/mdrtb/mdrtbEditPatient", map);
+		}
+		
+		// save the patient
+		Context.getPatientService().savePatient(patient);
+		
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
+		return new ModelAndView("redirect:/module/mdrtb/mdrtbEditPatient.form?patientId=" + patient.getId());
+	}
+	
+	
+	/**
+	 * Utility methods
+	 */
+	
+	// auto-assign any patient identifiers as required, if the idgen module is installed, using reflection
+	@SuppressWarnings("unchecked")
+    private String assignIdentifier(PatientIdentifierType type) {
+		try {
+			Class identifierSourceServiceClass = Context.loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
+			Object idgen = Context.getService(identifierSourceServiceClass);
+	        Method generateIdentifier = identifierSourceServiceClass.getMethod("generateIdentifier", PatientIdentifierType.class, String.class);
+	        
+	        return (String) generateIdentifier.invoke(idgen, type, "auto-assigned during patient creation");
+		}
+		catch (Exception e) {
+			log.error("Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?", e);
+		} 
+		
+		return null;
+	}
+	
+	private PatientIdentifier getIdentifierById(Integer id, Patient patient) {
+		for (PatientIdentifier identifier : patient.getIdentifiers()) {
+			if (identifier != null && identifier.getId() != null && identifier.getId().equals(id)) {
+				return identifier;
+			}
+		}
+		return null;
+	}
+}

@@ -386,6 +386,11 @@
 		<defaultValue>ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN</defaultValue>
 		<description>The list of default drugs to display in the specimen "Add Dst" list</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.fixedIdentifierLocation</property>
+		<defaultValue></defaultValue>
+		<description>Takes as a parameter a location name.  If this property exists, when creating patient identifiers, the patient identifier location is set to this value (and setting the location is not presented to the user as an option).</description>
+	</globalProperty>
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">
