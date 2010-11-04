@@ -6,6 +6,13 @@
 
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
+
+<!-- only show the headers if we are in edit mode (i.e,. we have an existing patient id) -->
+<c:if test="${! empty patientId}">
+	<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
+	<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
+</c:if>
+
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
 
@@ -20,9 +27,9 @@
 
 	$j(document).ready(function(){
 
-		$j('#birthdateEstimatedCheckbox').change(function () {
-			
-			if ( $j('#birthdateEstimatedCheckbox').attr('value') == "true" ) {
+		// togggle the estimated checkbox
+		$j('#birthdateEstimatedCheckbox').click(function () {
+			if ($j(this).is(':checked')){
 				$j('#birthdateEstimated').attr('value', "true");
 			}
 			else {
@@ -39,7 +46,7 @@
 
 <!--  EDIT/ADD PATIENT BOX -->
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.editPatient" text="Edit Patient"/></b>
+<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientDetails" text="Patient Details"/></b>
 <div class="box" style="margin:0px;">
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
@@ -51,8 +58,10 @@
 </c:if>
 
 <form action="mdrtbEditPatient.form" method="POST">
-
+<input type="hidden" name="cancelURL" value="${cancelURL}" />
+<input type="hidden" name="successURL" value="${successURL}" />
 <input type=hidden name="patientId" value="${patientId}"/>
+<input type=hidden name="patientProgramId" value="${patientProgramId}"/>
 
 <table class="box" style="padding:6px">
 
@@ -160,8 +169,8 @@
 <td>
 <openmrs_tag:dateField formFieldName="birthdate" startValue="${patient.birthdate}"/>
 <spring:message code="Person.birthdateEstimated"/>
-<input type="hidden" name="birthdateEstimated" value="${patient.birthdateEstimated}"/>
-<input type="checkbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patient.birthdateEstimated == true}">checked</c:if> />
+<input type="hidden" id="birthdateEstimated" name="birthdateEstimated" value="${patient.birthdateEstimated}"/>
+<input type="checkbox" id="birthdateEstimatedCheckbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patient.birthdateEstimated == true}">checked</c:if> />
 </td>
 </tr>
 </table>
@@ -186,7 +195,7 @@
 
 <tr><td colspan="2">
 <button type="submit"><spring:message code="Patient.save" text="Save Patient"/></button>
-<button><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
+<button type="reset" onclick="window.location='${cancelURL}?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
 
 </table>
 

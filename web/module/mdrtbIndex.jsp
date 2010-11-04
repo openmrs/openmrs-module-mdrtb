@@ -13,7 +13,7 @@
 			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 			<openmrs:hasPrivilege privilege="Add Patients">
 				<br/><br/>
-					<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbAddPatientForm.form|viewType=shortEdit" moduleId="mdrtb" />
+					<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbEditPatient.form|successURL=/module/mdrtb/dashboard/dashboard.form|cancelURL=mdrtbIndex.form|viewType=shortEdit" moduleId="mdrtb" />
 			</openmrs:hasPrivilege>
 			
 			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.bottomLeft" type="html">

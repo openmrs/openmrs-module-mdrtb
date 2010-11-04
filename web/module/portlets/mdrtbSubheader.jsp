@@ -95,27 +95,9 @@
 		
 		<li <c:if test='<%= request.getRequestURI().contains("specimen") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>
-		
-		
-	<!--
-		<c:if test='<%= request.getRequestURI().contains("specimen") %>'>
-			<li style="font-size:60%;" <c:if test='<%= request.getRequestURI().contains("list") %>'>class="active"</c:if>>
-			<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.listSpecimens" text="List Specimens"/></a></li>
-			<li style="font-size:60%;" <c:if test='<%= request.getRequestURI().contains("add") %>'>class="active"</c:if>>
-			<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/add.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.addASpecimen" text="Add a Specimen"/></a></li>
-		</c:if>
-		
-		-->
 	
-	<!-- 
-		<li <c:if test='<%= request.getRequestURI().contains("contacts") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/contacts/contacts.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.contacts" text="Contacts"/></a></li>
-	-->
-	
-	<!--  
-		<li <c:if test='<%= request.getRequestURI().contains("status") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/status/status.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.status" text="Status"/></a></li>
-	-->
+		<li <c:if test='<%= request.getRequestURI().contains("mdrtbEditPatient") %>'>class="active"</c:if>>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbEditPatient.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.patientDetails" text="Patient Details"/></a></li>
 	
 	</ul>
 </td>

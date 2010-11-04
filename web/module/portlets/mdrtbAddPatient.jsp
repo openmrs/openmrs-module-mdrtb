@@ -26,6 +26,8 @@
 			<spring:message code="mdrtb.search.instructions"/> <br/><br/>
 			
 			<form method="get" action="${model.postURL}" onSubmit="return validateForm()">
+			<input type="hidden" name="cancelURL" value="${model.cancelURL}" />
+			<input type="hidden" name="successURL" value="${model.successURL}" />
 				<table>
 					<tr>
 						<td><spring:message code="mdrtb.name"/></td>

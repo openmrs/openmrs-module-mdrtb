@@ -32,6 +32,7 @@ import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.validator.PatientValidator;
+import org.openmrs.web.controller.person.PersonFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -65,6 +66,36 @@ public class MdrtbEditPatientController {
 		binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
 	}
 	
+	@ModelAttribute("patientId")
+	public Integer getPatientId(@RequestParam(required = false, value = "patientId") Integer patientId) {
+		return patientId;
+	}
+	
+	@ModelAttribute("patientProgramId")
+	public Integer getPatientProgramId(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
+		return patientProgramId;
+	}
+	
+	@ModelAttribute("successURL")
+	public String getSuccessUrl(@RequestParam(required=false, value="successURL") String successUrl) {
+		// as a default, just reload the same page
+		if (StringUtils.isBlank(successUrl)) {
+			successUrl="mdrtbEditPatient.form";
+		}
+		
+		return successUrl;
+	}
+	
+	@ModelAttribute("cancelURL")
+	public String getCancelUrl(@RequestParam(required=false, value="cancelURL") String cancelUrl) {
+		// as a default, just reload the same page
+		if (StringUtils.isBlank(cancelUrl)) {
+			cancelUrl="mdrtbEditPatient.form";
+		}
+		
+		return cancelUrl;
+	}
+	
 	@ModelAttribute("locations")
 	public Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
@@ -78,11 +109,11 @@ public class MdrtbEditPatientController {
 	}
 	
 	@ModelAttribute("patientIdentifierMap")
-	public Map<Integer, PatientIdentifier> getPatientIdentifierMap(@RequestParam(required = true, value="patientId") Integer patientId) {
+	public Map<Integer, PatientIdentifier> getPatientIdentifierMap(@RequestParam(required = false, value="patientId") Integer patientId) {
 		
 		final Map<Integer,PatientIdentifier> map = new HashMap<Integer,PatientIdentifier>();
 		
-		if (patientId != -1) {
+		if (patientId !=null && patientId != -1) {
 			Patient patient = Context.getPatientService().getPatient(patientId);
 		
 			if (patient != null) {
@@ -125,11 +156,16 @@ public class MdrtbEditPatientController {
 	}
 	
 	@ModelAttribute("patient")
-	public Patient getPatient(@RequestParam(required = true, value="patientId") Integer patientId) {
+	public Patient getPatient(@RequestParam(required = false, value="patientId") Integer patientId,
+	                          @RequestParam(required = false, value="addName") String addName,
+	                          @RequestParam(required = false, value="addBirthdate") String addBirthdate,
+	                          @RequestParam(required = false, value="addAge") String addAge,
+	                          @RequestParam(required = false, value="addGender") String addGender){
 		
 		Patient patient = null;
 		
-		if (patientId != -1) {  // signifies adding a new patient
+		// see if we have a patient id (-1 signifies that we are looking to add a new patient)
+		if (patientId != null && patientId != -1) {  
 			patient = Context.getPatientService().getPatient(patientId);
 			
 			if (patient == null) {
@@ -137,7 +173,13 @@ public class MdrtbEditPatientController {
 			}
 		}
 		else {
+			// handle a new patient
 			patient = new Patient();
+			
+			// initialize with any request parameters that may have been passed
+			if (addName != null) {
+				PersonFormController.getMiniPerson(patient, addName, addGender, addBirthdate, addAge);
+			}
 		}
 		
 		// if there is no default address for this patient, create one
@@ -176,10 +218,12 @@ public class MdrtbEditPatientController {
 	                               @RequestParam("identifierId") String [] identifierId, 
 	                               @RequestParam(required = false, value = "identifierLocation") Location [] identifierLocation,
 	                               @RequestParam("identifierType") PatientIdentifierType [] identifierType,
+	                               @RequestParam(required = false, value ="patientProgramId") Integer patientProgramId,
+	                               @RequestParam("successURL") String successUrl,
 	                               SessionStatus status, ModelMap map) {
 		
 		// first, we need to set the patient id to null if it's been set to -1
-		if (patient.getId() == -1) {
+		if (patient.getId() != null && patient.getId() == -1) {
 			patient.setId(null);
 		}
 		
@@ -239,7 +283,10 @@ public class MdrtbEditPatientController {
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:/module/mdrtb/mdrtbEditPatient.form?patientId=" + patient.getId());
+		String returnUrl = "redirect:" + successUrl + (successUrl.contains("?") ? "&" : "?") + "patientId=" + patient.getId() + 
+			(patientProgramId != null ? "&patientProgramId=" + patientProgramId : "");
+
+		return new ModelAndView(returnUrl);
 	}
 	
 	
