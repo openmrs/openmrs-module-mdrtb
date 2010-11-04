@@ -17,7 +17,9 @@
 <!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
-
+<style type="text/css">
+	th {vertical-align:top}
+</style>
 
 <!-- JQUERY FOR THIS PAGE -->
 
@@ -58,12 +60,11 @@
 </c:if>
 
 <form action="mdrtbEditPatient.form" method="POST">
-<input type="hidden" name="cancelURL" value="${cancelURL}" />
 <input type="hidden" name="successURL" value="${successURL}" />
 <input type=hidden name="patientId" value="${patientId}"/>
 <input type=hidden name="patientProgramId" value="${patientProgramId}"/>
 
-<table class="box" style="padding:6px">
+<table style="padding:6px">
 
 <tr>
 <th style="headerCell"><spring:message code="Person.name"/></th>
@@ -126,6 +127,7 @@
 <td><input name="identifierValue" type="text" value="${! empty patientIdentifierMap[type.id] ? patientIdentifierMap[type.id].identifier : ''}"/></td>
 <c:if test="${showIdentifierLocationSelector}">
 	<td><select name="identifierLocation">
+	<option value=""/>
 	<c:forEach var="location" items="${locations}">
 		<option value="${location.id}" <c:if test="${location == patientIdentifierMap[type.id].location}">selected</c:if>>${location.displayString}</option>
 	</c:forEach>
@@ -193,9 +195,12 @@
 	</tr>
 </openmrs:forEachDisplayAttributeType>
 
+<tr height="5"><td colspan="2">&nbsp;</td></tr>
+
 <tr><td colspan="2">
 <button type="submit"><spring:message code="Patient.save" text="Save Patient"/></button>
-<button type="reset" onclick="window.location='${cancelURL}?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
+
+<button type="reset" onclick="history.back()"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
 
 </table>
 

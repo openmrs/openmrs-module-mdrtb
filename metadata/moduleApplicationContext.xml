@@ -16,24 +16,23 @@
     <bean id="MdrtbMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     	<property name="order"><value>71</value></property>
     	<property name="mappings">
+    		<!--  we should soon be able to get rid of all of these except for the portlets -->
             <props>
+            	
+            	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
+            
+            <!--  
            		<prop key="module/@MODULE_ID@/mdrtbTSAdmin.list">MdrtbAdmiList</prop> 		
 				<prop key="module/@MODULE_ID@/mdrtbTSAdmin.form">MdrtbAdmiForm</prop> 
-            	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
-            	<prop key="module/@MODULE_ID@/mdrtbAddPatientForm.form">MdrtbAddPatientFormController</prop>
             	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
-            	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop>
+            	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop> -->
             	
             	<!-- hacky way to handle existing tabs until we substitute them out -->
             	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
-            	<!--  
-            	<prop key="module/@MODULE_ID@/visits/visits.form">VisitsController</prop>
-            	<prop key="module/@MODULE_ID@/status/status.form">StatusController</prop>
-            	-->
-            	
+         
      			<!--  portlets -->
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
-            	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
+            	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>  
             	<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
             	<prop key="**/mdrtbShortSummary.portlet">shortSummaryPortletController</prop>
             	<prop key="**/mdrtbCustomList.portlet">customSummaryPortletController</prop>
@@ -41,23 +40,23 @@
 		</property>
     </bean>
     <!-- Controllers --> 
+    
+   <!--   
 	 <bean id="MdrtbManageContactsController" class="@MODULE_PACKAGE@.web.controller.MdrtbManageContactsController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/contacts/contacts</value></property>
 		<property name="successView"><value>contacts.form</value></property>
     </bean>     
+    -->
+    
     <bean id="MdrtbFormController" class="@MODULE_PACKAGE@.web.controller.MdrtbFormController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
 		<property name="successView"><value>mdrtbIndex.form</value></property>
     </bean>
-	<bean id="MdrtbAddPatientFormController" class="@MODULE_PACKAGE@.web.controller.MdrtbAddPatientFormController">
-		<property name="sessionForm"><value>true</value></property>
-		<property name="commandName"><value>patient</value></property>
-		<property name="commandClass"><value>org.openmrs.web.controller.patient.ShortPatientModel</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbAddPatientForm</value></property>
-		<property name="successView"><value>dashboard/dashboard.form</value></property>
-    </bean>
+    
+    
+    <!-- 
      <bean id="MdrtbAdmiList" class="@MODULE_PACKAGE@.web.controller.MdrtbTSAdmListController">
 		<property name="commandName"><value>listObj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
@@ -72,7 +71,7 @@
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
 		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
-    </bean> 
+    </bean>   -->
     
     <!-- hacky way to handle existing tabs until we substitute them out -->
     <bean id="RegimenController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
@@ -80,22 +79,11 @@
 		<property name="formView"><value>/module/@MODULE_ID@/regimen/regimen</value></property>
 		<property name="successView"><value>regimen.form</value></property>
     </bean>
-    
-    <!--  
-   	<bean id="VisitsController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/visits/visits</value></property>
-		<property name="successView"><value>visits.form</value></property>
-    </bean>
-     <bean id="StatusController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/status/status</value></property>
-		<property name="successView"><value>status.form</value></property>
-    </bean> -->
+   
     
     <!-- portlet controllers -->    
     <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController"/>
-    <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/>
+    <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/> 
     <bean id="patientSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.PatientSummaryPortletController" />
 	<bean id="shortSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.ShortSummaryPortletController" />
 	<bean id="customSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.CustomSummaryPortletController" />

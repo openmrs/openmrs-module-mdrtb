@@ -86,16 +86,6 @@ public class MdrtbEditPatientController {
 		return successUrl;
 	}
 	
-	@ModelAttribute("cancelURL")
-	public String getCancelUrl(@RequestParam(required=false, value="cancelURL") String cancelUrl) {
-		// as a default, just reload the same page
-		if (StringUtils.isBlank(cancelUrl)) {
-			cancelUrl="mdrtbEditPatient.form";
-		}
-		
-		return cancelUrl;
-	}
-	
 	@ModelAttribute("locations")
 	public Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
