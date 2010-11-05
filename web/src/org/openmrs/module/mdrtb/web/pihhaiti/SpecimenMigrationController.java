@@ -565,6 +565,41 @@ public class SpecimenMigrationController {
      	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/removeWaitingForTestResults.form")
+    public ModelAndView removeWaitingForTestResults() {
+    	// remove Waiting for Test results as optons for Smear and Culture Results
+    	Concept smearResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
+    	Concept cultureResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
+    	Concept waitingForTestResults = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
+    	
+    	for (ConceptAnswer answer : smearResult.getAnswers()) {
+    		if (answer.getAnswerConcept().equals(waitingForTestResults)) {
+    			smearResult.removeAnswer(answer);
+    			break;
+    		}
+    	}
+    	Context.getConceptService().saveConcept(smearResult);
+    	
+    	for (ConceptAnswer answer : cultureResult.getAnswers()) {
+    		if (answer.getAnswerConcept().equals(waitingForTestResults)) {
+    			cultureResult.removeAnswer(answer);
+    			break;
+    		}
+    	}
+    	Context.getConceptService().saveConcept(cultureResult);
+    	
+    	// now void any result obs that are set to WAITING FOR TEST RESULTS
+    	Concept [] concepts = {smearResult, cultureResult};
+    	Concept [] answers = {waitingForTestResults};
+    	
+    	List<Obs> waitingObs = Context.getObsService().getObservations(null, null, Arrays.asList(concepts), Arrays.asList(answers), null, null, null, null, null, null, null, false);
+    	for (Obs obs : waitingObs) {
+    		Context.getObsService().voidObs(obs, "voided as part of mdr-tb migration");
+    	}
+    	
+      	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     // TODO: add script to retire the forms
     
     // just a hacky test
