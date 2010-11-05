@@ -276,7 +276,7 @@
 
 
 <!-- LEFT-HAND COLUMN START -->
-<div id="leftColumn" style="float: left; width:19%;  padding:0px 4px 4px 4px">
+<div id="leftColumn" style="float: left; width:29%;  padding:0px 4px 4px 4px">
 
 <b class="boxHeader"><spring:message code="mdrtb.specimens" text="Specimens"/></b>
 <div class="box">
@@ -288,13 +288,22 @@
 <tr>
 <td class="tableCell"><nobr><u><spring:message code="mdrtb.dateCollected" text="Date Collected"/></u></nobr></td>
 <td class="tableCell"><nobr><u><spring:message code="mdrtb.sampleid" text="Sample ID"/></u></nobr></td>
+<td class="tableCell"><nobr><u><spring:message code="mdrtb.tests" text="Tests"/></u></nobr></td>
 <td width="99%">&nbsp;</td>
 </tr>
 
-<c:forEach var="specimenListItem" items="${specimens}">
-	<tr <c:if test="${specimenListItem.id == specimen.id}"> style="background-color : gold"</c:if>>
+<c:forEach var="specimenListItem" items="${specimens}" varStatus="i">
+	<tr 
+		<c:if test="${i.count % 2 == 0 }">class="evenRow"</c:if>
+		<c:if test="${i.count % 2 != 0 }">class="oddRow"</c:if>
+		<c:if test="${specimenListItem.id == specimen.id}"> style="background-color : gold"</c:if>>
 	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}"><openmrs:formatDate date="${specimenListItem.dateCollected}" format="${_dateFormatDisplay}"/></a></nobr></td>
 	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}">${specimenListItem.identifier}</a></nobr></td>
+	<td class="tableCell"><nobr>
+						<c:if test="${fn:length(specimenListItem.smears) > 0 }"><spring:message code="mdrtb.smear" text="Smear"/></c:if>
+						<c:if test="${fn:length(specimenListItem.cultures) > 0 }"><spring:message code="mdrtb.culture" text="Culture"/></c:if>
+						<c:if test="${fn:length(specimenListItem.dsts) > 0 }"><spring:message code="mdrtb.dst" text="DST"/></c:if>
+						</nobr></td>
 	<td width="99%">&nbsp;</td>
 	</tr>
 </c:forEach>
@@ -311,7 +320,7 @@
 
 <!-- START OF RIGHT-HAND COLUMN -->
 
-<div id="rightColumn" style="float: right; width:79%;  padding:0px 4px 4px 4px">
+<div id="rightColumn" style="float: right; width:69%;  padding:0px 4px 4px 4px">
 
 <c:if test="${! empty specimen}">
 
