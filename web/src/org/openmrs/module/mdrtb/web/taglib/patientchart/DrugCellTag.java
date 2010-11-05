@@ -15,7 +15,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
-import org.openmrs.util.OpenmrsUtil;
 
 
 public class DrugCellTag extends TagSupport {
@@ -30,6 +29,8 @@ public class DrugCellTag extends TagSupport {
 	
 	private String style;
 	
+	private String showTooltip;
+	
 	  public int doStartTag() {
 		 
 	    	String ret = null;
@@ -43,14 +44,13 @@ public class DrugCellTag extends TagSupport {
 	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
 	    			if(component != null) {
 	    				updateTitle(titleString, component);
-	    				// TODO: make this a global prop, make sure it's in sync with color in dstresultscell
-	    				colorString="skyblue";
+	    				colorString = MdrtbConstants.PATIENT_CHART_REGIMEN_CELL_COLOR;
 	    			}
 	    		}
 	    	}
 	    	
 	    	if(StringUtils.isNotBlank(colorString)) {
-	    		ret = "<td class=\"chartCell\" title=\"" + titleString.toString() + "\" style=\"background-color:" + colorString + "\"/>";
+	    		ret = "<td class=\"chartCell\"" + ("true".equalsIgnoreCase(this.showTooltip) ? " title=\"" + titleString + "\"" : "") + " style=\"background-color:" + colorString + "\"/>";
 	    	}
 	    	else {
 	    		ret = "<td class=\"chartCell\"/>";
@@ -88,7 +88,7 @@ public class DrugCellTag extends TagSupport {
 			return;
 		}
 		
-		SimpleDateFormat df = MdrtbConstants.dateFormatDisplay;
+		SimpleDateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
 		
 		titleString.append("<nobr>");
 		titleString.append(component.getDrug().getName());
@@ -141,5 +141,13 @@ public class DrugCellTag extends TagSupport {
 
 	public String getStyle() {
 	    return style;
+    }
+
+	public void setShowMouseover(String showTooltip) {
+	    this.showTooltip = showTooltip;
+    }
+
+	public String getShowMouseover() {
+	    return showTooltip;
     }
 }

@@ -151,6 +151,11 @@
 		<required>false</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
 
 <tag>
@@ -178,6 +183,11 @@
 	<attribute>
 		<name>clazz</name>
 		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
 </tag>
@@ -208,7 +218,12 @@
 		<name>style</name>
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
-	</attribute>>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
 
 <tag>
@@ -247,7 +262,27 @@
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
 </tag>
+
+<tag>
+	<description>
+		Renders a Lab cell for display in the patient chart
+	</description>
+	<name>labCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.LabCellTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>specimen</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
 
 <tag>
 	<description>

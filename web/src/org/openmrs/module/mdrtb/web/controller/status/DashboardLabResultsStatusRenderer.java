@@ -27,7 +27,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		
 		if (smear != null) {
 			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
-			        smear.getDateCollected() != null ? MdrtbConstants.dateFormatDisplay.format(smear.getDateCollected()) : "(N/A)",
+			        smear.getDateCollected() != null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(smear.getDateCollected()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
@@ -49,7 +49,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		if (culture != null) {
 			String[] params = {
 			        culture.getResult().getBestShortName(Context.getLocale()).toString(),
-			        culture.getDateCollected() != null ? MdrtbConstants.dateFormatDisplay.format(culture.getDateCollected()) : "(N/A)",
+			        culture.getDateCollected() != null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(culture.getDateCollected()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
@@ -74,7 +74,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 	
 	@SuppressWarnings("unchecked")
     public void renderPendingLabResults(StatusItem pendingLabResults, LabResultsStatus status) {
-		DateFormat df = MdrtbConstants.dateFormatDisplay;
+		DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
 		
 		List<StatusItem> tests = (List<StatusItem>) pendingLabResults.getValue();
 		
@@ -155,7 +155,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		   return Context.getMessageSourceService().getMessage("mdrtb.notConverted");
 	   }
 	   else {
-		   String[] params = {MdrtbConstants.dateFormatDisplay.format(cultureConversion.getDate()) };
+		   String[] params = {MdrtbConstants.DATE_FORMAT_DISPLAY.format(cultureConversion.getDate()) };
 		   return Context.getMessageSourceService().getMessage("mdrtb.converted", params,
 			    "Converted on {0}", Context.getLocale());
 	   }

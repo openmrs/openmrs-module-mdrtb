@@ -129,7 +129,7 @@ public class PatientChartFactory {
 				record.setLabel(iteration.toString());
 			}
 			else {
-				DateFormat format = MdrtbConstants.dateFormatDisplay;
+				DateFormat format = MdrtbConstants.DATE_FORMAT_DISPLAY;
 				record.setLabel(format.format(recordStartDate.getTime()));
 			}
 			

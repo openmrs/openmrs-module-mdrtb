@@ -18,7 +18,7 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
 
     public String renderRegimen(Regimen regimen) {
     	  	
-    	DateFormat df = MdrtbConstants.dateFormatDisplay;
+    	DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
     	
     	// first we need to pull out all the drugs in this regimen
     	List<Concept> generics = new LinkedList<Concept>();

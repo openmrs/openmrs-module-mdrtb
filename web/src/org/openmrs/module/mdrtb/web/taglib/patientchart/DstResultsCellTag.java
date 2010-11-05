@@ -11,9 +11,10 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.DstResult;
 
 
@@ -31,6 +32,8 @@ public class DstResultsCellTag extends TagSupport {
     
     private Concept drug;
     
+    private String showTooltip;
+    
     public int doStartTag() {
    
     	String ret = null;
@@ -42,7 +45,7 @@ public class DstResultsCellTag extends TagSupport {
     		for(Regimen regimen : regimens) {
     			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
     			if(component != null) {
-    				drugColor="skyblue";  // TODO: make this a global prop, make sure it's in sync with color in dst results cell
+    				drugColor = MdrtbConstants.PATIENT_CHART_REGIMEN_CELL_COLOR;  
     				break;
     			}
     		}
@@ -81,8 +84,8 @@ public class DstResultsCellTag extends TagSupport {
     		
     		String color = Context.getService(MdrtbService.class).getColorForConcept(result);
     		
-    		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\" title=\"" + title +
-    				"\" style=\"background-color:" + color + ";" + style + "\">" + 
+    		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\"" +
+    				("true".equalsIgnoreCase(this.showTooltip) ? " title=\"" + title + "\"" : "") + " style=\"background-color:" + color + ";" + style + "\">" + 
     				result.getBestShortName(Context.getLocale()) + "</td></tr></table></td>";
     	}
     	else {
@@ -140,6 +143,16 @@ public class DstResultsCellTag extends TagSupport {
 
 	public String getStyle() {
 	    return style;
+    }
+
+
+	public void setShowMouseover(String showTooltip) {
+	    this.showTooltip = showTooltip;
+    }
+
+
+	public String getShowMouseover() {
+	    return showTooltip;
     }
 
 }

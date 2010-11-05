@@ -44,7 +44,7 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	    else {
 	    	Obs result = (Obs) mostRecentTestResult.getValue();
 
-			String params [] = {result.getValueCoded().getDisplayString(), MdrtbConstants.dateFormatDisplay.format(result.getObsDatetime())};
+			String params [] = {result.getValueCoded().getDisplayString(), MdrtbConstants.DATE_FORMAT_DISPLAY.format(result.getObsDatetime())};
 	    	
 	    	mostRecentTestResult.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.testResultsStatus", params,
 			    "{0} on {1}", Context.getLocale()));
@@ -88,7 +88,7 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
     		Date startDate = ((Regimen) regimens.get(regimens.size() - 1).getValue()).getStartDate();
     		Date endDate = ((Regimen) regimens.get(0).getValue()).getStartDate();
     		
-    		artTreatment.setDisplayString(MdrtbConstants.dateFormatDisplay.format(startDate) + " - " + (endDate == null ? MdrtbConstants.dateFormatDisplay.format(endDate) : 
+    		artTreatment.setDisplayString(MdrtbConstants.DATE_FORMAT_DISPLAY.format(startDate) + " - " + (endDate == null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(endDate) : 
     			Context.getMessageSourceService().getMessage("mdrtb.present")));
     	}
     }

@@ -2,10 +2,8 @@ package org.openmrs.module.mdrtb.web.taglib.patientchart;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -14,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -36,13 +33,13 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 	
 	private String parameters;
 	
+	private String showTooltip;
+	
     protected void renderCell(List<Bacteriology> bacs) {
     	
     	String titleString = "";
     	
     	String colorString = "";
-    	
-    	String labString = "";
     	
     	String resultString = "";
     	
@@ -59,29 +56,10 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     		// used to track the "overall" result, which determines how we decide what color to display
     		Concept overallResult = null;
     		
-    		// used to keep track of the locations we have already displayed
-    		Set<Location> labs = new HashSet<Location> ();
-    		
     		// loop through all the bacteriologies in this set and fetch the result for each of them
     		for(Bacteriology bac : bacs) {
     			if(bac != null) {		
-    				
-    				// update the lab string based on this bac
-    				// only add this lab to the display list if we've yet to display it
-					if(!labs.contains(bac.getLab())) {
-						
-						// add a slash if we have multiple labs
-						if(StringUtils.isNotEmpty(labString)) {
-							labString = labString.concat("/");
-						}
-						
-						// add the lab name to the display string
-						labString = labString.concat(Context.getService(MdrtbService.class).getDisplayCodeForLocation(bac.getLab()));
-						
-						// now mark that we've already handled this lab
-						labs.add(bac.getLab());
-					}
-    			
+    							
     				// if there's a valid result....
     				if(bac.getResult() != null) {
     					
@@ -140,8 +118,8 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     		// TODO: this is operating on the assumption that all the bacs are from the same specimen
     		ret = "<td onmouseover=\"document.body.style.cursor = \'pointer\'\" onmouseout=\"document.body.style.cursor = \'default\'\" " 
     				+ "onclick=\"window.location = \'../specimen/specimen.form?specimenId=" + bacs.get(0).getSpecimenId() + "&testId=" + bacs.get(0).getId()
-    				+ this.parameters + "\'\" title=\"" + titleString + "\" style=\";background-color:" + colorString 
-    				+ ";" + this.style + "\" " + ((this.clazz !=null && !this.clazz.isEmpty()) ? "class=\"" + this.clazz + "\"" : "") + ">&nbsp;" + resultString + " " + labString + "&nbsp;</td>";
+    				+ this.parameters + "\'\"" + ("true".equalsIgnoreCase(this.showTooltip) ? " title=\"" + titleString + "\"" : "") + "style=\";background-color:" + colorString 
+    				+ ";" + this.style + "\" " + ((this.clazz !=null && !this.clazz.isEmpty()) ? "class=\"" + this.clazz + "\"" : "") + ">&nbsp;" + resultString + "&nbsp;</td>";
     	}
     
     	try {
@@ -187,6 +165,14 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 	
     public void setParameters(String parameters) {
     	this.parameters = parameters;
+    }
+
+	public void setShowMouseover(String showTooltip) {
+	    this.showTooltip = showTooltip;
+    }
+
+	public String getShowMouseover() {
+	    return showTooltip;
     }
 
 	/**

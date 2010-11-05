@@ -14,7 +14,7 @@ public class TestStatusRenderer {
 	public static String renderStandardStatus(Test test) {
 		
 		TestStatus status = test.getStatus();
-	    DateFormat df = MdrtbConstants.dateFormatDisplay;
+	    DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
 	    
 	    if (status == TestStatus.COMPLETED) {
 	    	String[] params = {test.getLab().getDisplayString(), df.format(test.getResultDate())};

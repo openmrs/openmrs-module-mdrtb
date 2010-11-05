@@ -4,6 +4,7 @@
 <style type="text/css">
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 	.chartCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
+	.spacerCell {border:0px; padding:0px; width:1px; background-color: #8FABC7}
 </style>
 
 
@@ -11,22 +12,30 @@
 <div id="patientChart" align="center">
 <table style="border:2px solid #8FABC7; font-size: .9em; border-spacing:0px;">
 
-<!-- START HEADER ROW -->
-<thead>
+<!-- START HEADER ROWS -->
+<tr>
+<td class="chartCell" colspan="3">&nbsp;</td>
+<td class="spacerCell"></td>
+<td class="chartCell" colspan="3" align="center"><spring:message code="mdrtb.bacteriologies" text="Bacteriologies"/></td3>
+<td class="spacerCell"></td>
+<td class="chartCell" colspan="${fn:length(model.chart.drugTypes)}" align="center"><spring:message code="mdrtb.dsts" text="DSTs"/></td>
+</tr>
+
 <tr>
 <td class="chartCell"><spring:message code="mdrtb.month" text="Month"/></td>
 <td class="chartCell"><spring:message code="mdrtb.dateCollected" text="Date collected"/></td>
-<td class="chartCell" style="width:100px"><spring:message code="mdrtb.smears" text="Smears"/></td>
-<td class="chartCell" style="width:100px"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
+<td class="chartCell"><spring:message code="mdrtb.lab" text="Lab"/></td>
+<td class="spacerCell"></td>
+<td class="chartCell" style="width:60px"><spring:message code="mdrtb.smears" text="Smears"/></td>
+<td class="chartCell" style="width:60px"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
 <td class="chartCell"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
+<td class="spacerCell"></td>
 <!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${model.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
 </c:forEach>
 </tr>
-</thead>
-
-<!-- END HEADER ROW -->
+<!-- END HEADER ROWS -->
 
 <!-- START ROWS -->
 <tbody>
@@ -47,6 +56,15 @@
 					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}" format="${_dateFormatDisplay}"/></a>
 				</c:if>
 			</td>
+			
+			<td class="chartCell"><nobr>
+				<c:if test="${!empty component.specimen}">
+					<mdrtb:labCell specimen="${component.specimen}"/>&nbsp;
+				</c:if>
+			</nobr></td>
+			
+			
+			<td class="spacerCell">&nbsp;</td>
 			
 			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.smears}">
 				<table style="padding:0px; border:0px; margin0px; width:100%">
@@ -70,6 +88,8 @@
 			</c:if>
 			</td>
 	
+			<td class="spacerCell">&nbsp;</td>
+	
 			<!--  dsts -->
 			<c:forEach var="drugType" items="${model.chart.drugTypes}">
 				<c:choose>
@@ -87,7 +107,11 @@
 			<!-- HANDLE STATE CHANGE COMPONENTS -->
 			<c:if test="${component.type eq 'stateChangeRecordComponent'}">
 				<td class="chartCell"><openmrs:formatDate date="${component.date}" format="${_dateFormatDisplay}"/></td>
-				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(model.chart.drugTypes) + 3}">${component.text}</td>
+				<td class="chartCell"/>
+				<td class="spacerCell">&nbsp;</td>
+				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="3">${component.text}</td>
+				<td class="spacerCell">&nbsp;</td>
+				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(model.chart.drugTypes)}">${component.text}</td>
 			</c:if>
 			<!-- END OF HANDLING STATE CHANGE COMPONENTS -->
 			</tr>

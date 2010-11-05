@@ -21,7 +21,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	
     	Encounter encounter = (Encounter) visit.getValue();
     	
-    	String[] params = { MdrtbConstants.dateFormatDisplay.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
+    	String[] params = { MdrtbConstants.DATE_FORMAT_DISPLAY.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
     	
     	visit.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.visitStatus.visit", params,
 		    "{0} at {1}", Context.getLocale()));
