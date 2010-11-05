@@ -43,7 +43,7 @@
 			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.editProgram" text="Edit Program"/>',
 			width: '50%',
-			position: 'left',
+			position: [150,150],
 		});
 
 		$j('#programEditButton').click(function() {
@@ -68,7 +68,7 @@
 			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.closeProgram" text="Close Program"/>',
 			width: '50%',
-			position: 'left',
+			position: [150,150],
 		});
 
 		$j('#programCloseButton').click(function() {
@@ -94,13 +94,12 @@
  		
 		$j('#hospitalizationsEditPopup').dialog({
 			autoOpen: ${(fn:length(hospitalizationErrors.allErrors) > 0 ? true : false)},
-			position: 'right',
 			modal: true,
 			draggable: false,
 			closeOnEscape: false,
 			title: '<spring:message code="mdrtb.editHospitalization" text="Edit Hospitalization"/>',
 			width: '40%',
-			position: 'left',
+			position: [150,150],
 		});
 
 		// opens the pop-up to edit a hospitalization and populates the fill-ins with the appropriate dates
