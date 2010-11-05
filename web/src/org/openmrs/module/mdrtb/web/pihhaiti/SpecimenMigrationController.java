@@ -79,10 +79,6 @@ public class SpecimenMigrationController {
 		// TODO: NOTE THAT WE WILL WANT TO MAKE SURE WE KEEP CONCEPTS IN SYNC BETWEEN SERVERS/DICTIONARYS
 		addAndUpdateConcepts();
 		
-		// add new global properties		
-		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("mdrtb.colorMap","1407:lightgrey|1408:lightcoral|1409:lightcoral|1410:lightcoral|2224:lightgrey|3047:khaki|664:lightgreen|703:lightcoral|2474:lightgreen|3017:khaki|1441:lightcoral|1107:none"));
-		Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("mdrtb.locationToDisplayCodeMap","1:N/A|2:CANGE|3:HINCHE|4:N/A|5:MSLI"));
-		
 		// convert smears on Haiti forms
 		convertSmearsOnIntakeAndFollowup();
 		

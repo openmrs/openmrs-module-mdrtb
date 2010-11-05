@@ -391,6 +391,17 @@
 		<defaultValue></defaultValue>
 		<description>Takes as a parameter a location name.  If this property exists, when creating patient identifiers, the patient identifier location is set to this value (and setting the location is not presented to the user as an option).</description>
 	</globalProperty>
+	<globalProperty>
+		<property>mdrtb.colorMap</property>
+		<defaultValue>1407:lightgrey|1408:lightcoral|1409:lightcoral|1410:lightcoral|2224:lightgrey|3047:khaki|664:lightgreen|703:lightcoral|2474:lightgreen|3017:khaki|1441:lightcoral|1107:none</defaultValue>
+		<description>Pipe-delimited list mapping concept ids to color names and/or hex codes for display in the patient chart and (potentially) elsewhere.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>mdrtb.locationToDisplayCodeMap</property>
+		<defaultValue>1:N/A|2:CANGE|3:HINCHE|4:N/A|5:MSLI</defaultValue>
+		<description>Pipe-delimited list mapping a location id to it's display name.</description>
+	</globalProperty>
+	
 	<dwr>
 		<allow>
 			<create creator="new" javascript="MdrtbFindPatient">
