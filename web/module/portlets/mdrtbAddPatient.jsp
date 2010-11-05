@@ -13,14 +13,7 @@
 	
 	<div id="createPatient">
 		<b class="boxHeader">
-			<c:choose>
-				<c:when test="${model.personType != null && model.personType != ''}">
-					<spring:message code="Person.create.${model.personType}" />
-				</c:when>
-				<c:otherwise>
-					<spring:message code="Person.create"/>
-				</c:otherwise>
-			</c:choose>
+				<spring:message code="mdrtb.enrollNewPatient"/>
 		</b>
 		<div class="box" style="padding: 15px 15px 15px 15px;">
 			<spring:message code="mdrtb.search.instructions"/> <br/><br/>
@@ -56,7 +49,7 @@
 					<tr>
 						<td></td>
 						<td>
-							<input type="submit" value='<spring:message code="Person.create"/>'/>
+							<input type="submit" value='<spring:message code="mdrtb.enrollNewPatient"/>'/>
 						</td>
 					</tr>
 				</table>
