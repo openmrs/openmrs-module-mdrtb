@@ -1,13 +1,16 @@
 package org.openmrs.module.mdrtb.web.controller;
 
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +22,7 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
@@ -194,12 +198,51 @@ public class MdrtbEditPatientController {
 		return patient;
 	}
 
-	
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showForm() {
+	@SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showForm(@RequestParam(required = false, value="patientId") Integer patientId,
+	                             @RequestParam(required = false, value="addName") String addName,
+	                             @RequestParam(required = false, value="addBirthdate") Date addBirthdate,
+	                             @RequestParam(required = false, value="addAge") String addAge,
+	                             @RequestParam(required = false, value="addGender") String addGender,
+	                             @RequestParam(required = false, value="skipSimilarCheck") Boolean skipSimilarCheck,
+	                             ModelMap map) throws ParseException {
+		
+		// if we are dealing with a new patient (one with no id, or id=-1) we need to check for similar patients first
+		if ((skipSimilarCheck == null || !skipSimilarCheck) && (patientId == null || patientId == -1)) {
+			
+			Integer birthYear = null;
+			
+			if (addBirthdate != null) {				
+				Calendar birthDate = Calendar.getInstance();
+				birthDate.setTime(addBirthdate);
+				birthYear = birthDate.get(Calendar.YEAR);
+			}
+			else if (StringUtils.isNotBlank(addAge)) {
+				Calendar currentDate = Calendar.getInstance();
+				currentDate.setTime(new Date());
+				birthYear = currentDate.get(Calendar.YEAR) - Integer.valueOf(addAge);
+			}
+			
+			Set<Person> similarPersons = Context.getPersonService().getSimilarPeople(addName, birthYear, addGender);
+			
+			if (similarPersons.size() > 0) {
+				map.put("patients", similarPersons);
+				
+				// add the request params to the map so that we can pass them on
+				map.put("addName", addName);
+				map.put("addBirthdate", addBirthdate);
+				map.put("addAge", addAge);
+				map.put("addGender", addGender);
+				
+				return new ModelAndView("/module/mdrtb/similarPatients");
+			}
+		}
+		
+		// if no similar patients, show the edit page
+		
 		return new ModelAndView("/module/mdrtb/mdrtbEditPatient");
 	}
-	
 
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST)

@@ -8,7 +8,7 @@
 
 
 <!-- only show the headers if we are in edit mode (i.e,. we have an existing patient id) -->
-<c:if test="${! empty patientId}">
+<c:if test="${! empty patientId && patientId != -1}">
 	<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 	<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 </c:if>
@@ -22,14 +22,13 @@
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
-
 <script type="text/javascript"><!--
 
 	var $j = jQuery.noConflict();	
 
 	$j(document).ready(function(){
 
-		// togggle the estimated checkbox
+		// toggle the estimated checkbox
 		$j('#birthdateEstimatedCheckbox').click(function () {
 			if ($j(this).is(':checked')){
 				$j('#birthdateEstimated').attr('value', "true");
@@ -43,8 +42,9 @@
 -->
 </script>
 <!-- END JQUERY -->
+
 <!-- START PAGE DIV -->
-<div>
+<div align="center">
 
 <!--  EDIT/ADD PATIENT BOX -->
 
@@ -110,6 +110,7 @@
 </td>
 <c:if test="${showIdentifierLocationSelector}">
 	<td><select name="identifierLocation">
+	<option value=""/>
 	<c:forEach var="location" items="${locations}">
 		<option value="${location.id}" <c:if test="${location == patientIdentifierMap[type.id].location}">selected</c:if>>${location.displayString}</option>
 	</c:forEach>
