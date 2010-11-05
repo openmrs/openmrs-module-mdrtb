@@ -44,7 +44,7 @@
 		<c:if test="${component.type eq 'specimenRecordComponent'}">
 			<td class="chartCell">
 				<c:if test="${!empty component.specimen}">
-					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}"/></a>
+					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}" format="${_dateFormatDisplay}"/></a>
 				</c:if>
 			</td>
 			
@@ -86,7 +86,7 @@
 			
 			<!-- HANDLE STATE CHANGE COMPONENTS -->
 			<c:if test="${component.type eq 'stateChangeRecordComponent'}">
-				<td class="chartCell"><openmrs:formatDate date="${component.date}"/></td>
+				<td class="chartCell"><openmrs:formatDate date="${component.date}" format="${_dateFormatDisplay}"/></td>
 				<td class="chartCell" style="background-color:lightgray;text-align:center" colspan="${fn:length(model.chart.drugTypes) + 3}">${component.text}</td>
 			</c:if>
 			<!-- END OF HANDLING STATE CHANGE COMPONENTS -->

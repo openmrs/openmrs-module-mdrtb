@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
@@ -13,7 +14,7 @@ public class TestStatusRenderer {
 	public static String renderStandardStatus(Test test) {
 		
 		TestStatus status = test.getStatus();
-	    DateFormat df = DateFormat.getDateInstance();
+	    DateFormat df = MdrtbConstants.dateFormatDisplay;
 	    
 	    if (status == TestStatus.COMPLETED) {
 	    	String[] params = {test.getLab().getDisplayString(), df.format(test.getResultDate())};

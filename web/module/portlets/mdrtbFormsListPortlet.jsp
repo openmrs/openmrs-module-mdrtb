@@ -68,7 +68,7 @@
 								</c:set>
 						<tr class="${rowClass}">
 							<td class="${rowClass}" nowrap><a href="${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${obj.patient.patientId}&formId=${enc.form.formId}&encounterId=${enc.encounterId}&mode=VIEW&returnUrl=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?view=FORM">${enc.form.name}</a></td>
-							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${dateFormat}" /></td>
+							<td class="${rowClass}" nowrap> <openmrs:formatDate date="${enc.encounterDatetime}" format="${_dateFormatDisplay}" /></td>
 							<td class="${rowClass}" nowrap>${enc.provider}</td>
 							<td class="${rowClass}" nowrap>${enc.location}</td>
 						</tr>

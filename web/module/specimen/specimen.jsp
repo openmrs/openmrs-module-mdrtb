@@ -293,7 +293,7 @@
 
 <c:forEach var="specimenListItem" items="${specimens}">
 	<tr <c:if test="${specimenListItem.id == specimen.id}"> style="background-color : gold"</c:if>>
-	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}"><openmrs:formatDate date="${specimenListItem.dateCollected}"/></a></nobr></td>
+	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}"><openmrs:formatDate date="${specimenListItem.dateCollected}" format="${_dateFormatDisplay}"/></a></nobr></td>
 	<td class="tableCell"><nobr><a href="specimen.form?specimenId=${specimenListItem.id}&patientProgramId=${patientProgramId}">${specimenListItem.identifier}</a></nobr></td>
 	<td width="99%">&nbsp;</td>
 	</tr>
@@ -339,7 +339,7 @@
 </tr>
 
 <tr>
-<td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td><td><nobr><openmrs:formatDate date="${specimen.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
 <td><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</td><td>${specimen.appearance.displayString}</td>
 <td width="100%">&nbsp;</td>
 </tr>
@@ -491,19 +491,19 @@
 <table cellpadding="0">
 <tr>
 <td><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td><td><nobr>${test.accessionNumber}</nobr></td>
-<td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateOrdered}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateOrdered}" format="${_dateFormatDisplay}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <td><nobr><spring:message code="mdrtb.lab" text="Lab"/>:</nobr></td><td><nobr>${test.lab}</nobr></td>
-<td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateReceived}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.dateReceived}" format="${_dateFormatDisplay}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
 <tr>
 <td><nobr><spring:message code="mdrtb.method" text="Method"/>:</nobr></td><td><nobr>${test.method.displayString}</nobr></td>
-<td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.startDate}" format="${_dateFormatDisplay}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -522,7 +522,7 @@
 </c:if>
 </nobr></td>
 </c:if>
-<td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}"/></nobr></td>
+<td><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td><td><nobr><openmrs:formatDate date="${test.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 

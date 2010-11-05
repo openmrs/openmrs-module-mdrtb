@@ -46,7 +46,7 @@
 							<span class="mdrListValue">
 								${patient.hivStatus}
 								<c:if test="${patient.hivStatusDate != null}">
-									(<openmrs:formatDate format="dd/MM/yyyy" date="${patient.hivStatusDate}"/>)
+									(<openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.hivStatusDate}"/>)
 								</c:if>
 							</span>
 						</td>
@@ -55,10 +55,10 @@
 							<span class="mdrListValue"><br/>${patient.currentRegimen}</span>
 							<br/>
 							<span class="mdrListLabel">Date Hebergement:</span>
-							<span class="mdrListValue"><openmrs:formatDate format="dd/MM/yyyy" date="${patient.hospitalizedDate}"/></span>
+							<span class="mdrListValue"><openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.hospitalizedDate}"/></span>
 							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 							<span class="mdrListLabel">Date Ambulatoires:</span>
-							<span class="mdrListValue"><openmrs:formatDate format="dd/MM/yyyy" date="${patient.ambulatoryDate}"/></span>
+							<span class="mdrListValue"><openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.ambulatoryDate}"/></span>
 						</td>
 					</tr>
 				</c:forEach>

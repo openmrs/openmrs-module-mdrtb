@@ -15,6 +15,7 @@ import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
@@ -128,7 +129,7 @@ public class PatientChartFactory {
 				record.setLabel(iteration.toString());
 			}
 			else {
-				DateFormat format = new SimpleDateFormat("MM/yyyy");
+				DateFormat format = MdrtbConstants.dateFormatDisplay;
 				record.setLabel(format.format(recordStartDate.getTime()));
 			}
 			

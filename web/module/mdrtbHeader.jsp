@@ -24,6 +24,9 @@
 <openmrs:htmlInclude file="/dwr/util.js" />
 <openmrs:htmlInclude file="/dwr/interface/DWRAlertService.js" />
 
+<!-- set the date format to use throughout the module -->
+<c:set var="_dateFormatDisplay" value="dd/MMM/yyyy" scope="request"/>
+
 <c:choose>
 	<c:when test="${!empty pageTitle}">
 		<title>${pageTitle}</title>

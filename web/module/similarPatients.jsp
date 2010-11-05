@@ -73,7 +73,7 @@
 <td>${patient.age}</td>
 <td>${patient.gender}</td>
 <td>${patient.birthdateEstimated ? '~' : ''}</td>
-<td><openmrs:formatDate date="${patient.birthdate}"/></td>
+<td><openmrs:formatDate date="${patient.birthdate}" format="${_dateFormatDisplay}"/></td>
 </tr>
 </c:forEach>
 </table>

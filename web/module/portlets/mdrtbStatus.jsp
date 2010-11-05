@@ -152,7 +152,7 @@
 													<td > <spring:message code="mdrtb.mdrtbprogramstartdatebroken" /><bR><Br></td>
 													<td><div >
 														
-														<input type='text' name='programstartdate' value="<openmrs:formatDate date="${obj.patientProgram.dateEnrolled}" format="${dateFormat}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/>
+														<input type='text' name='programstartdate' value="<openmrs:formatDate date="${obj.patientProgram.dateEnrolled}" format="${_dateFormatDisplay}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/>
 														<Br>
 													</div></td>
 												</tr>
@@ -160,7 +160,7 @@
 													<td ><spring:message code="mdrtb.treatmentstartdate" />:<bR><Br></td> 
 													<td><div >
 															
-															<span class="dstWarning" id="reqTreatmentStartDate" style="display:none;">*</span><input type='text' name='treatmentstartdate' id='treatmentstartdateinput' value="<openmrs:formatDate date="${obj.treatmentStartDate.valueDatetime}" format="${dateFormat}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/>
+															<span class="dstWarning" id="reqTreatmentStartDate" style="display:none;">*</span><input type='text' name='treatmentstartdate' id='treatmentstartdateinput' value="<openmrs:formatDate date="${obj.treatmentStartDate.valueDatetime}" format="${_dateFormatDisplay}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/>
 															<Br>
 													</div></td>
 												</tr>
@@ -230,7 +230,7 @@
 															<!-- adding detection date for 2008 forms -->
 															<span class="spanFontSize"><span class="dstWarning" id="reqDetectionDate" style="display:none;">* </span>
 															&nbsp;&nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.date" />:&nbsp;
-															<input type='text' id='detectionDate' name='detectionDate' value="<openmrs:formatDate date="${obj.tbCaseClassification.obsDatetime}" format="${dateFormat}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/><Br>
+															<input type='text' id='detectionDate' name='detectionDate' value="<openmrs:formatDate date="${obj.tbCaseClassification.obsDatetime}" format="${_dateFormatDisplay}" />" style="width:90px" onmousedown="javascript:$j(this).date_input()"/><Br>
 															
 															
 															<span class="spanFontSize"><span class="dstWarning" id="reqTypePull" style="display:none;">* </span><spring:message code="mdrtb.pulmonary" /></span><input type="radio" name="pulmonaryradio"  value="0"
@@ -325,7 +325,7 @@
 																</c:forEach>	
 															</select><Br>
 															<span class="spanFontSize"><spring:message code="mdrtb.date" />&nbsp;&nbsp;</span> <Br>
-															<input type='text' name='dateofhivtest' style="width:90px" value='<c:if test="${!empty obj.hivStatus}"><openmrs:formatDate date="${obj.hivStatus.obsDatetime}" format="${dateFormat}" /></c:if>' onmousedown="javascript:$j(this).date_input()"><br>
+															<input type='text' name='dateofhivtest' style="width:90px" value='<c:if test="${!empty obj.hivStatus}"><openmrs:formatDate date="${obj.hivStatus.obsDatetime}" format="${_dateFormatDisplay}" /></c:if>' onmousedown="javascript:$j(this).date_input()"><br>
 														
 														
 														<span class="spanFontSize"><spring:message code="mdrtb.latestcd4countpercent" />    &nbsp;&nbsp;</span><br>
@@ -378,7 +378,7 @@
 																</c:forEach>
 															</select><Br>
 															<span class="spanFontSize"><spring:message code="mdrtb.date" />   &nbsp;&nbsp;</span>
-															<input type='text' name='patientStatusDate' style="width:90px" value='<openmrs:formatDate date="${patientDate}" format="${dateFormat}" />' onmousedown="javascript:$j(this).date_input()">
+															<input type='text' name='patientStatusDate' style="width:90px" value='<openmrs:formatDate date="${patientDate}" format="${_dateFormatDisplay}" />' onmousedown="javascript:$j(this).date_input()">
 															<bR>
 													</td>
 												</tr>
@@ -399,7 +399,7 @@
 																</c:forEach>
 															</select><bR>
 															<span class="spanFontSize"><spring:message code="mdrtb.date" />   &nbsp;&nbsp;</span>
-															<input type='text' name='outcomeStatusDate'  style="width:90px" value='<openmrs:formatDate date="${outcomeDate}" format="${dateFormat}" />' onmousedown="javascript:$j(this).date_input()">
+															<input type='text' name='outcomeStatusDate'  style="width:90px" value='<openmrs:formatDate date="${outcomeDate}" format="${_dateFormatDisplay}" />' onmousedown="javascript:$j(this).date_input()">
 															<bR>
 													</td>
 												</tr>
@@ -445,7 +445,7 @@
 														<input type='text' disabled="true" class="disabled" name='treatmentsupporteraddress'  id='treatmentsupportervillage' value='<c:if test="${!empty obj.treatmentSupporter}"><c:if test="${!empty obj.treatmentSupporter.addresses}"><c:set var="stopad" scope="page" value="0" /><c:forEach items="${obj.treatmentSupporter.addresses}" var="address" varStatus="varStatus"><c:if test="${stopad==0}">${address.cityVillage}</c:if><c:set var="stopad" scope="page" value="1" /></c:forEach></c:if></c:if>' >
 														<br>
 														<span class="spanFontSize"><spring:message code="mdrtb.treatmentsupporterbirthdate" />:    &nbsp;&nbsp;</span> <Br>
-														<input type='text' disabled="true" class="disabled" id='treatmentsupporterdob' name='treatmentsupporterdob'  value='<c:if test="${!empty obj.treatmentSupporter}"><openmrs:formatDate date="${obj.treatmentSupporter.birthdate}" format="${dateFormat}" /></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()">
+														<input type='text' disabled="true" class="disabled" id='treatmentsupporterdob' name='treatmentsupporterdob'  value='<c:if test="${!empty obj.treatmentSupporter}"><openmrs:formatDate date="${obj.treatmentSupporter.birthdate}" format="${_dateFormatDisplay}" /></c:if>' style="width:90px" onmousedown="javascript:$j(this).date_input()">
 														<br><spring:message code="mdrtb.phone" />:<br><input type='text' disabled="true" class="disabled" id="treatmentsupporterphone" value="<c:if test="${!empty obj.treatmentSupporterPhone}">${obj.treatmentSupporterPhone.valueText}</c:if>"/>
 														<br>
 															<a href="#" class="simple_popup" onmousedown="javascript:showSubmit = false; toggleToDisabled(true);$j('#treatmentSupporterAction').val('1');"><spring:message code="mdrtb.searchforapersoninopenmrs" /></a>

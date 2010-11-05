@@ -62,7 +62,7 @@
  
 <tr>
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
-<td><openmrs:formatDate date="${followup.encounterDatetime}"/></td>
+<td><openmrs:formatDate date="${followup.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
  
 <tr>

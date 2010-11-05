@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.util.OpenmrsUtil;
@@ -87,7 +88,7 @@ public class DrugCellTag extends TagSupport {
 			return;
 		}
 		
-		SimpleDateFormat dateFormat = OpenmrsUtil.getDateFormat(Context.getLocale());
+		SimpleDateFormat df = MdrtbConstants.dateFormatDisplay;
 		
 		titleString.append("<nobr>");
 		titleString.append(component.getDrug().getName());
@@ -98,12 +99,12 @@ public class DrugCellTag extends TagSupport {
 		titleString.append("</nobr><br/><nobr>");
 		titleString.append(component.getDrugOrder().getFrequency());
 		titleString.append("</nobr><br/><nobr>");
-		titleString.append(dateFormat.format(component.getStartDate()));
+		titleString.append(df.format(component.getStartDate()));
 		titleString.append("</nobr>");
 		
 		if(component.getStopDate() != null) {
 			titleString.append("<br/><nobr>");
-			titleString.append(dateFormat.format(component.getStopDate()));
+			titleString.append(df.format(component.getStopDate()));
 			titleString.append("</nobr>");
 		}
 		

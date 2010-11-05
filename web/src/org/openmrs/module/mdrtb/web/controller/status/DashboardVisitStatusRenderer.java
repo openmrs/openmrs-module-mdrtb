@@ -8,6 +8,7 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.status.StatusItem;
 import org.openmrs.module.mdrtb.status.VisitStatus;
@@ -20,9 +21,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	
     	Encounter encounter = (Encounter) visit.getValue();
     	
-    	DateFormat df = DateFormat.getDateInstance();
-    	
-    	String[] params = { df.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
+    	String[] params = { MdrtbConstants.dateFormatDisplay.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
     	
     	visit.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.visitStatus.visit", params,
 		    "{0} at {1}", Context.getLocale()));

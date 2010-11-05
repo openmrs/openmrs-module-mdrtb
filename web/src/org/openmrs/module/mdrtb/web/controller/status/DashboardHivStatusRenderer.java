@@ -8,6 +8,7 @@ import java.util.List;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenComponent;
@@ -42,9 +43,8 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	    }
 	    else {
 	    	Obs result = (Obs) mostRecentTestResult.getValue();
-			DateFormat df = DateFormat.getDateInstance();
-			
-			String params [] = {result.getValueCoded().getDisplayString(), df.format(result.getObsDatetime())};
+
+			String params [] = {result.getValueCoded().getDisplayString(), MdrtbConstants.dateFormatDisplay.format(result.getObsDatetime())};
 	    	
 	    	mostRecentTestResult.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.testResultsStatus", params,
 			    "{0} on {1}", Context.getLocale()));
@@ -84,13 +84,11 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
     		artTreatment.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.notOnTreatment"));
     	}
     	else {
-    		DateFormat df = DateFormat.getDateInstance();
-    		
     		// remember, the regimen list is in reverse order
     		Date startDate = ((Regimen) regimens.get(regimens.size() - 1).getValue()).getStartDate();
     		Date endDate = ((Regimen) regimens.get(0).getValue()).getStartDate();
     		
-    		artTreatment.setDisplayString(df.format(startDate) + " - " + (endDate == null ? df.format(endDate) : 
+    		artTreatment.setDisplayString(MdrtbConstants.dateFormatDisplay.format(startDate) + " - " + (endDate == null ? MdrtbConstants.dateFormatDisplay.format(endDate) : 
     			Context.getMessageSourceService().getMessage("mdrtb.present")));
     	}
     }

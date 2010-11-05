@@ -177,7 +177,7 @@
 <div class="box" style="margin:0px;">
 
 <table cellpadding="0" cellspacing="0">
-<tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td width="75%"><openmrs:formatDate date="${program.dateEnrolled}"/></td></tr>
+<tr><td><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td width="75%"><openmrs:formatDate date="${program.dateEnrolled}" format="${_dateFormatDisplay}"/></td></tr>
 <tr><td><spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>:</td><td>${program.location.displayString}</td></tr>
 </table>
 
@@ -212,7 +212,7 @@
 
 <table cellpadding="0" cellspacing="0">
 <c:if test="${!program.active}">
-<tr><td><spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><openmrs:formatDate date="${program.dateCompleted}"/></td></tr>
+<tr><td><spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><openmrs:formatDate date="${program.dateCompleted}" format="${_dateFormatDisplay}"/></td></tr>
 <tr><td><spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>${program.outcome.concept.displayString}</td></tr>
 </c:if>
 </table>
@@ -448,11 +448,11 @@ ${regimen.displayString}
 
 <c:forEach var="hospitalization" items="${program.allHospitalizations}">
 <tr>
-<td><nobr><span class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}"/></span></nobr></td>
+<td><nobr><span class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}" format="${_dateFormatDisplay}"/></span></nobr></td>
 <td><nobr>
 <c:choose>
  	<c:when test="${!empty hospitalization.endDate}"> 
-		<span class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}"/></span>
+		<span class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}" format="${_dateFormatDisplay}"/></span>
     </c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
@@ -546,9 +546,9 @@ ${regimen.displayString}
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticSmear.value}">
 		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
 		<td><nobr>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.resultDate}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 	</c:when>
 	<c:otherwise>
 		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
@@ -561,9 +561,9 @@ ${regimen.displayString}
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticCulture.value}">
 		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.dateCollected}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
 		<td><nobr>${status.labResultsStatus.diagnosticCulture.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.resultDate}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 	</c:when>
 	<c:otherwise>
 		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
@@ -611,9 +611,9 @@ ${regimen.displayString}
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentSmear.value}">
 		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.dateCollected}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
 		<td><nobr>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.resultDate}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 	</c:when>
 	<c:otherwise>
 		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
@@ -626,9 +626,9 @@ ${regimen.displayString}
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentCulture.value}">
 		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.dateCollected}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
 		<td><nobr>${status.labResultsStatus.mostRecentCulture.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.resultDate}"/></nobr></td>
+		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 	</c:when>
 	<c:otherwise>
 		<td colspan="4" align="center"><spring:message code="mdrtb.none" text="None"/></td>

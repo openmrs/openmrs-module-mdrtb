@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -17,7 +18,7 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
 
     public String renderRegimen(Regimen regimen) {
     	  	
-    	DateFormat df = DateFormat.getDateInstance();
+    	DateFormat df = MdrtbConstants.dateFormatDisplay;
     	
     	// first we need to pull out all the drugs in this regimen
     	List<Concept> generics = new LinkedList<Concept>();

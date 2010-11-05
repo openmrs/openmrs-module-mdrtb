@@ -8,7 +8,7 @@
 							${obj.familyNameTwo}
 				</b></td>
 				<td><spring:message code="mdrtb.birthday" />
-				<b><openmrs:formatDate date="${obj.patient.birthdate}" format="${dateFormat}" /></b>
+				<b><openmrs:formatDate date="${obj.patient.birthdate}" format="${_dateFormatDisplay}" /></b>
 				&nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.gender" /> <b>${obj.patient.gender}</b>&nbsp;&nbsp;&nbsp;
 				
 				</td>			
@@ -22,7 +22,7 @@
 			<tr>
 				<td class="smaller"><spring:message code="mdrtb.treatmentstartdate" />
 				</td>
-				<td colspan="3"><openmrs:formatDate date="${obj.treatmentStartDate.valueDatetime}" format="${dateFormat}" />
+				<td colspan="3"><openmrs:formatDate date="${obj.treatmentStartDate.valueDatetime}" format="${_dateFormatDisplay}" />
 				</td>
 			</tr>
 			<c:if test="${!empty obj.patientProgram}">
@@ -74,7 +74,7 @@
 			<tr>
 				<td class="smaller"><spring:message code="mdrtb.cultureconversiondate" />
 				</td>
-				<td colspan="3"><openmrs:formatDate date="${obj.cultureConversion.valueDatetime}" format="${dateFormat}" />
+				<td colspan="3"><openmrs:formatDate date="${obj.cultureConversion.valueDatetime}" format="${_dateFormatDisplay}" />
 				</td>
 			</tr>
 			</c:if>
@@ -82,21 +82,21 @@
 			<tr>
 				<td class="smaller"><spring:message code="mdrtb.culturereconversiondate" />
 				</td>
-				<td colspan="3"><openmrs:formatDate date="${obj.cultureReconversion.valueDatetime}" format="${dateFormat}" />
+				<td colspan="3"><openmrs:formatDate date="${obj.cultureReconversion.valueDatetime}" format="${_dateFormatDisplay}" />
 				</td>
 			</tr>
 			</c:if>
 			<tr>
 				<td class="smaller"><spring:message code="mdrtb.mdrtbprogramstartdate" />
 				</td>
-				<td><openmrs:formatDate date="${obj.patientProgram.dateEnrolled}" format="${dateFormat}"/>
+				<td><openmrs:formatDate date="${obj.patientProgram.dateEnrolled}" format="${_dateFormatDisplay}"/>
 				</td>
 			</tr>	
 			<c:if test="${!empty obj.patientProgram.dateCompleted}">
 			<tr>	
 				<td class="smaller"><spring:message code="mdrtb.mdrtbprogramstopdate" />
 				</td>
-				<td><openmrs:formatDate date="${obj.patientProgram.dateCompleted}" format="${dateFormat}"/>
+				<td><openmrs:formatDate date="${obj.patientProgram.dateCompleted}" format="${_dateFormatDisplay}"/>
 				</td>
 			</tr>
 			</c:if>
