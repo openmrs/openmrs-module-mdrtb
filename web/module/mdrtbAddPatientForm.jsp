@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <style><%@ include file="resources/date_input.css"%></style>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>

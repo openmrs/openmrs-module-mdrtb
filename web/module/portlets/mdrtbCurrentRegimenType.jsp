@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp" %>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbCurrentRegimenTypeService.js'></script>
 <script type="text/javascript">
 

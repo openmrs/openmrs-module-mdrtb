@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp" %>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <style><%@ include file="resources/date_input.css"%></style>

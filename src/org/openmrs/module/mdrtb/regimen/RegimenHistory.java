@@ -155,11 +155,28 @@ public class RegimenHistory {
      */
     public List<Regimen> getRegimensBetweenDates(Date fromDate, Date toDate, boolean inclusive) {
     	List<Regimen> regimens = new ArrayList<Regimen>();
-    	for (Date d : getRegimenChangeDates()) {
+    	
+    	// strip the time elements out of the dates
+    	RegimenUtils.stripTimeComponent(fromDate);
+    	RegimenUtils.stripTimeComponent(toDate);
+    	
+    	// if the from date is not null, get the current regimen on that date
+    	if (fromDate != null) {
+    		Regimen regimen = getRegimenOnDate(fromDate);
+    		// ignore this regimen if it has no start date and no orders (i.e., the if this date is before any regimen events have occured)
+    		if (regimen.getStartDate() == null && regimen.getDrugOrders().size() > 0) {
+    			regimens.add(regimen);
+    		}			
+     	}
+    	
+    	for (Date d : getRegimenChangeDates()) {	
     		boolean beforeOk = (fromDate == null || (inclusive ? fromDate.compareTo(d) <= 0 : fromDate.compareTo(d) < 0));
     		boolean afterOk = (toDate == null || (inclusive ? toDate.compareTo(d) >= 0 : toDate.compareTo(d) > 0));
     		if (beforeOk && afterOk) {
-    			regimens.add(getRegimenOnDate(d));
+    			Regimen regimen = getRegimenOnDate(d);
+    			if (!regimens.contains(regimen)) {
+    				regimens.add(getRegimenOnDate(d));
+    			}
     		}
     	}
     	return regimens;

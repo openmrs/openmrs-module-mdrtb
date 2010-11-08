@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="../mdrtbHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />

@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp" %>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 <c:set var="mdrtbId" scope="page" value="" />
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/index.htm" />
 

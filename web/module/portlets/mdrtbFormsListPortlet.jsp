@@ -1,4 +1,4 @@
-			<%@ include file="/WEB-INF/template/include.jsp" %>
+			<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 		
 		
 <table class="portletTable" style="border-spacing:20px;border-collapse:separate;border-style:none;">

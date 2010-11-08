@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%> 
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 
 <style type="text/css">
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
@@ -52,7 +52,7 @@
 		<c:if test="${component.type eq 'specimenRecordComponent'}">
 			<td class="chartCell">
 				<c:if test="${!empty component.specimen}">
-					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}"><openmrs:formatDate date="${component.specimen.dateCollected}" format="${_dateFormatDisplay}"/></a>
+					<a href="<%= request.getContextPath() %>/module/mdrtb/specimen/specimen.form?specimenId=${component.specimen.id}&patientProgramId=${patientProgramId}"><openmrs:formatDate date="${component.specimen.dateCollected}" format="${_dateFormatDisplay}"/></a>
 				</c:if>
 			</td>
 			

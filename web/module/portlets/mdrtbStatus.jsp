@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <div class="statusContainerDiv">
 <script type="text/javascript">
 	function removeSupporter(patientId, treatmentSupporterId){

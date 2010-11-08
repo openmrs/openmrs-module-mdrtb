@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <div id="box" style="position:relative;left:3%;top:8px">
 		<table class="patientTable">
 			<tr class="patientOverviewHeaderEven">

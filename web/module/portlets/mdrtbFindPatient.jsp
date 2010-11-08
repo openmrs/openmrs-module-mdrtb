@@ -1,6 +1,6 @@
 <%@ page errorPage="/errorhandler.jsp" %>
 <%@ page import="org.openmrs.web.WebConstants" %>
-<%@ include file="/WEB-INF/template/include.jsp" %>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbFindPatient.js'></script>
 <openmrs:globalProperty key="use_patient_attribute.healthCenter" var="useHealthCenter"/>
 <openmrs:globalProperty key="use_patient_attribute.mothersName" var="useMothersName"/>

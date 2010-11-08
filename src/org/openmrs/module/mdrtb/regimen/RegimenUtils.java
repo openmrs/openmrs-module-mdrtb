@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.regimen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -495,10 +496,37 @@ public class RegimenUtils {
     }
     
     
+    /** 
+     * Strips the time component from a Calendar object, leaving only the date component
+     */
+    public static void stripTimeComponent(Calendar cal) {
+    	cal.set(Calendar.HOUR_OF_DAY, 0);
+    	cal.set(Calendar.MINUTE, 0);
+    	cal.set(Calendar.SECOND, 0);
+    	cal.set(Calendar.MILLISECOND, 0);
+    }
+    
+    /**
+     * Strips the time component of a Date object, leaving only the date component
+     */
+    public static void stripTimeComponent(Date date) {
+    	if (date == null) {
+    		return;
+    	}
+    	else {
+    		Calendar cal = Calendar.getInstance();
+    		cal.setTime(date);
+    		stripTimeComponent(cal);
+    		date = cal.getTime();
+    	}
+    }
+    
     private static boolean setSaveOrder(boolean merged){
         if (!merged)
             return true;
         else 
             return false;
     }
+    
+    
 }

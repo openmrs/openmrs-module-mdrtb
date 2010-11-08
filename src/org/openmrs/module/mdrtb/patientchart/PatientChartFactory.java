@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb.patientchart;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -76,7 +75,7 @@ public class PatientChartFactory {
 			return null;
 		}
 		
-		// if the patient has been on treatment, but there is no treatment end date, (i.e, treatment is active) set the treatment end date to today
+		// if the patient has been on treatment, but there is no treatment end date, (i.e, treatment is active), set the treatment end date to today
 		if(hasBeenOnTreatment && treatmentEndDate == null) {
 			treatmentEndDate = new Date();
 		}
@@ -119,9 +118,10 @@ public class PatientChartFactory {
 		
 		// now go through the add all the other specimens
 		Integer iteration = 0;
-		
+	
 		// loop until we are out of specimens, or until we've passed the treatment end date, whatever is later
-		while(specimens.size() > 0 || (treatmentEndDate != null && (recordEndDate.getTime()).before(treatmentEndDate))) {
+		while(specimens.size() > 0 || (treatmentEndDate != null && (!recordStartDate.getTime().after(treatmentEndDate))
+										&& (!recordEndDate.getTime().after(new Date())) ) ) {
 			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
 			
 			// label rows by treatment month if has been on treatment, otherwise label by actual month

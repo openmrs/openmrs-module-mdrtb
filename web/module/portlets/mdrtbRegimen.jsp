@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/template/include.jsp" %>
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 <%@ taglib prefix="mdrtbPortlets" uri="taglibs/mdrtbPortlets.tld" %>
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbOrder.js'></script>
 
