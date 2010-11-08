@@ -555,7 +555,6 @@ public class MdrtbUtil {
                    }
                }
            }    
-         mu.syncCultureStatus(p, os);
              //call smear cleaning here:
          mu.fixSmearConversions(p);
    }
@@ -963,7 +962,7 @@ public class MdrtbUtil {
     		return null;
     	}
     	
-    	return RegimenUtils.getAntiretroviralRegimenHistory(patient).getRegimenList();
+    	return RegimenUtils.getHivRegimenHistory(patient).getAllRegimens();
     }
 
 	

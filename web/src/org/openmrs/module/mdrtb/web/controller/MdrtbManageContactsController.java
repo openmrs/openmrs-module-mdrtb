@@ -535,17 +535,6 @@ public class MdrtbManageContactsController extends SimpleFormController {
                 }    
             }
             
-            if (mp.getPatientProgram() != null){
-                Set<ProgramWorkflowState> pwsSet = mu.getStatesCultureStatus();
-                Set<PatientState> psSet = mp.getPatientProgram().getStates();
-                Date dateTmp = new Date(0);
-                for (PatientState patientState : psSet){
-                    if (pwsSet.contains(patientState.getState()) && patientState.getEndDate() == null && !patientState.getVoided()){
-                        mp.setCultureStatus(patientState);
-                    }         
-                }
-            }
-            
             //TODO: programatically figure out treatment start date?
             Concept c = mu.getConceptTreatmentStartDate();
             List<Obs> obsTmp = os.getObservationsByPersonAndConcept(mp.getPatient(), c);

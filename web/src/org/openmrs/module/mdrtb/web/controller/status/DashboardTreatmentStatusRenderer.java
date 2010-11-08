@@ -1,7 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openmrs.Concept;
@@ -10,7 +10,6 @@ import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.status.TreatmentStatusRenderer;
 
 
@@ -21,20 +20,16 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     	DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
     	
     	// first we need to pull out all the drugs in this regimen
-    	List<Concept> generics = new LinkedList<Concept>();
-    	for (RegimenComponent component : regimen.getComponents()) {
-    		// TODO: note that we are operating on generics, not the drug itself
-    		generics.add(component.getGeneric());
-    	}
+    	List<Concept> generics = new ArrayList<Concept>(regimen.getUniqueGenerics());
     	
     	// sort the drug list
     	generics = MdrtbUtil.sortMdrtbDrugs(generics);
     	
     	// get end reason, if there is one
     	String endReason = "";
-    	if (regimen.getEndReason() != null) {
-    		endReason = regimen.getEndReason().getDisplayString();
-    	}
+		for (Concept c : regimen.getEndReasons()) {
+			endReason += ("".equals(endReason) ? "" : ", ") + c.getDisplayString();
+		}
     	
 	    String displayString = "<tr><td><nobr>" + DashboardStatusRendererUtil.renderDrugList(generics) + "</nobr></td><td><nobr>" 
 	    	+ df.format(regimen.getStartDate()) + "</nobr></td><td>" 

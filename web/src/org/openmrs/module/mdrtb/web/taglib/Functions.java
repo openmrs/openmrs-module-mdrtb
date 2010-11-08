@@ -13,27 +13,29 @@
  */
 package org.openmrs.module.mdrtb.web.taglib;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenChange;
+import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 
 public class Functions {
 	
 	/**
-	 * Returns true if the passed collection contains the passed object
-	 * @param c
-	 * @param o
-	 * @return
+	 * @return true if the passed collection contains the passed object
 	 */
 	public static boolean collectionContains(Collection<Object> c, Object o) {
 		return c != null && c.contains(o);
 	}
 	
 	/**
-	 * Returns true if the passed array contains the passed object
-	 * @param c
-	 * @param o
-	 * @return
+	 * @return true if the passed array contains the passed object
 	 */
 	public static boolean arrayContains(Object[] c, Object o) {
 		if (c != null) {
@@ -47,10 +49,7 @@ public class Functions {
 	}
 	
 	/**
-	 * Returns true if the passed collection contains the passed object
-	 * @param c
-	 * @param o
-	 * @return
+	 * @return true if the passed collection contains the passed object
 	 */
 	public static boolean instanceOf(Object o, String className) {
 		try {
@@ -59,6 +58,89 @@ public class Functions {
 		}
 		catch (ClassNotFoundException e) {
 			throw new RuntimeException("Unable to load class " + className);
+		}
+	}
+	
+	/**
+	 * @return a List of Objects, ordered in the reverse of their original order
+	 */
+	public static <T> List<T> reverse(Collection<T> collection) {
+		List<T> l = new ArrayList<T>(collection);
+		Collections.reverse(l);
+		return l;
+	}
+	
+	/**
+	 * @return a List of Objects, ordered in their natural order
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Comparable> List<T> sort(Collection<T> collection) {
+		List<T> l = new ArrayList<T>(collection);
+		Collections.sort(l);
+		return l;
+	}
+	
+	/**
+	 * @returns the Regimen on the passed Date
+	 */
+	public static RegimenChange changeOnDate(RegimenHistory rh, Date d) {
+		return rh.getRegimenChanges().get(d);
+	}
+	
+	/**
+	 * @returns the Regimen on the passed Date
+	 */
+	public static Regimen regimenOnDate(RegimenHistory rh, Date d, Boolean includeChangesOnDate) {
+		return rh.getRegimenOnDate(d, includeChangesOnDate);
+	}
+	
+	/**
+	 * @return the comparison result between the two passed objects
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Comparable>int compare(T c1, T c2) {
+		return c1.compareTo(c2);
+	}
+	
+	/**
+	 * @return true if the passed date is in the future
+	 */
+	public static boolean isFutureDate(Date d) {
+		return d != null && d.compareTo(new Date()) > 0;
+	}
+	
+	/**
+	 * @return a String representation of a Date
+	 */
+	public static String formatDate(Date d, String format) {
+		if (d == null) {
+			return "";
+		}
+		return new SimpleDateFormat(format).format(d);
+	}
+	
+	/**
+	 * @return a String representation of a Date
+	 */
+	public static String formatDateDefault(Date d) {
+		if (d == null) {
+			return "";
+		}
+		return Context.getDateFormat().format(d);
+	}
+	
+	/**
+	 * @return a Date from a String
+	 */
+	public static Date parseDate(String s, String format) {
+		if (s == null) {
+			return null;
+		}
+		try {
+			return new SimpleDateFormat(format).parse(s.toString());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

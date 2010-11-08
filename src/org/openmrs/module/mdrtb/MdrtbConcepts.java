@@ -111,10 +111,11 @@ public class MdrtbConcepts {
     public final static String [] CONTAMINATED = {"CONTAMINATED"};
     
     // MDR-TB Treatment Type
-    public final static String [] CURRENT_TREATMENT_TYPE = {"CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE"};
+    public final static String [] CURRENT_MDRTB_TREATMENT_TYPE = {"CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE"};
     public final static String [] EMPIRIC = {"EMPIRIC"};
     public final static String [] INDIVIDUALIZED = {"INDIVIDUALIZED"};
     public final static String [] STANDARDIZED = {"STANDARDIZED"};
+    public final static String [] REASON_TB_TX_STOPPED = {"REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED"};
     
     // MDR-TB Classification
     public final static String [] CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE = {"CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE"};
@@ -189,6 +190,7 @@ public class MdrtbConcepts {
     
     // Antiretrovirals (for HIV status section)
     public final static String [] ANTIRETROVIRALS = {"ANTIRETROVIRAL DRUGS"};
+    public final static String [] REASON_HIV_TX_STOPPED = {"REASON ANTIRETROVIRALS CHANGED OR STOPPED"};
     
     // Hospitalization states
     public final static String [] HOSPITALIZATION_WORKFLOW = {"HOSPITALIZATION WORKFLOW"};

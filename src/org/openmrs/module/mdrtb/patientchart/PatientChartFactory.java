@@ -57,7 +57,7 @@ public class PatientChartFactory {
 		SpecimenUtil.groupSpecimensByDay(specimens);
 		
 		// also get the regimen history for the patient
-		RegimenHistory regimenHistory = RegimenUtils.getRegimenHistory(patient);
+		RegimenHistory regimenHistory = RegimenUtils.getTbRegimenHistory(patient);
 		
 		// calculate all the state change components we need to display on the chart
 		List<RecordComponent> stateChangeRecordComponents = createAllStateChangeRecordComponents(program);
@@ -164,7 +164,7 @@ public class PatientChartFactory {
 		// if there are no specimen components, simply gather all the regimens the patient was on during this time period
 		// and put it on a specimen component
 		if(components.size() == 0) {
-			List<Regimen> regimens = regimenHistory.getRegimensBetweenDates((recordStartDate != null ? recordStartDate.getTime() : null), recordEndDate.getTime());
+			List<Regimen> regimens = regimenHistory.getRegimensDuring((recordStartDate != null ? recordStartDate.getTime() : null), recordEndDate.getTime());
 			// note that we set the date for this component to be one millisecond after the start date for the record; this way regimen-only components
 			// sort after any other components with a date equal to the record start date (i.e., so that a treatment start date event sorts before any
 			// regimen information)
@@ -217,10 +217,10 @@ public class PatientChartFactory {
 			
 				// fetch the regimens that we want to display in this component
 				if(!i.hasNext()) {
-					regimens = regimenHistory.getRegimensBetweenDates(dateCounter,endDate.getTime()); 
+					regimens = regimenHistory.getRegimensDuring(dateCounter,endDate.getTime()); 
 				}
 				else{
-					regimens = regimenHistory.getRegimensBetweenDates(dateCounter,specimenToAdd.getDateCollected());
+					regimens = regimenHistory.getRegimensDuring(dateCounter,specimenToAdd.getDateCollected());
 					dateCounter = specimenToAdd.getDateCollected();
 				}
 						

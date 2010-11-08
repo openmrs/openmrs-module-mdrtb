@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
-<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/date_input.css""/>

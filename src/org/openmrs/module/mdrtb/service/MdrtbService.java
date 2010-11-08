@@ -58,7 +58,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Fetches a concept specified by a MdrtbConcepts mapping
      */
-    public Concept getConcept(String [] conceptMapping);
+    public Concept getConcept(String... conceptMapping);
    
     /**
      * Resets the concept map cache
@@ -302,6 +302,16 @@ public interface MdrtbService extends OpenmrsService {
      */
     @Transactional(readOnly=true)
     public Collection<ConceptAnswer> getPossibleAnatomicalSites();
+    
+    /**
+     * @return all of the Drugs within the ConceptSets which match the conceptMapKeys
+     */
+    public List<Concept> getDrugsInSet(String... conceptMapKey);
+    
+    /**
+     * @return all of the Drugs within the ConceptSet which match the conceptMapKeys
+     */
+    public List<Concept> getDrugsInSet(Concept concept);
   
     /**
      * Returns all the possible drugs to display in a DST result, in the order we want to display them

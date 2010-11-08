@@ -1,55 +1,248 @@
 package org.openmrs.module.mdrtb.regimen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
-import org.openmrs.Encounter;
+import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
-import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.common.MessageUtil;
+import org.openmrs.module.reporting.common.ObjectUtil;
+import org.openmrs.order.RegimenSuggestion;
 import org.openmrs.util.OpenmrsUtil;
 
+/**
+ * Utility method for use with Regimens
+ */
 public class RegimenUtils {
 
-    protected final Log log = LogFactory.getLog(getClass());
-    
-    public static RegimenHistory getRegimenHistory(Patient patient) {
-        return new RegimenHistory(Context.getOrderService().getDrugOrdersByPatient(patient));
-    }
-    
-    public static RegimenHistory getMdrtbRegimenHistory(Patient patient) {   	
-    	return getRegimenHistoryForDrugList(patient, Context.getService(MdrtbService.class).getMdrtbDrugs());
-    }
-    
-    public static RegimenHistory getAntiretroviralRegimenHistory(Patient patient) {
-    	return getRegimenHistoryForDrugList(patient, Context.getService(MdrtbService.class).getAntiretrovirals()); 	
+    protected static final Log log = LogFactory.getLog(RegimenUtils.class);
+
+    /**
+     * @return a Map from the Can Replace Concept Set to a List of supported RegimenSuggestions for that Set
+     */
+    public static Map<String, List<RegimenSuggestion>> getRegimenSuggestions() {
+    	Map<String, List<RegimenSuggestion>> suggestions = new HashMap<String, List<RegimenSuggestion>>();
+    	for (RegimenSuggestion rs : Context.getOrderService().getStandardRegimens()) {
+    		String canReplace = ObjectUtil.nvlStr(rs.getCanReplace(), "");
+    		List<RegimenSuggestion> l = suggestions.get(canReplace);
+    		if (l == null) {
+    			l = new ArrayList<RegimenSuggestion>();
+    			suggestions.put(canReplace, l);
+    		}
+    		l.add(rs);
+    	}
+    	return suggestions;
     }
     
     /**
-	 * Creates a regimen history for a specific patient, but including only the
-	 * drugs in the specified list
+     * @return a List of Drugs whose Concept matches a Concept in the passed set
      */
-    public static RegimenHistory getRegimenHistoryForDrugList(Patient patient, List<Concept> drugs) {
-    	List<DrugOrder> drugOrders = new LinkedList<DrugOrder>();
-
-    	// loop through all the drug orders for this patient, but only keep orders for MDR-TB drugs
-    	for (DrugOrder drugOrder: Context.getOrderService().getDrugOrdersByPatient(patient)) {
-    		if (drugs.contains(drugOrder.getConcept())) {
-    			drugOrders.add(drugOrder);
+    public static List<Drug> getDrugsWithGenericInSet(Concept drugSet) {
+    	List<Drug> ret = new ArrayList<Drug>();
+    	List<Drug> allDrugs = Context.getConceptService().getAllDrugs();
+    	if (drugSet == null) {
+    		return allDrugs;
+    	}
+    	List<Concept> generics = Context.getConceptService().getConceptsByConceptSet(drugSet);
+    	for (Drug drug : allDrugs) {
+    		if (generics.contains(drug.getConcept())) {
+    			ret.add(drug);
     		}
     	}
-    	
-    	return new RegimenHistory(drugOrders);
+    	return ret;
     }
+    
+    /**
+     * TODO: Consider making this user-configurable
+     * @return the List of all possible regimen types
+     */
+    public static List<RegimenType> getRegimenTypes() {
+    	List<RegimenType> ret = new ArrayList<RegimenType>();
+    	Map<String, List<RegimenSuggestion>> suggests = getRegimenSuggestions();
+    	Set<Drug> addedDrugs = new HashSet<Drug>();
+    	{
+    		RegimenType type = new RegimenType("tb");
+    		type.setDrugSet(getMdrtbService().getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS));
+    		type.setDrugs(getDrugsWithGenericInSet(type.getDrugSet()));
+    		addedDrugs.addAll(type.getDrugs());
+    		type.setTypeQuestion(getMdrtbService().getConcept(MdrtbConcepts.CURRENT_MDRTB_TREATMENT_TYPE));
+    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_TB_TX_STOPPED));
+    		type.setSuggestions(suggests.get(MdrtbConcepts.TUBERCULOSIS_DRUGS[0]));
+    		ret.add(type);
+    	}
+    	{
+    		RegimenType type = new RegimenType("hiv");
+    		type.setDrugSet(getMdrtbService().getConcept(MdrtbConcepts.ANTIRETROVIRALS));
+    		type.setDrugs(getDrugsWithGenericInSet(type.getDrugSet()));
+    		addedDrugs.addAll(type.getDrugs());
+    		type.setSuggestions(suggests.get(MdrtbConcepts.ANTIRETROVIRALS[0]));
+    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_HIV_TX_STOPPED));
+    		ret.add(type);
+    	}
+    	{
+    		RegimenType type = new RegimenType("other");
+    		List<Drug> otherDrugs = getDrugsWithGenericInSet(null);
+    		otherDrugs.removeAll(addedDrugs);
+    		type.setDrugs(otherDrugs);
+    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_TB_TX_STOPPED));
+    		ret.add(type);
+    	}
+    	return ret;
+    }
+    
+    /**
+     * @return the full regimen history for the patient, categorized by type
+     */
+    public static Map<String, RegimenHistory> getRegimenHistory(Patient patient) {
+    	Map<String, RegimenHistory> m = new LinkedHashMap<String, RegimenHistory>();
+
+    	List<DrugOrder> orders = Context.getOrderService().getDrugOrdersByPatient(patient);
+    	
+    	// Add a RegimenHistory to the returned Map for each defined Regimen Type
+    	for (RegimenType type : RegimenUtils.getRegimenTypes()) {
+    		List<Concept> concepts = null;
+    		if (type.getDrugSet() != null) {
+    			concepts = getMdrtbService().getDrugsInSet(type.getDrugSet());
+    		}
+    		RegimenHistory history = new RegimenHistory(patient, type);
+    		
+    		// Add each DrugOrder that is appropriate for the Regimen Type, and remove it so that it is only found within one type
+    		for (Iterator<DrugOrder> i = orders.iterator(); i.hasNext();) {
+    			DrugOrder o = i.next();
+    			if (concepts == null || concepts.contains(o.getConcept())) {
+    				history.addDrugOrder(o);
+    				i.remove();
+    			}
+    		}
+    		
+    		// Add each Observation that is appropriate for the Regimen Type
+    		for (Obs o : Context.getObsService().getObservationsByPersonAndConcept(patient, type.getTypeQuestion())) {
+    			history.addReasonForStarting(o);
+    		}
+    		
+    		m.put(type.getName(), history);
+    	}
+    	return m;
+    }
+    
+    /**
+     * @param patient
+     * @return the Tuberculosis Regimens for a Patient
+     */
+    public static RegimenHistory getTbRegimenHistory(Patient patient) {   	
+    	return getRegimenHistory(patient).get("tb");
+    }
+    
+    /**
+     * @param patient
+     * @return the HIV Regimens for a Patient
+     */
+    public static RegimenHistory getHivRegimenHistory(Patient patient) {
+    	return getRegimenHistory(patient).get("hiv");	
+    }
+	
+    /**
+     * @return a String representation of the Generic drugs within this Regimen, separated by the passed String
+     */
+    public static String formatRegimenGenerics(Object regimen, String separator, String emptyCode) {
+    	return formatConcepts(((Regimen)regimen).getUniqueGenerics(), separator, emptyCode);
+    }
+    
+    /**
+     * @return a String representation of the Generic drugs within the passed orders, separated by the passed String
+     */
+    public static String formatDrugOrders(Collection<DrugOrder> orders, String separator, String emptyCode) {
+    	Set<Concept> s = new HashSet<Concept>();
+    	for (DrugOrder d : orders) {
+    		s.add(d.getConcept());
+    	}
+    	return formatConcepts(s, separator, emptyCode);
+    }
+    
+    /**
+     * @return a String representation of the Obs within the passed orders, separated by the passed String
+     */
+    public static String formatCodedObs(Collection<Obs> obs, String separator, String emptyCode) {
+    	Set<Concept> s = new HashSet<Concept>();
+    	for (Obs o : obs) {
+    		if (o.getValueCoded() != null) {
+    			s.add(o.getValueCoded());
+    		}
+    	}
+    	return formatConcepts(s, separator, emptyCode);
+    }
+    
+    /**
+     * @return the formatted obs valueCoded
+     */
+    public static String formatCodedObs(Obs obs, String emptyCode) {
+    	if (obs == null || obs.getValueCoded() == null) {
+    		return emptyCode;
+    	}
+    	return formatCodedObs(Arrays.asList(obs), "", emptyCode);
+    }
+    
+    /**
+     * @return a String representation of the passed Concepts, using best short name, separated by the passed String
+     */
+    public static String formatConcepts(Collection<Concept> concepts, String separator, String emptyCode) {
+    	if (concepts == null || concepts.isEmpty()) {
+    		if (ObjectUtil.notNull(emptyCode)) {
+    			return MessageUtil.translate(emptyCode);
+    		}
+    		return "";
+    	}
+    	List<String> shortNames = new ArrayList<String>();
+    	for (Concept c : concepts) {
+    		shortNames.add(c.getBestShortName(Context.getLocale()).getName());
+    	}
+    	Collections.sort(shortNames);
+    	return OpenmrsUtil.join(shortNames, separator);
+    }
+    
+    /**
+     * @return the MdrtbService
+     */
+    private static MdrtbService getMdrtbService() {
+    	return Context.getService(MdrtbService.class);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+
     
     /* here's the logic for what happens if there is a future regimen:
      * 
@@ -78,10 +271,10 @@ public class RegimenUtils {
                         //if orders are the same update the old order with the new, taking the new end date value (Do not create new order) (OUTCOME10)
                         //if orders are different adjust the old to end on new start date (create the new order) (OUTCOME11)
                     
-     * */
+     * 
     public static void setRegimen(Patient patient, Date effectiveDate, Collection<DrugOrder> drugOrders, Concept reasonForChange, Encounter encounterForChange) {
         RegimenHistory history = getRegimenHistory(patient);
-        Regimen regOnDate = history.getRegimen(effectiveDate);
+        Regimen regOnDate = history.getRegimenOnDate(effectiveDate);
         List<Regimen> regAfterDate = history.getRegimensAfter(effectiveDate);
         OrderService os = Context.getOrderService();
         if (encounterForChange != null){
@@ -92,7 +285,7 @@ public class RegimenUtils {
         }    
          
         if (!anyRegimens(regAfterDate)) {
-            if (regOnDate == null || regOnDate.getComponents().isEmpty()) {
+            if (regOnDate == null || regOnDate.getDrugOrders().isEmpty()) {
                 //case:  there is no existing regimen on the regimen start date, and there are no new regimens after this date
                 // go ahead and create the regimen:
                 for (DrugOrder drugOrder : drugOrders) {
@@ -102,11 +295,11 @@ public class RegimenUtils {
 
                 //case: there are still open orders and there are no new regimens after this date
                 // first see what existing things we need to stop
-                for (RegimenComponent before : regOnDate.getComponents()) {
+                for (DrugOrder before : regOnDate.getDrugOrders()) {
                     //stop the old order only if it isn't exactly identical to a new order (excluding discontinued_date)
                     for (DrugOrder newOrder:drugOrders){
-                        if (!before.getDrugOrder().getDiscontinued() && drugOrderMatchesDrugConcept(before.getDrugOrder(), newOrder) && !regimenComponentIsTheSameAsDrugOrderExcludingDates(before.getDrugOrder(), newOrder)){
-                            discontinueOrder( before.getDrugOrder(), effectiveDate, reasonForChange);
+                        if (!before.getDiscontinued() && drugOrderMatchesDrugConcept(before, newOrder) && !regimenComponentIsTheSameAsDrugOrderExcludingDates(before, newOrder)){
+                            discontinueOrder( before, effectiveDate, reasonForChange);
                         }    
                     }
                 }
@@ -118,16 +311,16 @@ public class RegimenUtils {
                     
                
                         boolean alreadyExists = false;
-                        for (RegimenComponent before : regOnDate.getComponents()){
+                        for (DrugOrder before : regOnDate.getDrugOrders()){
                             
-                            if (!before.getDrugOrder().getDiscontinued() && regimenComponentIsTheSameAsDrugOrderExcludingDates(before.getDrugOrder(), newOrder)){
+                            if (!before.getDiscontinued() && regimenComponentIsTheSameAsDrugOrderExcludingDates(before, newOrder)){
                                 alreadyExists = true;
-                                before.getDrugOrder().setDiscontinuedDate(newOrder.getDiscontinuedDate());
-                                before.getDrugOrder().setAutoExpireDate(newOrder.getAutoExpireDate());
-                                before.getDrugOrder().setPrn(newOrder.getPrn());
-                                before.getDrugOrder().setInstructions(newOrder.getInstructions());
-                                os.saveOrder(before.getDrugOrder());
-                                newOrder.setOrderId(before.getDrugOrder().getOrderId());
+                                before.setDiscontinuedDate(newOrder.getDiscontinuedDate());
+                                before.setAutoExpireDate(newOrder.getAutoExpireDate());
+                                before.setPrn(newOrder.getPrn());
+                                before.setInstructions(newOrder.getInstructions());
+                                os.saveOrder(before);
+                                newOrder.setOrderId(before.getOrderId());
                                 break;
                             }
                         }
@@ -213,7 +406,7 @@ public class RegimenUtils {
             }      
         }
     }
-
+*/
     /**
      * Discontinues an order given a date and a reason, and saves it to the database if anything has changed.
      *  
@@ -246,7 +439,7 @@ public class RegimenUtils {
      */
     private static boolean anyRegimens(List<Regimen> regimenList) {
         for (Regimen reg : regimenList)
-            if (!reg.getComponents().isEmpty())
+            if (!reg.getDrugOrders().isEmpty())
                 return true;
         return false;
     }
@@ -289,12 +482,12 @@ public class RegimenUtils {
     /*newDrugOrder argument used to pass in the drug or the drug concept*/
     public static List<DrugOrder> getDrugOrdersInOrderByDrugOrConcept(RegimenHistory history, DrugOrder newDrugOrder){
             List<DrugOrder> ret = new ArrayList<DrugOrder>();
-            List<Regimen> regList = history.getRegimenList();
+            List<Regimen> regList = history.getAllRegimens();
             
             for (Regimen regimen : regList){
-                for (RegimenComponent rc : regimen.getComponents()){
-                    if (drugOrderMatchesDrugConcept(rc.getDrugOrder(), newDrugOrder)){
-                        ret.add(rc.getDrugOrder());   
+                for (DrugOrder rc : regimen.getDrugOrders()){
+                    if (drugOrderMatchesDrugConcept(rc, newDrugOrder)){
+                        ret.add(rc);   
                     }
                 }
             }
@@ -308,55 +501,4 @@ public class RegimenUtils {
         else 
             return false;
     }
-    
-    public static String getRegimenAsString(Date regDate, Patient p, String separator, boolean includeDosages) {
-    	return getRegimenAsString(getRegimenOnDate(p, regDate), separator, includeDosages);
-    }
-    
-    public static String getRegimenAsString(Regimen r, String separator, boolean includeDosages) {
-    	if (separator == null) {
-    		separator = "";
-    	}
-		String ret = "";
-		if (r != null && r.getComponents()!= null){
-		    int total = r.getComponents().size();
-		    int count = 1;
-		    for (RegimenComponent rc : r.getComponents()){
-		        if (rc.getDrug() == null)
-		            ret += rc.getGeneric().getBestShortName(Context.getLocale());
-		        else
-		            ret += rc.getDrug().getName();
-		        if (includeDosages)
-		            ret += " (" + rc.getDrugOrder().getDose() + " " + rc.getDrugOrder().getUnits()+ " " + rc.getDrugOrder().getFrequency() + ")";
-		        if (count != total )
-		            ret += separator;
-		        count ++;
-		    }
-		}   
-        return ret;
-    }
-    
-    public static Regimen getRegimenOnDate(Patient p, Date regDate){
-        Regimen ret = null;
-        RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
-        if (rh != null){
-            Regimen r = rh.getRegimen(regDate);
-            if (r != null){
-               return r;
-            }   
-        }
-        return ret;
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

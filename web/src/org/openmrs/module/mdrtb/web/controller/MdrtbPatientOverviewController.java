@@ -245,10 +245,8 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 	            
 	            //workflow states:
 	            
-	            
-	            map.put("cultureStates", mu.getStatesCultureStatus());
+	          
 	            map.put("outcomeStates", mu.getStatesOutcomes());
-	            map.put("patientStates", mu.getStatesPatientStatus());
 	            map.put("standardized", mu.getConceptStandardized());
 	            map.put("empiric", mu.getConceptEmpiric());
 	            map.put("individualized", mu.getConceptIndividualized());
@@ -1804,15 +1802,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                     }
                     if (mp.getPatientProgram() == null && pps.size() > 0){
                         mp.setPatientProgram(pps.get(pps.size()-1));
-                    }
-                    if (mp.getPatientProgram() != null){
-                        Set<ProgramWorkflowState> pwsSet = mu.getStatesCultureStatus();
-                        Set<PatientState> psSet = mp.getPatientProgram().getStates();
-                        for (PatientState ps : psSet){
-                            if (pwsSet.contains(ps.getState()) && ps.getEndDate() == null && !ps.getVoided()){
-                                mp.setCultureStatus(ps);
-                            }         
-                        }
                     }
                     
                     //TODO: 

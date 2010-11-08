@@ -839,7 +839,7 @@ public final class MdrtbFactory {
     }
     
     public Concept getConceptCurrentRegimenType(){
-    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURRENT_TREATMENT_TYPE);
+    	 return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURRENT_MDRTB_TREATMENT_TYPE);
     }
     
     public Concept getConceptScanty(){
@@ -1100,17 +1100,6 @@ public final class MdrtbFactory {
     
     public Set<ProgramWorkflowState> getStatesOutcomes(){
     	return getOutcomeWorkflow().getSortedStates();
-    }
-    
-    public Set<ProgramWorkflowState> getStatesCultureStatus(){
-        Program program = this.getMDRTBProgram();
-        ProgramWorkflow pw = program.getWorkflowByName(this.STR_CULTURE_STATUS_PARENT);
-        return  pw.getSortedStates();
-    }
-    public Set<ProgramWorkflowState> getStatesPatientStatus(){
-        Program program = this.getMDRTBProgram();
-        ProgramWorkflow pw = program.getWorkflowByName(this.STR_TUBERCULOSIS_PATIENT_STATUS_PARENT);
-        return  pw.getSortedStates();
     }
 
     public String getSTR_ON_ANTIRETROVIRALS() {
@@ -1653,159 +1642,6 @@ public final class MdrtbFactory {
              MdrtbUtil.fixCultureConversions(p, this);
          }
      }
-     
-     
-     
-    
-     
-     /**
-      * 
-      * Sync the patient state for culture status with the culture conversion obs.
-      * 
-      * @param p
-      * @param os
-      * @param program
-      */
-     public void syncCultureStatus(Patient p, ObsService os){
-         Program program = this.getMDRTBProgram();
-         List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(p, program, null, null, null, null, false);
-         Concept cCulture = this.getConceptCultureResult();
-         //the patient must be enrolled in the mdrtb program for this to run:
-         if (programs.size() > 0){
-             
-             Concept cc = this.getConceptCultureConversion();
-             Concept rc = this.getConceptCultureReconversion();
-             ProgramWorkflowService pws = Context.getProgramWorkflowService();
-             
-           //get the latest patientprogram:
-             PatientProgram pp = programs.get(programs.size()-1);
-             Set<ProgramWorkflowState> possibleStates = this.getStatesCultureStatus();
-             
-             //get all cc and rc obs
-             List<Obs> ccs = os.getObservationsByPersonAndConcept(p, cc);
-             List<Obs> rcs = os.getObservationsByPersonAndConcept(p, rc);
-             Obs o = null;
-             
-             if (ccs != null && ccs.size() > 0){
-                 o = ccs.get(0);
-                 ccs.addAll(rcs);
-                 for (Obs oTmp:ccs){
-                     if (o.getValueDatetime().getTime() < oTmp.getValueDatetime().getTime())
-                         o = oTmp;
-                 }
-             }
-
-             if (o != null){
-                 //this is the winning obs; change pp state accordingly, if necessary.
-                 if (o.getConcept().equals(cc)){
-                     
-                     for (PatientState ps : pp.getStates()){
-                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_CONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_CONVERTED), o.getValueDatetime());
-                             pws.savePatientProgram(pp);
-                             break;
-                         }
-                     }
-                     
-                 } else {
-                     
-                     for (PatientState ps : pp.getStates()){
-                         if (possibleStates.contains(ps.getState()) && !ps.getState().getConcept().equals(this.getMDRTBConceptByKey(STR_RECONVERTED, new Locale("en", "US"), this.xmlConceptList))){
-                             pp = transitionToStateNoErrorChecking(pp, ps.getState().getProgramWorkflow().getStateByName(this.STR_RECONVERTED), o.getValueDatetime());
-                             pws.savePatientProgram(pp);
-                             break;
-                         }
-                     }
-
-                 }
-                 
-             } else {
-
-                 Program mdrtbProgram = this.getMDRTBProgram();
-
-                 Map<Obs, Date> cultureObs = MdrtbUtil.getCultures(p, this);
-                 
-                 for (PatientProgram ppTmp:programs){
-                     Set<PatientState> pss = ppTmp.getStates();
-                     boolean found = false;
-                     if (pss != null){
-                         for (PatientState ps : pss){
-                             if (ps.getState().getProgramWorkflow().getConcept().getConceptId() == mdrtbProgram.getWorkflowByName(this.STR_CULTURE_STATUS_PARENT).getConcept().getConceptId()){
-                                 found = true;
-                                
-                                 break;
-                                 
-                             }    
-                          }
-                     }
-
-                         //figure out if there are any cultures in the current program:
-                         List<Obs> relevantCultures = new ArrayList<Obs>();
-                         boolean allCulturesAreNegative = true;
-                         for (Map.Entry<Obs, Date> e : cultureObs.entrySet()) {
-                             
-                             Date startDate = ppTmp.getDateEnrolled();
-                             Date endDate = ppTmp.getDateCompleted();
-                             if (endDate == null)
-                                     endDate = new Date();
-                             
-                             Calendar startCal = Calendar.getInstance();
-                             Calendar endCal = Calendar.getInstance();
-                             startCal.setTime(startDate);
-                             endCal.setTime(endDate);
-                             startCal.add(Calendar.MONTH, -2);
-                             endCal.add(Calendar.MONTH, 3);
-                             
-                             endDate = endCal.getTime();
-                             startDate = startCal.getTime();
-                             if (e.getValue().before(endDate) && e.getValue().after(startDate)){
-                                 relevantCultures.add(e.getKey());
-                                 if (!MdrtbUtil.isNegativeBacteriology(e.getKey(), cCulture, this))
-                                     allCulturesAreNegative = false;
-                             }    
-                         }
-                         
-                         
-                         if (relevantCultures.size() == 0 || !found || allCulturesAreNegative == true){
-                              try {
-                                 Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
-                                     for (ProgramWorkflow pwTmp:pw){
-                                    
-                                         if (pwTmp.getStateByName(this.getSTR_NONE()) != null){
-                                          
-                                             ppTmp = transitionToStateNoErrorChecking(ppTmp,pwTmp.getStateByName(this.getSTR_NONE()), ppTmp.getDateEnrolled());
-                                             break;
-                                         }  
-                                     }
-                                     ppTmp = pws.savePatientProgram(ppTmp);
-                                 } catch (Exception ex){
-                                     log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
-                                 }
-                            
-                         
-                         }  else {
-                             try {
-                                 Set<ProgramWorkflow> pw = ppTmp.getProgram().getWorkflows();
-                                     for (ProgramWorkflow pwTmp:pw){
-                                         ProgramWorkflowState state = pwTmp.getStateByName(this.getSTR_NOT_CONVERTED());
-                                         if (state != null){
-                                             ppTmp = transitionToStateNoErrorChecking(ppTmp, state, ppTmp.getDateEnrolled());
-                                             break;
-                                         }  
-                                     }
-                                     ppTmp = pws.savePatientProgram(ppTmp);
-                                 } catch (Exception ex){
-                                     log.warn("Could not set patient state of not converted for new mdrtb program enrollee", ex);
-                                 }
-                             
-                         }
-                 }
-                 
-             }
-         }
-     }
-     
-    
      
      /**
       * 

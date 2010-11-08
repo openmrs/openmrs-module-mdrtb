@@ -13,7 +13,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
-import org.openmrs.Obs;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
@@ -21,7 +20,6 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
@@ -189,7 +187,8 @@ public class MdrtbRegimenUtils {
            
            ObsService os = Context.getObsService();
            
-           
+           /*  MIKE: Commented out during regimen redesign to fix compilation issue...
+            * 
            RegimenUtils.setRegimen(p, effectiveDate, newDOs, reasonForChange, null);
                if (regTypeInt != null) {
                    
@@ -217,7 +216,7 @@ public class MdrtbRegimenUtils {
                    }
                    
                }
-          
+          */
            
     }
 }

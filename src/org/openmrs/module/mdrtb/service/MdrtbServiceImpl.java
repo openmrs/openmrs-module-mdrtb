@@ -150,7 +150,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return dao.getConceptWords(phrase, locales);
 	}
 	
-	public Concept getConcept(String [] conceptMapping) {
+	public Concept getConcept(String... conceptMapping) {
 		return conceptMap.lookup(conceptMapping);
 	}
 	
@@ -560,33 +560,36 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     public Collection<ConceptAnswer> getPossibleAnatomicalSites() {
     	return this.getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getAnswers();
     }
+    
+    /**
+     * @return the List of Concepts that represent the Drugs within the passed Drug Set
+     */
+    public List<Concept> getDrugsInSet(String... conceptMapKey) {
+    	return getDrugsInSet(Context.getService(MdrtbService.class).getConcept(conceptMapKey));
+    }
+    
+    /**
+     * @return the List of Concepts that represent the Drugs within the passed Drug Set
+     */
+    public List<Concept> getDrugsInSet(Concept concept) {
+    	List<Concept> drugs = new LinkedList<Concept>();
+    	if (concept != null) {
+    		List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(concept);
+    		if (drugSet != null) {
+				for (ConceptSet drug : drugSet) {
+					drugs.add(drug.getConcept());
+				}
+    		}
+    	}
+    	return drugs;    	
+    }
 	
     public List<Concept> getMdrtbDrugs() {
-    	
-    	Concept tbDrugs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
-    	List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(tbDrugs);
-    	
-    	List<Concept> drugs = new LinkedList<Concept>();
-    	
-    	for (ConceptSet drug : drugSet) {
-    		drugs.add(drug.getConcept());
-    	}
-    	
-    	return drugs;
-    	
+    	return getDrugsInSet(MdrtbConcepts.TUBERCULOSIS_DRUGS);
     }
     
     public List<Concept> getAntiretrovirals() {
-    	Concept antiretrovirals = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANTIRETROVIRALS);
-    	List<ConceptSet> drugSet = Context.getConceptService().getConceptSetsByConcept(antiretrovirals);
-    	
-    	List<Concept> drugs = new LinkedList<Concept>();
-    	
-    	for (ConceptSet drug : drugSet) {
-    		drugs.add(drug.getConcept());
-    	}
-    	
-    	return drugs;
+    	return getDrugsInSet(MdrtbConcepts.ANTIRETROVIRALS);
     }
     
     public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes() {

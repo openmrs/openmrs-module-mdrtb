@@ -104,7 +104,6 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
             MdrtbFactory mu = ms.getMdrtbFactory();
             map.put("outcomeStates", mu.getStatesOutcomes());
-            map.put("patientStates", mu.getStatesPatientStatus());
             map.put("locations", Context.getLocationService().getAllLocations());
         }
         return map ;
@@ -390,21 +389,7 @@ public class MdrtbPatientStatusAdminController extends SimpleFormController {
                            break;
                    }
                    //status
-                   pwsSet = mu.getStatesPatientStatus();
-                   foundTmp = false;
-                   for (ProgramWorkflowState pws:  pwsSet){
-                       for (PatientState ps : psSet){
-                              if (ps.getEndDate() == null && !ps.getVoided()
-                                      && ps.getState().getProgramWorkflowStateId().intValue() == pws.getProgramWorkflowStateId().intValue()){
-                               moo.setStatus(ps);
-                               foundTmp = true;
-                               break;
-                               
-                           }
-                       }     
-                       if (foundTmp)
-                           break;
-                   }
+
                    //treatment start date
                    
                    List<Obs> oList = os.getObservationsByPersonAndConcept(pp.getPatient(), tsdConcept);

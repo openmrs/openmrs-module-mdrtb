@@ -1,224 +1,195 @@
 package org.openmrs.module.mdrtb.web.taglib;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.TreeMap;
 
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Obs;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.reporting.common.MessageUtil;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
 public class RegimenHistoryTag extends TagSupport {
 
-    public static final long serialVersionUID = 121341223L;
-    private final Log log = LogFactory.getLog(getClass());
+    public static final long serialVersionUID = 1L;
+    protected final static Log log = LogFactory.getLog(RegimenHistoryTag.class);
+
+    //***** PROPERTIES *****
     
-    private Integer patientId;
-    private String drugConceptList;
-    private boolean includeAllOrderedDrugs = false;
-    private String drugTitleString;
-    private String durationTitleString;
+    private RegimenHistory history;
+    private String messagePrefix;
     private String cssClass;
     private String graphicResourcePath;
+    private String dateFormat;
+    private String activeCssClass;
+    private String futureCssClass;
     private boolean invert = true;
-    private List<Obs> stEmpIndObs = new ArrayList<Obs>();
-    private Integer standardizedId;
-    private Integer empiricId;
-    private Integer individualizedId;
-    private String typeString;
-    private String stString;
-    private String empString;
-    private String indString;
-    private boolean timeDescending;
-
-	public int doStartTag() {
+    private boolean timeDescending = false;
+    
+    //***** INSTANCE METHDOS *****
+    
+	/**
+	 * @see TagSupport#doStartTag()
+	 */
+	@Override
+	public int doStartTag() throws JspException {
 		
-        String ret = "";
-        SimpleDateFormat sdf = Context.getDateFormat();
-        Patient patient = Context.getPatientService().getPatient(patientId);
-        RegimenHistory history = new RegimenHistory(Context.getOrderService().getDrugOrdersByPatient(patient));
-        String noRegimenLabel = Context.getMessageSourceService().getMessage("mdrtb.noRegimen");
-        String drugIndicator = "X";
-        if (StringUtils.isNotEmpty(graphicResourcePath)) {
-        	drugIndicator = "<img src='" + graphicResourcePath + "' alt='X'>";
+		StringBuilder sb = new StringBuilder();
+		
+		DateFormat df = (ObjectUtil.isNull(dateFormat) ? Context.getDateFormat() : new SimpleDateFormat(dateFormat));
+		String activeCss = ObjectUtil.nvlStr(activeCssClass, "activeRegimenRow");
+		String futureCss = ObjectUtil.nvlStr(futureCssClass, "futureRegimenRow");
+		String prefix = ObjectUtil.nvlStr(messagePrefix, "mdrtb.");
+        String noneTitle = MessageUtil.translate(prefix + "none", "None");
+        String dateTitle = MessageUtil.translate(prefix + "date", "Date");
+        String durationTitle = MessageUtil.translate(prefix + "duration", "Duration");
+        String typeTitle = MessageUtil.translate(prefix + "treatmentType", "Type");
+        String futureTitle = MessageUtil.translate(prefix + "future", "Future");
+        String daysTitle = MessageUtil.translate(prefix + "days", "days");
+		
+		List<Regimen> allRegimens = new ArrayList<Regimen>();
+		if (history != null) {
+			allRegimens = history.getAllRegimens();
 		}
-        
-        //get drugs:
-        Set<Concept> drugConcepts = new LinkedHashSet<Concept>();
-        MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
-        if (StringUtils.isNotEmpty(drugConceptList)){
-            for (StringTokenizer st = new StringTokenizer(drugConceptList, "|"); st.hasMoreTokens(); ) {
-                String s = st.nextToken().trim().split(":")[0];
-                Concept c = MdrtbUtil.getMDRTBConceptByName(s, new Locale("en"), mu);
-                if (c != null)
-                    drugConcepts.add(c);
-            }    
-        }
-        if (includeAllOrderedDrugs || StringUtils.isEmpty(drugConceptList)) {
-            List<RegimenComponent> rcs = history.getComponents(null);
-            for (RegimenComponent rc : rcs){
-                Concept drugConcept = rc.getGeneric();
-                if (drugConcept != null)
-                    drugConcepts.add(drugConcept);
-            }
-        }
-        
-        if (history == null || history.getRegimenList().size() == 0 || !doesHistoryHaveAGenericInDrugConceptSet(history, drugConcepts)){
-            release();
-            return SKIP_BODY;
-        }
-        
-        //get date map:
-        Map<Date, Regimen> allDates = new LinkedHashMap<Date, Regimen>();
-        Date lastCloseDate = null;
-        for (Regimen reg : history.getRegimenList()) {
-            if (doesRegimenHaveAGenericInDrugConceptSet(reg,drugConcepts)) {
-            	if (lastCloseDate != null && lastCloseDate.before(reg.getStartDate())) {
-            		allDates.put(lastCloseDate, null);
-            	}
-            	allDates.put(reg.getStartDate(), reg);  
-            	lastCloseDate = reg.getEndDate();
-            }
-        }
-        Regimen mostRecentRegimen = history.getRegimenList().get(history.getRegimenList().size()-1);
-        if (!mostRecentRegimen.isActive()) {
-        	allDates.put(mostRecentRegimen.getEndDate(), null);
-        }
-        
-        List<Date> dateList = new ArrayList<Date>(allDates.keySet());
-        if (timeDescending) {
-        	Collections.reverse(dateList);
-        }
-        
-        if (invert) { //time goes down
-            ret += "<table class='" + cssClass + "'><tbody>";
-            ret += "<tr><th>" + drugTitleString + ":</th>";
-            for (Concept drugConcept : drugConcepts){
-                ret += "<th>" + drugConcept.getBestShortName(Context.getLocale()).getName() + "</th>";
-            }
-            ret += "<td><b>" + getDurationTitleString() + "</b></td><td><b>" + getTypeString() + "</b></td></tr>";
+		if (allRegimens.isEmpty()) {
+			sb.append(noneTitle);
+		}
+		else {
+			// Order the Regimen entries appropriately
+	        if (timeDescending) {
+	        	Collections.reverse(allRegimens);
+	        }
+	        
+	        // Construct sorted Map from Drug generic display name to Concept for all relevant drugs
+	        Map<String, Concept> allDrugs = new TreeMap<String, Concept>();
+	        for (Regimen r : allRegimens) {
+	        	for (Concept c : r.getUniqueGenerics()) {
+	        		allDrugs.put(c.getBestShortName(Context.getLocale()).getName(), c);
+	        	}
+	        }
+			
+			// Get the text or image to display when a drug is present
+	        String drugIndicator = "X";
+	        if (ObjectUtil.notNull(graphicResourcePath)) {
+	        	drugIndicator = "<img src='" + graphicResourcePath + "' alt='X'>";
+			}
+	        
+	        if (invert) { //time goes down
+	        	
+		        sb.append("<table class='" + cssClass + "'><tbody>");
+		        sb.append("<tr><th>" + dateTitle + "</th>");
+		        
+	            for (String s : allDrugs.keySet()) {
+	                sb.append("<th>" + s + "</th>");
+	            }
+	            sb.append("<th>" + durationTitle + "</th><th>" + typeTitle + "</th></tr>");
+	            for (int i=0; i<allRegimens.size(); i++) {
+	            	Regimen regimen = allRegimens.get(i);
+	            	
+	            	String rowClass = (i%2 == 0 ? "evenRow" : "oddRow");
+	            	rowClass += (regimen.isFuture() ? " " + futureCss : regimen.isActive() ? " " + activeCss : "");
+	
+	                sb.append("<tr class='" + rowClass + "'>");
+	                sb.append("<th>" + df.format(regimen.getStartDate())+ "</th>");
+	                
+	                // If there are no active drugs in this Regimen, format this specially
+	                if (regimen.getDrugOrders().isEmpty()) {
+	                	sb.append("<td colspan=\"" + (allDrugs.size() + 2) + "\">" + noneTitle + "</td><tr>");
+	                }
+	                else {
+	                	for (Concept c : allDrugs.values()) {
+	                		sb.append("<td>" + (regimen.containsGeneric(c) ? drugIndicator : " &nbsp;") + "</td>");
+	                	}
+	                	sb.append("<td>" + (regimen.isFuture() ? futureTitle : regimen.getDurationInDays() + " " + daysTitle) + "</td>");
 
-            for (int i=0; i<dateList.size(); i++) {
-            	Date d = dateList.get(i);
-            	Regimen reg = allDates.get(d);
-            	
-            	String rowClass = (i%2 == 0 ? "evenRow" : "oddRow");
-            	if ((timeDescending && i==0) || (!timeDescending && i == dateList.size()-1)) {
-            		rowClass = "activeRegimenRow";
-            	}
+	                	sb.append("<td style=\"text-align:left;\" width=\"100%\">" + RegimenUtils.formatCodedObs(regimen.getReasonForStarting(), "") + "</td></tr>");
+	                }
+	            }
+	            sb.append("</tbody></table>");
+	        } 
+	        else {  //time goes horizontal
+	        	
+		        sb.append("<table class='" + cssClass + "'><tbody>");
 
-                ret += "<tr class='" + rowClass + "'>";
-                ret += "<th>" + sdf.format(d)+ "</th>";
-                
-                if (reg == null) {
-                	ret += "<td colspan=\"" + (drugConcepts.size() + 2) + "\">" + noRegimenLabel + "</td><tr>";
-                }
-                else {
-                	for (Concept drugConcept : drugConcepts) {
-                		ret += "<td>";
-                		if (reg != null && reg.containsDrugConceptOnDate(drugConcept, d)) {
-                			ret += drugIndicator;
-                		}
-                		else {
-                			ret += " &nbsp;";
-                		}
-                		ret +="</td>";
-                	}
-                	if (reg != null && reg.getDurationInDays() != null) {
-                		ret += "<td><b>" + reg.getDurationInDays().toString() + "</b></td>";
-                	}
-                	else {
-                		ret += "<td>" + " " + "</td>";
-                	}
-                	ret += "<td>" + addStEmpIndMarker(allDates, d) + "</td></tr>";
-                }
-            }
-            ret += "</tbody></table>";
-        } 
-        else {  //time goes horizontal
-          ret += "<table class='" + cssClass + "'><tbody>";
-          ret += "<tr><th>" + drugTitleString + "</th>";
-          for (int i=0; i<dateList.size(); i++) {
-          	Date d = dateList.get(i);
-          	ret += "<th>" + sdf.format(d) + "</th>";
-          }
-          ret += "</tr>";
-          
-          boolean isEvenRow = false;
-          for (Concept drugConcept : drugConcepts) {
-        	  isEvenRow = !isEvenRow;
-        	  
-        	  String rowClass = (isEvenRow ? "oddRow" : "evenRow");
-        	  ret += "<tr class='" + rowClass + "'>";
-        	  ret += "<td><b>" + drugConcept.getBestShortName(Context.getLocale()).getName() + "</b></td>";
-        	  
-              for (int i=0; i<dateList.size(); i++) {
-              	Date d = dateList.get(i);
-              	Regimen reg = allDates.get(d);
-              	
-              	String cellClass = ((timeDescending && i==0) || (!timeDescending && i == dateList.size()-1)) ? "activeRegimenRow" : rowClass;
-              	
-              	ret += "<td class=\"" + cellClass + "\">";
-              	if (reg != null && reg.containsDrugConceptOnDate(drugConcept, d)) {
-            		if (reg != null && reg.containsDrugConceptOnDate(drugConcept, d)) {
-            			ret += drugIndicator;
-            		}
-            		else {
-            			ret += " &nbsp;";
-            		}
-              	}
-              	ret +="</td>";
-              }
-              ret += "</tr>";
-          }
-          
-          ret += "<tr class='" + (isEvenRow ? "oddRow" : "evenRow") + "'>";
-          ret += "<td><b>" + getDurationTitleString() + "</b></td>";
-          for (int i=0; i<dateList.size(); i++) {
-            	Date d = dateList.get(i);
-            	Regimen reg = allDates.get(d);
-            	if (reg != null && reg.getDurationInDays() != null) {
-            		ret += "<td><b>" + reg.getDurationInDays().toString() + "</b></td>";
-            	}
-            	else {
-            		ret += "<td>" + " " + "</td>";
-            	}
-          }
-          ret += "</tr>";
-          
-          ret += "<tr class='" + (isEvenRow ? "oddRow" : "evenRow") + "'>";
-          ret += "<td><b>" + getTypeString() + "</b></td>";
-          for (int i=0; i<dateList.size(); i++) {
-        	  Date d = dateList.get(i);     
-        	  ret += "<td>" + addStEmpIndMarker(allDates, d) + "</td>";
-          }
-          ret += "</tr></tbody></table>";    
-        }    
+		        List<List<String>> rowData = new ArrayList<List<String>>();
+		        int activeCol = -1;
+		        
+		        // Date Row
+		        List<String> dateRow = new ArrayList<String>();
+		        dateRow.add(dateTitle);
+	            for (int i=0; i<allRegimens.size(); i++) {
+	            	Regimen r = allRegimens.get(i);
+	            	dateRow.add(df.format(r.getStartDate()));
+	            	if (r.isActive()) {
+	            		activeCol = i+1;
+	            	}
+	            }
+	            rowData.add(dateRow);
+	            
+	            // Drug Rows
+	            for (String s : allDrugs.keySet()) {
+	            	List<String> drugRow = new ArrayList<String>();
+	            	drugRow.add(s);
+	            	for (Regimen r : allRegimens) {
+	            		drugRow.add((r.containsGeneric(allDrugs.get(s)) ? drugIndicator : " &nbsp;"));
+	            	}
+	            	rowData.add(drugRow);
+	            }
+	            
+	            // Duration Row
+	            List<String> durationRow = new ArrayList<String>();
+	            durationRow.add(durationTitle);
+	            for (Regimen r : allRegimens) {
+	            	durationRow.add((r.isFuture() ? futureTitle : r.getDurationInDays() + " " + daysTitle));
+	            }
+	            rowData.add(durationRow);
+	            
+	            // Type Row
+	            List<String> typeRow = new ArrayList<String>();
+	            typeRow.add(typeTitle);
+	            for (Regimen r : allRegimens) {
+	            	typeRow.add(RegimenUtils.formatCodedObs(r.getReasonForStarting(), ""));
+	            }
+	            rowData.add(typeRow);         
+	            
+	            // Render Rows
+	            for (int i=0; i<rowData.size(); i++) {
+	            	List<String> row = rowData.get(i);
+	            	
+	            	String rowClass = (i%2 == 0 ? "oddRow" : "evenRow");
+	            	
+	            	sb.append("<tr class='" + rowClass + "'>");
+	            	for (int j=0; j<row.size(); j++) {
+	            		String cell = row.get(j);
+		              	String cellClass = j==activeCol ? activeCss : rowClass;
+	            		if (i == 0 || j == 0) {
+	            			sb.append("<th class='" + cellClass + "'>" + cell + "</th>");
+	            		}
+	            		else {
+	            			sb.append("<td class='" + cellClass + "'>" + cell + "</td>");
+	            		}
+	            	}
+	            	sb.append("</tr>");
+	            }
+	            sb.append("</tbody></table>");
+	        }
+	    }
 
         try {
-            pageContext.getOut().write(ret);
+            pageContext.getOut().write(sb.toString());
         } 
         catch (IOException e) {
             log.error("Could not write to pageContext", e);
@@ -226,228 +197,132 @@ public class RegimenHistoryTag extends TagSupport {
         
         release();
         return SKIP_BODY;
-    }
-    
-    public int doEndTag() {
-        patientId = null;
-        drugConceptList = null;
-        includeAllOrderedDrugs = false;
-        drugTitleString = null;
-        durationTitleString = null;
+	}
+	
+	/**
+	 * @see TagSupport#doEndTag()
+	 */
+	@Override
+	public int doEndTag() throws JspException {
+        history = null;
+        messagePrefix = null;
         cssClass = null;
-        stEmpIndObs = new ArrayList<Obs>();
         graphicResourcePath = null;
-        typeString = null;
-        stString = null;
-        empString = null;
-        indString = null;
+        dateFormat = null;
+        activeCssClass = null;
+        futureCssClass = null;
         invert = true;
         timeDescending = false;
         return EVAL_PAGE;
-     }
-
-    private static boolean doesRegimenHaveAGenericInDrugConceptSet(Regimen reg, Set<Concept> drugConcepts){
-        for (Concept drugConcept : drugConcepts){
-            if (reg.containsDrugConcept(drugConcept))
-                return true;
-        }
-        
-        return false;
-    }
-    
-    private static boolean doesHistoryHaveAGenericInDrugConceptSet(RegimenHistory history, Set<Concept> drugConcepts){
-        for (Regimen reg : history.getRegimenList()){
-            for (Concept drugConcept : drugConcepts){
-                if (reg.containsDrugConcept(drugConcept))
-                    return true;
-            }
-        }
-        
-        return false;
-    }
-
-
-
-    private String addStEmpIndMarker(Map<Date, Regimen> allDates, Date thisRegimenDate){
-        String ret = "<b>";
-        if (stEmpIndObs != null){
-            for (Obs oTmp: stEmpIndObs){
-                if (isDateInRegimenPeriod(allDates, thisRegimenDate, oTmp.getObsDatetime())){
-
-                        if (oTmp.getValueCoded() != null){
-                            if (oTmp.getValueCoded().getConceptId().intValue() == this.standardizedId.intValue())
-                                ret += this.stString;
-                            if (oTmp.getValueCoded().getConceptId().intValue() == this.empiricId.intValue())
-                                ret += this.empString;
-                            if (oTmp.getValueCoded().getConceptId().intValue() == this.individualizedId.intValue())
-                                ret += this.indString;
-                        }
-                        if (thisRegimenDate.getTime() != oTmp.getObsDatetime().getTime()){
-                            SimpleDateFormat sdf = Context.getDateFormat();
-                            ret += " (" + sdf.format(oTmp.getObsDatetime()) + ")";
-                        } 
-                }
-            }
-        }
-        ret += "</b>";
-        return ret;
-    }
-    
-    
-    private boolean isDateInRegimenPeriod(Map<Date, Regimen> allDates, Date thisRegimenDate, Date obsDate){
-        boolean ret = false;
-        boolean stopIteratingNextTime = false;
-        int size = allDates.size() - 1;
-        int counter = 0;
-        for (Map.Entry<Date, Regimen> e : allDates.entrySet()){
-            if (ret == true && obsDate.getTime() < e.getKey().getTime()){
-                return true;
-            } else if (stopIteratingNextTime){
-                break;
-            }
-            if (thisRegimenDate.getTime() == e.getKey().getTime() && obsDate.getTime() >= thisRegimenDate.getTime()){
-                ret = true;
-                stopIteratingNextTime = true;
-                if (counter == size) //if there are no more regimen changes
-                    return true;
-            }    
-            counter++;
-        }
-        return false;
-    }
-    
-    public String getTypeString() {
-        return typeString;
-    }
-
-    public void setTypeString(String typeString) {
-        this.typeString = typeString;
-    }
-
-    public String getStString() {
-        return stString;
-    }
-
-    public void setStString(String stString) {
-        this.stString = stString;
-    }
-
-    public String getEmpString() {
-        return empString;
-    }
-
-    public void setEmpString(String empString) {
-        this.empString = empString;
-    }
-
-    public String getIndString() {
-        return indString;
-    }
-
-    public void setIndString(String indString) {
-        this.indString = indString;
-    }
-
-    public Integer getStandardizedId() {
-        return standardizedId;
-    }
-
-    public void setStandardizedId(Integer standardizedId) {
-        this.standardizedId = standardizedId;
-    }
-
-    public Integer getEmpiricId() {
-        return empiricId;
-    }
-
-    public void setEmpiricId(Integer empiricId) {
-        this.empiricId = empiricId;
-    }
-
-    public Integer getIndividualizedId() {
-        return individualizedId;
-    }
-
-    public void setIndividualizedId(Integer individualizedId) {
-        this.individualizedId = individualizedId;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
-    }
-
-    public String getDrugConceptList() {
-        return drugConceptList;
-    }
-
-    public void setDrugConceptList(String drugConceptList) {
-        this.drugConceptList = drugConceptList;
-    }
-
-	public boolean isIncludeAllOrderedDrugs() {
-		return includeAllOrderedDrugs;
-	}
-
-	public void setIncludeAllOrderedDrugs(boolean includeAllOrderedDrugs) {
-		this.includeAllOrderedDrugs = includeAllOrderedDrugs;
 	}
 	
-    public String getGraphicResourcePath() {
-        return graphicResourcePath;
-    }
-
-    public void setGraphicResourcePath(String graphicResourcePath) {
-        this.graphicResourcePath = graphicResourcePath;
-    }
-
-    public boolean isInvert() {
-        return invert;
-    }
-
-    public void setInvert(boolean invert) {
-        this.invert = invert;
-    }
-
-    public List<Obs> getStEmpIndObs() {
-        return stEmpIndObs;
-    }
-
-    public void setStEmpIndObs(List<Obs> stEmpIndObs) {
-        this.stEmpIndObs = stEmpIndObs;
-    }
-    
-    public String getDrugTitleString() {
-        return drugTitleString;
-    }
-
-    public void setDrugTitleString(String drugTitleString) {
-        this.drugTitleString = drugTitleString;
-    }
-
-    public String getDurationTitleString() {
-        return durationTitleString;
-    }
-
-    public void setDurationTitleString(String durationTitleString) {
-        this.durationTitleString = durationTitleString;
-    }
-
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-
+	//***** PROPERTY ACCESS *****
+	
+	/**
+	 * @return the history
+	 */
+	public RegimenHistory getHistory() {
+		return history;
+	}
+	/**
+	 * @param history the history to set
+	 */
+	public void setHistory(RegimenHistory history) {
+		this.history = history;
+	}
+	/**
+	 * @return the messagePrefix
+	 */
+	public String getMessagePrefix() {
+		return messagePrefix;
+	}
+	/**
+	 * @param messagePrefix the messagePrefix to set
+	 */
+	public void setMessagePrefix(String messagePrefix) {
+		this.messagePrefix = messagePrefix;
+	}
+	/**
+	 * @return the cssClass
+	 */
+	public String getCssClass() {
+		return cssClass;
+	}
+	/**
+	 * @param cssClass the cssClass to set
+	 */
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
+	}
+	/**
+	 * @return the graphicResourcePath
+	 */
+	public String getGraphicResourcePath() {
+		return graphicResourcePath;
+	}
+	/**
+	 * @param graphicResourcePath the graphicResourcePath to set
+	 */
+	public void setGraphicResourcePath(String graphicResourcePath) {
+		this.graphicResourcePath = graphicResourcePath;
+	}
+	/**
+	 * @return the dateFormat
+	 */
+	public String getDateFormat() {
+		return dateFormat;
+	}
+	/**
+	 * @param dateFormat the dateFormat to set
+	 */
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+	/**
+	 * @return the activeCssClass
+	 */
+	public String getActiveCssClass() {
+		return activeCssClass;
+	}
+	/**
+	 * @param activeCssClass the activeCssClass to set
+	 */
+	public void setActiveCssClass(String activeCssClass) {
+		this.activeCssClass = activeCssClass;
+	}
+	/**
+	 * @return the futureCssClass
+	 */
+	public String getFutureCssClass() {
+		return futureCssClass;
+	}
+	/**
+	 * @param futureCssClass the futureCssClass to set
+	 */
+	public void setFutureCssClass(String futureCssClass) {
+		this.futureCssClass = futureCssClass;
+	}
+	/**
+	 * @return the invert
+	 */
+	public boolean isInvert() {
+		return invert;
+	}
+	/**
+	 * @param invert the invert to set
+	 */
+	public void setInvert(boolean invert) {
+		this.invert = invert;
+	}
+	/**
+	 * @return the timeDescending
+	 */
 	public boolean isTimeDescending() {
 		return timeDescending;
 	}
-
+	/**
+	 * @param timeDescending the timeDescending to set
+	 */
 	public void setTimeDescending(boolean timeDescending) {
 		this.timeDescending = timeDescending;
 	}

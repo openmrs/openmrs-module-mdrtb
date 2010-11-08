@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="mdrtbHeader.jsp"%>
-<%@ taglib prefix="mdrtb" uri="taglibs/mdrtb.tld" %>
 <style><%@ include file="resources/mdrtb.css"%></style>
 
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbListPatients.form" />

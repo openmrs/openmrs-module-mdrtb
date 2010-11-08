@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/template/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
-<%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 <%@ taglib prefix="mdrtbPortlets" uri="/WEB-INF/view/module/mdrtb/portlets/taglibs/mdrtbPortlets.tld" %>
 
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbOrder.js'></script>
@@ -59,24 +58,7 @@
 		<spring:message code="mdrtb.empiricShort" var="empiricTitle" />
 		<spring:message code="mdrtb.individualizedShort" var="indivTitle" />
 		<openmrs:globalProperty key="mdrtb.DST_drug_list" var="dstDrugList"/>
-		<mdrtbPortlets:regimenHistory 
-					typeString = "${typeTitle}"
-					stString = "${standardizedTitle}"
-					empString = "${empiricTitle}"
-					indString = "${indivTitle}"
-					standardizedId = "${standardized.conceptId}"
-	    			empiricId = "${empiric.conceptId}"
-	    			individualizedId = "${individualized.conceptId}"
-					stEmpIndObs="${obj.stEmpIndObs}"
-					patientId="${obj.patient.patientId}" 
-					drugTitleString="${drugTitle}" 
-					durationTitleString="${durationindays}" 
-					drugConceptList="${dstDrugList}|PYRAZINAMIDE|AMOXICILLIN AND CLAVULANIC ACID|KANAMYCIN|LEVOFLOXACIN|RIFABUTINE|CLARITHROMYCIN|THIOACETAZONE|P-AMINOSALICYLIC ACID"
-					includeAllOrderedDrugs="true" 
-					cssClass="widgetOut"
-					invert="true"
-					timeDescending="true"/>
-		<br/>
+
 		<span style="position:relative;left:2%;">	
 			<openmrs:portlet url="mdrtbCurrentRegimenType" id="mdrtbCurrentRegimenType" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
 		</span>	

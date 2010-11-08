@@ -1,209 +1,245 @@
 package org.openmrs.module.mdrtb.regimen;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
-import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.Obs;
+import org.openmrs.Patient;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
-public class RegimenHistory implements Serializable {
-
-    private static final long serialVersionUID = 1L;    
-
-    protected final Log log = LogFactory.getLog(getClass());
+/**
+ * Represents a History of Regimen Changes for a Patient
+ */
+public class RegimenHistory {
+	
+    protected static final Log log = LogFactory.getLog(RegimenHistory.class);
     
-    private List<RegimenComponent> components;
-    private transient ListMap<Date, RegimenComponent[]> events;
-    private transient Map<Collection<Drug>, ListMap<Date, RegimenComponent[]>> eventsByRegimenType;
+    //***** PROPERTIES *****
     
-    public RegimenHistory() {
-        components = new ArrayList<RegimenComponent>();
+    private Patient patient;
+    private RegimenType type;
+    private Map<Date, RegimenChange> regimenChanges;
+    
+    //***** CONSTRUCTORS *****
+    
+    public RegimenHistory(Patient patient) {
+    	this.patient = patient;
     }
     
-    public RegimenHistory(Collection<DrugOrder> orders) {
-        this();
-        for (DrugOrder o : orders) {
-            if (!o.isVoided())
-                add(new RegimenComponent(o));
-        }
+    public RegimenHistory(Patient patient, RegimenType type) {
+    	this(patient);
+    	this.type = type;
     }
     
-    public void add(RegimenComponent component) {
-        components.add(component);
+    //***** INSTANCE METHODS *****
+    
+    /**
+     * Adds a DrugOrder, which modifies Regimen Change events on both the start and end dates
+     */
+    public void addDrugOrder(DrugOrder order) {
+    	
+    	RegimenChange startChange = getRegimenChanges().get(order.getStartDate());
+    	if (startChange == null) {
+    		startChange = new RegimenChange(order.getStartDate());
+    		getRegimenChanges().put(order.getStartDate(), startChange);
+    	}
+    	startChange.getOrdersStarted().add(order);
+    	
+    	Date endDate = (ObjectUtil.nvl(order.getDiscontinuedDate(), order.getAutoExpireDate()));
+    	if (endDate != null) {
+	    	RegimenChange endChange = getRegimenChanges().get(endDate);
+	    	if (endChange == null) {
+	    		endChange = new RegimenChange(endDate);
+	    		getRegimenChanges().put(endDate, endChange);
+	    	}
+	    	endChange.getOrdersEnded().add(order);
+    	}
     }
     
     /**
-     * Reorganizes this as a List<Regimen>. Requires some calculation, but no database hits.
-     * 
-     * @return
-     * 
-     * @should get correct regimen list
+     * Adds an Observation, which modifies a Regimen Change to indicate the reason for starting
      */
-    public List<Regimen> getRegimenList() {
-        return getRegimenList((Collection<Drug>) null);
-    }
-        
-    /**
-     * Reorganizes this as a List<Regimen>. Requires some calculation, but no database hits.
-     * 
-     * @param relevantDrugs ignore regimen components whose drugs aren't in this collection
-     * @return
-     * 
-     * @should get correct regimen list
-     */
-    public List<Regimen> getRegimenList(Collection<Drug> relevantDrugs) {
-        ListMap<Date, RegimenComponent[]> events = calculateEvents(relevantDrugs);
-        
-        List<Regimen> ret = new ArrayList<Regimen>();
-        Set<RegimenComponent> runningList = new HashSet<RegimenComponent>();
-        
-        Regimen lastRegimen = null;
-        for (Map.Entry<Date, List<RegimenComponent[]>> e : events.entrySet()) {
-            Concept reason = null;
-            for (RegimenComponent[] ev : e.getValue()) {
-                if (ev[0] != null) {
-                    if (!runningList.remove(ev[0]))
-                        throw new RuntimeException("Didn't remove anything");
-                    if (ev[0].getStopReason() != null)
-                        reason = ev[0].getStopReason();
-                }
-                if (ev[1] != null) {
-                    runningList.add(ev[1]);
-                }
-            }
-            if (lastRegimen != null) {
-                lastRegimen.setEndDate(e.getKey());
-                lastRegimen.setEndReason(reason);
-            }
-            Regimen thisRegimen = new Regimen(e.getKey(), null, reason, null, new HashSet<RegimenComponent>(runningList));
-            ret.add(thisRegimen);
-            lastRegimen = thisRegimen;
-        }
-        if (ret.size() > 0 && ret.get(ret.size() - 1).getComponents().isEmpty()) {
-            ret.remove(ret.size() - 1);
-        }
-        return ret;
+    public void addReasonForStarting(Obs obs) {
+    	RegimenChange obsDateChange = getRegimenChanges().get(obs.getObsDatetime());
+    	if (obsDateChange == null) {
+    		obsDateChange = new RegimenChange(obs.getObsDatetime());
+    		getRegimenChanges().put(obs.getObsDatetime(), obsDateChange);
+    	}
+    	obsDateChange.setReasonForStarting(obs);    	
     }
     
-    public Regimen getRegimen(Date date) {
-        List<Regimen> regs = getRegimenList();
-        for (Regimen reg : regs) {
-            if (reg.isActive(date))
-                return reg;
-        }
-        return null;
+    /**
+     * @return List of all regimen change dates, ordered from earliest to latest
+     */
+    public List<Date> getRegimenChangeDates() {
+    	return new ArrayList<Date>(getRegimenChanges().keySet());
     }
-
+    
+    /**
+     * @return the Regimen active on the current date
+     */
+    public Regimen getActiveRegimen() {
+    	return getRegimenOnDate(null);
+    }
+    
+    /**
+     * @return the List of future Drug Orders
+     */
+    public Set<DrugOrder> getPastDrugOrders() {
+    	Set<DrugOrder> s = new HashSet<DrugOrder>();
+    	Date today = new Date();
+    	for (RegimenChange change : getRegimenChanges().values()) {
+    		if (change.getChangeDate().compareTo(today) <= 0) {
+    			s.addAll(change.getOrdersEnded());
+    		}
+    	}
+    	return s;
+    }
+    
+    /**
+     * @return the List of future Drug Orders
+     */
+    public Set<DrugOrder> getFutureDrugOrders() {
+    	Set<DrugOrder> s = new HashSet<DrugOrder>();
+    	Date today = new Date();
+    	for (RegimenChange change : getRegimenChanges().values()) {
+    		if (change.getChangeDate().compareTo(today) > 0) {
+    			s.addAll(change.getOrdersStarted());
+    		}
+    	}
+    	return s;
+    }
+    
+    /**
+     * Returns the List of active DrugOrders on the passed Date
+     * @param date the date on which to retrieve the passed Orders
+     * @return the active DrugOrders on the passed Date
+     */
+    public Regimen getRegimenOnDate(Date date) {
+    	return getRegimenOnDate(date, true);
+    }
+    
+    /**
+     * @return the List of active DrugOrders at the start of the passed Date (i.e. not including changes effective that day)
+     */
+    public Regimen getRegimenOnDate(Date date, boolean includeChangesOnDate) {
+    	Regimen r = new Regimen();
+    	date = (date == null ? new Date() : date);
+    	int numChanges = getRegimenChangeDates().size();
+    	for (int i=0; i<numChanges; i++) {
+    		Date changeDate = (Date) getRegimenChangeDates().get(i);
+    		boolean isLastChange = (i == numChanges-1);
+    		int comparisonVal = (includeChangesOnDate ? 0 : -1);
+    		if (changeDate.compareTo(date) <= comparisonVal) {
+    			RegimenChange change = getRegimenChanges().get(changeDate);
+    			r.setStartDate(changeDate);
+    			r.setEndDate(isLastChange ? null : getRegimenChangeDates().get(i+1));
+    			r.getDrugOrders().addAll(change.getOrdersStarted());
+    			r.getDrugOrders().removeAll(change.getOrdersEnded());
+    			r.setReasonForStarting(change.getReasonForStarting());
+    		}
+    	}
+    	return r;
+    }
+    
     /**
      * Gets all the regimens in this history between two dates
      */
-    public List<Regimen> getRegimensBetweenDates(Date startDate, Date endDate) {
-    	List<Regimen> regimens = new LinkedList<Regimen>();
-    	
-    	for(Regimen regimen : this.getRegimenList()) {
-    		if( (endDate == null || regimen.getStartDate().before(endDate)) &&
-    			(regimen.getEndDate() == null || startDate == null || !regimen.getEndDate().before(startDate)) ) {
-    			regimens.add(regimen);
+    public List<Regimen> getRegimensBetweenDates(Date fromDate, Date toDate, boolean inclusive) {
+    	List<Regimen> regimens = new ArrayList<Regimen>();
+    	for (Date d : getRegimenChangeDates()) {
+    		boolean beforeOk = (fromDate == null || (inclusive ? fromDate.compareTo(d) <= 0 : fromDate.compareTo(d) < 0));
+    		boolean afterOk = (toDate == null || (inclusive ? toDate.compareTo(d) >= 0 : toDate.compareTo(d) > 0));
+    		if (beforeOk && afterOk) {
+    			regimens.add(getRegimenOnDate(d));
     		}
     	}
-    	
     	return regimens;
     }
     
+    /**
+     * @return all List of all Regimens in this History
+     */
+    public List<Regimen> getAllRegimens() {
+    	return getRegimensBetweenDates(null, null, true);
+    }
     
+    /**
+     * @param effectiveDate the date to check
+     * @return all Regimens active before the passed Date
+     */
+    public List<Regimen> getRegimensBefore(Date effectiveDate) {
+    	return getRegimensBetweenDates(null, effectiveDate, false);
+    }
+    
+    /**
+     * @param effectiveDate the date to check
+     * @return all Regimens active after the passed Date
+     */
+    public List<Regimen> getRegimensDuring(Date fromDate, Date toDate) {
+    	return getRegimensBetweenDates(fromDate, toDate, true);
+    }
+    
+    /**
+     * @param effectiveDate the date to check
+     * @return all Regimens active after the passed Date
+     */
     public List<Regimen> getRegimensAfter(Date effectiveDate) {
-        List<Regimen> regs = getRegimenList();
-        int startFrom = Integer.MAX_VALUE;
-        if (regs.size() > 0 && effectiveDate.before(regs.get(0).getStartDate()))
-            return regs;
-        for (int i = 0; i < regs.size(); i++) {
-            if (regs.get(i).isActive(effectiveDate)) {
-                startFrom = i + 1;
-                break;
-            }
-        }
-        if (startFrom < regs.size())
-            return regs.subList(startFrom, regs.size());
-        else
-            return new ArrayList<Regimen>();
-    }
-
-    /**
-     * Builds up events, as a map from date to all events that happen on that date.
-     * An event is represented by a RegimenComponent[] where:
-     *     the 0th element is a RegimenComponent that was stopped
-     *     the 1st element is a RegimenComponent that was started
-     */
-    private synchronized void calculateEvents() {
-        if (events == null) {
-            events = new ListMap<Date, RegimenComponent[]>();
-            for (RegimenComponent c : components) {
-                if (c.getStartDate() == null)
-                    throw new IllegalArgumentException("Found null startDate in " + c);
-                events.add(c.getStartDate(), new RegimenComponent[] { null, c });
-                if (c.getStopDate() != null)
-                    events.add(c.getStopDate(), new RegimenComponent[] { c, null });
-            }
-        }
+    	return getRegimensBetweenDates(effectiveDate, null, false);
     }
     
-    /**
-     * Builds up events whose drug is in the given collection, as a map from date to
-     * all events that happen on that date.
-     * An event is represented by a RegimenComponent[] where:
-     *     the 0th element is a RegimenComponent that was stopped
-     *     the 1st element is a RegimenComponent that was started
-     */
-    private synchronized ListMap<Date, RegimenComponent[]> calculateEvents(Collection<Drug> relevantDrugs) {
-        if (eventsByRegimenType == null) {
-            eventsByRegimenType = new HashMap<Collection<Drug>, ListMap<Date, RegimenComponent[]>>();
-        }
-        ListMap<Date, RegimenComponent[]> ret = eventsByRegimenType.get(relevantDrugs);
-        if (ret != null)
-            return ret;
-        ret = new ListMap<Date, RegimenComponent[]>();
-        eventsByRegimenType.put(relevantDrugs, ret);
-        for (RegimenComponent c : getComponents(relevantDrugs)) {
-            if (c.getStartDate() == null)
-                throw new IllegalArgumentException("Found null startDate in " + c);
-            ret.add(c.getStartDate(), new RegimenComponent[] { null, c });
-            if (c.getStopDate() != null)
-                ret.add(c.getStopDate(), new RegimenComponent[] { c, null });
-        }
-        return ret;
-    }
-
-    public List<RegimenComponent> getComponents(Collection<Drug> relevantDrugs) {
-        List<RegimenComponent> ret = new ArrayList<RegimenComponent>();
-        for (RegimenComponent c : components)
-            if (relevantDrugs == null || relevantDrugs.contains(c.getDrug()))
-                ret.add(c);
-        return ret;
-    }
-
+    //***** PROPERTY ACCESS *****
     
-    /**
-     * Returns a list of events equivalent to the list passed in, but with all events
-     * where the same drug is stopped and started on the same day removed.
-     * (These would generally be dose-change-only events.)
-     */
-    public static void removeDoseChangeEvents(ListMap<Date, RegimenComponent[]> events) {
-         ListMap<Date, RegimenComponent[]> ret = new ListMap<Date, RegimenComponent[]>();
-         for (Map.Entry<Date, List<RegimenComponent[]>> e : events.entrySet()) {
-             throw new RuntimeException("Not Yet Implemented!");
-         }
-    }
-    
+	/**
+	 * @return the patient
+	 */
+	public Patient getPatient() {
+		return patient;
+	}
+
+	/**
+	 * @param patient the patient to set
+	 */
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	/**
+	 * @return the regimenChanges
+	 */
+	public Map<Date, RegimenChange> getRegimenChanges() {
+		if (regimenChanges == null) {
+			regimenChanges = new TreeMap<Date, RegimenChange>();
+		}
+		return regimenChanges;
+	}
+
+	/**
+	 * @param regimenChanges the regimenChanges to set
+	 */
+	public void setRegimenChanges(Map<Date, RegimenChange> regimenChanges) {
+		this.regimenChanges = regimenChanges;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public RegimenType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(RegimenType type) {
+		this.type = type;
+	}
 }

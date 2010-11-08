@@ -30,6 +30,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
+import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -59,7 +60,6 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.allergy.MdrtbAllergyStringObj;
 import org.openmrs.module.mdrtb.allergy.MdrtbAllergyUtils;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.reporting.excel.SheetHelper;
@@ -444,12 +444,12 @@ public class PatientSummaryUtil {
 	                }
             	}
             	
-            	RegimenHistory rh = RegimenUtils.getRegimenHistory(p);
+            	RegimenHistory rh = RegimenUtils.getTbRegimenHistory(p);
 
             	if (ObjectUtil.containsAny(columns, CURRENT_REGIMEN, CURRENT_REGIMEN_DATE)) {
             		map.put(CURRENT_REGIMEN, getRegimenAsString(rh, effectiveDate, null));
             		if (rh != null) {
-            			Regimen r = rh.getRegimen(effectiveDate);
+            			Regimen r = rh.getRegimenOnDate(effectiveDate);
             			if (r != null) {
             				map.put(CURRENT_REGIMEN_DATE, r.getStartDate());
             			}
@@ -608,11 +608,11 @@ public class PatientSummaryUtil {
     
     public static String getRegimenAsString(RegimenHistory rh, Date regDate, ConceptNameTag tag) {
     	if (rh != null) {
-	    	Regimen r = rh.getRegimen(regDate);
-	    	if (r != null && r.getComponents() != null) {
+	    	Regimen r = rh.getRegimenOnDate(regDate);
+	    	if (r != null && r.getDrugOrders() != null) {
 	    		Set<String> components = new TreeSet<String>();
-	    		for (RegimenComponent rc : r.getComponents()) {
-	    			components.add(getConceptDisplay(rc.getGeneric(), tag));
+	    		for (DrugOrder rc : r.getDrugOrders()) {
+	    			components.add(getConceptDisplay(rc.getConcept(), tag));
 	    		}
 	    		return OpenmrsUtil.join(components, "+");
 	    	}

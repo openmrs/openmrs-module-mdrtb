@@ -1,185 +1,238 @@
 package org.openmrs.module.mdrtb.regimen;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.Drug;
-import org.openmrs.api.context.Context;
-import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.DrugOrder;
+import org.openmrs.Obs;
 
+/**
+ * Represents a series of drugs given at the same time, generally for the same reason.
+ * The startDate and endDate of the Regimen represent the start dates of the whole Regimen:
+ * its individual components may have different startDate and endDate values.
+ */
 public class Regimen {
 
+	//***** PROPERTIES *****
+	
     private Date startDate;
     private Date endDate;
-    private Concept startReason;
-    private Concept endReason;
-    private Set<RegimenComponent> components;
+    private Obs reasonForStarting;
+    private Set<DrugOrder> drugOrders;
     
-    public Regimen() {
-        this.components = new HashSet<RegimenComponent>();
+    //***** CONSTRUCTORS *****
+    
+    public Regimen() {}
+    
+    //***** INSTANCE METHODS *****
+    
+    /**
+     * @return whether the Regimen is currently active
+     */
+    public boolean isActive() {
+        return isActive(null);
     }
     
-    public Regimen(Date startDate, Date endDate, Concept startReason, Concept endReason, Set<RegimenComponent> components) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.startReason = startReason;
-        this.endReason = endReason;
-        this.components = components;
+    /**
+     * @return whether the Regimen is in the future
+     */
+    public boolean isFuture() {
+    	return startDate != null && startDate.compareTo(new Date()) > 0;
+    }
+
+    /**
+     * @return whether the Regimen is active on the passed date
+     */
+    public boolean isActive(Date date) {
+    	if (date == null) {
+    		date = new Date();
+    	}
+    	boolean started = startDate != null && startDate.compareTo(date) <= 0;
+    	boolean notEnded = endDate == null || endDate.compareTo(date) > 0;
+    	return started && notEnded;
     }
     
-    public String toString() {
-        StringBuilder ret = new StringBuilder();
-        for (Concept g : getUniqueGenerics())
-            ret.append(g.getBestName(Context.getLocale())).append(", ");
-        ret.append(" from " + startDate);
-        if (endDate != null) {
-            ret.append(" to " + endDate);
-            if (endReason != null)
-                ret.append(" because " + endReason);
-        }
-        return ret.toString();
+    /**
+     * @param fromDate the lower date bound to check, inclusive
+     * @param toDate the upper date bound to check, inclusive
+     * @param entirePeriod if true, checks that the Regimen is active for the entire period.  otherwise, checks that it is active ever during the period.
+     * @return true if the regimen is active during the specified date range
+     */
+    public boolean isActive(Date fromDate, Date toDate, boolean entirePeriod) {
+    	if (startDate == null) {
+    		return false;
+    	}
+    	if (entirePeriod) {
+    		boolean startedOnOrBefore = (startDate.compareTo(fromDate) <= 0);
+    		boolean endedAfter = (endDate == null || endDate.compareTo(toDate) > 0);
+    		return startedOnOrBefore && endedAfter;
+    	}
+    	boolean startedOnOrBeforeEnd = (startDate.compareTo(endDate) <= 0);
+    	boolean endedOnOrAfterStart = (toDate == null || toDate.compareTo(startDate) >= 0);
+    	return startedOnOrBeforeEnd && endedOnOrAfterStart;
     }
     
+    /**
+     * @return the duration of the Regimen in days.  If the start date is null or after the end date, returns -1
+     */
+    public int getDurationInDays() {
+    	Date fromDate = startDate;
+    	Date toDate = (endDate == null ? new Date() : endDate);
+    	if (fromDate == null || fromDate.after(toDate)) {
+    		return -1;
+    	}
+    	double days = (toDate.getTime() - fromDate.getTime()) / 1000 / 60 / 60 / 24;
+    	return (int)days;
+    }
+    
+    /**
+     * @return the unique set of reasons why this Regimen was discontinued
+     */
+    public Set<Concept> getEndReasons() {
+    	Set<Concept> c = new HashSet<Concept>();
+    	if (getEndDate() != null) {
+	    	for (DrugOrder o : getDrugOrders()) {
+	    		if (getEndDate().equals(o.getDiscontinuedDate()) && o.getDiscontinuedReason() != null) {
+	    			c.add(o.getDiscontinuedReason());
+	    		}
+	    	}
+    	}
+    	return c;
+    }
+
+    /**
+     * @return the unique set of generic drugs within this Order
+     */
     public Set<Concept> getUniqueGenerics() {
         Set<Concept> ret = new HashSet<Concept>();
-        for (RegimenComponent c : components) {
-            ret.add(c.getGeneric());
+        for (DrugOrder o : getDrugOrders()) {
+            ret.add(o.getConcept());
         }
         return ret;
     }
-
-    public void add(RegimenComponent component) {
-        components.add(component);
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Concept getEndReason() {
-        return endReason;
-    }
-
-    public void setEndReason(Concept endReason) {
-        this.endReason = endReason;
-    }
-
-    public Set<RegimenComponent> getComponents() {
-        return components;
-    }
-
-    public void setComponents(Set<RegimenComponent> components) {
-        this.components = components;
-    }
     
-    public boolean isActive() {
-        return isActive(new Date());
-    }
-
-    public boolean isActive(Date date) {
-        return OpenmrsUtil.compareWithNullAsEarliest(startDate, date) <= 0
-                && OpenmrsUtil.compareWithNullAsLatest(date, endDate) < 0;
-    }
-
-    public boolean containsDrug(Drug drug) {
-        if (components == null)
-            return false;
-        for (RegimenComponent c : components) {
-            if (c.getDrug().equals(drug))
-                return true;
-        }
-        return false;
-    }
-    
-    public boolean containsDrugConcept(Concept drug) {
-       return (getRegimenComponentByDrugConcept(drug) != null);
-    }
-    
-    public RegimenComponent getRegimenComponentByDrugConcept(Concept drug) {
-    	if (components == null) {
-    		return null;
-    	}
-    	for (RegimenComponent c: components) {
-    		if (c.getGeneric().equals(drug)) {
-    			return c;
+    /**
+     * @param generic the concept to match
+     * @return the matching DrugOrder for the passed Drug Concept, or null if none found
+     */
+    public DrugOrder getMatchingDrugOrder(Concept generic) {
+    	for (DrugOrder o : getDrugOrders()) {
+    		if (o.getConcept() != null && o.getConcept().equals(generic)) {
+    			return o;
     		}
     	}
     	return null;
     }
     
-    public boolean containsDrugConceptOnDate(Concept concept, Date date) {
-        if (components == null)
-            return false;
-        for (RegimenComponent c : components) {
-            if (c.getGeneric().equals(concept) && (c.getStartDate().equals(date) || c.getStartDate().before(date)) && (c.getStopDate() == null || c.getStopDate().after(date)))
-                return true;
-        }
-        return false;
+    /**
+     * @param drug the drug to match
+     * @return the matching DrugOrder for the passed Drug, or null if none found
+     */
+    public DrugOrder getMatchingDrugOrder(Drug drug) {
+    	for (DrugOrder o : getDrugOrders()) {
+    		if (o.getDrug() != null && o.getDrug().equals(drug)) {
+    			return o;
+    		}
+    	}
+    	return null;
     }
     
-    public Integer getDurationInDays(){
-        Integer ret = null;
-        if (startDate != null){
-            Date endDateTmp = new Date();
-            if (endDate != null)
-                endDateTmp = endDate;
-            
-            
-            Calendar calFrom = Calendar.getInstance();
-            Calendar calTo = Calendar.getInstance();
-            
-            calFrom.setTime(startDate);
-            calTo.setTime(endDateTmp);
-            
-            int calFromDaysOfYear = calFrom.get(Calendar.DAY_OF_YEAR);
-            int calFromYear = calFrom.get(Calendar.YEAR);
-            int calToDaysOfYear = calTo.get(Calendar.DAY_OF_YEAR);
-            int calToYear = calTo.get(Calendar.YEAR);
-            int retTmp = calToDaysOfYear - calFromDaysOfYear;
-            int yearDif = calToYear - calFromYear;
-            
-               
-            int yearDifTotal = 0;
-                for (int i = 0; i < yearDif; i++){
-                    int yearThisIteration = calFrom.get(Calendar.YEAR) + i;
-                    Calendar yearTest = Calendar.getInstance();
-                    yearTest.set(Calendar.YEAR, yearThisIteration);
-                    int daysInStartYear = calFrom.getMaximum(Calendar.DAY_OF_YEAR);
-                    yearDifTotal += daysInStartYear;
-                }
-            retTmp = retTmp + yearDifTotal;
-            ret = Integer.valueOf(retTmp);
-        }
-        return ret;
+    /**
+     * @param drug the Drug to check
+     * @return whether this DrugRegimen contains this Drug
+     */
+    public boolean containsDrug(Drug drug) {
+    	return getMatchingDrugOrder(drug) != null;
     }
     
-    public Integer getDurationInWeeks(){
-        Integer ret = null;
-        if (startDate != null){
-            Date endDateTmp = new Date();
-            if (endDate != null && endDate.before(endDateTmp))
-                endDateTmp = endDate;
-            long diff = endDateTmp.getTime() - startDate.getTime(); //milliseconds
-            int numerator = (1000*60*60*24*7); 
-            float diffF = ((float) diff / numerator);
-            ret = Math.round(diffF);
-        }
-        return ret;
+    /**
+     * @param concept the Concept to check
+     * @return whether this DrugRegimen contains any DrugOrders with this Concept
+     */
+    public boolean containsGeneric(Concept concept) {
+    	return getUniqueGenerics().contains(concept);
     }
+    
+	/**
+     * @see Object#toString()
+     */
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        for (DrugOrder o : getDrugOrders()) {
+        	ret.append((ret.length() == 0 ? "" : " + ") + o.toString());
+        }
+        ret.append(" from " + startDate + " to " + endDate + " ");
+        return ret.toString();
+    }
+    
+    //***** PROPERTY ACCESS *****
 
+    /**
+	 * @return the startDate
+	 */
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	/**
+	 * @return the reasonForStarting
+	 */
+	public Obs getReasonForStarting() {
+		return reasonForStarting;
+	}
+
+	/**
+	 * @param reasonForStarting the reasosForStarting to set
+	 */
+	public void setReasonForStarting(Obs reasonForStarting) {
+		this.reasonForStarting = reasonForStarting;
+	}
+
+	/**
+	 * @return the drugOrders
+	 */
+	public Set<DrugOrder> getDrugOrders() {
+		if (drugOrders == null) {
+			drugOrders = new HashSet<DrugOrder>();
+		}
+		return drugOrders;
+	}
+
+	/**
+	 * @param drugOrders the drugOrders to set
+	 */
+	public void setDrugOrders(Set<DrugOrder> drugOrders) {
+		this.drugOrders = drugOrders;
+	}
+
+	/**
+	 * @param drugOrder the DrugOrder to add
+	 */
+	public void addDrugOrder(DrugOrder drugOrder) {
+		getDrugOrders().add(drugOrder);
+	}
 }

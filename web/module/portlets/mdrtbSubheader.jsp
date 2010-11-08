@@ -89,9 +89,11 @@
 		<a href="${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.visits" text="Visits"/></a></li>
 			
 				
-		<li <c:if test='<%= request.getRequestURI().contains("regimen") %>'>class="active"</c:if>>
+		<li <c:if test='<%= request.getRequestURI().contains("/regimen/regimen") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.regimens" text="Regimens"/></a></li>
-	
+
+		<li <c:if test='<%= request.getRequestURI().contains("manageRegimens") %>'>class="active"</c:if>>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/manageRegimens.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.drugOrders" text="Drug Orders"/></a></li>	
 		
 		<li <c:if test='<%= request.getRequestURI().contains("specimen") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>

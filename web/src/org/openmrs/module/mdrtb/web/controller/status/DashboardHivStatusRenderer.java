@@ -6,12 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.status.HivStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusItem;
 
@@ -57,9 +57,9 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	   if(regimen != null) {
 	   		// first we need to pull out all the drugs in this regimen
    			List<Concept> generics = new LinkedList<Concept>();
-   			for (RegimenComponent component : regimen.getComponents()) {
+   			for (DrugOrder component : regimen.getDrugOrders()) {
    				// TODO: note that we are operating on generics, not the drug itself
-   				generics.add(component.getGeneric());
+   				generics.add(component.getConcept());
    			}
    	
    			// sort the drug list

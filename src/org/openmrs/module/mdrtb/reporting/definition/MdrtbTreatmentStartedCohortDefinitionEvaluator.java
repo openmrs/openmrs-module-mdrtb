@@ -23,7 +23,7 @@ import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinition
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 
 /**
- * Evaluates an DstResultCohortDefinition and produces a Cohort
+ * Evaluates an MdrtbTreatmentStartedCohortDefinition and produces a Cohort
  */
 @Handler(supports={MdrtbTreatmentStartedCohortDefinition.class})
 public class MdrtbTreatmentStartedCohortDefinitionEvaluator implements CohortDefinitionEvaluator {

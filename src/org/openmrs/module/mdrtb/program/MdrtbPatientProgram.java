@@ -258,7 +258,7 @@ public class MdrtbPatientProgram {
 			return null;
 		}
 		
-		return RegimenUtils.getMdrtbRegimenHistory(program.getPatient()).getRegimensBetweenDates(getPreviousProgramDateCompleted(), 
+		return RegimenUtils.getTbRegimenHistory(program.getPatient()).getRegimensDuring(getPreviousProgramDateCompleted(), 
 			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
 	}
 	

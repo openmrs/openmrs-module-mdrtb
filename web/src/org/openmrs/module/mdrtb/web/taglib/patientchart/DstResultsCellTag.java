@@ -9,11 +9,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.DrugOrder;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.DstResult;
 
@@ -43,7 +43,7 @@ public class DstResultsCellTag extends TagSupport {
     	// determine if we need to color the overall cell to reflect an active drug order
     	if(regimens != null) {
     		for(Regimen regimen : regimens) {
-    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
+    			DrugOrder component = regimen.getMatchingDrugOrder(drug);
     			if(component != null) {
     				drugColor = MdrtbConstants.PATIENT_CHART_REGIMEN_CELL_COLOR;  
     				break;

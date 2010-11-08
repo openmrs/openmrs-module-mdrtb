@@ -600,6 +600,15 @@ public class SpecimenMigrationController {
       	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/setupDrugOrderConceptMappings.form")
+    public ModelAndView createDrugOrderConceptMappings() {
+    	
+    	addConceptMapping("REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED", "REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED");
+    	addConceptMapping("REASON ANTIRETROVIRALS CHANGED OR STOPPED","REASON ANTIRETROVIRALS CHANGED OR STOPPED");
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+
     // TODO: add script to retire the forms
     
     // just a hacky test

@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.taglib.patientchart;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.jsp.JspWriter;
@@ -11,10 +12,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.DrugOrder;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.regimen.Regimen;
-import org.openmrs.module.mdrtb.regimen.RegimenComponent;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
 
 public class DrugCellTag extends TagSupport {
@@ -40,10 +42,10 @@ public class DrugCellTag extends TagSupport {
 	    	StringBuffer titleString = new StringBuffer();
 	    	
 	    	if(regimens != null) {
-	    		for(Regimen regimen : regimens) {
-	    			RegimenComponent component = regimen.getRegimenComponentByDrugConcept(drug);
-	    			if(component != null) {
-	    				updateTitle(titleString, component);
+	    		for (Regimen regimen : regimens) {
+	    			DrugOrder d = regimen.getMatchingDrugOrder(drug);
+	    			if(d != null) {
+	    				updateTitle(titleString, d);
 	    				colorString = MdrtbConstants.PATIENT_CHART_REGIMEN_CELL_COLOR;
 	    			}
 	    		}
@@ -81,10 +83,10 @@ public class DrugCellTag extends TagSupport {
 	 * Adds the details of the specified regimen component (i.e. drug order) to the
 	 * title (which can be rendered in a tooltip)
 	 */
-	private static void updateTitle(StringBuffer titleString, RegimenComponent component) {
+	private static void updateTitle(StringBuffer titleString, DrugOrder component) {
 		
 		// if the component is null or a drug order is missing, do nothing--protect against null pointer crashing everything
-		if(component == null || component.getDrugOrder() == null || component.getDrug() == null) {
+		if(component == null || component.getDrug() == null) {
 			return;
 		}
 		
@@ -93,24 +95,25 @@ public class DrugCellTag extends TagSupport {
 		titleString.append("<nobr>");
 		titleString.append(component.getDrug().getName());
 		titleString.append(" ");
-		titleString.append(component.getDrugOrder().getDose());
+		titleString.append(component.getDose());
 		titleString.append(" ");
-		titleString.append(component.getDrugOrder().getUnits());
+		titleString.append(component.getUnits());
 		titleString.append("</nobr><br/><nobr>");
-		titleString.append(component.getDrugOrder().getFrequency());
+		titleString.append(component.getFrequency());
 		titleString.append("</nobr><br/><nobr>");
 		titleString.append(df.format(component.getStartDate()));
 		titleString.append("</nobr>");
 		
-		if(component.getStopDate() != null) {
+		Date stopDate = ObjectUtil.nvl(component.getDiscontinuedDate(), component.getAutoExpireDate());
+		if(stopDate != null) {
 			titleString.append("<br/><nobr>");
-			titleString.append(df.format(component.getStopDate()));
+			titleString.append(df.format(stopDate));
 			titleString.append("</nobr>");
 		}
 		
-		if(component.getStopReason() != null) {
+		if(component.getDiscontinuedReason() != null) {
 			titleString.append("<br/><nobr>");
-			titleString.append(component.getStopReason().getBestName(Context.getLocale()));
+			titleString.append(component.getDiscontinuedReason().getBestName(Context.getLocale()));
 			titleString.append("</nobr>");
 		}
 		
