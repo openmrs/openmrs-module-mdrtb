@@ -42,14 +42,14 @@
     <!-- Controllers --> 
     
    <!--   
-	 <bean id="MdrtbManageContactsController" class="@MODULE_PACKAGE@.web.controller.MdrtbManageContactsController">
+	 <bean id="MdrtbManageContactsController" class="org.openmrs.module.mdrtb.web.controller.MdrtbManageContactsController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/contacts/contacts</value></property>
 		<property name="successView"><value>contacts.form</value></property>
     </bean>     
     -->
     
-    <bean id="MdrtbFormController" class="@MODULE_PACKAGE@.web.controller.MdrtbFormController">
+    <bean id="MdrtbFormController" class="org.openmrs.module.mdrtb.web.controller.MdrtbFormController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
 		<property name="successView"><value>mdrtbIndex.form</value></property>
@@ -57,24 +57,24 @@
     
     
     <!-- 
-     <bean id="MdrtbAdmiList" class="@MODULE_PACKAGE@.web.controller.MdrtbTSAdmListController">
+     <bean id="MdrtbAdmiList" class="org.openmrs.module.mdrtb.web.controller.MdrtbTSAdmListController">
 		<property name="commandName"><value>listObj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
 		<property name="successView"><value>mdrtbTSAdmin.list</value></property>
     </bean>
-    <bean id="MdrtbAdmiForm" class="@MODULE_PACKAGE@.web.controller.MdrtbTSAdmFormController">
+    <bean id="MdrtbAdmiForm" class="org.openmrs.module.mdrtb.web.controller.MdrtbTSAdmFormController">
 		<property name="commandName"><value>formObj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
 		<property name="successView"><value>mdrtbTSAdmin.list</value></property>
     </bean> 
-    <bean id="MdrtbPatientStatusAdmin" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientStatusAdminController">
+    <bean id="MdrtbPatientStatusAdmin" class="org.openmrs.module.mdrtb.web.controller.MdrtbPatientStatusAdminController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
 		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
     </bean>   -->
     
     <!-- hacky way to handle existing tabs until we substitute them out -->
-    <bean id="RegimenController" class="@MODULE_PACKAGE@.web.controller.MdrtbPatientOverviewController">
+    <bean id="RegimenController" class="org.openmrs.module.mdrtb.web.controller.MdrtbPatientOverviewController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/regimen/regimen</value></property>
 		<property name="successView"><value>regimen.form</value></property>
@@ -82,11 +82,11 @@
    
     
     <!-- portlet controllers -->    
-    <bean id="patientChartPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.PatientChartPortletController"/>
-    <bean id="mdrtbSubheaderPortletController" class="@MODULE_PACKAGE@.web.controller.portlet.MdrtbSubheaderPortletController"/> 
-    <bean id="patientSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.PatientSummaryPortletController" />
-	<bean id="shortSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.ShortSummaryPortletController" />
-	<bean id="customSummaryPortletController" class="@MODULE_PACKAGE@.web.controller.reporting.CustomSummaryPortletController" />
+    <bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController"/>
+    <bean id="mdrtbSubheaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbSubheaderPortletController"/> 
+    <bean id="patientSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.PatientSummaryPortletController" />
+	<bean id="shortSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.ShortSummaryPortletController" />
+	<bean id="customSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.CustomSummaryPortletController" />
     
     <bean parent="serviceContext">
 		<property name="moduleService">
@@ -138,7 +138,7 @@
 	</bean>
 
 	<!--  Enable annotation-driven Spring MVC -->    
-    <context:component-scan base-package="@MODULE_PACKAGE@" />
+    <context:component-scan base-package="org.openmrs.module.mdrtb" />
     
 </beans>
 
