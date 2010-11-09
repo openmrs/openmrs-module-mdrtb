@@ -55,7 +55,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.2.13894-dev.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.6.2.13894-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.6.2.13894-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.6.2.13894-dev.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/programlocation-0.0.2.jar"/>
 	<classpathentry kind="lib" path="lib-common/htmlwidgets-1.5.5.jar"/>
 	<classpathentry kind="lib" path="lib-common/serialization.xstream-0.2.4.jar"/>

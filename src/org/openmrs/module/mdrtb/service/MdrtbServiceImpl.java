@@ -42,8 +42,6 @@ import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
-import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.specimen.Culture;
@@ -55,6 +53,7 @@ import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
@@ -65,8 +64,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	private static MdrtbFactory mdrtbFactory;
 	
 	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?
-	
-	private List<MdrtbRegimenSuggestion> standardRegimens = null;
 	
 	private List<Locale> localeSetUsedInDB = null;
 	
@@ -96,22 +93,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public void setMdrtbFactory(MdrtbFactory newMdrtbFactory) {
 		MdrtbServiceImpl.mdrtbFactory = newMdrtbFactory;
-	}
-	
-	public List<MdrtbRegimenSuggestion> getStandardRegimens() {
-		if(standardRegimens == null) {
-			setStandardRegimens(MdrtbRegimenUtils.getMdrtbRegimenSuggestions());
-		}
-		
-		return standardRegimens;
-	}
-	
-	public void setStandardRegimens(List<MdrtbRegimenSuggestion> standardRegimens) {
-		if(this.standardRegimens == null) {
-			this.standardRegimens = new LinkedList<MdrtbRegimenSuggestion>();
-		}
-		
-		this.standardRegimens.addAll(standardRegimens);
 	}
 	
 	public List<Locale> getLocaleSetUsedInDB() {
@@ -154,6 +135,36 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return conceptMap.lookup(conceptMapping);
 	}
 	
+	/**
+	 * @see MdrtbService#findMatchingConcept(String)
+	 */
+	public Concept findMatchingConcept(String lookup) {
+    	if (ObjectUtil.notNull(lookup)) {
+    		// First try MDR-TB module's known concept mappings
+    		try {
+    			return Context.getService(MdrtbService.class).getConcept(new String[] {lookup});
+    		}
+    		catch (Exception e) {}
+    		// Next try id/name
+    		try {
+    			Concept c = Context.getConceptService().getConcept(lookup);
+    			if (c != null) {
+    				return c;
+    			}
+    		}
+    		catch (Exception e) {}
+    		// Next try uuid 
+        	try {
+        		Concept c = Context.getConceptService().getConceptByUuid(lookup);
+    			if (c != null) {
+    				return c;
+    			}
+        	}
+        	catch (Exception e) {}
+    	}
+    	return null;
+	}
+
 	public void resetConceptMapCache() {
 		this.conceptMap.resetCache();
 	}

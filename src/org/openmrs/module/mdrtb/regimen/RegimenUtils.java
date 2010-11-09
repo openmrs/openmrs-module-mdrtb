@@ -1,12 +1,12 @@
 package org.openmrs.module.mdrtb.regimen;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -23,12 +23,14 @@ import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
-import org.openmrs.order.RegimenSuggestion;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsUtil;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * Utility method for use with Regimens
@@ -36,23 +38,6 @@ import org.openmrs.util.OpenmrsUtil;
 public class RegimenUtils {
 
     protected static final Log log = LogFactory.getLog(RegimenUtils.class);
-
-    /**
-     * @return a Map from the Can Replace Concept Set to a List of supported RegimenSuggestions for that Set
-     */
-    public static Map<String, List<RegimenSuggestion>> getRegimenSuggestions() {
-    	Map<String, List<RegimenSuggestion>> suggestions = new HashMap<String, List<RegimenSuggestion>>();
-    	for (RegimenSuggestion rs : Context.getOrderService().getStandardRegimens()) {
-    		String canReplace = ObjectUtil.nvlStr(rs.getCanReplace(), "");
-    		List<RegimenSuggestion> l = suggestions.get(canReplace);
-    		if (l == null) {
-    			l = new ArrayList<RegimenSuggestion>();
-    			suggestions.put(canReplace, l);
-    		}
-    		l.add(rs);
-    	}
-    	return suggestions;
-    }
     
     /**
      * @return a List of Drugs whose Concept matches a Concept in the passed set
@@ -72,42 +57,56 @@ public class RegimenUtils {
     	return ret;
     }
     
+    public static List<Concept> getGenericsForDrugSet(String drugSet) {	
+		List<Concept> generics = new ArrayList<Concept>();
+		if (ObjectUtil.isNull(drugSet) || drugSet.equals("*")) {
+			generics = Context.getConceptService().getConceptsWithDrugsInFormulary();
+			if (drugSet.equals("*")) {
+				for (RegimenType t : RegimenUtils.getRegimenTypes()) {
+					if (!"*".equals(t.getDrugSet())) {
+						Concept c = getMdrtbService().findMatchingConcept(drugSet);
+						generics.removeAll(Context.getConceptService().getConceptsByConceptSet(c));
+					}
+				}
+			}
+		}
+		else {
+			Concept c = getMdrtbService().findMatchingConcept(drugSet);
+			generics = Context.getConceptService().getConceptsByConceptSet(c);
+		}
+		return generics;
+    }
+    
     /**
-     * TODO: Consider making this user-configurable
-     * @return the List of all possible regimen types
+     * @return the List of configured regimen types, from global property if configured, or default if not
      */
+    @SuppressWarnings("unchecked")
     public static List<RegimenType> getRegimenTypes() {
-    	List<RegimenType> ret = new ArrayList<RegimenType>();
-    	Map<String, List<RegimenSuggestion>> suggests = getRegimenSuggestions();
-    	Set<Drug> addedDrugs = new HashSet<Drug>();
-    	{
-    		RegimenType type = new RegimenType("tb");
-    		type.setDrugSet(getMdrtbService().getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS));
-    		type.setDrugs(getDrugsWithGenericInSet(type.getDrugSet()));
-    		addedDrugs.addAll(type.getDrugs());
-    		type.setTypeQuestion(getMdrtbService().getConcept(MdrtbConcepts.CURRENT_MDRTB_TREATMENT_TYPE));
-    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_TB_TX_STOPPED));
-    		type.setSuggestions(suggests.get(MdrtbConcepts.TUBERCULOSIS_DRUGS[0]));
-    		ret.add(type);
+    	
+		XStream xstream = new XStream(new DomDriver());
+		xstream.setMode(XStream.NO_REFERENCES);
+		xstream.alias("regimenType", RegimenType.class);
+		xstream.alias("regimenSuggestion", RegimenSuggestion.class);
+		xstream.alias("drugSuggestion", DrugSuggestion.class);
+    	
+    	String xml = Context.getAdministrationService().getGlobalProperty("mdrtb.regimenTypeConfiguration");
+    	if (ObjectUtil.isNull(xml)) {
+    		InputStream is = null;
+    		try {
+    			is = OpenmrsClassLoader.getInstance().getResourceAsStream("org/openmrs/module/mdrtb/regimen/RegimenTypeConfiguration.xml");
+    			log.debug("Returning regimen types from default configuration...");
+    			return (List<RegimenType>)xstream.fromXML(is);
+    		}
+    		finally {
+    			try {
+    				is.close();
+    			}
+    			catch (Exception e) {}
+    		}
     	}
-    	{
-    		RegimenType type = new RegimenType("hiv");
-    		type.setDrugSet(getMdrtbService().getConcept(MdrtbConcepts.ANTIRETROVIRALS));
-    		type.setDrugs(getDrugsWithGenericInSet(type.getDrugSet()));
-    		addedDrugs.addAll(type.getDrugs());
-    		type.setSuggestions(suggests.get(MdrtbConcepts.ANTIRETROVIRALS[0]));
-    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_HIV_TX_STOPPED));
-    		ret.add(type);
-    	}
-    	{
-    		RegimenType type = new RegimenType("other");
-    		List<Drug> otherDrugs = getDrugsWithGenericInSet(null);
-    		otherDrugs.removeAll(addedDrugs);
-    		type.setDrugs(otherDrugs);
-    		type.setReasonForStoppingQuestion(getMdrtbService().getConcept(MdrtbConcepts.REASON_TB_TX_STOPPED));
-    		ret.add(type);
-    	}
-    	return ret;
+    	
+    	log.debug("Returning regimen types from global property configuration...");
+		return (List<RegimenType>)xstream.fromXML(xml);
     }
     
     /**
@@ -136,8 +135,11 @@ public class RegimenUtils {
     		}
     		
     		// Add each Observation that is appropriate for the Regimen Type
-    		for (Obs o : Context.getObsService().getObservationsByPersonAndConcept(patient, type.getTypeQuestion())) {
-    			history.addReasonForStarting(o);
+    		if (type.getReasonForStartingQuestion() != null) {
+    			Concept c = getMdrtbService().getConcept(type.getReasonForStartingQuestion());
+	    		for (Obs o : Context.getObsService().getObservationsByPersonAndConcept(patient, c)) {
+	    			history.addReasonForStarting(o);
+	    		}
     		}
     		
     		m.put(type.getName(), history);

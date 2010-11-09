@@ -20,7 +20,6 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -40,10 +39,6 @@ public interface MdrtbService extends OpenmrsService {
     
     @Deprecated
     public void setMdrtbFactory(MdrtbFactory newMdrtbFactory);
-
-    public List<MdrtbRegimenSuggestion> getStandardRegimens();
-
-    public void setStandardRegimens(List<MdrtbRegimenSuggestion> standardRegimens);
     
     public List<Locale> getLocaleSetUsedInDB();
     
@@ -59,6 +54,11 @@ public interface MdrtbService extends OpenmrsService {
      * Fetches a concept specified by a MdrtbConcepts mapping
      */
     public Concept getConcept(String... conceptMapping);
+    
+    /**
+     * @return the Concept specified by the passed lookup string.  Checks MdrtbConcepts mapping, id, name, and uuid before returning null
+     */
+    public Concept findMatchingConcept(String lookup);
    
     /**
      * Resets the concept map cache

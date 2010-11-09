@@ -8,10 +8,11 @@
 		${id}StandardRegimens['${rs.codeName}'] = {
 			'displayName':'${rs.displayName}',
 			'codeName':'${rs.codeName}',
-			'canReplace':'${rs.canReplace}',
+			'reasonForStarting':'${rs.reasonForStarting}',
 			'drugComponents': [
 				<c:forEach items="${rs.drugComponents}" var="dc" varStatus="dcStatus">
 					{
+						'generic':'${dc.generic}',
 						'drugId':'${dc.drugId}',
 						'dose':'${dc.dose}',
 						'units':'${dc.units}',
@@ -25,8 +26,9 @@
 		};
 	</c:forEach>
 
-	var ${id}DrugOptions = '<option value=""></option><c:forEach items="${history.type.drugs}" var="d"><option value="${d.drugId}">${d.name}</option</c:forEach>';
-	var ${id}UnitOptions = '<option value=""></option><c:forEach items="${doseUnits}" var="u"><option value="${u}">${u}</option</c:forEach>';
+	var ${id}GenericOptions = '<option value=""></option><openmrs:forEachRecord name="conceptSet" conceptSet="${history.type.drugSet}"><option value="${record.conceptId}">${record.name.name}</option></openmrs:forEachRecord>';
+	var ${id}DrugOptions = '<option value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
+	var ${id}UnitOptions = '<option value=""></option><c:forEach items="${doseUnits}" var="u"><option value="${u}">${u}</option></c:forEach>';
 	var ${id}Index = 0;
 
 	$j(document).ready(function() {
@@ -34,15 +36,19 @@
 			var codeName = $j('#${id}standardRegimenSelector').val();
 			var regToAdd = ${id}StandardRegimens[codeName];
 			for (var i=0; i<regToAdd.drugComponents.length; i++) {
-				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}DrugOptions, ${id}UnitOptions, ${id}Index++);
+				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, ${id}Index++);
 			}
 			$j('#${id}standardRegimenSelector').val('');
 		});
 
 		$j('#${id}individualDrugSelector').append(${id}DrugOptions);
+		$j('#${id}individualGenericSelector').append(${id}GenericOptions).change(function() {
+			limitDrug(this, '${id}individualDrugSelector');
+		});
 
 		$j('#${id}AddIndividualDrug').click(function() {
 			addDrug('${id}NewOrderMarker', {
+						'generic':$j('#${id}individualGenericSelector').val(), 
 						'drugId':$j('#${id}individualDrugSelector').val(), 
 						'dose':'', 
 						'units':'', 
@@ -50,21 +56,23 @@
 						'instructions':'', 
 						'startDate':'<openmrs:formatDate date="${changeDate}" format="dd/MMM/yyyy"/>', 
 						'autoExpireDate':''
-					}, ${id}DrugOptions, ${id}UnitOptions, ${id}Index++
+					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, ${id}Index++
 			);
-			$j('#${id}individualDrugSelector').val('')
+			$j('#${id}individualGenericSelector').val('');
+			$j('#${id}individualDrugSelector').hide('');
 		});
 
 		<c:forEach items="${change.ordersStarted}" var="d" varStatus="orderStatus">
 			addDrug('${id}NewOrderMarker', {
 						'drugId':'${d.drug.drugId}', 
+						'generic':'${d.concept.conceptId}', 
 						'dose':'${d.dose}', 
 						'units':'${d.units}', 
 						'frequency':'${d.frequency}', 
 						'instructions':'${d.instructions}', 
 						'startDate':'<openmrs:formatDate date="${d.startDate}" format="dd/MMM/yyyy"/>', 
 						'autoExpireDate':'<openmrs:formatDate date="${d.autoExpireDate}" format="dd/MMM/yyyy"/>'
-					}, ${id}DrugOptions, ${id}UnitOptions, ${id}Index++
+					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, ${id}Index++
 			);
 		</c:forEach>
 	});
@@ -91,6 +99,7 @@
 			<table>
 				<tr>
 					<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
+					<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
 					<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
 					<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
 					<th class="headerStyle"><spring:message code="mdrtb.action" text="Action"/></th>
@@ -101,6 +110,7 @@
 					<c:set var="isStopped" value="${mdrtb:collectionContains(change.ordersEnded, drugOrder)}"/>
 					<tr>
 						<td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.concept.name.name}</td>
+						<td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.drug.name}</td>						
 						<td class="cellStyle">
 							<c:if test="${!empty drugOrder.dose}">
 								${drugOrder.dose} ${drugOrder.units}
@@ -120,9 +130,9 @@
 							<c:set var="needExtraRow" value="${!empty drugOrder.discontinuedReason}"/>
 							<select name="reason.${drugOrder.orderId}" id="stopReason${changeOrderIndex}" <c:if test="${!isStopped}">style="display:none;"</c:if>>
 								<option value=""></option>
-								<c:forEach items="${history.type.reasonForStoppingQuestion.answers}" var="a">
-									<option value="${a.answerConcept.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == a.answerConcept.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${a.answerConcept}"/></option>
-								</c:forEach>
+								<openmrs:forEachRecord name="answer" concept="${history.type.reasonForStoppingQuestion}">
+									<option value="${record.answerConcept.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == record.answerConcept.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${record.answerConcept}"/></option>
+								</openmrs:forEachRecord>
 								<c:if test="${needExtraRow}">
 									<option value="${drugOrder.discontinuedReason}" selected><mdrtb:format obj="${drugOrder.discontinuedReason}"/></option>
 								</c:if>
@@ -137,7 +147,7 @@
 		</div>
 	</c:if>
 	<br/>
-	<c:if test="${!empty history.type.typeQuestion}">
+	<c:if test="${!empty history.type.reasonForStartingQuestion}">
 		<b class="boxHeader"><spring:message code="mdrtb.changesToTreatmentType" text="Changes to Treatment Type"/></b>
 		<div class="box">
 			<table width="100%">
@@ -155,10 +165,10 @@
 					</td>
 				</tr>
 				<tr>
-					<th class="headerStyle"><spring:message code="mdrtb.changneToTreatmentType" text="Change to Treatment Type"/>:</th>
+					<th class="headerStyle"><spring:message code="mdrtb.changeToTreatmentType" text="Change to Treatment Type"/>:</th>
 					<td class="cellStyle" valign="top" width="100%">
 						<spring:message code="${empty regimenAtStart.drugOrders ? 'mdrtb.unspecified' : 'mdrtb.noChange'}" var="noChangeMsg"/>
-						<openmrs_tag:conceptAnswerField formFieldName="reasonForStarting" concept="${history.type.typeQuestion}" initialValue="${regimenAtEnd.reasonForStarting.valueCoded}" optionHeader="${noChangeMsg}"/>
+						<openmrs_tag:conceptAnswerField formFieldName="reasonForStarting" concept="${mdrtb:getConcept(history.type.reasonForStartingQuestion)}" initialValue="${regimenAtEnd.reasonForStarting.valueCoded}" optionHeader="${noChangeMsg}"/>
 					</td>
 				</tr>
 			</table>
@@ -171,6 +181,7 @@
 		<table>
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
+				<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
 				<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/>/<spring:message code="mdrtb.unit" text="Unit"/></th>
 				<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
 				<th class="headerStyle"><spring:message code="mdrtb.startDate" text="Start Date"/></th>
@@ -194,7 +205,8 @@
 		<br/><b> - <spring:message code="mdrtb.or" text="or"/> - </b><br/>
 	</c:if>
 	<spring:message code="mdrtb.startIndividualDrugs" text="Start individual drugs:"/>
-	<select id="${id}individualDrugSelector" name="${id}individualDrugSelector"></select>
+	<select id="${id}individualGenericSelector" name="${id}individualGenericSelector"></select>
+	<select id="${id}individualDrugSelector" name="${id}individualDrugSelector" style="display:none;"></select>
 	<input type="button" id="${id}AddIndividualDrug" value="<spring:message code="mdrtb.add" text="Add"/>"/>
 
 	<br/><br/>

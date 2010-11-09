@@ -1,24 +1,22 @@
 package org.openmrs.module.mdrtb.regimen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.openmrs.Concept;
-import org.openmrs.Drug;
-import org.openmrs.order.RegimenSuggestion;
 
 /**
  * Represents the metadata for how to group Drug Orders together to construct Regimens
  */
-public class RegimenType {
+public class RegimenType implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	//***** PROPERTIES *****
 
 	private String name;
-	private Concept drugSet;
-	private List<Drug> drugs;
-	private Concept typeQuestion;
-	private Concept reasonForStoppingQuestion;
+	private String drugSet;
+	private String reasonForStartingQuestion;
+	private String reasonForStoppingQuestion;
 	private List<RegimenSuggestion> suggestions;
  
 	//***** CONSRUCTORS *****
@@ -78,66 +76,42 @@ public class RegimenType {
 	/**
 	 * @return the drugSet
 	 */
-	public Concept getDrugSet() {
+	public String getDrugSet() {
 		return drugSet;
 	}
 
 	/**
 	 * @param drugSet the drugSet to set
 	 */
-	public void setDrugSet(Concept drugSet) {
+	public void setDrugSet(String drugSet) {
 		this.drugSet = drugSet;
 	}
 
 	/**
-	 * @return the drugs
+	 * @return the reasonForStartingQuestion
 	 */
-	public List<Drug> getDrugs() {
-		if (drugs == null) {
-			drugs = new ArrayList<Drug>();
-		}
-		return drugs;
+	public String getReasonForStartingQuestion() {
+		return reasonForStartingQuestion;
 	}
 
 	/**
-	 * @param drugs the drugs to set
+	 * @param reasonForStartingQuestion the reasonForStartingQuestion to set
 	 */
-	public void setDrugs(List<Drug> drugs) {
-		this.drugs = drugs;
-	}
-	
-	/**
-	 * @param drug the Drug to add
-	 */
-	public void addDrug(Drug drug) {
-		getDrugs().add(drug);
-	}
-
-	/**
-	 * @return the typeQuestion
-	 */
-	public Concept getTypeQuestion() {
-		return typeQuestion;
-	}
-
-	/**
-	 * @param typeQuestion the typeQuestion to set
-	 */
-	public void setTypeQuestion(Concept typeQuestion) {
-		this.typeQuestion = typeQuestion;
+	public void setReasonForStartingQuestion(String reasonForStartingQuestion) {
+		this.reasonForStartingQuestion = reasonForStartingQuestion;
 	}
 
 	/**
 	 * @return the reasonForStoppingQuestion
 	 */
-	public Concept getReasonForStoppingQuestion() {
+	public String getReasonForStoppingQuestion() {
 		return reasonForStoppingQuestion;
 	}
 
 	/**
 	 * @param reasonForStoppingQuestion the reasonForStoppingQuestion to set
 	 */
-	public void setReasonForStoppingQuestion(Concept reasonForStoppingQuestion) {
+	public void setReasonForStoppingQuestion(String reasonForStoppingQuestion) {
 		this.reasonForStoppingQuestion = reasonForStoppingQuestion;
 	}
 
@@ -145,6 +119,9 @@ public class RegimenType {
 	 * @return the suggestions
 	 */
 	public List<RegimenSuggestion> getSuggestions() {
+		if (suggestions == null) {
+			suggestions = new ArrayList<RegimenSuggestion>();
+		}
 		return suggestions;
 	}
 

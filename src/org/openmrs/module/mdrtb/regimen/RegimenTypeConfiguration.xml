@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<regimenType>
+		<name>tb</name>
+		<drugSet>TUBERCULOSIS DRUGS</drugSet>
+		<reasonForStartingQuestion>CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE</reasonForStartingQuestion>
+		<reasonForStoppingQuestion>REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED</reasonForStoppingQuestion>
+		<suggestions>
+			<regimenSuggestion> 
+				<codeName>INJECTABLEINITIAL</codeName>
+				<displayName>Injectable Phase Initial</displayName>
+				<reasonForStarting>STANDARDIZED</reasonForStarting>
+				<drugComponents> 
+					<drugSuggestion> 
+						<generic>1417</generic> 
+						<drugId>48</drugId> 
+						<dose>1</dose> 
+						<units>g</units> 
+						<frequency>1/day x 6 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>5829</generic> 
+						<drugId>46</drugId> 
+						<dose>400</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1418</generic> 
+						<drugId>53</drugId> 
+						<dose>200</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1415</generic> 
+						<drugId>59</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1413</generic> 
+						<drugId>58</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>INJECTABLECONTINUATION</codeName>
+				<displayName>Injectable Phase Continuation</displayName>
+				<reasonForStarting>STANDARDIZED</reasonForStarting>
+				<drugComponents> 
+					<drugSuggestion> 
+						<generic>1417</generic> 
+						<drugId>48</drugId> 
+						<dose>1</dose> 
+						<units>g</units> 
+						<frequency>1/day x 3 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>5829</generic> 
+						<drugId>46</drugId> 
+						<dose>400</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1418</generic> 
+						<drugId>53</drugId> 
+						<dose>200</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1415</generic> 
+						<drugId>59</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1413</generic> 
+						<drugId>58</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion> 
+				<codeName>CONTINUATIONSIMPLE</codeName>
+				<displayName>Continuation Phase Without Z</displayName>
+				<reasonForStarting>STANDARDIZED</reasonForStarting>
+				<drugComponents> 
+					<drugSuggestion> 
+						<generic>1418</generic> 
+						<drugId>53</drugId> 
+						<dose>200</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1415</generic> 
+						<drugId>59</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1413</generic> 
+						<drugId>58</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>CONTINUATIONPLUS</codeName>
+				<displayName>Continuation Phase plus Z</displayName>
+				<reasonForStarting>STANDARDIZED</reasonForStarting>
+				<drugComponents> 
+					<drugSuggestion> 
+						<generic>1418</generic> 
+						<drugId>53</drugId> 
+						<dose>200</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1415</generic> 
+						<drugId>59</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1413</generic> 
+						<drugId>58</drugId> 
+						<dose>250</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>5829</generic> 
+						<drugId>46</drugId> 
+						<dose>400</dose> 
+						<units>mg</units> 
+						<frequency>1/day x 7 days/week</frequency>  
+						<instructions></instructions> 
+						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+		</suggestions>
+	</regimenType>
+	
+	<regimenType>
+		<name>hiv</name>
+		<drugSet>ANTIRETROVIRAL DRUGS</drugSet>
+		<reasonForStoppingQuestion>REASON ANTIRETROVIRALS CHANGED OR STOPPED</reasonForStoppingQuestion>
+		<suggestions>
+			<regimenSuggestion>
+				<codeName>standardTri30</codeName>
+				<displayName>3TC + d4T(30) + NVP (Triomune-30)</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>792</generic> 
+						<drugId>2</drugId>
+						<dose>1</dose>
+						<units>tab(s)</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+			  		</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>standardTri40</codeName>
+				<displayName>3TC + d4T(40) + NVP (Triomune-40)</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>792</generic> 
+						<drugId>3</drugId>
+						<dose>1</dose>
+						<units>tab(s)</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>standardD4t30Efv</codeName>
+				<displayName>d4T(30) + 3TC + EFV(600)</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>625</generic> 
+						<drugId>5</drugId>
+						<dose>30</dose>
+						<units>mg</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+					<drugSuggestion>
+						<generic>628</generic> 
+						<drugId>42</drugId>
+						<dose>150</dose>
+						<units>mg</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+			  		<drugSuggestion>
+			  			<generic>633</generic> 
+						<drugId>11</drugId>
+						<dose>600</dose>
+						<units>mg</units>
+						<frequency>1/day x 7 days/week</frequency>
+						<instructions></instructions>
+			  		</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>standardAztNvp</codeName>
+				<displayName>AZT + 3TC + NVP</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>630</generic> 
+						<drugId>39</drugId>
+						<dose>1</dose>
+						<units>tab(s)</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+					<drugSuggestion>
+						<generic>631</generic> 
+						<drugId>22</drugId>
+						<dose>200</dose>
+						<units>mg</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>standardAztEfv</codeName>
+				<displayName>AZT + 3TC + EFV(600)</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>630</generic> 
+						<drugId>39</drugId>
+						<dose>1</dose>
+						<units>tab(s)</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+					<drugSuggestion>
+						<generic>633</generic> 
+						<drugId>11</drugId>
+						<dose>600</dose>
+						<units>mg</units>
+						<frequency>1/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion>
+				<codeName>standardD4t40Efv</codeName>
+				<displayName>d4T(40) + 3TC + EFV(600)</displayName>
+				<drugComponents>
+					<drugSuggestion>
+						<generic>625</generic> 
+						<drugId>6</drugId>
+						<dose>40</dose>
+						<units>mg</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+					<drugSuggestion>
+						<generic>628</generic> 
+						<drugId>42</drugId>
+						<dose>150</dose>
+						<units>mg</units>
+						<frequency>2/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+					<drugSuggestion>
+						<generic>633</generic> 
+						<drugId>11</drugId>
+						<dose>600</dose>
+						<units>mg</units>
+						<frequency>1/day x 7 days/week</frequency>
+						<instructions></instructions>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+		</suggestions>
+	</regimenType>
+	
+	<regimenType>
+		<name>other</name>
+		<reasonForStoppingQuestion>REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED</reasonForStoppingQuestion>
+	</regimenType>
+</list>

@@ -61,12 +61,10 @@ import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.MdrtbContactPerson;
 import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbPatient;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.PredictionModel;
 import org.openmrs.module.mdrtb.MdrtbConstants.MdrtbPatientDashboardTabs;
-import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenSuggestion;
-import org.openmrs.module.mdrtb.mdrtbregimens.MdrtbRegimenUtils;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.pihhaiti.MSPPFormUtil;
 import org.openmrs.module.web.extension.PatientDashboardTabExt;
 import org.openmrs.util.OpenmrsConstants;
@@ -150,9 +148,6 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
 	//            map.put("tbDrugs", tbDrugs);
 	            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
 	            MdrtbFactory mu = ms.getMdrtbFactory(); 
-	            
-	            List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
-	            map.put("standardRegimens", suggestions);
 	            
 	            List<Drug> firstLineDrugs = new ArrayList<Drug>();
 	            List<Concept> mdrtbDrugs = new ArrayList<Concept>();
@@ -367,6 +362,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                             if (endDateParam != null && !endDateParam.equals(""))
                                 endDateObj = sdf.parse(endDateParam);
                             
+                            /* COMMENTED OUT BY MIKE TO GET COMPILATION WORKING 11/8/10
                             List<MdrtbRegimenSuggestion> suggestions =  ms.getStandardRegimens();
                             for (MdrtbRegimenSuggestion mrs : suggestions){
                                 if (mrs.getCodeName().equals(newDrugConceptParam)){
@@ -381,7 +377,7 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     break;
                                 } 
                             }
-                            
+                            */
                             
                         } else if ((newDrugParam != null && !newDrugParam.equals("")) || (newDrugConceptParam != null && !newDrugConceptParam.equals(""))){
                            
@@ -449,8 +445,9 @@ public class MdrtbPatientOverviewController extends SimpleFormController {
                                     } catch (Exception ex){
                                         log.error("Invalid regimen type read in from standard regimen xml file.  Could not convert regimen type value to an Integer.");
                                     }
+                                    /* commented out by mike to get compilation working
                                     MdrtbRegimenUtils.reconcileAndSaveDrugOrders(newDOs, regTypeInt, Context.getPatientService().getPatient(Integer.valueOf(patientId)), startDateObj);
-                                        
+                                    */
                                 } 
                             } 
                             

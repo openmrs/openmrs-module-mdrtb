@@ -20,10 +20,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.openmrs.Concept;
+import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenChange;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
+import org.openmrs.module.mdrtb.regimen.RegimenType;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
 public class Functions {
 	
@@ -142,5 +148,31 @@ public class Functions {
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * @return the matching Concept
+	 */
+	public static Concept getConcept(String lookup) {
+		return Context.getService(MdrtbService.class).findMatchingConcept(lookup);
+	}
+	
+	/**
+	 * @return a List of Drugs who are in the set matching the passed conceptSet
+	 */
+	public static List<Drug> drugsInSet(String conceptSet) {
+		if (ObjectUtil.isNull(conceptSet)) {
+			return Context.getConceptService().getAllDrugs();
+		}
+		if ("*".equals(conceptSet)) {
+			List<Drug> drugs = Context.getConceptService().getAllDrugs();
+			for (RegimenType t : RegimenUtils.getRegimenTypes()) {
+				if (!"*".equals(t.getDrugSet())) {
+					drugs.removeAll(drugsInSet(t.getDrugSet()));
+				}
+			}
+		}
+		Concept c = Context.getConceptService().getConcept(conceptSet);
+		return RegimenUtils.getDrugsWithGenericInSet(c);
 	}
 }

@@ -9,7 +9,7 @@
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Partners in Health</author>
 	<description>MDR TB Module.</description>
-	<activator>@MODULE_PACKAGE@.MdrtbActivator</activator>
+	<activator>org.openmrs.module.mdrtb.MdrtbActivator</activator>
 		
 	<require_version>1.6</require_version>
 	
@@ -20,21 +20,21 @@
 		
 	<extension>
 		<point>org.openmrs.admin.list</point>
-		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
+		<class>org.openmrs.module.mdrtb.extension.html.AdminList</class>
 	</extension>
 	<extension>
 		<point>org.openmrs.patientDashboardTab</point>
-		<class>@MODULE_PACKAGE@.extension.html.MdrtbPatientDashboardTabExt</class>
+		<class>org.openmrs.module.mdrtb.extension.html.MdrtbPatientDashboardTabExt</class>
 	</extension>
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
-		<class>@MODULE_PACKAGE@.extension.html.MdrtbGutterItem</class>
+		<class>org.openmrs.module.mdrtb.extension.html.MdrtbGutterItem</class>
 	</extension>
 
 	<!--  AOP advice points -->
 	<advice>
 		<point>org.openmrs.api.ConceptService</point>
-		<class>@MODULE_PACKAGE@.service.ConceptServiceAdvice</class>
+		<class>org.openmrs.module.mdrtb.service.ConceptServiceAdvice</class>
 	</advice>
 
 	<globalProperty>

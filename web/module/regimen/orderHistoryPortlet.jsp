@@ -14,7 +14,7 @@
 						<th class="headerStyle"><spring:message code="mdrtb.startDate" text="Start Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.endDate" text="End Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.regimen" text="Regimen"/></th>
-						<c:if test="${!empty history.type.typeQuestion}">
+						<c:if test="${!empty history.type.reasonForStartingQuestion}">
 							<th class="headerStyle" width="100%"><spring:message code="mdrtb.treatmentType" text="Type"/></th>
 						</c:if>
 					</tr>
@@ -39,7 +39,7 @@
 								</c:choose>
 							</td>
 							<td class="${changeStyle}"><mdrtb:format obj="${regimen}" separator=" + "/></td>
-							<c:if test="${!empty history.type.typeQuestion}">
+							<c:if test="${!empty history.type.reasonForStartingQuestion}">
 								<td class="${changeStyle}"><mdrtb:format obj="${regimen.reasonForStarting}"/></td>
 							</c:if>
 						</tr>
