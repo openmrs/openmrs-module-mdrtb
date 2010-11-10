@@ -21,8 +21,10 @@ import java.util.Map;
 
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -104,7 +106,7 @@ public class OutcomeReport implements ReportSpecification {
 		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
 		baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location);
+			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			if (locationFilter != null) {
 				baseCohortDefs.put("location", new Mapped(locationFilter, null));
 			}
@@ -114,7 +116,11 @@ public class OutcomeReport implements ReportSpecification {
 		
 		CohortCrossTabDataSetDefinition dsd = new CohortCrossTabDataSetDefinition();
 		
-		CohortDefinition prevNew = ReportUtil.minus(Cohorts.getNewCaseFilter(), Cohorts.getNewExtrapulmonaryFilter());
+		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+		
+		// TODO: what does this do?
+		CohortDefinition prevNew = ReportUtil.minus(newPatient, Cohorts.getNewExtrapulmonaryFilter());
 		CohortDefinition relapse = Cohorts.getPrevRelapseFilter();
 		CohortDefinition prevDef = Cohorts.getPrevDefaultFilter();
 		CohortDefinition cat1 = Cohorts.getPrevFailureCatIFilter();

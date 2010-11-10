@@ -98,7 +98,7 @@ public class MOHReport implements ReportSpecification {
 		Date endDate = (Date)context.getParameterValue("endDate");
 
 		CohortDefinition inProgramAtStart = Cohorts.getInMdrProgramEverDuring(startDate, endDate);
-		CohortDefinition atLocation = (location == null ? null : Cohorts.getLocationFilter(location));
+		CohortDefinition atLocation = (location == null ? null : Cohorts.getLocationFilter(location, startDate, endDate));
 		CohortDefinition newlyHospitalized = Cohorts.getNewlyHospitalizedDuringPeriod(startDate, endDate);
 		CohortDefinition allHospitalized = Cohorts.getEverHospitalizedDuringPeriod(startDate, endDate);
 		CohortDefinition startedTxDuring = Cohorts.getStartedTreatmentFilter(startDate, endDate);

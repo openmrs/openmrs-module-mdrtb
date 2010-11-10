@@ -13,20 +13,24 @@
  */
 package org.openmrs.module.mdrtb.reporting.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.Location;
-import org.openmrs.PersonAttributeType;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
+import org.openmrs.module.mdrtb.reporting.definition.MdrtbPatientProgramStateCohortDefinition;
+import org.openmrs.module.mdrtb.reporting.definition.MdrtbProgramLocationCohortDefinition;
 import org.openmrs.module.mdrtb.reporting.definition.MdrtbTreatmentStartedCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -34,7 +38,6 @@ import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinitio
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.common.SetComparator;
@@ -61,20 +64,21 @@ public class Cohorts {
 	/**
 	 * @return the CohortDefinition for the Location
 	 */
-	public static CohortDefinition getLocationFilter(Location location) {
+	
+	
+	public static CohortDefinition getLocationFilter(Location location, Date startDate, Date endDate) {
 		if (location != null) {
-			String phc = Context.getAdministrationService().getGlobalProperty("mdrtb.reporting.healthCenterAttributeTypeName", "");
-			PersonAttributeType pat = Context.getPersonService().getPersonAttributeTypeByName(phc);
-			if (pat != null) {
-				PersonAttributeCohortDefinition assignedToLocation = new PersonAttributeCohortDefinition();
-				assignedToLocation.setAttributeType(pat);
-				assignedToLocation.setValueLocations(Arrays.asList(location));
-				return assignedToLocation;
-			}
+			MdrtbProgramLocationCohortDefinition cd = new MdrtbProgramLocationCohortDefinition();
+			cd.setLocation(location);
+			cd.setStartDate(startDate);
+			cd.setEndDate(endDate);
+			
+			return cd;
 		}
+		
 		return null;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static CohortDefinition getStartedInStateDuring(Integer stateId, Date startDate, Date endDate) {
 		PatientStateCohortDefinition cd = new PatientStateCohortDefinition();
@@ -141,6 +145,7 @@ public class Cohorts {
 		return ReportUtil.getCodedObsCohort(TimeModifier.ANY, 1568, startDate, endDate, SetComparator.IN, 6349);
 	}
 	
+	// checked
 	public static CohortDefinition getMdrDetectionFilter(Date startDate, Date endDate) {
 		DstResultCohortDefinition mdrPats = new DstResultCohortDefinition();
 		mdrPats.setIncludeMdr(true);
@@ -149,6 +154,7 @@ public class Cohorts {
 		return mdrPats;
 	}
 	
+	// checked
 	public static CohortDefinition getXdrDetectionFilter(Date startDate, Date endDate) {
 		DstResultCohortDefinition xdrPats = new DstResultCohortDefinition();
 		xdrPats.setIncludeXdr(true);
@@ -157,6 +163,7 @@ public class Cohorts {
 		return xdrPats;
 	}
 	
+	// checked
 	public static CohortDefinition getStartedTreatmentFilter(Date startDate, Date endDate) {
 		MdrtbTreatmentStartedCohortDefinition startedTreatmentCohort = new MdrtbTreatmentStartedCohortDefinition();
 		startedTreatmentCohort.setFromDate(startDate);
@@ -164,29 +171,60 @@ public class Cohorts {
 		return startedTreatmentCohort;
 	}
 	
+	// checked
 	public static CohortDefinition getConfirmedMdrFilter(Date startDate, Date endDate) {
-		CompositionCohortDefinition confirmed = new CompositionCohortDefinition();	
-		confirmed.addSearch("detectedWithMDR", getMdrDetectionFilter(startDate, endDate), null);
+		CompositionCohortDefinition confirmed = new CompositionCohortDefinition();
+		
+		// NOTE: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
+		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
+		confirmed.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		confirmed.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
 		confirmed.setCompositionString("detectedWithMDR AND startedTreatment");
 		return confirmed;
 	}
 	
+	// checked
 	public static CohortDefinition getSuspectedMdrFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition suspected = new CompositionCohortDefinition();	
-		suspected.addSearch("detectedWithMDR", getMdrDetectionFilter(startDate, endDate), null);
+		
+		// NOTE: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
+		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
+		suspected.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		suspected.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
 		suspected.setCompositionString("(NOT detectedWithMDR) AND startedTreatment");
 		return suspected;
 	}
 	
-	public static CohortDefinition getNewCaseFilter() {
-		CodedObsCohortDefinition newCase = new CodedObsCohortDefinition();
-		newCase.setTimeModifier(TimeModifier.NO);
-		newCase.setQuestion(Context.getConceptService().getConcept(6371)); // TODO: Refactor this
-		return newCase;
+	// checked
+	public static CohortDefinition getMdrtbPatientProgramStateFilter(Concept workflowConcept, List<Concept> stateConcepts, Date startDate, Date endDate) {
+		MdrtbPatientProgramStateCohortDefinition cd = new MdrtbPatientProgramStateCohortDefinition();
+		cd.setWorkflowConcept(workflowConcept);
+		cd.setStateConcepts(stateConcepts);
+		cd.setStartDate(startDate);
+		cd.setEndDate(endDate);
+		return cd;
 	}
 	
+	// checked
+	public static CohortDefinition getMdrtbPatientProgramStateFilter(Concept workflowConcept, Concept stateConcept, Date startDate, Date endDate) {
+		List<Concept> stateConcepts = new ArrayList<Concept>();
+		stateConcepts.add(stateConcept);
+		
+		return getMdrtbPatientProgramStateFilter(workflowConcept, stateConcepts, startDate, endDate);
+	}
+	
+/**
+	public static CohortDefinition getClassificationPreviousDrugUseFilter(Concept stateConcept, Date startDate, Date endDate) {
+		MdrtbPatientProgramStateCohortDefinition newCase = new MdrtbPatientProgramStateCohortDefinition();
+		newCase.setStartDate(startDate);
+		newCase.setEndDate(endDate);
+		newCase.setWorkflowConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE));
+		newCase.addStateConcept(stateConcept);
+		
+		return newCase;
+	}
+	*/
+
 	public static CohortDefinition getAnyPreviousTreatmentFilter() {
 		CodedObsCohortDefinition newCase = new CodedObsCohortDefinition();
 		newCase.setTimeModifier(TimeModifier.ANY);
@@ -194,7 +232,9 @@ public class Cohorts {
 		return newCase;
 	}
 	
-	public static CohortDefinition getPrevFirstLineCaseFilter() {
+	/**
+	
+	public static CohortDefinition getPrevFirstLineCaseFilter(Date startDate, Date endDate) {		
 		CompositionCohortDefinition prevFirstLineCase = new CompositionCohortDefinition();	
 		prevFirstLineCase.setName("MDR-TB: Previously treated with first-line drugs");
 		prevFirstLineCase.addSearch("previouslyTreatedSecondLine", getPrevSecondLineCaseFilter(), null);
@@ -206,6 +246,8 @@ public class Cohorts {
 	public static CohortDefinition getPrevSecondLineCaseFilter() {
 		return ReportUtil.getCodedObsCohort(TimeModifier.ANY, 6371, null, null, SetComparator.IN, 2127);
 	}
+	
+	*/
 	
 	public static CohortDefinition getPrevRelapseFilter() {
 		CohortDefinition prevTx = getAnyPreviousTreatmentFilter();
@@ -232,9 +274,13 @@ public class Cohorts {
 	}
 	
 	public static CohortDefinition getNewExtrapulmonaryFilter() {
+		return null;
+		
+		/**
 		CohortDefinition newCase = Cohorts.getNewCaseFilter();		
 		CodedObsCohortDefinition extra = ReportUtil.getCodedObsCohort(TimeModifier.ANY, 992, null, null, SetComparator.IN, 1547);
 		return ReportUtil.getCompositionCohort("AND", newCase, extra);
+		*/
 	}
 	
 	public static CohortDefinition getNewlyHospitalizedDuringPeriod(Date startDate, Date endDate) {

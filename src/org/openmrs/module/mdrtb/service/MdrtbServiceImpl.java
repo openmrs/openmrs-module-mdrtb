@@ -208,6 +208,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	    	}
 		}
 		
+		Collections.sort(programs);
 		return programs;
 	}
 	

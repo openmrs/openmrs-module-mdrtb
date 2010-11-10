@@ -17,6 +17,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.query.service.CohortQueryService;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
@@ -35,7 +37,7 @@ public class MdrtbQueryService {
      */
     public static Cohort getPatientsResistantToAnyDrugs(EvaluationContext context, Date minResultDate, Date maxResultDate, Concept... drugs) {
     	
-    	Integer resistant = 1441; // TODO: Refactor this
+    	Integer resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getConceptId();
     	
     	StringBuilder q = new StringBuilder();
     	q.append("select 	p.patient_id ");

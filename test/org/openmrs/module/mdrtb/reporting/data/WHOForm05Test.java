@@ -24,6 +24,11 @@ public class WHOForm05Test extends BaseModuleContextSensitiveTest {
 	public void setup() throws Exception {
 		authenticate();
 	}
+	
+	@Override
+	public String getWebappName() {
+		return "openmrs_haiti_mdrtb";
+	}
     
     @Test
 	public void render() throws Exception {

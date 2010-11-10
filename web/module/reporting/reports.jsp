@@ -14,11 +14,11 @@
 </style>
 
 <script type="text/javascript" charset="utf-8">
-	$(document).ready(function() {
-		$('#reportData').load(function(event){
-			var ht = $("#reportData").height($(window).height()-80);
+	$j(document).ready(function() {
+		$j('#reportData').load(function(event){
+			var ht = $j("#reportData").height($j(window).height()-80);
 		});
-		$('#cancelButton').click(function(event){
+		$j('#cancelButton').click(function(event){
 			document.location.href = '${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form';
 		});
 	});

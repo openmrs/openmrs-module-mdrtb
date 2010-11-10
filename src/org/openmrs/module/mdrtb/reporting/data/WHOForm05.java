@@ -20,8 +20,10 @@ import java.util.Map;
 
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -88,7 +90,8 @@ public class WHOForm05 implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-	public ReportData evaluateReport(EvaluationContext context) {
+	@SuppressWarnings("unchecked")
+    public ReportData evaluateReport(EvaluationContext context) {
 		
 		ReportDefinition report = new ReportDefinition();
 		
@@ -97,7 +100,7 @@ public class WHOForm05 implements ReportSpecification {
 		Date endDate = (Date)context.getParameterValue("endDate");
 		
 		// Set base cohort to patients assigned to passed location, if applicable
-		CohortDefinition locationFilter = Cohorts.getLocationFilter(location);
+		CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 		if (locationFilter != null) {
 			report.setBaseCohortDefinition(locationFilter, null);
 		}
@@ -111,9 +114,23 @@ public class WHOForm05 implements ReportSpecification {
 		CohortCrossTabDataSetDefinition treatmentDsd = new CohortCrossTabDataSetDefinition();
 		treatmentDsd.addRow("confirmed", Cohorts.getConfirmedMdrFilter(startDate, endDate), null);
 		treatmentDsd.addRow("suspected", Cohorts.getSuspectedMdrFilter(startDate, endDate), null);
-		treatmentDsd.addColumn("new", Cohorts.getNewCaseFilter(), null);
-		treatmentDsd.addColumn("previousFirstLine", Cohorts.getPrevFirstLineCaseFilter(), null);
-		treatmentDsd.addColumn("previousSecondLine", Cohorts.getPrevSecondLineCaseFilter(), null);
+		
+		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition previousFirstLine = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY), startDate, endDate);
+		
+		CohortDefinition previousSecondLine = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS), startDate, endDate);
+		
+		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 new ArrayList(), startDate, endDate);
+		
+		treatmentDsd.addColumn("new", newPatient, null);
+		treatmentDsd.addColumn("previousFirstLine", previousFirstLine, null);
+		treatmentDsd.addColumn("previousSecondLine", previousSecondLine, null);
+		treatmentDsd.addColumn("unknown", unknown, null);
 		report.addDataSetDefinition("startedTreatment", treatmentDsd, null);
 		
 		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);

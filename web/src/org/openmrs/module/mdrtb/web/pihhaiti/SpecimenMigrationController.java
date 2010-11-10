@@ -533,7 +533,6 @@ public class SpecimenMigrationController {
    
     	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
     		if (workflow.getConcept().equals(outcome)) {
-    			// also retire all states associated with that workflow
     			for (ProgramWorkflowState state : workflow.getStates()) {
     				if (state.getConcept().equals(stillOnTreatment)) {
     					workflow.retireState(state);
@@ -605,6 +604,14 @@ public class SpecimenMigrationController {
     	
     	addConceptMapping("REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED", "REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED");
     	addConceptMapping("REASON ANTIRETROVIRALS CHANGED OR STOPPED","REASON ANTIRETROVIRALS CHANGED OR STOPPED");
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/createQuinolonesConceptMappings.form")
+    public ModelAndView createQuinolonesMappings() {
+    	
+    	addConceptMapping("TUBERCULOSIS QUINOLONES", "QUINOLONES");
     	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }

@@ -27,7 +27,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 
 
-public class MdrtbPatientProgram {
+public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 
 	private org.openmrs.module.programlocation.PatientProgram program;
 	
@@ -345,6 +345,13 @@ public class MdrtbPatientProgram {
 			return program.equals(((MdrtbPatientProgram) obj).getPatientProgram());
 		}
 	}	
+	
+	/**
+	 * Implementation of comparable method
+	 */
+	public int compareTo(MdrtbPatientProgram programToCompare) {
+		return this.getDateEnrolled().compareTo(programToCompare.getDateEnrolled());
+	}
 	
 	/**
 	 * Utility functions

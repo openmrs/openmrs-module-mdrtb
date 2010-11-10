@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Location;
-import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
@@ -101,14 +102,13 @@ public class WHOForm07 implements ReportSpecification {
 		Location location = (Location) context.getParameterValue("location");
 		Date startDate = (Date)context.getParameterValue("startDate");
 		Date endDate = (Date)context.getParameterValue("endDate");
-		Date today = new Date();
 		
 		// Base Cohort is confirmed mdr patients who started treatment during year, optionally at location
 		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
 		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrFilter(startDate, endDate), null));
 		baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location);
+			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			if (locationFilter != null) {
 				baseCohortDefs.put("location", new Mapped(locationFilter, null));
 			}	
@@ -118,11 +118,61 @@ public class WHOForm07 implements ReportSpecification {
 		
 		CohortCrossTabDataSetDefinition dsd = new CohortCrossTabDataSetDefinition();
 		
-		dsd.addRow("New", Cohorts.getNewCaseFilter(), null);
-		dsd.addRow("PreviousFirstLine", Cohorts.getPrevFirstLineCaseFilter(), null);
-		dsd.addRow("PreviousSecondLine", Cohorts.getPrevSecondLineCaseFilter(), null);
+		// create the rows in the chart
+		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition previousFirstLine = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY), startDate, endDate);
+		
+		CohortDefinition previousSecondLine = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS), startDate, endDate);
+		
+		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), 
+			 new ArrayList(), startDate, endDate);
+		
+		dsd.addRow("New", newPatient, null);
+		dsd.addRow("PreviousFirstLine", previousFirstLine, null);
+		dsd.addRow("PreviousSecondLine", previousSecondLine, null);
+		dsd.addRow("Unknown", unknown, null);
+		
 		dsd.addRow("Total", ReportUtil.getCompositionCohort(dsd.getRows(), "OR"), null);
 		
+		// create the columns in the chart
+		CohortDefinition cured =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED), startDate, endDate);
+		
+		CohortDefinition complete =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE), startDate, endDate);
+		
+		CohortDefinition failed =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED), startDate, endDate);
+	
+		CohortDefinition defaulted =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED), startDate, endDate);
+		
+		CohortDefinition died =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED), startDate, endDate);
+		
+		CohortDefinition transferred =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_OUT), startDate, endDate);
+		
+		// TODO: vs still on treatment?
+		CohortDefinition stillEnrolled =  Cohorts.getMdrtbPatientProgramStateFilter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), 
+			 new ArrayList(), startDate, endDate);
+	
+		dsd.addColumn("Cured", cured, null);
+		dsd.addColumn("TreatmentCompleted", complete, null);
+		dsd.addColumn("Failed", failed, null);
+		dsd.addColumn("Defaulted", defaulted, null);
+		dsd.addColumn("Died", died, null);
+		dsd.addColumn("TransferredOut", transferred, null);
+		dsd.addColumn("StillEnrolled", stillEnrolled, null);
+		dsd.addColumn("Total", baseCohort, null);
+		report.addDataSetDefinition("Treatment results", dsd, null);
+		
+	
+		/**
 		@SuppressWarnings("deprecation")
 		ProgramWorkflow outcomes = Context.getProgramWorkflowService().getWorkflow(1); // TODO: Refactor
 		CohortDefinition cured = Cohorts.getInStateFilter(today, outcomes, "CURED - TB");
@@ -131,16 +181,18 @@ public class WHOForm07 implements ReportSpecification {
 		CohortDefinition defaulted = Cohorts.getInStateFilter(today, outcomes, "DEFAULTED - TB");
 		CohortDefinition died = Cohorts.getInStateFilter(today, outcomes, "DIED - TB");
 		CohortDefinition transferred = Cohorts.getInStateFilter(today, outcomes, "PATIENT TRANSFERRED OUT");
+		*/
 		
+		/**
 		dsd.addColumn("Cured", ReportUtil.getCompositionCohort("AND", baseCohort, cured), null);
 		dsd.addColumn("TreatmentCompleted", ReportUtil.getCompositionCohort("AND", baseCohort, complete), null);
 		dsd.addColumn("Failed", ReportUtil.getCompositionCohort("AND", baseCohort, failed), null);
 		dsd.addColumn("Defaulted", ReportUtil.getCompositionCohort("AND", baseCohort, defaulted), null);
 		dsd.addColumn("Died", ReportUtil.getCompositionCohort("AND", baseCohort, died), null);
 		dsd.addColumn("TransferredOut", ReportUtil.getCompositionCohort("AND", baseCohort, transferred), null);
-		dsd.addColumn("StillOnTreatment", ReportUtil.minus(baseCohort, cured, complete, failed, defaulted, died, transferred), null);
+		dsd.addColumn("StillEnrolled", ReportUtil.getCompositionCohort("AND", baseCohort, stillEnrolled), null);
 		dsd.addColumn("Total", baseCohort, null);
-		report.addDataSetDefinition("Treatment results", dsd, null);
+		report.addDataSetDefinition("Treatment results", dsd, null); */
 		
 		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
 		return data;
