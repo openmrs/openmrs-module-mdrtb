@@ -670,7 +670,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	// get the workflow via the concept name
     	for (ProgramWorkflow workflow : mdrtbProgram.getAllWorkflows()) {
     		if (workflow.getConcept().equals(workflowConcept)) {
-    			return workflow.getSortedStates();
+    			return workflow.getStates(false);
     		}
     	}
     	return null;
