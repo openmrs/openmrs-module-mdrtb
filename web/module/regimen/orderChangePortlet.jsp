@@ -12,6 +12,7 @@
 			'drugComponents': [
 				<c:forEach items="${rs.drugComponents}" var="dc" varStatus="dcStatus">
 					{
+						'orderId':'', 
 						'generic':'${dc.generic}',
 						'drugId':'${dc.drugId}',
 						'dose':'${dc.dose}',
@@ -48,6 +49,7 @@
 
 		$j('#${id}AddIndividualDrug').click(function() {
 			addDrug('${id}NewOrderMarker', {
+						'orderId':'', 
 						'generic':$j('#${id}individualGenericSelector').val(), 
 						'drugId':$j('#${id}individualDrugSelector').val(), 
 						'dose':'', 
@@ -64,8 +66,9 @@
 
 		<c:forEach items="${change.ordersStarted}" var="d" varStatus="orderStatus">
 			addDrug('${id}NewOrderMarker', {
-						'drugId':'${d.drug.drugId}', 
+						'orderId':'${d.orderId}', 
 						'generic':'${d.concept.conceptId}', 
+						'drugId':'${d.drug.drugId}', 
 						'dose':'${d.dose}', 
 						'units':'${d.units}', 
 						'frequency':'${d.frequency}', 
@@ -120,10 +123,10 @@
 							${drugOrder.frequency}
 						</td>
 						<td class="cellStyle">
-							<input type="radio" tabIndex="-1" onchange="hideLayer('stopReason${changeOrderIndex}');showLayer('continueReason${changeOrderIndex}');" name="action.${drugOrder.orderId}" value="continue" <c:if test="${!isStopped}">checked</c:if>> 
+							<input type="radio" tabIndex="-1" onchange="hideLayer('stopReason${changeOrderIndex}');showLayer('continueReason${changeOrderIndex}');" name="action:${drugOrder.orderId}" value="continue" <c:if test="${!isStopped}">checked</c:if>> 
 							<spring:message code="mdrtb.continue" text="Continue"/>
 							&nbsp;&nbsp;&nbsp;
-							<input type="radio" tabIndex="-1" onchange="showLayer('stopReason${changeOrderIndex}');hideLayer('continueReason${changeOrderIndex}');" name="action.${drugOrder.orderId}" value="stop" <c:if test="${isStopped}">checked</c:if>> 
+							<input type="radio" tabIndex="-1" onchange="showLayer('stopReason${changeOrderIndex}');hideLayer('continueReason${changeOrderIndex}');" name="action:${drugOrder.orderId}" value="stop" <c:if test="${isStopped}">checked</c:if>> 
 							<spring:message code="mdrtb.stop" text="Stop"/>
 						</td>
 						<td class="cellStyle">

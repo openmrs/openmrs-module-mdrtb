@@ -3,6 +3,8 @@
 // Adds a new drug entry row immediately before the sectionId element of a table
 //******************************
 function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, suffix) {
+	$hiddenOrderIndex = $j('<input type="hidden" name="newOrderKey"/>').val(suffix);
+	$hiddenOrderId = $j('<input type="hidden" name="orderId:' + suffix + '"/>').val(drug.orderId);
 	$genericSelector = $j('<select name="generic:' + suffix + '" onchange="limitDrug(this, \'drug'+suffix + '\');">' + genericOptions + '</select>').val(drug.generic);
 	$drugSelector = $j('<select id="drug' + suffix + '" name="drug:' + suffix + '">' + drugOptions + '</select>').val(drug.drugId);
 	$doseSelector = $j('<input type="text" size="6" name="dose:' + suffix + '"/>').val(drug.dose);
@@ -13,6 +15,8 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, suff
 	$removeButton = $j('<input type="button" value=" X " onclick="removeElement(\'addDrugRow' + drug.drugId + '-' + suffix + '\');" />');
 	
 	$newRow = $j('<tr id="addDrugRow' + drug.drugId + '-' + suffix + '">');
+	$newRow.append($hiddenOrderIndex);
+	$newRow.append($hiddenOrderId);
 	$newRow.append($j('<td>').html($genericSelector));
 	$newRow.append($j('<td>').html($drugSelector));
 	$newRow.append($j('<td>').html($doseSelector).append($unitSelector));
