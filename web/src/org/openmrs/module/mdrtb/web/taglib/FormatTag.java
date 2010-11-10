@@ -77,7 +77,7 @@ public class FormatTag extends BodyTagSupport {
 	@SuppressWarnings("unchecked")
 	public int doStartTag() throws JspException {
 		
-		String ret = "";
+		String ret = (ObjectUtil.notNull(defaultVal) ? MessageUtil.translate(defaultVal) : "");
 		if (obj != null) {
 			if (obj instanceof Collection<?>) {
 				Collection<?> l = (Collection<?>) obj;
@@ -96,9 +96,6 @@ public class FormatTag extends BodyTagSupport {
 						}
 						ret = OpenmrsUtil.join(s, separator);
 					}
-				}
-				else {
-					ret = defaultVal;
 				}
 			}
 			else {

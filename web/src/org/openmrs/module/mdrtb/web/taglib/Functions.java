@@ -160,6 +160,13 @@ public class Functions {
 	/**
 	 * @return a List of Drugs who are in the set matching the passed conceptSet
 	 */
+	public static List<Concept> genericsInSet(String conceptSet) {
+		return RegimenUtils.getGenericsForDrugSet(conceptSet);
+	}
+	
+	/**
+	 * @return a List of Drugs who are in the set matching the passed conceptSet
+	 */
 	public static List<Drug> drugsInSet(String conceptSet) {
 		if (ObjectUtil.isNull(conceptSet)) {
 			return Context.getConceptService().getAllDrugs();

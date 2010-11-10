@@ -713,6 +713,15 @@
 	    <description>
 	      Returns a List of Drugs in the passed set
 	    </description>
+	    <name>genericsInSet</name>
+	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
+	    <function-signature>java.util.List genericsInSet(java.lang.String)</function-signature>
+	</function>
+	
+	<function>
+	    <description>
+	      Returns a List of Drugs in the passed set
+	    </description>
 	    <name>drugsInSet</name>
 	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
 	    <function-signature>java.util.List drugsInSet(java.lang.String)</function-signature>

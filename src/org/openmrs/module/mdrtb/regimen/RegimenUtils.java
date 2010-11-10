@@ -17,6 +17,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
@@ -27,6 +28,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.util.OpenmrsClassLoader;
+import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 
 import com.thoughtworks.xstream.XStream;
@@ -60,7 +62,8 @@ public class RegimenUtils {
     public static List<Concept> getGenericsForDrugSet(String drugSet) {	
 		List<Concept> generics = new ArrayList<Concept>();
 		if (ObjectUtil.isNull(drugSet) || drugSet.equals("*")) {
-			generics = Context.getConceptService().getConceptsWithDrugsInFormulary();
+			ConceptClass drugClass = Context.getConceptService().getConceptClass(OpenmrsConstants.CONCEPT_CLASS_DRUG);
+			generics = Context.getConceptService().getConceptsByClass(drugClass);
 			if (drugSet.equals("*")) {
 				for (RegimenType t : RegimenUtils.getRegimenTypes()) {
 					if (!"*".equals(t.getDrugSet())) {
@@ -107,6 +110,18 @@ public class RegimenUtils {
     	
     	log.debug("Returning regimen types from global property configuration...");
 		return (List<RegimenType>)xstream.fromXML(xml);
+    }
+    
+    /**
+     * @return the regimen type for the passed name
+     */
+    public static RegimenType getRegimenType(String name) {
+    	for (RegimenType type : getRegimenTypes()) {
+    		if (type.getName().equals(name)) {
+    			return type;
+    		}
+    	}
+    	return null;
     }
     
     /**

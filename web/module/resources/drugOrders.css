@@ -1,6 +1,9 @@
 .cellStyle {
 	text-align:left; padding-right:20px; white-space:nowrap;
 }
+.indentedCellStyle {
+	text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;
+}
 .cellWrappable {
 	text-align:left; padding-right:20px;
 }

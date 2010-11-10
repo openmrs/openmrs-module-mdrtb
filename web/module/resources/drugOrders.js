@@ -2,7 +2,7 @@
 //******************************
 // Adds a new drug entry row immediately before the sectionId element of a table
 //******************************
-function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, suffix) {
+function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, deleteButtonText, suffix) {
 	$hiddenOrderIndex = $j('<input type="hidden" name="newOrderKey"/>').val(suffix);
 	$hiddenOrderId = $j('<input type="hidden" name="orderId:' + suffix + '"/>').val(drug.orderId);
 	$genericSelector = $j('<select name="generic:' + suffix + '" onchange="limitDrug(this, \'drug'+suffix + '\');">' + genericOptions + '</select>').val(drug.generic);
@@ -12,7 +12,7 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, suff
 	$frequencySelector = $j('<input type="text" name="frequency:' + suffix + '"/>').val(drug.frequency);
 	$endDateSelector = $j('<input type="text" size="10" tabIndex="-1" name="autoExpireDate:' + suffix + '" onFocus=\"showCalendar(this)\"/>').val(drug.autoExpireDate);
 	$instructionsSelector = $j('<input type="text" name="instructions:' + suffix + '"/>').val(drug.instructions);
-	$removeButton = $j('<input type="button" value=" X " onclick="removeElement(\'addDrugRow' + drug.drugId + '-' + suffix + '\');" />');
+	$removeButton = $j('<input type="button" value=" ' + deleteButtonText + ' " onclick="removeElement(\'addDrugRow' + drug.drugId + '-' + suffix + '\');" />');
 	
 	$newRow = $j('<tr id="addDrugRow' + drug.drugId + '-' + suffix + '">');
 	$newRow.append($hiddenOrderIndex);
@@ -38,14 +38,14 @@ function removeElement(id) {
 
 // Limits the drug selector
 function limitDrug(selectorElement, idOfDrugSelector) {
+	$j('#'+idOfDrugSelector).hide();
 	var genericId = $j(selectorElement).val();
 	if (genericId != null && genericId != '') {
-		$j('#'+idOfDrugSelector).show();
-		$j('#'+idOfDrugSelector + " > option").show();
-		$j('#'+idOfDrugSelector + " > option").not('.drugConcept'+genericId).hide();
-	}
-	else {
-		$j('#'+idOfDrugSelector).hide();
+		if ($j('#'+idOfDrugSelector).find('.drugConcept'+genericId).size() > 0) {
+			$j('#'+idOfDrugSelector).show();
+			$j('#'+idOfDrugSelector + " > option").show();
+			$j('#'+idOfDrugSelector + " > option").not('.drugConcept'+genericId).hide();
+		}
 	}
 }
 

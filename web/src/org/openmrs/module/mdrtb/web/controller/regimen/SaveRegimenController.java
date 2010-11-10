@@ -3,7 +3,6 @@ package org.openmrs.module.mdrtb.web.controller.regimen;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,12 +32,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * This Controller manages the Regimen tab
+ * This Controller handles the submission of edits to a Regimen
  */
 @Controller
-public class MdrtbManageRegimenController {
+public class SaveRegimenController {
 	
-	protected static final Log log = LogFactory.getLog(MdrtbManageRegimenController.class);
+	protected static final Log log = LogFactory.getLog(SaveRegimenController.class);
 	
 	@InitBinder
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -46,39 +45,6 @@ public class MdrtbManageRegimenController {
     	dateFormat.setLenient(false);
     	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
 	}
-
-    @RequestMapping("/module/mdrtb/regimen/manageRegimens")
-    public void manageRegimens(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		ModelMap model) {
-    	
-    	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", patientProgramId);
-    	
-    	Patient p = Context.getPatientService().getPatient(patientId);
-    	model.addAttribute("patient", p);
-
-    	Map<String, RegimenHistory> m = RegimenUtils.getRegimenHistory(p);
-    	model.addAttribute("regimenHistoryGroups", m);
-    }
-    
-    @RequestMapping("/module/mdrtb/regimen/editRegimen")
-    public void editRegimen(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		@RequestParam(required=true, value="type") String type,
-    		@RequestParam(required=true, value="changeDate") Date changeDate,
-    		ModelMap model) {
-    	
-    	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", patientProgramId);
-    	model.addAttribute("type", type);
-    	model.addAttribute("changeDate", changeDate);
-    	
-    	Patient p = Context.getPatientService().getPatient(patientId);
-    	model.addAttribute("patient", p);
-    }
     
     @RequestMapping("/module/mdrtb/regimen/saveRegimen")
     public String saveRegimen(
@@ -96,7 +62,7 @@ public class MdrtbManageRegimenController {
     	RegimenHistory history = RegimenUtils.getRegimenHistory(patient).get(type);
     	
     	RegimenChange change = history.getRegimenChanges().get(startingChangeDate);
-    	Regimen regimenAtStart = history.getRegimenOnDate(changeDate, false);
+    	Regimen regimenAtStart = history.getRegimenOnDate(startingChangeDate, false);
     	
     	// Get parameters organized
     	
@@ -217,7 +183,7 @@ public class MdrtbManageRegimenController {
 		// Update reason for starting obs
 		if (change != null && change.getReasonForStarting() != null) {
 			Obs reasonForStartingObs = change.getReasonForStarting();
-			if (!reasonForStartingObs.getValueCoded().getConceptId().toString().equals(reasonForStarting)) {
+			if (!reasonForStartingObs.getValueCoded().getConceptId().toString().equals(reasonForStarting) || changeDate.compareTo(startingChangeDate) != 0) {
 				if (ObjectUtil.isNull(reasonForStarting)) {
 					Context.getObsService().voidObs(reasonForStartingObs, "Reason for starting treatment voided on MDR-TB Drug Order Tab");
 				}
@@ -241,6 +207,6 @@ public class MdrtbManageRegimenController {
 			}
 		}
     	
-    	return "redirect:/module/mdrtb/regimen/manageRegimens.form?patientId="+patientId + "&patientProgramId="+patientProgramId;
+    	return "redirect:/module/mdrtb/regimen/manageDrugOrders.form?patientId="+patientId + "&patientProgramId="+patientProgramId;
     }    
 }
