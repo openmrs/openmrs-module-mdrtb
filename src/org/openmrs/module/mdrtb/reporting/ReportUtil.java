@@ -26,7 +26,10 @@ import org.openmrs.Concept;
 import org.openmrs.OpenmrsMetadata;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -228,5 +231,108 @@ public class ReportUtil {
 		periodDates.put("endDate", c.getTime());
 		
 		return periodDates;
+	}
+	
+	@SuppressWarnings("unchecked")
+    public static Map<String,CohortDefinition> getMdrtbOutcomesFilterSet(Date startDate, Date endDate) {
+		Map<String,CohortDefinition> map = new HashMap<String,CohortDefinition>();
+		
+		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+		
+		CohortDefinition cured =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED), startDate, endDate);
+		
+		CohortDefinition complete =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE), startDate, endDate);
+		
+		CohortDefinition failed =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED), startDate, endDate);
+	
+		CohortDefinition defaulted =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED), startDate, endDate);
+		
+		CohortDefinition died =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED), startDate, endDate);
+		
+		CohortDefinition transferred =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_OUT), startDate, endDate);
+		
+		CohortDefinition stillEnrolled =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(), startDate, endDate);
+	
+		map.put("Cured", cured);
+		map.put("TreatmentCompleted", complete);
+		map.put("Failed", failed);
+		map.put("Defaulted", defaulted);
+		map.put("Died", died);
+		map.put("TransferredOut", transferred);
+		map.put("StillEnrolled", stillEnrolled);
+		
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+    public static Map<String,CohortDefinition> getMdrtbPreviousDrugUseFilterSet(Date startDate, Date endDate) {
+		Map<String,CohortDefinition> map = new HashMap<String,CohortDefinition>();
+
+		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
+		
+		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition previousFirstLine = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY), startDate, endDate);
+		
+		CohortDefinition previousSecondLine = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS), startDate, endDate);
+		
+		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(), startDate, endDate);
+		
+		map.put("New", newPatient);
+		map.put("PreviousFirstLine", previousFirstLine);
+		map.put("PreviousSecondLine", previousSecondLine);
+		map.put("Unknown", unknown);
+		
+		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+    public static Map<String,CohortDefinition> getMdrtbPreviousTreatmentFilterSet(Date startDate, Date endDate) {
+		Map<String,CohortDefinition> map = new HashMap<String,CohortDefinition>();
+		
+		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+		
+		CohortDefinition newPatient =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition relapse =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition afterDefault =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_DEFAULT), startDate, endDate);
+	
+		CohortDefinition failureCatI =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT), startDate, endDate);
+		
+		CohortDefinition failureCatII =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT), startDate, endDate);
+		
+		CohortDefinition transferred =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition other =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDR_TB_PATIENT), startDate, endDate);
+		
+		CohortDefinition unknown =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(), startDate, endDate);
+	
+		map.put("New", newPatient);
+		map.put("Relapse", relapse);
+		map.put("AfterDefault", afterDefault);
+		map.put("AfterFailureCategoryI", failureCatI);
+		map.put("AfterFailureCategoryII", failureCatII);
+		map.put("TransferredIn", transferred);
+		map.put("Other", other);
+		map.put("Unknown", unknown);
+		
+		return map;
 	}
 }
