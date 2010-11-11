@@ -334,7 +334,7 @@
 <td><nobr><spring:message code="mdrtb.regimen" text="Regimen"/></nobr></td>
 <td><nobr><spring:message code="mdrtb.startdate" text="Start Date"/></nobr></td>
 <td><nobr><spring:message code="mdrtb.enddate" text="End Date"/></nobr></td>
-<td width="95%"><nobr><spring:message code="mdrtb.endReason" text="End Reason"/></nobr></td>
+<td width="95%"><nobr><spring:message code="mdrtb.regimenType" text="Type"/></nobr></td>
 </tr>
 <c:forEach var="regimen" items="${status.treatmentStatus.regimens.value}">
 ${regimen.displayString}
@@ -342,7 +342,7 @@ ${regimen.displayString}
 </table>
 </c:if>
 <br/>
-<button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addRegimens" text="Add Regimens"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}/module/mdrtb/regimen/manageDrugOrders.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.editTreatment" text="Edit Treatment"/></button>
 
 </div>
 

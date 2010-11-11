@@ -1,16 +1,14 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.MdrtbConstants.TreatmentState;
 import org.openmrs.module.mdrtb.regimen.Regimen;
+import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.status.TreatmentStatusRenderer;
+import org.openmrs.module.reporting.common.MessageUtil;
 
 
 public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer {
@@ -19,24 +17,20 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     	  	
     	DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
     	
-    	// first we need to pull out all the drugs in this regimen
-    	List<Concept> generics = new ArrayList<Concept>(regimen.getUniqueGenerics());
+    	String regimenStr = RegimenUtils.formatRegimenGenerics(regimen, " + ", "mdrtb.none");
+    	String startDateStr = df.format(regimen.getStartDate());
+    	String endDateStr = (regimen.getEndDate() != null ? df.format(regimen.getEndDate()) : MessageUtil.translate("mdrtb.present"));
+    	String typeStr = RegimenUtils.formatCodedObs(regimen.getReasonForStarting(), "");
     	
-    	// sort the drug list
-    	generics = MdrtbUtil.sortMdrtbDrugs(generics);
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("<tr>");
+    	sb.append("<td style=\"white-space:nowrap;\">" + regimenStr + "</td>");
+    	sb.append("<td style=\"white-space:nowrap;\">" + startDateStr + "</td>");
+    	sb.append("<td style=\"white-space:nowrap;\">" + endDateStr + "</td>");
+    	sb.append("<td style=\"white-space:nowrap;\">" + typeStr + "</td>");
+    	sb.append("</tr>");
     	
-    	// get end reason, if there is one
-    	String endReason = "";
-		for (Concept c : regimen.getEndReasons()) {
-			endReason += ("".equals(endReason) ? "" : ", ") + c.getDisplayString();
-		}
-    	
-	    String displayString = "<tr><td><nobr>" + DashboardStatusRendererUtil.renderDrugList(generics) + "</nobr></td><td><nobr>" 
-	    	+ df.format(regimen.getStartDate()) + "</nobr></td><td>" 
-	    	+ (regimen.getEndDate() != null ? df.format(regimen.getEndDate()) : Context.getMessageSourceService().getMessage("mdrtb.present")) + "</nobr></td><td><nobr>"
-	        + endReason + "</nobr></td></tr>";
-	    
-	    return displayString;
+    	return sb.toString();
     }
 
     public String renderTreatmentState(TreatmentState state) {

@@ -80,10 +80,44 @@
 			);
 		</c:forEach>
 	});
+
+	function validateAndSubmit() {
+
+		$j('#errorDisplay').html('');
+		var changeDate = $j('#changeDateSelector').val();
+		if (changeDate == '') {
+			$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.changeDateRequired" text="Please specify a Change Date"/></li>');
+		}
+
+		$j('.reasonField').not('.hidden').each(function() {
+			if ($j(this).val() == '') {
+	    		$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.discontinuedReasonRequiredForAllStoppedOrders" text="Please specify a discontinued reason for all stopped orders"/></li>');
+			}
+		});
+
+		$j('.genericDrugInput').each(function() {
+			if ($j(this).val() == '') {
+	    		$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.drugRequiredForAllNewOrders" text="Please specify a drug for all new orders"/></li>');
+			}
+		});
+
+		$j('.doseInput').each(function() {
+			if ($j(this).val() != '') {
+				//TODO: Validate that this is a number
+			}
+		});
+
+		// TODO: Validate that startDate, autoExpireDate, and discontinueDates are in proper sequence.
+
+		if ($j('#errorDisplay').html() == '') {
+			$j('#regimenForm').submit();
+		}
+	}
 </script>
 
+<ul id="errorDisplay" class="error"></ul>
 <br/>
-<form action="saveRegimen.form">
+<form id="regimenForm" action="saveRegimen.form">
 	<input type="hidden" name="patientId" value="${patientId}"/>
 	<input type="hidden" name="patientProgramId" value="${patientProgramId}"/>
 	<input type="hidden" name="type" value="${type}"/>
@@ -95,7 +129,7 @@
 		</c:choose>
 		<spring:message code="mdrtb.treatment.${history.type.name}"/> 
 		<spring:message code="mdrtb.changesOn" text="changes on"/> 
-		<input type="text" name="changeDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${changeDate}" />" onFocus="showCalendar(this)" /><span class="datePatternHint"> (<openmrs:datePattern />)</span>
+		<input id="changeDateSelector" type="text" name="changeDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${changeDate}" />" onFocus="showCalendar(this)" /><span class="datePatternHint"> (<openmrs:datePattern />)</span>
 	</b>
 	<br/>	
 	<br/>
@@ -116,7 +150,7 @@
 						<th class="headerStyle"><spring:message code="mdrtb.reasonForStopping" text="Reason for stopping"/></th>
 					</tr>
 					<c:forEach items="${regimenAtStart.drugOrders}" var="drugOrder" varStatus="orderStatus">
-						<c:set var="changeOrderIndex" value="${id}:${orderStatus.index}"/>
+						<c:set var="changeOrderIndex" value="${id}_${orderStatus.index}"/>
 						<c:set var="isStopped" value="${mdrtb:collectionContains(change.ordersEnded, drugOrder)}"/>
 						<tr>
 							<td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.concept.name.name}</td>
@@ -130,15 +164,15 @@
 								${drugOrder.frequency}
 							</td>
 							<td class="cellStyle">
-								<input type="radio" tabIndex="-1" onchange="hideLayer('stopReason${changeOrderIndex}');showLayer('continueReason${changeOrderIndex}');" name="action:${drugOrder.orderId}" value="continue" <c:if test="${!isStopped}">checked</c:if>> 
+								<input type="radio" tabIndex="-1" onchange="addClass('stopReason${changeOrderIndex}','hidden');removeClass('continueReason${changeOrderIndex}','hidden');" name="action:${drugOrder.orderId}" value="continue" <c:if test="${!isStopped}">checked</c:if>> 
 								<spring:message code="mdrtb.continue" text="Continue"/>
 								&nbsp;&nbsp;&nbsp;
-								<input type="radio" tabIndex="-1" onchange="showLayer('stopReason${changeOrderIndex}');hideLayer('continueReason${changeOrderIndex}');" name="action:${drugOrder.orderId}" value="stop" <c:if test="${isStopped}">checked</c:if>> 
+								<input type="radio" tabIndex="-1" onchange="removeClass('stopReason${changeOrderIndex}','hidden');addClass('continueReason${changeOrderIndex}','hidden');" name="action:${drugOrder.orderId}" value="stop" <c:if test="${isStopped}">checked</c:if>> 
 								<spring:message code="mdrtb.stop" text="Stop"/>
 							</td>
 							<td class="cellStyle">
 								<c:set var="needExtraRow" value="${!empty drugOrder.discontinuedReason}"/>
-								<select name="reason.${drugOrder.orderId}" id="stopReason${changeOrderIndex}" <c:if test="${!isStopped}">style="display:none;"</c:if>>
+								<select name="reason.${drugOrder.orderId}" id="stopReason${changeOrderIndex}" class="reasonField<c:if test="${!isStopped}"> hidden</c:if>">
 									<option value=""></option>
 									<openmrs:forEachRecord name="answer" concept="${history.type.reasonForStoppingQuestion}">
 										<option value="${record.answerConcept.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == record.answerConcept.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${record.answerConcept}"/></option>
@@ -147,7 +181,7 @@
 										<option value="${drugOrder.discontinuedReason}" selected><mdrtb:format obj="${drugOrder.discontinuedReason}"/></option>
 									</c:if>
 								</select>
-								<span id="continueReason${changeOrderIndex}" <c:if test="${isStopped}">style="display:none;"</c:if>>
+								<span id="continueReason${changeOrderIndex}" <c:if test="${isStopped}">class="hidden"</c:if>>
 									<spring:message code="mdrtb.continued" text="Continued"/>
 								</span>
 							</td>
@@ -221,6 +255,6 @@
 	<input type="button" id="${id}AddIndividualDrug" value="<spring:message code="mdrtb.add" text="Add"/>"/>
 
 	<br/><br/>
-	<input type="submit" value="<spring:message code="mdrtb.submit" text="Submit"/>"/>
+	<input type="button" value="<spring:message code="mdrtb.submit" text="Submit"/>" onclick="javacript:validateAndSubmit();"/>
 	<input type="button" value="<spring:message code="mdrtb.cancel" text="Cancel"/>" onclick="javascript:history.go(-1);"/>
 </form>

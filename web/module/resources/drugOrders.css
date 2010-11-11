@@ -19,6 +19,9 @@
 .drugAlert {
 	color:red;	
 }
+.hidden {
+	display:none;	
+}
 .regimenHistory {
 	border:1px solid grey; white-space:nowrap; background-color:#EEEEDD;
 }

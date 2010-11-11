@@ -5,9 +5,9 @@
 function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, deleteButtonText, suffix) {
 	$hiddenOrderIndex = $j('<input type="hidden" name="newOrderKey"/>').val(suffix);
 	$hiddenOrderId = $j('<input type="hidden" name="orderId:' + suffix + '"/>').val(drug.orderId);
-	$genericSelector = $j('<select name="generic:' + suffix + '" onchange="limitDrug(this, \'drug'+suffix + '\');">' + genericOptions + '</select>').val(drug.generic);
+	$genericSelector = $j('<select class="genericDrugInput" name="generic:' + suffix + '" onchange="limitDrug(this, \'drug'+suffix + '\');">' + genericOptions + '</select>').val(drug.generic);
 	$drugSelector = $j('<select id="drug' + suffix + '" name="drug:' + suffix + '">' + drugOptions + '</select>').val(drug.drugId);
-	$doseSelector = $j('<input type="text" size="6" name="dose:' + suffix + '"/>').val(drug.dose);
+	$doseSelector = $j('<input class="doseInput" type="text" size="6" name="dose:' + suffix + '"/>').val(drug.dose);
 	$unitSelector = $j('<select name="unit:' + suffix + '">' + unitOptions + '</select>').val(drug.units);
 	$frequencySelector = $j('<input type="text" name="frequency:' + suffix + '"/>').val(drug.frequency);
 	$endDateSelector = $j('<input type="text" size="10" tabIndex="-1" name="autoExpireDate:' + suffix + '" onFocus=\"showCalendar(this)\"/>').val(drug.autoExpireDate);
@@ -34,6 +34,14 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, dele
 // Removes the element with the passed id from the DOM
 function removeElement(id) {
 	$j('#'+id).remove();
+}
+
+function removeClass(elementId, className) {
+	$j('#'+elementId).removeClass(className);
+}
+
+function addClass(elementId, className) {
+	$j('#'+elementId).addClass(className);
 }
 
 // Limits the drug selector

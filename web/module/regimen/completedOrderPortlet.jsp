@@ -23,7 +23,7 @@
 					<c:forEach items="${openmrs:sort(group.value.pastDrugOrders, 'startDate', false)}" var="drugOrder">
 						<tr>
 							<td class="indentedCellStyle">
-								<a href="editRegimen.form?patientId=${patient.patientId}&patientProgramId=${patientProgramId}&type=${group.key}&changeDate=${mdrtb:formatDateDefault(drugOrder.startDate)}">
+								<a href="editDrugOrder.form?patientId=${patient.patientId}&patientProgramId=${patientProgramId}&type=${group.key}&orderId=${drugOrder.orderId}">
 									${drugOrder.concept.name.name}
 								</a>
 							</td>

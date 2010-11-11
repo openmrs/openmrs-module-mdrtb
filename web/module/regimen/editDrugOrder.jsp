@@ -25,6 +25,8 @@
 		
 		var generic = $j('#genericSelector').val();
 		var startDate = $j('#startDateField').val();
+		var dose = $j('#doseSelector').val();
+		var autoExpireDate = $j('#autoExpireField').val();
 		var discontinuedDate = $j('#discontinuedDateField').val();
 		var discontinuedReason = $j('#discontinuedReasonField').val();
 
@@ -36,10 +38,17 @@
 		if (startDate == '') {
 			$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.startDateRequired" text="Please specify a Start Date"/></li>');
 		}
+		if (dose != '') {
+			// TODO: Check if this is a valid number
+		}
+		if (autoExpireDate != '') {
+			// TODO: Check if this is after start date
+		}
 	    if (discontinuedDate != '') {
 	    	if (discontinuedReason == '') {
 	    		$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.discontinuedReasonRequired" text="Please specify a discontinued reason"/></li>');
 	    	}
+	    	// TODO: Check if this is after startDate and before autoExpireDate (if autoExpire not null)
 	    }
 	    if (discontinuedReason != '') {
 	    	if (discontinuedDate == '') {
@@ -96,7 +105,7 @@
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
 				<td class="cellStyle">
-					<input type="text" size="10" name="dose" value="${drugOrder.dose}"/>
+					<input id="doseSelector" type="text" size="10" name="dose" value="${drugOrder.dose}"/>
 					<select name="units">
 						<option value=""></option>
 						<c:forEach items="${doseUnits}" var="u">
@@ -118,7 +127,7 @@
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.autoExpireDate" text="Planned Stop Date"/></th>
 				<td class="cellStyle">
-					<input type="text" name="autoExpireDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${drugOrder.autoExpireDate}" />" onFocus="showCalendar(this)" />
+					<input id="autoExpireField" type="text" name="autoExpireDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${drugOrder.autoExpireDate}" />" onFocus="showCalendar(this)" />
 				</td>
 			</tr>
 			<tr>
