@@ -7,6 +7,12 @@
 </style>
 
 
+<c:choose>
+<c:when test="${empty model.chart.records}">
+	<spring:message code="mdrtb.noChart" text="No test results or regimen information available for this patient program."/>
+</c:when>
+
+<c:otherwise>
 <!-- PATIENT CHART -->
 <div id="patientChart" align="center">
 <table style="border:2px solid #8FABC7; font-size: .9em; border-spacing:0px;">
@@ -124,3 +130,5 @@
 </div> 
 
 <!-- END PATIENT CHART -->
+</c:otherwise>
+</c:choose>

@@ -282,7 +282,8 @@
 
 <div id="specimenList">
 
-<c:if test="${fn:length(specimens) > 0}">
+<c:choose>
+<c:when test="${fn:length(specimens) > 0}">
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
 <td class="tableCell"><nobr><u><spring:message code="mdrtb.dateCollected" text="Date Collected"/></u></nobr></td>
@@ -307,7 +308,12 @@
 	</tr>
 </c:forEach>
 </table>
-</c:if>
+</c:when>
+
+<c:otherwise>
+	<spring:message code="mdrtb.noSpecimens" text="No specimen information available for this patient program."/>
+</c:otherwise>
+</c:choose>
 
 </div>
 </div>
