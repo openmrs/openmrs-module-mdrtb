@@ -1,8 +1,12 @@
 package org.openmrs.module.mdrtb.web.controller.regimen;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -10,10 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.DrugOrder;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.PredictionModel;
+import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.stereotype.Controller;
@@ -88,8 +100,54 @@ public class MdrtbRegimenPortletController {
 			}
 
 			map.addAllAttributes(parameters);
+			
+			// Alerts
+			Map<DrugOrder, String> drugAlerts = new HashMap<DrugOrder, String>();
+			if ("true".equals(parameters.get("alerts"))) {
+				
+				Regimen activeTbRegimen = historyGroups.get("tb").getActiveRegimen();
+				
+				// Show warnings for any drug orders which are active and have resistances.  TODO: Limit by date?
+				Concept resistantQuestion = getMdrtbService().getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG);
+				List<Obs> dstResults = Context.getObsService().getObservationsByPersonAndConcept(patient, resistantQuestion);
+				Set<Concept> resistances = new HashSet<Concept>();
+				for (Obs o : dstResults) {
+					resistances.add(o.getValueCoded());
+				}
+				for (DrugOrder order : activeTbRegimen.getDrugOrders()) {
+					if (resistances.contains(order.getConcept())) {
+						drugAlerts.put(order, MessageUtil.translate("mdrtb.drugContraIndicatedByDst"));
+					}
+				}
+				
+                // Resistance Probability: Experimental for Hamish
+				if (dstResults.isEmpty()) { // Only show this warning if no DSTs have been done
+	                if ("true".equals(Context.getAdministrationService().getGlobalProperty("mdrtb.enableResistanceProbabilityWarning"))) {
+	                    Map<PredictionModel.RiskFactor, Boolean> riskFactors = PredictionModel.getRiskFactors(patient);
+	                    map.addAttribute("resistanceRiskFactors", riskFactors);
+	                    double probability = PredictionModel.calculateRiskProbability(riskFactors, 1);
+	                    map.addAttribute("resistanceProbability", probability);
+	                    
+	                    Concept inh = getMdrtbService().getConcept(MdrtbConcepts.ISONIAZID);
+	                    Concept rif = getMdrtbService().getConcept(MdrtbConcepts.RIFAMPICIN);
+	                    for (DrugOrder order : activeTbRegimen.getDrugOrders()) {
+	                    	if (order.getConcept().equals(inh) || order.getConcept().equals(rif)) {
+	                    		drugAlerts.put(order, MessageUtil.translate("mdrtb.probabilityOfResistance") + ": " + probability + "%");
+	                    	}
+	                    }
+	                }
+				}
+			}
+			map.addAttribute("drugAlerts", drugAlerts);
 		}
 		
 		return new ModelAndView(portletPath, map);
+	}
+	
+	/**
+	 * @return the MdrtbService
+	 */
+	private MdrtbService getMdrtbService() {
+		return Context.getService(MdrtbService.class);
 	}
 }

@@ -80,20 +80,15 @@
 	<ul id="menu">	
 		<li style="border-left-width: 0px;" <c:if test='<%= request.getRequestURI().contains("dashboard") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.overview" text="Overview"/></a></li>
-		
-		
+
 		<li <c:if test='<%= request.getRequestURI().contains("chart") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/chart/chart.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.chart" text="Chart"/></a></li>
 		
 		<li <c:if test='<%= request.getRequestURI().contains("visits") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.visits" text="Visits"/></a></li>
-			
-				
-		<li <c:if test='<%= request.getRequestURI().contains("/regimen/regimen") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/regimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.regimens" text="Regimens"/></a></li>
 
 		<li <c:if test='<%= request.getRequestURI().contains("manageDrugOrders") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/manageDrugOrders.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.drugOrders" text="Drug Orders"/></a></li>	
+		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/manageDrugOrders.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.treatment" text="Treatment"/></a></li>	
 		
 		<li <c:if test='<%= request.getRequestURI().contains("specimen") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>

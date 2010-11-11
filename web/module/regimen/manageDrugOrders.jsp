@@ -107,7 +107,7 @@
 			<br/>
 			<b class="boxHeader"><spring:message code="mdrtb.activeOrders" text="Active Orders"/></b>
 			<div class="box">
-				<mdrtb:regimenPortlet id="activeOrders" patientId="${patient.patientId}" url="activeOrderPortlet"/>
+				<mdrtb:regimenPortlet id="activeOrders" patientId="${patient.patientId}" url="activeOrderPortlet" parameters="alerts=true"/>
 			</div>
 			<br/>
 			<b class="boxHeader"><spring:message code="mdrtb.completedOrders" text="Completed Orders"/></b>

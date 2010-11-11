@@ -16,6 +16,9 @@
 .future {
 	font-style:italic; color:grey; font-weight:normal;
 }
+.drugAlert {
+	color:red;	
+}
 .regimenHistory {
 	border:1px solid grey; white-space:nowrap; background-color:#EEEEDD;
 }
