@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,6 +37,7 @@ public class RegimenHistoryTag extends TagSupport {
     private String dateFormat;
     private String activeCssClass;
     private String futureCssClass;
+    private String editLink;
     private boolean invert = true;
     private boolean timeDescending = false;
     
@@ -103,7 +105,7 @@ public class RegimenHistoryTag extends TagSupport {
 	            	rowClass += (regimen.isFuture() ? " " + futureCss : regimen.isActive() ? " " + activeCss : "");
 	
 	                sb.append("<tr class='" + rowClass + "'>");
-	                sb.append("<th>" + df.format(regimen.getStartDate())+ "</th>");
+	                sb.append("<th>" + dateLink(regimen.getStartDate(), df) + "</th>");
 	                
 	                // If there are no active drugs in this Regimen, format this specially
 	                if (regimen.getDrugOrders().isEmpty()) {
@@ -132,7 +134,7 @@ public class RegimenHistoryTag extends TagSupport {
 		        dateRow.add(dateTitle);
 	            for (int i=0; i<allRegimens.size(); i++) {
 	            	Regimen r = allRegimens.get(i);
-	            	dateRow.add(df.format(r.getStartDate()));
+	            	dateRow.add(dateLink(r.getStartDate(), df));
 	            	if (r.isActive()) {
 	            		activeCol = i+1;
 	            	}
@@ -214,6 +216,20 @@ public class RegimenHistoryTag extends TagSupport {
         invert = true;
         timeDescending = false;
         return EVAL_PAGE;
+	}
+	
+	/**
+	 * @return the edit link for the given Date
+	 */
+	private String dateLink(Date date, DateFormat displayDateFormat) {
+		if (ObjectUtil.isNull(getEditLink())) {
+			return displayDateFormat.format(date);
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("<a href=\"" + editLink + Context.getDateFormat().format(date) + "\">");
+		sb.append(displayDateFormat.format(date));
+		sb.append("</a>");
+		return sb.toString();
 	}
 	
 	//***** PROPERTY ACCESS *****
@@ -301,6 +317,18 @@ public class RegimenHistoryTag extends TagSupport {
 	 */
 	public void setFutureCssClass(String futureCssClass) {
 		this.futureCssClass = futureCssClass;
+	}
+	/**
+	 * @return the editLink
+	 */
+	public String getEditLink() {
+		return editLink;
+	}
+	/**
+	 * @param editLink the editLink to set
+	 */
+	public void setEditLink(String editLink) {
+		this.editLink = editLink;
 	}
 	/**
 	 * @return the invert

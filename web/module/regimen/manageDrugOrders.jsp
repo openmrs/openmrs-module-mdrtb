@@ -119,10 +119,16 @@
 	<tr id="ordersByDateSection">
 		<td valign="top">
 			<br/>
-			<b class="boxHeader"><spring:message code="mdrtb.orderHistory" text="Order History"/></b>
-			<div class="box">
-				<mdrtb:regimenPortlet id="orderHistory" patientId="${patient.patientId}" url="orderHistoryPortlet"/>
-			</div>
+			<c:forEach items="${regimenHistoryGroups}" var="entry">
+				<b class="boxHeader">
+					<spring:message code="mdrtb.treatment.${entry.key}"/>
+				</b>
+				<div class="box">
+					<c:set var="editUrl" value="${pageContext.request.contextPath}/module/mdrtb/regimen/editRegimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}&type=${entry.key}&changeDate="/>
+					<mdrtb:regimenHistory history="${entry.value}" dateFormat="dd/MMM/yyyy" cssClass="regimenHistory" futureCssClass="future" invert="true" timeDescending="true" editLink="${editUrl}"/>
+				</div>
+				<br/>
+			</c:forEach>
 		</td>
 	</tr>
 </table>
