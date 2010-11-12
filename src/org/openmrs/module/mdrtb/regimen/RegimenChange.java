@@ -18,7 +18,7 @@ public class RegimenChange implements Comparable<RegimenChange> {
 	private Date changeDate;					// The date of the Regimen Change
 	private Set<DrugOrder> ordersStarted;		// The Collection of Orders started on this date
 	private Set<DrugOrder> ordersEnded;			// The Collection of Orders ended on this date
-	private Obs reasonForStarting;			// Obs on this date which might describe the reason for starting orders
+	private Obs reasonForStarting;				// Obs on this date which might describe the reason for starting orders
     
     //***** CONSTRUCTORS *****
     
