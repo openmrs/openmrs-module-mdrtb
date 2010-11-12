@@ -31,6 +31,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -982,7 +983,23 @@ public class MdrtbUtil {
     	
     	return positiveResults;
     }
-
+    
+    /**
+     * Returns the concept ids of all the concepts that represent positive results for a smear or culture
+     */
+    public static Integer [] getPositiveResultConceptIds() {
+    	Set<Concept> positiveConcepts = getPositiveResultConcepts();
+    	Integer [] positiveResultIds = new Integer[positiveConcepts.size()];
+    	
+    	int i = 0;
+    	for (Concept positiveConcept : positiveConcepts) {
+    		positiveResultIds[i] = positiveConcept.getConceptId();
+    		i++;
+    	}
+    	
+    	return positiveResultIds;
+    }
+ 
     /**
      * Loads and sorts the drugs stored in the global property mdtrb.defaultDstDrugs
      */
@@ -1061,4 +1078,17 @@ public class MdrtbUtil {
     	
     	return sortedDrugs;
     }
+    
+    /**
+	 * Gets a specific ProgramWorkflowState, given the concept associated with the state
+	 */
+    public static ProgramWorkflowState getProgramWorkflowState(Concept programWorkflowStateConcept) {
+		for (ProgramWorkflowState state : Context.getProgramWorkflowService().getStates()) {
+			if (state.getConcept().equals(programWorkflowStateConcept)) {
+				return state;
+			}
+		}
+		return null;
+	}
+	
 }

@@ -19,6 +19,7 @@ import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -227,7 +228,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	
 	public void addHospitalization(Date admissionDate, Date dischargeDate) {
 		PatientState hospitalization = new PatientState();
-		hospitalization.setState(getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)));
+		hospitalization.setState(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)));
 		hospitalization.setStartDate(admissionDate);
 		hospitalization.setEndDate(dischargeDate);
 		this.program.getStates().add(hospitalization);
@@ -471,19 +472,6 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		}
 		
 	}
-	
-	/**
-	 * Gets a specific ProgramWorkflowState
-	 */
-    private ProgramWorkflowState getProgramWorkflowState(Concept programWorkflowStateConcept) {
-		for (ProgramWorkflowState state : Context.getProgramWorkflowService().getStates()) {
-			if (state.getConcept().equals(programWorkflowStateConcept)) {
-				return state;
-			}
-		}
-		return null;
-	}
-	
 	
 	/**
 	 * Voids all states related to a specific workflow

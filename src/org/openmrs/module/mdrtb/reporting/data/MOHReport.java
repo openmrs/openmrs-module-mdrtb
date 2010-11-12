@@ -97,7 +97,7 @@ public class MOHReport implements ReportSpecification {
 		Date startDate = (Date)context.getParameterValue("startDate");
 		Date endDate = (Date)context.getParameterValue("endDate");
 
-		CohortDefinition inProgramAtStart = Cohorts.getInMdrProgramEverDuring(startDate, endDate);
+		CohortDefinition inProgram = Cohorts.getInMdrProgramEverDuring(startDate, endDate);
 		CohortDefinition atLocation = (location == null ? null : Cohorts.getLocationFilter(location, startDate, endDate));
 		CohortDefinition newlyHospitalized = Cohorts.getNewlyHospitalizedDuringPeriod(startDate, endDate);
 		CohortDefinition allHospitalized = Cohorts.getEverHospitalizedDuringPeriod(startDate, endDate);
@@ -107,8 +107,11 @@ public class MOHReport implements ReportSpecification {
 		CohortDefinition smearNegative = Cohorts.getMostRecentlySmearNegativeByDate(endDate);
 		CohortDefinition abandoned = Cohorts.getDefaultedDuringFilter(startDate, endDate);
 		CohortDefinition died = Cohorts.getDiedDuringFilter(startDate, endDate);
+		
+		// TODO: figure out what obs to look for here--see ticket HATB-358
 		CohortDefinition newlyHivPositive = Cohorts.getNewlyHivPositive(startDate, endDate);
 		CohortDefinition everHivPositive = Cohorts.getHivPositiveDuring(null, endDate);
+	
 		CohortDefinition transferredIn = Cohorts.getTransferredInDuring(startDate, endDate);
 		CohortDefinition controlSmearNegative = Cohorts.getAllSmearNegativeDuring(startDate, endDate);
 		CohortDefinition controlSmearPositive = Cohorts.getAnySmearPositiveDuring(startDate, endDate);
@@ -124,7 +127,7 @@ public class MOHReport implements ReportSpecification {
 		CohortDefinition relapsedTx = Cohorts.getRelapsedDuringFilter(startDate, endDate);
 
 		ReportDefinition report = new ReportDefinition();
-		report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", inProgramAtStart, atLocation), null);
+		report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", inProgram, atLocation), null);
 		
 		CohortCrossTabDataSetDefinition s3 = new CohortCrossTabDataSetDefinition();
 		report.addDataSetDefinition("III. Diagnostic / Traitement et Suivi des Patients MDR-TB", s3, null);
