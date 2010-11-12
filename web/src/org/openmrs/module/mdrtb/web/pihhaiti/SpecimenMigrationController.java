@@ -1102,6 +1102,7 @@ public class SpecimenMigrationController {
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT", "Registration Group - Previous Treatment");
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE", "Registration Group - Previous Drug Use");
        	addConceptShortName("MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME", "Outcome");
+       	addConceptShortName("HOSPITALIZATION WORKFLOW", "Hospitalization");
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
 

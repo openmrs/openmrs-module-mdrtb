@@ -48,7 +48,7 @@
 	}
 	.ui-multiselect div.available {
 		position: absolute; 
-		left: 802px; 
+		left: 844px; 
 	}
 </style>
 
@@ -120,7 +120,7 @@
 								<td class="patientTable" style="padding-right:10px;">
 									<c:if test="${!empty p[c]}">
 										<c:choose>
-											<c:when test="${pih:instanceOf(p[c], 'java.util.Date')}">
+											<c:when test="${mdrtb:instanceOf(p[c], 'java.util.Date')}">
 												<openmrs:formatDate date="${p[c]}" format="${_dateFormatDisplay}"/>
 											</c:when>
 											<c:otherwise>${p[c]}</c:otherwise>

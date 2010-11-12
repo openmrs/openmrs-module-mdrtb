@@ -89,16 +89,14 @@
 						<br/>
 					</td></tr>
 
-					<tr><th colspan="2"><spring:message code="mdrtb.enrolledLocation" text="Enrolled Location"/></th></tr>
-					<tr>
-						<td colspan="2">
+					<tr><th colspan="2"><spring:message code="mdrtb.enrolledLocation" text="Enrolled Location"/>
 							<select name="location">
 								<option value=""><spring:message code="mdrtb.all" text="All"/></option>
 								<c:forEach items="${patientLocations}" var="l">
 									<option value="${l.locationId}" <c:if test="${location == l}">selected</c:if>>${l.name}</option>
 								</c:forEach>
 							</select>
-						</td>
+						</th>
 					</tr>
 					
 					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollment"/></th></tr>
@@ -119,9 +117,9 @@
 						<td><spring:message code="mdrtb.enrollment.never"/></td>
 					</tr>
 					
-					<c:forEach items="${mdrProgram.workflows}" var="wf">
+					<c:forEach items="${openmrs:sort(mdrProgram.workflows, 'concept.name.name', false)}" var="wf">
 						<tr><th colspan="2"><br/><mdrtb:format obj="${wf.concept}"/></th></tr>
-						<c:forEach items="${wf.states}" var="wfs">
+						<c:forEach items="${openmrs:sort(wf.states, 'concept.name.name', false)}" var="wfs">
 							<tr>
 								<td><input type="checkbox" name="states" value="${wfs.programWorkflowStateId}"<c:if test="${mdrtb:collectionContains(states, wfs)}"> checked</c:if>/>&nbsp;</td>
 								<td><mdrtb:format obj="${wfs.concept}"/><br/></td>
