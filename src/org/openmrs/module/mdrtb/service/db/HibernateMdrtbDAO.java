@@ -81,8 +81,16 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
         return ret;
     }
     
-    
+    /**
+	 * @see MdrtbDAO#getLocationsWithAnyProgramEnrollments()
+	 */
     @SuppressWarnings("unchecked")
+	public List<Location> getLocationsWithAnyProgramEnrollments() throws DAOException {
+		String query = "select distinct location from PatientProgram where voided = false";
+		return sessionFactory.getCurrentSession().createQuery(query).list();
+	}
+
+	@SuppressWarnings("unchecked")
     public List<Location> getAllMdrtrbLocations(boolean includeRetired) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Location.class);
         if (!includeRetired) {

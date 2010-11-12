@@ -1,11 +1,10 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="mdrtbHeader.jsp"%>
-<style><%@ include file="resources/mdrtb.css"%></style>
-<style><%@ include file="resources/date_input.css"%></style>
-<h2><table><tr><td><img src="${pageContext.request.contextPath}/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" /></td></tr></table></h2>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/findPatient.htm" />
-<spring:message var="pageTitle" code="findPatient.title" scope="page"/>
-<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
+
+<h2><table><tr><td><img src="${pageContext.request.contextPath}/moduleResources/mdrtb/who_logo.bmp" alt="logo WHO" style="height:50px; width:50px;" border="0"/></td><td>&nbsp;<spring:message code="mdrtb.title" /></td></tr></table></h2>
+
 <br />
 <table class="indexTable">
 	<tr>
@@ -13,7 +12,7 @@
 			<openmrs:portlet id="mdrtbFindPatient" url="mdrtbFindPatient" parameters="size=full|postURL=${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form|showIncludeVoided=false|viewType=shortEdit" moduleId="mdrtb"/>
 			<openmrs:hasPrivilege privilege="Add Patients">
 				<br/><br/>
-					<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbEditPatient.form|successURL=/module/mdrtb/dashboard/dashboard.form|viewType=shortEdit" moduleId="mdrtb" />
+				<openmrs:portlet id="mdrtbAddPatient" url="mdrtbAddPatient" parameters="personType=patient|postURL=mdrtbEditPatient.form|successURL=/module/mdrtb/dashboard/dashboard.form|viewType=shortEdit" moduleId="mdrtb" />
 			</openmrs:hasPrivilege>
 			
 			<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.bottomLeft" type="html">
@@ -66,7 +65,7 @@
 				</openmrs:hasPrivilege>
 			</openmrs:extensionPoint>
 			
-			<table class="indexInner" style="border-collapse:collapse;">
+			<table class="indexInner">
 			
 				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;">
 					<b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;
@@ -78,11 +77,10 @@
 						<spring:message code="mdrtb.viewListPatientPage"/>
 					</a>
 					<br/><br/>
-					<c:forEach var="entry" items="${patientLists}" varStatus="varStatus">
-						<a href="${pageContext.request.contextPath}/${entry.key}">
-							${entry.value}
-						</a><br/>
+					<c:forEach var="e" items="${patientLists}">
+						<a href="${pageContext.request.contextPath}/${e.value}"><spring:message code="${e.key}"/></a><br/>
 					</c:forEach>
+
 					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.listPatientLinks" type="html">
 						<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
 							<spring:message code="${extension.title}"/>:
@@ -121,7 +119,11 @@
 						<i> &nbsp; <spring:message code="mdrtb.noReports"/></i><br/>
 					</c:if>
 				</td></tr>
-				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;"><b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;</b></td></tr>
+				<tr><td style="background-color:#8FABC7;padding:2px 2px 2px 2px;">
+					<b class="boxHeaderTwo" nowrap style="padding:0px 0px 0px 0px;">
+						&nbsp;&nbsp;<spring:message code="mdrtb.viewdrugrequirements" />&nbsp;&nbsp;
+					</b>
+				</td></tr>
 				<tr><td>
 					<a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a><br/>
 					<a href="drugforecast/patientsTakingDrugs.list"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a>

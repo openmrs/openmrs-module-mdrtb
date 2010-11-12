@@ -44,6 +44,12 @@ public interface MdrtbService extends OpenmrsService {
     
     public void setLocaleSetUsedInDB(List<Locale> localeSetUsedInDB);
     
+    /**
+     * @return all Locations which have non-voided Patient Programs associated with them
+     */
+    @Transactional(readOnly=true)
+    public List<Location> getLocationsWithAnyProgramEnrollments();
+    
     @Transactional(readOnly=true)
     public List<Location> getAllMdrtrbLocations(boolean includeRetired);
     

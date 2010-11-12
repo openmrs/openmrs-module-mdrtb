@@ -31,7 +31,7 @@
 					<tr>
 						<td><spring:message code="mdrtb.birthdate"/><br/><i style="font-weight: normal; font-size: 0.8em;">(<spring:message code="general.format"/>: <openmrs:datePattern />)</i></td>
 						<td valign="top">
-							<input type="text" name="addBirthdate" id="birthdate" size="11" value="" onmousedown="javascript:$j(this).date_input()" onKeyUp="clearError('birthdate')"/>
+							<input type="text" name="addBirthdate" id="birthdate" size="10" value="" onFocus="showCalendar(this)" onKeyUp="clearError('birthdate')"/>
 							<spring:message code="mdrtb.or"/> <spring:message code="mdrtb.age"/>
 							<input type="text" name="addAge" id="age" size="5" value="" onKeyUp="clearError('birthdate')" />
 							<span class="error" id="birthdateError"><spring:message code="Person.birthdate.required"/></span>

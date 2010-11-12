@@ -14,6 +14,11 @@ public interface MdrtbDAO {
 
     public List<Location> getAllMdrtrbLocations(boolean includeRetired) throws DAOException;
     
+    /**
+     * @return all Locations which have non-voided Patient Programs associated with them
+     */
+    public List<Location> getLocationsWithAnyProgramEnrollments() throws DAOException;
+    
     public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) throws DAOException;
     
 }

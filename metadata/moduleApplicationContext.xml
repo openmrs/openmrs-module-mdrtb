@@ -18,18 +18,15 @@
     	<property name="mappings">
     		<!--  we should soon be able to get rid of all of these except for the portlets -->
             <props>
-            	
-            	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
             
             <!--  
+            	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
            		<prop key="module/@MODULE_ID@/mdrtbTSAdmin.list">MdrtbAdmiList</prop> 		
 				<prop key="module/@MODULE_ID@/mdrtbTSAdmin.form">MdrtbAdmiForm</prop> 
             	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
-            	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop> -->
-            	
-            	<!-- hacky way to handle existing tabs until we substitute them out -->
-            	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop>
-         
+            	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop> TODO: Need contacts back in
+            	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop> -->
+
      			<!--  portlets -->
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
             	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>  
@@ -49,12 +46,13 @@
     </bean>     
     -->
     
+    <!--
     <bean id="MdrtbFormController" class="org.openmrs.module.mdrtb.web.controller.MdrtbFormController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
 		<property name="successView"><value>mdrtbIndex.form</value></property>
     </bean>
-    
+    -->
     
     <!-- 
      <bean id="MdrtbAdmiList" class="org.openmrs.module.mdrtb.web.controller.MdrtbTSAdmListController">
@@ -71,15 +69,13 @@
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
 		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
-    </bean>   -->
-    
-    <!-- hacky way to handle existing tabs until we substitute them out -->
+    </bean>
     <bean id="RegimenController" class="org.openmrs.module.mdrtb.web.controller.MdrtbPatientOverviewController">
 		<property name="commandName"><value>obj</value></property>
 		<property name="formView"><value>/module/@MODULE_ID@/regimen/regimen</value></property>
 		<property name="successView"><value>regimen.form</value></property>
     </bean>
-   
+    -->
     
     <!-- portlet controllers -->    
     <bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController"/>

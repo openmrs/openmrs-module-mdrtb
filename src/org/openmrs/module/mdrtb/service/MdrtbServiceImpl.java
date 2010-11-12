@@ -123,6 +123,13 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		this.localeSetUsedInDB.addAll(localeSetUsedInDB);
 	}
 	
+	/**
+	 * @see MdrtbService#getLocationsWithAnyProgramEnrollments()
+	 */
+	public List<Location> getLocationsWithAnyProgramEnrollments() {
+		return dao.getLocationsWithAnyProgramEnrollments();
+	}
+
 	public List<Location> getAllMdrtrbLocations(boolean includeRetired) {
 		return dao.getAllMdrtrbLocations(includeRetired);
 	}
