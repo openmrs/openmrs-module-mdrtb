@@ -30,6 +30,8 @@ import org.openmrs.Form;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
 import org.openmrs.Obs;
+import org.openmrs.Order;
+import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
@@ -1070,6 +1072,31 @@ public class SpecimenMigrationController {
     	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/resetOrdersWithDiscontinuedDateInFuture.form")
+    public ModelAndView setFutureDiscontinuedDateToNull() {
+    	
+    	// this migration is PIH Haiti specific--fixes a bug that occurred in the previous migration
+    	
+    	Date today = new Date();
+    	 	
+    	for (Order order : Context.getOrderService().getOrders()) {
+    		
+    		if (order != null && order.getDiscontinuedDate() != null && order.getDiscontinued() && order.getDiscontinuedDate().after(today)) {
+    			log.warn("Resetting discontinued state on order " + order.getId() + " to null; discontinued date erronously in the future (" + order.getDiscontinuedDate() + ")");
+    		
+    			order.setDiscontinued(false);
+    			order.setDiscontinuedDate(null);
+    			order.setDiscontinuedBy(null);
+    			order.setDiscontinuedReason(null);
+    			
+    			Context.getOrderService().saveOrder(order);
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
 
     // TODO: add script to retire the forms
     

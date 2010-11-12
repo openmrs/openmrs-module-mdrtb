@@ -36,6 +36,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/setupDrugOrderConceptMappings.form">/module/mdrtb/pihhaiti/migrate/setupDrugOrderConceptMappings.form</a>
    <br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/createQuinolonesConceptMappings.form">/module/mdrtb/pihhaiti/migrate/createQuinolonesConceptMappings.form</a>
+   <br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/resetOrdersWithDiscontinuedDateInFuture.form">/module/mdrtb/pihhaiti/migrate/resetOrdersWithDiscontinuedDateInFuture.form</a>
    
    
 </body>
