@@ -1097,6 +1097,13 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/changeStateShortNames.form")
+    public ModelAndView changeStateShortNames() {
+    	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT", "Registration Group - Previous Treatment");
+    	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE", "Registration Group - Previous Drug Use");
+       	addConceptShortName("MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME", "Outcome");
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
 
     // TODO: add script to retire the forms
     
@@ -1166,6 +1173,18 @@ public class SpecimenMigrationController {
 		concept.addConceptMapping(conceptMap);
 		Context.getConceptService().saveConcept(concept);
 		
+	}
+	
+	private void addConceptShortName(String conceptMapping, String shortName) {
+		Concept c = Context.getService(MdrtbService.class).getConcept(conceptMapping);
+		ConceptName conceptName = new ConceptName();
+		conceptName.setName(shortName);
+		conceptName.setLocale(Locale.ENGLISH);
+		Set<ConceptNameTag> conceptNameTags = new HashSet<ConceptNameTag>();
+		conceptNameTags.add(Context.getConceptService().getConceptNameTagByName("short"));
+		conceptName.setTags(conceptNameTags);
+		c.addName(conceptName);
+		Context.getConceptService().saveConcept(c);
 	}
 	
 	private void addConceptMapping(String name, String mapping) {

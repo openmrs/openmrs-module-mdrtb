@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
+<!-- TODO: THIS PAGE CAN BE DELETED -->
+
 <style>
 	.cellStyle {
 		text-align:left; padding-right:20px; white-space:nowrap;

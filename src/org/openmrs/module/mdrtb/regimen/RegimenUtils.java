@@ -86,6 +86,8 @@ public class RegimenUtils {
     @SuppressWarnings("unchecked")
     public static List<RegimenType> getRegimenTypes() {
     	
+    	Thread.currentThread().setContextClassLoader(OpenmrsClassLoader.getInstance());
+    	
 		XStream xstream = new XStream(new DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("regimenType", RegimenType.class);

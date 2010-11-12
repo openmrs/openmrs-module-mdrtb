@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 <%@ taglib prefix="mdrtbPortlets" uri="/WEB-INF/view/module/mdrtb/portlets/taglibs/mdrtbPortlets.tld" %>
 
+<!-- TODO: THIS PAGE CAN BE DELETED -->
+
 <script src='<%= request.getContextPath() %>/dwr/interface/MdrtbOrder.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>

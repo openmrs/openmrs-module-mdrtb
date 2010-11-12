@@ -6,10 +6,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Location;
+import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientSetService.PatientLocationMethod;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbCohortUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,7 @@ public class MdrtbListPatientsController {
 	    			@RequestParam(required=false, value="identifier") 		String identifier,
 	    			@RequestParam(required=false, value="name") 			String name,
 	    			@RequestParam(required=false, value="enrollment")		String enrollment,
-	    			@RequestParam(required=false, value="locations") 		List<Location> locations,
-	    			@RequestParam(required=false, value="locationMethod") 	PatientLocationMethod locationMethod,
+	    			@RequestParam(required=false, value="location") 		Location location,
 	    			@RequestParam(required=false, value="states") 			List<ProgramWorkflowState> states
 	            ) {
     	
@@ -47,14 +47,21 @@ public class MdrtbListPatientsController {
     	model.addAttribute("identifier", identifier);
     	model.addAttribute("name", name);
     	model.addAttribute("enrollment", enrollment);
-    	model.addAttribute("locations", locations);
-    	model.addAttribute("locationMethod", locationMethod);
+    	model.addAttribute("location", location);;
     	model.addAttribute("states", states);
     	
     	if (StringUtils.hasText(displayMode)) {
-    		Cohort cohort = MdrtbCohortUtil.getMdrPatients(identifier, name, enrollment, locations, locationMethod, states);
+    		Cohort cohort = MdrtbCohortUtil.getMdrPatients(identifier, name, enrollment, location, states);
         	model.addAttribute("patientIds", cohort.getCommaSeparatedPatientIds());
         	model.addAttribute("patients", Context.getPatientSetService().getPatients(cohort.getMemberIds()));
     	}
+    	
+    	MdrtbService svc = Context.getService(MdrtbService.class);
+    	
+    	Program mdrtbProgram = svc.getMdrtbProgram();
+    	model.addAttribute("mdrProgram", mdrtbProgram);
+    	
+    	List<Location> patientLocations = svc.getLocationsWithAnyProgramEnrollments();
+    	model.addAttribute("patientLocations", patientLocations);
     }
 }

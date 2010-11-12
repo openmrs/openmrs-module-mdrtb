@@ -1,12 +1,10 @@
 package org.openmrs.module.mdrtb.web.controller.reporting;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Location;
-import org.openmrs.api.PatientSetService.PatientLocationMethod;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbCohortUtil;
 import org.springframework.stereotype.Controller;
@@ -24,9 +22,8 @@ public class MdrPatientListController {
             		@RequestParam(value="view", required=false) String view,
             		ModelMap model) {
         
-    	PatientLocationMethod method = PatientLocationMethod.PATIENT_HEALTH_CENTER;
     	Location l = Context.getLocationService().getLocation(locationId);
-    	Cohort c = MdrtbCohortUtil.getMdrPatients(null, null, enrollment, Arrays.asList(l), method, null);
+    	Cohort c = MdrtbCohortUtil.getMdrPatients(null, null, enrollment, l, null);
     	view = (StringUtils.isEmpty(view) ? "patientSummary" : view);
 		
     	model.addAttribute("view", view);

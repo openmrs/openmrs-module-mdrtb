@@ -1,19 +1,11 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="mdrtbHeader.jsp"%>
-<style><%@ include file="resources/mdrtb.css"%></style>
 
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbListPatients.form" />
 
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
-
-<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
-
-<script type="text/javascript">
-	var $j = jQuery.noConflict(); 
-</script>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -54,16 +46,11 @@
 	th.patientTable,td.patientTable {text-align:left; white-space:nowrap; border: 1px solid black; font-size:small; padding-left:5px; padding-right:5px;}
 </style>
 
-<openmrs:globalProperty key="mdrtb.listPatientsLocationMethod" var="locationMethod" defaultValue="PATIENT_HEALTH_CENTER"/>
-<openmrs:globalProperty key="mdrtb.location_list" var="locationList"/>
-<openmrs:globalProperty key="mdrtb.program_name" var="mdrProgram"/>
-
 <form method="get">
 
 	<table class="patientTable">
 		<tr>
 			<td valign="top" class="patientTable">
-				<input type="hidden" name="locationMethod" value="${locationMethod}"/>
 				<table>
 					<tr style="border-bottom:2px solid black;"><td colspan="2" style="background-color:#C0C0C0; font-weight:bold;">
 						<table width="100%"><tr>
@@ -102,13 +89,17 @@
 						<br/>
 					</td></tr>
 
-					<tr><th colspan="2"><spring:message code="mdrtb.locationMethod.${locationMethod}"/></th></tr>
-					<mdrtb:forEachRecord name="location" filterList="${locationList}">
-						<tr>
-							<td><input type="checkbox" name="locations" value="${record.locationId}"<c:if test="${mdrtb:collectionContains(locations, record)}"> checked</c:if>/>&nbsp;</td>
-							<td>${record.name}</td>
-						</tr>
-					</mdrtb:forEachRecord>
+					<tr><th colspan="2"><spring:message code="mdrtb.enrolledLocation" text="Enrolled Location"/></th></tr>
+					<tr>
+						<td colspan="2">
+							<select name="location">
+								<option value=""><spring:message code="mdrtb.all" text="All"/></option>
+								<c:forEach items="${patientLocations}" var="l">
+									<option value="${l.locationId}" <c:if test="${location == l}">selected</c:if>>${l.name}</option>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
 					
 					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollment"/></th></tr>
 					<tr>
@@ -127,44 +118,16 @@
 						<td><input type="radio" name="enrollment" value="never"<c:if test="${enrollment == 'never'}"> checked</c:if>/>&nbsp;</td>
 						<td><spring:message code="mdrtb.enrollment.never"/></td>
 					</tr>
-									
-					<mdrtb:forEachRecord name="workflow" programName="${mdrProgram}">
-						
-						<tr><th colspan="2">
-							<br/><mdrtb:concept concept="${record.concept}" nameVar="n" mappingVar="m">
-								<c:choose>
-									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME'}">
-										<spring:message code="mdrtb.patientstatusworkflow.outcome"/>
-									</c:when>
-									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS CULTURE STATUS'}">
-										<spring:message code="mdrtb.patientstatusworkflow.cultureStatus"/>
-									</c:when>
-									<c:when test="${m == 'MULTI-DRUG RESISTANT TUBERCULOSIS PATIENT STATUS'}">
-										<spring:message code="mdrtb.patientstatusworkflow.patientStatus"/>
-									</c:when>
-									<c:when test="${m == 'CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE'}">
-										<spring:message code="mdrtb.previousDrugClassification"/>
-									</c:when>
-									<c:when test="${m == 'CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT'}">
-										<spring:message code="mdrtb.previousTreatmentClassification"/>
-									</c:when>		
-									<c:when test="${m == 'HOSPITALIZATION WORKFLOW'}">
-										<spring:message code="mdrtb.currentlyHospitalized"/>
-									</c:when>								
-									<c:otherwise>
-										${n.name}
-									</c:otherwise>
-								</c:choose>
-							</mdrtb:concept>
-						</th></tr>
-						
-						<mdrtb:forEachRecord name="state" programName="${mdrProgram}" workflowNames="${record.concept.name}">
+					
+					<c:forEach items="${mdrProgram.workflows}" var="wf">
+						<tr><th colspan="2"><br/><mdrtb:format obj="${wf.concept}"/></th></tr>
+						<c:forEach items="${wf.states}" var="wfs">
 							<tr>
-								<td><input type="checkbox" name="states" value="${record.programWorkflowStateId}"<c:if test="${mdrtb:collectionContains(states, record)}"> checked</c:if>/>&nbsp;</td>
-								<td><mdrtb:concept concept="${record.concept}" nameVar="n" mappingVar="m">${n.name}</mdrtb:concept><br/></td>
-							</tr>
-						</mdrtb:forEachRecord>
-					</mdrtb:forEachRecord>
+								<td><input type="checkbox" name="states" value="${wfs.programWorkflowStateId}"<c:if test="${mdrtb:collectionContains(states, wfs)}"> checked</c:if>/>&nbsp;</td>
+								<td><mdrtb:format obj="${wfs.concept}"/><br/></td>
+							</tr>							
+						</c:forEach>
+					</c:forEach>
 				</table>
 			</td>
 			<td valign="top" width="100%" style="padding-left:10px;">

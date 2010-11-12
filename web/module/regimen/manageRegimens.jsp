@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<!-- TODO: THIS PAGE CAN BE DELETED -->
+
 <openmrs:require privilege="View Orders" otherwise="/login.htm" redirect="/module/mdrtb/regimen/manageRegimens.form"/>
 
 <openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/mdrtb/drugOrders.js"/>

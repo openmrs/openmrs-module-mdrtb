@@ -1,18 +1,18 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.openmrs.Cohort;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientSetService.PatientLocationMethod;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.springframework.util.StringUtils;
 
 public class MdrtbCohortUtil {
@@ -21,15 +21,14 @@ public class MdrtbCohortUtil {
 	 * Utility method to return patients matching passed criteria
 	 * @return Cohort
 	 */
-	public static Cohort getMdrPatients(String identifier, String name, String enrollment, List<Location> locations,
-										PatientLocationMethod locationMethod, List<ProgramWorkflowState> states) {
+	public static Cohort getMdrPatients(String identifier, String name, String enrollment, Location location, List<ProgramWorkflowState> states) {
 		
 		Cohort cohort = Context.getPatientSetService().getAllPatients();
 		
 		MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
+		
 		Date now = new Date();
-		Program mdrtbProgram = mu.getMDRTBProgram();
+		Program mdrtbProgram = ms.getMdrtbProgram();
 		
 		if ("current".equals(enrollment)) {
 			Cohort current = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, now, now);
@@ -57,27 +56,10 @@ public class MdrtbCohortUtil {
 			cohort = Cohort.intersect(cohort, nameIdMatches);
 		}
 		
-		if (locations != null) {
-			
-			if (locationMethod == null) {
-				locationMethod = PatientLocationMethod.PATIENT_HEALTH_CENTER;
-			}
-			Map<Location, Cohort> locationCache = new HashMap<Location, Cohort>();
-			String unknownLocationName = Context.getAdministrationService().getGlobalProperty("mdrtb.unknownLocationName");
-			
-			Set<Integer> startingLocationMemberIds = cohort.getMemberIds();
-			Cohort locationCohort = new Cohort();
-			for (Location l : locations) {
-				locationCohort = Cohort.union(locationCohort, getLocationCohort(l, locationMethod, locationCache));
-				if (l.getName().equals(unknownLocationName)) {
-					Cohort noLocations = new Cohort(startingLocationMemberIds);
-					for (Location ul : Context.getLocationService().getAllLocations()) {
-						noLocations = Cohort.subtract(noLocations, getLocationCohort(ul, locationMethod, locationCache));
-					}
-					locationCohort = Cohort.union(locationCohort, noLocations);
-				}
-			}
-			
+		// If Location is specified, limit to patients at this Location
+		if (location != null) {
+			CohortDefinition lcd = Cohorts.getLocationFilter(location, now, now);
+			Cohort locationCohort = Context.getService(CohortDefinitionService.class).evaluate(lcd, new EvaluationContext());
 			cohort = Cohort.intersect(cohort, locationCohort);
 		}
 		
@@ -88,16 +70,4 @@ public class MdrtbCohortUtil {
 		
 		return cohort;
 	}
-	
-    /**
-     * Utility method to return a list of patients at a given location
-     */
-    public static Cohort getLocationCohort(Location location, PatientLocationMethod locationMethod, Map<Location, Cohort> cache) {
-    	if (cache.containsKey(location)) {
-    		return cache.get(location);
-    	}
-    	Cohort c = Context.getPatientSetService().getPatientsHavingLocation(location, locationMethod);
-    	cache.put(location, c);
-    	return c;
-    }
 }
