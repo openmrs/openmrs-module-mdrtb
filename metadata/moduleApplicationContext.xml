@@ -14,20 +14,11 @@
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
            
     <bean id="MdrtbMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    	<property name="order"><value>71</value></property>
+    	<property name="order"><value>10</value></property>
     	<property name="mappings">
-    		<!--  we should soon be able to get rid of all of these except for the portlets -->
             <props>
-            
-            <!--  
-            	<prop key="module/@MODULE_ID@/mdrtbIndex.form">MdrtbFormController</prop>
-           		<prop key="module/@MODULE_ID@/mdrtbTSAdmin.list">MdrtbAdmiList</prop> 		
-				<prop key="module/@MODULE_ID@/mdrtbTSAdmin.form">MdrtbAdmiForm</prop> 
-            	<prop key="module/@MODULE_ID@/mdrtbPatientStatusAdmin.form">MdrtbPatientStatusAdmin</prop>
-            	<prop key="module/@MODULE_ID@/contacts/contacts.form">MdrtbManageContactsController</prop> TODO: Need contacts back in
-            	<prop key="module/@MODULE_ID@/regimen/regimen.form">RegimenController</prop> -->
-
-     			<!--  portlets -->
+            	<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
+            	
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
             	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>  
             	<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
@@ -36,46 +27,12 @@
 	    	</props>
 		</property>
     </bean>
-    <!-- Controllers --> 
+    <!-- Controllers -->
     
-   <!--   
-	 <bean id="MdrtbManageContactsController" class="org.openmrs.module.mdrtb.web.controller.MdrtbManageContactsController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/contacts/contacts</value></property>
-		<property name="successView"><value>contacts.form</value></property>
-    </bean>     
-    -->
-    
-    <!--
-    <bean id="MdrtbFormController" class="org.openmrs.module.mdrtb.web.controller.MdrtbFormController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbIndex</value></property>
-		<property name="successView"><value>mdrtbIndex.form</value></property>
-    </bean>
-    -->
-    
-    <!-- 
-     <bean id="MdrtbAdmiList" class="org.openmrs.module.mdrtb.web.controller.MdrtbTSAdmListController">
-		<property name="commandName"><value>listObj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
-		<property name="successView"><value>mdrtbTSAdmin.list</value></property>
-    </bean>
-    <bean id="MdrtbAdmiForm" class="org.openmrs.module.mdrtb.web.controller.MdrtbTSAdmFormController">
-		<property name="commandName"><value>formObj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbTSAdmin</value></property>
-		<property name="successView"><value>mdrtbTSAdmin.list</value></property>
-    </bean> 
-    <bean id="MdrtbPatientStatusAdmin" class="org.openmrs.module.mdrtb.web.controller.MdrtbPatientStatusAdminController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/mdrtbPatientStatusAdmin</value></property>
-		<property name="successView"><value>mdrtbPatientStatusAdmin.form</value></property>
-    </bean>
-    <bean id="RegimenController" class="org.openmrs.module.mdrtb.web.controller.MdrtbPatientOverviewController">
-		<property name="commandName"><value>obj</value></property>
-		<property name="formView"><value>/module/@MODULE_ID@/regimen/regimen</value></property>
-		<property name="successView"><value>regimen.form</value></property>
-    </bean>
-    -->
+	<bean id="mdrtbCohortBuilderController" class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
+		<property name="formView"><value>/module/@MODULE_ID@/reporting/cohortBuilder</value></property>
+		<property name="successView"><value>cohortBuilder.list</value></property>
+	</bean>
     
     <!-- portlet controllers -->    
     <bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController"/>

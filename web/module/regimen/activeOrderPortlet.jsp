@@ -36,8 +36,8 @@
 								</c:if>
 							</td>
 							<td class="cellStyle future">${drugOrder.frequency}</td>
-							<td class="cellStyle future"><openmrs:formatDate date="${drugOrder.startDate}" format="dd/MMM/yyyy"/></td>
-							<td class="cellStyle future"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="dd/MMM/yyyy"/></td>
+							<td class="cellStyle future"><openmrs:formatDate date="${drugOrder.startDate}" format="${_dateFormatDisplay}"/></td>
+							<td class="cellStyle future"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="${_dateFormatDisplay}"/></td>
 							<td class="cellStyle future">${drugOrder.instructions}</td>
 							<td class="cellStyle future drugAlert" style="width:100%">${drugAlerts[drugOrder]}</td>
 						</tr>
@@ -56,8 +56,8 @@
 								</c:if>
 							</td>
 							<td class="cellStyle">${drugOrder.frequency}</td>
-							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.startDate}" format="dd/MMM/yyyy"/></td>
-							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="dd/MMM/yyyy"/></td>
+							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.startDate}" format="${_dateFormatDisplay}"/></td>
+							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="${_dateFormatDisplay}"/></td>
 							<td class="cellStyle">${drugOrder.instructions}</td>
 							<td class="cellStyle future drugAlert" style="width:100%">${drugAlerts[drugOrder]}</td>
 						</tr>

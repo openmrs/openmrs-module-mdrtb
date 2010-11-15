@@ -65,16 +65,19 @@
 	</c:if>
 	<c:if test="${authenticatedUser == null}">
 		<c:redirect url="/index.htm" />
-		<span id="userLoggedOut" class="firstChild"> <spring:message
-			code="header.logged.out" /> </span>
-		<span id="userLogIn"> <a
-			href='<%= request.getContextPath() %>/login.htm'><spring:message
-			code="header.login" /></a> </span>
+		<span id="userLoggedOut" class="firstChild"> <spring:message code="header.logged.out" /> </span>
+		<span id="userLogIn">
+			<a href="${pageContext.request.contextPath}/login.htm"><spring:message code="header.login" /></a>
+		</span>
 	</c:if>
 	</openmrs:authentication> 
 
 	<span id="userHelp"> <a href='<%= request.getContextPath() %>/moduleResources/mdrtb/MDR-TB_OpenMRS_Documentation.pdf'>
 	<spring:message code="mdrtb.title" /> <spring:message code="header.help" /></a> </span>
+	<span id="classicViewLink">
+		<a href="${pageContext.request.contextPath}/index.htm"><spring:message code="mdrtb.switchToclassicView"/></a>
+	</span>
+	
 </div>
 
 <div id="banner"><%@ include file="/WEB-INF/template/banner.jsp"%>

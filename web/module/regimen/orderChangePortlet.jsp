@@ -19,7 +19,7 @@
 						'dose':'${dc.dose}',
 						'units':'${dc.units}',
 						'frequency':'${dc.frequency}',
-						'startDate':'<openmrs:formatDate date="${changeDate}" format="dd/MMM/yyyy"/>',
+						'startDate':'<openmrs:formatDate date="${changeDate}" format="${_dateFormatDisplay}"/>',
 						'autoExpireDate':'',
 						'instructions':'${dc.instructions}'
 					}<c:if test="${!dcStatus.last}">,</c:if>
@@ -57,7 +57,7 @@
 						'units':'', 
 						'frequency':'', 
 						'instructions':'', 
-						'startDate':'<openmrs:formatDate date="${changeDate}" format="dd/MMM/yyyy"/>', 
+						'startDate':'<openmrs:formatDate date="${changeDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':''
 					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', ${id}Index++
 			);
@@ -74,7 +74,7 @@
 						'units':'${d.units}', 
 						'frequency':'${d.frequency}', 
 						'instructions':'${d.instructions}', 
-						'startDate':'<openmrs:formatDate date="${d.startDate}" format="dd/MMM/yyyy"/>', 
+						'startDate':'<openmrs:formatDate date="${d.startDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':'<openmrs:formatDate date="${d.autoExpireDate}" format="dd/MM/yyyy"/>'
 					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', ${id}Index++
 			);

@@ -23,7 +23,7 @@
 						<tr>
 							<td class="${changeStyle}">
 								<a href="editRegimen.form?patientId=${patient.patientId}&patientProgramId=${patientProgramId}&type=${group.key}&changeDate=${mdrtb:formatDateDefault(regimen.startDate)}">
-									${mdrtb:formatDate(regimen.startDate, 'dd/MMM/yyyy')}
+									${mdrtb:formatDate(regimen.startDate, '${_dateFormatDisplay}')}
 								</a>
 							</td>
 							<td class="${changeStyle}"><mdrtb:format obj="${regimen}" separator=" + "/></td>

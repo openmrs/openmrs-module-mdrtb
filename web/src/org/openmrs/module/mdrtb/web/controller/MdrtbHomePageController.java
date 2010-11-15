@@ -99,7 +99,11 @@ public class MdrtbHomePageController {
             patientLists.put("mdrtb.activePatients", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbShortSummary&enrollment=current");
             patientLists.put("mdrtb.mdrtbSummary", "module/reporting/mdrPatientList.list");
             patientLists.put("mdrtb.glcReport", "module/mdrtb/reporting/glcReport.form");
-            model.addAttribute("patientLists", patientLists);            
+            model.addAttribute("patientLists", patientLists);
+            
+            // Link to Cohort Builder, if reporting compatibility is installed
+            boolean rcStarted = ModuleFactory.getStartedModulesMap().containsKey("reportingcompatibility");
+            model.addAttribute("showCohortBuilder", rcStarted);
         }
     }
 }

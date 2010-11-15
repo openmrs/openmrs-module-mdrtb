@@ -61,7 +61,7 @@
 						<optGroup label="<spring:message code="mdrtb.treatment.${entry.key}"/>"></optGroup>
 						<c:forEach items="${entry.value.regimenChanges}" var="changeEntry">
 							<option value="${entry.key}:${mdrtb:formatDateDefault(changeEntry.key)}">
-								<openmrs:formatDate format="dd/MMM/yyyy" date="${changeEntry.key}"/>
+								<openmrs:formatDate format="${_dateFormatDisplay}" date="${changeEntry.key}"/>
 								&nbsp;&nbsp;
 								<spring:message code="mdrtb.started" text="Started"/>: 
 								<mdrtb:format obj="${changeEntry.value.drugsStartedAndNotEnded}" separator=", " defaultVal="mdrtb.none"/>; 
@@ -125,7 +125,7 @@
 				</b>
 				<div class="box">
 					<c:set var="editUrl" value="${pageContext.request.contextPath}/module/mdrtb/regimen/editRegimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}&type=${entry.key}&changeDate="/>
-					<mdrtb:regimenHistory history="${entry.value}" dateFormat="dd/MMM/yyyy" cssClass="regimenHistory" futureCssClass="future" invert="true" timeDescending="true" editLink="${editUrl}"/>
+					<mdrtb:regimenHistory history="${entry.value}" dateFormat="${_dateFormatDisplay}" cssClass="regimenHistory" futureCssClass="future" invert="true" timeDescending="true" editLink="${editUrl}"/>
 				</div>
 				<br/>
 			</c:forEach>

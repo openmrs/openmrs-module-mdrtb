@@ -80,6 +80,12 @@
 					<c:forEach var="e" items="${patientLists}">
 						<a href="${pageContext.request.contextPath}/${e.value}"><spring:message code="${e.key}"/></a><br/>
 					</c:forEach>
+					<br/>
+					<c:if test="${showCohortBuilder}">
+						<a href="${pageContext.request.contextPath}/cohortBuilder.list">
+							<spring:message code="mdrtb.cohortBuilder" text="Cohort Builder"/>
+						</a><br/>
+					</c:if>
 
 					<openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.listPatientLinks" type="html">
 						<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">

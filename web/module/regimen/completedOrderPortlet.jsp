@@ -33,9 +33,9 @@
 									${drugOrder.dose} ${drugOrder.units}
 								</c:if>
 							</td>
-							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.startDate}" format="dd/MMM/yyyy"/></td>
-							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="dd/MMM/yyyy"/></td>
-							<td class="cellStyle"><openmrs:formatDate date="${empty drugOrder.discontinuedDate ? drugOrder.autoExpireDate : drugOrder.discontinuedDate}" format="dd/MMM/yyyy"/></td>
+							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.startDate}" format="${_dateFormatDisplay}"/></td>
+							<td class="cellStyle"><openmrs:formatDate date="${drugOrder.autoExpireDate}" format="${_dateFormatDisplay}"/></td>
+							<td class="cellStyle"><openmrs:formatDate date="${empty drugOrder.discontinuedDate ? drugOrder.autoExpireDate : drugOrder.discontinuedDate}" format="${_dateFormatDisplay}"/></td>
 							<td class="cellWrappable"><mdrtb:format obj="${drugOrder.discontinuedReason}"/></td>
 						</tr>
 					</c:forEach>
