@@ -51,7 +51,7 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 				}
 				else {
 					String n = URLEncoder.encode(name, "UTF-8");
-					String url = "/openmrs/module/mdrtb/viewCohort.htm?title="+n+"&patientIds=" + c.getCommaSeparatedPatientIds();
+					String url = "/openmrs/module/mdrtb/reporting/viewCohort.htm?title="+n+"&patientIds=" + c.getCommaSeparatedPatientIds();
 					w.write("<a href=\"" + url + "\" target=\"_blank\">" + c.size() + "</a>");
 				}
 			}
