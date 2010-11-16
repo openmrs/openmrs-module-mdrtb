@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +33,10 @@ import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.validator.PatientValidator;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
-import org.openmrs.validator.PatientValidator;
 import org.openmrs.web.controller.person.PersonFormController;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -225,9 +226,17 @@ public class MdrtbEditPatientController {
 			}
 			
 			Set<Person> similarPersons = Context.getPersonService().getSimilarPeople(addName, birthYear, addGender);
+			Set<Patient> similarPatients = new HashSet<Patient>();
 			
-			if (similarPersons.size() > 0) {
-				map.put("patients", similarPersons);
+			// we only want to pass on similar persons who are patients in this case
+			for (Person person : similarPersons) {
+				if (person instanceof Patient) {
+					similarPatients.add((Patient) person);
+				}
+			}
+			
+			if (similarPatients.size() > 0) {
+				map.put("patients", similarPatients);
 				
 				// add the request params to the map so that we can pass them on
 				map.put("addName", addName);
