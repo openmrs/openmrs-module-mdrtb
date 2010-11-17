@@ -250,7 +250,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 			return null;
 		}
 		
-		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), getPreviousProgramDateCompleted(), program.getDateCompleted());
+		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), getPreviousProgramDateCompleted(),
+			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()));
     }
 	
 	public List<Regimen> getMdrtbRegimensDuringProgram() {
@@ -260,7 +261,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		}
 		
 		return RegimenUtils.getTbRegimenHistory(program.getPatient()).getRegimensDuring(getPreviousProgramDateCompleted(), 
-			(program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
+			(!isMostRecentProgram() && program.getDateCompleted() != null ? program.getDateCompleted() : new Date()));
 	}
 	
 	public List<Encounter> getMdrtbEncountersDuringProgram() {
@@ -276,7 +277,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
     	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
     	
 		
-		return Context.getEncounterService().getEncounters(program.getPatient(), null, getPreviousProgramDateCompleted(), program.getDateCompleted(), null, types, null, false);
+		return Context.getEncounterService().getEncounters(program.getPatient(), null, getPreviousProgramDateCompleted(), 
+			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()), null, types, null, false);
 	}
 	
 	public Concept getCurrentAnatomicalSiteDuringProgram() {
@@ -287,7 +289,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		Concept [] anatomicalSiteConcept = {Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB)};
 		Person [] person = {program.getPatient()};
 		
-		List<Obs> anatomicalSites = Context.getObsService().getObservations(Arrays.asList(person), null, Arrays.asList(anatomicalSiteConcept), null, null, null, null, null, null, getPreviousProgramDateCompleted(), program.getDateCompleted(), false);
+		List<Obs> anatomicalSites = Context.getObsService().getObservations(Arrays.asList(person), null, Arrays.asList(anatomicalSiteConcept), null, null, null, null, null, null, 
+			getPreviousProgramDateCompleted(), (!isMostRecentProgram() ?  program.getDateCompleted(): new Date()), false);
 	
 		if (anatomicalSites.size() > 0) {
 			return anatomicalSites.get(0).getValueCoded();
@@ -359,6 +362,21 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	 */
 	
 	/**
+	 * Returns true if this is the most recent program for this patient
+	 */
+	private Boolean isMostRecentProgram() {
+		List<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient());
+		
+		if (programs.size() > 0) {
+			return this.equals(programs.get(programs.size() - 1));
+		}
+		else {
+			return false;
+		}
+	}
+	
+	
+	/**
 	 * Gets the end date of the program before the previous program
 	 * (Returns null if this is the first program)
 	 */
@@ -370,7 +388,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	
 	/**
 	 * Get the program directly before this program
-	 * (Returns null if this is the first program
+	 * (Returns null if this is the first program)
 	 */
 	private MdrtbPatientProgram getPreviousProgram() {
 		

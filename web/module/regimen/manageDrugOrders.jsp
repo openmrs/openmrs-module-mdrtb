@@ -48,7 +48,7 @@
 
 <table width="100%">
 	<tr>
-		<td class="cellStyle"><spring:message code="mdrtb.modifyExistingTreatmentChange" text="Modify an existing treatment change:"/></td>
+		<td class="cellStyle"><spring:message code="mdrtb.modifyExistingTreatmentChange" text="Modify an existing treatment change"/>:</td>
 		<td class="cellStyle" width="100%">
 			<form action="editRegimen.form" method="get">
 				<input type="hidden" name="patientId" value="${patient.patientId}"/>
@@ -65,7 +65,7 @@
 								&nbsp;&nbsp;
 								<spring:message code="mdrtb.started" text="Started"/>: 
 								<mdrtb:format obj="${changeEntry.value.drugsStartedAndNotEnded}" separator=", " defaultVal="mdrtb.none"/>; 
-								<spring:message code="mdrtb.started" text="Ended"/>: 
+								<spring:message code="mdrtb.ended" text="Ended"/>: 
 								<mdrtb:format obj="${changeEntry.value.drugsEndedAndNotStarted}" separator=", " defaultVal="mdrtb.none"/>
 							</option>
 						</c:forEach>
@@ -76,7 +76,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="cellStyle"><spring:message code="mdrtb.addNewTreatmentChange" text="Add a new treatment change:"/></td>
+		<td class="cellStyle"><spring:message code="mdrtb.addNewTreatmentChange" text="Add a new treatment change"/>:</td>
 		<td class="cellStyle" width="100%">
 			<form action="editRegimen.form" method="get">
 				<input type="hidden" name="patientId" value="${patient.patientId}"/>
@@ -87,7 +87,7 @@
 						<option value="${entry.key}"><spring:message code="mdrtb.treatment.${entry.key}"/></option>
 					</c:forEach>
 				</select>
-				<spring:message code="mdrtb.onDate" text=" on date "/>
+				&nbsp;<spring:message code="mdrtb.onDate" text="on date"/>&nbsp;
 				<input type="text" name="changeDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${changeDate}" />" onFocus="showCalendar(this)" />
 				<input type="submit" value="<spring:message code="mdrtb.submit" text="Submit"/>"/>
 			</form>

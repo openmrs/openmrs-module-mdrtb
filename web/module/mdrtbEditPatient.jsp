@@ -67,7 +67,7 @@
 <table style="padding:6px">
 
 <tr>
-<th style="headerCell"><spring:message code="Person.name"/></th>
+<th style="headerCell"><spring:message code="mdrtb.name"/></th>
 <td>
 <table cellspacing="0" cellpadding="0" border="0">
 <openmrs:portlet url="nameLayout" id="namePortlet" size="columnHeaders" parameters="layoutShowTable=false|layoutShowExtended=false" /></td>
@@ -81,14 +81,14 @@
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th class="headerCell"><spring:message code="PatientIdentifier.title.endUser"/></th>
+<th class="headerCell"><spring:message code="mdrtb.identifierNumbers"/></th>
 <td>
 <table>
 <tr>
-<th><spring:message code="PatientIdentifier.identifierType"/></th>
-<th><spring:message code="PatientIdentifier.identifier"/></th>
+<th><spring:message code="mdrtb.identifierType"/></th>
+<th><spring:message code="mdrtb.identifier"/></th>
 <c:if test="${showIdentifierLocationSelector}">
-	<th><spring:message code="PatientIdentifier.location.identifier"/></th>
+	<th><spring:message code="mdrtb.identifierLocation"/></th>
 </c:if>
 </tr>
 
@@ -144,7 +144,7 @@
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th class="headerCell"><spring:message code="Person.address"/></th>
+<th class="headerCell"><spring:message code="mdrtb.address"/></th>
 <td>
 <spring:nestedPath path="patient.personAddress">
 <openmrs:portlet url="addressLayout" id="addressPortlet" size="full" parameters="layoutMode=edit|layoutShowTable=true|layoutShowExtended=false" />
@@ -159,16 +159,16 @@
 <td>
 <table cellspacing="3" cellpadding="3">
 <tr>
-<td><spring:message code="Person.gender"/></td>
+<td><spring:message code="mdrtb.gender"/></td>
 <td>
 <openmrs:forEachRecord name="gender">
 <input type="radio" name="gender" id="${record.key}" value="${record.key}" <c:if test="${record.key == patient.gender}">checked</c:if> />
-<label for="${record.key}"> <spring:message code="Person.gender.${record.value}"/> </label>
+<label for="${record.key}"> <spring:message code="mdrtb.${record.value}"/> </label>
 </openmrs:forEachRecord>
 </td>
 </tr>
 <tr>
-<td><spring:message code="Person.birthdate"/> </td>
+<td><spring:message code="mdrtb.birthdate"/> </td>
 <td>
 <openmrs_tag:dateField formFieldName="birthdate" startValue="${patient.birthdate}"/>
 <spring:message code="Person.birthdateEstimated"/>

@@ -157,7 +157,7 @@ public class MdrtbQueryService {
 	 */
 	private static void addOptionalDateClause(StringBuilder sb, String baseClause, Date d) {
 		if (d != null) {
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Context.getLocale());
 			sb.append(baseClause + "'" + df.format(d) + "' ");
 		}
 	}

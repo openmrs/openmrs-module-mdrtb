@@ -65,7 +65,7 @@
 </td></tr>
 
 <tr><td>
-<spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:</td><td>
+<spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>:</td><td>
 <select name="location">
 <option value=""/>
 <c:forEach var="location" items="${locations}">

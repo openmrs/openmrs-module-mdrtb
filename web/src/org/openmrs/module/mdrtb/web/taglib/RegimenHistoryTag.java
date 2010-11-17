@@ -51,7 +51,7 @@ public class RegimenHistoryTag extends TagSupport {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		DateFormat df = (ObjectUtil.isNull(dateFormat) ? Context.getDateFormat() : new SimpleDateFormat(dateFormat));
+		DateFormat df = (ObjectUtil.isNull(dateFormat) ? Context.getDateFormat() : new SimpleDateFormat(dateFormat, Context.getLocale()));
 		String activeCss = ObjectUtil.nvlStr(activeCssClass, "activeRegimenRow");
 		String futureCss = ObjectUtil.nvlStr(futureCssClass, "futureRegimenRow");
 		String prefix = ObjectUtil.nvlStr(messagePrefix, "mdrtb.");

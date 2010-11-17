@@ -122,7 +122,7 @@ public class Functions {
 		if (d == null) {
 			return "";
 		}
-		return new SimpleDateFormat(format).format(d);
+		return new SimpleDateFormat(format, Context.getLocale()).format(d);
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class Functions {
 			return null;
 		}
 		try {
-			return new SimpleDateFormat(format).parse(s.toString());
+			return new SimpleDateFormat(format,Context.getLocale()).parse(s.toString());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

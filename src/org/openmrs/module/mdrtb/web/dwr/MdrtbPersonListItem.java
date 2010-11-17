@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonName;
+import org.openmrs.api.context.Context;
 import org.openmrs.web.dwr.PersonListItem;
 
 public class MdrtbPersonListItem {
@@ -59,7 +60,7 @@ public class MdrtbPersonListItem {
             
             gender = person.getGender();
             birthdate = person.getBirthdate();
-            SimpleDateFormat sdf = new SimpleDateFormat(dateString);
+            SimpleDateFormat sdf = new SimpleDateFormat(dateString, Context.getLocale());
             if (birthdate != null)
                 birthdateString = sdf.format(birthdate);
             birthdateEstimated = person.isBirthdateEstimated();

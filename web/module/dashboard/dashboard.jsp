@@ -301,11 +301,12 @@
 <form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted"/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
 <select name="outcome">
+<option value=""/>
 <c:forEach var="outcome" items="${outcomes}">
 <option value="${outcome.id}"  <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
 </c:forEach>

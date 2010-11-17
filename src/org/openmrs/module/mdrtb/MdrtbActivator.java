@@ -34,12 +34,12 @@ public class MdrtbActivator implements Activator, Runnable {
 
     public void shutdown() {
     	log.info("Shutting down MDR-TB module.");
-    	registerAddressTemplates();
+    	unregisterAddressTemplates();
     }
 
     public void startup() {
     	log.info("Starting up MDR-TB module.");
-    	unregisterAddressTemplates();
+    	registerAddressTemplates();
     }
 
     public void run() {
@@ -50,6 +50,9 @@ public class MdrtbActivator implements Activator, Runnable {
 	 * Sets up the Default Address Template
 	 */
 	public void registerAddressTemplates() {
+		
+		log.info("Registering default address format.");
+		
 		AddressTemplate at = new AddressTemplate();
 		at.setDisplayName("Default Address Format");
 		at.setCodeName("default");
@@ -75,7 +78,7 @@ public class MdrtbActivator implements Activator, Runnable {
 	public void unregisterAddressTemplates() {
 		for (Iterator<AddressTemplate> i = AddressSupport.getInstance().getLayoutTemplates().iterator(); i.hasNext();) {
 			AddressTemplate at = i.next();
-			if ("defaultMdrtb".equals(at.getCodeName())) {
+			if ("default".equals(at.getCodeName())) {
 				i.remove();
 			}
 		}

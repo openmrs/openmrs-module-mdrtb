@@ -15,7 +15,7 @@
 						<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.dateStart" text="Start Date"/></th>
+						<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.autoExpireDate" text="Scheduled Stop Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.actualStopDate" text="Actual Stop Date"/></th>
 						<th class="headerStyle" width="100%"><spring:message code="mdrtb.discontinuedReason" text="Reason Discontinued"/></th>

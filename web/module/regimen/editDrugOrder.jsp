@@ -119,7 +119,7 @@
 				<td class="cellStyle"><input type="text" size="30" name="frequency" value="${drugOrder.frequency}"/></td>
 			</tr>
 			<tr>
-				<th class="headerStyle"><spring:message code="mdrtb.startDate" text="Start Date"/></th>
+				<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
 				<td class="cellStyle">
 					<input id="startDateField" type="text" name="startDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${drugOrder.startDate}" />" onFocus="showCalendar(this)" />
 				</td>
@@ -135,7 +135,7 @@
 				<td class="cellStyle"><textarea name="instructions" rows="2" cols="30">${drugOrder.instructions}</textarea></td>
 			</tr>
 			<tr>
-				<th class="headerStyle"><spring:message code="mdrtb.discontinuedDate" text="Discontinued Date"/></th>
+				<th class="headerStyle"><spring:message code="mdrtb.discontinueddate" text="Discontinued Date"/></th>
 				<td class="cellStyle">
 					<input id="discontinuedDateField" type="text" name="discontinuedDate" size="10" tabIndex="-1" value="<openmrs:formatDate date="${drugOrder.discontinuedDate}" />" onFocus="showCalendar(this)" />
 				</td>

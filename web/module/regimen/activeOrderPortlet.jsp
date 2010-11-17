@@ -17,7 +17,7 @@
 						<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.dateStart" text="Start Date"/></th>
+						<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.scheduledStopDate" text="Scheduled Stop Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.instructions" text="Instructions"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.alerts" text="Alerts"/></th>

@@ -682,7 +682,7 @@ public class PatientSummaryUtil {
 	
     public static String formatDate(Date d, Boolean estimated, String emptyMessage) {
     	if (d != null) {
-    		DateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
+    		DateFormat df = new SimpleDateFormat("dd/MMM/yyyy", Context.getLocale());
     		return (estimated == Boolean.TRUE ? "~" : "") + df.format(d);
     	}
     	return (emptyMessage == null ? "" : MessageUtil.translate(emptyMessage));
@@ -696,7 +696,7 @@ public class PatientSummaryUtil {
     }
     
 	public static int compareDates(Date d1, Date d2, String format) {
-		DateFormat df = new SimpleDateFormat(format);
+		DateFormat df = new SimpleDateFormat(format, Context.getLocale());
 		String s1 = df.format(d1);
 		String s2 = df.format(d2);
 		return s1.compareTo(s2);

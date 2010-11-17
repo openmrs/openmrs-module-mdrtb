@@ -11,7 +11,6 @@
 				<c:when test="${empty history.allRegimens}"><tr><th colspan="4"><spring:message code="mdrtb.none"/></th></tr></c:when>
 				<c:otherwise>
 					<tr>
-						<th class="headerStyle"><spring:message code="mdrtb.effectiveDate" text="Effective Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.regimen" text="Regimen"/></th>
 						<c:if test="${!empty history.type.reasonForStartingQuestion}">
 							<th class="headerStyle" width="100%"><spring:message code="mdrtb.treatmentType" text="Type"/></th>

@@ -48,7 +48,7 @@
 <b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.similarPatients" text="Similar Patients"/></b>
 <div class="box" style="margin:0px;">
 
-<spring:message code="Person.search.similarPersonInstructions"/>
+<spring:message code="mdrtb.similarPersonInstructions"/>
 
 <br/><br/>
 
@@ -58,10 +58,10 @@
 <th><spring:message code="PersonName.givenName"/></th>
 <th><spring:message code="PersonName.middleName"/></th>
 <th><spring:message code="PersonName.familyName"/></th>
-<th><spring:message code="Person.age"/></th>
-<th><spring:message code="Person.gender"/></th>
+<th><spring:message code="mdrtb.age"/></th>
+<th><spring:message code="mdrtb.gender"/></th>
 <th>&nbsp;</th>
-<th><spring:message code="Person.birthdate"/></th>
+<th><spring:message code="mdrtb.birthdate"/></th>
 </tr>
 <c:forEach var="patient" items="${patients}" varStatus="i">
 <tr class="${i.count % 2 == 0 ? 'evenRow' : 'oddRow'}">
@@ -89,8 +89,8 @@
 <input type="hidden" name="patientId" value="-1"/>
 <input type="hidden" name="skipSimilarCheck" value="1"/>
 
-<button type="submit"><spring:message code="Person.search.similarPersonNotOnList"/></button>
-<button type="reset" onclick="history.back()"><spring:message code="general.back"/></button>
+<button type="submit"><spring:message code="mdrtb.similarPersonNotOnList"/></button>
+<button type="reset" onclick="history.back()"><spring:message code="mdrtb.back"/></button>
 </form>
 
 </div>
