@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -181,5 +182,16 @@ public class Functions {
 		}
 		Concept c = Context.getConceptService().getConcept(conceptSet);
 		return RegimenUtils.getDrugsWithGenericInSet(c);
+	}
+	
+	public static List<Concept> answersToQuestion(String question) {
+		List<Concept> ret = new ArrayList<Concept>();
+		Concept c = Context.getService(MdrtbService.class).getConcept(question);
+		if (c != null) {
+			for (ConceptAnswer ca : c.getAnswers()) {
+				ret.add(ca.getAnswerConcept());
+			}
+		}
+		return ret;
 	}
 }

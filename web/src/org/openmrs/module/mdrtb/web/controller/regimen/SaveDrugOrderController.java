@@ -45,18 +45,20 @@ public class SaveDrugOrderController {
     public String saveRegimen(
     		@RequestParam(required=true, value="patientId") Integer patientId,
     		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		@RequestParam(required=true, value="type") String type,
-    		@RequestParam(required=true, value="orderId") Integer orderId,
+    		@RequestParam(required=false, value="type") String type,
+    		@RequestParam(required=false, value="orderId") Integer orderId,
     		@RequestParam(required=true, value="generic") Concept generic,
-    		@RequestParam(required=true, value="drug") Drug drug,
-    		@RequestParam(required=true, value="dose") Double dose,
-    		@RequestParam(required=true, value="units") String units,
-    		@RequestParam(required=true, value="frequency") String frequency,
-    		@RequestParam(required=true, value="instructions") String instructions,
+    		@RequestParam(required=false, value="drug") Drug drug,
+    		@RequestParam(required=false, value="dose") Double dose,
+    		@RequestParam(required=false, value="units") String units,
+    		@RequestParam(required=false, value="frequency") String frequency,
+    		@RequestParam(required=false, value="perDay") String perDay,
+    		@RequestParam(required=false, value="perWeek") String perWeek,
+    		@RequestParam(required=false, value="instructions") String instructions,
     		@RequestParam(required=true, value="startDate") Date changeDate,
-    		@RequestParam(required=true, value="autoExpireDate") Date autoExpireDate,
-    		@RequestParam(required=true, value="discontinuedDate") Date discontinuedDate,
-    		@RequestParam(required=true, value="discontinuedReason") Concept discontinuedReason,
+    		@RequestParam(required=false, value="autoExpireDate") Date autoExpireDate,
+    		@RequestParam(required=false, value="discontinuedDate") Date discontinuedDate,
+    		@RequestParam(required=false, value="discontinuedReason") Concept discontinuedReason,
     		HttpServletRequest request, ModelMap model) throws Exception {
     	
     	User user = Context.getAuthenticatedUser();
@@ -76,6 +78,17 @@ public class SaveDrugOrderController {
 		drugOrder.setDrug(drug);
 		drugOrder.setDose(dose);
 		drugOrder.setUnits(units);
+		if (ObjectUtil.isNull(frequency)) {
+			frequency = "";
+			String separator = "";
+			if (ObjectUtil.notNull(perDay)) {
+				frequency += perDay + "/day";
+				separator = " x ";
+			}
+			if (ObjectUtil.notNull(perWeek)) {
+				frequency += separator + perWeek + " days/week";
+			}
+		}
 		drugOrder.setFrequency(frequency);
 		drugOrder.setInstructions(instructions);
 		drugOrder.setStartDate(changeDate);

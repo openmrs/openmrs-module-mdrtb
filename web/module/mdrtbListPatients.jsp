@@ -48,31 +48,12 @@
 
 <form method="get">
 
-	<table class="patientTable">
+	<table class="patientTable" width="100%">
 		<tr>
 			<td valign="top" class="patientTable">
 				<table>
-					<tr style="border-bottom:2px solid black;"><td colspan="2" style="background-color:#C0C0C0; font-weight:bold;">
-						<table width="100%"><tr>
-							<td style="width:100%;">
-								<spring:message code="mdrtb.display"/>: 
-								<select name="displayMode">
-									<option value="basic"<c:if test="${'basic' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.basicDetails"/></option>
-									<option value="mdrtbShortSummary"<c:if test="${'mdrtbShortSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbShortSummary"/></option>
-									<option value="mdrtbSummary"<c:if test="${'mdrtbSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbSummary"/></option>
-									<option value="mdrtbCustomList"<c:if test="${'mdrtbCustomList' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbCustomList"/></option>
-									
-									<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
-										<option value="${extension.key}"<c:if test="${extension.key == param.displayMode}"> selected</c:if>>
-											<spring:message code="${extension.label}"/>
-										</option>
-									</openmrs:extensionPoint>
-								</select>
-							</td>
-							<td align="right" style="white-space:nowrap;">
-								<input type="submit" value="<spring:message code="general.search"/>"/>
-							</td>
-						</tr></table>
+					<tr style="border-bottom:2px solid black; height:25px;"><td colspan="2" style="padding-left:10px; background-color:#C0C0C0; font-weight:bold;">
+						<spring:message code="mdrtb.whichPatientsToDisplay" text="Which patients to display"/>:
 					</td></tr>
 					<tr><td colspan="2">
 						<br/>
@@ -128,7 +109,26 @@
 					</c:forEach>
 				</table>
 			</td>
-			<td valign="top" width="100%" style="padding-left:10px;">
+			<td valign="top" width="100%" class="patientTable" style="padding-left:10px;">
+				<table width="100%">
+					<tr style="border-bottom:2px solid black;"><td colspan="2" style="background-color:#C0C0C0; font-weight:bold;">
+						<spring:message code="mdrtb.whichPatientDataDisplay" text="Which patient data to display"/>: 
+						<select name="displayMode">
+							<option value="basic"<c:if test="${'basic' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.basicDetails"/></option>
+							<option value="mdrtbShortSummary"<c:if test="${'mdrtbShortSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbShortSummary"/></option>
+							<option value="mdrtbSummary"<c:if test="${'mdrtbSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbSummary"/></option>
+							<option value="mdrtbCustomList"<c:if test="${'mdrtbCustomList' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbCustomList"/></option>
+							
+							<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
+								<option value="${extension.key}"<c:if test="${extension.key == param.displayMode}"> selected</c:if>>
+									<spring:message code="${extension.label}"/>
+								</option>
+							</openmrs:extensionPoint>
+						</select>
+						<input type="submit" value="<spring:message code="mdrtb.listPatients" text="List"/>"/>
+					</td></tr>
+				</table>
+				<br/>
 				<c:set var="extensionFound" value="false"/>
 				<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">
 					<c:if test="${extension.key == param.displayMode}">
@@ -136,7 +136,7 @@
 						<openmrs:portlet moduleId="${extension.moduleId}" url="${extension.portletUrl}" patientIds="${patientIds}" />
 					</c:if>
 				</openmrs:extensionPoint>
-				<c:if test="${extenionFound != 'true'}">
+				<c:if test="${extensionFound != 'true'}">
 					<c:choose>
 						<c:when test="${param.displayMode == 'mdrtbSummary'}">
 							<openmrs:portlet moduleId="mdrtb" url="mdrtbPatientSummary" patientIds="${patientIds}" />

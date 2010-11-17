@@ -28,7 +28,7 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	List<Regimen> regimensDuringProgram = mdrtbProgram.getMdrtbRegimensDuringProgram();
     	
     	if (regimensDuringProgram != null) {
-    		for (Regimen regimen : mdrtbProgram.getMdrtbRegimensDuringProgram()) {
+    		for (Regimen regimen : regimensDuringProgram) {
 	 	
     			if (regimen.isActive()) {
     				treatmentState = TreatmentState.ON_TREATMENT;

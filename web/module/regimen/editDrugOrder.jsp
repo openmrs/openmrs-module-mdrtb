@@ -85,7 +85,7 @@
 				<td class="cellStyle">
 					<select id="genericSelector" name="generic">
 						<option value=""></option>
-						<c:forEach items="${mdrtb:genericsInSet(regimenType.drugSet)}" var="c">
+						<c:forEach items="${openmrs:sort(mdrtb:genericsInSet(regimenType.drugSet), 'name.name', false)}" var="c">
 							<option value="${c.conceptId}" <c:if test="${c == drugOrder.concept}">selected</c:if>>${c.name.name}</option>
 						</c:forEach>
 					</select>
@@ -116,7 +116,17 @@
 			</tr>
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
-				<td class="cellStyle"><input type="text" size="30" name="frequency" value="${drugOrder.frequency}"/></td>
+				<td class="cellStyle">
+					<c:choose>
+						<c:when test="${!empty drugOrder.frequency}">
+							<input type="text" size="30" name="frequency" value="${drugOrder.frequency}"/>
+						</c:when>
+						<c:otherwise>
+							<input type="text" size="5" name="perDay"/><spring:message code="mdrtb.perday"/>
+							<input type="text" size="5" name="perWeek"/><spring:message code="mdrtb.perweek"/>
+						</c:otherwise>
+					</c:choose>
+				</td>
 			</tr>
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
@@ -146,17 +156,17 @@
 					<c:set var="needExtraRow" value="${!empty drugOrder.discontinuedReason}"/>
 					<select id="discontinuedReasonField" name="discontinuedReason">
 						<option value=""></option>
-						<openmrs:forEachRecord name="answer" concept="${regimenType.reasonForStoppingQuestion}">
-							<option value="${record.answerConcept.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == record.answerConcept.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${record.answerConcept}"/></option>
-						</openmrs:forEachRecord>
+						<c:forEach items="${mdrtb:answersToQuestion(regimenType.reasonForStoppingQuestion)}" var="a">
+							<option value="${a.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == a.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${a}"/></option>
+						</c:forEach>
 						<c:if test="${needExtraRow}">
-							<option value="${drugOrder.discontinuedReason}" selected><mdrtb:format obj="${drugOrder.discontinuedReason}"/></option>
+							<option value="${drugOrder.discontinuedReason.conceptId}" selected><mdrtb:format obj="${drugOrder.discontinuedReason}"/></option>
 						</c:if>
 					</select>
 				</td>
 			</tr>
 		</table>
 		<input type="button" onclick="validateAndSubmit();" value="<spring:message code="mdrtb.submit" text="Submit"/>"/>
-		<input type="button" value="<spring:message code="mdrtb.cancel" text="Cancel"/>" onclick="javascript:history.go(-1);"/>
+		<input type="button" value="<spring:message code="mdrtb.cancel" text="Cancel"/>" onclick="document.location.href='manageDrugOrders.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"/>
 	</div>
 </form>

@@ -143,6 +143,19 @@ public class SaveRegimenController {
 	   			String dose = request.getParameter("dose:"+key);
 	   			String unit = request.getParameter("unit:"+key);
 	   			String frequency = request.getParameter("frequency:"+key);
+	   			if (ObjectUtil.isNull(frequency)) {
+	   				frequency = "";
+	   				String perDay = request.getParameter("perDay:"+key);
+	   				String perWeek = request.getParameter("perWeek:"+key);
+	   				String separator = "";
+	   				if (ObjectUtil.notNull(perDay)) {
+	   					frequency += perDay + "/day";
+	   					separator = " x ";
+	   				}
+	   				if (ObjectUtil.notNull(perWeek)) {
+	   					frequency += separator + perWeek + " days/week";
+	   				}
+	   			}
 	   			String autoExpireDate = request.getParameter("autoExpireDate:"+key);
 	   			String instructions = request.getParameter("instructions:"+key);
 	   			

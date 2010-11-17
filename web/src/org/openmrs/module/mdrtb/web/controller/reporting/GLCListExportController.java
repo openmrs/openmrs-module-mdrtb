@@ -30,7 +30,7 @@ public class GLCListExportController {
 	
     @RequestMapping("/module/mdrtb/reporting/glcReport")
     public void glcReport(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-    		@RequestParam("location") Location location) throws Exception {
+    		@RequestParam(value="location", required=false) Location location) throws Exception {
 
     	Cohort c = PatientSummaryUtil.getCohort(location);
     	

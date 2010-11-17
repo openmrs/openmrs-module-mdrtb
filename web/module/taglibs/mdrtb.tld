@@ -740,5 +740,14 @@
 	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
 	    <function-signature>org.openmrs.Concept getConcept(java.lang.String)</function-signature>
 	</function>
+	
+	<function>
+	    <description>
+	      Returns all answers to the passed question
+	    </description>
+	    <name>answersToQuestion</name>
+	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
+	    <function-signature>java.util.List answersToQuestion(java.lang.String)</function-signature>
+	</function>
 
 </taglib>

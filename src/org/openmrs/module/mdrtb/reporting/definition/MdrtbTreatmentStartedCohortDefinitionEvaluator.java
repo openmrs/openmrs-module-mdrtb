@@ -17,7 +17,9 @@ import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -39,8 +41,7 @@ public class MdrtbTreatmentStartedCohortDefinitionEvaluator implements CohortDef
      */
     public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {	
     	MdrtbTreatmentStartedCohortDefinition cd = (MdrtbTreatmentStartedCohortDefinition) cohortDefinition;
-    	String mdrtbDrugs = Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtb_drugs");
-    	Concept tbDrugSet = Context.getConceptService().getConceptByName(mdrtbDrugs);
+    	Concept tbDrugSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
     	return MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
 	}
 }

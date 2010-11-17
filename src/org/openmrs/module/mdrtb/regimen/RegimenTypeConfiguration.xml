@@ -8,7 +8,7 @@
 		<suggestions>
 			<regimenSuggestion> 
 				<codeName>INJECTABLEINITIAL</codeName>
-				<displayName>Injectable Phase Initial</displayName>
+				<displayName>Injectable Phase Initial (H + KM + Z + OFX + PTO + CS)</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -60,7 +60,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion>
 				<codeName>INJECTABLECONTINUATION</codeName>
-				<displayName>Injectable Phase Continuation</displayName>
+				<displayName>Injectable Phase Continuation (KM + Z + OFX + PTO + CS)</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -112,7 +112,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion> 
 				<codeName>CONTINUATIONSIMPLE</codeName>
-				<displayName>Continuation Phase Without Z</displayName>
+				<displayName>Continuation Phase Without Z (OFX + PTO + CS)</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -146,7 +146,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion>
 				<codeName>CONTINUATIONPLUS</codeName>
-				<displayName>Continuation Phase plus Z</displayName>
+				<displayName>Continuation Phase plus Z (OFX + PTO + CS + Z)</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -184,6 +184,48 @@
 						<frequency>1/day x 7 days/week</frequency>  
 						<instructions></instructions> 
 						<asNeeded>false</asNeeded>
+					</drugSuggestion>
+				</drugComponents>
+			</regimenSuggestion>
+			<regimenSuggestion> 
+				<codeName>KM_LFX_ETHIO_CS_PAS</codeName>
+				<displayName>KM + LFX + Ethio + CS + PAS</displayName>
+				<reasonForStarting>EMPIRIC</reasonForStarting>
+				<drugComponents> 
+					<drugSuggestion> 
+						<generic>1417</generic> 
+						<drugId>48</drugId> 
+						<dose></dose> 
+						<units></units> 
+						<frequency></frequency>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>755</generic> 
+						<drugId>54</drugId> 
+						<dose></dose> 
+						<units></units> 
+						<frequency></frequency>  
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1414</generic> 
+						<drugId>57</drugId> 
+						<dose></dose> 
+						<units></units> 
+						<frequency></frequency>  
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1413</generic> 
+						<drugId>58</drugId> 
+						<dose></dose> 
+						<units></units> 
+						<frequency></frequency>
+					</drugSuggestion>
+					<drugSuggestion> 
+						<generic>1419</generic> 
+						<drugId>61</drugId> 
+						<dose></dose> 
+						<units></units> 
+						<frequency></frequency>
 					</drugSuggestion>
 				</drugComponents>
 			</regimenSuggestion>

@@ -3,11 +3,13 @@ package org.openmrs.module.mdrtb.regimen;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
+import org.openmrs.module.reporting.common.ObjectUtil;
 
 /**
  * Represents a series of drugs given at the same time, generally for the same reason.
@@ -168,9 +170,53 @@ public class Regimen {
         return ret.toString();
     }
     
+    /**
+	 * @see Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof Regimen) {
+			Regimen that = (Regimen)obj;
+			if (ObjectUtil.areEqual(this.getStartDate(), that.getStartDate())) {
+				if (ObjectUtil.areEqual(this.getEndDate(), that.getEndDate())) {
+					if (ObjectUtil.areEqual(this.getReasonForStarting(), that.getReasonForStarting())) {
+						if (this.getDrugOrders().size() == that.getDrugOrders().size()) {
+							for (DrugOrder order : this.getDrugOrders()) {
+								if (!that.getDrugOrders().contains(order)) {
+									return false;
+								}
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @see Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		if (startDate != null) { hash += 31 * startDate.hashCode(); }
+		if (endDate != null) { hash += 31 * endDate.hashCode(); }
+		if (reasonForStarting != null) { hash += 31 * reasonForStarting.getObsId().hashCode(); }
+		Set<Integer> orderIds = new TreeSet<Integer>();
+		for (DrugOrder order : getDrugOrders()) {
+			orderIds.add(order.getOrderId());
+		}
+		for (Integer orderId : orderIds) {
+			hash += 31 * orderId.hashCode();
+		}
+		return hash;
+	} 
+    
     //***** PROPERTY ACCESS *****
 
-    /**
+	/**
 	 * @return the startDate
 	 */
 	public Date getStartDate() {

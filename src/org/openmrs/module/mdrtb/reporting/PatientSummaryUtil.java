@@ -62,12 +62,17 @@ import org.openmrs.module.mdrtb.allergy.MdrtbAllergyUtils;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
+import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.excel.SheetHelper;
 import org.openmrs.module.mdrtb.reporting.excel.StyleHelper;
 import org.openmrs.module.mdrtb.reporting.logic.GetLatestEnrollmentDateRule;
 import org.openmrs.module.mdrtb.reporting.logic.ProgramDataSourceMDRTB;
+import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.util.OpenmrsUtil;
 
 public class PatientSummaryUtil {
@@ -169,6 +174,11 @@ public class PatientSummaryUtil {
     	TELEPHONE_NUMBER, BIRTHPLACE, CIVIL_STATUS, HEALTH_CENTER, HEALTH_DISTRICT, MOTHERS_NAME, TREATMENT_SUPPORTER
     };
     
+    public static final String[] GLC_COLUMNS = {
+    	FULL_NAME, AGE, GENDER, "hospitalizedDate", "ambulatoryDate", EMPIRIC_REGIMEN, EMPIRIC_REGIMEN_DATE, 
+    	INDIVIDUALIZED_REGIMEN, INDIVIDUALIZED_REGIMEN_DATE, CURRENT_REGIMEN, CURRENT_REGIMEN_DATE, RESISTANCE_LIST, CLINICAL_PROGRESS
+    };
+    
     static {
         LogicService ls = Context.getLogicService();
         ConceptService cs = Context.getConceptService();
@@ -250,12 +260,16 @@ public class PatientSummaryUtil {
     }
     
     public static Cohort getCohort(Location location) {
-        Program mdrtbProgram = MdrtbFactory.getInstance().getMDRTBProgram();
+    	
+    	MdrtbService svc = Context.getService(MdrtbService.class);
     	Date now = new Date();
     	
-        Cohort cohort = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, now, now);
+    	Program mdrProgram = svc.getMdrtbProgram();
+    	Cohort cohort = Context.getPatientSetService().getPatientsInProgram(mdrProgram, now, now);
+        
         if (location != null) {
-	        Cohort atLocation = Context.getPatientSetService().getPatientsHavingLocation(location);
+        	CohortDefinition cd = Cohorts.getLocationFilter(location, now, now);
+	        Cohort atLocation = Context.getService(CohortDefinitionService.class).evaluate(cd, new EvaluationContext());
 	        cohort = Cohort.intersect(cohort, atLocation);
         }
         return cohort;
@@ -263,7 +277,7 @@ public class PatientSummaryUtil {
 
     public static Map<Integer, Map<String, Object>> getPatientSummaryData(Cohort cohort, List<String> columns, Date effectiveDate) {
     	
-    	long ms = System.currentTimeMillis();
+   	long ms = System.currentTimeMillis();
     	Map<Integer, Map<String, Object>> byPatient = new HashMap<Integer, Map<String, Object>>();
     	
     	MdrtbFactory mu = MdrtbFactory.getInstance();
@@ -277,7 +291,7 @@ public class PatientSummaryUtil {
     	if (cohort == null) {
     		cohort = new Cohort();
     	}
-    	
+ 
         List<Patient> patients = Context.getPatientSetService().getPatients(cohort.getMemberIds());
 
         List<Person> persons = new ArrayList<Person>();

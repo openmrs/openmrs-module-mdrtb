@@ -2,6 +2,8 @@
 
 <openmrs:globalProperty var="doseUnits" key="mdrtb.drugDoseUnits" defaultValue="g,mg,ml,tab(s)"/>
 <spring:message code="mdrtb.delete" text="Delete" var="deleteText"/>
+<spring:message code="mdrtb.perday" var="perDayText"/>
+<spring:message code="mdrtb.perweek" var="perWeekText"/>
 
 <script type="text/javascript">
 	var ${id}StandardRegimens = new Array();
@@ -28,7 +30,7 @@
 		};
 	</c:forEach>
 
-	var ${id}GenericOptions = '<option value=""></option><c:forEach items="${mdrtb:genericsInSet(history.type.drugSet)}" var="c"><option value="${c.conceptId}">${c.name.name}</option></c:forEach>';
+	var ${id}GenericOptions = '<option value=""></option><c:forEach items="${openmrs:sort(mdrtb:genericsInSet(history.type.drugSet), \'name.name\', false)}" var="c"><option value="${c.conceptId}">${c.name.name}</option></c:forEach>';
 	var ${id}DrugOptions = '<option value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
 	var ${id}UnitOptions = '<option value=""></option><c:forEach items="${doseUnits}" var="u"><option value="${u}">${u}</option></c:forEach>';
 	var ${id}Index = 0;
@@ -38,7 +40,7 @@
 			var codeName = $j('#${id}standardRegimenSelector').val();
 			var regToAdd = ${id}StandardRegimens[codeName];
 			for (var i=0; i<regToAdd.drugComponents.length; i++) {
-				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', ${id}Index++);
+				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++);
 			}
 			$j('#${id}standardRegimenSelector').val('');
 		});
@@ -59,7 +61,7 @@
 						'instructions':'', 
 						'startDate':'<openmrs:formatDate date="${changeDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':''
-					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', ${id}Index++
+					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
 			);
 			$j('#${id}individualGenericSelector').val('');
 			$j('#${id}individualDrugSelector').hide('');
@@ -76,7 +78,7 @@
 						'instructions':'${d.instructions}', 
 						'startDate':'<openmrs:formatDate date="${d.startDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':'<openmrs:formatDate date="${d.autoExpireDate}" format="dd/MM/yyyy"/>'
-					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', ${id}Index++
+					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
 			);
 		</c:forEach>
 	});
@@ -256,5 +258,5 @@
 
 	<br/><br/>
 	<input type="button" value="<spring:message code="mdrtb.submit" text="Submit"/>" onclick="javacript:validateAndSubmit();"/>
-	<input type="button" value="<spring:message code="mdrtb.cancel" text="Cancel"/>" onclick="javascript:history.go(-1);"/>
+	<input type="button" value="<spring:message code="mdrtb.cancel" text="Cancel"/>" onclick="document.location.href='manageDrugOrders.form?patientId=${patientId}&patientProgramId=${patientProgramId}'"/>
 </form>

@@ -26,6 +26,18 @@
 			"bAutoWidth": true
 		});
 
+		$j('#configureButton').click(function() {
+			$j('#columnChooser').show();
+			$j('#patientResultTable').hide();
+			$j(this).hide();
+		});
+
+		$j('#cancelButton').click(function() {
+			$j('#columnChooser').hide();
+			$j('#patientResultTable').show();
+			$j('#configureButton').show();
+		});
+
 		<c:if test="${!empty model.columns}">
 			$j("#columnChooser").hide();
 		</c:if>
@@ -48,22 +60,14 @@
 	}
 	.ui-multiselect div.available {
 		position: absolute; 
-		left: 844px; 
+		left: 820px; 
 	}
 </style>
 
 <div style="padding-top:5px;">
-	<button href="javascript:void(0);" onclick="toggleLayer('columnChooser', this, '<spring:message code="mdrtb.configure"/>', '<spring:message code="mdrtb.hideConfiguration"/>'); return false;">
-		<spring:message code="mdrtb.configure"/>
-	</button>
-	&nbsp;&nbsp;|&nbsp;&nbsp;
-	<button><spring:message code="mdrtb.outputToList"/></button>
-	<c:if test="${!empty model.data}">
-		&nbsp;&nbsp;|&nbsp;&nbsp;
-		<button onclick="outputToExcel(); return false;"><spring:message code="mdrtb.exportToExcel"/></button>
-	</c:if>
+	<input type="button" id="configureButton" value="<spring:message code="mdrtb.configure"/>"/>
 </div>
-<hr/>
+<br/>
 <div style="padding-left:5px; padding-right:5px; width:100%;">
 	<div id="columnChooser">
 		<select id="columnSelector" class="multiselect" multiple="multiple" name="columns">
@@ -89,49 +93,59 @@
 				</option>
 			</c:forEach>
 		</select>
+		&nbsp;&nbsp;|&nbsp;&nbsp;
+		<button><spring:message code="mdrtb.outputToList"/></button>
+		<c:if test="${!empty model.data}">
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			<button onclick="outputToExcel(); return false;"><spring:message code="mdrtb.exportToExcel"/></button>
+		</c:if>
+		&nbsp;&nbsp;|&nbsp;&nbsp;
+		<input type="button" value="<spring:message code="mdrtb.cancel"/>" id="cancelButton"/>
 	</div>
 </div>
 
-<c:if test="${!empty model.columns}">
-	<c:choose>
-		<c:when test="${empty model.data}">
-			<br/>
-			<i>Il n'ya pas de patients</i>
-		</c:when>
-		<c:otherwise>
-			<table id="customPatientTable" width="100%">
-				<thead>
-					<tr>
-						<th>&nbsp;</th>
-						<c:forEach items="${model.columns}" var="c">
-							<th class="patientTable" style="padding-right:10px;">${model.availableColumns[c]}</th>
-						</c:forEach>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${model.data}" var="p">
-						<tr class="patientRow patientRow${p.patientId}">
-							<td class="patientTable" style="white-space:nowrap; width:20px;">
-								<a href="mdrtbPatientOverview.form?patientId=${p.patientId}">
-									<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
-								</a>
-							</td>
+<div id="patientResultTable">
+	<c:if test="${!empty model.columns}">
+		<c:choose>
+			<c:when test="${empty model.data}">
+				<br/>
+				<i>Il n'ya pas de patients</i>
+			</c:when>
+			<c:otherwise>
+				<table id="customPatientTable" width="100%">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
 							<c:forEach items="${model.columns}" var="c">
-								<td class="patientTable" style="padding-right:10px;">
-									<c:if test="${!empty p[c]}">
-										<c:choose>
-											<c:when test="${mdrtb:instanceOf(p[c], 'java.util.Date')}">
-												<openmrs:formatDate date="${p[c]}" format="${_dateFormatDisplay}"/>
-											</c:when>
-											<c:otherwise>${p[c]}</c:otherwise>
-										</c:choose>
-									</c:if>
-								</td>
+								<th class="patientTable" style="padding-right:10px;">${model.availableColumns[c]}</th>
 							</c:forEach>
 						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</c:otherwise>
-	</c:choose>
-</c:if>
+					</thead>
+					<tbody>
+						<c:forEach items="${model.data}" var="p">
+							<tr class="patientRow patientRow${p.patientId}">
+								<td class="patientTable" style="white-space:nowrap; width:20px;">
+									<a href="mdrtbPatientOverview.form?patientId=${p.patientId}">
+										<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
+									</a>
+								</td>
+								<c:forEach items="${model.columns}" var="c">
+									<td class="patientTable" style="padding-right:10px;">
+										<c:if test="${!empty p[c]}">
+											<c:choose>
+												<c:when test="${mdrtb:instanceOf(p[c], 'java.util.Date')}">
+													<openmrs:formatDate date="${p[c]}" format="${_dateFormatDisplay}"/>
+												</c:when>
+												<c:otherwise>${p[c]}</c:otherwise>
+											</c:choose>
+										</c:if>
+									</td>
+								</c:forEach>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+</div>

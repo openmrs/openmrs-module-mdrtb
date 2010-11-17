@@ -22,7 +22,7 @@
 		<i>Il n'ya pas de patients</i>
 	</c:when>
 	<c:otherwise>
-		<table cellspacing="0" cellpadding="2" border="1" class="mdrListTable">	
+		<table cellspacing="0" cellpadding="2" border="1" class="mdrListTable" width="100%">	
 			<tbody>
 				<c:forEach var="patient" items="${model.data}">
 		
@@ -31,7 +31,7 @@
 						<td nowrap><span class="mdrListLabel">No. Dossier:</span><br/><span class="mdrListValue">${patient.mdrtbId}</span></td>
 						<td><span class="mdrListLabel">Age:</span><br/><span class="mdrListValue">${patient.age}</span></td>
 						<td><span class="mdrListLabel">Sexe:</span><br/><span class="mdrListValue">${patient.gender}</span></td>
-						<td><span class="mdrListLabel">Poids:</span><br/><span class="mdrListValue">${patient.weight} kgs.</span></td>
+						<td><span class="mdrListLabel">Poids:</span><br/><span class="mdrListValue"><c:if test="${!empty patient.weight}">${patient.weight} kgs.</c:if></span></td>
 						<td><span class="mdrListLabel">Statut VIH:</span><br/><span class="mdrListValue">${patient.hivStatus}<c:if test="${!empty patient.hivStatus}"> (<openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.hivStatusDate}"/>)</c:if></span></td>
 						<td><span class="mdrListLabel">Statut MDR:</span><br/><span class="mdrListValue">${patient.mdrStatus}</span></td>
 					</tr>

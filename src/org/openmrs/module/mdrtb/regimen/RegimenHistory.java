@@ -165,7 +165,7 @@ public class RegimenHistory {
     		Regimen regimen = getRegimenOnDate(fromDate);
     		
     		// ignore this regimen if it has no start date and no orders (i.e., if this date is before any regimen events have occurred)
-    		if (!(regimen.getStartDate() == null && regimen.getDrugOrders().size() < 1)) {
+    		if (regimen.getStartDate() != null && !regimen.getDrugOrders().isEmpty()) {
     			regimens.add(regimen);
     		}			
      	}
