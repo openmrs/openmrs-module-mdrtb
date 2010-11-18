@@ -677,7 +677,7 @@
 
 <tr>
 <c:if test="${test.testType eq 'smear' || test.testType eq 'culture'}">
-<td><nobr><spring:message code="mdrtb.results" text="Results"/>:</nobr></td>
+<td><nobr><spring:message code="mdrtb.result" text="Result"/>:</nobr></td>
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${test.testType eq 'smear' ? smearResults : cultureResults}">
