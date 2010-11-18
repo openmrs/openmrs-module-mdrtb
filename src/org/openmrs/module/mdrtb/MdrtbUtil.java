@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -30,6 +31,7 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ObsService;
@@ -1088,6 +1090,26 @@ public class MdrtbUtil {
 				return state;
 			}
 		}
+		return null;
+	}
+    
+    /**
+     * Auto-assign any patient identifiers as required, if the idgen module is installed, using reflection
+     * Auto generated method comment
+     */
+	@SuppressWarnings("unchecked")
+    public static String assignIdentifier(PatientIdentifierType type) {		
+		try {
+			Class identifierSourceServiceClass = Context.loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
+			Object idgen = Context.getService(identifierSourceServiceClass);
+	        Method generateIdentifier = identifierSourceServiceClass.getMethod("generateIdentifier", PatientIdentifierType.class, String.class);
+	        
+	        return (String) generateIdentifier.invoke(idgen, type, "auto-assigned during patient creation");
+		}
+		catch (Exception e) {
+			log.error("Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?", e);
+		} 
+		
 		return null;
 	}
 	

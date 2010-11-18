@@ -32,6 +32,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.validator.PatientValidator;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -280,12 +281,14 @@ public class MdrtbEditPatientController {
 		}
 		
 		// handle patient identifiers
-		for (Integer i=0; i<identifierValue.length; i++) {	
-			if (ModuleFactory.getStartedModulesMap().containsKey("idgen") && StringUtils.isBlank(identifierValue[i])) {
-				identifierValue[i] = assignIdentifier(identifierType[i]);
+		for (Integer i=0; i<identifierValue.length; i++) {
+			
+			//  if this identifier is blank and the idgen module is installed, see if we need to auto-generate this identifier
+			if (StringUtils.isBlank(identifierValue[i]) && ModuleFactory.getStartedModulesMap().containsKey("idgen")) {
+				identifierValue[i] = MdrtbUtil.assignIdentifier(identifierType[i]);
 			}
 			
-			// first update any existing identifiers (ones with ids)
+			// update any existing identifiers (ones with ids)
 			if (StringUtils.isNotBlank(identifierId[i])) {
 				PatientIdentifier identifier = getIdentifierById(Integer.valueOf(identifierId[i]), patient);
 				
@@ -335,23 +338,6 @@ public class MdrtbEditPatientController {
 	/**
 	 * Utility methods
 	 */
-	
-	// auto-assign any patient identifiers as required, if the idgen module is installed, using reflection
-	@SuppressWarnings("unchecked")
-    private String assignIdentifier(PatientIdentifierType type) {
-		try {
-			Class identifierSourceServiceClass = Context.loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
-			Object idgen = Context.getService(identifierSourceServiceClass);
-	        Method generateIdentifier = identifierSourceServiceClass.getMethod("generateIdentifier", PatientIdentifierType.class, String.class);
-	        
-	        return (String) generateIdentifier.invoke(idgen, type, "auto-assigned during patient creation");
-		}
-		catch (Exception e) {
-			log.error("Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?", e);
-		} 
-		
-		return null;
-	}
 	
 	private PatientIdentifier getIdentifierById(Integer id, Patient patient) {
 		for (PatientIdentifier identifier : patient.getIdentifiers()) {

@@ -33,6 +33,8 @@ import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.OrderType;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
@@ -43,6 +45,8 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Smear;
@@ -1103,6 +1107,44 @@ public class SpecimenMigrationController {
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE", "Registration Group - Previous Drug Use");
        	addConceptShortName("MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME", "Outcome");
        	addConceptShortName("HOSPITALIZATION WORKFLOW", "Hospitalization");
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addZLIdentifiers.form")
+    public ModelAndView addZLIdentifiers() {
+    	// add a ZL identifier for each non-voided patient that doesn't have one
+    	
+    	PatientIdentifierType zlIdentifier = Context.getPatientService().getPatientIdentifierTypeByName("ZL EMR ID");
+    	
+    	Location fixedLocation = null;
+		String fixedLocationName = Context.getAdministrationService().getGlobalProperty("mdrtb.fixedIdentifierLocation");
+		if (StringUtils.isNotBlank(fixedLocationName)) {
+			fixedLocation = Context.getLocationService().getLocation(fixedLocationName);
+			if (fixedLocation == null) {
+				throw new MdrtbAPIException("Location referenced by mdrtb.fixedIdentifierLocation global prop does not exist.");
+			}
+		}
+    	
+    	
+    	for (Patient patient : Context.getPatientService().getAllPatients()) {
+    		Boolean hasZLId = false;
+    		
+    		for (PatientIdentifier identifier : patient.getActiveIdentifiers() ) {
+    			if (identifier.getIdentifierType().equals(zlIdentifier)) {
+    				hasZLId = true;
+    			}
+    		}
+    		
+    		if (!hasZLId) {
+    			PatientIdentifier identifier = new PatientIdentifier(MdrtbUtil.assignIdentifier(zlIdentifier), zlIdentifier, fixedLocation);
+				identifier.setPreferred(true);
+				patient.addIdentifier(identifier);
+				Context.getPatientService().savePatient(patient);
+				log.info("Assigned ZL EMR ID " + identifier.getIdentifier() + " to patient " + patient.getId());
+    		}
+    		
+    	}
+    	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
 
