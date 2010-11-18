@@ -16,7 +16,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.result.Result;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.query.service.CohortQueryService;
@@ -62,6 +64,16 @@ public class MdrtbQueryService {
     public static Cohort getCohortWithResistanceProfile(EvaluationContext context, Date maxResultDate, String profile) {
     	Map<String, Cohort> profiles = getResistanceProfiles(context, maxResultDate);
     	return ObjectUtil.nvl(profiles.get(profile), new Cohort());
+    }
+    
+    public static Map<Integer, String> getResistanceProfilesByPatient(EvaluationContext context, Date maxResultDate) {
+    	Map<Integer, String> ret = new HashMap<Integer, String>();
+    	for (Map.Entry<String, Cohort> e : getResistanceProfiles(context, maxResultDate).entrySet()) {
+    		for (Integer pId : e.getValue().getMemberIds()) {
+    			ret.put(pId, e.getKey());
+    		}
+    	}
+    	return ret;
     }
     
     /**
@@ -150,6 +162,62 @@ public class MdrtbQueryService {
     	addOptionalDateClause(q, "and min(o.start_date) <= ", toDate);
     	
     	return executeQuery(q.toString(), context);
+	}
+	
+	/**
+	 * @return the most recent Obs Result for the given Cohort and Question
+	 */
+	public static Map<Integer, Result> getLatestObsResults(Cohort cohort, Concept question) {
+		Map<Integer, Result> ret = new HashMap<Integer, Result>();
+		
+	   	StringBuilder q = new StringBuilder();
+    	q.append("select	o.person_id, o.value_coded, o.obs_datetime ");
+    	q.append("from		patient p, obs o ");
+    	q.append("where		p.patient_id = o.person_id ");
+    	q.append("and		p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + question.getConceptId() + " ");
+    	q.append("order by	o.obs_datetime asc ");
+    	
+    	for (List<Object> row : Context.getAdministrationService().executeSQL(q.toString(), true)) {
+    		Integer patientId = (Integer)row.get(0);
+    		Result r = new Result();
+    		Concept result = Context.getConceptService().getConcept((Integer)row.get(1));
+    		r.setValueCoded(result);
+    		r.setResultObject(result);
+    		r.setResultDate((Date) row.get(2));
+    		ret.put(patientId, r);
+    	}
+    	
+    	return ret;
+	}
+	
+	/**
+	 * @return the active PatientState Result for the given ProgramWorkflow and Cohort
+	 */
+	public static Map<Integer, Result> getActiveState(Cohort cohort, ProgramWorkflow workflow) {
+		Map<Integer, Result> ret = new HashMap<Integer, Result>();
+		
+	   	StringBuilder q = new StringBuilder();
+    	q.append("select	p.patient_id, s.concept_id, ps.start_date ");
+    	q.append("from		patient p, patient_program pp, patient_state ps, program_workflow_state s ");
+    	q.append("where		p.patient_id = pp.patient_id ");
+    	q.append("and		pp.patient_program_id = ps.patient_program_id ");
+    	q.append("and		ps.state = s.program_workflow_state_id ");
+    	q.append("and		p.voided = 0 and pp.voided = 0 and ps.voided = 0 ");
+    	q.append("and		s.program_workflow_id = " + workflow.getProgramWorkflowId() + " ");
+    	q.append("and		ps.end_date is null ");
+    	
+    	for (List<Object> row : Context.getAdministrationService().executeSQL(q.toString(), true)) {
+    		Integer patientId = (Integer)row.get(0);
+    		Result r = new Result();
+    		Concept result = Context.getConceptService().getConcept((Integer)row.get(1));
+    		r.setValueCoded(result);
+    		r.setResultObject(result);
+    		r.setResultDate((Date) row.get(2));
+    		ret.put(patientId, r);
+    	}
+    	
+    	return ret;
 	}
 	
 	/**

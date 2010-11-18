@@ -99,12 +99,6 @@ public class MdrtbHomePageController {
             Map<String, String> patientLists = new LinkedHashMap<String, String>();
             patientLists.put("mdrtb.activePatients", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbShortSummary&enrollment=current");
             patientLists.put("mdrtb.mdrtbSummary", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbSummary&enrollment=current");
-            
-            StringBuilder glcReportUrl = new StringBuilder("module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbCustomList&enrollment=current");
-            for (String s : PatientSummaryUtil.GLC_COLUMNS) {
-            	glcReportUrl.append("&columns="+s);
-            }
-            patientLists.put("mdrtb.glcReport", glcReportUrl.toString());
             model.addAttribute("patientLists", patientLists);
             
             // Link to Cohort Builder, if reporting compatibility is installed

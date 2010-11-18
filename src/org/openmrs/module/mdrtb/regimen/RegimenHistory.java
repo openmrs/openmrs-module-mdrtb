@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -81,6 +82,16 @@ public class RegimenHistory {
      */
     public List<Date> getRegimenChangeDates() {
     	return new ArrayList<Date>(getRegimenChanges().keySet());
+    }
+    
+    /**
+     * @return the initial regimen in the history
+     */
+    public Regimen getStartingRegimen() {
+    	if (getRegimenChanges().isEmpty()) {
+    		return null;
+    	}
+    	return getRegimenOnDate(getRegimenChangeDates().get(0));
     }
     
     /**
@@ -212,6 +223,18 @@ public class RegimenHistory {
      */
     public List<Regimen> getRegimensAfter(Date effectiveDate) {
     	return getRegimensBetweenDates(effectiveDate, null, false);
+    }
+    
+    /**
+     * @return the first Regimen in the History whose reason for starting matches the passed type
+     */
+    public Regimen getFirstRegimenOfType(Concept type) {
+    	for (Regimen r : getAllRegimens()) {
+    		if (r.getReasonForStarting() != null && type.equals(r.getReasonForStarting().getValueCoded())) {
+    			return r;
+    		}
+    	}
+    	return null;
     }
     
     //***** PROPERTY ACCESS *****
