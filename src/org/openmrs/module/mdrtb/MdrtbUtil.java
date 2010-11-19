@@ -1027,11 +1027,11 @@ public class MdrtbUtil {
     				}
     			}    	
     			catch (NumberFormatException e) {
-    				// if not a concept id, must be a cocnept name
-    				Concept concept = Context.getConceptService().getConcept(drug);
+    				// if not a concept id, must be a concept map
+    				Concept concept = Context.getService(MdrtbService.class).getConcept(drug);
     				
     				if (concept == null) {
-    					log.error("Unable to find concept referenced by id " + drug);
+    					log.error("Unable to find concept referenced by " + drug);
     				}
     				// add the concept to the list
     				else {

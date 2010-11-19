@@ -15,6 +15,7 @@ import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.Bacteriology;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
@@ -299,8 +300,12 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 		if (specimens != null) {
 			for (Specimen specimen : specimens) {
 				for (Test test : specimen.getTests()) {
-					if (test.getStatus() != TestStatus.COMPLETED) { // TODO: do I need to test if date equals "0" or something like that?
-						tests.add(new StatusItem(test));
+					if (test.getStatus() != TestStatus.COMPLETED) {
+						// if a test does not have a status of complete, also verify that there are no results before we decide to display it as "pending"
+						if (test instanceof Bacteriology && ((Bacteriology) test).getResult() == null  ||
+								test instanceof Dst && ((Dst) test).getResults().size() == 0) {
+							tests.add(new StatusItem(test));
+						}
 					}
 				}
 			}

@@ -83,7 +83,7 @@
 <form action="mdrtbEditPatient.form" method="GET">
 <input type="hidden" name="addAge" value="${addAge}"/>
 <input type="hidden" name="addName" value="${addName}"/>
-<input type="hidden" name="addBirthdate" value="${addBirthdate}"/>
+<input type="hidden" name="addBirthdate" value="<openmrs:formatDate date='${patient.birthdate}'/>"/>
 <input type="hidden" name="addGender" value="${addGender}"/>
 <input type="hidden" name="successURL" value="${successURL}"/>
 <input type="hidden" name="patientId" value="-1"/>

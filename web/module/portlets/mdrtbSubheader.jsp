@@ -49,7 +49,7 @@
 <table width="100%">
 <tr>
 <td align="left">
-&nbsp;<spring:message code="mdrtb.currentlyViewing" text="Currently viewing"/>:
+&nbsp;<span style="font-weight:bold"><spring:message code="mdrtb.currentlyViewing" text="Currently viewing"/>:</span>
 <select id="programSelector">
 <c:forEach var="program" items="${model.patientPrograms}">
 	<c:choose>

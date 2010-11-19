@@ -21,23 +21,22 @@
 <tr>
 <td class="chartCell" colspan="3">&nbsp;</td>
 <td class="spacerCell"></td>
-<td class="chartCell" colspan="3" align="center"><spring:message code="mdrtb.bacteriologies" text="Bacteriologies"/></td3>
+<td class="chartCell" colspan="3" align="center" style="font-weight:bold"><spring:message code="mdrtb.bacteriologies" text="Bacteriologies"/></td3>
 <td class="spacerCell"></td>
-<td class="chartCell" colspan="${fn:length(model.chart.drugTypes)}" align="center"><spring:message code="mdrtb.dsts" text="DSTs"/></td>
+<td class="chartCell" colspan="${fn:length(model.chart.drugTypes)}" align="center" style="font-weight:bold"><spring:message code="mdrtb.dsts" text="DSTs"/></td>
 </tr>
 
 <tr>
-<td class="chartCell"><spring:message code="mdrtb.month" text="Month"/></td>
-<td class="chartCell"><spring:message code="mdrtb.dateCollected" text="Date collected"/></td>
-<td class="chartCell"><spring:message code="mdrtb.lab" text="Lab"/></td>
+<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.month" text="Month"/></td>
+<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.dateCollected" text="Date collected"/></td>
+<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.lab" text="Lab"/></td>
 <td class="spacerCell"></td>
-<td class="chartCell" style="width:60px"><spring:message code="mdrtb.smears" text="Smears"/></td>
-<td class="chartCell" style="width:60px"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
-<td class="chartCell"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
+<td class="chartCell" style="width:60px;font-weight:bold"><spring:message code="mdrtb.smears" text="Smears"/></td>
+<td class="chartCell" style="width:60px;font-weight:bold"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
+<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <td class="spacerCell"></td>
-<!--  <td class="chartCell" style="border-bottom:none;width:10px">&nbsp;</td> --> <!-- BLANK CELL -->
 <c:forEach var="drugType" items="${model.chart.drugTypes}">
-	<td class="chartCell" style="width:30px;vertical-align:top">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
+	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
 </c:forEach>
 </tr>
 <!-- END HEADER ROWS -->

@@ -1148,6 +1148,27 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
 
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/closeOpenProgramsWithOutcomes.form")
+    public ModelAndView closeOpenProgramsWithOutcomes() {
+    	
+    	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
+    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	
+    	for (PatientProgram program : Context.getProgramWorkflowService().getPatientPrograms(null, mdrtb, null, null, null, null, false)) {
+    		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    		
+    		if (mdrtbProgram.getOutcome() != null && mdrtbProgram.getOutcome().getConcept() != null && mdrtbProgram.getDateCompleted() == null) {
+    			PatientState outcomeState = getPatientState(program, outcome);
+    			mdrtbProgram.setDateCompleted(outcomeState.getStartDate());
+    			Context.getProgramWorkflowService().savePatientProgram(mdrtbProgram.getPatientProgram());
+    			log.info("Closed patient program " + program.getId() + " on " + mdrtbProgram.getDateCompleted() + " because program had previously assigned outcome of " + mdrtbProgram.getOutcome());
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    
     // TODO: add script to retire the forms
     
     // just a hacky test
@@ -1383,5 +1404,22 @@ public class SpecimenMigrationController {
 			nonCoded.setValueCoded(type);
 			nonCoded.setValueText(null);
 		}
+	}
+	
+	/**
+	 * Gets the state for a workflow 
+	 * 
+	 * Note that this method operates under the assumption that there is only one non-voided
+	 * state per workflow at any one time.  For a generic workflow, this would not be a valid
+	 * assumption, but for the Classification and Outcome workflows we are working with, this should be true.
+	 */
+	private PatientState getPatientState (PatientProgram program, Concept workflowConcept) {
+		for (PatientState state : program.getStates()) {
+			if (state.getState().getProgramWorkflow().getConcept().equals(workflowConcept) && !state.getVoided()) {
+				return state;
+			}
+		}
+		
+		return null;
 	}
 }

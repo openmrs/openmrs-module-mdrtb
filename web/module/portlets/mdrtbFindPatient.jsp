@@ -418,8 +418,8 @@ function useMdrtbLoadingMessage(message) {
 		<c:when test="${model.size=='mini'}">
 			<span id="findPatient">
 				<c:choose>
-					<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
-					<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
+					<c:when test="${!empty model.labelCode}"><span style="font-weight:bold"><spring:message code="${model.labelCode}"/></span></c:when>
+					<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
 				</c:choose>
 				<input type="text" value="" id="searchBox" name="searchBox">
 				<div id="results" style="position:absolute; z-index:1000; border:2px solid black; background-color:#CCCCCC; ${model.resultStyle}">
