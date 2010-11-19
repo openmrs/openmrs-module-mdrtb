@@ -36,29 +36,26 @@
 									${patient.fullName}
 								</a>
 							</span><br/>
-							<span class="mdrListLabel">No. Dossier:</span>
-							<span class="mdrListValue">${patient.mdrtbId}</span><br/>
+							<span class="mdrListLabel">Identifier:</span>
+							<span class="mdrListValue">${patient.primaryIdentifier}</span><br/>
 							<span class="mdrListLabel">Age:</span>
 							<span class="mdrListValue">${patient.age}</span>&nbsp;|&nbsp;
 							<span class="mdrListLabel">Sexe:</span>
 							<span class="mdrListValue">${patient.gender}</span><br/>
 							<span class="mdrListLabel">Statut VIH:</span> 
 							<span class="mdrListValue">
-								${patient.hivStatus}
-								<c:if test="${patient.hivStatusDate != null}">
-									(<openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.hivStatusDate}"/>)
+								${patient['obs.RESULT OF HIV TEST.latest']}
+								<c:if test="${!empty patient['obs.RESULT OF HIV TEST.latestDate']}">
+									(${patient['obs.RESULT OF HIV TEST.latestDate']})
 								</c:if>
 							</span>
 						</td>
 						<td style="white-space:normal;">
 							<span class="mdrListLabel">Regime Actuel:</span> 
-							<span class="mdrListValue"><br/>${patient.currentRegimen}</span>
+							<span class="mdrListValue"><br/>${patient.currentTbRegimen}</span>
 							<br/>
-							<span class="mdrListLabel">Date Hebergement:</span>
-							<span class="mdrListValue"><openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.hospitalizedDate}"/></span>
-							&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-							<span class="mdrListLabel">Date Ambulatoires:</span>
-							<span class="mdrListValue"><openmrs:formatDate format="${_dateFormatDisplay}" date="${patient.ambulatoryDate}"/></span>
+							<span class="mdrListLabel">Hebergement:</span>
+							<span class="mdrListValue"><br/>${patient['state.6']}</span>
 						</td>
 					</tr>
 				</c:forEach>

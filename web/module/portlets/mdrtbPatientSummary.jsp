@@ -28,7 +28,7 @@
 		
 					<tr bgcolor="#e0e0e0">
 						<td colspan="2"><span class="mdrListBigValue">${patient.fullName}</span></td>
-						<td nowrap><span class="mdrListLabel">No. Dossier:</span><br/><span class="mdrListValue">${patient.mdrtbId}</span></td>
+						<td nowrap><span class="mdrListLabel">Identifier:</span><br/><span class="mdrListValue">${patient.primaryIdentifier}</span></td>
 						<td><span class="mdrListLabel">Age:</span><br/><span class="mdrListValue">${patient.age}</span></td>
 						<td><span class="mdrListLabel">Sexe:</span><br/><span class="mdrListValue">${patient.gender}</span></td>
 						<td><span class="mdrListLabel">Poids:</span><br/><span class="mdrListValue"><c:if test="${!empty patient.weight}">${patient.weight} kgs.</c:if></span></td>

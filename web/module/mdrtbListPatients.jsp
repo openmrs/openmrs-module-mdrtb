@@ -116,7 +116,6 @@
 						<select name="displayMode">
 							<option value="basic"<c:if test="${'basic' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.basicDetails"/></option>
 							<option value="mdrtbShortSummary"<c:if test="${'mdrtbShortSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbShortSummary"/></option>
-							<option value="mdrtbSummary"<c:if test="${'mdrtbSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbSummary"/></option>
 							<option value="mdrtbCustomList"<c:if test="${'mdrtbCustomList' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbCustomList"/></option>
 							
 							<openmrs:extensionPoint pointId="org.openmrs.mdrtb.listPatientDisplayModes" type="html">

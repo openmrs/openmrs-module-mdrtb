@@ -65,6 +65,7 @@ public class PatientSummaryUtil {
     public static final String DEAD = "dead";
     public static final String DEATH_DATE = "deathDate";
     public static final String CAUSE_OF_DEATH = "causeOfDeath";
+    public static final String PRIMARY_IDENTIFIER = "primaryIdentifier";
     
     public static final String STARTING_TB_REGIMEN = "startingTbRegimen";
     public static final String STARTING_TB_REGIMEN_DATE = "startingTbRegimenDate";
@@ -112,13 +113,17 @@ public class PatientSummaryUtil {
     	for (String s : DEMOGRAPHICS_KEYS) {
     		keys.put(s, MessageUtil.translate("mdrtb."+s));
     	}
+    	String primaryIdType = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
     	for (PatientIdentifierType pit : Context.getPatientService().getAllPatientIdentifierTypes()) {
     		keys.put("identifier."+pit.getName(), pit.getName());
+    		if (pit.getName().equals(primaryIdType) || pit.getId().toString().equals(primaryIdType)) {
+    			keys.put(PRIMARY_IDENTIFIER, MessageUtil.translate("mdrtb.identifier"));
+    		}
     	}
     	for (PersonAttributeType pat : Context.getPersonService().getAllPersonAttributeTypes()) {
     		keys.put("attribute."+pat.getName(), pat.getName());
     	}
-    	for (ProgramWorkflow wf : Context.getService(MdrtbService.class).getMdrtbProgram().getAllWorkflows()) {
+    	for (ProgramWorkflow wf : Context.getService(MdrtbService.class).getMdrtbProgram().getWorkflows()) {
     		String cn = formatConcept(wf.getConcept());
     		keys.put("state."+wf.getId(), cn);
     	}
@@ -243,6 +248,12 @@ public class PatientSummaryUtil {
         		}
         	}
         	
+        	if (ObjectUtil.containsAny(columns, PRIMARY_IDENTIFIER)) {
+        		String primaryIdType = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
+        		PatientIdentifier pi = p.getPatientIdentifier(primaryIdType);
+        		map.put(PRIMARY_IDENTIFIER, (pi == null ? "" : pi.getIdentifier()));
+        	}
+        	
         	for (String c : columns) {
         		if (c.startsWith("identifier.")) {
         			PatientIdentifier pi = p.getPatientIdentifier(c.split("\\.")[1]);
@@ -295,9 +306,11 @@ public class PatientSummaryUtil {
         		RegimenHistory tbHistory = RegimenUtils.getTbRegimenHistory(p);
         		if (ObjectUtil.containsAny(columns, STARTING_TB_REGIMEN, STARTING_TB_REGIMEN_DATE, STARTING_TB_REGIMEN_TYPE)) {
     				Regimen r = tbHistory.getStartingRegimen();
-        			map.put(STARTING_TB_REGIMEN, formatObject(r, ""));
-    				map.put(STARTING_TB_REGIMEN_DATE, formatDate(r.getStartDate(), null, null));
-    				map.put(STARTING_TB_REGIMEN_TYPE, formatObject(r.getReasonForStarting(), ""));
+    				if (r != null) {
+	        			map.put(STARTING_TB_REGIMEN, formatObject(r, ""));
+	    				map.put(STARTING_TB_REGIMEN_DATE, formatDate(r.getStartDate(), null, null));
+	    				map.put(STARTING_TB_REGIMEN_TYPE, formatObject(r.getReasonForStarting(), ""));
+    				}
         		}
         		if (ObjectUtil.containsAny(columns, CURRENT_TB_REGIMEN, CURRENT_TB_REGIMEN_DATE, CURRENT_TB_REGIMEN_TYPE)) {
     				Regimen r = tbHistory.getActiveRegimen();

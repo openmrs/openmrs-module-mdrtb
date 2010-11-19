@@ -25,7 +25,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.mdrtb.reporting.PatientSummaryUtil;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.data.MOHReport;
 import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
@@ -98,7 +97,6 @@ public class MdrtbHomePageController {
         	
             Map<String, String> patientLists = new LinkedHashMap<String, String>();
             patientLists.put("mdrtb.activePatients", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbShortSummary&enrollment=current");
-            patientLists.put("mdrtb.mdrtbSummary", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbSummary&enrollment=current");
             model.addAttribute("patientLists", patientLists);
             
             // Link to Cohort Builder, if reporting compatibility is installed

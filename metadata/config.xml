@@ -401,6 +401,11 @@
 		<defaultValue>1:N/A|2:CANGE|3:HINCHE|4:N/A|5:MSLI</defaultValue>
 		<description>Pipe-delimited list mapping a location id to it's display name.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.primaryPatientIdentifierType</property>
+		<defaultValue/>
+		<description>The primary patient identifier to display for patients</description>
+	</globalProperty>
 	
 	<dwr>
 		<allow>

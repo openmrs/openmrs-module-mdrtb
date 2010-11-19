@@ -175,6 +175,7 @@ public class MdrtbQueryService {
     	q.append("from		patient p, obs o ");
     	q.append("where		p.patient_id = o.person_id ");
     	q.append("and		p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.value_coded is not null ");
     	q.append("and		o.concept_id = " + question.getConceptId() + " ");
     	q.append("order by	o.obs_datetime asc ");
     	
