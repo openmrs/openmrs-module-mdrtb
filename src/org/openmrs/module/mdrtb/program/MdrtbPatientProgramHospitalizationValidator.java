@@ -35,7 +35,7 @@ public class MdrtbPatientProgramHospitalizationValidator implements Validator {
     		}
     		
     		if (hospitalization.getEndDate() != null && hospitalization.getStartDate().after(hospitalization.getEndDate())) {
-    			errors.reject("mdrtb.program.errors.dischargeDateBeforeAdmissionDate", "The admission date cannot be before the discharge date.");
+    			errors.reject("mdrtb.program.errors.dischargeDateBeforeAdmissionDate", "The discharge date cannot be before the admission date.");
     		}
     		
     		if (previousHospitalizationStartDate == null) {

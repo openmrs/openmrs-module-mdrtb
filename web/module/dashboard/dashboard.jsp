@@ -29,7 +29,7 @@
 
 <!-- JQUERY FOR THIS PAGE -->
 
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -147,7 +147,6 @@
 			dateFormat: 'dd/mm/yy',
 		 });
 	});
--->
 </script>
 <!-- END JQUERY -->
 
@@ -446,12 +445,13 @@ ${regimen.displayString}
 </tr>
 
 <c:forEach var="hospitalization" items="${program.allHospitalizations}">
+<!-- the hidden "admissionDate" and "dischargeDate" spans are used to hold the dates in "edit" format for use by jquery when opening the edit pop-up -->
 <tr>
-<td><nobr><span class="admissionDate"><openmrs:formatDate date="${hospitalization.startDate}" format="${_dateFormatDisplay}"/></span></nobr></td>
+<td><nobr><span class="admissionDate" style="display:none"><openmrs:formatDate date="${hospitalization.startDate}"/></span><openmrs:formatDate date="${hospitalization.startDate}" format="${_dateFormatDisplay}"/></nobr></td>
 <td><nobr>
 <c:choose>
  	<c:when test="${!empty hospitalization.endDate}"> 
-		<span class="dischargeDate"><openmrs:formatDate date="${hospitalization.endDate}" format="${_dateFormatDisplay}"/></span>
+		<span class="dischargeDate" style="display:none"><openmrs:formatDate date="${hospitalization.endDate}"/></span><openmrs:formatDate date="${hospitalization.endDate}" format="${_dateFormatDisplay}"/>
     </c:when>
 	<c:otherwise>
 		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
@@ -493,10 +493,10 @@ ${regimen.displayString}
 <input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value="${hospitalizationStateId}"/>
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" value="<openmrs:formatDate date='${admissionDate}'/>"/>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate"/>
 </td></tr>
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>"/>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate"/>
 </td></tr>
 </table>
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
