@@ -19,10 +19,7 @@
 <!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
-<!--  these are to make sure that the datepicker appears above the popup -->
 <style type="text/css">
-	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
-    .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 	.ui-dialog-titlebar-close{display: none;}  <!--hides the close button on the pop-ups -->
 </style>
@@ -43,6 +40,7 @@
 			title: '<spring:message code="mdrtb.editProgram" text="Edit Program"/>',
 			width: '50%',
 			position: [150,150],
+			zIndex:990
 		});
 
 		$j('#programEditButton').click(function() {
@@ -68,6 +66,7 @@
 			title: '<spring:message code="mdrtb.closeProgram" text="Close Program"/>',
 			width: '50%',
 			position: [150,150],
+			zIndex:990
 		});
 
 		$j('#programCloseButton').click(function() {
@@ -99,6 +98,7 @@
 			title: '<spring:message code="mdrtb.editHospitalization" text="Edit Hospitalization"/>',
 			width: '40%',
 			position: [150,150],
+			zIndex:990
 		});
 
 		// opens the pop-up to edit a hospitalization and populates the fill-ins with the appropriate dates
@@ -126,26 +126,6 @@
 				$j('#hospitalizationsEditPopup').dialog('close');
 			}
 		});
-		
-		$j('#dateEnrolled').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-		
-		$j('#dateCompleted').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-
-		$j('#dateToClose').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-
-		$j('#startDate').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-
-		$j('#endDate').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
 	});
 </script>
 <!-- END JQUERY -->
@@ -230,7 +210,7 @@
 <form id="programEdit" action="${pageContext.request.contextPath}/module/mdrtb/program/programEdit.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td style="font-weight:bold">
 <spring:message code="mdrtb.enrollment.Location" text="Enrollment Location"/>:</td><td>
@@ -264,7 +244,7 @@
 
 <c:if test="${!program.active}">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>"/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td style="font-weight:bold">
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
@@ -300,7 +280,7 @@
 <form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted"/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td style="font-weight:bold">
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
@@ -493,10 +473,10 @@ ${regimen.displayString}
 <input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value="${hospitalizationStateId}"/>
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate"/>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" onFocus="showCalendar(this)" style="z-index:1"/>
 </td></tr>
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate"/>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" onFocus="showCalendar(this)" style="z-index:99999"/>
 </td></tr>
 </table>
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>

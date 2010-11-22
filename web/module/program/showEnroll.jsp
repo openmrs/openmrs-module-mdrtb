@@ -18,29 +18,11 @@
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <!--  these are to make sure that the datepicker appears above the popup -->
 <style type="text/css">
-	#ui-datepicker-div { z-index: 9999; /* must be > than popup editor (950) */}
-    .ui-datepicker {z-index: 9999 !important; /* must be > than popup editor (1002) */}
     td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
 <!-- CUSTOM JQUERY  -->
-<script type="text/javascript"><!--
 
-	var $j = jQuery.noConflict();	
-
-	$j(document).ready(function(){
-
-		$j('#dateEnrolled').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-
-		$j('#dateCompleted').datepicker({		
-			dateFormat: 'dd/mm/yy',
-		 });
-		
- 	});
--->
-</script>
 
 <br/><br/>
 
@@ -61,7 +43,7 @@
 <form id="programEnroll" action="${pageContext.request.contextPath}/module/mdrtb/program/programEnroll.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>"/>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td><td><input id="dateEnrolled" type="text" size="14" tabindex="-1" name="dateEnrolled" value="<openmrs:formatDate date='${program.dateEnrolled}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 
 <tr><td>
@@ -96,7 +78,7 @@
 
 <c:if test="${hasActiveProgram}">
 <tr><td>
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>"/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td>
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
