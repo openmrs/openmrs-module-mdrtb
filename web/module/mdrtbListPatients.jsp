@@ -53,7 +53,8 @@
 			<td valign="top" class="patientTable">
 				<table>
 					<tr style="border-bottom:2px solid black; height:25px;"><td colspan="2" style="padding-left:10px; background-color:#C0C0C0; font-weight:bold;">
-						<spring:message code="mdrtb.whichPatientsToDisplay" text="Which patients to display"/>:
+						<spring:message code="mdrtb.choosePatientsToDisplay" text="Choose patients to display"/>:
+						<input type="submit" value="<spring:message code="mdrtb.listPatients" text="List"/>"/>
 					</td></tr>
 					<tr><td colspan="2">
 						<br/>
@@ -112,7 +113,7 @@
 			<td valign="top" width="100%" class="patientTable" style="padding-left:10px;">
 				<table width="100%">
 					<tr style="border-bottom:2px solid black;"><td colspan="2" style="background-color:#C0C0C0; font-weight:bold;">
-						<spring:message code="mdrtb.whichPatientDataDisplay" text="Which patient data to display"/>: 
+						<spring:message code="mdrtb.chooseColumnsToDisplay" text="Choose columns to display"/>: 
 						<select name="displayMode">
 							<option value="basic"<c:if test="${'basic' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.basicDetails"/></option>
 							<option value="mdrtbShortSummary"<c:if test="${'mdrtbShortSummary' == param.displayMode}"> selected</c:if>><spring:message code="mdrtb.mdrtbShortSummary"/></option>

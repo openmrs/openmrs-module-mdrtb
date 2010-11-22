@@ -41,10 +41,13 @@
 		<c:if test="${!empty model.columns}">
 			$j("#columnChooser").hide();
 		</c:if>
+		<c:if test="${empty model.columns}">
+			$j("#configureButton").hide();
+		</c:if>
 	});
 
 	function outputToExcel() {
-		var excelUrl = '${pageContext.request.contextPath}/module/mdrtb/customSummaryExport.form?patientIds=${model.patientIds}';
+		var excelUrl = '${pageContext.request.contextPath}/module/mdrtb/reporting/customSummaryExport.form?patientIds=${model.patientIds}';
 		<c:forEach items="${model.columns}" var="column">
 			excelUrl += '&columns=${column}';
 		</c:forEach>
@@ -64,10 +67,6 @@
 	}
 </style>
 
-<div style="padding-top:5px;">
-	<input type="button" id="configureButton" value="<spring:message code="mdrtb.configure"/>"/>
-</div>
-<br/>
 <div style="padding-left:5px; padding-right:5px; width:100%;">
 	<div id="columnChooser">
 		<select id="columnSelector" class="multiselect" multiple="multiple" name="columns">
@@ -95,17 +94,18 @@
 		</select>
 		&nbsp;&nbsp;|&nbsp;&nbsp;
 		<button><spring:message code="mdrtb.outputToList"/></button>
-		<c:if test="${!empty model.data}">
-			&nbsp;&nbsp;|&nbsp;&nbsp;
-			<button onclick="outputToExcel(); return false;"><spring:message code="mdrtb.exportToExcel"/></button>
-		</c:if>
-		&nbsp;&nbsp;|&nbsp;&nbsp;
+		&nbsp;&nbsp;
 		<input type="button" value="<spring:message code="mdrtb.cancel"/>" id="cancelButton"/>
 	</div>
 </div>
 
 <div id="patientResultTable">
 	<c:if test="${!empty model.columns}">
+		<div style="padding:5px;">
+			<input type="button" id="configureButton" value="<spring:message code="mdrtb.configureColumns" text="Configure Columns"/>"/>
+			<button onclick="outputToExcel(); return false;"><spring:message code="mdrtb.exportToExcel"/></button>
+		</div>
+		<hr/>
 		<c:choose>
 			<c:when test="${empty model.data}">
 				<br/>
