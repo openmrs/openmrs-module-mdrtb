@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
@@ -15,7 +16,7 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
 
     public String renderRegimen(Regimen regimen) {
     	  	
-    	DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
+    	DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
     	
     	String regimenStr = RegimenUtils.formatRegimenGenerics(regimen, " + ", "mdrtb.none");
     	String startDateStr = df.format(regimen.getStartDate());

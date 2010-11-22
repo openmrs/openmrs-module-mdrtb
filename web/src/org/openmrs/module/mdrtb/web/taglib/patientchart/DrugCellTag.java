@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.taglib.patientchart;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -90,7 +91,7 @@ public class DrugCellTag extends TagSupport {
 			return;
 		}
 		
-		SimpleDateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
+		DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
 		
 		titleString.append("<nobr>");
 		titleString.append(component.getDrug().getName());

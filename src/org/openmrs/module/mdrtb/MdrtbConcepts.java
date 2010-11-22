@@ -175,10 +175,10 @@ public class MdrtbConcepts {
 
     // Treatment Outcome and Patient Status
     public final static String [] MDR_TB_TX_OUTCOME = {"MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME"};
-    public final static String [] CURED = {"CURED - TB"};
-    public final static String [] DEFAULTED = {"DEFAULTED - TB"};
-    public final static String [] DIED = {"DIED - TB"};
-    public final static String [] FAILED = {"FAILED - TB"};
+    public final static String [] CURED = {"CURED"};
+    public final static String [] DEFAULTED = {"DEFAULTED"};
+    public final static String [] DIED = {"DIED"};
+    public final static String [] FAILED = {"FAILED"};
     public final static String [] TREATMENT_COMPLETE = {"TREATMENT COMPLETE"};
     public final static String [] PATIENT_TRANSFERRED_OUT = {"PATIENT TRANSFERRED OUT"};
     public final static String [] STILL_ON_TREATMENT = {"STILL ON TREATMENT"};

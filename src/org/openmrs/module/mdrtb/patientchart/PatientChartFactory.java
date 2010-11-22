@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.patientchart;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -129,7 +130,7 @@ public class PatientChartFactory {
 				record.setLabel(iteration.toString());
 			}
 			else {
-				DateFormat format = MdrtbConstants.DATE_FORMAT_DISPLAY;
+				DateFormat format = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
 				record.setLabel(format.format(recordStartDate.getTime()));
 			}
 			

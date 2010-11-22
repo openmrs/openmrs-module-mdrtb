@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,9 +20,11 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
 	
     public void renderVisit(StatusItem visit, VisitStatus status) {
     	
+    	DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
+    	
     	Encounter encounter = (Encounter) visit.getValue();
     	
-    	String[] params = { MdrtbConstants.DATE_FORMAT_DISPLAY.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
+    	String[] params = { df.format(encounter.getEncounterDatetime()), encounter.getLocation().getDisplayString()};
     	
     	visit.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.visitStatus.visit", params,
 		    "{0} at {1}", Context.getLocale()));

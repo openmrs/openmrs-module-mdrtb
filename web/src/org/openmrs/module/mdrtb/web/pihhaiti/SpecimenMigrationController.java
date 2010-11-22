@@ -31,7 +31,6 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
-import org.openmrs.OrderType;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
@@ -67,6 +66,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SpecimenMigrationController {
+	
+	/**
+	 * IMPORTANT NOTE:
+	 * 
+	 * THESE MIGRATION SCRIPTS SHOULD BE RUN BY A USER WHO HAS HIS/HER DEFAULT PROFILE
+	 * LANGUAGE SET TO ENGLISH, SINCE THE MODULE RELIES ON FETCHING CONCEPTS BY ENGLISH
+	 * NAME IN ORDER TO WORK
+	 */
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -1169,6 +1176,55 @@ public class SpecimenMigrationController {
     }
     
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateOutcomeStates.form")
+    public ModelAndView migrateOutcomeStates() {
+    	// add a new concept mapping
+    	addConceptMapping("PATIENT CURED","CURED");
+    	addConceptMapping("PATIENT DIED","DIED");
+    	addConceptMapping("REGIMEN FAILURE","FAILED");
+    	addConceptMapping("PATIENT DEFAULTED", "DEFAULTED");
+    	
+    	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
+    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	
+    	// fetch the outcome workflow
+    	ProgramWorkflow outcomeWorkflow = null;
+    	for (ProgramWorkflow workflow : mdrtb.getWorkflows()) {
+    		if (workflow.getConcept().equals(outcome)) {
+    			outcomeWorkflow = workflow;
+    			break;
+    		}
+    	}
+    	
+    	// now change the concepts associated with the states
+    	ProgramWorkflowState cured = outcomeWorkflow.getState(Context.getConceptService().getConcept(1585));
+    	cured.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED));
+    	
+    	ProgramWorkflowState died = outcomeWorkflow.getState(Context.getConceptService().getConcept(1565));
+    	died.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+    	
+    	ProgramWorkflowState failed = outcomeWorkflow.getState(Context.getConceptService().getConcept(1587));
+    	failed.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED));
+    	
+    	ProgramWorkflowState defaulted = outcomeWorkflow.getState(Context.getConceptService().getConcept(1567));
+    	defaulted.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED));
+    	
+    	Context.getProgramWorkflowService().saveProgram(mdrtb);
+    	
+    	// retire old concepts
+    	//  TODO: IMPORTANT: are the concept ids the same on all systems?
+    	retireConcept(1564);
+    	retireConcept(1585);
+    	retireConcept(1563);
+    	retireConcept(1565);
+    	retireConcept(1587);
+    	retireConcept(1566);
+    	retireConcept(1567);
+    	retireConcept(1584);
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     // TODO: add script to retire the forms
     
     // just a hacky test
@@ -1237,6 +1293,11 @@ public class SpecimenMigrationController {
 		concept.addConceptMapping(conceptMap);
 		Context.getConceptService().saveConcept(concept);
 		
+	}
+	
+	private void retireConcept(Integer id) {
+		Concept retire = Context.getConceptService().getConcept(id);
+		Context.getConceptService().retireConcept(retire, "retired as part of mdr-tb migration");
 	}
 	
 	private void addConceptShortName(String conceptMapping, String shortName) {

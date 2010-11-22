@@ -1,13 +1,10 @@
 package org.openmrs.module.mdrtb;
 
-import java.text.SimpleDateFormat;
-
-import org.openmrs.api.context.Context;
 
 public class MdrtbConstants {
     private static final String moduleName = "mdrtb";
     
-    public static final SimpleDateFormat DATE_FORMAT_DISPLAY = new SimpleDateFormat("dd/MMM/yyyy", Context.getLocale());
+    public static final String DATE_FORMAT_DISPLAY = "dd/MMM/yyyy";
     public static final String PATIENT_CHART_REGIMEN_CELL_COLOR = "lightblue";
     
     public static final String MDRTB_PROGRAM_GLOBAL_PROPERTY = moduleName + ".program_name";

@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +45,8 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
 	    else {
 	    	Obs result = (Obs) mostRecentTestResult.getValue();
 
-			String params [] = {result.getValueCoded().getDisplayString(), MdrtbConstants.DATE_FORMAT_DISPLAY.format(result.getObsDatetime())};
+	    	DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
+			String params [] = {result.getValueCoded().getDisplayString(), df.format(result.getObsDatetime())};
 	    	
 	    	mostRecentTestResult.setDisplayString(Context.getMessageSourceService().getMessage("mdrtb.testResultsStatus", params,
 			    "{0} on {1}", Context.getLocale()));
@@ -88,7 +90,8 @@ public class DashboardHivStatusRenderer implements HivStatusRenderer {
     		Date startDate = ((Regimen) regimens.get(regimens.size() - 1).getValue()).getStartDate();
     		Date endDate = ((Regimen) regimens.get(0).getValue()).getStartDate();
     		
-    		artTreatment.setDisplayString(MdrtbConstants.DATE_FORMAT_DISPLAY.format(startDate) + " - " + (endDate == null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(endDate) : 
+    		DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
+    		artTreatment.setDisplayString(df.format(startDate) + " - " + (endDate == null ? df.format(endDate) : 
     			Context.getMessageSourceService().getMessage("mdrtb.present")));
     	}
     }

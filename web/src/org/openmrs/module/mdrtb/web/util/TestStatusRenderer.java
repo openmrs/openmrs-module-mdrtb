@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.util;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.openmrs.api.context.Context;
@@ -14,7 +15,7 @@ public class TestStatusRenderer {
 	public static String renderStandardStatus(Test test) {
 		
 		TestStatus status = test.getStatus();
-	    DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
+		DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
 	    
 	    if (status == TestStatus.COMPLETED) {
 	    	String[] params = {test.getLab().getDisplayString(), df.format(test.getResultDate())};

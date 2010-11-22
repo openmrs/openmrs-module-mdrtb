@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,13 +22,15 @@ import org.openmrs.module.mdrtb.status.StatusItem;
 
 public class DashboardLabResultsStatusRenderer implements LabResultsStatusRenderer {
 	
+	private DateFormat df = new SimpleDateFormat(MdrtbConstants.DATE_FORMAT_DISPLAY, Context.getLocale());
+	
 	public void renderSmear(StatusItem item, LabResultsStatus status) {
 		
 		Smear smear = (Smear) item.getValue();
 		
 		if (smear != null) {
 			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
-			        smear.getDateCollected() != null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(smear.getDateCollected()) : "(N/A)",
+			        smear.getDateCollected() != null ? df.format(smear.getDateCollected()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + smear.getSpecimenId() + "&testId="
@@ -49,7 +52,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		if (culture != null) {
 			String[] params = {
 			        culture.getResult().getBestShortName(Context.getLocale()).toString(),
-			        culture.getDateCollected() != null ? MdrtbConstants.DATE_FORMAT_DISPLAY.format(culture.getDateCollected()) : "(N/A)",
+			        culture.getDateCollected() != null ? df.format(culture.getDateCollected()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			
 			item.setLink("/module/mdrtb/specimen/specimen.form?specimenId=" + culture.getSpecimenId() + "&testId=" 
@@ -73,9 +76,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
     }
 	
 	@SuppressWarnings("unchecked")
-    public void renderPendingLabResults(StatusItem pendingLabResults, LabResultsStatus status) {
-		DateFormat df = MdrtbConstants.DATE_FORMAT_DISPLAY;
-		
+    public void renderPendingLabResults(StatusItem pendingLabResults, LabResultsStatus status) {		
 		List<StatusItem> tests = (List<StatusItem>) pendingLabResults.getValue();
 		
 		for (StatusItem item : tests) {
@@ -155,7 +156,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		   return Context.getMessageSourceService().getMessage("mdrtb.notConverted");
 	   }
 	   else {
-		   String[] params = {MdrtbConstants.DATE_FORMAT_DISPLAY.format(cultureConversion.getDate()) };
+		   String[] params = {df.format(cultureConversion.getDate()) };
 		   return Context.getMessageSourceService().getMessage("mdrtb.converted", params,
 			    "Converted on {0}", Context.getLocale());
 	   }
