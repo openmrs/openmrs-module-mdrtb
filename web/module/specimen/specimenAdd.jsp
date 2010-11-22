@@ -150,7 +150,7 @@
 </tr>
 
 <tr>
-<td><nobr><spring:message code="mdrtb.results" text="Results"/>:</nobr></td>
+<td><nobr><spring:message code="mdrtb.result" text="Result"/>:</nobr></td>
 <td><select name="result" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${testType eq 'smear' ? smearResults : cultureResults}">
