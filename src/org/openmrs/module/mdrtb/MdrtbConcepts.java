@@ -198,6 +198,7 @@ public class MdrtbConcepts {
     public final static String [] AMBULATORY = {"AMBULATORY"};
     
     // Other
+    public final static String [] UNKNOWN = {"UNKNOWN"};
     public final static String [] RETURN_VISIT_DATE = {"RETURN VISIT DATE"};
     public final static String [] TELEPHONE_NUMBER = {"TELEPHONE NUMBER"};
 }

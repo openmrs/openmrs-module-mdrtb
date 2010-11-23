@@ -252,6 +252,7 @@ public class SpecimenImpl implements Specimen {
 			for(Obs obs : encounter.getObsAtTopLevel(false)) {
 				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANNED_LAB_REPORT))) {
 					// TODO: I've been unable to make this "soft" fail--if a scanned lab report is missing, it hangs the system
+					// the API exception OpenMRS throws seems to kill the session
 					try {
 						reports.add(new ScannedLabReportImpl(obs));
 					}

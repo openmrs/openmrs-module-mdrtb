@@ -27,6 +27,11 @@ public class MdrtbPatientProgramValidator implements Validator {
 	    	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "outcome", "mdrtb.program.errors.noOutcome", "Please specify an outcome.");
 	    }
 	    
+	    // make sure, if an outcome has been set, that it has a date completed
+	    if (program.getOutcome() != null) {
+	    	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dateCompleted", "mdrtb.program.errors.NoDateCompleted", "Please specify a date completed.");
+	    }
+	    
 	    // make sure the program enrollment date is not in the future
 	    if (program.getDateEnrolled() != null && program.getDateEnrolled().after(new Date())) {
 	    	errors.rejectValue("dateEnrolled", "mdrtb.program.errors.dateEnrolledInFuture", "The date enrolled cannot be in the future.");
@@ -38,7 +43,7 @@ public class MdrtbPatientProgramValidator implements Validator {
 	    }
 	    
 	    // make sure that the enrollment date is before the date completed
-	    if (program.getDateCompleted() != null && program.getDateCompleted().before(program.getDateEnrolled())) {
+	    if (program.getDateCompleted() != null && program.getDateEnrolled() != null && program.getDateCompleted().before(program.getDateEnrolled())) {
 	    	errors.rejectValue("dateCompleted", "mdrtb.program.errors.dateCompletedBeforeDateEnrolled", "The program completion date cannot be before the enrollment date.");
 	    }
 	    

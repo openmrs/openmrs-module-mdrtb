@@ -10,11 +10,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgramHospitalizationValidator;
@@ -30,6 +33,7 @@ import org.openmrs.module.mdrtb.web.controller.status.DashboardHivStatusRenderer
 import org.openmrs.module.mdrtb.web.controller.status.DashboardLabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardTreatmentStatusRenderer;
 import org.openmrs.module.mdrtb.web.controller.status.DashboardVisitStatusRenderer;
+import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -58,28 +62,34 @@ public class MdrtbDashboardController {
 		
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
 		binder.registerCustomEditor(ProgramWorkflowState.class, new ProgramWorkflowStateEditor());
 		
 	}
 	
 	@ModelAttribute("locations")
-	Collection<Location> getPossibleLocations() {
+	public Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations();
 	}
 	
 	@ModelAttribute("outcomes")
-	Collection<ProgramWorkflowState> getOutcomes() {		
+	public Collection<ProgramWorkflowState> getOutcomes() {		
 		return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
-	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousTreatment")
-	Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
+	}
+	
+	@ModelAttribute("patientDied")
+	public ProgramWorkflowState getPatientDiedState() {
+		return MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
 	}
 	
 	@ModelAttribute("hospitalizationState")
@@ -163,7 +173,8 @@ public class MdrtbDashboardController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/module/mdrtb/program/programEdit.form", method = RequestMethod.POST)
 	public ModelAndView processEditPopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors, 
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map) {
+	                                     @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath,
+	                                     SessionStatus status, HttpServletRequest request, ModelMap map) {
 		  
 		// perform validation 
 		if (program != null) {
@@ -179,6 +190,13 @@ public class MdrtbDashboardController {
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
 				
+		// mark the patient as died if required
+		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
+			Context.getPatientService().processDeath(program.getPatient(), program.getDateCompleted(), 
+				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)), null);
+		}
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
@@ -189,8 +207,9 @@ public class MdrtbDashboardController {
 	
 	@SuppressWarnings("unchecked")
     @RequestMapping(value = "/module/mdrtb/program/programClose.form", method = RequestMethod.POST)
-	public ModelAndView processClosePopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors, 
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map) {
+	public ModelAndView processClosePopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
+	                                      @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath,
+	                                      SessionStatus status, HttpServletRequest request, ModelMap map) {
 		  
 		// perform validation 
 		if (program != null) {
@@ -205,7 +224,14 @@ public class MdrtbDashboardController {
 		   
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-				
+		
+		// mark the patient as died if required
+		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
+			Context.getPatientService().processDeath(program.getPatient(), program.getDateCompleted(), 
+				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)), null);
+		}
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();

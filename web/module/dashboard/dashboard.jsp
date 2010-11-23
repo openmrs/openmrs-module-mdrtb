@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%@ taglib prefix="wgt" uri="/WEB-INF/view/module/htmlwidgets/resources/htmlwidgets.tld" %>
+
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
 <openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
@@ -9,8 +11,6 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
-
-
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
@@ -21,6 +21,7 @@
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+	.ac_results {  z-index: 9999; } <!-- make any auto-completes appear on top of modal dialogs -->
 	.ui-dialog-titlebar-close{display: none;}  <!--hides the close button on the pop-ups -->
 </style>
 
@@ -125,6 +126,19 @@
 				// otherwise, just close the popup
 				$j('#hospitalizationsEditPopup').dialog('close');
 			}
+		});
+
+		// event handler to hide/show date of death/cause of death fields
+		$j('.outcome').change(function() {
+				if ($j(this).attr('value') == ${patientDied.id}) {
+					// show patient died fields
+					$j(this).closest('div').find('.patientDiedField').show();
+				}
+				else {
+					// hide the patient died fields and reset their values
+					$j(this).closest('div').find('.patientDiedField').hide().find('#causeOfDeath').attr('value','');
+					$j(this).closest('div').find('.patientDiedField').find('#causeOfDeathTextField').attr('value','');
+				}
 		});
 	});
 </script>
@@ -243,18 +257,23 @@
 </td></tr>
 
 <c:if test="${!program.active}">
-<tr><td style="font-weight:bold">
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>" onFocus="showCalendar(this)"/>
-</td></tr>
-<tr><td style="font-weight:bold">
-<spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
-<select name="outcome">
-<option value=""/>
-<c:forEach var="outcome" items="${outcomes}">
-<option value="${outcome.id}" <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
-</c:forEach>
-</select>	
-</td></tr>
+	<tr><td style="font-weight:bold">
+	<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateCompleted" type="text" size="14" name="dateCompleted" value="<openmrs:formatDate date='${program.dateCompleted}'/>" onFocus="showCalendar(this)"/>
+	</td></tr>
+	<tr><td style="font-weight:bold">
+	<spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
+	<select class="outcome" name="outcome">
+	<option value=""/>
+	<c:forEach var="outcome" items="${outcomes}">
+	<option value="${outcome.id}" <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
+	</c:forEach>
+	</select>	
+	</td></tr>
+	<c:if test="${! program.patient.dead}">
+		<tr class="patientDiedField"<c:if test="${program.outcome != patientDied}"> style="display:none"</c:if>><td style="font-weight:bold">
+		<spring:message code="mdrtb.causeOfDeath" text="Cause of Death"/>:</td><td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept"/>
+	</td></tr>
+</c:if>
 </c:if>
 </table>
 
@@ -284,13 +303,19 @@
 </td></tr>
 <tr><td style="font-weight:bold">
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
-<select name="outcome">
+<select class="outcome" name="outcome">
 <option value=""/>
 <c:forEach var="outcome" items="${outcomes}">
 <option value="${outcome.id}"  <c:if test="${outcome == program.outcome}">selected</c:if> >${outcome.concept.displayString}</option>
 </c:forEach>
 </select>	
 </td></tr>
+</td></tr>
+<c:if test="${! program.patient.dead}">
+	<tr class="patientDiedField"<c:if test="${program.outcome != patientDied}"> style="display:none"</c:if>><td style="font-weight:bold">
+	<spring:message code="mdrtb.causeOfDeath" text="Cause of Death"/>:</td><td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept"/>
+	</td></tr>
+</c:if>
 </table>
 <button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> <button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
 
