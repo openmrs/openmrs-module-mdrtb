@@ -1228,9 +1228,28 @@ public class SpecimenMigrationController {
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form")
     public ModelAndView addUnknownMapping() {
     	addConceptMapping("Unknown","Unknown");
+    	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form")
+    public ModelAndView markPatientsAsDeceased() {
+    	
+    	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
+    	ProgramWorkflowState died = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+    	Concept unknown = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN);
+    	
+    	for (PatientProgram program : Context.getProgramWorkflowService().getPatientPrograms(null, mdrtb, null, null, null, null, false)) {
+    		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
+    		if (mdrtbProgram.getOutcome() != null && mdrtbProgram.getOutcome().equals(died) && !program.getPatient().isDead()) {
+    			Patient patient = program.getPatient();
+    			Context.getPatientService().processDeath(patient, program.getDateCompleted(), unknown, null);
+    			log.info("Marking patient " + patient.getId() + " as deceased on " + program.getDateCompleted());
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
     
     // TODO: add script to retire the forms
     

@@ -48,6 +48,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/migrateOutcomeStates.form">/module/mdrtb/pihhaiti/migrate/migrateOutcomeStates.form</a>
 	<br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form">/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form</a>
+	<br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form">/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form</a>
 	
 	
 </body>
