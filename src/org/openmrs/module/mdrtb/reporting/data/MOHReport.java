@@ -27,6 +27,7 @@ import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -44,14 +45,14 @@ public class MOHReport implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return "ZL MDR-TB Report";
+		return translate("name");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return "Report on MDR-TB treatment to be completed monthly and quarterly";
+		return translate("description");
 	}
 	
 	/**
@@ -59,10 +60,10 @@ public class MOHReport implements ReportSpecification {
 	 */
 	public List<Parameter> getParameters() {
 		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", "Facility", Location.class));
-		l.add(new Parameter("year", "Year of treatment start", Integer.class));
-		l.add(new Parameter("quarter", "Quarter (optional)", Integer.class));
-		l.add(new Parameter("month", "Month (optional)", Integer.class));
+		l.add(new Parameter("location", translate("location"), Location.class));
+		l.add(new Parameter("year", translate("year"), Integer.class));
+		l.add(new Parameter("quarter", translate("quarter"), Integer.class));
+		l.add(new Parameter("month", translate("month"), Integer.class));
 		return l;
 	}
 	
@@ -130,31 +131,31 @@ public class MOHReport implements ReportSpecification {
 		report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", inProgram, atLocation), null);
 		
 		CohortCrossTabDataSetDefinition s3 = new CohortCrossTabDataSetDefinition();
-		report.addDataSetDefinition("III. Diagnostic / Traitement et Suivi des Patients MDR-TB", s3, null);
-		s3.addRow("1.a Nombre de patients heberges pour traitement anti TB resistant - nouveaux heberges", newlyHospitalized, null);
-		s3.addRow("1.b Nombre de patients heberges pour traitement anti TB resistant - total heberges", allHospitalized, null);
-		s3.addRow("2.a Nombre de nouveaux cas mis cas sous tratement pour MDR-TB - TPM+", ReportUtil.getCompositionCohort("AND", startedTxDuring, smearPositive), null);
-		s3.addRow("2.b Nombre de nouveaux cas mis cas sous tratement pour MDR-TB - TPM-", ReportUtil.getCompositionCohort("AND", startedTxDuring, smearNegative), null);
-		s3.addRow("2.c Nombre de nouveaux cas mis cas sous tratement pour MDR-TB - Total", startedTxDuring, null);
-		s3.addRow("3.  Nombre de patients ayant abandonne le traitement", abandoned, null);
-		s3.addRow("4.  Nombre de patients decedes", died, null);
-		s3.addRow("5.  Nombre de nouveaux patients sous traitement MDR-TB et VIH+", ReportUtil.getCompositionCohort("AND", startedTxByEnd, newlyHivPositive), null);
-		s3.addRow("6.  Nombre de patients referes/recus pour evaluation MDR-TB", transferredIn, null);
-		s3.addRow("7.  Nombre de patients davec crachats de controle negatifs", controlSmearNegative, null);
-		s3.addRow("8.  Nombre de patients davec crachats de controle positives", controlSmearPositive, null);
-		s3.addRow("9.  Nombre de cultures diagnostique postives", firstCulturePositive, null);
-		s3.addRow("10. Nombre de nouveaux patients avec tests resistance confirmes", resistantTests, null);
-		s3.addRow("11. Nombre total de patients en suivi non heberges", ambulatory, null);
-		s3.addRow("12. Nombre de patients avec culture en cours", pendingCultures, null);
-		s3.addRow("13. Nombre total de patients avec coinfection MDR-TB + HIV", everHivPositive, null);
-		s3.addRow("14. Nombre de cultures de controle positives", controlCulturePositive, null);
-		s3.addRow("15. Nombre de cultures de controle negatives", controlCultureNegative, null);
-		s3.addRow("16. Nombre de patients ayant termine leur traitement MDR-TB avec success", ReportUtil.getCompositionCohort("OR", completedTx, curedTx), null);
-		s3.addRow("17. Nombre de patients ayant echoue le traitement pour MDR-TB", failedTx, null);
-		s3.addRow("18. Nombre de patients ayant repris le traitement MDR-TB au cours du mois", relapsedTx, null);
+		report.addDataSetDefinition("III. " + translate("section3"), s3, null);
+		s3.addRow("1.a " + translate("1.a"), newlyHospitalized, null);
+		s3.addRow("1.b " + translate("1.b"), allHospitalized, null);
+		s3.addRow("2.a " + translate("2.a"), ReportUtil.getCompositionCohort("AND", startedTxDuring, smearPositive), null);
+		s3.addRow("2.b " + translate("2.b"), ReportUtil.getCompositionCohort("AND", startedTxDuring, smearNegative), null);
+		s3.addRow("2.c " + translate("2.c"), startedTxDuring, null);
+		s3.addRow("3. " + translate("3"), abandoned, null);
+		s3.addRow("4. " + translate("4"), died, null);
+		s3.addRow("5. " + translate("5"), ReportUtil.getCompositionCohort("AND", startedTxByEnd, newlyHivPositive), null);
+		s3.addRow("6. " + translate("6"), transferredIn, null);
+		s3.addRow("7. " + translate("7"), controlSmearNegative, null);
+		s3.addRow("8. " + translate("8"), controlSmearPositive, null);
+		s3.addRow("9. " + translate("9"), firstCulturePositive, null);
+		s3.addRow("10. " + translate("10"), resistantTests, null);
+		s3.addRow("11. " + translate("11"), ambulatory, null);
+		s3.addRow("12. " + translate("12"), pendingCultures, null);
+		s3.addRow("13. " + translate("13"), everHivPositive, null);
+		s3.addRow("14. " + translate("14"), controlCulturePositive, null);
+		s3.addRow("15. " + translate("15"), controlCultureNegative, null);
+		s3.addRow("16. " + translate("16"), ReportUtil.getCompositionCohort("OR", completedTx, curedTx), null);
+		s3.addRow("17. " + translate("17"), failedTx, null);
+		s3.addRow("18. " + translate("18"), relapsedTx, null);
 		
 		CohortCrossTabDataSetDefinition s4 = new CohortCrossTabDataSetDefinition();
-		report.addDataSetDefinition("IV. Repartition des patients selon leur profil de resistance", s4, null);
+		report.addDataSetDefinition("IV. " + translate("section4"), s4, null);
 		Map<String, Cohort> profiles = MdrtbQueryService.getResistanceProfiles(context, endDate);
 		for (Map.Entry<String, Cohort> e : profiles.entrySet()) {
 			DstResultCohortDefinition cd = new DstResultCohortDefinition();
@@ -165,5 +166,12 @@ public class MOHReport implements ReportSpecification {
 		
 		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
 		return data;
+	}
+	
+	/**
+	 * Utility method to translate the report indicators
+	 */
+	private static String translate(String key) {
+		return MessageUtil.translate("mdrtb.indicatorReport."+key);
 	}
 }
