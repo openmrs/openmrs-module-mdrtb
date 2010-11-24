@@ -57,6 +57,7 @@ public class ReportingController {
         @RequestParam(required=false, value="format") String format,
         HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
 
+    	response.setContentType("text/html");
 		try {
 			ReportSpecification report = type.newInstance();
 			
