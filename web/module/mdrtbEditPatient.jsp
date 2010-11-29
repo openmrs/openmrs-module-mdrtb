@@ -1,9 +1,10 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+<%@ taglib prefix="wgt" uri="/WEB-INF/view/module/htmlwidgets/resources/htmlwidgets.tld" %>
 
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
-
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 
@@ -35,6 +36,26 @@
 			}
 			else {
 				$j('#birthdateEstimated').attr('value', "false");
+			} 
+		});
+
+		// handle the toggle of the dead checkbox
+		$j('#deadCheckbox').click(function () {
+			if ($j(this).is(':checked')){
+				$j('#dead').attr('value', "true");
+				// show the death date and cause of death rows
+				$j('#deathDateRow').show();
+				$j('#causeOfDeathRow').show();
+			}
+			else {
+				$j('#dead').attr('value', "false");
+				// hide the death date and cause of death rows
+				$j('#deathDateRow').hide();
+				$j('#causeOfDeathRow').hide();
+				// reset the values of these fields
+				$j('#deathDate').val("");
+				$j('#causeOfDeath').val("");
+				$j('#causeOfDeathTextField').val("");
 			} 
 		});
 
@@ -168,7 +189,7 @@
 </td>
 </tr>
 <tr>
-<td><spring:message code="mdrtb.birthdate"/> </td>
+<td><spring:message code="mdrtb.birthdate"/></td>
 <td>
 <openmrs_tag:dateField formFieldName="birthdate" startValue="${patient.birthdate}"/>
 <spring:message code="Person.birthdateEstimated"/>
@@ -178,6 +199,24 @@
 </tr>
 </table>
 </td>
+</tr>
+
+<tr height="5"><td colspan="2">&nbsp;</td></tr>
+
+<tr>
+<th><spring:message code="mdrtb.deceased" text="Deceased"/></th>
+<td>
+<input type="hidden" id="dead" name="dead" value="${patient.dead}"/>
+<input type="checkbox" id="deadCheckbox" name="deadCheckbox" value="true" <c:if test="${patient.dead == true}">checked</c:if> />
+</td>
+</tr>
+<tr id="deathDateRow" <c:if test="${!patient.dead}">style="display:none"</c:if>>
+<th><spring:message code="mdrtb.deathDate"/></th>
+<td><openmrs_tag:dateField formFieldName="deathDate" startValue="${patient.deathDate}"/></td>
+</tr>
+<tr id="causeOfDeathRow" <c:if test="${!patient.dead}">style="display:none"</c:if>>
+<th><spring:message code="mdrtb.causeOfDeath"/></th>
+<td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept" object="${patient}" property="causeOfDeath"/></td>
 </tr>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>

@@ -50,8 +50,10 @@ public class PatientValidator implements Validator {
 		}
 		
 		// Make sure they choose a gender
-		if (StringUtils.isBlank(patient.getGender())) errors.rejectValue("gender", "Person.gender.required");
-
+		if (StringUtils.isBlank(patient.getGender())) {
+			errors.rejectValue("gender", "Person.gender.required");
+		}
+		
 		// check patients birthdate against future dates and really old dates
 		if (patient.getBirthdate() != null) {
 			if (patient.getBirthdate().after(new Date()))
@@ -66,15 +68,23 @@ public class PatientValidator implements Validator {
 			}
 		}
 		
+		// tests required if the patient has been marked as dead
+		if (patient.isDead()) {
+			if (patient.getDeathDate() == null) {
+				errors.rejectValue("deathDate","mdrtb.dateOfDeath.errors.required");
+			}
+			else if (patient.getDeathDate().after(new Date())) {
+				errors.rejectValue("deathDate", "mdrtb.dateOfDeath.errors.dateInFuture");
+			}
+			if (patient.getCauseOfDeath() == null) {
+				errors.rejectValue("causeOfDeath", "mdrtb.causeOfDeath.errors.required");
+			}
+		}
+		
 		//	 Patient Info 
 		if (patient.isPersonVoided())
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "voidReason", "error.null");
-		if (patient.isDead() && (patient.getCauseOfDeath() == null))
-			errors.rejectValue("causeOfDeath", "Patient.dead.causeOfDeathNull");		
-		
-		// Make sure they choose a gender
-		if (StringUtils.isBlank(patient.getGender())) errors.rejectValue("gender", "Person.gender.required");
-		
+				
 		// Validate PatientIdentifers
 		PatientIdentifierValidator piv = new PatientIdentifierValidator();
 		if (patient != null && patient.getIdentifiers() != null) {

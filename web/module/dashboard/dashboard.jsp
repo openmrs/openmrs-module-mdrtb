@@ -313,8 +313,9 @@
 </td></tr>
 <c:if test="${! program.patient.dead}">
 	<tr class="patientDiedField"<c:if test="${program.outcome != patientDied}"> style="display:none"</c:if>><td style="font-weight:bold">
-	<spring:message code="mdrtb.causeOfDeath" text="Cause of Death"/>:</td><td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept"/>
-	</td></tr>
+	<spring:message code="mdrtb.causeOfDeath" text="Cause of Death"/>:</td>
+	<td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept" object="${program.patient}" property="causeOfDeath"/></td>
+	</tr>
 </c:if>
 </table>
 <button type="submit"><spring:message code="mdrtb.closeProgram" text="Close Program"/></button> <button type="reset" id="programCloseCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>

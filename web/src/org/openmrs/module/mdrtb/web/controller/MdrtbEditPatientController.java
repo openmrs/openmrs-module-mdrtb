@@ -19,6 +19,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
@@ -32,9 +33,12 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.validator.PatientValidator;
+import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
@@ -67,7 +71,8 @@ public class MdrtbEditPatientController {
     	dateFormat.setLenient(false);
     	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
     	
-		// register binders for locations
+		// register other custom binders
+    	binder.registerCustomEditor(Concept.class, new ConceptEditor());
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
 	}
@@ -150,13 +155,14 @@ public class MdrtbEditPatientController {
 	public List<PatientIdentifierType> getPatientIdentifierTypes() {
 		return ListUtils.subtract(Context.getPatientService().getAllPatientIdentifierTypes(),  getPatientIdentifierTypesAutoAssigned());	
 	}
-	
+	    
 	@ModelAttribute("patient")
 	public Patient getPatient(@RequestParam(required = false, value="patientId") Integer patientId,
 	                          @RequestParam(required = false, value="addName") String addName,
 	                          @RequestParam(required = false, value="addBirthdate") String addBirthdate,
 	                          @RequestParam(required = false, value="addAge") String addAge,
-	                          @RequestParam(required = false, value="addGender") String addGender){
+	                          @RequestParam(required = false, value="addGender") String addGender,
+	                          HttpServletRequest request){
 		
 		Patient patient = null;
 		
@@ -321,11 +327,14 @@ public class MdrtbEditPatientController {
 			return new ModelAndView("/module/mdrtb/mdrtbEditPatient", map);
 		}
 		
-		// TODO: need to explicitly call the "processDeath" PatientService method here if the patient has died
-		// TODO: note that marking a patient back as alive won't reopen drug orders, etc
-		
 		// save the patient
 		Context.getPatientService().savePatient(patient);
+		
+		// if the patient has been set to dead, exit him/her from care
+		if (patient.getDead()) {
+			Context.getPatientService().exitFromCare(patient, patient.getDeathDate(), 
+				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+		}
 		
 		// clears the command object from the session
 		status.setComplete();
