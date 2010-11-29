@@ -321,6 +321,9 @@ public class MdrtbEditPatientController {
 			return new ModelAndView("/module/mdrtb/mdrtbEditPatient", map);
 		}
 		
+		// TODO: need to explicitly call the "processDeath" PatientService method here if the patient has died
+		// TODO: note that marking a patient back as alive won't reopen drug orders, etc
+		
 		// save the patient
 		Context.getPatientService().savePatient(patient);
 		

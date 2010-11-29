@@ -1299,6 +1299,9 @@ public class SpecimenMigrationController {
     }
 		
 	private void addConcept(String name, String clazz, String datatype, String map, String mapSource) {
+		
+		// TODO: test to make sure concept hasn't already been added
+		
 		Concept concept = new Concept();
 		ConceptName conceptName = new ConceptName();
 		ConceptMap conceptMap = new ConceptMap();
@@ -1327,6 +1330,9 @@ public class SpecimenMigrationController {
 	}
 	
 	private void addConceptShortName(String conceptMapping, String shortName) {
+		
+		// TODO: test to make sure short name hasn't already been added
+		
 		Concept c = Context.getService(MdrtbService.class).getConcept(conceptMapping);
 		ConceptName conceptName = new ConceptName();
 		conceptName.setName(shortName);
@@ -1339,6 +1345,9 @@ public class SpecimenMigrationController {
 	}
 	
 	private void addConceptMapping(String name, String mapping) {
+		
+		// TODO: test to make sure mapping hasn't already been added
+		
 		Concept concept = Context.getConceptService().getConceptByName(name);
 		ConceptMap map = new ConceptMap();
 		map.setSource(Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"));

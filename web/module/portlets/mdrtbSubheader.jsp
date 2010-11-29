@@ -26,14 +26,14 @@
 <c:if test="${model.patient.dead}">
 	<div id="patientDashboardDeceased" class="retiredMessage">
 		<div>
-			<spring:message code="Patient.patientDeceased"/>
+			<spring:message code="mdrtb.patientIsDeceased" text="The patient is deceased."/>
 			<c:if test="${not empty model.patient.deathDate}">
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<spring:message code="Person.deathDate"/>: <openmrs:formatDate date="${model.patient.deathDate}" format="${_dateFormatDisplay}"/>
+				<spring:message code="mdrtb.deathDate" text="Date of death"/>: <openmrs:formatDate date="${model.patient.deathDate}" format="${_dateFormatDisplay}"/>
 			</c:if>
 			<c:if test="${not empty model.causeOfDeath}">
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<spring:message code="Person.causeOfDeath"/>: 
+				<spring:message code="mdrtb.causeOfDeath" text="Cause of death"/>: 
 				<c:if test="${not empty model.causeOfDeath.valueCoded}"> 
 					  &nbsp;&nbsp;<openmrs:format concept="${obj.causeOfDeath.valueCoded}"/>
 				</c:if>

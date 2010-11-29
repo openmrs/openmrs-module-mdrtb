@@ -245,7 +245,7 @@
 		<select id="${id}standardRegimenSelector" name="${id}standardRegimenSelector">
 			<option value=""></option>
 			<c:forEach items="${history.type.suggestions}" var="suggestion">
-				<option value="${suggestion.codeName}">${suggestion.displayName}</option>
+				<option value="${suggestion.codeName}"><spring:message code="${suggestion.displayName}" text="${suggestion.displayName}"/></option>
 			</c:forEach>
 		</select>
 		<input type="button" id="${id}AddStandardRegimen" value="<spring:message code="mdrtb.add" text="Add"/>"/>

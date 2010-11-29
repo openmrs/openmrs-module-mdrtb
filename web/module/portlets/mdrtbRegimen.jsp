@@ -484,7 +484,7 @@
 
 	<br>
 	<!-- active orders -->
-	<b><spring:message code="mdrtb.activeorders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" />
+	<b><spring:message code="mdrtb.activeOrders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" />
 	<br><br>
 		<c:set var="addEmptyDiv" scope="page" value="1" />
 		<c:if test="${empty obj.currentDrugOrders}">
@@ -593,7 +593,7 @@
 		</c:if>
 	</div>
 	<br><br>
-	<b><spring:message code="mdrtb.completedorders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" /> 
+	<b><spring:message code="mdrtb.completedOrders" /></b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="evenRowFirstLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.firstline" /> &nbsp;&nbsp;&nbsp;<span class="evenRowInjectible">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.injectibles" /> &nbsp;&nbsp;&nbsp; <span class="oddRowQuinolone">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.quinolones" /> &nbsp;&nbsp;&nbsp;<span class="oddRowSecondLine">&nbsp;&nbsp;&nbsp;</span> <spring:message code="mdrtb.othersecondline" /> 
 	<br><br>
 	<!-- completed orders -->
 	<c:if test="${empty obj.completedDrugOrders}">
@@ -677,7 +677,7 @@
 					<select name="newDrug_" id="newDrug_" onChange="javascript:populateDrugList(this)">
 					<option value=''></option>
 					<c:forEach items="${standardRegimens}" var="standardReg">
-						<option value='${standardReg.codeName}'>${standardReg.displayName}</option>
+						<option value='${standardReg.codeName}'><spring:message code="${standardReg.displayName}" text="${standardReg.displayName}"/></option>
 					</c:forEach>
 					<option value=''></option>
 					<c:forEach items="${firstLineConcepts}" var="firstLineConcept">

@@ -8,7 +8,7 @@
 		<suggestions>
 			<regimenSuggestion> 
 				<codeName>INJECTABLEINITIAL</codeName>
-				<displayName>Injectable Phase Initial (H + KM + Z + OFX + PTO + CS)</displayName>
+				<displayName>mdrtb.injectablePhaseInitial</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -60,7 +60,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion>
 				<codeName>INJECTABLECONTINUATION</codeName>
-				<displayName>Injectable Phase Continuation (KM + Z + OFX + PTO + CS)</displayName>
+				<displayName>mdrtb.injectablePhaseContinuation</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -112,7 +112,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion> 
 				<codeName>CONTINUATIONSIMPLE</codeName>
-				<displayName>Continuation Phase Without Z (OFX + PTO + CS)</displayName>
+				<displayName>mdrtb.continuationPhaseWithoutZ</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
@@ -146,7 +146,7 @@
 			</regimenSuggestion>
 			<regimenSuggestion>
 				<codeName>CONTINUATIONPLUS</codeName>
-				<displayName>Continuation Phase plus Z (OFX + PTO + CS + Z)</displayName>
+				<displayName>mdrtb.continuationPhasePlusZ</displayName>
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
