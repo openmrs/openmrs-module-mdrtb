@@ -77,7 +77,9 @@
 			</tr>
 		</table>
 	</div>
-	
+	<div style="padding:5px;">
+		<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.bottomPatientHeader" type="html" parameters="patientId=${model.patient.patientId}" />
+	</div>
 	<script type="text/javascript">
 		function showMoreIdentifiers() {
 			if (identifierElement.style.display == '') {
