@@ -192,7 +192,7 @@
 <td><spring:message code="mdrtb.birthdate"/></td>
 <td>
 <openmrs_tag:dateField formFieldName="birthdate" startValue="${patient.birthdate}"/>
-<spring:message code="Person.birthdateEstimated"/>
+<spring:message code="mdrtb.estimated"/>
 <input type="hidden" id="birthdateEstimated" name="birthdateEstimated" value="${patient.birthdateEstimated}"/>
 <input type="checkbox" id="birthdateEstimatedCheckbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patient.birthdateEstimated == true}">checked</c:if> />
 </td>
@@ -240,7 +240,7 @@
 <tr><td colspan="2">
 <button type="submit"><spring:message code="Patient.save" text="Save Patient"/></button>
 
-<button type="reset" onclick="history.back()"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
+<button id="reset" type="reset"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
 
 </table>
 
