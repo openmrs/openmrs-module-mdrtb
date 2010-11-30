@@ -150,7 +150,12 @@
 
 		// event handler to handle the "quick test entry" add button at the top of the page
 		$j('#quickEntryAddButton').click(function(){
-			window.location='add.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}&testType=' + $j('#quickEntryAddSelect').attr('value');
+			if($j('#quickEntryAddSelect').attr('value').indexOf("Set") != -1) {
+				window.location='quickEntry.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}&testType=' + $j('#quickEntryAddSelect').attr('value') + "&numberOfTests=3";
+			}
+			else {
+				window.location='quickEntry.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}&testType=' + $j('#quickEntryAddSelect').attr('value') + "&numberOfTests=1";
+			}
 		});
 	
 		// event handler to display edit detail boxes
@@ -264,9 +269,10 @@
 <div>
 
 <button onclick="window.location='add.form?patientId=${! empty patientId ? patientId : specimen.patient.patientId}&patientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addANewSpecimen" text="Add a new Specimen"/></button>
-<span style="font-weight:bold"><spring:message code="mdrtb.addResultForNewSpecimen" text="or add a result for NEW specimen"/>:</span>  
+<span style="font-weight:bold"><spring:message code="mdrtb.addResultForNewSpecimen" text="or add results for new specimen(s)"/>:</span>  
 <select id="quickEntryAddSelect">
 	<option value="smear"><spring:message code="mdrtb.smear"/></option>
+	<option value="smearSet"><spring:message code="mdrtb.smearSet"/></option>
 	<option value="culture"><spring:message code="mdrtb.culture"/></option>
 </select>
 <button id="quickEntryAddButton" type="button"><spring:message code="mdrtb.add" text="Add"/></button>
