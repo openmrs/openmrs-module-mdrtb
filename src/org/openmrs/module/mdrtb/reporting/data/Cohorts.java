@@ -147,7 +147,7 @@ public class Cohorts {
 	}
 
 	public static CohortDefinition getRelapsedDuringFilter(Date startDate, Date endDate) {
-		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT)), startDate, endDate);
+		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE)), startDate, endDate);
 
 	}
 	
@@ -221,7 +221,7 @@ public class Cohorts {
 	}
 	
 	public static CohortDefinition getTransferredInDuring(Date startDate, Date endDate) {
-		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT)), startDate, endDate);
+		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER)), startDate, endDate);
 	}
 	
 	public static CohortDefinition getMostRecentlySmearPositiveByDate(Date effectiveDate) {

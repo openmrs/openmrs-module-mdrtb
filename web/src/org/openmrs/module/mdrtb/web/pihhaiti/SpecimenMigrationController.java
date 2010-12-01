@@ -598,7 +598,7 @@ public class SpecimenMigrationController {
     	previousDrug.setProgram(mdrtbProgram);
     	
     	ProgramWorkflowState newPatient = new ProgramWorkflowState();
-    	newPatient.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
+    	newPatient.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
     	newPatient.setInitial(true);
     	newPatient.setTerminal(false);
     	previousDrug.addState(newPatient);
@@ -622,19 +622,19 @@ public class SpecimenMigrationController {
     	previousTreatment.setProgram(mdrtbProgram);
     	
     	ProgramWorkflowState newPatientTreatment = new ProgramWorkflowState();
-    	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT));
+    	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
     	newPatientTreatment.setInitial(true);
     	newPatientTreatment.setTerminal(false);
     	previousTreatment.addState(newPatientTreatment);
     	
     	ProgramWorkflowState relapse = new ProgramWorkflowState();
-    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT));
+    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE));
     	relapse.setInitial(true);
     	relapse.setTerminal(false);
     	previousTreatment.addState(relapse);
     	
       	ProgramWorkflowState afterDefault = new ProgramWorkflowState();
-      	afterDefault.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_DEFAULT));
+      	afterDefault.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED));
       	afterDefault.setInitial(true);
       	afterDefault.setTerminal(false);
     	previousTreatment.addState(afterDefault);
@@ -652,13 +652,13 @@ public class SpecimenMigrationController {
     	previousTreatment.addState(afterFailiureCat2);
     	
     	ProgramWorkflowState transfer = new ProgramWorkflowState();
-    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
     	transfer.setInitial(true);
     	transfer.setTerminal(false);
     	previousTreatment.addState(transfer);
     	
     	ProgramWorkflowState other = new ProgramWorkflowState();
-    	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDR_TB_PATIENT));
+    	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER));
     	other.setInitial(true);
     	other.setTerminal(false);
     	previousTreatment.addState(other);
@@ -1251,6 +1251,64 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
     
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form")
+    public ModelAndView migrateRegistrationGroupStates() {
+    	// create the new concepts for NEW and TRANSFER
+    	addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
+    	addConcept("TRANSFER", "Misc", "N/A", "TRANSFER", "org.openmrs.module.mdrtb");
+    	
+    	// add other new concept mapping
+    	addConceptMapping("RELAPSE","RELAPSE");
+    	addConceptMapping("OTHER NON-CODED","OTHER");
+    	
+    	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
+    	Concept prevDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
+    	Concept prevTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	
+    	// fetch the workflows
+    	ProgramWorkflow prevDrugUseWorkflow = null;
+    	ProgramWorkflow prevTreatmentWorkflow = null;
+    	for (ProgramWorkflow workflow : mdrtb.getWorkflows()) {
+    		if (workflow.getConcept().equals(prevDrugUse)) {
+    			prevDrugUseWorkflow = workflow;
+    		}
+    		if (workflow.getConcept().equals(prevTreatment)) {
+    			prevTreatmentWorkflow = workflow;
+    		}
+    	}
+    	
+    	// now change the concepts associated with the states
+    	ProgramWorkflowState newPatient = prevDrugUseWorkflow.getState(Context.getConceptService().getConcept(1523));
+    	newPatient.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
+    	
+    	ProgramWorkflowState newPatientTreatment = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1523));
+    	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
+    	
+    	ProgramWorkflowState transfer = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1529));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
+    
+    	ProgramWorkflowState relapse = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1524));
+    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE));
+    	
+    	ProgramWorkflowState other = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1530));
+    	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER));
+    	
+    	ProgramWorkflowState defaulted = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1525));
+    	defaulted.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED));
+    	
+    	Context.getProgramWorkflowService().saveProgram(mdrtb);
+    	
+    	// retire old concepts
+    	//  TODO: IMPORTANT: are the concept ids the same on all systems?
+    	retireConcept(1523);
+    	retireConcept(1529);
+    	retireConcept(1524);
+    	retireConcept(1530);
+    	retireConcept(1525);
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
     // TODO: add script to retire the forms
     
     // just a hacky test
@@ -1300,7 +1358,11 @@ public class SpecimenMigrationController {
 		
 	private void addConcept(String name, String clazz, String datatype, String map, String mapSource) {
 		
-		// TODO: test to make sure concept hasn't already been added
+		// can't use this because sometimes we may be adding concepts with the same/similiar name
+	//if (Context.getConceptService().getConceptByName(name) != null) {
+		//	log.warn("The concept with name " + name + " already exists.");
+			//return;
+		//}
 		
 		Concept concept = new Concept();
 		ConceptName conceptName = new ConceptName();

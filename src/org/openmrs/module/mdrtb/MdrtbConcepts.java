@@ -119,17 +119,16 @@ public class MdrtbConcepts {
     
     // MDR-TB Classification
     public final static String [] CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE = {"CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE"};
-    public final static String [] NEW_MDR_TB_PATIENT = {"NEW MDR-TB PATIENT"};
+    public final static String [] NEW = {"NEW"};
     public final static String [] PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY = {"PREVIOUSLY TREATED WITH FIRST LINE DRUGS ONLY"};
     public final static String [] PREVIOUSLY_TREATED_SECOND_LINE_DRUGS = {"PREVIOUSLY TREATED WITH SECOND LINE DRUGS"};
     
     public final static String [] CAT_4_CLASSIFICATION_PREVIOUS_TX = {"CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT"};
-    public final static String [] TREATMENT_AFTER_DEFAULT = {"TREATMENT AFTER DEFAULT MDR-TB PATIENT"};
     public final static String [] TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT = {"TREATMENT AFTER FAILURE OF FIRST TREATMENT MDR-TB PATIENT"};
     public final static String [] TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT = {"TREATMENT AFTER FAILURE OF RE-TREATMENT MDR-TB PATIENT"};
-    public final static String [] OTHER_MDR_TB_PATIENT = {"OTHER MDR-TB PATIENT"};
-    public final static String [] RELAPSE_MDR_TB_PATIENT = {"RELAPSE MDR-TB PATIENT"};
-    public final static String [] TRANSFER_IN_MDR_TB_PATIENT = {"TRANSFER IN MDR-TB PATIENT"};
+    public final static String [] OTHER = {"OTHER"};
+    public final static String [] RELAPSE = {"RELAPSE"};
+    public final static String [] TRANSFER = {"TRANSFER"};
     
     public final static String [] TB_CASE_CLASSIFICATION = {"TUBERCULOSIS CASE CLASSIFICATION"};
     public final static String [] MDR_TB = {"MULTI-DRUG RESISTANT TUBERCULOSIS"};

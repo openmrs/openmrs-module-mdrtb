@@ -277,7 +277,7 @@ public class ReportUtil {
 		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
 		
 		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW), startDate, endDate);
 		
 		CohortDefinition previousFirstLine = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
 			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY), startDate, endDate);
@@ -302,13 +302,13 @@ public class ReportUtil {
 		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
 		
 		CohortDefinition newPatient =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW_MDR_TB_PATIENT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW), startDate, endDate);
 		
 		CohortDefinition relapse =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MDR_TB_PATIENT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE), startDate, endDate);
 		
 		CohortDefinition afterDefault =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_DEFAULT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED), startDate, endDate);
 	
 		CohortDefinition failureCatI =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
 			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT), startDate, endDate);
@@ -317,10 +317,10 @@ public class ReportUtil {
 			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT), startDate, endDate);
 		
 		CohortDefinition transferred =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER_IN_MDR_TB_PATIENT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER), startDate, endDate);
 		
 		CohortDefinition other =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, 
-			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDR_TB_PATIENT), startDate, endDate);
+			 Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER), startDate, endDate);
 		
 		CohortDefinition unknown =  Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(), startDate, endDate);
 	
