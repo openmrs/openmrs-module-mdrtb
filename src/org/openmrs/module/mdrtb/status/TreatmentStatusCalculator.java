@@ -30,7 +30,8 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	if (regimensDuringProgram != null) {
     		for (Regimen regimen : regimensDuringProgram) {
 	 	
-    			if (regimen.isActive()) {
+    			// test if there is an active regimen that contains drug orders
+    			if (regimen.isActive() && regimen.getDrugOrders() != null && regimen.getDrugOrders().size() > 0) {
     				treatmentState = TreatmentState.ON_TREATMENT;
     			}
 	    	
@@ -50,7 +51,7 @@ public class TreatmentStatusCalculator implements StatusCalculator {
 	    
 	    // if the treatment state has not been set to "On treatment" (i.e., if one of the regimens was active)
 	    // set the state to not on treatment ONLY if the program is currently active (whether a treatment is active for
-	    // a closed program doesn't make much sense
+	    // a closed program doesn't make much sense)
 	    // TODO: in the future, for closed programs this status should display some sort of summary for that program (never treated, treatment complete, etc)
 	    if (treatmentState == null && mdrtbProgram.getActive()) {
 	    	treatmentState = TreatmentState.NOT_ON_TREATMENT;
