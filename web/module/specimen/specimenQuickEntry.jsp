@@ -32,13 +32,13 @@
 		$j('#errorDisplay').html('');
 		
 		if (location == '') {
-			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noLocation" text="Please specify a location."/></li>');
+			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noLocation' text='Please specify a location.'/></li>");
 		}
 		if (provider == '') {
-			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noCollector" text="Please specify who collected this sample."/></li>');
+			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noCollector' text='Please specify who collected this sample.'/></li>");
 		}
 		if (lab == '') {
-			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noLab" text="Please specify a laboratory."/></li>');
+			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noLab' text='Please specify a laboratory.'/></li>");
 		}
 
 		// check all the individual tests
@@ -52,7 +52,7 @@
 			// date collected is only required parameter (unless an entire row is blank)
 			if ((identifier != '' | type != '' | appearance !='' | result !='') &&
 				dateCollected == '') {
-					$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noDateCollected" text="Please specify the date collected."/></li>');
+					$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateCollected' text='Please specify the date collected.'/></li>");
 			}
 
 			// TODO: add validation of collection date;  we could use the openmrs:datePattern tag, and the

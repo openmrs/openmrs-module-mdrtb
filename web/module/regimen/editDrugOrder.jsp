@@ -33,10 +33,10 @@
 		$j('#errorDisplay').html('');
 		
 		if (generic == '') {
-			$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.genericRequired" text="Please specify a Drug"/></li>');
+			$j('#errorDisplay').append("<li><spring:message code='mdrtb.drugOrder.genericRequired' text='Please specify a Drug'/></li>");
 		}
 		if (startDate == '') {
-			$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.startDateRequired" text="Please specify a Start Date"/></li>');
+			$j('#errorDisplay').append("<li><spring:message code='mdrtb.drugOrder.startDateRequired' text='Please specify a Start Date'/></li>");
 		}
 		if (dose != '') {
 			// TODO: Check if this is a valid number
@@ -46,13 +46,13 @@
 		}
 	    if (discontinuedDate != '') {
 	    	if (discontinuedReason == '') {
-	    		$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.discontinuedReasonRequired" text="Please specify a discontinued reason"/></li>');
+	    		$j('#errorDisplay').append("<li><spring:message code='mdrtb.drugOrder.discontinuedReasonRequired' text='Please specify a discontinued reason'/></li>");
 	    	}
 	    	// TODO: Check if this is after startDate and before autoExpireDate (if autoExpire not null)
 	    }
 	    if (discontinuedReason != '') {
 	    	if (discontinuedDate == '') {
-	    		$j('#errorDisplay').append('<li><spring:message code="mdrtb.drugOrder.discontinuedDateRequired" text="Please specify a discontinued date"/></li>');
+	    		$j('#errorDisplay').append("<li><spring:message code='mdrtb.drugOrder.discontinuedDateRequired' text='Please specify a discontinued date'/></li>");
 	    	}
 	    }
 
