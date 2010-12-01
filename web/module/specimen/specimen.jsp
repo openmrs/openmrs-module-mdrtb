@@ -17,7 +17,6 @@
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
-
 <script type="text/javascript"><!--
 
 	var $j = jQuery.noConflict();	

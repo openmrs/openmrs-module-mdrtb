@@ -16,17 +16,71 @@
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
-<b class="boxHeader"><spring:message code="mdrtb.${testType}"/> <spring:message code="mdrtb.results" /></b>
+<!-- JQUERY FOR THIS PAGE -->
+<script type="text/javascript">
+
+	var $j = jQuery.noConflict();
+
+	function validateAndSubmit() {
+
+		var numberOfTests = ${numberOfTests};
+		
+		var location = $j('#location').val();
+		var provider = $j('#provider').val();
+		var lab = $j('#lab').val();
+		
+		$j('#errorDisplay').html('');
+		
+		if (location == '') {
+			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noLocation" text="Please specify a location."/></li>');
+		}
+		if (provider == '') {
+			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noCollector" text="Please specify who collected this sample."/></li>');
+		}
+		if (lab == '') {
+			$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noLab" text="Please specify a laboratory."/></li>');
+		}
+
+		// check all the individual tests
+		for(i = 1; i <= numberOfTests; i++) {
+			var dateCollected = $j('#dateCollected' + i).val();
+			var identifier = $j('#identifier' + i).val();
+			var type = $j('#type' + i).val();
+			var appearance = $j('#appearance' + i).val();
+			var result = $j('#result' + i).val();
+			
+			// date collected is only required parameter (unless an entire row is blank)
+			if ((identifier != '' | type != '' | appearance !='' | result !='') &&
+				dateCollected == '') {
+					$j('#errorDisplay').append('<li><spring:message code="mdrtb.specimen.errors.noDateCollected" text="Please specify the date collected."/></li>');
+			}
+
+			// TODO: add validation of collection date;  we could use the openmrs:datePattern tag, and the
+			// parseSimpleDate library function in openmrs.js, but this will fail with localized patterns, like the French "(jj/mm/aaaa"	
+		}
+		
+		if ($j('#errorDisplay').html() == '') {
+			$j('#quickEntry').submit();
+		}
+	}	
+
+
+</script>
+
+<b class="boxHeader"><spring:message code="mdrtb.${testType}results"/></b>
 <!-- display the proper header depending on whether we were adding a specimen, or a smear/culture -->
 
 <div class="box">
-<form name="quickEntry" action="quickEntry.form?patientId=${patientId}&patientProgramId=${patientProgramId}&numberOfTests=${numberOfTests}&testType=${testType}" method="post">
+<form id="quickEntry" name="quickEntry" action="quickEntry.form?patientId=${patientId}&patientProgramId=${patientProgramId}&numberOfTests=${numberOfTests}&testType=${testType}" method="post">
+
+<!-- display error messages -->
+<ul id="errorDisplay" class="error"></ul>
 
 <table>
 <tr>
 <th><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</th>
 <td>
-<select name="location">
+<select id="location" name="location">
 <option value=""></option>
 <c:forEach var="location" items="${locations}">
 	<option value="${location.locationId}">${location.displayString}</option>
@@ -38,7 +92,7 @@
 <tr>
 <th><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</th>
 <td>
-<select name="provider">
+<select id="provider" name="provider">
 <option value=""/>
 <c:forEach var="provider" items="${providers}">
 	<option value="${provider.id}">${provider.personName}</option>
@@ -49,7 +103,7 @@
 
 <tr>
 <th><spring:message code="mdrtb.lab" text="Lab"/>:</th>
-<td><select name="lab">
+<td><select id="lab" name="lab">
 <option value=""></option>
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}">${location.displayString}</option>
@@ -73,19 +127,19 @@
 <c:forEach var="i" begin="1" end="${numberOfTests}" step="1">
 <tr>
 <td><openmrs_tag:dateField formFieldName="dateCollected${i}" startValue=""/></td>
-<td><input type="text" size="10" name="identifier${i}"/></td>
+<td><input id="identifier${i}" name="identifier${i}" type="text" size="10"/></td>
 
 <td>
-<select name="type${i}">
+<select id="type${i}" name="type${i}">
 <option value=""></option>
 <c:forEach var="type" items="${types}">
-	<option value="${type.answerConcept.id}">${type.answerConcept.displayString}</option>
+	<option value="${type.answerConcept.id}" <c:if test="${type.answerConcept.id == defaultSampleType.id}">selected</c:if>>${type.answerConcept.displayString}</option>
 </c:forEach>
 </select>
 </td>
 
 <td>
-<select name="appearance${i}">
+<select id="appearance${i}" name="appearance${i}">
 <option value=""></option>
 <c:forEach var="appearance" items="${appearances}">
 	<option value="${appearance.answerConcept.id}">${appearance.answerConcept.displayString}</option>
@@ -94,7 +148,7 @@
 </td>
 
 <td>
-<select name="result${i}" class="result">
+<select id="result${i}" name="result${i}" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${testType eq 'smear' ? smearResults : cultureResults}">
 <option value="${result.answerConcept.id}">${result.answerConcept.displayString}</option>
@@ -108,7 +162,7 @@
 
 <br/>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
+<button type="button" onclick="validateAndSubmit();" ><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
 
 </form>
 </div>

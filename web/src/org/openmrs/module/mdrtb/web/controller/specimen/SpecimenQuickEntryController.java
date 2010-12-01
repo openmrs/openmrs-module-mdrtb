@@ -6,9 +6,11 @@ import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Bacteriology;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -37,6 +40,13 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 		return numberOfTests;
 	}
 	
+	// used to specify the default sample type (i.e, sputum)
+	@ModelAttribute("defaultSampleType")
+	public Concept getDefaultSampleType() {
+		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPUTUM);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET) 
 	public ModelAndView showQuickEntry(@RequestParam(required = true, value = "patientId") Integer patientId, ModelMap map) {
@@ -54,13 +64,13 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 		                              @RequestParam(required = true, value = "location") Location location,
 		                              @RequestParam(required = true, value = "lab") Location lab,
 		                              @RequestParam(required = true, value = "provider") Person provider,
-		                              HttpServletRequest request) throws ParseException {
+		                              HttpServletRequest request, ModelMap map, SessionStatus status) throws ParseException {
 										
 		// cycle through all tests
 		Integer i = 1;
 		while (i < numberOfTests + 1) {
-			// we are only adding results where a result has been specified
-			if (StringUtils.isNotBlank(request.getParameter("result" + i))) {
+			// we are only adding results where a date collected has been specified
+			if (StringUtils.isNotBlank(request.getParameter("dateCollected" + i))) {
 				
 				String dateCollected = request.getParameter("dateCollected" + i);
 				String identifier = request.getParameter("identifier" + i);
@@ -93,10 +103,10 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 				// now add the appropriate test
 				Bacteriology bac;
 				
-				if (testType.equals("smear")) {
+				if (testType.contains("smear")) {
 					bac = specimen.addSmear();
 				}
-				else if (testType.equals("culture")) {
+				else if (testType.contains("culture")) {
 					bac = specimen.addCulture();
 				}
 				else {
@@ -105,8 +115,10 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 				
 				// now add the test-specific parameters
 				bac.setLab(lab);
-				bac.setResult(Context.getConceptService().getConcept(Integer.valueOf(result)));
-				
+				if (StringUtils.isNotBlank(result)) {
+					bac.setResult(Context.getConceptService().getConcept(Integer.valueOf(result)));
+				}
+					
 				// save the specimen
 				Context.getService(MdrtbService.class).saveSpecimen(specimen);
 			}
@@ -114,8 +126,12 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 			i++;
 		}
 		
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
 		// redirect to the overview page
-		return new ModelAndView("redirect:specimen.form?patientProgramId=" + patientProgramId);
+		return new ModelAndView("redirect:specimen.form?patientProgramId=" + patientProgramId + "&patientId=" + patientId);
 	}
 	
 	
