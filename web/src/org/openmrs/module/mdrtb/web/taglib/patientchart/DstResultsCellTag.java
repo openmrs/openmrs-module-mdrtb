@@ -70,7 +70,7 @@ public class DstResultsCellTag extends TagSupport {
     		
     				title = title + concentration + dstResult.getResult().getBestShortName(Context.getLocale()) + "<br>";
     
-    				// TODO: figure out if this is the right rule if there are multiple results for the same drug
+    				// TODO: figure out if this is the right rule: if there are multiple results for the same drug
     				// right now I'm setting the result to intermediate (so it will pick up that color)
     				if(result == null) {
     					result = dstResult.getResult();

@@ -1113,4 +1113,30 @@ public class MdrtbUtil {
 		return null;
 	}
 	
+	/**
+	 * Given a concept, locale, and a string that represents a concept name tag,
+	 * returns the first concept name for that concept that matches the language and is tagged with the specified tag
+	 */
+	public static ConceptName getConceptName(Concept concept, String language, String conceptNameTag) {
+		if (concept == null) {
+			log.error("No concept provided to findConceptName");
+			return null;
+		}
+		
+		ConceptNameTag tag = Context.getConceptService().getConceptNameTagByName(conceptNameTag);
+		
+		if (tag == null) {
+			log.warn("Invalid concept name tag parameter " + conceptNameTag + " passed to findConceptName");
+		}
+		
+		for (ConceptName name : concept.getNames()) {
+			if ((language == null || name.getLocale() == null || name.getLocale().getLanguage() == null || name.getLocale().getLanguage().equals(language)) 
+				&& ((tag == null) || (name.getTags().contains(tag)))) {
+				return name;
+			}				
+		}
+		
+		return null;
+	}
+	
 }

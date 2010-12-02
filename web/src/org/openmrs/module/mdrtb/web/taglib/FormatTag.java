@@ -23,12 +23,16 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.reporting.common.MessageUtil;
@@ -45,6 +49,7 @@ public class FormatTag extends BodyTagSupport {
 	private Object obj;
 	private String separator;
 	private String defaultVal;
+	private String tagName; // for concepts, specifies the concept name tag to use when fetching the concept name; default is short
 	
 	//***** INSTANCE METHODS *****
 	
@@ -58,7 +63,20 @@ public class FormatTag extends BodyTagSupport {
 				return RegimenUtils.formatRegimenGenerics(r, separator, ObjectUtil.nvlStr(defaultVal, "mdrtb.none"));
 			}
 			else if (o instanceof Concept) {
-				return ((Concept)o).getBestShortName(Context.getLocale()).getName();
+				Concept concept = (Concept) o;
+				ConceptName name = null;
+				
+				// if a name tag has been specified, try to get the name for that tag
+				if(StringUtils.isNotBlank(tagName)) {
+					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(), tagName);
+				}	
+
+				// if we haven't found a name yet, just get the best short name
+				if (name == null) {
+					name = concept.getBestShortName(Context.getLocale());
+				}
+				
+				return name.getName();
 			}
 			else if (o instanceof Obs) {
 				Obs obs = (Obs)o;
@@ -119,6 +137,7 @@ public class FormatTag extends BodyTagSupport {
 	    obj = null;
 	    separator = null;
 	    defaultVal = null;
+	    tagName = null;
 	    return EVAL_PAGE;
     }
     
@@ -165,4 +184,14 @@ public class FormatTag extends BodyTagSupport {
 	public void setDefaultVal(String defaultVal) {
 		this.defaultVal = defaultVal;
 	}
+
+	
+    public String getTagName() {
+    	return tagName;
+    }
+
+	
+    public void setTagName(String tagName) {
+    	this.tagName = tagName;
+    }
 }
