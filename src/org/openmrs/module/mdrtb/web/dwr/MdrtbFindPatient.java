@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
@@ -37,8 +38,11 @@ public class MdrtbFindPatient {
                 PatientListItem patientListItem = new PatientListItem(p);
                 
                 // make sure the correct patient identifier is set on the patient list item
-                patientListItem.setIdentifier(p.getPatientIdentifier(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType")).getIdentifier());
-                
+                String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
+                if (StringUtils.isNotBlank(primaryIdentifier)) {
+                	patientListItem.setIdentifier(p.getPatientIdentifier(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType")).getIdentifier());
+                }
+                	
             	patientList.add(patientListItem);
             }
                    
