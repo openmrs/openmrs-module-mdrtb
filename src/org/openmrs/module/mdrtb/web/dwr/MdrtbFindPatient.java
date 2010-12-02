@@ -7,6 +7,7 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.PatientService;
@@ -32,10 +33,15 @@ public class MdrtbFindPatient {
 
             patients = ps.getPatients(searchValue);
             patientList = new Vector<Object>(patients.size());
-            for (Patient p : patients)
-                    patientList.add(new PatientListItem(p));
-
-       
+            for (Patient p : patients) {
+                PatientListItem patientListItem = new PatientListItem(p);
+                
+                // make sure the correct patient identifier is set on the patient list item
+                patientListItem.setIdentifier(p.getPatientIdentifier(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType")).getIdentifier());
+                
+            	patientList.add(patientListItem);
+            }
+                   
         
         // I'm taking out the 'minimal patients returned'
         // If this needs to be smarter, there should be a better findPatients(...)

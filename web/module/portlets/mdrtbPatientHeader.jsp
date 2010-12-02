@@ -7,6 +7,11 @@
 		
 		<div id="patientHeaderPatientName">${model.patient.personName}</div>
 		<div id="patientHeaderPreferredIdentifier">
+			<c:if test="${!empty model.primaryIdentifier}">
+				<span class="patientHeaderPatientIdentifier"><span id="patientHeaderPatientIdentifierType">${model.primaryIdentifier.identifierType.name}:</span> ${model.primaryIdentifier.identifier}</span>
+			</c:if>
+		
+			<!--  TODO: delete this once we are sure we don't want it
 			<c:if test="${fn:length(model.patient.activeIdentifiers) > 0}">
 				<c:if test="${!empty model.obj.patientIdentifier}">
 					<span class="patientHeaderPatientIdentifier"><span id="patientHeaderPatientIdentifierType">${model.obj.patientIdentifier.identifierType.name}:</span> ${model.obj.patientIdentifier.identifier}</span>
@@ -18,6 +23,7 @@
 					</c:forEach>
 				</c:if>
 			</c:if>
+			-->
 		</div>
 		<table id="patientHeaderGeneralInfo">
 			<tr>
@@ -49,6 +55,9 @@
 					<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.Header" type="html" parameters="patientId=${model.patient.patientId}" />
 				</td>
 				<td style="width: 100%;">&nbsp;</td>
+				
+				
+				<!--  TODO: delete this once we are sure we don't need it 
 				<td id="patientHeaderOtherIdentifiers">
 					
 					<c:if test="${fn:length(model.patient.activeIdentifiers) > 1}">
@@ -74,6 +83,8 @@
 						<small><a id="patientHeaderShowMoreIdentifiers" onclick="return showMoreIdentifiers()" title='<spring:message code="patientDashboard.showMoreIdentifers"/>'><spring:message code="general.nMore" arguments="${fn:length(model.patient.activeIdentifiers) - 2}"/></a></small>
 					</td>
 				</c:if>
+				-->
+				
 			</tr>
 		</table>
 	</div>

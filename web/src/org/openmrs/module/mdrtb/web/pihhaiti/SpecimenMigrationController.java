@@ -1254,12 +1254,12 @@ public class SpecimenMigrationController {
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form")
     public ModelAndView migrateRegistrationGroupStates() {
     	// create the new concepts for NEW and TRANSFER
-    	addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
-    	addConcept("TRANSFER", "Misc", "N/A", "TRANSFER", "org.openmrs.module.mdrtb");
+    	//addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
+    	//addConcept("TRANSFER", "Misc", "N/A", "TRANSFER", "org.openmrs.module.mdrtb");
     	
     	// add other new concept mapping
-    	addConceptMapping("RELAPSE","RELAPSE");
-    	addConceptMapping("OTHER NON-CODED","OTHER");
+    	//addConceptMapping("RELAPSE","RELAPSE");
+    	//addConceptMapping("OTHER NON-CODED","OTHER");
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
     	Concept prevDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
