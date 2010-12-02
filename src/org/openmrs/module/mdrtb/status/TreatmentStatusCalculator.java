@@ -30,8 +30,8 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	if (regimensDuringProgram != null) {
     		for (Regimen regimen : regimensDuringProgram) {
 	 	
-    			// test if there is an active regimen that contains drug orders
-    			if (regimen.isActive() && regimen.getDrugOrders() != null && regimen.getDrugOrders().size() > 0) {
+    			// test if there is an active regimen that isn't empty
+    			if (regimen.isActive() && !regimen.isEmpty()) {
     				treatmentState = TreatmentState.ON_TREATMENT;
     			}
 	    	

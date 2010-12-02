@@ -78,6 +78,14 @@ public class Regimen {
     }
     
     /**
+     * Returns whether the current regimen is empty (empty defined as having no drug orders)
+     */
+    public boolean isEmpty() {
+    	return (getDrugOrders() == null || getDrugOrders().size() == 0);
+    }
+    
+    
+    /**
      * @return the duration of the Regimen in days.  If the start date is null or after the end date, returns -1
      */
     public int getDurationInDays() {
