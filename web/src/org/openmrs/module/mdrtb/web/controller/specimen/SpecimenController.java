@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -190,15 +191,23 @@ public class SpecimenController extends AbstractSpecimenController {
 	                                  @RequestParam(required = false, value = "testId") Integer testId, 
 	                                  @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
+	                                  @RequestParam(required = false, value = "addScannedLabReportLocation") Location scannedLabReportLocation,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
 	  
 		// validate
     	if(specimen != null) {
     		new SpecimenValidator().validate(specimen, specimenErrors);
     	}
+    	
+    	// validate that a lab has been supplied if there's a scanned lab report
+    	if (scannedLabReport != null && !scannedLabReport.isEmpty() && scannedLabReportLocation == null) {
+    		specimenErrors.reject("mdrtb.specimen.errors.noLabForScannedLabReport", "Please specify a lab for this scanned lab report.");
+    	}
 		
 		if (specimenErrors.hasErrors()) {
 			map.put("testId", testId);
+			map.put("addScannedLabReport", scannedLabReport);
+			map.put("addScannedLabReportLocation", scannedLabReportLocation);
 			map.put("specimenErrors", specimenErrors);
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
@@ -225,7 +234,7 @@ public class SpecimenController extends AbstractSpecimenController {
 			ScannedLabReport report = specimen.addScannedLabReport();
 			
 			// TODO: hack for now, we are assuming that the location must be MSLI!
-			report.setLab(Context.getLocationService().getLocation("MSLI"));
+			report.setLab(scannedLabReportLocation);
 			report.setFile(scannedLabReport);
 		
 			// need to save this explicitly for the obs handler to pick it up and handle it properly

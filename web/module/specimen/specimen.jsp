@@ -372,7 +372,8 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
-<a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
+<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+<br/>
 </c:forEach>
 </td>
 <td width="100%">&nbsp;</td>
@@ -459,12 +460,20 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
-<span class="scannedLabReport"><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a>
-<button class="removeScannedLabReport" value="${report.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button>
+
+<span class="scannedLabReport"><nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}
+<button class="removeScannedLabReport" value="${report.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></nobr>
 <input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/></span>
 <br/>
 </c:forEach>
-<input type="file" name="addScannedLabReport" size="50" />
+<nobr><input type="file" name="addScannedLabReport" size="50" value="${! empty addScannedLabReport ? addScannedLabReport.originalFilename : ''}"/> <spring:message code="mdrtb.lab"/>:
+<select name="addScannedLabReportLocation">
+<option value=""/>
+<c:forEach var="location" items="${locations}">
+<option value="${location.locationId}" <c:if test="${location == addScannedLabReportLocation}">selected</c:if>>${location.displayString}</option>
+</c:forEach>
+</select>	
+</nobr>
 </td>
 <td width="100%">&nbsp;</td>
 </tr>
