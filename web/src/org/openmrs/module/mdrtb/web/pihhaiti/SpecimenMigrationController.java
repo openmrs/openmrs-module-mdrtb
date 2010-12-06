@@ -857,7 +857,7 @@ public class SpecimenMigrationController {
     			
     			// is there a screwy location?
     			if (location.getId() == null) {
-    				System.out.println("location " + location.getDisplayString());
+    				log.error("location " + location.getDisplayString() + " does not have an ID");
     			}
     			else {
     				for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {

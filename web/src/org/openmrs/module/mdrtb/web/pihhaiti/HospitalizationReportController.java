@@ -50,8 +50,6 @@ public class HospitalizationReportController {
 						
 						output.append("|" + df.format(obs.getObsDatetime()));					}
 					
-					System.out.println(output.toString());
-					
 				}
 			}
 			
