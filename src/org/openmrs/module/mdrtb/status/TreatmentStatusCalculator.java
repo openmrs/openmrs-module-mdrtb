@@ -1,6 +1,7 @@
 package org.openmrs.module.mdrtb.status;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,11 +31,20 @@ public class TreatmentStatusCalculator implements StatusCalculator {
     	if (regimensDuringProgram != null) {
     		for (Regimen regimen : regimensDuringProgram) {
 	 	
+    			// if the patient is dead, ignore any active, empty regimen
+    			// (i.e., we don't want the top line of the treatment table to show that the patient wasn't on 
+    			// on treatment after they were dead... this is obvious!)
+    			if (regimen.isActive() && regimen.isEmpty() && mdrtbProgram.getPatient().isDead()) {
+    				continue;
+    			}
+    			
     			// test if there is an active regimen that isn't empty
+    			// if this is the case, the patient is currently on treatment
     			if (regimen.isActive() && !regimen.isEmpty()) {
     				treatmentState = TreatmentState.ON_TREATMENT;
     			}
 	    	
+    			// create a status item for this regimen
     			StatusItem item = new StatusItem();
 	    	
     			item.setValue(regimen);
