@@ -66,6 +66,13 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     }
 
     public void renderNewIntakeVisit(StatusItem newIntakeVisit, VisitStatus status) {
+    
+    	// we've changed this so that we link to the select form page instead of determining what form to use here
+     	newIntakeVisit.setLink("/module/mdrtb/form/select.form?formType=intake&patientId=" 
+     		+ status.getPatientProgram().getPatient().getPatientId() 
+     		+ "&patientProgramId=" + status.getPatientProgram().getId());
+    	
+    	/**
     	EncounterType [] intake = {Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"))};
     
     	// see if there are any forms associated with the intake encounter type
@@ -89,9 +96,17 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	else {
     		throw new MdrtbAPIException("More than one form associated with MDR-TB intake encounter.");
     	}	
+    	*/
     }
 
-    public void renderNewFollowUpVisit(StatusItem newfollowUpVisit, VisitStatus status) {
+    public void renderNewFollowUpVisit(StatusItem newFollowUpVisit, VisitStatus status) {
+    
+    	// we've changed this so that we link to the select form page instead of determining what form to use here
+    	newFollowUpVisit.setLink("/module/mdrtb/form/select.form?formType=followUp&patientId=" 
+     		+ status.getPatientProgram().getPatient().getPatientId() 
+     		+ "&patientProgramId=" + status.getPatientProgram().getId());
+    	
+    	/**
     	EncounterType [] followUp = {Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"))};
         
     	// see if there are any forms associated with the intake encounter type
@@ -112,5 +127,7 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
     	else {
     		throw new MdrtbAPIException("More than one form associated with MDR-TB follow-up encounter.");
     	}
+    	
+    	*/
     } 
 }
