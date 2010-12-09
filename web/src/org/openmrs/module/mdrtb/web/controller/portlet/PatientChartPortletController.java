@@ -23,7 +23,6 @@ public class PatientChartPortletController extends PortletController {
 		Thread.currentThread().setContextClassLoader(OpenmrsClassLoader.getInstance());
 		PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(Integer.valueOf((String) model.get("patientProgramId")));
 		PatientChart chart = new PatientChartFactory().createPatientChart(program);
-		model.put("patientProgramId", program.getId());
 		model.put("chart", chart);
 	}
 }

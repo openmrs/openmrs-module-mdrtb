@@ -6,7 +6,7 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}"/>
-<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}"/>
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}" parameters="patientProgramId=${patientProgramId}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference? -->
 <!-- TODO: add privileges? -->

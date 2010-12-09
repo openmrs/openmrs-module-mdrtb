@@ -5,7 +5,7 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/date_input.css""/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
-<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}" parameters="patientProgramId=${patientProgramId}"/>		
 
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>

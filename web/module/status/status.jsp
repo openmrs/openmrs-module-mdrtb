@@ -10,7 +10,7 @@
 <style><%@ include file="/WEB-INF/view/module/mdrtb/resources/date_input.css"%></style>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
-<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>		
+<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${obj.patient.patientId}" parameters="patientProgramId=${patientProgramId}"/>		
 
 <!-- need to use an "include" to add this so that the javascript files can pick up the model object -->
 <!-- and for some reason we may need the regimen javascript as well -->

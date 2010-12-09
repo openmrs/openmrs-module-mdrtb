@@ -134,7 +134,7 @@
 
 <tr>
 <td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
-<td><textarea cols="60" rows="8" name="clinicianNotes">${followup.clinicianNotes}</textarea></td>
+<td><textarea  cols="100" rows="15" name="clinicianNotes">${followup.clinicianNotes}</textarea></td>
 </tr>
 
 

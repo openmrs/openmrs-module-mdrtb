@@ -45,6 +45,13 @@
 	</div>
 </c:if>
 
+<!-- BANNER FOR CLOSED PROGRAMS -->
+<c:if test="${! empty model.patientProgram && !model.patientProgram.active && !model.patient.dead}">
+	<div id="patientDashboardDeceased" class="retiredMessage">
+		<div><spring:message code="mdrtb.patientProgramClosed" text="The patient program you are viewing is closed."/></div>
+	</div>
+</c:if>
+
 <!-- PROGRAM SELECTION AND FIND PATIENT SEARCH BOX -->
 <table width="100%">
 <tr>
@@ -54,10 +61,10 @@
 <c:forEach var="program" items="${model.patientPrograms}">
 	<c:choose>
 		<c:when test="${program.active}">
-			<option value="${program.id}" <c:if test="${program.id == patientProgramId}">selected</c:if> ><spring:message code="mdrtb.activeMdrtbProgramSelector" text="Active MDR-TB Program, started on"/> <openmrs:formatDate date="${program.dateEnrolled}" format="${_dateFormatDisplay}"/> <c:if test="${!empty program.location}"> <spring:message code="mdrtb.at" text="at"/> ${program.location}</c:if></option>
+			<option value="${program.id}" <c:if test="${program.id == model.patientProgramId}">selected</c:if> ><spring:message code="mdrtb.activeMdrtbProgramSelector" text="Active MDR-TB Program, started on"/> <openmrs:formatDate date="${program.dateEnrolled}" format="${_dateFormatDisplay}"/> <c:if test="${!empty program.location}"> <spring:message code="mdrtb.at" text="at"/> ${program.location}</c:if></option>
 		</c:when>
 		<c:otherwise>
-			<option value="${program.id}" <c:if test="${program.id == patientProgramId}">selected</c:if> ><spring:message code="mdrtb.closedMdrtbProgramSelector" text="MDR-TB program from"/> <openmrs:formatDate date="${program.dateEnrolled}" format="${_dateFormatDisplay}"/> <spring:message code="mdrtb.to" text="to"/> <openmrs:formatDate date="${program.dateCompleted}" format="${_dateFormatDisplay}"/><c:if test="${!empty program.location}"> <spring:message code="mdrtb.at" text="at"/> ${program.location}</c:if></option>
+			<option value="${program.id}" <c:if test="${program.id == model.patientProgramId}">selected</c:if> ><spring:message code="mdrtb.closedMdrtbProgramSelector" text="MDR-TB program from"/> <openmrs:formatDate date="${program.dateEnrolled}" format="${_dateFormatDisplay}"/> <spring:message code="mdrtb.to" text="to"/> <openmrs:formatDate date="${program.dateCompleted}" format="${_dateFormatDisplay}"/><c:if test="${!empty program.location}"> <spring:message code="mdrtb.at" text="at"/> ${program.location}</c:if></option>
 		</c:otherwise>
 	</c:choose>
 </c:forEach>

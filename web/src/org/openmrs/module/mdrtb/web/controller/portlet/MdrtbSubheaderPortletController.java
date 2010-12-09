@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -16,12 +17,16 @@ import org.openmrs.web.controller.PortletController;
 public class MdrtbSubheaderPortletController extends PortletController {
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
 		Patient patient = Context.getPatientService().getPatient((Integer) model.get("patientId"));
-		
+			
 		List<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient);
-		
 		// we want to display the list in reverse chronological order
 		Collections.reverse(programs);
-		
 		model.put("patientPrograms", programs);
+		
+		// get the program we are currently viewing	
+		if (StringUtils.isNotBlank((String) model.get("patientProgramId"))) {
+			MdrtbPatientProgram patientProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(Integer.valueOf((String) model.get("patientProgramId")));
+			model.put("patientProgram", patientProgram);
+		}
 	}
 }
