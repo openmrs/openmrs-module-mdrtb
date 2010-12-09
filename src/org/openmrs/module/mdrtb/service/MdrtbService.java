@@ -238,6 +238,12 @@ public interface MdrtbService extends OpenmrsService {
     public void deleteScannedLabReport(Integer reportId);
     
     /**
+     * Handles exiting a patient from care
+     */
+    @Transactional
+    public void exitFromCare(Patient patient, Date dateExited, Concept reasonForExit);
+    
+    /**
      * Gets the MDR-TB program
      */
     @Transactional(readOnly=true)

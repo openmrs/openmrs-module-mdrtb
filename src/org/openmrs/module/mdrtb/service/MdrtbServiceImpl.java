@@ -39,6 +39,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
@@ -510,6 +511,26 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		else {
 			Context.getObsService().voidObs(obs, "voided by Mdr-tb module specimen tracking UI");
+		}
+	}
+	
+	public void exitFromCare(Patient patient, Date dateExited, Concept reasonForExit) {
+	
+		// first call the main Patient Service exit from care method
+		Context.getPatientService().exitFromCare(patient, dateExited, reasonForExit);
+		
+		// if the most recent MDR-TB program is open, we need to close it
+		MdrtbPatientProgram program = getMostRecentMdrtbPatientProgram(patient);
+		
+		if (program != null && program.getActive()) {
+			program.setDateCompleted(dateExited);
+			ProgramWorkflowState outcome = MdrtbUtil.getProgramWorkflowState(reasonForExit);
+			
+			if(outcome != null) {
+				program.setOutcome(MdrtbUtil.getProgramWorkflowState(reasonForExit));
+			}
+			
+			Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
 		}
 	}
 	
