@@ -17,6 +17,7 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -193,7 +194,7 @@ public class SpecimenController extends AbstractSpecimenController {
 	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
 	                                  @RequestParam(required = false, value = "addScannedLabReportLocation") Location scannedLabReportLocation,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
-	  
+    	
 		// validate
     	if(specimen != null) {
     		new SpecimenValidator().validate(specimen, specimenErrors);

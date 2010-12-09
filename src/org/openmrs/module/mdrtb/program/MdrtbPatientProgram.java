@@ -241,6 +241,23 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	}
 	
 	/**
+	 * Returns true/false whether the passed date falls within this program period
+	 */
+	public boolean isDateDuringProgram(Date date) {
+		if (date == null) {
+			return false;
+		}
+		
+		if((getPreviousProgramDateCompleted() != null && date.before(getPreviousProgramDateCompleted()))
+				|| (!isMostRecentProgram() && date.after(program.getDateCompleted())) ) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	/**
 	 * Methods that get certain patient data during the time of this program
 	 */
 	

@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.web.controller.specimen;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
@@ -43,7 +44,8 @@ public class SpecimenAddController extends AbstractSpecimenController {
 	                                  @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
 		// validate
-		new SpecimenValidator().validate(specimen, result);
+		MdrtbPatientProgram patientProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+		new SpecimenValidator().validate(specimen, result, patientProgram);
 		
     	if (result.hasErrors()) {
 			map.put("patientProgramId", patientProgramId);

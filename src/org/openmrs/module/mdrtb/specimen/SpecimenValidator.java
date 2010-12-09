@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -24,6 +25,18 @@ public class SpecimenValidator implements Validator {
 	    	errors.rejectValue("dateCollected", "mdrtb.specimen.errors.dateCollectedInFuture", "The date collected cannot be in the future.");
 	    }
 	    
+    }
+    
+    public void validate(Object target, Errors errors, MdrtbPatientProgram patientProgram) {
+    	validate(target, errors);
+    	
+        Specimen specimen = (Specimen) target;
+    	
+    	if (patientProgram != null) {
+    		if (specimen.getDateCollected() !=null && !patientProgram.isDateDuringProgram(specimen.getDateCollected())) {
+    			errors.rejectValue("dateCollected", "mdrtb.specimen.errors.dateCollectedNotDuringProgram", "The date collected was not during the current MDR-TB program period. If this is the correct collection date, then please choose another program, or modify the dates of this program.");
+    		}
+    	}
     }
 
 }
