@@ -52,6 +52,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form">/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form</a>
 	<br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form">/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form</a>
+	<br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form">/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form</a>
 	
 	
 </body>

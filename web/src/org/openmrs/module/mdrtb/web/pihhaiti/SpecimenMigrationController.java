@@ -1227,7 +1227,7 @@ public class SpecimenMigrationController {
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form")
     public ModelAndView addUnknownMapping() {
-    	addConceptMapping("Unknown","Unknown");
+    	addConceptMapping("UNKNOWN","UNKNOWN");
     	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }
@@ -1305,6 +1305,13 @@ public class SpecimenMigrationController {
     	retireConcept(1524);
     	retireConcept(1530);
     	retireConcept(1525);
+    	
+    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    }
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form")
+    public ModelAndView addCommentsMapping() {
+    	addConceptMapping("CLINICIAN NOTES","CLINICIAN NOTES");
     	
     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
     }

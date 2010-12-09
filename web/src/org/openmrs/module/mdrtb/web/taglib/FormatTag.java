@@ -82,6 +82,14 @@ public class FormatTag extends BodyTagSupport {
 				Obs obs = (Obs)o;
 				return obs.getValueAsString(Context.getLocale());
 			}
+			else if (o instanceof String) {
+				// turn line breaks into <br/> for HTML display
+				String str = (String) o;
+				str = str.replace("\r\n", "<br/>");
+				str = str.replace("\n", "<br/>");
+				str = str.replace("\r", "<br/>");
+				return str;
+			}
 			else {
 				return o.toString();
 			}

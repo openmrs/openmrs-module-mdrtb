@@ -74,6 +74,11 @@
 <td>${followup.provider.personName}</td>
 </tr>
 
+<tr>
+<td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
+<td><mdrtb:format obj="${followup.clinicianNotes}"/></td>
+</tr>
+
 </table>
 
 </div>
@@ -126,6 +131,12 @@
 </select>
 </td>
 </tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
+<td><textarea cols="60" rows="8" name="clinicianNotes">${followup.clinicianNotes}</textarea></td>
+</tr>
+
 
 </table>
 

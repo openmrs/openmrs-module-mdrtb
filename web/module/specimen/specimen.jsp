@@ -364,7 +364,7 @@
 </tr>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</td><td colspan="3">${specimen.comments}</td>
+<td style="font-weight:bold"><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</td><td colspan="3"><mdrtb:format obj="${specimen.comments}"/></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -598,7 +598,7 @@
 </c:if>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td><td colspan="3">${test.comments}</td>
+<td style="font-weight:bold"><nobr><spring:message code="mdrtb.comments" text="Comments"/>:</nobr></td><td colspan="3"><mdrtb:format obj="${test.comments}"/></td>
 <td width="100%">&nbsp;</td>
 </tr>
 

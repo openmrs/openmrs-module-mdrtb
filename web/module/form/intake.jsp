@@ -79,6 +79,11 @@
 <td>${intake.anatomicalSite.displayString}</td>
 </tr>
 
+<tr>
+<td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
+<td><mdrtb:format obj="${intake.clinicianNotes}"/></td>
+</tr>
+
 </table>
 
 </div>
@@ -142,6 +147,11 @@
 </c:forEach>
 </select>
 </td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
+<td><textarea cols="60" rows="8" name="clinicianNotes">${intake.clinicianNotes}</textarea></td>
 </tr>
 
 </table>
