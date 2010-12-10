@@ -81,6 +81,9 @@ public class DrugForecastUtil {
         });
         for (DrugOrder o : getDrugOrders(cohort, drugSet, fromDate, toDate)) {
             if (o.getDrug() != null) {
+            	
+            	System.out.println("get the drugs for drug order " + o + " with id " + o.getId());
+            	
                 double usage = getDrugUsage(o, fromDate, toDate);
                 increment(ret, o.getDrug(), usage);
             }
@@ -112,7 +115,7 @@ public class DrugForecastUtil {
         int days = daysOfOverlap(fromDate, toDate, o.getStartDate(), o.isDiscontinuedRightNow() ? o.getDiscontinuedDate() : o.getAutoExpireDate());
         if (days <= 0)
             return 0;
-        double pillsPerDose = o.getDose();
+        double pillsPerDose = (o.getDose() != null ? o.getDose() : 0);
         if (pillsPerDose == 0)
             return 0;
         if (drug != null && drug.getDoseStrength() != null)

@@ -45,9 +45,8 @@ public class DrugForecastController {
         cohort.setDescription("All patients in system");
         List<Concept> drugSets = new ArrayList<Concept>();
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
         {
-            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"), mu);
+        	Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
             tb.getConceptSets();
             drugSets.add(tb);
         }
@@ -107,10 +106,9 @@ public class DrugForecastController {
         Cohort cohort = Context.getPatientSetService().getAllPatients();
         cohort.setDescription("All patients in system");
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-        MdrtbFactory mu = ms.getMdrtbFactory();
         List<Concept> drugSets = new ArrayList<Concept>();
         {
-            Concept tb = MdrtbUtil.getMDRTBConceptByName("TUBERCULOSIS TREATMENT DRUGS", new Locale("en"), mu);
+        	Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
             tb.getConceptSets();
             drugSets.add(tb);
         }
