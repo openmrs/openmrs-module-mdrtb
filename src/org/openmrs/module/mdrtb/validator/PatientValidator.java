@@ -82,8 +82,8 @@ public class PatientValidator implements Validator {
 		}
 		
 		//	 Patient Info 
-		if (patient.isPersonVoided())
-			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "voidReason", "error.null");
+		if (patient.isVoided())
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "voidReason", "mdrtb.voidReason.errors.required");
 				
 		// Validate PatientIdentifers
 		PatientIdentifierValidator piv = new PatientIdentifierValidator();

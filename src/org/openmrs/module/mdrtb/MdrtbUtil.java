@@ -39,6 +39,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.Test;
 
 public class MdrtbUtil {
     
@@ -1138,5 +1140,50 @@ public class MdrtbUtil {
 		
 		return null;
 	}
+	
+	/**
+     * Configures the default values for a Test, based on the existing values for other tests in the specimen
+     * Implements the following rule:
+     * 
+     * If this is the first test, and the specimen has a sample id, set the accession # field with this sample id.
+     * If this is not the first test, then--
+     * If the Accession # on all the existing tests and the sample ID on the specimen are all the same, set the accession # field with this number.
+     * If the Lab, Date Ordered, or Date Received on all the existing tests are identical, set these fields with these values.
+     * 
+     */
+    public static void setTestDefaults(Specimen specimen, Test test) { 	
+    	
+    	Set<String> accessionNumberSet = new HashSet<String>();
+    	Set<Date> dateOrderedSet = new HashSet<Date>();
+    	Set<Date> dateReceivedSet = new HashSet<Date>();
+    	Set<Location> labSet = new HashSet<Location>();
+    	
+    	// first add the identifier of the sample to the accession number set
+    	accessionNumberSet.add(specimen.getIdentifier());
+    	
+    	// now loop through all the tests for this sample, excluding the test we want to set the defaults for
+    	for (Test t : specimen.getTests()) {
+    		if (t != test) {
+    			accessionNumberSet.add(t.getAccessionNumber());
+    			dateOrderedSet.add(t.getDateOrdered());
+    			dateReceivedSet.add(t.getDateReceived());
+    			labSet.add(t.getLab());
+    		}
+    	}
+    	
+    	// test if any of are sets contain exactly one non-null member
+    	if (accessionNumberSet.size() == 1 && !accessionNumberSet.contains(null)) {
+    		test.setAccessionNumber(accessionNumberSet.iterator().next());
+    	}
+    	if (dateOrderedSet.size() == 1 && !dateOrderedSet.contains(null)) {
+    		test.setDateOrdered(dateOrderedSet.iterator().next());
+    	}
+    	if (dateReceivedSet.size() == 1 && !dateReceivedSet.contains(null)) {
+    		test.setDateReceived(dateReceivedSet.iterator().next());
+    	}
+    	if (labSet.size() == 1 && !labSet.contains(null)) {
+    		test.setLab(labSet.iterator().next());
+    	}
+    }
 	
 }

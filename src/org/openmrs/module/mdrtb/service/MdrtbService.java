@@ -108,6 +108,11 @@ public interface MdrtbService extends OpenmrsService {
     public Specimen createSpecimen(Patient patient);
     
     /**
+     * Fetches a specimen sample obj given a specimen id
+     */
+    public Specimen getSpecimen(Integer specimedId);
+    
+    /**
      * Fetches a specimen sample obj given an encounter of the Specimen Collection type
      */
     public Specimen getSpecimen(Encounter encounter);
@@ -142,7 +147,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Creates a new Smear, associated with the given encounter
      */
-    public Smear createSmear(Encounter encounter);
+    public Smear createSmear(Specimen specimen);
     
     /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
@@ -168,7 +173,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Creates a new culture, associated with the given encounter
      */
-    public Culture createCulture(Encounter encounter);
+    public Culture createCulture(Specimen specimen);
     
     /**
      * Fetches a culture given the obs of a Tuberculosis Smear Test Construct
@@ -195,7 +200,7 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Creates a new dst, associated with the given encounter
      */
-    public Dst createDst(Encounter encounter);
+    public Dst createDst(Specimen specimen);
     
     /**
      * Fetches a dst given the obs of a Tuberculosis Smear Test Construct

@@ -260,6 +260,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return new SpecimenImpl(patient);
 	}
 	
+	public Specimen getSpecimen(Integer specimenId) {
+		return getSpecimen(Context.getEncounterService().getEncounter(specimenId));
+	}
+	
 	public Specimen getSpecimen(Encounter encounter) {
 		// return null if there is no encounter, or if the encounter if of the wrong type
 		if(encounter == null || encounter.getEncounterType() != Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"))) {
@@ -356,10 +360,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 	}
 	
-	public Smear createSmear(Encounter encounter) {		
-		// first, get the specimen
-		Specimen specimen = getSpecimen(encounter);
-		
+	public Smear createSmear(Specimen specimen) {			
 		if (specimen == null) {
 			log.error("Unable to create smear: specimen is null.");
 			return null;
@@ -396,10 +397,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	public Culture createCulture(Encounter encounter) {		
-		// first, get the specimen
-		Specimen specimen = getSpecimen(encounter);
-		
+	public Culture createCulture(Specimen specimen) {			
 		if (specimen == null) {
 			log.error("Unable to create culture: specimen is null.");
 			return null;
@@ -435,12 +433,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	public Dst createDst(Encounter encounter) {		
-		// first, get the specimen
-		Specimen specimen = getSpecimen(encounter);
-		
+	public Dst createDst(Specimen specimen) {		
 		if (specimen == null) {
-			log.error("Unable to create smear: specimen is null.");
+			log.error("Unable to create dst: specimen is null.");
 			return null;
 		}
 		
@@ -690,7 +685,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	/**
 	 * Utility functions
 	 */
-	
+    
     private Set<ProgramWorkflowState> getPossibleWorkflowStates(Concept workflowConcept) {
     	// get the mdrtb program via the name listed in global properties
     	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));

@@ -17,7 +17,6 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -72,7 +71,8 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new smear if needed
 			if (smear == null) {
-				smear = Context.getService(MdrtbService.class).createSmear(Context.getEncounterService().getEncounter(specimenId));
+				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+				smear = Context.getService(MdrtbService.class).createSmear(specimen);
 			}
 		}
 				
@@ -100,7 +100,8 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new culture if needed
 			if (culture == null) {
-				culture = Context.getService(MdrtbService.class).createCulture(Context.getEncounterService().getEncounter(specimenId));
+				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+				culture = Context.getService(MdrtbService.class).createCulture(specimen);
 			}
 		}
 				
@@ -128,7 +129,8 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new dst if needed
 			if (dst == null) {
-				dst = Context.getService(MdrtbService.class).createDst(Context.getEncounterService().getEncounter(specimenId));
+				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+				dst = Context.getService(MdrtbService.class).createDst(specimen);
 			}
 		}
 				

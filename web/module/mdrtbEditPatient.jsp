@@ -42,22 +42,39 @@
 		// handle the toggle of the dead checkbox
 		$j('#deadCheckbox').click(function () {
 			if ($j(this).is(':checked')){
-				$j('#dead').attr('value', "true");
+				$j('#dead').attr('value', 'true');
 				// show the death date and cause of death rows
 				$j('#deathDateRow').show();
 				$j('#causeOfDeathRow').show();
 			}
 			else {
-				$j('#dead').attr('value', "false");
+				$j('#dead').attr('value', 'false');
 				// hide the death date and cause of death rows
 				$j('#deathDateRow').hide();
 				$j('#causeOfDeathRow').hide();
 				// reset the values of these fields
-				$j('#deathDate').val("");
-				$j('#causeOfDeath').val("");
-				$j('#causeOfDeathTextField').val("");
+				$j('#deathDate').val('');
+				$j('#causeOfDeath').val('');
+				$j('#causeOfDeathTextField').val('');
 			} 
 		});
+
+		// handle the toggle of the voided checkbox
+		$j('#voidedCheckbox').click(function () {
+			if ($j(this).is(':checked')){
+				$j('#voided').attr('value', 'true');
+				// show the void reason row
+				$j('#voidReasonRow').show();
+			}
+			else {
+				$j('#voided').attr('value', 'false');
+				// show the void reason row
+				$j('#voidReasonRow').hide();
+				// reset the value of void reason
+				$j('#voidReason').val('');
+			} 
+		});
+		
 
 	});
 -->
@@ -237,9 +254,23 @@
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
+<tr>
+<th><spring:message code="general.voided"/></th>
+<td>
+<input type="hidden" id="voided" name="voided" value="${patient.voided}"/>
+<input type="checkbox" id="voidedCheckbox" name="voidedCheckbox" value="true" <c:if test="${patient.voided}">checked</c:if> />
+</td>
+</tr>
+
+<tr id="voidReasonRow" <c:if test="${!patient.voided}">style="display:none"</c:if>>
+<th><spring:message code="general.voidReason"/></th>
+<td><input id="voidReason" name="voidReason" value="${patient.voidReason}"/></td>
+</tr>
+
+<tr height="5"><td colspan="2">&nbsp;</td></tr>
+
 <tr><td colspan="2">
 <button type="submit"><spring:message code="Patient.save" text="Save Patient"/></button>
-
 <button id="reset" type="reset"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
 
 </table>
