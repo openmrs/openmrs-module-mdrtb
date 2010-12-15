@@ -1,13 +1,11 @@
 package org.openmrs.module.mdrtb.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -18,9 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
-import org.openmrs.ConceptName;
 import org.openmrs.ConceptSet;
-import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
@@ -38,7 +34,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
@@ -62,67 +57,17 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	protected MdrtbDAO dao;
 	
-	private static MdrtbFactory mdrtbFactory;
-	
-	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?
-	
-	private List<Locale> localeSetUsedInDB = null;
-	
+	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?		
 	
 	// caches
 	private Map<Integer,String> colorMapCache = null;
 	
 	private Map<Integer,String> locationToDisplayCodeCache = null;
 	
-	
-
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
 	}
 	
-	public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)
-	                                                                                                                    throws APIException {
-		return dao.getMdrtbConceptNamesByNameList(nameList, removeDuplicates, loc);
-	}
-	
-	public MdrtbFactory getMdrtbFactory() {
-		if (mdrtbFactory == null) {
-			this.setMdrtbFactory(MdrtbFactory.getInstance());
-		}
-		return mdrtbFactory;
-	}
-	
-	public void setMdrtbFactory(MdrtbFactory newMdrtbFactory) {
-		MdrtbServiceImpl.mdrtbFactory = newMdrtbFactory;
-	}
-	
-	public List<Locale> getLocaleSetUsedInDB() {
-		if(localeSetUsedInDB == null) {
-			List<Locale> locales = new ArrayList<Locale>();
-	        List<List<Object>> rows = Context.getAdministrationService().executeSQL("select distinct locale from concept_word", true);
-	        
-	        //get all used locales in ConceptWord table
-	        for (List<Object> row:rows){
-	            for (Object o : row){
-	                String oTmp = (String) o;
-	                if (oTmp != null && oTmp != "")
-	                    locales.add(new Locale(oTmp));
-	            }
-	        }
-	        
-	        setLocaleSetUsedInDB(locales);
-		}
-		
-		return localeSetUsedInDB;
-	}
-	
-	public void setLocaleSetUsedInDB(List<Locale> localeSetUsedInDB) {
-		if(this.localeSetUsedInDB == null) {
-			this.localeSetUsedInDB = new LinkedList<Locale>();
-		}
-		
-		this.localeSetUsedInDB.addAll(localeSetUsedInDB);
-	}
 	
 	/**
 	 * @see MdrtbService#getLocationsWithAnyProgramEnrollments()
@@ -131,14 +76,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return dao.getLocationsWithAnyProgramEnrollments();
 	}
 
-	public List<Location> getAllMdrtrbLocations(boolean includeRetired) {
-		return dao.getAllMdrtrbLocations(includeRetired);
-	}
-	
-	public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales) {		
-		return dao.getConceptWords(phrase, locales);
-	}
-	
 	public Concept getConcept(String... conceptMapping) {
 		return conceptMap.lookup(conceptMapping);
 	}

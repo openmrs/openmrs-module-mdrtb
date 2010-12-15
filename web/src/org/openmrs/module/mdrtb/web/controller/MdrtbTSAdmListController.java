@@ -21,10 +21,10 @@ import org.openmrs.RelationshipType;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbTreatmentSupporter;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.ConceptClassEditor;
 import org.openmrs.propertyeditor.ConceptDatatypeEditor;
 import org.openmrs.propertyeditor.ConceptEditor;
@@ -147,11 +147,10 @@ public class MdrtbTSAdmListController extends SimpleFormController {
         List<MdrtbTreatmentSupporter> ret = new ArrayList<MdrtbTreatmentSupporter>();
         if (Context.isAuthenticated()){
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory();
-                Concept phoneConcept = mu.getConceptPhoneNumber();
+                Concept phoneConcept = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER));
                 
                 //get the concept for TS Activity
-                Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
+                Concept tsActivityConcept = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_SUPPORTER_CURRENTLY_ACTIVE));
                 
                 
                 String treatSupAttributeTypeString = Context.getAdministrationService().getGlobalProperty("mdrtb.treatment_supporter_person_attribute_type");
@@ -192,7 +191,6 @@ public class MdrtbTSAdmListController extends SimpleFormController {
                         
                     }
                 }
-                mu = null;
         }
         
         return ret;

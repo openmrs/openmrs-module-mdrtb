@@ -15,28 +15,29 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class MdrtbAllergyUtils {
 
     protected final Log log = LogFactory.getLog(getClass());
         
-    public static Map<Patient, List<MdrtbAllergyStringObj>> getPatientAllergies(List<Patient> pList, MdrtbFactory mu){
+    public static Map<Patient, List<MdrtbAllergyStringObj>> getPatientAllergies(List<Patient> pList){
         
     
         Map<Patient, List<MdrtbAllergyStringObj>> ret = new HashMap<Patient, List<MdrtbAllergyStringObj>>();
         List<Concept> cList = new ArrayList<Concept>();
-        cList.add(mu.getConceptAdverseEffectConstruct());
+        cList.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_CONSTRUCT));
         List<Person> persList = new ArrayList<Person>();
         for (Patient p: pList)
             persList.add(p);
         List<Obs> oList = Context.getObsService().getObservations(persList, null, cList, null, null, null, null, null, null, null, null, false);
-        Concept effect = mu.getConceptAdverseEffect();
-        Concept effectNC = mu.getConceptAdverseEffectNonCoded();
-        Concept medication = mu.getConceptAdverseEffectMedication();
-        Concept medicationNC = mu.getConceptAdverseEffectMedicationNonCoded();
-        Concept actionTaken = mu.getConceptAdverseEffectActionTaken();
-        Concept adverseEffectDate = mu.getConceptAdverseEffectDate();
+        Concept effect = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT);
+        Concept effectNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_NON_CODED);
+        Concept medication = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION);
+        Concept medicationNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION_NON_CODED);
+        Concept actionTaken = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_ACTION_TAKEN);
+        Concept adverseEffectDate = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_DATE);
         
         for (Patient p : pList){
            ArrayList<MdrtbAllergyStringObj> allergyList = new ArrayList<MdrtbAllergyStringObj>(); 

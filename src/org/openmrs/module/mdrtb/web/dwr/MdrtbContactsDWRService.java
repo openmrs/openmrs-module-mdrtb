@@ -23,9 +23,10 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
+@Deprecated
 public class MdrtbContactsDWRService {
     
     protected final Log log = LogFactory.getLog(getClass());
@@ -71,9 +72,8 @@ public class MdrtbContactsDWRService {
             }
             
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory();
             ObsService os = Context.getObsService();
-            List<Obs> oListPhone = os.getObservationsByPersonAndConcept(contact, mu.getConceptPhoneNumber());
+            List<Obs> oListPhone = os.getObservationsByPersonAndConcept(contact, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER));
                if (oListPhone.size() > 0){
                 Obs ophone = oListPhone.get(oListPhone.size()-1);
               
@@ -84,7 +84,7 @@ public class MdrtbContactsDWRService {
                } else {
                    
                    Obs o = new Obs();
-                   o.setConcept(mu.getConceptPhoneNumber());
+                   o.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER));
                    o.setCreator(Context.getAuthenticatedUser());
                    o.setDateCreated(new Date());
                    LocationService ls = Context.getLocationService();
@@ -186,9 +186,8 @@ public class MdrtbContactsDWRService {
               //newKnownMDRString
                 if (popupKnownMDRVal != null){
                     MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-                    MdrtbFactory mu = ms.getMdrtbFactory();
                     ObsService os = Context.getObsService();
-                    Concept cKnown = mu.getConceptKnownMDRCase();
+                    Concept cKnown = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE);
                     List<Obs> oList = os.getObservationsByPersonAndConcept(contact, cKnown);
                     if (oList != null && oList.size() > 0){
                         Obs oInner = oList.get(oList.size() -1);
@@ -234,10 +233,9 @@ public class MdrtbContactsDWRService {
             person = Context.getPersonService().savePerson(person);
             
             MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory();
             
             Obs o = new Obs();
-            o.setConcept(mu.getConceptPhoneNumber());
+            o.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER));
             o.setCreator(Context.getAuthenticatedUser());
             o.setDateCreated(new Date());
             LocationService ls = Context.getLocationService();

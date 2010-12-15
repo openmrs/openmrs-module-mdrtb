@@ -9,7 +9,7 @@ import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbCohortUtil;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
@@ -51,7 +51,7 @@ public class MdrtbListPatientsController {
     	model.addAttribute("states", states);
     	
     	if (StringUtils.hasText(displayMode)) {
-    		Cohort cohort = MdrtbCohortUtil.getMdrPatients(identifier, name, enrollment, location, states);
+    		Cohort cohort = MdrtbUtil.getMdrPatients(identifier, name, enrollment, location, states);
         	model.addAttribute("patientIds", cohort.getCommaSeparatedPatientIds());
         	model.addAttribute("patients", Context.getPatientSetService().getPatients(cohort.getMemberIds()));
     	}

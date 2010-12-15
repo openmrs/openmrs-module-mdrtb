@@ -25,10 +25,10 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbFactory;
-import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbTreatmentSupporter;
 import org.openmrs.module.mdrtb.propertyeditor.ObsEditor;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.ConceptClassEditor;
 import org.openmrs.propertyeditor.ConceptDatatypeEditor;
 import org.openmrs.propertyeditor.ConceptEditor;
@@ -77,9 +77,6 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
         Map<String,Object> map = new HashMap<String,Object>();
         if (Context.isAuthenticated()){
         	
-        	MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-            MdrtbFactory mu = ms.getMdrtbFactory();
-        	
             String dateFormat = Context.getDateFormat().toPattern();
             map.put("dateFormat", dateFormat);
             
@@ -91,7 +88,7 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
                     + msa.getMessage("mdrtb.jun")+ "','"+ msa.getMessage("mdrtb.jul")+ "','"+ msa.getMessage("mdrtb.aug")+ "','"+ msa.getMessage("mdrtb.sept")+ "','"+ msa.getMessage("mdrtb.oct")+ "','"+ msa.getMessage("mdrtb.nov")+ "','"+ msa.getMessage("mdrtb.dec")+ "'");
             
             //get the potential answers for the TS Activity concept and make them available to the JSP 
-            Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
+            Concept tsActivityConcept = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_SUPPORTER_CURRENTLY_ACTIVE));
             List<Concept> activityAnswers = new ArrayList<Concept>();
             if (tsActivityConcept == null)
                     throw new RuntimeException("Could not find concept for treatment supporter activity");
@@ -202,12 +199,11 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
        if (Context.isAuthenticated()){
            MdrtbTreatmentSupporter p = new MdrtbTreatmentSupporter();
            MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
-           MdrtbFactory mu = ms.getMdrtbFactory();
-           Concept phoneConcept = mu.getConceptPhoneNumber();
+           Concept phoneConcept = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TELEPHONE_NUMBER));
            ConceptService cs = Context.getConceptService();
            
            //get the concept for TS Activity
-           Concept tsActivityConcept = mu.getConceptTreatmentSupporterActive();
+           Concept tsActivityConcept = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_SUPPORTER_CURRENTLY_ACTIVE));
           
            ObsService os = Context.getObsService();
            String personId = request.getParameter("personId");
@@ -263,7 +259,6 @@ public class MdrtbTSAdmFormController extends SimpleFormController {
         	   o.setValueCoded(yesConcept);
         	   p.setActive(o);
            }
-           mu = null;
            return p;
        } else return "";
        

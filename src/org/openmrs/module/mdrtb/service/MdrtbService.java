@@ -3,13 +3,10 @@ package org.openmrs.module.mdrtb.service;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
-import org.openmrs.ConceptName;
-import org.openmrs.ConceptWord;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -17,9 +14,7 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.mdrtb.MdrtbFactory;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -30,31 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 public interface MdrtbService extends OpenmrsService {
-    
-    @Transactional(readOnly=true)
-    public List<ConceptName> getMdrtbConceptNamesByNameList(List<String> nameList, boolean removeDuplicates, Locale loc)  throws APIException ;
-    
-    @Deprecated
-    public MdrtbFactory getMdrtbFactory();
-    
-    @Deprecated
-    public void setMdrtbFactory(MdrtbFactory newMdrtbFactory);
-    
-    public List<Locale> getLocaleSetUsedInDB();
-    
-    public void setLocaleSetUsedInDB(List<Locale> localeSetUsedInDB);
+
     
     /**
      * @return all Locations which have non-voided Patient Programs associated with them
      */
     @Transactional(readOnly=true)
     public List<Location> getLocationsWithAnyProgramEnrollments();
-    
-    @Transactional(readOnly=true)
-    public List<Location> getAllMdrtrbLocations(boolean includeRetired);
-    
-    @Transactional(readOnly=true)
-    public List<ConceptWord> getConceptWords(String phrase, List<Locale> locales);
     
     /**
      * Fetches a concept specified by a MdrtbConcepts mapping

@@ -18,7 +18,6 @@
     	<property name="mappings">
             <props>
             	<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
-            	
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
             	<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
             	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>  
@@ -28,6 +27,7 @@
 	    	</props>
 		</property>
     </bean>
+    
     <!-- Controllers -->
     
 	<bean id="mdrtbCohortBuilderController" class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
@@ -35,7 +35,7 @@
 		<property name="successView"><value>cohortBuilder.list</value></property>
 	</bean>
     
-    <!-- portlet controllers -->    
+    <!-- Portlet controllers -->    
     <bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController"/>
     <bean id="mdrtbPatientHeaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbPatientHeaderPortletController"/> 
     <bean id="mdrtbSubheaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbSubheaderPortletController"/> 

@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.pihhaiti;
+package org.openmrs.module.mdrtb.web.migration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class SpecimenMigrationController {
+public class MigrationController {
 	
 	/**
 	 * IMPORTANT NOTE:
@@ -105,7 +105,7 @@ public class SpecimenMigrationController {
 			
 			*/
 			
-			return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+			return new ModelAndView("/module/mdrtb/migration/migration");
 		}
 		
 	
@@ -206,7 +206,7 @@ public class SpecimenMigrationController {
 		}
 		Context.getConceptService().saveConcept(pulmonary);
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
 	@RequestMapping("/module/mdrtb/pihhaiti/migrate/connvertSmearsOnIntakeAndFollowup.form")
@@ -248,7 +248,7 @@ public class SpecimenMigrationController {
 			}
 		}
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
 	// Note: this is a PIH-specific use case
@@ -364,7 +364,7 @@ public class SpecimenMigrationController {
 		Form toRetire = Context.getFormService().getForm("Resultats de Crachat (MSPP)");
 		Context.getFormService().retireForm(toRetire, "retired as part of mdr-tb migration");
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	
 	}
 	
@@ -535,7 +535,7 @@ public class SpecimenMigrationController {
 			}
 		}
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
 	@RequestMapping("/module/mdrtb/pihhaiti/migrate/cleanUpConcepts.form")
@@ -556,7 +556,7 @@ public class SpecimenMigrationController {
 		
 		Context.getConceptService().saveConcept(smearConstruct);
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/voidEncounters.form")
@@ -585,7 +585,7 @@ public class SpecimenMigrationController {
 		Context.getEncounterService().retireEncounterType(Context.getEncounterService().getEncounterType("DST Result"), "retired as part of MDR-TB migration");
 		
 		
-		 return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		 return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addWorkflows.form")
@@ -667,7 +667,7 @@ public class SpecimenMigrationController {
     	
     	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addHospitalizationWorkflow.form")
@@ -715,7 +715,7 @@ public class SpecimenMigrationController {
     	
     	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateHospitalizations.form")
@@ -783,7 +783,7 @@ public class SpecimenMigrationController {
 		}
 		
 		
-		return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addPulmonary.form")
@@ -801,13 +801,13 @@ public class SpecimenMigrationController {
     	
     	addConceptMapping("SITE OF TB DISEASE", "ANATOMICAL SITE OF TUBERCULOSIS");
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addDaysToPositivity.form")
     public ModelAndView addDaysToPositivity() {
     	addConcept("TUBERCULOSIS CULTURE DAYS TO POSITIVITY", "Question", "Numeric", "DAYS TO POSITIVITY", "org.openmrs.module.mdrtb");
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateLocations.form")
@@ -871,7 +871,7 @@ public class SpecimenMigrationController {
     		}
     	} 	
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroups.form")
@@ -933,7 +933,7 @@ public class SpecimenMigrationController {
     			Context.getObsService().voidObs(previousTreatmentObs, "voided as part of mdrtb-migration");
     		}
     	}
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireOldWorkflows.form")
@@ -971,7 +971,7 @@ public class SpecimenMigrationController {
      		}
      	}
      	
-     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+     	return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireStillOnTreatmentState.form")
@@ -1007,7 +1007,7 @@ public class SpecimenMigrationController {
      	Context.getProgramWorkflowService().saveProgram(mdrtbProgram);
      	
      	
-     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+     	return new ModelAndView("/module/mdrtb/migration/migration");
     	
     }
     
@@ -1025,7 +1025,7 @@ public class SpecimenMigrationController {
     		}
     	}
     	
-     	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     /**
@@ -1063,7 +1063,7 @@ public class SpecimenMigrationController {
     		Context.getObsService().voidObs(obs, "voided as part of mdr-tb migration");
     	}
     	
-      	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+      	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     */
     
@@ -1073,7 +1073,7 @@ public class SpecimenMigrationController {
     	addConceptMapping("REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED", "REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED");
     	addConceptMapping("REASON ANTIRETROVIRALS CHANGED OR STOPPED","REASON ANTIRETROVIRALS CHANGED OR STOPPED");
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/createQuinolonesConceptMappings.form")
@@ -1081,7 +1081,7 @@ public class SpecimenMigrationController {
     	
     	addConceptMapping("TUBERCULOSIS QUINOLONES", "QUINOLONES");
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/resetOrdersWithDiscontinuedDateInFuture.form")
@@ -1105,7 +1105,7 @@ public class SpecimenMigrationController {
     		}
     	}
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/changeStateShortNames.form")
@@ -1114,7 +1114,7 @@ public class SpecimenMigrationController {
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE", "Registration Group - Previous Drug Use");
        	addConceptShortName("MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME", "Outcome");
        	addConceptShortName("HOSPITALIZATION WORKFLOW", "Hospitalization");
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addZLIdentifiers.form")
@@ -1152,7 +1152,7 @@ public class SpecimenMigrationController {
     		
     	}
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
 
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/closeOpenProgramsWithOutcomes.form")
@@ -1172,7 +1172,7 @@ public class SpecimenMigrationController {
     		}
     	}
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     
@@ -1222,14 +1222,14 @@ public class SpecimenMigrationController {
     	retireConcept(1567);
     	retireConcept(1584);
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form")
     public ModelAndView addUnknownMapping() {
     	addConceptMapping("UNKNOWN","UNKNOWN");
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihaiti/migrate/markPatientsAsDeceased.form")
@@ -1248,7 +1248,7 @@ public class SpecimenMigrationController {
     		}
     	}
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form")
@@ -1306,14 +1306,14 @@ public class SpecimenMigrationController {
     	retireConcept(1530);
     	retireConcept(1525);
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     @RequestMapping("/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form")
     public ModelAndView addCommentsMapping() {
     	addConceptMapping("CLINICIAN NOTES","CLINICIAN NOTES");
     	
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
     // TODO: add script to retire the forms
@@ -1337,7 +1337,7 @@ public class SpecimenMigrationController {
     			treatmentStatus.add((TreatmentStatus) (treatmentCalc.calculate(program)));
     		}
     	}
-    	return new ModelAndView("/module/mdrtb/pihhaiti/specimenMigration");
+    	return new ModelAndView("/module/mdrtb/migration/migration");
     }
   
     

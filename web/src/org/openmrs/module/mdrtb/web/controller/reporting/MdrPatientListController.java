@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbCohortUtil;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,7 @@ public class MdrPatientListController {
             		ModelMap model) {
         
     	Location l = Context.getLocationService().getLocation(locationId);
-    	Cohort c = MdrtbCohortUtil.getMdrPatients(null, null, enrollment, l, null);
+    	Cohort c = MdrtbUtil.getMdrPatients(null, null, enrollment, l, null);
     	view = (StringUtils.isEmpty(view) ? "patientSummary" : view);
 		
     	model.addAttribute("view", view);

@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.web.dwr;
 
+@Deprecated
 public class MdrtbSideEffect {
 
         private String type;
