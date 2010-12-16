@@ -61,9 +61,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	// caches
 	private Map<Integer,String> colorMapCache = null;
-	
-	private Map<Integer,String> locationToDisplayCodeCache = null;
-	
+
 	public void setMdrtbDAO(MdrtbDAO dao) {
 		this.dao = dao;
 	}
@@ -77,6 +75,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 
 	public Concept getConcept(String... conceptMapping) {
+		return conceptMap.lookup(conceptMapping);
+	}
+	
+	public Concept getConcept(String conceptMapping) {
 		return conceptMap.lookup(conceptMapping);
 	}
 	
@@ -604,21 +606,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	this.colorMapCache = null;
     }
     
-    // TODO: should this really run the display code through message.properties for localization (probably not, since locations are proper names?)
-    public String getDisplayCodeForLocation(Location location) {
-    	// initialize the cache if need be 
-    	if(locationToDisplayCodeCache == null) {
-    		locationToDisplayCodeCache = loadCache(Context.getAdministrationService().getGlobalProperty("mdrtb.locationToDisplayCodeMap"));
-    	}
-    	
-    	return locationToDisplayCodeCache.get(location.getId());
-    }
-    
-    
-    public void resetLocationToDisplayCodeCache() {
-    	this.locationToDisplayCodeCache = null;
-    }
-    
 	/**
 	 * Utility functions
 	 */
@@ -643,7 +630,25 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	if(StringUtils.isNotBlank(mapAsString)) {    	
     		for(String mapping : mapAsString.split("\\|")) {
     			String[] mappingFields = mapping.split(":");
-    			map.put(Integer.valueOf(mappingFields[0]), mappingFields[1]);
+    			
+    			Integer conceptId = null;
+    			
+    			// if this is a mapping code, need to convert it to the concept id
+    			if(!MdrtbUtil.isInteger(mappingFields[0])) {
+    				Concept concept = getConcept(mappingFields[0]);
+    				if (concept != null) {
+    					conceptId = concept.getConceptId();
+    				}
+    				else {
+    					throw new MdrtbAPIException("Invalid concept mapping value in the the colorMap global property.");
+    				}
+    			}
+    			// otherwise, assume this is a concept id
+    			else {
+    				conceptId = Integer.valueOf(mappingFields[0]);
+    			}
+    			
+    			map.put(conceptId, mappingFields[1]);
     		}
     	}
     	else {

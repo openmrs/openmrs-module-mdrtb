@@ -39,6 +39,11 @@ public interface MdrtbService extends OpenmrsService {
     public Concept getConcept(String... conceptMapping);
     
     /**
+     * Fetches a concept specified by a MdrtbConcepts mapping
+     */
+    public Concept getConcept(String conceptMapping);
+    
+    /**
      * @return the Concept specified by the passed lookup string.  Checks MdrtbConcepts mapping, id, name, and uuid before returning null
      */
     public Concept findMatchingConcept(String lookup);
@@ -342,15 +347,5 @@ public interface MdrtbService extends OpenmrsService {
      */
     public void resetColorMapCache();
     
-    /**
-     * Returns the display associated with a given location
-     * Used to display location codes in the patient chart
-     */
-    public String getDisplayCodeForLocation(Location location);
-    
-    /**
-     * Resets the display code for location to null to force cache relod
-     */
-    public void resetLocationToDisplayCodeCache();
 }
 

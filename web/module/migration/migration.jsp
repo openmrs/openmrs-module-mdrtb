@@ -54,6 +54,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form">/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form</a>
 	<br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form">/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form</a>
+	<br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/pihhaiti/migrate/removeOldGlobalProps.form">/module/mdrtb/pihhaiti/migrate/removeOldGlobalProps.form</a>
 	
 	
 </body>

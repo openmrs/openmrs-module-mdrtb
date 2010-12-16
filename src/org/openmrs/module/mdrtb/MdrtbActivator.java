@@ -16,37 +16,44 @@ package org.openmrs.module.mdrtb;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.GlobalProperty;
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.api.context.Context;
 import org.openmrs.layout.web.address.AddressSupport;
 import org.openmrs.layout.web.address.AddressTemplate;
 import org.openmrs.module.Activator;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
- * This class contains the logic that is run every time this module
- * is either started or shutdown
+ * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class MdrtbActivator implements Activator, Runnable {
-
-    private Log log = LogFactory.getLog(this.getClass());
-
-    public void shutdown() {
-    	log.info("Shutting down MDR-TB module.");
-    	unregisterAddressTemplates();
-    }
-
-    public void startup() {
-    	log.info("Starting up MDR-TB module.");
-    	registerAddressTemplates();
-    }
-
-    public void run() {
-	    // TODO Auto-generated method stub  
-    }
-    
-    /**
+	
+	private Log log = LogFactory.getLog(this.getClass());
+	
+	public void shutdown() {
+		log.info("Shutting down MDR-TB module.");
+		unregisterAddressTemplates();
+	}
+	
+	public void startup() {
+		log.info("Starting up MDR-TB module.");
+		registerAddressTemplates();
+		configureGlobalProperties();
+	}
+	
+	public void run() {
+		// TODO Auto-generated method stub  
+	}
+	
+	/**
 	 * Sets up the Default Address Template
 	 */
 	public void registerAddressTemplates() {
@@ -83,5 +90,20 @@ public class MdrtbActivator implements Activator, Runnable {
 			}
 		}
 	}
-    
+	
+	/**
+	 * Configures any global properties that need to be configured
+	 */
+	private void configureGlobalProperties() {
+		// configure the primary patient identifier type if needed
+		if (StringUtils.isBlank(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType"))) {
+			List<PatientIdentifierType> types = Context.getPatientService().getAllPatientIdentifierTypes();
+			// just pick the first identifier to use as the primary
+			if(types.size() > 0) {
+				GlobalProperty primaryIdType = Context.getAdministrationService().getGlobalPropertyObject("mdrtb.primaryPatientIdentifierType");
+				primaryIdType.setPropertyValue(types.get(0).getName());
+				Context.getAdministrationService().saveGlobalProperty(primaryIdType);
+			}
+		}
+	}
 }

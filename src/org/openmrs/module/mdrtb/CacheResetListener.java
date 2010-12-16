@@ -15,7 +15,7 @@ public class CacheResetListener implements GlobalPropertyListener {
 	
 
     public boolean supportsPropertyName(String property) {   	
-	    return property != null && (property.equals("mdrtb.colorMap") || property.equals("mdrtb.locationToDisplayCodeMap"));
+	    return property != null && property.equals("mdrtb.colorMap");
     }
 	
 	
@@ -23,9 +23,6 @@ public class CacheResetListener implements GlobalPropertyListener {
 		if (property.getProperty() != null) {
 			if (property.getProperty().equals("mdrtb.colorMap")) {
 				Context.getService(MdrtbService.class).resetColorMapCache();
-			}
-			if (property.getProperty().equals("mdrtb.locationToDisplayCodeMap")) {
-				Context.getService(MdrtbService.class).resetLocationToDisplayCodeCache();
 			}
 		}
 	    

@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,16 @@ public class MdrtbConceptMap {
 		
 		// if we didn't find a match, fail hard
 		throw new MissingConceptException("Can't find concept for mapping " + conceptMapping[0]);
+	}
+	
+
+	/**
+	 * Utility method which retrieves a mapped MDR-TB concept by code
+	 */
+	public Concept lookup(String conceptMapping) {
+		String [] search = new String[1];
+		search[0] = conceptMapping;
+		return lookup(search);
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package org.openmrs.module.mdrtb.web.migration;
+package org.openmrs.module.mdrtb.web.controller.migration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -80,8 +80,8 @@ public class MigrationController {
 	private Set<Concept> testConstructConcepts;
 	private Map<String,Specimen> specimenMap = new HashMap<String,Specimen>();
 	
-	 @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrate.form")
-		public ModelAndView migrateSpecimenData() {
+	 @RequestMapping("/module/mdrtb/migration/migration.form")
+	 public ModelAndView migrateSpecimenData() {
 			
 		 /**
 			initialize();
@@ -1317,6 +1317,61 @@ public class MigrationController {
     }
     
     // TODO: add script to retire the forms
+    
+    @RequestMapping("/module/mdrtb/pihhaiti/migrate/removeOldGlobalProps.form")
+    public ModelAndView removeOldGlobalProps() {
+    	String [] GlOBAL_PROPS_TO_REMOVE = {"mdrtb.location_list",
+    										"mdrtb.lab_list",
+    										"mdrtb.culture_method_concept",
+    										"mdrtb.DST_methods",
+    										"mdrtb.smear_method_concept",
+    										"mdrtb.anatomical_locations_concept",
+    										"mdrtb.DST_drug_list",
+    										"mdrtb.DST_result_list",
+    										"mdrtb.culture_result_list",
+    										"mdrtb.smear_result_list",
+    										"mdrtb.mdrtb_default_provider",
+    										"mdrtb.first_line_drugs",
+    										"mdrtb.injectible_drugs",
+    										"mdrtb.quinolones",
+    										"mdrtb.other_second_line",
+    										"mdrtb.discontinue_drug_order_reasons",
+    										"mdrtb.default_discontinue_drug_order_reason",
+    										"mdrtb.max_num_bacteriologies_or_dsts_to_add_at_once",
+    										"mdrtb.organism_type",
+    										"mdrtb.positive_culture_concepts",
+    										"mdrtb.ART_identifier_type",
+    										"mdrtb.dst_color_coding_red",
+    										"mdrtb.dst_color_coding_green",
+    										"mdrtb.dst_color_coding_yellow",
+    										"mdrtb.in_mdrtb_program_cohort_definition_id",
+    										"mdrtb.conversion_definition_interval",
+    										"mdrtb.conversion_definition_number",
+    										"mdrtb.red_list",
+    										"mdrtb.green_list",
+    										"mdrtb.yellow_list",
+    										"mdrtb.lab_test_order_type",
+    										"mdrtb.listPatientsLocationMethod",
+    										"mdrtb.unknownLocationName",
+    										"mdrtb.show_lab",
+    										"mdrtb.patient_dashboard_tab_conf",
+    										"mdrtb.dstContradicatesDrugWarningColor",
+    										"mdrtb.probableResistanceWarningColor",
+    										"mdrtb.enableResistanceProbabilityWarning"};
+    	
+    	for (String propertyName : GlOBAL_PROPS_TO_REMOVE) {
+    		GlobalProperty prop = Context.getAdministrationService().getGlobalPropertyObject(propertyName);
+    		if (prop == null) {
+    			log.warn("No global property found with code " + propertyName);
+    		}
+    		else {
+    			Context.getAdministrationService().purgeGlobalProperty(prop);
+    			log.info("Removed global property " + propertyName);
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/migration/migration");
+    }
     
     // just a hacky test
     @RequestMapping("/module/mdrtb/pihhaiti/test/loadStatus.form")

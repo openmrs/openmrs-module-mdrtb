@@ -37,6 +37,8 @@
 		<class>org.openmrs.module.mdrtb.service.ConceptServiceAdvice</class>
 	</advice>
 
+	<!-- Global properties -->
+
 	<globalProperty>
 		<property>@MODULE_ID@.program_name</property>
 		<defaultValue>MDR-TB PROGRAM</defaultValue>
@@ -53,116 +55,10 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.treatment_supporter_person_attribute_type</property>
-		<defaultValue>Treatment Supporter</defaultValue>
-		<description>
-			The person attribute type that corresponds to being a treatment supporter/acompanateur/dots worker.
-		</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.patient_identifier_type_list</property>
 		<defaultValue/>
 		<description>
 			Pipe delimited list of all patient identifier types associated with the MDRTB program.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.location_list</property>
-		<defaultValue/>
-		<description>
-			Pipe delimited list of all locations that you want to choose from in the add patient dialogs in the mdrtb module.  This will generally correspond to the health centers that are participating in an mdrtb program.  If blank, all openMRS locations will be displayed.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.lab_list</property>
-		<defaultValue>Unknown Location</defaultValue>
-		<description>
-			Pipe delimited list of all labs that will be performing any tests associated with MDRTB.  These are expected to be locations in openMRS.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.culture_method_concept</property>
-		<defaultValue>TUBERCULOSIS CULTURE METHOD</defaultValue>
-		<description>
-			The Concept question for which the answers are all possible culture methods.  This must be a ConceptSet.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.DST_methods</property>
-		<defaultValue>TUBERCULOSIS DRUG SENSITIVITY TEST METHOD</defaultValue>
-		<description>
-			The ConceptSet who's answers are all possible DST laboratory test methods.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.smear_method_concept</property>
-		<defaultValue>TUBERCULOSIS SMEAR MICROSCOPY METHOD</defaultValue>
-		<description>
-			The Concept question for which the answers are all possible smear laboratory test methods.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.anatomical_locations_concept</property>
-		<defaultValue>TUBERCULOSIS SAMPLE SOURCE</defaultValue>
-		<description>
-			The Concept question for which the answers are all possible anatomical locations from which an MDR-TB related lab sample can be taken.
-			Probably 'sputum'.  This must be a ConceptSet.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.DST_drug_list</property>
-		<defaultValue>DST TEST COMPONENTS</defaultValue>
-		<description>
-			The ConceptSet containing all of the ordered drug concepts that are used as a row in a DST test, OR a list of concepts delimited by |.  If the latter, you can list concept_name, followed by a :, followed by the concentration level for the dst result.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.DST_result_list</property>
-		<defaultValue>SUSCEPTIBLE TO TUBERCULOSIS DRUG|INTERMEDIATE TO TUBERCULOSIS DRUG|RESISTANT TO TUBERCULOSIS DRUG|DRUG SENSITIVITY TEST CONTAMINATED|WAITING FOR TEST RESULTS</defaultValue>
-		<description>
-			ConceptSet containing all possible DST results concepts (in a DST result, the result concept gets the result, the valueCoded concept is the drug).  Can also be a list of concepts by name, delimited by |.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.culture_result_list</property>
-		<defaultValue>TUBERCULOSIS CULTURE RESULT</defaultValue>
-		<description>
-			Concept with possible valueCoded answers that are all possible culture results.  Can also be a list of concepts by name, delimited by |.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.smear_result_list</property>
-		<defaultValue>TUBERCULOSIS SMEAR RESULT</defaultValue>
-		<description>
-			Concept with possible valueCoded answers that are all possible smear results.  Can also be a list of concepts by name, delimited by |.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.test_result_encounter_type_DST</property>
-		<defaultValue/>
-		<description>
-			This should be the name of the encounter type that you want to use for encounters wrapping DST results.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.test_result_encounter_type_bacteriology</property>
-		<defaultValue/>
-		<description>
-			This should be the name of the encounter type that you want to use for encounters wrapping bacteriology (smear+culture) results.
-		</description>
-	</globalProperty>	
-	<globalProperty>
-		<property>@MODULE_ID@.mdrtb_forms_list</property>
-		<defaultValue/>
-		<description>
-			List all MDR-TB forms by name, pipe delimited.  These will appear in the form list on the MDR-TB home.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.mdrtb_default_provider</property>
-		<defaultValue>provider</defaultValue>
-		<description>
-			This will be used to mark the default provider in MDR-TB related encounters, if none is already provided.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -173,198 +69,15 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.first_line_drugs</property>
-		<defaultValue>FIRST-LINE TUBERCULOSIS DRUGS</defaultValue>
-		<description>
-			Name of the ConceptSet that contains all first line Tuberculosis Treatment Drugs
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.injectible_drugs</property>
-		<defaultValue>INJECTIBLE TUBERCULOSIS DRUGS</defaultValue>
-		<description>
-			Name of the ConceptSet that contains all injectible Tuberculosis Treatement Drugs
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.quinolones</property>
-		<defaultValue>TUBERCULOSIS QUINOLONES</defaultValue>
-		<description>
-			Name of the ConceptSet that contains all quinolones Tuberculosis Treatement Drugs
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.other_second_line</property>
-		<defaultValue>OTHER SECOND-LINE TUBERCULOSIS DRUGS</defaultValue>
-		<description>
-			Name of the ConceptSet that contains all other second-line Tuberculosis Treatement Drugs
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.discontinue_drug_order_reasons</property>
-		<defaultValue>REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED</defaultValue>
-		<description>
-			Name of the ConceptSet that contains all of the value-coded concepts representing reasons why
-			you would want to discontinue a TB drug order.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.default_discontinue_drug_order_reason</property>
-		<defaultValue>UNKNOWN</defaultValue>
-		<description>
-			Out of the global property mdrtb.discontinue_drug_order_reasons, which reason should be used as the default if none is given
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.max_num_bacteriologies_or_dsts_to_add_at_once</property>
-		<defaultValue>4</defaultValue>
-		<description>
-			Expects an integer value.  Represents the maximum number of smears, cultures, or DSTs that you would ever want to add at one time 
-			for a given sputum sample.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.organism_type</property>
-		<defaultValue>TYPE OF ORGANISM</defaultValue>
-		<description>
-			A concept set of possible TB culture organism types, or a | delimited list of organism concepts
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.positive_culture_concepts</property>
-		<defaultValue>WEAKLY POSITIVE|STRONGLY POSITIVE|MODERATELY POSITIVE|SCANTY</defaultValue>
-		<description>
-			These are the concepts that signify a positive bacteriology result.  Pipe delimited.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.ART_identifier_type</property>
-		<defaultValue>Lesotho ART Register number</defaultValue>
-		<description>Set this to the patient identifier type for the ART program
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.treatment_supporter_relationship_type</property>
-		<defaultValue>Treatment Supporter/Treatment Supportee</defaultValue>
-		<description>The relationship type used to describe the relationship from a treatment supporter (A) to a patient (B)
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.patient_contact_id_attribute_type</property>
-		<defaultValue>MDR-TB Patient Contact ID Number</defaultValue>
-		<description>The person attribute type corresponding to a patient contact's ID number.
-		</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.database_version</property>
 		<defaultValue>1.0.0</defaultValue>
 		<description>The version trigger for the contents of sqldiff.xml
 		</description>
 	</globalProperty>
-	
-	<globalProperty>
-		<property>@MODULE_ID@.dst_color_coding_red</property>
-		<defaultValue>RESISTANT TO TUBERCULOSIS DRUG</defaultValue>
-		<description>The DST result value that will be coded with the color red in the DST entry screen (Resistant).
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.dst_color_coding_green</property>
-		<defaultValue>SUSCEPTIBLE TO TUBERCULOSIS DRUG</defaultValue>
-		<description>The DST result value that will be coded with the color green in the DST entry screen (Susceptible).
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.dst_color_coding_yellow</property>
-		<defaultValue>INTERMEDIATE TO TUBERCULOSIS DRUG</defaultValue>
-		<description>The DST result value that will be coded with the color yellow in the DST entry screen (Intermediate).
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.in_mdrtb_program_cohort_definition_id</property>
-		<defaultValue>9</defaultValue>
-		<description>The ID of the saved cohort definition for all patients in the mdr-tb program.  This is used by the forecasting requirements links on the homepage.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.conversion_definition_interval</property>
-		<defaultValue>30</defaultValue>
-		<description>Used to define culture and smear conversions.  Sets X in the following conversion definition: at least ____ consecutive negative bacteriologies with the earliest and the latest occurring at least X days apart.  For example, the WHO definition is 2 negative bacteriologies, at least 30 days apart.  Unit is days.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.conversion_definition_number</property>
-		<defaultValue>2</defaultValue>
-		<description>Used to define culture and smear conversions.  Sets ____ in the following conversion definition: at least ____ consecutive negative bacteriologies with the earliest and the latest occurring at least X days apart.  For example, the WHO definition is 2 negative bacteriologies, at least 30 days apart.  Unit is number of bacteriologies.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.red_list</property>
-		<defaultValue>resistant|positive|scanty|POSITIVE|SCANTY|RESISTANT|RÉSISTANT|POSITIF|positif|MINIMES</defaultValue>
-		<description>Sets list of concept name strings that should be displayed in red in bacteriology and dst widget.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.green_list</property>
-		<defaultValue>negative|NEGATIVE|susceptible|SUSCEPTIBLE|NÉGATIF|SENSIBLE</defaultValue>
-		<description>Sets list of concept name strings that should be displayed in green in bacteriology and dst widget.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.yellow_list</property>
-		<defaultValue>intermediate|INTERMEDIATE|MODÉRÉE</defaultValue>
-		<description>Sets list of concept name strings that should be displayed in yellow in bacteriology and dst widget.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
-		<defaultValue/>
-		<description>This should be the name of the encounter type that you want to use for encounters wrapping specimen collections.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.lab_test_order_type</property>
-		<defaultValue/>
-		<description>This should be the id of the order type that you want to use when ordering lab tests.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.listPatientsLocationMethod</property>
-		<defaultValue>PATIENT_HEALTH_CENTER</defaultValue>
-		<description>The location calculation method to use for the list patients page</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.unknownLocationName</property>
-		<defaultValue>Unknown Location</defaultValue>
-		<description>The name of the Location that represents an Unknown Location</description>
-	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
 		<defaultValue/>
 		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.show_lab</property>
-		<defaultValue>false</defaultValue>
-		<description>True/false whether or not to display lab names in the bacteriology widget.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.patient_dashboard_tab_conf</property>
-		<description>Used to configure what tabs are displayed on the mdrtb patient overview page, and in what order they appear. 
-		Specify the order for the tabs to appear using a pipe-delimited list. For example, "STATUS|FORM|REG|BAC|DST|CONTACTS" will 
-		display the tabs in the default order. To hide a tab, append the tab name with ":hide".  Note that any tabs that aren't explicitly
-		hidden using this method will be displayed at the end of the tab list. For instance "BAC|FORM|STATUS:hide|CONTACTS:hide" would 
-		display the following tabs BAC,FORM,REG,DST, in that order. To use the default display order, keep this property empty.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.dstContradicatesDrugWarningColor</property>
-		<defaultValue>#FF0000</defaultValue>
-		<description>Color to display active regimens which are contra-indicated by DST results</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.probableResistanceWarningColor</property>
-		<defaultValue>#FF8000</defaultValue>
-		<description>Color to display active regimens for which the patient has a high probability of resistance</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.enableResistanceProbabilityWarning</property>
-		<defaultValue>false</defaultValue>
-		<description>If true, shows resistance probability warnings.  Currently experimental.</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
@@ -392,19 +105,61 @@
 		<description>Takes as a parameter a location name.  If this property exists, when creating patient identifiers, the patient identifier location is set to this value (and setting the location is not presented to the user as an option).</description>
 	</globalProperty>
 	<globalProperty>
-		<property>mdrtb.colorMap</property>
-		<defaultValue>1407:lightgrey|1408:lightcoral|1409:lightcoral|1410:lightcoral|2224:lightgrey|3047:khaki|664:lightgreen|703:lightcoral|2474:lightgreen|3017:khaki|1441:lightcoral|1107:none</defaultValue>
+		<property>@MODULE_ID@.colorMap</property>
+		<defaultValue>CONTAMINATED:lightgrey|MODERATELY POSITIVE:lightcoral|STRONGLY POSITIVE:lightcoral|WEAKLY POSITIVE:lightcoral|WAITING FOR TEST RESULTS:lightgrey|SCANTY:khaki|NEGATIVE:lightgreen|POSITIVE:lightcoral|SUSCEPTIBLE TO TUBERCULOSIS DRUG:lightgreen|INTERMEDIATE TO TUBERCULOSIS DRUG:khaki|RESISTANT TO TUBERCULOSIS DRUG:lightcoral|NONE:none</defaultValue>
 		<description>Pipe-delimited list mapping concept ids to color names and/or hex codes for display in the patient chart and (potentially) elsewhere.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>mdrtb.locationToDisplayCodeMap</property>
-		<defaultValue>1:N/A|2:CANGE|3:HINCHE|4:N/A|5:MSLI</defaultValue>
-		<description>Pipe-delimited list mapping a location id to it's display name.</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.primaryPatientIdentifierType</property>
 		<defaultValue/>
 		<description>The primary patient identifier to display for patients</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.findPatientNumResults</property>
+		<defaultValue>20</defaultValue>
+		<description>Number of results to display when searching for patient</description>
+	</globalProperty>
+	
+	
+	<globalProperty>
+		<property>@MODULE_ID@.treatment_supporter_person_attribute_type</property>
+		<defaultValue>Treatment Supporter</defaultValue>
+		<description>
+			LEGACY: The person attribute type that corresponds to being a treatment supporter/acompanateur/dots worker.
+		</description>
+	</globalProperty>	
+	<globalProperty>
+		<property>@MODULE_ID@.treatment_supporter_relationship_type</property>
+		<defaultValue>Treatment Supporter/Treatment Supportee</defaultValue>
+		<description>LEGACY: The relationship type used to describe the relationship from a treatment supporter (A) to a patient (B)
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.patient_contact_id_attribute_type</property>
+		<defaultValue>MDR-TB Patient Contact ID Number</defaultValue>
+		<description>LEGACY: The person attribute type corresponding to a patient contact's ID number.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.test_result_encounter_type_DST</property>
+		<defaultValue/>
+		<description>
+			LEGACY - Only used in 2.0 by migration script: This should be the name of the encounter type that you want to use for encounters wrapping DST results.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.test_result_encounter_type_bacteriology</property>
+		<defaultValue/>
+		<description>
+			LEGACY - Only used in 2.0 by migration script: This should be the name of the encounter type that you want to use for encounters wrapping bacteriology (smear+culture) results.
+		</description>
+	</globalProperty>	
+	<globalProperty>
+		<property>@MODULE_ID@.mdrtb_forms_list</property>
+		<defaultValue/>
+		<description>
+			LEGACY - Only used in 2.0 by migration script: List all MDR-TB forms by name, pipe delimited.  These will appear in the form list on the MDR-TB home.
+		</description>
 	</globalProperty>
 	
 	<dwr>
@@ -414,19 +169,10 @@
 				<include method="findPatients"/>
 				<include method="findPeople"/>
 				<include method="findAllPeople"/>
-			</create>						
-			<create creator="new" javascript="MdrtbOrder">
-				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbOrder"/>
-				<include method="voidOrder"/>
-				<include method="discontinueOrder"/>
-			</create>			
+			</create>							
 			<create creator="new" javascript="MdrtbNextVisit">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbNextVisit"/>
 				<include method="setNextVisitDate"/>
-			</create>
-			<create creator="new" javascript="MdrtbCurrentRegimenTypeService">
-				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbCurrentRegimenTypeService"/>
-				<include method="setCurrentRegimenTypeOnDate"/>
 			</create>
 			<create creator="new" javascript="MdrtbContactsDWRService">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbContactsDWRService"/>
