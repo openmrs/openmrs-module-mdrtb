@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -125,7 +126,7 @@ public class ProgramController {
 		// TODO: modeling visit as a status probably wasn't the best way to go on my part
 		VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program);
 		
-		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink());		
+		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink() + "&returnUrl=" + request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=" + program.getId());		
 	}
 	
 	@RequestMapping("/module/mdrtb/program/programDelete.form")
@@ -143,8 +144,6 @@ public class ProgramController {
 		// clear the command object
 		status.setComplete();
 		map.clear();
-		
-		//return new ModelAndView("redirect:http://www.google.com/");
 		
 		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId);
 	}
