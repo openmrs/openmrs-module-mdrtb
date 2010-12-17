@@ -65,7 +65,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MigrationController {
+public class SpecimenMigrationController {
 	
 	/**
 	 * IMPORTANT NOTE:
@@ -80,8 +80,8 @@ public class MigrationController {
 	private Set<Concept> testConstructConcepts;
 	private Map<String,Specimen> specimenMap = new HashMap<String,Specimen>();
 	
-	 @RequestMapping("/module/mdrtb/migration/migration.form")
-	 public ModelAndView migrateSpecimenData() {
+	@RequestMapping("/module/mdrtb/migration/migration.form")
+	public ModelAndView migrateSpecimenData() {
 			
 		 /**
 			initialize();
@@ -105,11 +105,11 @@ public class MigrationController {
 			
 			*/
 			
-			return new ModelAndView("/module/mdrtb/migration/migration");
-		}
+		return new ModelAndView("/module/mdrtb/migration/migration");
+	}
 		
 	
-	@RequestMapping("/module/mdrtb/pihhaiti/migrate/addAndUpdateConcepts.form")
+	@RequestMapping("/module/mdrtb/migration/addAndUpdateConcepts.form")
 	public ModelAndView addAndUpdateConcepts() {
 		
 		// add concept mappings
@@ -209,7 +209,7 @@ public class MigrationController {
 		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
-	@RequestMapping("/module/mdrtb/pihhaiti/migrate/connvertSmearsOnIntakeAndFollowup.form")
+	@RequestMapping("/module/mdrtb/migration/connvertSmearsOnIntakeAndFollowup.form")
 	public ModelAndView convertSmearsOnIntakeAndFollowup() {
 		// fetch the encounter types associated with the Intake and Follow-up forms
 		List<EncounterType> intakeOrFollowup = new LinkedList<EncounterType>();
@@ -252,7 +252,7 @@ public class MigrationController {
 	}
 	
 	// Note: this is a PIH-specific use case
-	@RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateResultatsDeCrachetEncounters.form")
+	@RequestMapping("/module/mdrtb/migration/migrateResultatsDeCrachetEncounters.form")
 	public ModelAndView migrateResultatsDeCrachetEncounters() {
 					
 		// first we need to create a new dummy form that we will use to keep track of these encounters so that we can redisplay them in 
@@ -368,7 +368,7 @@ public class MigrationController {
 	
 	}
 	
-	@RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateBacAndDstEncounters.form")
+	@RequestMapping("/module/mdrtb/migration/migrateBacAndDstEncounters.form")
 	public ModelAndView migrateBacAndDstEncounters() {
 		
 		initialize();
@@ -538,7 +538,7 @@ public class MigrationController {
 		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
-	@RequestMapping("/module/mdrtb/pihhaiti/migrate/cleanUpConcepts.form")
+	@RequestMapping("/module/mdrtb/migration/cleanUpConcepts.form")
 	public ModelAndView cleanUpConcepts() {
 		// remove AFB smear and appearance of specimen from smear construct
 		Concept smearConstruct = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT);
@@ -559,7 +559,7 @@ public class MigrationController {
 		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
 	
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/voidEncounters.form")
+    @RequestMapping("/module/mdrtb/migration/voidEncounters.form")
 	public ModelAndView voidEncounters() {
 	
 		// this migration controller is meant to run AFTER the specimen migration controller, to void all the BAC and DST encounters
@@ -588,7 +588,7 @@ public class MigrationController {
 		 return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addWorkflows.form")
+    @RequestMapping("/module/mdrtb/migration/addWorkflows.form")
     public ModelAndView addWorkflows() {
     
     	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
@@ -670,7 +670,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addHospitalizationWorkflow.form")
+    @RequestMapping("/module/mdrtb/migration/addHospitalizationWorkflow.form")
     public ModelAndView addHospitalizationWorkflow() {
     
     	// create the hospitalizaton workflow construct
@@ -718,7 +718,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateHospitalizations.form")
+    @RequestMapping("/module/mdrtb/migration/migrateHospitalizations.form")
 	public ModelAndView createHospitalizationReport() {
 
 		Concept typeOfPatientConcept = Context.getConceptService().getConcept(3289);
@@ -786,7 +786,7 @@ public class MigrationController {
 		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addPulmonary.form")
+    @RequestMapping("/module/mdrtb/migration/addPulmonary.form")
     public ModelAndView createPulmonary() {
     	Concept site = Context.getConceptService().getConcept(1452);
     	
@@ -804,13 +804,13 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addDaysToPositivity.form")
+    @RequestMapping("/module/mdrtb/migration/addDaysToPositivity.form")
     public ModelAndView addDaysToPositivity() {
     	addConcept("TUBERCULOSIS CULTURE DAYS TO POSITIVITY", "Question", "Numeric", "DAYS TO POSITIVITY", "org.openmrs.module.mdrtb");
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateLocations.form")
+    @RequestMapping("/module/mdrtb/migration/migrateLocations.form")
     public ModelAndView migrateLocations() throws IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     	
     	PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
@@ -874,7 +874,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroups.form")
+    @RequestMapping("/module/mdrtb/migration/migrateRegistrationGroups.form")
     public ModelAndView migrateRegistrationGroups() {
     	Concept previousDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
     	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
@@ -936,7 +936,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireOldWorkflows.form")
+    @RequestMapping("/module/mdrtb/migration/retireOldWorkflows.form")
     public ModelAndView retireOldWorkflows() {
     	
     	// retire the patient status and culture status workflows
@@ -974,7 +974,7 @@ public class MigrationController {
      	return new ModelAndView("/module/mdrtb/migration/migration");
 	}
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/retireStillOnTreatmentState.form")
+    @RequestMapping("/module/mdrtb/migration/retireStillOnTreatmentState.form")
     public ModelAndView retireStillOnTreatmentState() {
 
     	Concept stillOnTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STILL_ON_TREATMENT);
@@ -1011,7 +1011,7 @@ public class MigrationController {
     	
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/setEmptyProgramLocationsToUnknown.form")
+    @RequestMapping("/module/mdrtb/migration/setEmptyProgramLocationsToUnknown.form")
     public ModelAndView setEmptyProgramLocationsToUnknown() {
     	Location unknown = Context.getLocationService().getLocation("Unknown Location");
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
@@ -1031,7 +1031,7 @@ public class MigrationController {
     /**
      * We should do this manually instead
      
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/removeWaitingForTestResults.form")
+    @RequestMapping("/module/mdrtb/migration/removeWaitingForTestResults.form")
     public ModelAndView removeWaitingForTestResults() {
     	// remove Waiting for Test results as optons for Smear and Culture Results
     	Concept smearResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
@@ -1067,7 +1067,7 @@ public class MigrationController {
     }
     */
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/setupDrugOrderConceptMappings.form")
+    @RequestMapping("/module/mdrtb/migration/setupDrugOrderConceptMappings.form")
     public ModelAndView createDrugOrderConceptMappings() {
     	
     	addConceptMapping("REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED", "REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED");
@@ -1076,7 +1076,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/createQuinolonesConceptMappings.form")
+    @RequestMapping("/module/mdrtb/migration/createQuinolonesConceptMappings.form")
     public ModelAndView createQuinolonesMappings() {
     	
     	addConceptMapping("TUBERCULOSIS QUINOLONES", "QUINOLONES");
@@ -1084,7 +1084,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/resetOrdersWithDiscontinuedDateInFuture.form")
+    @RequestMapping("/module/mdrtb/migration/resetOrdersWithDiscontinuedDateInFuture.form")
     public ModelAndView setFutureDiscontinuedDateToNull() {
     	
     	// this migration is PIH Haiti specific--fixes a bug that occurred in the previous migration
@@ -1108,7 +1108,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/changeStateShortNames.form")
+    @RequestMapping("/module/mdrtb/migration/changeStateShortNames.form")
     public ModelAndView changeStateShortNames() {
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT", "Registration Group - Previous Treatment");
     	addConceptShortName("CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE", "Registration Group - Previous Drug Use");
@@ -1117,7 +1117,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addZLIdentifiers.form")
+    @RequestMapping("/module/mdrtb/migration/addZLIdentifiers.form")
     public ModelAndView addZLIdentifiers() {
     	// add a ZL identifier for each non-voided patient that doesn't have one
     	
@@ -1155,7 +1155,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
 
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/closeOpenProgramsWithOutcomes.form")
+    @RequestMapping("/module/mdrtb/migration/closeOpenProgramsWithOutcomes.form")
     public ModelAndView closeOpenProgramsWithOutcomes() {
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
@@ -1176,7 +1176,7 @@ public class MigrationController {
     }
     
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateOutcomeStates.form")
+    @RequestMapping("/module/mdrtb/migration/migrateOutcomeStates.form")
     public ModelAndView migrateOutcomeStates() {
     	// add a new concept mapping
     	addConceptMapping("PATIENT CURED","CURED");
@@ -1225,7 +1225,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addUnknownMapping.form")
+    @RequestMapping("/module/mdrtb/migration/addUnknownMapping.form")
     public ModelAndView addUnknownMapping() {
     	addConceptMapping("UNKNOWN","UNKNOWN");
     	
@@ -1251,7 +1251,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/migrateRegistrationGroupStates.form")
+    @RequestMapping("/module/mdrtb/migration/migrateRegistrationGroupStates.form")
     public ModelAndView migrateRegistrationGroupStates() {
     	// create the new concepts for NEW and TRANSFER
     	addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
@@ -1309,7 +1309,7 @@ public class MigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/addCommentsMapping.form")
+    @RequestMapping("/module/mdrtb/migration/addCommentsMapping.form")
     public ModelAndView addCommentsMapping() {
     	addConceptMapping("CLINICIAN NOTES","CLINICIAN NOTES");
     	
@@ -1318,7 +1318,7 @@ public class MigrationController {
     
     // TODO: add script to retire the forms
     
-    @RequestMapping("/module/mdrtb/pihhaiti/migrate/removeOldGlobalProps.form")
+    @RequestMapping("/module/mdrtb/migration/removeOldGlobalProps.form")
     public ModelAndView removeOldGlobalProps() {
     	String [] GlOBAL_PROPS_TO_REMOVE = {"mdrtb.location_list",
     										"mdrtb.lab_list",
