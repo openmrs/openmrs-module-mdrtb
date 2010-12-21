@@ -1357,7 +1357,10 @@ public class SpecimenMigrationController {
     										"mdrtb.patient_dashboard_tab_conf",
     										"mdrtb.dstContradicatesDrugWarningColor",
     										"mdrtb.probableResistanceWarningColor",
-    										"mdrtb.enableResistanceProbabilityWarning"};
+    										"mdrtb.enableResistanceProbabilityWarning",
+    										"mdrtb.enable_specimen_tracking",
+    										"mdrtb.date_format_string",
+    										"mdrtb.patientIdentifierLocationToPrefixList"}; // note that this last prop might still be used in Rwanda?
     	
     	for (String propertyName : GlOBAL_PROPS_TO_REMOVE) {
     		GlobalProperty prop = Context.getAdministrationService().getGlobalPropertyObject(propertyName);
