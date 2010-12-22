@@ -548,7 +548,7 @@ ${regimen.displayString}
 	<c:when test="${! empty status.labResultsStatus.diagnosticSmear.value}">
 		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></nobr></td>
 		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
-		<td><nobr>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</nobr></td>
+		<td><nobr>${status.labResultsStatus.diagnosticSmear.value.lab.displayString}</nobr></td>
 		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
 	</c:when>
 	<c:otherwise>
