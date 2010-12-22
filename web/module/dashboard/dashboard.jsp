@@ -299,7 +299,7 @@
 <form id="programClose" action="${pageContext.request.contextPath}/module/mdrtb/program/programClose.form?patientProgramId=${program.id}" method="post" >
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted" onFocus="showCalendar(this)"/>
+<spring:message code="mdrtb.completionDate" text="Completion Date"/>:</td><td><input id="dateToClose" type="text" size="14" tabindex="-1" name="dateCompleted"  value="<openmrs:formatDate date='${program.dateCompleted}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td style="font-weight:bold">
 <spring:message code="mdrtb.outcome" text="Outcome"/>:</td><td>
@@ -499,10 +499,10 @@ ${regimen.displayString}
 <input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value="${hospitalizationStateId}"/>
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" onFocus="showCalendar(this)" style="z-index:1"/>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" value="<openmrs:formatDate date='${admissionDate}'/>" onFocus="showCalendar(this)" style="z-index:1"/>
 </td></tr>
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" onFocus="showCalendar(this)" style="z-index:99999"/>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>" onFocus="showCalendar(this)" style="z-index:99999"/>
 </td></tr>
 </table>
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
