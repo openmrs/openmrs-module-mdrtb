@@ -228,7 +228,7 @@ public interface MdrtbService extends OpenmrsService {
      * Handles exiting a patient from care
      */
     @Transactional
-    public void exitFromCare(Patient patient, Date dateExited, Concept reasonForExit);
+    public void processDeath(Patient patient, Date deathDate, Concept causeOfDeath);
     
     /**
      * Gets the MDR-TB program

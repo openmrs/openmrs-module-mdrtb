@@ -1376,6 +1376,28 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
+    @RequestMapping("/module/mdrtb/migration/closeHospitaliationsForDeadPatients.form")
+    public ModelAndView closeHospitalizationsForDeadPatients() {
+    	
+    	// loop thru all the patients
+    	for (Patient patient : Context.getPatientService().getAllPatients(false)) {
+    		// see if the patient is dead
+    		if (patient.getDead()) {
+    			// now get all the MDR-TB patient programs for this patient
+    			for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient)) {
+    				// see if there is an active hospitalization for this program
+    				if (program.getCurrentlyHospitalized()) {
+    					program.closeCurrentHospitalization(patient.getDeathDate());
+    					Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+    					log.info("Closed hospitalization for deceased patient " + patient.getId() + " on " + patient.getDeathDate());
+    				}
+    			}
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/migration/migration");
+    }
+    
     // just a hacky test
     @RequestMapping("/module/mdrtb/pihhaiti/test/loadStatus.form")
     public ModelAndView loadStatus() {

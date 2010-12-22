@@ -207,7 +207,6 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	
 	public Boolean getCurrentlyHospitalized() {
 		Concept hospitalizationWorkflow = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW);
-		
 		ProgramWorkflowState currentState = getCurrentPatientWorkflowState(hospitalizationWorkflow);
 		
 		if (currentState == null) {
@@ -215,6 +214,16 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		}
 		else {
 			return currentState.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+		}
+	}
+	
+	public void closeCurrentHospitalization(Date dischargeDate) {
+				
+		PatientState currentState = getCurrentPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW));
+		
+		// if the current state is hospitalized, we need to close it
+		if (currentState != null && currentState.getState() != null && currentState.getState().getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED))) {			
+			currentState.setEndDate(dischargeDate);
 		}
 	}
 	
@@ -481,7 +490,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	 * Gets the current state for a workflow
 	 * 
 	 * This method is meant to operate on workflows like the the Hospitalization Workflow
-	 * that we will be using to state chanes over time
+	 * that we will be using to state changes over time
 	 */
 	
 	private PatientState getCurrentPatientState (Concept workflowConcept) {

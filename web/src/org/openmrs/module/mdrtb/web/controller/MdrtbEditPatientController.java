@@ -332,8 +332,8 @@ public class MdrtbEditPatientController {
 		
 		// if the patient has been set to dead, exit him/her from care
 		if (patient.getDead()) {
-			Context.getService(MdrtbService.class).exitFromCare(patient, patient.getDeathDate(), 
-				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+			Context.getService(MdrtbService.class).processDeath(patient, patient.getDeathDate(), 
+				patient.getCauseOfDeath());
 		}
 		
 		// clears the command object from the session

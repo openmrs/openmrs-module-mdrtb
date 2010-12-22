@@ -448,22 +448,23 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 	}
 	
-	public void exitFromCare(Patient patient, Date dateExited, Concept reasonForExit) {
+	public void processDeath(Patient patient, Date deathDate, Concept causeOfDeath) {
 	
-		// first call the main Patient Service exit from care method
-		Context.getPatientService().exitFromCare(patient, dateExited, reasonForExit);
+		// first call the main Patient Service process death method
+		Context.getPatientService().processDeath(patient, deathDate, causeOfDeath, null);
 		
 		// if the most recent MDR-TB program is open, we need to close it
 		MdrtbPatientProgram program = getMostRecentMdrtbPatientProgram(patient);
 		
 		if (program != null && program.getActive()) {
-			program.setDateCompleted(dateExited);
-			ProgramWorkflowState outcome = MdrtbUtil.getProgramWorkflowState(reasonForExit);
-			
-			if(outcome != null) {
-				program.setOutcome(MdrtbUtil.getProgramWorkflowState(reasonForExit));
-			}
-			
+			program.setDateCompleted(deathDate);
+			program.setOutcome(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED)));
+			Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+		}
+		
+		// if the patient is hospitalized, we need to end the hospitalization
+		if (program != null && program.getCurrentlyHospitalized()) {
+			program.closeCurrentHospitalization(deathDate);
 			Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
 		}
 	}

@@ -228,8 +228,8 @@ public class MdrtbDashboardController {
 		// mark the patient as died if required
 		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
 		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
-			Context.getPatientService().processDeath(program.getPatient(), program.getDateCompleted(), 
-				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)), null);
+			Context.getService(MdrtbService.class).processDeath(program.getPatient(), program.getDateCompleted(), 
+				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)));
 		}
 		
 		// clears the command object from the session

@@ -56,6 +56,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/migration/addCommentsMapping.form">/module/mdrtb/migration/addCommentsMapping.form</a>
 	<br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/migration/removeOldGlobalProps.form">/module/mdrtb/migration/removeOldGlobalProps.form</a>
+	<br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/migration/closeHospitaliationsForDeadPatients.form">/module/mdrtb/migration/closeHospitaliationsForDeadPatients.form</a>
 	
 	
 </body>
