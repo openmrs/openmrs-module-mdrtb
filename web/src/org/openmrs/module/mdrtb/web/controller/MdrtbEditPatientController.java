@@ -327,6 +327,11 @@ public class MdrtbEditPatientController {
 			return new ModelAndView("/module/mdrtb/mdrtbEditPatient", map);
 		}
 		
+		// sync up the patient and person voided attributes
+		// TODO: is this correct... do we ever want to void a patient but keep the person (for instance, if the person is also a treatment supporter?)
+		patient.setPersonVoided(patient.getVoided());
+		patient.setPersonVoidReason(patient.getVoidReason());
+		
 		// save the patient
 		Context.getPatientService().savePatient(patient);
 		
