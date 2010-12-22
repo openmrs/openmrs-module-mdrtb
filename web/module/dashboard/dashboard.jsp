@@ -340,7 +340,7 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.regimen" text="Regimen"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.startdate" text="Start Date"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.enddate" text="End Date"/></nobr></td>
-<td width="95%" style="font-weight:bold"><nobr><spring:message code="mdrtb.regimenType" text="Type"/></nobr></td>
+<td style="font-weight:bold"><nobr><spring:message code="mdrtb.regimenType" text="Type"/></nobr></td>
 </tr>
 <c:forEach var="regimen" items="${status.treatmentStatus.regimens.value}">
 ${regimen.displayString}
@@ -447,14 +447,14 @@ ${regimen.displayString}
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dischargeDate" text="Discharge Date"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.duration" text="Duration"/></nobr></td>
 <td>&nbsp;</td>
-<td width="90%">&nbsp;</td>
+<td width="95%">&nbsp;</td>
 </tr>
 
 <c:forEach var="hospitalization" items="${program.allHospitalizations}">
 <!-- the hidden "admissionDate" and "dischargeDate" spans are used to hold the dates in "edit" format for use by jquery when opening the edit pop-up -->
 <tr>
-<td><nobr><span class="admissionDate" style="display:none"><openmrs:formatDate date="${hospitalization.startDate}"/></span><openmrs:formatDate date="${hospitalization.startDate}" format="${_dateFormatDisplay}"/></nobr></td>
-<td><nobr>
+<td><span class="admissionDate" style="display:none"><openmrs:formatDate date="${hospitalization.startDate}"/></span><openmrs:formatDate date="${hospitalization.startDate}" format="${_dateFormatDisplay}"/></td>
+<td>
 <c:choose>
  	<c:when test="${!empty hospitalization.endDate}"> 
 		<span class="dischargeDate" style="display:none"><openmrs:formatDate date="${hospitalization.endDate}"/></span><openmrs:formatDate date="${hospitalization.endDate}" format="${_dateFormatDisplay}"/>
@@ -463,13 +463,13 @@ ${regimen.displayString}
 		<spring:message code="mdrtb.currentlyHospitalized" text="Currently hospitalized"/>
 	</c:otherwise>
 </c:choose>
-</nobr></td>
-<td><nobr>
+</td>
+<td>
 <c:if test="${!empty hospitalization.endDate}">
 	<mdrtb:duration startDate="${hospitalization.startDate}" endDate="${hospitalization.endDate}" format="days"/> 
 	<spring:message code="mdrtb.days" text="days"/>
 </c:if>
-</nobr></td>
+</td>
 <td><a id="${hospitalization.id}" class="hospitalizationsEditLink" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'"><spring:message code="mdrtb.edit" text="edit"/></a></td>
 <td><a href="${pageContext.request.contextPath}/module/mdrtb/program/hospitalizationsDelete.form?patientProgramId=${program.id}&hospitalizationStateId=${hospitalization.id}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteHospitalization" text="Are you sure you want to delete this hospitalization?"/>')"><spring:message code="mdrtb.delete" text="delete"/></a></td>
 </tr>
@@ -539,20 +539,20 @@ ${regimen.displayString}
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.result"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCollected"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.lab"/></nobr></td>
-<td width="90%" style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted"/></nobr></td>
+<td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted"/></nobr></td>
 </tr>
 
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/></nobr></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticSmear.value}">
-		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
-		<td><nobr>${status.labResultsStatus.diagnosticSmear.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></td>
+		<td>${status.labResultsStatus.diagnosticSmear.value.lab.displayString}</td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticSmear.value.resultDate}" format="${_dateFormatDisplay}"/></td>
 	</c:when>
 	<c:otherwise>
-		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
+		<td colspan="4" align="center"><spring:message code="mdrtb.none" text="None"/></td>
 	</c:otherwise>
 </c:choose>
 </tr>
@@ -561,13 +561,13 @@ ${regimen.displayString}
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/></nobr></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticCulture.value}">
-		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
-		<td><nobr>${status.labResultsStatus.diagnosticCulture.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></td>
+		<td>${status.labResultsStatus.diagnosticCulture.value.lab.displayString}</td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.diagnosticCulture.value.resultDate}" format="${_dateFormatDisplay}"/></td>
 	</c:when>
 	<c:otherwise>
-		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
+		<td colspan="4" align="center"><spring:message code="mdrtb.none" text="None"/></td>
 	</c:otherwise>
 </c:choose>
 </tr>
@@ -604,20 +604,20 @@ ${regimen.displayString}
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.result"/></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCollected"/></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.lab"/></td>
-<td width="90%" style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted"/></td>
+<td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted"/></td>
 </tr>
 
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/></nobr></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentSmear.value}">
-		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
-		<td><nobr>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.dateCollected}" format="${_dateFormatDisplay}"/></td>
+		<td>${status.labResultsStatus.mostRecentSmear.value.lab.displayString}</td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentSmear.value.resultDate}" format="${_dateFormatDisplay}"/></td>
 	</c:when>
 	<c:otherwise>
-		<td colspan="4" align="center"><nobr><spring:message code="mdrtb.none" text="None"/></nobr></td>
+		<td colspan="4" align="center"><spring:message code="mdrtb.none" text="None"/></td>
 	</c:otherwise>
 </c:choose>
 </tr>
@@ -626,10 +626,10 @@ ${regimen.displayString}
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/></nobr></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentCulture.value}">
-		<td><nobr><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.value.result.displayString}</mdrtb:a></nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></nobr></td>
-		<td><nobr>${status.labResultsStatus.mostRecentCulture.value.lab.displayString}</nobr></td>
-		<td><nobr><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.resultDate}" format="${_dateFormatDisplay}"/></nobr></td>
+		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.value.result.displayString}</mdrtb:a></td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.dateCollected}" format="${_dateFormatDisplay}"/></td>
+		<td>${status.labResultsStatus.mostRecentCulture.value.lab.displayString}</td>
+		<td><openmrs:formatDate date="${status.labResultsStatus.mostRecentCulture.value.resultDate}" format="${_dateFormatDisplay}"/></td>
 	</c:when>
 	<c:otherwise>
 		<td colspan="4" align="center"><spring:message code="mdrtb.none" text="None"/></td>
