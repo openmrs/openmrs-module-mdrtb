@@ -58,6 +58,8 @@
     <a href="${pageContext.request.contextPath}/module/mdrtb/migration/removeOldGlobalProps.form">/module/mdrtb/migration/removeOldGlobalProps.form</a>
 	<br/><br/>     
     <a href="${pageContext.request.contextPath}/module/mdrtb/migration/closeHospitaliationsForDeadPatients.form">/module/mdrtb/migration/closeHospitaliationsForDeadPatients.form</a>
+	<br/><br/>     
+    <a href="${pageContext.request.contextPath}/module/mdrtb/migration/voidPersonsAssociatedWithVoidedPatients.form">/module/mdrtb/migration/voidPersonsAssociatedWithVoidedPatients.form</a>
 	
 	
 </body>

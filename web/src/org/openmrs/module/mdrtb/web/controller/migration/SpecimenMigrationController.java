@@ -1398,6 +1398,20 @@ public class SpecimenMigrationController {
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
     
+    @RequestMapping("/module/mdrtb/migration/voidPersonsAssociatedWithVoidedPatients.form")
+    public ModelAndView voidPersonsAssociatedWithVoidedPatients() {
+    	for (Patient patient : Context.getPatientService().getAllPatients(true)) {
+    		if (patient.isVoided() && !patient.isPersonVoided()) {
+    			patient.setPersonVoided(patient.getVoided());
+    			patient.setPersonVoidReason(patient.getVoidReason());			
+    			Context.getPatientService().savePatient(patient);
+    			log.info("Voiding person " + patient.getPersonId() + " because associated patient " + patient.getId()+ " has been voided");
+    		}
+    	}
+    	
+    	return new ModelAndView("/module/mdrtb/migration/migration");
+    }
+    
     // just a hacky test
     @RequestMapping("/module/mdrtb/pihhaiti/test/loadStatus.form")
     public ModelAndView loadStatus() {
