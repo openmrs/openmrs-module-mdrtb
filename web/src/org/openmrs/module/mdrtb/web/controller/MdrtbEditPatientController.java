@@ -33,7 +33,6 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService.ATTR_VIEW_TYPE;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -43,6 +42,7 @@ import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.web.controller.person.PersonFormController;
+import org.openmrs.web.dwr.PatientListItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -233,12 +233,20 @@ public class MdrtbEditPatientController {
 			}
 			
 			Set<Person> similarPersons = Context.getPersonService().getSimilarPeople(addName, birthYear, addGender);
-			Set<Patient> similarPatients = new HashSet<Patient>();
+			Set<PatientListItem> similarPatients = new HashSet<PatientListItem>();
+	        String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
 			
 			// we only want to pass on similar persons who are patients in this case
 			for (Person person : similarPersons) {
 				if (person instanceof Patient) {
-					similarPatients.add((Patient) person);
+					PatientListItem  patientListItem = new PatientListItem((Patient) person);
+					
+					// make sure the correct patient identifier is set on the patient list item
+					if (StringUtils.isNotBlank(primaryIdentifier)) {
+	                	patientListItem.setIdentifier(((Patient) person).getPatientIdentifier(primaryIdentifier).getIdentifier());
+	                }
+					
+					similarPatients.add(patientListItem);
 				}
 			}
 			

@@ -65,8 +65,8 @@
 </tr>
 <c:forEach var="patient" items="${patients}" varStatus="i">
 <tr class="${i.count % 2 == 0 ? 'evenRow' : 'oddRow'}">
-<input type="hidden" value="${patient.id}"/>
-<td>${patient.patientIdentifier}</td>
+<input type="hidden" value="${patient.patientId}"/>
+<td>${patient.identifier}</td>
 <td>${patient.givenName}</td>
 <td>${patient.middleName}</td>
 <td>${patient.familyName}</td>

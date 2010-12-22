@@ -34,13 +34,13 @@ public class MdrtbFindPatient {
 
             patients = ps.getPatients(searchValue);
             patientList = new Vector<Object>(patients.size());
+            String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
             for (Patient p : patients) {
                 PatientListItem patientListItem = new PatientListItem(p);
                 
                 // make sure the correct patient identifier is set on the patient list item
-                String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
                 if (StringUtils.isNotBlank(primaryIdentifier)) {
-                	patientListItem.setIdentifier(p.getPatientIdentifier(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType")).getIdentifier());
+                	patientListItem.setIdentifier(p.getPatientIdentifier(primaryIdentifier).getIdentifier());
                 }
                 	
             	patientList.add(patientListItem);
