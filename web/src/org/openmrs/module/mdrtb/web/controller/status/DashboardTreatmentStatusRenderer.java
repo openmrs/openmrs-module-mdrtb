@@ -25,10 +25,10 @@ public class DashboardTreatmentStatusRenderer implements TreatmentStatusRenderer
     	
     	StringBuilder sb = new StringBuilder();
     	sb.append("<tr>");
-    	sb.append("<td style=\"white-space:nowrap;\">" + regimenStr + "</td>");
-    	sb.append("<td style=\"white-space:nowrap;\">" + startDateStr + "</td>");
-    	sb.append("<td style=\"white-space:nowrap;\">" + endDateStr + "</td>");
-    	sb.append("<td style=\"white-space:nowrap;\">" + typeStr + "</td>");
+    	sb.append("<td>" + regimenStr + "</td>");
+    	sb.append("<td>" + startDateStr + "</td>");
+    	sb.append("<td>" + endDateStr + "</td>");
+    	sb.append("<td>" + typeStr + "</td>");
     	sb.append("</tr>");
     	
     	return sb.toString();
