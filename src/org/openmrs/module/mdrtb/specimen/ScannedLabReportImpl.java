@@ -51,7 +51,12 @@ public class ScannedLabReportImpl implements ScannedLabReport {
 	}
 	
     public String getFilename() {
-    	return report.getComplexData().getTitle();
+    	if (report.getComplexData() != null) {
+    		return report.getComplexData().getTitle();
+    	}
+    	else {
+    		return null;
+    	}
     }
 
     public String getId() {

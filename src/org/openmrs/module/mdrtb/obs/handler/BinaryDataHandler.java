@@ -53,6 +53,9 @@ public class BinaryDataHandler extends AbstractHandler implements ComplexObsHand
 	 * Returns the same ComplexData for all views.  The title is the original filename,
 	 * and the data is the raw byte[] of data
 	 * 
+	 * Note that if the method cannot find the file associated with the obs, it
+	 * returns the obs with the ComplexData = null
+	 * 
 	 * @see ComplexObsHandler#getObs(Obs, String)
 	 */
 	public Obs getObs(Obs obs, String view) {
@@ -65,9 +68,14 @@ public class BinaryDataHandler extends AbstractHandler implements ComplexObsHand
 				originalFilename = originalFilename.replace(",", "").replace(" ", "");
 			}
 			
-			FileInputStream fileInputStream = new FileInputStream(file);	
-			obs.setComplexData(new ComplexData(originalFilename, new BufferedInputStream(fileInputStream)));
-			fileInputStream.close();
+			if (file.exists()) {
+				FileInputStream fileInputStream = new FileInputStream(file);	
+				obs.setComplexData(new ComplexData(originalFilename, new BufferedInputStream(fileInputStream)));
+				fileInputStream.close();
+			}
+			else {
+				log.error("Unable to find file associated with complex obs " + obs.getId());
+			}
 		}
 		catch (Exception e) {
 			throw new APIException("An error occurred while trying to get binary complex obs.", e);

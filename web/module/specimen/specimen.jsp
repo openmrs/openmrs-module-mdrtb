@@ -372,7 +372,14 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
-<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+<c:choose>
+	<c:when test="${! empty report.filename}">
+		<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:when>
+	<c:otherwise>
+		<nobr><spring:message code="mdrtb.missingScannedLabReport"/> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:otherwise>
+</c:choose>
 <br/>
 </c:forEach>
 </td>
