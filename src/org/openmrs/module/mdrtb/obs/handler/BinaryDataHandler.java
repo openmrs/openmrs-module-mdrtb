@@ -35,9 +35,12 @@ import org.openmrs.util.OpenmrsUtil;
  * @see OpenmrsConstants#GLOBAL_PROPERTY_COMPLEX_OBS_DIR
  * @since 1.5
  */
+
+
 public class BinaryDataHandler extends AbstractHandler implements ComplexObsHandler {
 	
 	// TODO: remove this once it gets added to core--it should be in 1.8?
+	// TODO: but 1.8 may not have the change where I test for file.exists()?
 	
 	public static final Log log = LogFactory.getLog(BinaryDataHandler.class);
 	
