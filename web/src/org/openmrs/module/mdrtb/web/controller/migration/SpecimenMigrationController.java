@@ -140,12 +140,14 @@ public class SpecimenMigrationController {
 		
 		// modify concepts
 		
+		// haiti-specific?
 		// PHYSICAN-REPORTED TUBERCULOSIS SMEAR MICROSCOPY CONSTRUCT
 		Concept physicanSmearConstruct = Context.getConceptService().getConceptByName("PHYSICAN-REPORTED TUBERCULOSIS SMEAR MICROSCOPY CONSTRUCT");
 		physicanSmearConstruct.setSet(true);
 		physicanSmearConstruct.getConceptSets().add(new ConceptSet(Context.getConceptService().getConcept("PHYSICAN-REPORTED TUBERCULOSIS SMEAR RESULT"), new Double(1)));
 		Context.getConceptService().saveConcept(physicanSmearConstruct);
 		
+		// haiti-specific?
 		// PHYSICAN-REPORTED TUBERCULOSIS SMEAR RESULT
 		Concept physicanSmearResult = Context.getConceptService().getConceptByName("PHYSICAN-REPORTED TUBERCULOSIS SMEAR RESULT");
 		addAnswerConcept(physicanSmearResult, Context.getConceptService().getConceptByName("POSITIVE"));
@@ -208,7 +210,8 @@ public class SpecimenMigrationController {
 		
 		return new ModelAndView("/module/mdrtb/migration/migration");
 	}
-	
+
+	// haiti-specific
 	@RequestMapping("/module/mdrtb/migration/connvertSmearsOnIntakeAndFollowup.form")
 	public ModelAndView convertSmearsOnIntakeAndFollowup() {
 		// fetch the encounter types associated with the Intake and Follow-up forms
@@ -719,7 +722,7 @@ public class SpecimenMigrationController {
     }
     
     @RequestMapping("/module/mdrtb/migration/migrateHospitalizations.form")
-	public ModelAndView createHospitalizationReport() {
+	public ModelAndView migrateHospitalizations() {
 
 		Concept typeOfPatientConcept = Context.getConceptService().getConcept(3289);
 		Concept hospitalizedConcept = Context.getConceptService().getConcept(3389);

@@ -50,7 +50,7 @@ public class AdminList extends AdministrationSectionExt {
 		Map<String, String> map = new HashMap<String, String>();
 		
 		map.put("module/mdrtb/mdrtbIndex.form", "mdrtb.title.homepage");
-		map.put("module/mdrtb/migration/migration.form", "mdrtb.migration");
+		//map.put("module/mdrtb/migration/migration.form", "mdrtb.migration");
 		
 		return map;
 	}
