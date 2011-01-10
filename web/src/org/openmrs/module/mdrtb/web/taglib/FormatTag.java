@@ -28,7 +28,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
-import org.openmrs.ConceptNameTag;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
@@ -129,8 +128,10 @@ public class FormatTag extends BodyTagSupport {
 			}
 		}
 		try {
-			JspWriter w = pageContext.getOut();
-			w.println(ret);
+			if (ret != null) {
+				JspWriter w = pageContext.getOut();
+				w.println(ret);
+			}
 		}
 		catch (IOException ex) {
 			log.error("Error while starting duration tag", ex);
