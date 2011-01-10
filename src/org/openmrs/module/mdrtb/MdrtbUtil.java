@@ -88,8 +88,8 @@ public class MdrtbUtil {
   	 */
   	public static Obs getObsFromEncounter(Concept concept, Encounter encounter) {
   		if (encounter.getObsAtTopLevel(false) != null) {
-  			for(Obs obs : encounter.getObsAtTopLevel(false)) {
-  				if(!obs.isVoided() && obs.getConcept().equals(concept)) {
+  			for (Obs obs : encounter.getObsAtTopLevel(false)) {
+  				if (!obs.isVoided() && obs.getConcept().equals(concept)) {
   					return obs;
   				}
   			}

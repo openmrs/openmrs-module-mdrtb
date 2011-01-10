@@ -62,7 +62,7 @@ public class AbstractFormController {
 	
 	@ModelAttribute("locations")
 	Collection<Location> getPossibleLocations() {
-		return Context.getLocationService().getAllLocations();
+		return Context.getLocationService().getAllLocations(false);
 	}
 	
 	@ModelAttribute("sites")

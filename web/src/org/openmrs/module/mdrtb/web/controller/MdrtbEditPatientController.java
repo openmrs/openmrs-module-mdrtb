@@ -99,7 +99,7 @@ public class MdrtbEditPatientController {
 	
 	@ModelAttribute("locations")
 	public Collection<Location> getPossibleLocations() {
-		return Context.getLocationService().getAllLocations();
+		return Context.getLocationService().getAllLocations(false);
 	}
 
 	// checks to see if the "fixedIdentifierLocation" global prop has been specified, which is used to determine if we

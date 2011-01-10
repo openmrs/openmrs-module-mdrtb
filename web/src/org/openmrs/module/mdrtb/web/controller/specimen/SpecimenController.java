@@ -146,8 +146,7 @@ public class SpecimenController extends AbstractSpecimenController {
 	 * @return
 	 */
 	@ModelAttribute("specimen")
-	public Specimen getSpecimen(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId, 
-	                            @RequestParam(required = false, value="specimenId") Integer specimenId) {
+	public Specimen getSpecimen(@RequestParam(required = false, value="specimenId") Integer specimenId) {
 		// for now, if no specimen is specified, default to the most recent specimen within the program
 		if (specimenId != null) {
 			return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));

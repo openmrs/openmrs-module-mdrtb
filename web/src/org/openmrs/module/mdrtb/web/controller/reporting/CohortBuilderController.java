@@ -157,7 +157,7 @@ public class CohortBuilderController implements Controller {
 			model.put("links", linkHelper());
 			model.put("programs", Context.getProgramWorkflowService().getAllPrograms());
 			model.put("encounterTypes", Context.getEncounterService().getAllEncounterTypes());
-			model.put("locations", Context.getLocationService().getAllLocations());
+			model.put("locations", Context.getLocationService().getAllLocations(false));
 			model.put("forms", Context.getFormService().getAllForms());
 			model.put("drugs", Context.getConceptService().getAllDrugs());
 			model.put("drugConcepts", genericDrugs);

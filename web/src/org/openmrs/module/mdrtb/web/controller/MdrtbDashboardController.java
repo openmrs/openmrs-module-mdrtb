@@ -69,7 +69,7 @@ public class MdrtbDashboardController {
 	
 	@ModelAttribute("locations")
 	public Collection<Location> getPossibleLocations() {
-		return Context.getLocationService().getAllLocations();
+		return Context.getLocationService().getAllLocations(false);
 	}
 	
 	@ModelAttribute("outcomes")

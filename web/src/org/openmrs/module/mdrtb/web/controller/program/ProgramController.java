@@ -52,7 +52,7 @@ public class ProgramController {
 	
 	@ModelAttribute("locations")
 	public Collection<Location> getPossibleLocations() {
-		return Context.getLocationService().getAllLocations();
+		return Context.getLocationService().getAllLocations(false);
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousDrugUse")

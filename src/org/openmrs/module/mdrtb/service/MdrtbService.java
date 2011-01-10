@@ -72,8 +72,12 @@ public interface MdrtbService extends OpenmrsService {
     public List<MdrtbPatientProgram> getMdrtbPatientProgramsInDateRange(Patient patient, Date startDate, Date endDate);
     
     /**
-     * Return the specific MdrtbPatientProgram the patient was enrolled in on the specified date (if any)
+     * Return the specific MdrtbPatientProgram the patient was enrolled in on the specified date 
      * (This assumes that a patient is only enrolled in one MDR-TB patient program at a time)
+     * 
+     * If the date is before any program enrollments, it returns the first program enrollment
+     * If the date is after all program enrollments, it returns the most recent program enrollment
+     * If the date is between two program enrollments, it returns the later of the two
      */
     @Transactional(readOnly=true)
     public MdrtbPatientProgram getMdrtbPatientProgramOnDate(Patient patient, Date date);
@@ -107,7 +111,19 @@ public interface MdrtbService extends OpenmrsService {
     /**
      * Fetches all specimens for a patient within a certain date range
      */
-    public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate);
+    public List<Specimen> getSpecimens(Patient patient, Date startDateCollected, Date endDateCollected);
+    
+    /**
+     * Fetches all specimens within a certain data range and from a certain lab
+     * 
+     * @param patient: only include specimens associated with this patient
+     * @param startDate: only include specimens with a date collected after (or equal to) this start date
+     * @param endDate: only include specimens with a date collected before (or equal to) this end date
+     * @param location: only include specimens collected from the specified location
+     * 
+     * All parameters can be set to null
+     */
+    public List<Specimen> getSpecimens(Patient patient, Date startDateCollected, Date endDateCollected, Location locationCollected);
     
     /**
      * Deletes a specimen, referenced by specimen Id

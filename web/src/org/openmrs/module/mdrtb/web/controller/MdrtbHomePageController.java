@@ -91,6 +91,9 @@ public class MdrtbHomePageController {
         	
         	model.addAttribute("reports", reports);
         	
+        	// add the specimen reports
+        	reports.put("module/mdrtb/specimen/specimenReportsOverview.form", Context.getMessageSourceService().getMessage("mdrtb.specimenReports"));
+        	
         	// Load patient lists
         	List<Location> patientLocations = Context.getService(MdrtbService.class).getLocationsWithAnyProgramEnrollments();
         	model.addAttribute("patientLocations", patientLocations);

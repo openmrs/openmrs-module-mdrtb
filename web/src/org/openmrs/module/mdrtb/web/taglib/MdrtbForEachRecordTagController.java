@@ -101,7 +101,7 @@ public class MdrtbForEachRecordTagController extends BodyTagSupport {
         }
         else if (name.equals("location")) {
             List<Location> locationOut = new ArrayList<Location>();
-            List<Location> locations = Context.getLocationService().getAllLocations();
+            List<Location> locations = Context.getLocationService().getAllLocations(false);
 
                 if (filterList != null && filterList.equals("") == false){
                     try{

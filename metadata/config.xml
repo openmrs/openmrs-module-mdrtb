@@ -119,6 +119,21 @@
 		<defaultValue>20</defaultValue>
 		<description>Number of results to display when searching for patient</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.specimenReports.daysSinceSmear</property>
+		<defaultValue>60</defaultValue>
+		<description>Stores the "days since smear" variable for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.specimenReports.daysSinceCulture</property>
+		<defaultValue>60</defaultValue>
+		<description>Stores the "days since culture" variable for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.specimenReports.defaultLabId</property>
+		<defaultValue>1</defaultValue>
+		<description>Stores the default lab ID for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
+	</globalProperty>
 	
 	
 	<globalProperty>

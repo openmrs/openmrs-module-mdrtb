@@ -159,15 +159,13 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return programs;
 	}
 	
-	// TODO: this method has not be used/tested
 	public MdrtbPatientProgram getMdrtbPatientProgramOnDate(Patient patient, Date date) {
 		for (MdrtbPatientProgram program : getMdrtbPatientPrograms(patient)) {
-			if (program.getDateEnrolled().before(date) && (program.getDateCompleted() == null || program.getDateCompleted().after(date)) ) {
+			if (program.isDateDuringProgram(date)) {
 				return program;
 			}
 		}
-		
-		// if we've got here, there's no program on this date
+
 		return null;
 	}
 	
@@ -215,6 +213,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<Specimen> getSpecimens(Patient patient) {
+		return getSpecimens(patient, null, null, null);
+	}
+	
+	public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate) {	
+		return getSpecimens(patient, startDate, endDate, null);
+	}
+	 
+	public List<Specimen> getSpecimens(Patient patient, Date startDateCollected, Date endDateCollected, Location locationCollected) {
 		List<Specimen> specimens = new LinkedList<Specimen>();
 		List<Encounter> specimenEncounters = new LinkedList<Encounter>();
 		
@@ -223,9 +229,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		List<EncounterType> specimenEncounterTypes = new LinkedList<EncounterType>();
 		specimenEncounterTypes.add(specimenEncounterType);
 		
-		specimenEncounters = Context.getEncounterService().getEncounters(patient, null, null, null, null, specimenEncounterTypes, null, false);
+		specimenEncounters = Context.getEncounterService().getEncounters(patient, locationCollected, startDateCollected, endDateCollected, null, specimenEncounterTypes, null, false);
 		
-		for(Encounter encounter : specimenEncounters) {
+		for(Encounter encounter : specimenEncounters) {	
 			specimens.add(new SpecimenImpl(encounter));
 		}
 		
@@ -233,22 +239,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimens;
 	}
 	
-	public List<Specimen> getSpecimens(Patient patient, Date startDate, Date endDate) {
-		
-		List<Specimen> specimens = getSpecimens(patient);
-		List<Specimen> specimensInRange = new LinkedList<Specimen>();
-		
-		for (Specimen specimen : specimens) {
-			if (endDate != null && specimen.getDateCollected().after(endDate)) {
-				break;
-			} else if (startDate == null || specimen.getDateCollected().after(startDate)) {
-				specimensInRange.add(specimen);
-			}
-		}
-		
-		return specimensInRange;
-	}
-	 
 	public void saveSpecimen(Specimen specimen) {
 		if (specimen == null) {
 			log.warn("Unable to save specimen: specimen object is null");

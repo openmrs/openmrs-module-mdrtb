@@ -384,10 +384,6 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	}
 	
 	/**
-	 * Utility functions
-	 */
-	
-	/**
 	 * Returns true if this is the most recent program for this patient
 	 */
 	private Boolean isMostRecentProgram() {
