@@ -17,11 +17,11 @@
 </tr>
 
 <c:forEach var="result" items="${model.results}" varStatus="i">
-	<c:forEach var="specimen" items="${result.value}" varStatus="j">
+	<c:forEach var="specimen" items="${result.value}">
 	<tr 
 		<c:if test="${i.count % 2 == 0 }">class="evenRow"</c:if>
 		<c:if test="${i.count % 2 != 0 }">class="oddRow"</c:if>>
-	<td class="tableCell"><nobr><c:if test="${j.count == 1}"><a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${result.key.id}">${result.key.personName}</a></c:if></nobr></td>
+	<td class="tableCell"><nobr><a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${result.key.id}">${result.key.personName}</a></nobr></td>
 	<td class="tableCell"><nobr><a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?specimenId=${specimen.id}"><openmrs:formatDate date="${specimen.dateCollected}" format="${_dateFormatDisplay}"/></a></nobr></td>
 	<td class="tableCell"><nobr>${specimen.identifier}</nobr></td>
 	<td>&nbsp;</td>
