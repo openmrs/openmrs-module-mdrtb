@@ -9,6 +9,8 @@
 		EXPECT:
 			- "use business-database-name;" was called prior to calling this script
 	</help>
+	
+	<!--  
 	<diff>
 		<version>1.0</version>
 		<author>Dave Thomas</author>
@@ -45,4 +47,6 @@
 			update `obs` set `concept_id` = 1453 where `concept_id` = 1113;
 		</sql>
 	</diff>
+	
+	-->
 </sqldiff>
