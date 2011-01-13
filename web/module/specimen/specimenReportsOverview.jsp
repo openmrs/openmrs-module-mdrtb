@@ -12,16 +12,16 @@
 <form action="specimenReportsOverview.form" method="POST">
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td>Report on specimens collected between <openmrs_tag:dateField formFieldName="startDateCollected" startValue="${query.startDateCollected}"/> and <openmrs_tag:dateField formFieldName="endDateCollected" startValue="${query.endDateCollected}"/></td>
+<td><spring:message code="mdrtb.specimenReports.dateRange1"/> <openmrs_tag:dateField formFieldName="startDateCollected" startValue="${query.startDateCollected}"/> <spring:message code="mdrtb.specimenReports.dateRange2"/> <openmrs_tag:dateField formFieldName="endDateCollected" startValue="${query.endDateCollected}"/></td>
 </tr>
 <tr>
-<td>Show specimens with positive smear results more than <input type="text" size="5" name="daysSinceSmear" value="${query.daysSinceSmear}"/> days old, but no culture results</td>
+<td><spring:message code="mdrtb.specimenReports.daysSinceSmear1"/> <input type="text" size="5" name="daysSinceSmear" value="${query.daysSinceSmear}"/> <spring:message code="mdrtb.specimenReports.daysSinceSmear2"/></td>
 </tr>
 <tr>
-<td>Show specimens with positive culture results more than <input type="text" size="5" name="daysSinceCulture" value="${query.daysSinceCulture}"/> days old, but no DST results</td>
+<td><spring:message code="mdrtb.specimenReports.daysSinceCulture1"/> <input type="text" size="5" name="daysSinceCulture" value="${query.daysSinceCulture}"/> <spring:message code="mdrtb.specimenReports.daysSinceCulture2"/></td>
 </tr>
 <tr>
-<td>Show specimens tested at:
+<td><spring:message code="mdrtb.specimenReports.showSpecimensTestedAt"/>:
 <select name="lab">
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == query.lab}">selected</c:if> >${location.displayString}</option>

@@ -35,6 +35,7 @@ public class SpecimenReportingTools {
 		
 		DateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
+		// load parameters to use in the query
 		Concept smearResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
 		Concept cultureResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
 		Concept resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG);
@@ -43,13 +44,10 @@ public class SpecimenReportingTools {
 		
 		EncounterType specimenEncounterType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
 		
-		// this query finds all the specimens that don't have any test results associated with them, by
-		// fetching the set of encounters of the specimen collection type which are not voided and are not in the set of
-		// encounters that have a not null obs of one of the following types: smear result, culture result, 
-		// resistant to tb drug, intermediate to tb drug, or susceptible to tb drug
-		
-		// TODO: update this to include ... "x days old"
-		
+		// select all the encounters of the specimen collection encounter type which are not voided and
+		// were collected between the start and end date, and are NOT in the set of encounters that have a smear result, culture result, or 
+		// DST result that is not voided and not null
+
 		String sql = "select patient_id, encounter_id from encounter where encounter_type='" + specimenEncounterType.getId() + "' and voided='0' and encounter.encounter_id " +
 						(startDateCollected != null ? "and encounter.encounter_datetime >= '" + sqlFormat.format(startDateCollected) + "' " : "") +
 						(endDateCollected != null ? "and encounter.encounter_datetime <= '" + sqlFormat.format(endDateCollected) + "' " : "") +
@@ -68,7 +66,7 @@ public class SpecimenReportingTools {
 		
 		DateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
-		// create all the parameters to use in the query
+		// load parameters to use in the query
 		Concept cultureResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
 		Concept resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG);
 		Concept intermediate = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INTERMEDIATE_TO_TB_DRUG);
@@ -79,11 +77,10 @@ public class SpecimenReportingTools {
 		String labIdString = convertIntegerArrayToString(labIds);
 		
 		EncounterType specimenEncounterType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
-		
-		// TODO: handle case where location == null
-		
-		// TODO: add a comment
-		// TODO: exclude contaminated, because we will pick them up elsewhere?
+
+		// select all encounters of the specimen collection encounter type that are not voided and and were collected within the start date
+		// and end date and have a positive culture result from the selected lab and are NOT in the set of encounters
+		// that have a DST result that is not voided and not null
 		
 		String sql = "select distinct encounter.patient_id, encounter.encounter_id from encounter, obs where encounter.encounter_id = obs.encounter_id " + 
 					 "and encounter_type='" + specimenEncounterType.getId() + "' and encounter.voided='0' and obs.voided='0' " + 
@@ -104,13 +101,12 @@ public class SpecimenReportingTools {
 		Calendar dateToCompare = Calendar.getInstance(Context.getLocale());
 		dateToCompare.add(Calendar.DAY_OF_YEAR, -daysSinceCulture);
 		
-		
+		// now take the result set and remove any that have a positive culture result within the past "daysSinceCulture" days
 		triage:
 			for (List<Object> result : results) {
 				Patient patient = Context.getPatientService().getPatient((Integer) result.get(0));
 				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen((Integer) result.get(1));
 				
-				// exclude specimens that have recent culture results
 				for (Culture culture : specimen.getCultures()) {
 					if (culture.getResultDate() != null && culture.getResultDate().after(dateToCompare.getTime())) {
 						continue triage;
@@ -139,10 +135,9 @@ public class SpecimenReportingTools {
 		
 		EncounterType specimenEncounterType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
 		
-		// TODO: handle case where location == null
-		
-		// TODO: add a comment
-		// TODO: exclude contaminated, because we will pick them up elsewhere?
+		// select all encounters of the specimen collection encounter type that are not voided and and were collected within the start date
+		// and end date and have a positive smear result from the selected lab and are NOT in the set of encounters
+		// that have a culture result that is not voided and not null
 		
 		String sql = "select distinct encounter.patient_id, encounter.encounter_id from encounter, obs where encounter.encounter_id = obs.encounter_id " + 
 					 "and encounter_type='" + specimenEncounterType.getId() + "' and encounter.voided='0' and obs.voided='0' " + 
@@ -162,12 +157,12 @@ public class SpecimenReportingTools {
 		Calendar dateToCompare = Calendar.getInstance(Context.getLocale());
 		dateToCompare.add(Calendar.DAY_OF_YEAR, -daysSinceSmear);
 		
+		// now take the result set and remove any that have a positive smear result within the past "daysSinceSmear" days
 		triage:
 			for (List<Object> result : results) {
 				Patient patient = Context.getPatientService().getPatient((Integer) result.get(0));
 				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen((Integer) result.get(1));
 				
-				// exclude specimens that have recent culture results
 				for (Smear smear : specimen.getSmears()) {
 					if (smear.getResultDate() != null && smear.getResultDate().after(dateToCompare.getTime())) {
 						continue triage;
@@ -198,6 +193,9 @@ public class SpecimenReportingTools {
 		String labIdString = convertIntegerArrayToString(labIds);
 		
 		EncounterType specimenEncounterType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
+		
+		// select all the encounters of the specimen collection encounter type that were collected within the startDate and endDate and are
+		// not voided and have smear, culture or DST result from the selected lab that is marked as contaminated
 		
 		String sql = "select distinct encounter.patient_id, encounter.encounter_id from encounter, obs where encounter.encounter_id = obs.encounter_id " + 
 						"and encounter_type='" + specimenEncounterType.getId() + "' and encounter.voided='0' " + 
@@ -239,8 +237,10 @@ public class SpecimenReportingTools {
 	}
 	
 	
+	/**
+	 * Converts an Integer array to String
+	 */
 	private static String convertIntegerArrayToString(Integer [] integers) {
-		
 		StringBuffer result = new StringBuffer(); 
 	
 		for (Integer i : integers) {
@@ -250,50 +250,4 @@ public class SpecimenReportingTools {
 		
 		return result.toString();
 	}
-	
-	
-	/**
-	 * Returns all specimens collected within the start and end date parameters that have no smear, bacteriology, or dst results associated with them
-	 */
-	/**
-	public static Map<Patient,List<Specimen>> getSpecimensWithNoResults(Date startDateCollected, Date endDateCollected) {
-		
-		Map<Patient,List<Specimen>> resultList = new HashMap<Patient,List<Specimen>>();
-		Concept waitingForTestResults = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS);
-		
-		// first get all specimens
-		List<Specimen> specimens = Context.getService(MdrtbService.class).getSpecimens(null, startDateCollected, endDateCollected);
-		
-		// loop through all the specimens within the date range
-		search:
-		for (Specimen specimen : specimens) {
-			// see if there are any tests with results
-			for (Test test  : specimen.getTests()) {
-				if (test instanceof Bacteriology && ((Bacteriology) test).getResult() != null) {
-					continue search;
-				}
-				else if (test instanceof Dst){
-					Dst dst = (Dst) test;
-					if (dst.getResults() != null) {
-						for (DstResult result : dst.getResults()) {
-							if (!result.getResult().equals(waitingForTestResults)) {
-									continue search;
-							}
-						}
-					}
-				}
-			}
-			
-			// if we've gotten here, this is a specimen with no results
-			// so we need to push it on the map
-			Patient patient = specimen.getPatient();
-			if (!resultList.containsKey(patient)) {
-				resultList.put(patient, new ArrayList<Specimen>());
-			}
-			resultList.get(patient).add(specimen);
-		}
-		
-		return resultList;
-	} **/
-
 }

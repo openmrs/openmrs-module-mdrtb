@@ -107,7 +107,7 @@
 	<globalProperty>
 		<property>@MODULE_ID@.colorMap</property>
 		<defaultValue>CONTAMINATED:lightgrey|MODERATELY POSITIVE:lightcoral|STRONGLY POSITIVE:lightcoral|WEAKLY POSITIVE:lightcoral|WAITING FOR TEST RESULTS:lightgrey|SCANTY:khaki|NEGATIVE:lightgreen|POSITIVE:lightcoral|SUSCEPTIBLE TO TUBERCULOSIS DRUG:lightgreen|INTERMEDIATE TO TUBERCULOSIS DRUG:khaki|RESISTANT TO TUBERCULOSIS DRUG:lightcoral|NONE:none</defaultValue>
-		<description>Pipe-delimited list mapping concept ids to color names and/or hex codes for display in the patient chart and (potentially) elsewhere.</description>
+		<description>Pipe-delimited list mapping concept ids or concept mappings to color names and/or hex codes for display in the patient chart and (potentially) elsewhere.</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.primaryPatientIdentifierType</property>

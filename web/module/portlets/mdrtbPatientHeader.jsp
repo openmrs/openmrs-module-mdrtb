@@ -37,6 +37,8 @@
 					<c:if test="${model.patient.age == 0}">< 1 <spring:message code="Person.age.year"/></c:if>
 					<span id="patientHeaderPatientBirthdate"><c:if test="${not empty model.patient.birthdate}">(<c:if test="${model.patient.birthdateEstimated}">~</c:if><openmrs:formatDate date="${model.patient.birthdate}" type="medium"  format="${_dateFormatDisplay}"/>)</c:if><c:if test="${empty model.patient.birthdate}"><spring:message code="Person.age.unknown"/></c:if></span>
 				</td>
+				
+				<!--  
 				<openmrs:globalProperty key="use_patient_attribute.tribe" defaultValue="false" var="showTribe"/>
 				<c:if test="${showTribe}">
 					<td id="patientHeaderPatientTribe">
@@ -45,6 +47,8 @@
 						<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterPatientHeaderPatientTribe" type="html" parameters="patientId=${model.patient.patientId}" />
 					</td>
 				</c:if>
+				-->
+				
 				<c:if test="${not empty model.patient.attributeMap['Health Center']}">
 					<td id="patientHeaderHealthCenter">
 						<spring:message code="mdrtb.healthcenter"/>:
