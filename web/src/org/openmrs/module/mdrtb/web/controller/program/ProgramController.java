@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
 
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -42,7 +41,7 @@ public class ProgramController {
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
 		
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());

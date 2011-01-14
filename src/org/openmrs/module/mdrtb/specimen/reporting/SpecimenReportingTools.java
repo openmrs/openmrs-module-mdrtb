@@ -107,15 +107,18 @@ public class SpecimenReportingTools {
 				Patient patient = Context.getPatientService().getPatient((Integer) result.get(0));
 				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen((Integer) result.get(1));
 				
-				for (Culture culture : specimen.getCultures()) {
-					if (culture.getResultDate() != null && culture.getResultDate().after(dateToCompare.getTime())) {
-						continue triage;
+				// only add patients that aren't dead
+				if (!patient.isDead()) {
+					for (Culture culture : specimen.getCultures()) {
+						if (culture.getResultDate() != null && culture.getResultDate().after(dateToCompare.getTime())) {
+							continue triage;
+						}
 					}
-				}
-				if (!resultMap.containsKey(patient)) {
-					resultMap.put(patient, new ArrayList<Specimen>());
-				}
-				resultMap.get(patient).add(specimen);
+					if (!resultMap.containsKey(patient)) {
+						resultMap.put(patient, new ArrayList<Specimen>());
+					}
+					resultMap.get(patient).add(specimen);
+				}	
 			}
 		
 		return resultMap;
@@ -163,15 +166,18 @@ public class SpecimenReportingTools {
 				Patient patient = Context.getPatientService().getPatient((Integer) result.get(0));
 				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen((Integer) result.get(1));
 				
-				for (Smear smear : specimen.getSmears()) {
-					if (smear.getResultDate() != null && smear.getResultDate().after(dateToCompare.getTime())) {
-						continue triage;
+				// only add patients that aren't dead
+				if (!patient.isDead()) {
+					for (Smear smear : specimen.getSmears()) {
+						if (smear.getResultDate() != null && smear.getResultDate().after(dateToCompare.getTime())) {
+							continue triage;
+						}
 					}
+					if (!resultMap.containsKey(patient)) {
+						resultMap.put(patient, new ArrayList<Specimen>());
+					}
+					resultMap.get(patient).add(specimen);
 				}
-				if (!resultMap.containsKey(patient)) {
-					resultMap.put(patient, new ArrayList<Specimen>());
-				}
-				resultMap.get(patient).add(specimen);
 			}
 		
 		return resultMap;
@@ -227,10 +233,13 @@ public class SpecimenReportingTools {
 			Patient patient = Context.getPatientService().getPatient((Integer) result.get(0));
 			Specimen specimen = Context.getService(MdrtbService.class).getSpecimen((Integer) result.get(1));
 			
-			if (!resultMap.containsKey(patient)) {
-				resultMap.put(patient, new ArrayList<Specimen>());
+			// only add patient that aren't dead
+			if (!patient.isDead()) {
+				if (!resultMap.containsKey(patient)) {
+					resultMap.put(patient, new ArrayList<Specimen>());
+				}
+				resultMap.get(patient).add(specimen);
 			}
-			resultMap.get(patient).add(specimen);
 		}
 		
 		return resultMap;

@@ -31,7 +31,7 @@ public class DrugForecastController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true, 10));
         binder.registerCustomEditor(Concept.class, new ConceptEditor());
     }
         

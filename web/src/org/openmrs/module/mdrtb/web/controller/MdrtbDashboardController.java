@@ -58,7 +58,7 @@ public class MdrtbDashboardController {
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
 		
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());

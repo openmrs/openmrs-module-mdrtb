@@ -57,7 +57,7 @@ public class MdrtbTSAdmListController extends SimpleFormController {
         binder.registerCustomEditor(java.lang.Double.class,
                 new CustomNumberEditor(java.lang.Double.class, nf, true));
         binder.registerCustomEditor(java.util.Date.class, 
-                new CustomDateEditor(Context.getDateFormat(), true));
+                new CustomDateEditor(Context.getDateFormat(), true, 10));
         binder.registerCustomEditor(org.openmrs.ConceptClass.class, 
                 new ConceptClassEditor());
         binder.registerCustomEditor(org.openmrs.ConceptDatatype.class, 

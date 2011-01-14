@@ -29,7 +29,7 @@ public class EditRegimenController {
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		DateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
     	binder.registerCustomEditor(Concept.class, new ConceptEditor());
     	binder.registerCustomEditor(Drug.class, new DrugEditor());
 	}

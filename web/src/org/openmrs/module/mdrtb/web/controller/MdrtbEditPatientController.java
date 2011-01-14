@@ -69,7 +69,7 @@ public class MdrtbEditPatientController {
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
     	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true));
+    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
     	
 		// register other custom binders
     	binder.registerCustomEditor(Concept.class, new ConceptEditor());

@@ -399,7 +399,8 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(specimenErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${specimenErrors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<span class="error">${error.defaultMessage}</span><br/><br/>
+	<!--  	<span class="error">${error.defaultMessage}</span><br/><br/> -->
 	</c:forEach>
 	<br/>
 </c:if>
@@ -654,7 +655,7 @@
 <!-- DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(testErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${testErrors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<span class="error">${error.defaultMessage}</span><br/><br/>
 	</c:forEach>
 	<br/>
 </c:if>
@@ -868,7 +869,7 @@
 <!-- DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(testErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${testErrors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<span class="error">${error.defaultMessage}</span><br/><br/>
 	</c:forEach>
 	<br/>
 </c:if>

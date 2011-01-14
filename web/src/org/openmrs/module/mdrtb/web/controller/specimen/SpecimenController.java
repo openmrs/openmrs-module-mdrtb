@@ -29,6 +29,8 @@ import org.openmrs.module.mdrtb.specimen.TestValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -196,6 +198,15 @@ public class SpecimenController extends AbstractSpecimenController {
 	                                  @RequestParam(required = false, value = "addScannedLabReportLocation") Location scannedLabReportLocation,
 	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
     	
+    	
+    	for (Object e : specimenErrors.getFieldErrors()) {
+    		FieldError error = (FieldError) e;
+    		
+    		System.out.println("error = " + error.getCode() + " with message " + error.getDefaultMessage() + " and for field " + error.getField());
+    	}
+    	
+    	
+    	
 		// validate
     	if(specimen != null) {
     		new SpecimenValidator().validate(specimen, specimenErrors);
@@ -268,8 +279,8 @@ public class SpecimenController extends AbstractSpecimenController {
 	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult errors, 
 	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
 	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
-	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {
-	                     
+	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {	
+    	
 		// validate
     	if(smear != null) {
     		new TestValidator().validate(smear, errors);
