@@ -295,16 +295,9 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		if (program.getDateEnrolled() == null) {
 			return null;
 		}
-
-		// only get MDR-TB specific encounters
-		List<EncounterType> types = new LinkedList<EncounterType>();
-		types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));
-    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));
-    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
-    	
 		
 		return Context.getEncounterService().getEncounters(program.getPatient(), null, getPreviousProgramDateCompleted(), 
-			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()), null, types, null, false);
+			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()), null, MdrtbUtil.getMdrtbEncounterTypes(), null, false);
 	}
 	
 	public Concept getCurrentAnatomicalSiteDuringProgram() {

@@ -14,6 +14,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -109,6 +110,19 @@ public class MdrtbUtil {
     	return RegimenUtils.getHivRegimenHistory(patient).getAllRegimens();
     }
 
+	/**
+	 * Returns a set of all encounter types associated with the MDR-TB Program
+	 */
+	public static Set<EncounterType> getMdrtbEncounterTypes() {
+
+		Set<EncounterType> types = new HashSet<EncounterType>();
+		types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));
+    	types.add(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type")));
+   		
+    	return types;
+	}
+	
 	
 	/**
 	 * Returns all the concepts that represent positive results for a smear or culture

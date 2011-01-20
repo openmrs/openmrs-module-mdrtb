@@ -20,9 +20,14 @@ public class ChartController {
 	public ModelAndView showPatientSummary(@RequestParam(required = true, value="patientId") Integer patientId, 
 	                                       @RequestParam(required = true, value="patientProgramId") Integer patientProgramId, ModelMap map) {
 		
+		// redirect to the dashboard if no patient program has been specified
+		if (patientProgramId == null) {
+			return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId);
+		}
+		
 		map.put("patientId",patientId);
 		map.put("patientProgramId", patientProgramId);
-	
+		
 		return new ModelAndView("/module/mdrtb/chart/chart", map);
 	}
 }

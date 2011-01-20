@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.web.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
+import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
@@ -22,20 +23,31 @@ public class VisitsController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/visits/visits.form")
-	public ModelAndView showVisits(@RequestParam(required = true, value="patientProgramId") Integer patientProgramId, ModelMap map) {
+	public ModelAndView showVisits(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId,
+	                               @RequestParam(required = false, value="patientId") Integer patientId, ModelMap map) {
 		
-		MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+		if (patientProgramId != null) {
+			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program));
+			map.put("patientId", program.getPatient().getId());
+			map.put("patientProgramId", patientProgramId);
+		}
+		else if (patientId != null) {			
+			Patient patient = Context.getPatientService().getPatient(patientId);
+			map.put("patientId", patientId);
+			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(patient));
+
+		}
+		else {
+			throw new MdrtbAPIException("Patient program Id or patient Id must be specified.");
+		}
 		
-		map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program));
-		
-		map.put("patientId", program.getPatient().getId());
-		map.put("patientProgramId", patientProgramId);
-	
 		return new ModelAndView("/module/mdrtb/visits/visits", map);
 	}
 	
 	@RequestMapping("/module/mdrtb/visits/delete.form")
-	public ModelAndView deleteVisit(@RequestParam(required = true, value="patientProgramId") Integer patientProgramId, 
+	public ModelAndView deleteVisit(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId,
+	                                @RequestParam(required = false, value="patientId") Integer patientId, 
 									@RequestParam(required = true, value="visitId") Integer visitId, ModelMap map) {
 		
 		// handle the deletion
@@ -48,7 +60,7 @@ public class VisitsController {
 		}
 		
 		// forward on to the main showVisits method to display the visits page
-		return showVisits(patientProgramId, map); 
+		return showVisits(patientProgramId, patientId, map); 
 	}
 										
 								

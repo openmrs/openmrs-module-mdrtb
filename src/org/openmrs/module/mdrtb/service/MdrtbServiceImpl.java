@@ -116,6 +116,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		this.conceptMap.resetCache();
 	}
 	
+	public List<Encounter> getMdrtbEncounters(Patient patient) {
+		return Context.getEncounterService().getEncounters(patient, null, null, null, null, MdrtbUtil.getMdrtbEncounterTypes(), null, false);
+	}
+	
 	public List<MdrtbPatientProgram> getMdrtbPatientPrograms(Patient patient) {
     	
     	List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, getMdrtbProgram(), null, null, null, null, false);

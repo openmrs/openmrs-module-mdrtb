@@ -53,6 +53,12 @@ public interface MdrtbService extends OpenmrsService {
      */
     public void resetConceptMapCache();
     
+    /**
+     * Gets all MDR-TB specific encounters for the given patient
+     */
+    @Transactional(readOnly=true)
+    public List<Encounter> getMdrtbEncounters(Patient patient);
+    
   	/**
   	 * Returns all the mdrtb programs for a given patient
   	 */

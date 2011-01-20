@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
+import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 
 public class VisitStatusCalculator implements StatusCalculator {
@@ -23,15 +25,25 @@ public class VisitStatusCalculator implements StatusCalculator {
 	// if there is no scheduled follow up?
 	
 	
-    public Status calculate(MdrtbPatientProgram mdrtbProgram) {
+    public Status calculate(MdrtbPatientProgram mdrtbProgram, Patient patient) {
+    	  	
+    	// create the new status
+    	VisitStatus status = null;
     	
-	   // create the new status
-    	VisitStatus status = new VisitStatus(mdrtbProgram);
-    	
+    	if (mdrtbProgram != null) {
+    		status = new VisitStatus(mdrtbProgram);
+    	}
+    	// hack to handle the situation if we don't have a patient program--create a "dummy" patient program with 
+    	// just the patient information to pass on to the renderer
+    	else {
+    		MdrtbPatientProgram dummyProgram = new MdrtbPatientProgram();
+    		dummyProgram.setPatient(patient);
+    		status = new VisitStatus(dummyProgram);
+    	}
+    		
     	EncounterType intakeType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"));
     	EncounterType followUpType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"));
     	EncounterType specimenType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
-    	
     	
     	// where we will store the various visits
     	List<StatusItem> intakeVisits = new LinkedList<StatusItem>();
@@ -39,10 +51,16 @@ public class VisitStatusCalculator implements StatusCalculator {
     	List<StatusItem> scheduledFollowUpVisits = new LinkedList<StatusItem>();
     	List<StatusItem> specimenCollectionVisits = new LinkedList<StatusItem>();
     	
+    	List<Encounter> encounters = null;
     	
-    	// get all the encounters during the program
-    	List<Encounter> encounters = mdrtbProgram.getMdrtbEncountersDuringProgram();
-   
+    	// get all the encounters during the program, or, if no program specified, get all MDR-TB encouters
+    	if (mdrtbProgram != null) {
+    		encounters = mdrtbProgram.getMdrtbEncountersDuringProgram();
+    	}
+    	else {
+    		encounters = Context.getService(MdrtbService.class).getMdrtbEncounters(patient);
+    	}
+    	
     	if (encounters != null) {
     		for (Encounter encounter : encounters) {
     			// create a new status item for this encounter
@@ -88,6 +106,14 @@ public class VisitStatusCalculator implements StatusCalculator {
     	return status;
     }
 
+    public Status calculate(MdrtbPatientProgram mdrtbProgram) {
+    	return calculate(mdrtbProgram, mdrtbProgram.getPatient());
+    }
+    
+    public Status calculate(Patient patient) {
+    	return calculate(null, patient);
+    }
+    
 
 	public void setRenderer(VisitStatusRenderer renderer) {
 	    this.renderer = renderer;

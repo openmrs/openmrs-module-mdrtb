@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Role;
@@ -54,17 +55,28 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("specimens")
 	public Collection<Specimen> getSpecimens(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+											 @RequestParam(required = false, value = "patientId") Integer patientId,
 											 @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		
-		// if we haven't been given a patient program id, see if we can determine it from the specimen
+		// if we haven't been given a patient program id try to fetch all the specimens for this patient
 		if (patientProgramId == null) {
-			patientProgramId = getPatientProgramIdFromSpecimenId(specimenId);
+			
+			Patient patient = null;
+			
+			if (patientId != null) {
+				patient = Context.getPatientService().getPatient(patientId);
+			}
+			else if (specimenId != null) {
+				patient = Context.getService(MdrtbService.class).getSpecimen(specimenId).getPatient();
+			}
+			else {
+				throw new MdrtbAPIException("No pateint program Id, patient id, or specimen Id specified");
+			}
+		
+			return Context.getService(MdrtbService.class).getSpecimens(patient);
 		}
 		
-		if (patientProgramId == null) {
-			throw new MdrtbAPIException("No patient program ID or specimen specified.");
-		}
-		
+		// otherwise, just fetch the specimens during the program
 		PatientProgram patientProgram = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		MdrtbPatientProgram mdrtbPatientProgram = new MdrtbPatientProgram(patientProgram);
 		return mdrtbPatientProgram.getSpecimensDuringProgram();
@@ -76,22 +88,14 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("patientProgramId")
-	public Integer getPatientProgramId(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
-	                                   @RequestParam(required = false, value = "specimenId") Integer specimenId) {
+	public Integer getPatientProgramId(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
 		
 		if (patientProgramId != null) {
 			return patientProgramId;
 		}
 		// if we haven't been given a patient program id, see if we can figure out based on date collected of the specimen
 		else {
-			patientProgramId = getPatientProgramIdFromSpecimenId(specimenId);
-			
-			if (patientProgramId != null) {
-				return patientProgramId;
-			}
-			else {
-				throw new MdrtbAPIException("No patient program ID or specimen specified.");
-			}
+			return null;
 		}
 	}
 	
@@ -212,27 +216,6 @@ public abstract class AbstractSpecimenController {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
 	
-	/**
-	 * Utility methods
-	 */
-	
-	/**
-	 * See if we can derive the appropriate patient program id given a specimen id
-	 */
-	private Integer getPatientProgramIdFromSpecimenId(Integer specimenId) {
-		
-		if (specimenId != null) {
-			Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-			MdrtbPatientProgram patientProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgramOnDate(specimen.getPatient(), specimen.getDateCollected());
-			
-			if (patientProgram != null) {
-			  return patientProgram.getId();
-			}
-		}
-		
-		// if we got here, it means we haven't been able to determine the patient program id
-		return null;
-	}
  }
 
 
