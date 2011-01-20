@@ -106,7 +106,7 @@ public class MdrtbDashboardController {
 	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
 	                                                  @RequestParam(required = false, value = "patientId") Integer patientId) {
 		// if there is no patient program selected, we want to show the most recent program
-    	if (patientProgramId == null) {
+    	if (patientProgramId == null || patientProgramId == -1) {
 			Patient patient = Context.getPatientService().getPatient(patientId);
 			
 			if (patient == null) {
@@ -127,7 +127,7 @@ public class MdrtbDashboardController {
     @RequestMapping("/module/mdrtb/dashboard/dashboard.form")
 	public ModelAndView showStatus(@ModelAttribute("program") MdrtbPatientProgram program,
 	                               @RequestParam(required = false, value = "patientId") Integer patientId,
-	                               @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
+	                               ModelMap map) {
 
     	if (program == null) {
     		// if the patient has no program, redirect to the enroll-in-program
@@ -184,7 +184,7 @@ public class MdrtbDashboardController {
 		if (errors.hasErrors()) {	
 			map.put("programEditErrors", errors);
 			// call the show status method to redisplay the page with errors
-			return showStatus(program, null, program.getId(), map);
+			return showStatus(program, null, map);
 		}
 		   
 		// save the actual update
@@ -219,7 +219,7 @@ public class MdrtbDashboardController {
 		if (errors.hasErrors()) {	
 			map.put("programCloseErrors", errors);
 			// call the show status method to redisplay the page with errors
-			return showStatus(program, null, program.getId(), map);
+			return showStatus(program, null, map);
 		}
 		   
 		// save the actual update
@@ -269,7 +269,7 @@ public class MdrtbDashboardController {
 			map.put("dischargeDate", dischargeDate);
 			map.put("hospitalizationStateId", (hospitalizationState != null ? hospitalizationState.getId() : ""));
 			// call the show status method to redisplay the page with errors
-			return showStatus(program, null, program.getId(), map);
+			return showStatus(program, null, map);
 		}  
 
 		// save the actual update

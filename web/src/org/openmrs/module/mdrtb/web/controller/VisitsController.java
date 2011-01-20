@@ -26,7 +26,7 @@ public class VisitsController {
 	public ModelAndView showVisits(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId,
 	                               @RequestParam(required = false, value="patientId") Integer patientId, ModelMap map) {
 		
-		if (patientProgramId != null) {
+		if (patientProgramId != null && patientProgramId != -1) {
 			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
 			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program));
 			map.put("patientId", program.getPatient().getId());
@@ -35,6 +35,7 @@ public class VisitsController {
 		else if (patientId != null) {			
 			Patient patient = Context.getPatientService().getPatient(patientId);
 			map.put("patientId", patientId);
+			map.put("patientProgramId", -1);
 			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(patient));
 
 		}

@@ -43,7 +43,7 @@ public class EditRegimenController {
     		ModelMap model) {
     	
     	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", patientProgramId);
+    	model.addAttribute("patientProgramId", (patientProgramId != null ? patientProgramId : -1) );
     	model.addAttribute("type", type);
     	model.addAttribute("changeDate", changeDate);
     	

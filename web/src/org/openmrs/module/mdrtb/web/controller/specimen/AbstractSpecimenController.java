@@ -59,7 +59,7 @@ public abstract class AbstractSpecimenController {
 											 @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		
 		// if we haven't been given a patient program id try to fetch all the specimens for this patient
-		if (patientProgramId == null) {
+		if (patientProgramId == null || patientProgramId == -1) {
 			
 			Patient patient = null;
 			
@@ -95,7 +95,7 @@ public abstract class AbstractSpecimenController {
 		}
 		// if we haven't been given a patient program id, see if we can figure out based on date collected of the specimen
 		else {
-			return null;
+			return -1;
 		}
 	}
 	

@@ -21,7 +21,7 @@ public class ChartController {
 	                                       @RequestParam(required = true, value="patientProgramId") Integer patientProgramId, ModelMap map) {
 		
 		// redirect to the dashboard if no patient program has been specified
-		if (patientProgramId == null) {
+		if (patientProgramId == null || patientProgramId == -1) {
 			return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + patientId);
 		}
 		
