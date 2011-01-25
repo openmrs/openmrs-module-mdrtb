@@ -217,7 +217,7 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(programEditErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${programEditErrors.allErrors}">
-		<span class="error">${error.defaultMessage}</span><br/><br/>
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 </c:if>
 
@@ -292,7 +292,7 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(programCloseErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${programCloseErrors.allErrors}">
-		<span class="error">${error.defaultMessage}</span><br/><br/>
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 </c:if>
 
@@ -491,7 +491,7 @@ ${regimen.displayString}
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(hospitalizationErrors.allErrors) > 0}">
 	<c:forEach var="error" items="${hospitalizationErrors.allErrors}">
-		<span class="error">${error.defaultMessage}</span><br/><br/>
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 </c:if>
 

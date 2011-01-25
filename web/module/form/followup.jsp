@@ -93,7 +93,7 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(errors.allErrors) > 0}">
 	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error">${error.defaultMessage}</span><br/><br/>
+		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 	<br/>
 </c:if>
