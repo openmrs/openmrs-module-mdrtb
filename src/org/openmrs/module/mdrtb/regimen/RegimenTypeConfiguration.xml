@@ -12,7 +12,7 @@
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
-						<generic>1417</generic> 
+						<generic>KANAMYCIN</generic> 
 						<drugId>48</drugId> 
 						<dose>1</dose> 
 						<units>g</units> 
@@ -21,7 +21,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>5829</generic> 
+						<generic>PYRAZINAMIDE</generic> 
 						<drugId>46</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
@@ -30,7 +30,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1418</generic> 
+						<generic>OFLOXACIN</generic> 
 						<drugId>53</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
@@ -39,7 +39,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1415</generic> 
+						<generic>PROTHIONAMIDE</generic> 
 						<drugId>59</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -48,7 +48,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1413</generic> 
+						<generic>CYCLOSERINE</generic> 
 						<drugId>58</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -64,7 +64,7 @@
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
-						<generic>1417</generic> 
+						<generic>KANAMYCIN</generic> 
 						<drugId>48</drugId> 
 						<dose>1</dose> 
 						<units>g</units> 
@@ -73,7 +73,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>5829</generic> 
+						<generic>PYRAZINAMIDE</generic> 
 						<drugId>46</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
@@ -82,7 +82,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1418</generic> 
+						<generic>OFLOXACIN</generic> 
 						<drugId>53</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
@@ -91,7 +91,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1415</generic> 
+						<generic>PROTHIONAMIDE</generic> 
 						<drugId>59</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -100,7 +100,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1413</generic> 
+						<generic>CYCLOSERINE</generic> 
 						<drugId>58</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -116,7 +116,7 @@
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
-						<generic>1418</generic> 
+						<generic>OFLOXACIN</generic> 
 						<drugId>53</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
@@ -125,7 +125,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1415</generic> 
+						<generic>PROTHIONAMIDE</generic> 
 						<drugId>59</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -134,7 +134,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1413</generic> 
+						<generic>CYCLOSERINE</generic> 
 						<drugId>58</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -150,7 +150,7 @@
 				<reasonForStarting>STANDARDIZED</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
-						<generic>1418</generic> 
+						<generic>OFLOXACIN</generic> 
 						<drugId>53</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
@@ -159,7 +159,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1415</generic> 
+						<generic>PROTHIONAMIDE</generic> 
 						<drugId>59</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -168,7 +168,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1413</generic> 
+						<generic>CYCLOSERINE</generic> 
 						<drugId>58</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
@@ -177,7 +177,7 @@
 						<asNeeded>false</asNeeded>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>5829</generic> 
+						<generic>PYRAZINAMIDE</generic> 
 						<drugId>46</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
@@ -193,35 +193,35 @@
 				<reasonForStarting>EMPIRIC</reasonForStarting>
 				<drugComponents> 
 					<drugSuggestion> 
-						<generic>1417</generic> 
+						<generic>KANAMYCIN</generic> 
 						<drugId>48</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>755</generic> 
+						<generic>LEVOFLOXACIN</generic> 
 						<drugId>54</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>  
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1414</generic> 
+						<generic>ETHIONAMIDE</generic> 
 						<drugId>57</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>  
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1413</generic> 
+						<generic>CYCLOSERINE</generic> 
 						<drugId>58</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>
 					</drugSuggestion>
 					<drugSuggestion> 
-						<generic>1419</generic> 
+						<generic>P-AMINOSALICYLIC ACID</generic> 
 						<drugId>61</drugId> 
 						<dose></dose> 
 						<units></units> 
@@ -242,7 +242,7 @@
 				<displayName>3TC + d4T(30) + NVP (Triomune-30)</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>792</generic> 
+						<generic>STAVUDINE LAMIVUDINE AND NEVIRAPINE</generic> 
 						<drugId>2</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
@@ -256,7 +256,7 @@
 				<displayName>3TC + d4T(40) + NVP (Triomune-40)</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>792</generic> 
+						<generic>STAVUDINE LAMIVUDINE AND NEVIRAPINE</generic> 
 						<drugId>3</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
@@ -270,7 +270,7 @@
 				<displayName>d4T(30) + 3TC + EFV(600)</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>625</generic> 
+						<generic>STAVUDINE</generic> 
 						<drugId>5</drugId>
 						<dose>30</dose>
 						<units>mg</units>
@@ -278,7 +278,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 					<drugSuggestion>
-						<generic>628</generic> 
+						<generic>LAMIVUDINE</generic> 
 						<drugId>42</drugId>
 						<dose>150</dose>
 						<units>mg</units>
@@ -286,7 +286,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 			  		<drugSuggestion>
-			  			<generic>633</generic> 
+			  			<generic>EFAVIRENZ</generic> 
 						<drugId>11</drugId>
 						<dose>600</dose>
 						<units>mg</units>
@@ -300,7 +300,7 @@
 				<displayName>AZT + 3TC + NVP</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>630</generic> 
+						<generic>ZIDOVUDINE AND LAMIVUDINE</generic> 
 						<drugId>39</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
@@ -308,7 +308,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 					<drugSuggestion>
-						<generic>631</generic> 
+						<generic>NEVIRAPINE</generic> 
 						<drugId>22</drugId>
 						<dose>200</dose>
 						<units>mg</units>
@@ -322,7 +322,7 @@
 				<displayName>AZT + 3TC + EFV(600)</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>630</generic> 
+						<generic>ZIDOVUDINE AND LAMIVUDINE</generic> 
 						<drugId>39</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
@@ -330,7 +330,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 					<drugSuggestion>
-						<generic>633</generic> 
+						<generic>EFAVIRENZ</generic> 
 						<drugId>11</drugId>
 						<dose>600</dose>
 						<units>mg</units>
@@ -344,7 +344,7 @@
 				<displayName>d4T(40) + 3TC + EFV(600)</displayName>
 				<drugComponents>
 					<drugSuggestion>
-						<generic>625</generic> 
+						<generic>STAVUDINE</generic> 
 						<drugId>6</drugId>
 						<dose>40</dose>
 						<units>mg</units>
@@ -352,7 +352,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 					<drugSuggestion>
-						<generic>628</generic> 
+						<generic>LAMIVUDINE</generic> 
 						<drugId>42</drugId>
 						<dose>150</dose>
 						<units>mg</units>
@@ -360,7 +360,7 @@
 						<instructions></instructions>
 					</drugSuggestion>
 					<drugSuggestion>
-						<generic>633</generic> 
+						<generic>EFAVIRENZ</generic> 
 						<drugId>11</drugId>
 						<dose>600</dose>
 						<units>mg</units>
