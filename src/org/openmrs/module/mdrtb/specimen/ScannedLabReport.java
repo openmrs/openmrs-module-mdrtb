@@ -28,6 +28,7 @@ public interface ScannedLabReport {
 		public String getId();
 		public String getFilename();
 		
+		public Object getFile();
 		public void setFile(MultipartFile file);
 		
 		public Location getLab();

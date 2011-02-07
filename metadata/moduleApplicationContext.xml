@@ -74,6 +74,7 @@
     
     
     <!-- Define the Complex Obs Handler -->
+   	<!--  TO DO: remove this once it gets added to core -->
     <bean parent="obsServiceTarget">
         <property name="handlers">
             <map>

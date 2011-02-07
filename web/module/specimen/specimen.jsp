@@ -373,8 +373,11 @@
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
 <c:choose>
-	<c:when test="${! empty report.filename}">
+	<c:when test="${! empty report.filename && ! empty report.file}">
 		<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:when>
+	<c:when test="${! empty report.filename && empty report.file}">
+		<nobr>${report.filename} - <spring:message code="mdrtb.missingScannedLabReport"/> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
 	</c:when>
 	<c:otherwise>
 		<nobr><spring:message code="mdrtb.missingScannedLabReport"/> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
@@ -467,8 +470,17 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
-
-<span class="scannedLabReport"><nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}
+<c:choose>
+	<c:when test="${! empty report.filename && ! empty report.file}">
+		<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:when>
+	<c:when test="${! empty report.filename && empty report.file}">
+		<nobr>${report.filename} - <spring:message code="mdrtb.missingScannedLabReport"/> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:when>
+	<c:otherwise>
+		<nobr><spring:message code="mdrtb.missingScannedLabReport"/> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
+	</c:otherwise>
+</c:choose>
 <button class="removeScannedLabReport" value="${report.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></nobr>
 <input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/></span>
 <br/>

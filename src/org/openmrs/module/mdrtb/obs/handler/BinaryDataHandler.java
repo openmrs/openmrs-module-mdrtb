@@ -13,12 +13,10 @@
  */
 package org.openmrs.module.mdrtb.obs.handler;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,20 +25,16 @@ import org.openmrs.api.APIException;
 import org.openmrs.obs.ComplexData;
 import org.openmrs.obs.ComplexObsHandler;
 import org.openmrs.obs.handler.AbstractHandler;
-import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
- * Handler for storing generic binary data for complex obs to the file system.
- * @see OpenmrsConstants#GLOBAL_PROPERTY_COMPLEX_OBS_DIR
- * @since 1.5
+ * Handler for storing files for complex obs to the file system. Files are stored in the location
+ * specified by the global property: "obs.complex_obs_dir"
+ * 
  */
 
-
+// TODO: we can remove this once it gets added to core in 1.8.x
 public class BinaryDataHandler extends AbstractHandler implements ComplexObsHandler {
-	
-	// TODO: remove this once it gets added to core--it should be in 1.8?
-	// TODO: but 1.8 may not have the change where I test for file.exists()?
 	
 	public static final Log log = LogFactory.getLog(BinaryDataHandler.class);
 	
@@ -53,57 +47,84 @@ public class BinaryDataHandler extends AbstractHandler implements ComplexObsHand
 	}
 	
 	/**
-	 * Returns the same ComplexData for all views.  The title is the original filename,
-	 * and the data is the raw byte[] of data
+	 * Currently supports all views
 	 * 
-	 * Note that if the method cannot find the file associated with the obs, it
-	 * returns the obs with the ComplexData = null
-	 * 
-	 * @see ComplexObsHandler#getObs(Obs, String)
+	 * @see org.openmrs.obs.ComplexObsHandler#getObs(org.openmrs.Obs, java.lang.String)
 	 */
 	public Obs getObs(Obs obs, String view) {
+		File file = getComplexDataFile(obs);
+		log.debug("value complex: " + obs.getValueComplex());
+		log.debug("file path: " + file.getAbsolutePath());
+		ComplexData complexData = null;
+		
+		// to handle problem with downloading/saving files with blank spaces or commas in their names
+		// also need to remove the "file" text appended to the end of the file name
+		String[] names = obs.getValueComplex().split("\\|");
+		String originalFilename = names[0];
+		if ("download".equals(view)) {
+			originalFilename = originalFilename.replaceAll(",", "").replaceAll(" ", "").replaceAll("file$","");	
+		}
 		
 		try {
-			File file = getComplexDataFile(obs);
-			String[] names = obs.getValueComplex().split("\\|");
-			String originalFilename = names[0];
-			if ("download".equals(view)) {
-				originalFilename = originalFilename.replace(",", "").replace(" ", "");
-			}
-			
-			if (file.exists()) {
-				FileInputStream fileInputStream = new FileInputStream(file);	
-				obs.setComplexData(new ComplexData(originalFilename, fileInputStream));
-			}
-			else {
-				log.error("Unable to find file associated with complex obs " + obs.getId());
-			}
+			complexData = new ComplexData(originalFilename, OpenmrsUtil.getFileAsBytes(file));
 		}
-		catch (Exception e) {
-			throw new APIException("An error occurred while trying to get binary complex obs.", e);
+		catch (IOException e) {
+			log.error("Trying to read file: " + file.getAbsolutePath(), e);
 		}
+		
+		obs.setComplexData(complexData);
+		
 		return obs;
 	}
 	
 	/**
-	 * @see ComplexObsHandler#saveObs(Obs)
+	 * TODO should this support a StringReader too?
+	 * 
+	 * @see org.openmrs.obs.ComplexObsHandler#saveObs(org.openmrs.Obs)
 	 */
 	public Obs saveObs(Obs obs) throws APIException {
-		try {			
-			// Write the File to the File System
-			String fileName = obs.getComplexData().getTitle();
-			InputStream in = (InputStream) obs.getComplexData().getData();
-			File outfile = getOutputFileToWrite(obs);
-			OutputStream out = new FileOutputStream(outfile, false);
-			OpenmrsUtil.copyFile(in, out);
-			
-			// Store the filename in the Obs
-			obs.setComplexData(null);
-			obs.setValueComplex(fileName + "|" + outfile.getName());
-			out.close();
+		// Get the buffered file  from the ComplexData.
+		ComplexData complexData = obs.getComplexData();
+		if (complexData == null) {
+			log.error("Cannot save complex data where obsId=" + obs.getObsId() + " because its ComplexData is null.");
+			return obs;
 		}
-		catch (Exception e) {
-			throw new APIException("Error writing binary data complex obs to the file system. ", e);
+		
+		FileOutputStream fout = null;
+		try {
+			File outfile = getOutputFileToWrite(obs);
+			fout = new FileOutputStream(outfile);
+			
+			Object data = obs.getComplexData().getData();
+			if (data instanceof byte[]) {
+				fout.write((byte[]) data);
+			} else if (InputStream.class.isAssignableFrom(data.getClass())) {
+				try {
+					OpenmrsUtil.copyFile((InputStream) data, fout);
+				}
+				catch (IOException e) {
+					throw new APIException(
+					        "Unable to convert complex data to a valid input stream and then read it into a buffered image");
+				}
+			}
+			
+			// Set the Title and URI for the valueComplex
+			obs.setValueComplex(outfile.getName() + " file |" + outfile.getName());
+			
+			// Remove the ComplexData from the Obs
+			obs.setComplexData(null);
+			
+		}
+		catch (IOException ioe) {
+			throw new APIException("Trying to write complex obs to the file system. ", ioe);
+		}
+		finally {
+			try {
+				fout.close();
+			}
+			catch (Throwable t) {
+				// pass
+			}
 		}
 		
 		return obs;
