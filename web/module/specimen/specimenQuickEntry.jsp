@@ -67,7 +67,7 @@
 
 </script>
 
-<b class="boxHeader"><spring:message code="mdrtb.${testType}results"/></b>
+<b class="boxHeader"><spring:message code="mdrtb.add${testType}Results"/></b>
 <!-- display the proper header depending on whether we were adding a specimen, or a smear/culture -->
 
 <div class="box">

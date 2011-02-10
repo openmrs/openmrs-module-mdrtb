@@ -177,6 +177,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		if (patientProgramId == null) {
 			throw new MdrtbAPIException("Patient program Id cannot be null.");
 		}
+		else if (patientProgramId == -1) {
+			return null;
+		}
 		else {
 			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 			
