@@ -543,7 +543,7 @@ ${regimen.displayString}
 </tr>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/></nobr></td>
+<td style="font-weight:bold"><spring:message code="mdrtb.diagnosticSmear" text="Diagnostic Smear"/></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticSmear.value}">
 		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticSmear.link}">${status.labResultsStatus.diagnosticSmear.value.result.displayString}</mdrtb:a></td>
@@ -558,7 +558,7 @@ ${regimen.displayString}
 </tr>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/></nobr></td>
+<td style="font-weight:bold"><spring:message code="mdrtb.diagnosticCulture" text="Diagnostic Culture"/></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.diagnosticCulture.value}">
 		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.diagnosticCulture.link}">${status.labResultsStatus.diagnosticCulture.value.result.displayString}</mdrtb:a></td>
@@ -608,7 +608,7 @@ ${regimen.displayString}
 </tr>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/></nobr></td>
+<td style="font-weight:bold"><spring:message code="mdrtb.mostRecentSmear" text="Most Recent Smear"/></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentSmear.value}">
 		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentSmear.link}">${status.labResultsStatus.mostRecentSmear.value.result.displayString}</mdrtb:a></td>
@@ -623,7 +623,7 @@ ${regimen.displayString}
 </tr>
 
 <tr>
-<td style="font-weight:bold"><nobr><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/></nobr></td>
+<td style="font-weight:bold"><spring:message code="mdrtb.mostRecentCulture" text="Most Recent Culture"/></td>
 <c:choose>
 	<c:when test="${! empty status.labResultsStatus.mostRecentCulture.value}">
 		<td><mdrtb:a href="${pageContext.request.contextPath}${status.labResultsStatus.mostRecentCulture.link}">${status.labResultsStatus.mostRecentCulture.value.result.displayString}</mdrtb:a></td>
