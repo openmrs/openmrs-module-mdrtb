@@ -221,6 +221,10 @@
 		<lang>es</lang>
 		<file>messages_es.properties</file>
 	</messages>
+	<messages>
+		<lang>ru</lang>
+		<file>messages_ru.properties</file>
+	</messages>
 	<!-- /Internationalization -->
 
 </module>
