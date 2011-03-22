@@ -194,6 +194,7 @@ public class SpecimenReportingTools {
 		Concept smearResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
 		Concept cultureResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT);
 		Concept contaminated = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTAMINATED);
+		Concept unsatisfactory = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNSATISFACTORY_SAMPLE);
 		Concept dstContaminated = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONTAMINATED);
 		
 		String labIdString = convertIntegerArrayToString(labIds);
@@ -208,7 +209,7 @@ public class SpecimenReportingTools {
 						 (startDateCollected != null ? "and encounter.encounter_datetime >= '" + sqlFormat.format(startDateCollected) + "' " : "") +
 						 (endDateCollected != null ? "and encounter.encounter_datetime <= '" + sqlFormat.format(endDateCollected) + "' " : "") +
 						"and obs.voided='0' " + (labIdString != null ? (" and obs.location_id in (" + labIdString + ") ") : "") + 
-						"and ( (concept_id in (" + smearResult.getId() + "," + cultureResult.getId()+ ") and value_coded='" + contaminated.getId() + "') " + 
+						"and ( (concept_id in (" + smearResult.getId() + "," + cultureResult.getId()+ ") and value_coded in (" + contaminated.getId() + "," + unsatisfactory.getId() + ")) " + 
 						"or concept_id = '" + dstContaminated.getId() + "');";
 		
 		List<List<Object>> results = Context.getAdministrationService().executeSQL(sql, true);

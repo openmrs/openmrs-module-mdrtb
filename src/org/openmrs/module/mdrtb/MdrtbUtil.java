@@ -1,14 +1,18 @@
 package org.openmrs.module.mdrtb;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.util.StringUtil;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
@@ -160,14 +164,22 @@ public class MdrtbUtil {
     /**
      * Loads and sorts the drugs stored in the global property mdtrb.defaultDstDrugs
      */
-    public static List<Concept> getDefaultDstDrugs() {
-    	List<Concept> drugs = new LinkedList<Concept>();
+    public static List<List<Object>> getDefaultDstDrugs() {
+    	List<List<Object>> drugs = new LinkedList<List<Object>>();
     	
-    	String drugString = Context.getAdministrationService().getGlobalProperty("mdrtb.defaultDstDrugs");
+    	String defaultDstDrugs = Context.getAdministrationService().getGlobalProperty("mdrtb.defaultDstDrugs");
     	
-    	if(StringUtils.hasText(drugString)) {
+    	if(StringUtils.hasText(defaultDstDrugs)) {
     		// split on the pipe
-    		for (String drug : drugString.split("\\|")) {
+    		for (String drugString : defaultDstDrugs.split("\\|")) {
+    			
+    			// now split into a name and concentration 
+    			String drug = drugString.split(":")[0];
+    			String concentration = null;
+    			if (drugString.split(":").length > 1) {
+    				concentration = drugString.split(":")[1];
+    			}
+    			
     			try {
     				// see if this is a concept id
     				Integer conceptId = Integer.valueOf(drug);
@@ -176,9 +188,9 @@ public class MdrtbUtil {
     				if (concept == null) {
     					log.error("Unable to find concept referenced by id " + conceptId);
     				}
-    				// add the concept to the list
+    				// add the concept/concentration pair to the list
     				else {
-    					drugs.add(concept);
+    					addDefaultDstDrugToMap(drugs, concept, concentration);
     				}
     			}    	
     			catch (NumberFormatException e) {
@@ -190,17 +202,26 @@ public class MdrtbUtil {
     				}
     				// add the concept to the list
     				else {
-    					drugs.add(concept);
+    					addDefaultDstDrugToMap(drugs, concept, concentration);
     				}
     			}
     		}
     	}
     	
-    	// now sort the drugs in the standard order for consistency
-    	sortMdrtbDrugs(drugs);
-    	
     	return drugs;
     }
+    
+    /**
+     * Private helper method used by getDefaultDstDrugs
+     * (Adds an element to the default dst drug map)
+     */
+    private static void addDefaultDstDrugToMap(List<List<Object>> drugs, Concept concept, String concentration) {
+    	List<Object> data = new LinkedList<Object>();
+    	data.add(concept);
+    	data.add(concentration);
+    	drugs.add(data);
+    }
+    
     
 	/**
 	 * Given a list of concepts, sorts them in the same order as the list of MDR-TB drugs

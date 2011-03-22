@@ -889,7 +889,7 @@
 
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
-<td><input type="text" name="accessionNumber" value="${test.accessionNumber}"/></td>
+<td><input type="text" name="accessionNumber" value="${! empty test.accessionNumber ? test.accessionNumber : specimen.identifier}"/></td>  <!--  if no accession number, default for the accession number of the first test -->
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
 <td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
@@ -899,7 +899,7 @@
 <td style="font-weight:bold"><spring:message code="mdrtb.lab" text="Lab"/>:</td>
 <td><select name="lab">
 <c:forEach var="location" items="${locations}">
-<option value="${location.locationId}" <c:if test="${location == test.lab}">selected</c:if> >${location.displayString}</option>
+<option value="${location.locationId}" <c:if test="${location == test.lab || (fn:length(specimen.tests) > 0 && location == specimen.tests[0].lab)}">selected</c:if> >${location.displayString}</option>
 </c:forEach>
 </select>
 </td>
@@ -1021,11 +1021,11 @@
 			<option value=""></option>
 			<c:forEach var="drug" items="${drugTypes}">
 				<!-- the test here is used to set the default drugs from the list as required -->
-				<option value="${drug.id}" <c:if test="${((i.count <= fn:length(defaultDstDrugs)) && defaultDstDrugs[i.count - 1].id == drug.id) || (! empty addDstResultDrug && addDstResultDrug[i.count - 1] == drug.id)}">selected</c:if> >${drug.displayString}</option>
+				<option value="${drug.id}" <c:if test="${((i.count <= fn:length(defaultDstDrugs)) && defaultDstDrugs[i.count - 1][0].id == drug.id) || (! empty addDstResultDrug && addDstResultDrug[i.count - 1] == drug.id)}">selected</c:if> >${drug.displayString}</option>
 			</c:forEach>
 			</select>
 		</td>
-		<td><input type="input" size="6" name="addDstResult${i.count}.concentration" value="${! empty addDstResultConcentration ? addDstResultConcentration[i.count - 1] : ''}"/></td>
+		<td><input type="input" size="6" name="addDstResult${i.count}.concentration" value="${! empty addDstResultConcentration ? addDstResultConcentration[i.count - 1] : defaultDstDrugs[i.count - 1][1]}"/></td>
 		<td><select name="addDstResult${i.count}.result" class="dstResult">
 			<option value=""></option>
 			<c:forEach var="possibleResult" items="${dstResults}">

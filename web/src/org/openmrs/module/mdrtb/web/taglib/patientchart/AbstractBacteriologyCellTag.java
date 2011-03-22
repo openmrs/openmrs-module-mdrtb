@@ -192,7 +192,8 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
     	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY), 5);
     	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEGATIVE), 6);
     	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTAMINATED), 7);
-    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS), 8);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNSATISFACTORY_SAMPLE), 8);
+    	resultRankings.put(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WAITING_FOR_TEST_RESULTS), 9);
     
     	return resultRankings;
     }

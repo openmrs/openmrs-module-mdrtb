@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +49,7 @@ public class SpecimenController extends AbstractSpecimenController {
 	 * Returns the default list of drugs to display in the DST add test results box
 	 */
 	@ModelAttribute("defaultDstDrugs")
-	public List<Concept> getDefaultDstDrugs() {
+	public List<List<Object>> getDefaultDstDrugs() {
 		return MdrtbUtil.getDefaultDstDrugs();
 	}
 	

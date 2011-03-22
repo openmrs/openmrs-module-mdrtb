@@ -80,6 +80,7 @@ public class MdrtbConcepts {
     public final static String [] POSITIVE = {"POSITIVE"};
     public final static String [] NEGATIVE = {"NEGATIVE"};
     public final static String [] CONTAMINATED = {"CONTAMINATED"};
+    public final static String [] UNSATISFACTORY_SAMPLE = {"UNSATISFACTORY SAMPLE"};
     
     // MDR-TB Classification
     public final static String [] CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE = {"CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE"};
