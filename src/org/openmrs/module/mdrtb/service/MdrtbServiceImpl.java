@@ -120,6 +120,25 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return Context.getEncounterService().getEncounters(patient, null, null, null, null, MdrtbUtil.getMdrtbEncounterTypes(), null, false);
 	}
 	
+	public List<MdrtbPatientProgram> getAllMdrtbPatientPrograms() {
+		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(null, getMdrtbProgram(), null, null, null, null, false);
+    	
+	 	// sort the programs so oldest is first and most recent is last
+    	Collections.sort(programs, new PatientProgramComparator());
+    	
+    	List<MdrtbPatientProgram> mdrtbPrograms = new LinkedList<MdrtbPatientProgram>();
+    	
+    	// sort the programs so oldest is first and most recent is last
+    	Collections.sort(programs, new PatientProgramComparator());
+    	
+    	// convert to mdrtb patient programs
+    	for (PatientProgram program : programs) {
+    		mdrtbPrograms.add(new MdrtbPatientProgram(program));
+    	}
+    	
+    	return mdrtbPrograms;
+	}
+	
 	public List<MdrtbPatientProgram> getMdrtbPatientPrograms(Patient patient) {
     	
     	List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient, getMdrtbProgram(), null, null, null, null, false);

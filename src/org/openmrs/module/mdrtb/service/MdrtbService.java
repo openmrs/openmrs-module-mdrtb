@@ -59,6 +59,12 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional(readOnly=true)
     public List<Encounter> getMdrtbEncounters(Patient patient);
     
+    /**
+     * Returns all the MDR-TB programs in the system
+     */
+    @Transactional(readOnly=true)
+    public List<MdrtbPatientProgram> getAllMdrtbPatientPrograms();
+    
   	/**
   	 * Returns all the mdrtb programs for a given patient
   	 */
