@@ -199,9 +199,20 @@ public class ReportUtil {
 		int startMonth = 1;
 		int endMonth = 12;
 		
+		
+		// if the year is null, we don't have start and end dates, want to query from the beginning of time until today
+		if (year == null && month == null && quarter == null) {
+			Map<String, Date> periodDates = new HashMap<String, Date>();;
+			periodDates.put("startDate", null);
+			periodDates.put("endDate", new Date());
+			
+			return periodDates;
+		}
+		
 		if (year == null || year < 1900 || year > 2100) {
 			throw new IllegalArgumentException("Please enter a valid year");
 		}
+		
 		if (quarter != null) {
 			if (quarter < 1 || quarter > 4) {
 				throw new IllegalArgumentException("Please enter a valid quarter (1-4)");

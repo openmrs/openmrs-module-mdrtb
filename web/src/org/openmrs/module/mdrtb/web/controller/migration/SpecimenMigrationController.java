@@ -1216,14 +1216,14 @@ public class SpecimenMigrationController {
     	
     	// retire old concepts
     	//  TODO: IMPORTANT: are the concept ids the same on all systems?
-    	retireConcept(1564);
-    	retireConcept(1585);
-    	retireConcept(1563);
-    	retireConcept(1565);
-    	retireConcept(1587);
-    	retireConcept(1566);
-    	retireConcept(1567);
-    	retireConcept(1584);
+    	retireConcept(1564);  // TREATMENT COMPLETED - TB CATEGORY IV
+    	retireConcept(1585);  // CURED - TB
+    	retireConcept(1563);  // CURED - TB CATEGORY IV
+    	retireConcept(1565);  // DIED - TB 
+    	retireConcept(1587);  // FAILED - TB
+    	retireConcept(1566);  // FAILED - TB CATEGORY IV
+    	retireConcept(1567);  // DEFAULTED - TB
+    	retireConcept(1584);  // MULTIDRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME
     	
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
@@ -1303,11 +1303,11 @@ public class SpecimenMigrationController {
     	
     	// retire old concepts
     	//  TODO: IMPORTANT: are the concept ids the same on all systems?
-    	retireConcept(1523);
-    	retireConcept(1529);
-    	retireConcept(1524);
-    	retireConcept(1530);
-    	retireConcept(1525);
+    	retireConcept(1523);  // NEW MDR-TB PATIENT
+    	retireConcept(1529);  // TRANSFER IN MDR-TB PATIENT
+    	retireConcept(1524);  // RELAPSE MDR-TB PATIENT
+    	retireConcept(1530);  // OTHER MDR-TB PATIENT
+    	retireConcept(1525);  // TREATMENT AFTER DEFAULT MDR-TB PATIENT
     	
     	return new ModelAndView("/module/mdrtb/migration/migration");
     }
