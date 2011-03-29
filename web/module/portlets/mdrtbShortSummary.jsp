@@ -32,7 +32,7 @@
 					<tr class="${s.index % 2 == 0 ? 'oddRow' : 'evenRow'}">
 						<td>
 							<span class="mdrListBigValue">
-								<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbPatientOverview.form?patientId=${patient.patientId}">
+								<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patient.patientId}">
 									${patient.fullName}
 								</a>
 							</span><br/>

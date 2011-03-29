@@ -79,7 +79,7 @@ public class PatientSummaryUtil {
     public static final String CITY_VILLAGE = "cityVillage";
     public static final String FULL_ADDRESS = "fullAddress";
     
-    public static final String RESISTANCE_LIST = "resistanceList";
+    public static final String RESISTANCE_LIST = "resistanceProfile";
     
     public static final String HIV_TEST_RESULT = MdrtbConcepts.RESULT_OF_HIV_TEST[0];
     public static final String SMEAR_RESULT = MdrtbConcepts.SMEAR_RESULT[0];

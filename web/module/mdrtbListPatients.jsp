@@ -50,7 +50,7 @@
 
 	<table class="patientTable" width="100%">
 		<tr>
-			<td valign="top" class="patientTable">
+			<td width="25%" valign="top" class="patientTable">
 				<table>
 					<tr style="border-bottom:2px solid black; height:25px;"><td colspan="2" style="padding-left:10px; background-color:#C0C0C0; font-weight:bold;">
 						<spring:message code="mdrtb.choosePatientsToDisplay" text="Choose patients to display"/>:
@@ -100,13 +100,17 @@
 					</tr>
 					
 					<c:forEach items="${openmrs:sort(mdrProgram.workflows, 'concept.name.name', false)}" var="wf">
-						<tr><th colspan="2"><br/><mdrtb:format obj="${wf.concept}"/></th></tr>
-						<c:forEach items="${openmrs:sort(wf.states, 'concept.name.name', false)}" var="wfs">
-							<tr>
-								<td><input type="checkbox" name="states" value="${wfs.programWorkflowStateId}"<c:if test="${mdrtb:collectionContains(states, wfs)}"> checked</c:if>/>&nbsp;</td>
-								<td><mdrtb:format obj="${wfs.concept}"/><br/></td>
-							</tr>							
-						</c:forEach>
+						<c:if test="${!wf.retired}">
+							<tr><th colspan="2"><br/><mdrtb:format obj="${wf.concept}"/></th></tr>
+							<c:forEach items="${openmrs:sort(wf.states, 'concept.name.name', false)}" var="wfs">
+								<c:if test="${!wfs.retired}">
+									<tr>
+										<td><input type="checkbox" name="states" value="${wfs.programWorkflowStateId}"<c:if test="${mdrtb:collectionContains(states, wfs)}"> checked</c:if>/>&nbsp;</td>
+										<td><mdrtb:format obj="${wfs.concept}"/><br/></td>
+									</tr>				
+								</c:if>			
+							</c:forEach>
+						</c:if>
 					</c:forEach>
 				</table>
 			</td>

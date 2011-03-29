@@ -127,7 +127,7 @@ public class MdrtbConcepts {
     // Hospitalization states
     public final static String [] HOSPITALIZATION_WORKFLOW = {"HOSPITALIZATION WORKFLOW"};
     public final static String [] HOSPITALIZED = {"HOSPITALIZED"};
-    public final static String [] AMBULATORY = {"AMBULATORY"};
+    public final static String [] AMBULATORY = {"AMBULATORY"};   // legacy, has been retired
     
     // Other
     public final static String [] UNKNOWN = {"UNKNOWN"};
