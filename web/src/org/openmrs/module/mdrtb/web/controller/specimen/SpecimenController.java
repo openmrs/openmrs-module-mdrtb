@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
@@ -246,7 +244,6 @@ public class SpecimenController extends AbstractSpecimenController {
 			// create the new result
 			ScannedLabReport report = specimen.addScannedLabReport();
 			
-			// TODO: hack for now, we are assuming that the location must be MSLI!
 			report.setLab(scannedLabReportLocation);
 			report.setFile(scannedLabReport);
 		
