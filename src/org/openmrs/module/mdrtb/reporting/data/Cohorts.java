@@ -35,6 +35,7 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
@@ -104,6 +105,10 @@ public class Cohorts {
 		cd.setOnDate(onDate);
 		cd.setStates(Arrays.asList(state));
 		return cd;
+	}
+	
+	public static CohortDefinition getNotInStateDuringFilter(ProgramWorkflowState state, Date startDate, Date endDate) {
+		return new InverseCohortDefinition(getInStateDuringFilter(state, startDate, endDate));
 	}
 
 	public static CohortDefinition getMdrtbPatientProgramStateFilter(Concept workflowConcept, List<Concept> stateConcepts, Date startDate, Date endDate) {
@@ -205,12 +210,12 @@ public class Cohorts {
 	}
 	
 	public static CohortDefinition getMostRecentlyAmbulatoryByEnd(Date startDate, Date endDate) {
-		return ReportUtil.getCodedObsCohort(TimeModifier.LAST, 3289, null, endDate, SetComparator.IN, 1664);
+		return getNotInStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)), startDate, endDate);
 	}
 	
 	// TODO: figure out what obs to look for here--see ticket HATB-358
 	public static CohortDefinition getHivPositiveDuring(Date startDate, Date endDate) {
-		return ReportUtil.getCodedObsCohort(TimeModifier.ANY, 3753, startDate, endDate, SetComparator.IN, 703);
+		return ReportUtil.getCodedObsCohort(TimeModifier.ANY, 3753, startDate, endDate, SetComparator.IN, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.POSITIVE).getId());
 	}
 	
 	// TODO: figure out what obs to look for here--see ticket HATB-358
@@ -265,7 +270,7 @@ public class Cohorts {
 	public static CohortDefinition getFirstCulturePositiveDuring(Date startDate, Date endDate) {	
 		StringBuilder q = new StringBuilder();
 		q.append("select 	o.person_id ");
-		q.append("from		obs o, (select person_id, concept_id, min(obs_datetime) as obs_datetime from obs where concept_id = 3046 group by person_id) d ");
+		q.append("from		obs o, (select person_id, concept_id, min(obs_datetime) as obs_datetime from obs where concept_id = "  + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT).getId() +  " group by person_id) d ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT).getId() + " ");
 		q.append("and		o.obs_datetime = d.obs_datetime ");
 		q.append("and		o.value_coded in (" + convertIntegerSetToString(MdrtbUtil.getPositiveResultConceptIds()) + ") ");

@@ -90,7 +90,8 @@ public class MdrtbQueryService {
     	
     	Map<String, Cohort> ret = new TreeMap<String, Cohort>();
     	
-    	Integer resistant = 1441; // TODO: Refactor this
+    	Integer resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getId(); 
+    	
     	StringBuilder q = new StringBuilder();
     	q.append("select 	p.patient_id, o.value_coded, n.name ");
     	q.append("from 		patient p, obs o, concept_name n ");
