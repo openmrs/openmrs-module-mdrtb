@@ -56,8 +56,8 @@ public class WHOForm05 implements ReportSpecification {
 	public List<Parameter> getParameters() {
 		List<Parameter> l = new ArrayList<Parameter>();
 		l.add(new Parameter("location", "Facility", Location.class));
-		l.add(new Parameter("quarter", "Quarter", Integer.class));
 		l.add(new Parameter("year", "Year", Integer.class));
+		l.add(new Parameter("quarter", "Quarter", Integer.class));
 		return l;
 	}
 	
