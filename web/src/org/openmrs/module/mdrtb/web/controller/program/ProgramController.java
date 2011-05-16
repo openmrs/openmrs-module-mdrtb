@@ -107,7 +107,8 @@ public class ProgramController {
     	}
 		
 		if (errors.hasErrors()) {
-			map.put("hasActiveProgram", Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient).getActive() ? true : false);
+			MdrtbPatientProgram mostRecentProgram = Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient);
+			map.put("hasActiveProgram", mostRecentProgram != null && mostRecentProgram.getActive() ? true : false);
 			map.put("patientId", patientId);
 			map.put("errors", errors);
 			return new ModelAndView("/module/mdrtb/program/showEnroll", map);
