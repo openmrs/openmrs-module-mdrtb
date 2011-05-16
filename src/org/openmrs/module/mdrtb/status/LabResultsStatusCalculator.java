@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptSet;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
@@ -152,12 +153,13 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 					// if resistant to capreomycin, kanamycin, or amikacin, and any one fluorquinolone, the patient is XDR
 					if ((resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.CAPREOMYCIN))
 					        || resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.KANAMYCIN)) 
-					        || resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.AMIKACIN)))
-					        && (resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.LEVOFLOXACIN))
-					        || resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.MOXIFLOXACIN))
-					        || resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.OFLOXACIN)))) {
-
-						classification = TbClassification.XDR_TB;
+					        || resistanceProfile.contains(mdrtbService.getConcept(MdrtbConcepts.AMIKACIN)))) {
+						
+						for (ConceptSet fluoroquinolone : mdrtbService.getConcept(MdrtbConcepts.QUINOLONES).getConceptSets()) {
+							if (resistanceProfile.contains(fluoroquinolone.getConcept())) {
+								classification = TbClassification.XDR_TB;
+							}
+						}
 					}
 				}
 			}
