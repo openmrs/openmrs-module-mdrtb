@@ -323,7 +323,16 @@ public class MdrtbEditPatientController {
 			// now add any identifiers that have a value, but no id
 			else if (StringUtils.isNotBlank(identifierValue[i])) {
 				PatientIdentifier identifier = new PatientIdentifier(identifierValue[i], identifierType[i], (fixedLocation == null ? identifierLocation[i] : fixedLocation));
-				identifier.setPreferred(true);
+				
+				// set this identifier as preferred if it is of the preferred tyoe
+				String preferredIdentifierTypeName = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
+				if (StringUtils.isNotBlank(preferredIdentifierTypeName)) {
+					PatientIdentifierType preferredIdentifierType = Context.getPatientService().getPatientIdentifierTypeByName(preferredIdentifierTypeName);
+					if (preferredIdentifierType != null && preferredIdentifierType == identifierType[i]) {
+						identifier.setPreferred(true);
+					}
+				}
+				
 				patient.addIdentifier(identifier);	
 			}
 		}

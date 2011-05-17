@@ -182,7 +182,7 @@ public class Cohorts {
 	public static CohortDefinition getConfirmedMdrFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition confirmed = new CompositionCohortDefinition();
 		
-		// NOTE: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
+		// TODO: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
 		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
 		confirmed.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		confirmed.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
@@ -193,7 +193,7 @@ public class Cohorts {
 	public static CohortDefinition getSuspectedMdrFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition suspected = new CompositionCohortDefinition();	
 		
-		// NOTE: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
+		// TODO: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
 		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
 		suspected.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		suspected.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
