@@ -80,10 +80,7 @@ public class DrugForecastUtil {
             }
         });
         for (DrugOrder o : getDrugOrders(cohort, drugSet, fromDate, toDate)) {
-            if (o.getDrug() != null) {
-            	
-            	System.out.println("get the drugs for drug order " + o + " with id " + o.getId());
-            	
+            if (o.getDrug() != null) {    	
                 double usage = getDrugUsage(o, fromDate, toDate);
                 increment(ret, o.getDrug(), usage);
             }

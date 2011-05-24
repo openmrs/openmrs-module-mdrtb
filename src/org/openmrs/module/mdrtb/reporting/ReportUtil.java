@@ -27,6 +27,7 @@ import org.openmrs.OpenmrsMetadata;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -345,5 +346,28 @@ public class ReportUtil {
 		map.put("Unknown", unknown);
 		
 		return map;
+	}
+	
+	/**
+	 * Returns a map of patients ids to the list of mdrtb patient programs for that patient
+	 */
+	public static Map<Integer,List<MdrtbPatientProgram>> getMdrtbPatientProgramsMap() {
+		
+		Map<Integer,List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = new HashMap<Integer,List<MdrtbPatientProgram>>();
+		
+		// get all the mdrtb patient programs
+		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getAllMdrtbPatientPrograms()) {
+			Integer patientId = program.getPatient().getId();
+			
+			// create a new entry for this patient if we don't already have it
+			if (!mdrtbPatientProgramsMap.containsKey(patientId)) {
+				mdrtbPatientProgramsMap.put(patientId, new ArrayList<MdrtbPatientProgram>());
+			}
+			
+			// add the program
+			mdrtbPatientProgramsMap.get(patientId).add(program);
+		}
+		
+		return mdrtbPatientProgramsMap;
 	}
 }

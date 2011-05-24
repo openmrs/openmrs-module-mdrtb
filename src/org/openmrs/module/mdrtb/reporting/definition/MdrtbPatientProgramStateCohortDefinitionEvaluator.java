@@ -1,6 +1,8 @@
 package org.openmrs.module.mdrtb.reporting.definition;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
@@ -10,6 +12,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
@@ -30,11 +33,11 @@ public class MdrtbPatientProgramStateCohortDefinitionEvaluator implements Cohort
     	Cohort baseCohort = (context.getBaseCohort() != null ? context.getBaseCohort() : new Cohort(Context.getPatientService().getAllPatients()));
     	Cohort resultCohort = new Cohort();
     	
+    	Map<Integer,List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = ReportUtil.getMdrtbPatientProgramsMap();
+    	
     	for (int id : baseCohort.getMemberIds()) {
-    		Patient patient = Context.getPatientService().getPatient(id);
-    		
     		// first we need to find out what program(s) the patient was on during a given time period
-    		List<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientProgramsInDateRange(patient, cd.getStartDate(), cd.getEndDate());
+    		List<MdrtbPatientProgram> programs = mdrtbPatientProgramsMap.get(id);
     		
     		// only continue if the patient was in a program during this time period
     		if (programs.size() != 0) {
