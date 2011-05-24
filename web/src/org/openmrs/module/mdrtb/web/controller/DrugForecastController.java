@@ -11,6 +11,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.drugneeds.DrugForecastUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.ConceptEditor;
@@ -43,7 +44,7 @@ public class DrugForecastController {
         List<Concept> drugSets = new ArrayList<Concept>();
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
         {
-        	Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
+        	Concept tb = ms.getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
             tb.getConceptSets();
             drugSets.add(tb);
         }
