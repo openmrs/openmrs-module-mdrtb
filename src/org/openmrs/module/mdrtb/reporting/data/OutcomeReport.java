@@ -19,13 +19,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
@@ -42,14 +45,14 @@ public class OutcomeReport implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return "Outcomes Report";
+		return Context.getMessageSourceService().getMessage("mdrtb.outcomeReport");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return "Report on patient outcome by Category IV registration group for patients who started treatment during a given time period";
+		return Context.getMessageSourceService().getMessage("mdrtb.outcomeReport.title");
 	}
 	
 	/**
@@ -57,10 +60,10 @@ public class OutcomeReport implements ReportSpecification {
 	 */
 	public List<Parameter> getParameters() {
 		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", "Facility", Location.class));
-		l.add(new Parameter("year", "Year of treatment start", Integer.class));
-		l.add(new Parameter("quarter", "Quarter (optional)", Integer.class));
-		l.add(new Parameter("month", "Month (optional)", Integer.class));
+		l.add(new Parameter("location",  Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
+		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), Integer.class));
+		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), Integer.class));
 		return l;
 	}
 	
@@ -69,7 +72,8 @@ public class OutcomeReport implements ReportSpecification {
 	 */
 	public List<RenderingMode> getRenderingModes() {
 		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML Report", "org/openmrs/module/mdrtb/reporting/data/output/OutcomeReport.html"));
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/OutcomeReport" + 
+			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
 		return l;
 	}
 	
@@ -130,7 +134,13 @@ public class OutcomeReport implements ReportSpecification {
 		
 		report.addDataSetDefinition("Treatment results", dsd, null);
 		
-		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		ReportData data;
+        try {
+	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+        }
+        catch (EvaluationException e) {
+        	throw new MdrtbAPIException("Unable to evaluate Outcomes report", e);
+        }
 		return data;
 	}
 }

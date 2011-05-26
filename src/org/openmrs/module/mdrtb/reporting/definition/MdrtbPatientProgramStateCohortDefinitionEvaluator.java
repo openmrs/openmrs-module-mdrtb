@@ -1,11 +1,9 @@
 package org.openmrs.module.mdrtb.reporting.definition;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Cohort;
-import org.openmrs.Patient;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;

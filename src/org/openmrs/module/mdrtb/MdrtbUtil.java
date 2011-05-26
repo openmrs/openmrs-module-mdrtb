@@ -23,6 +23,7 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.reporting.data.Cohorts;
@@ -32,6 +33,7 @@ import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.springframework.util.StringUtils;
 
 public class MdrtbUtil {
@@ -398,7 +400,13 @@ public class MdrtbUtil {
 		// If Location is specified, limit to patients at this Location
 		if (location != null) {
 			CohortDefinition lcd = Cohorts.getLocationFilter(location, now, now);
-			Cohort locationCohort = Context.getService(CohortDefinitionService.class).evaluate(lcd, new EvaluationContext());
+			Cohort locationCohort;
+            try {
+	            locationCohort = Context.getService(CohortDefinitionService.class).evaluate(lcd, new EvaluationContext());
+            }
+            catch (EvaluationException e) {
+            	  throw new MdrtbAPIException("Unable to evalute location cohort",e);
+            }
 			cohort = Cohort.intersect(cohort, locationCohort);
 		}
 		

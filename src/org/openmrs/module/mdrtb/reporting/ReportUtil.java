@@ -13,7 +13,8 @@
  */
 package org.openmrs.module.mdrtb.reporting;
 
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +28,7 @@ import org.openmrs.OpenmrsMetadata;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
@@ -151,10 +153,19 @@ public class ReportUtil {
 	
 	/**
 	 * Looks up a resource on the class path, and returns a RenderingMode based on it
+	 * @throws UnsupportedEncodingException 
 	 */
 	public static RenderingMode renderingModeFromResource(String label, String resourceName) {
-		InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-		if (is != null) {
+		InputStreamReader reader;
+		
+        try {
+	        reader = new InputStreamReader(OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName), "UTF-8");    
+        }
+        catch (UnsupportedEncodingException e) {
+	        throw new MdrtbAPIException("Error reading template from stream", e);
+        }
+        
+		if (reader != null) {
 			final ReportDesign design = new ReportDesign();
 			ReportDesignResource resource = new ReportDesignResource();
 			resource.setName("template");
@@ -169,11 +180,12 @@ public class ReportUtil {
 			resource.setContentType(contentType);
 			ReportRenderer renderer = null;
 			try {
-				resource.setContents(IOUtils.toByteArray(is));
+				resource.setContents(IOUtils.toByteArray(reader, "UTF-8"));
 			}
 			catch (Exception e) {
 				throw new RuntimeException("Error reading template from stream", e);
 			}
+			
 			design.getResources().add(resource);
 			if ("xls".equals(extension)) {
 				renderer = new ExcelTemplateRenderer() {

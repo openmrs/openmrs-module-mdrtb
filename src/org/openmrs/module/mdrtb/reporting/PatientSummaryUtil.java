@@ -37,6 +37,7 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
@@ -49,6 +50,7 @@ import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionSe
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.util.OpenmrsUtil;
 
 public class PatientSummaryUtil {
@@ -160,7 +162,13 @@ public class PatientSummaryUtil {
         
         if (location != null) {
         	CohortDefinition cd = Cohorts.getLocationFilter(location, now, now);
-	        Cohort atLocation = Context.getService(CohortDefinitionService.class).evaluate(cd, new EvaluationContext());
+	        Cohort atLocation;
+            try {
+	            atLocation = Context.getService(CohortDefinitionService.class).evaluate(cd, new EvaluationContext());
+            }
+            catch (EvaluationException e) {
+	            throw new MdrtbAPIException("Unable to evalute location cohort",e);
+            }
 	        cohort = Cohort.intersect(cohort, atLocation);
         }
         return cohort;

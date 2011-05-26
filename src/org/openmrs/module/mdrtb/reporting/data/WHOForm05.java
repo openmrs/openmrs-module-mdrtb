@@ -18,13 +18,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
@@ -40,14 +43,14 @@ public class WHOForm05 implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return "WHO Form 05";
+		return Context.getMessageSourceService().getMessage("mdrtb.form05");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return "Quarterly report on MDR-TB detection and Category IV treatment start";
+		return Context.getMessageSourceService().getMessage("mdrtb.form05.title");
 	}
 	
 	/**
@@ -55,9 +58,9 @@ public class WHOForm05 implements ReportSpecification {
 	 */
 	public List<Parameter> getParameters() {
 		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", "Facility", Location.class));
-		l.add(new Parameter("year", "Year", Integer.class));
-		l.add(new Parameter("quarter", "Quarter", Integer.class));
+		l.add(new Parameter("location", Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.year"), Integer.class));
+		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarter"), Integer.class));
 		return l;
 	}
 	
@@ -66,7 +69,8 @@ public class WHOForm05 implements ReportSpecification {
 	 */
 	public List<RenderingMode> getRenderingModes() {
 		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML Report", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm05.html"));
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm05" + 
+			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
 		return l;
 	}
 
@@ -79,7 +83,7 @@ public class WHOForm05 implements ReportSpecification {
 		Integer year = (Integer)parameters.get("year");
 		Integer quarter = (Integer)parameters.get("quarter");
 		if (quarter == null) {
-			throw new IllegalArgumentException("Please enter a quarter");
+			throw new IllegalArgumentException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAQuarter"));
 		}
 		context.getParameterValues().putAll(ReportUtil.getPeriodDates(year, quarter, null));
 		return context;
@@ -119,7 +123,13 @@ public class WHOForm05 implements ReportSpecification {
 		
 		report.addDataSetDefinition("startedTreatment", treatmentDsd, null);
 		
-		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		ReportData data;
+        try {
+	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+        }
+        catch (EvaluationException e) {
+        	throw new MdrtbAPIException("Unable to evaluate WHO Form 5 report", e);
+        }
 		return data;
 	}
 }

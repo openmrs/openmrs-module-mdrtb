@@ -19,14 +19,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
@@ -43,14 +46,14 @@ public class WHOForm07 implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return "WHO Form 07";
+		return Context.getMessageSourceService().getMessage("mdrtb.form07");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return "Annual report of treatment result of confirmed MDR-TB patients starting Category IV treatment";
+		return Context.getMessageSourceService().getMessage("mdrtb.form07.title");
 	}
 	
 	/**
@@ -58,8 +61,8 @@ public class WHOForm07 implements ReportSpecification {
 	 */
 	public List<Parameter> getParameters() {
 		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", "Facility", Location.class));
-		l.add(new Parameter("year", "Year of treatment start", Integer.class));
+		l.add(new Parameter("location", Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
 		return l;
 	}
 	
@@ -68,7 +71,8 @@ public class WHOForm07 implements ReportSpecification {
 	 */
 	public List<RenderingMode> getRenderingModes() {
 		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML Report", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm07.html"));
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm07" + 
+			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
 		return l;
 	}
 	
@@ -84,7 +88,7 @@ public class WHOForm07 implements ReportSpecification {
 			context.addParameterValue("endDate", DateUtil.getDateTime(year, 12, 31));
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Please enter a valid year for the report.");
+			throw new RuntimeException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAYear"));
 		}
 		return context;
 	}
@@ -133,7 +137,13 @@ public class WHOForm07 implements ReportSpecification {
 		
 		report.addDataSetDefinition("Treatment results", dsd, null);
 		
-		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		ReportData data;
+        try {
+	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+        }
+        catch (EvaluationException e) {
+        	throw new MdrtbAPIException("Unable to evaluate WHO Form 7 report", e);
+        }
 		return data;
 	}
 }

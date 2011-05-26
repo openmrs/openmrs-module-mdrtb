@@ -22,6 +22,7 @@ import java.util.Map;
 import org.openmrs.Cohort;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
@@ -30,6 +31,7 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
@@ -164,7 +166,13 @@ public class MOHReport implements ReportSpecification {
 			s4.addRow(e.getKey(), cd, null);
 		}
 		
-		ReportData data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		ReportData data;
+        try {
+	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+        }
+        catch (EvaluationException e) {
+	       throw new MdrtbAPIException("Unable to evaluate MOH Report", e);
+        }
 		return data;
 	}
 	
