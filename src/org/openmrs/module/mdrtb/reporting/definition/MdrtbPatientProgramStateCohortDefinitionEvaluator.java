@@ -31,16 +31,16 @@ public class MdrtbPatientProgramStateCohortDefinitionEvaluator implements Cohort
     	Cohort baseCohort = (context.getBaseCohort() != null ? context.getBaseCohort() : new Cohort(Context.getPatientService().getAllPatients()));
     	Cohort resultCohort = new Cohort();
     	
-    	Map<Integer,List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = ReportUtil.getMdrtbPatientProgramsMap();
+    	Map<Integer,List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = ReportUtil.getMdrtbPatientProgramsInDateRangeMap(cd.getStartDate(), cd.getEndDate());
     	
     	for (int id : baseCohort.getMemberIds()) {
     		// first we need to find out what program(s) the patient was on during a given time period
     		List<MdrtbPatientProgram> programs = mdrtbPatientProgramsMap.get(id);
     		
     		// only continue if the patient was in a program during this time period
-    		if (programs.size() != 0) {
+    		if (programs != null && programs.size() != 0) {
     			
-    			// by convention, operate on the most recent program during the time period
+    			// by convention, operate on the most recent program during the time period (there really should only ever be one program in a single period)
     			MdrtbPatientProgram program = programs.get(programs.size() - 1);
     			ProgramWorkflowState state;
     			

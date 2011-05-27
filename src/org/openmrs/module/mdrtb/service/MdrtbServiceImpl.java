@@ -121,15 +121,17 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<MdrtbPatientProgram> getAllMdrtbPatientPrograms() {
-		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(null, getMdrtbProgram(), null, null, null, null, false);
+		return getAllMdrtbPatientProgramsInDateRange(null, null);
+	}
+	
+	public List<MdrtbPatientProgram> getAllMdrtbPatientProgramsInDateRange(Date startDate, Date endDate) {
+		// (program must have started before the end date of the period, and must not have ended before the start of the period)
+		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(null, getMdrtbProgram(), null, endDate, startDate, null, false);
     	
 	 	// sort the programs so oldest is first and most recent is last
     	Collections.sort(programs, new PatientProgramComparator());
     	
     	List<MdrtbPatientProgram> mdrtbPrograms = new LinkedList<MdrtbPatientProgram>();
-    	
-    	// sort the programs so oldest is first and most recent is last
-    	Collections.sort(programs, new PatientProgramComparator());
     	
     	// convert to mdrtb patient programs
     	for (PatientProgram program : programs) {

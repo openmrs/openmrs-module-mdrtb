@@ -29,6 +29,7 @@ import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.data.MOHReport;
 import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
 import org.openmrs.module.mdrtb.reporting.data.WHOForm05;
+import org.openmrs.module.mdrtb.reporting.data.WHOForm06;
 import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.util.OpenmrsClassLoader;
@@ -84,7 +85,7 @@ public class MdrtbHomePageController {
         	}
         	
         	// Load default reporting framework reports
-        	ReportSpecification[] rpts = {new WHOForm05(), new WHOForm07(), new OutcomeReport(), new MOHReport()};
+        	ReportSpecification[] rpts = {new WHOForm05(), new WHOForm06(), new WHOForm07(), new OutcomeReport(), new MOHReport()};
         	for (ReportSpecification spec : rpts) {
             	reports.put("module/mdrtb/reporting/reports.form?type=" + spec.getClass().getName(), spec.getName());
             }

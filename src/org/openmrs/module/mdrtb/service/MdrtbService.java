@@ -65,6 +65,12 @@ public interface MdrtbService extends OpenmrsService {
     @Transactional(readOnly=true)
     public List<MdrtbPatientProgram> getAllMdrtbPatientPrograms();
     
+    /**
+     * Returns all the mdrtb programs in the system that were active during a specific date range
+     */
+    @Transactional(readOnly=true)
+    public List<MdrtbPatientProgram> getAllMdrtbPatientProgramsInDateRange(Date startDate, Date endDate);
+    
   	/**
   	 * Returns all the mdrtb programs for a given patient
   	 */
@@ -78,7 +84,7 @@ public interface MdrtbService extends OpenmrsService {
 	public MdrtbPatientProgram getMostRecentMdrtbPatientProgram(Patient patient);
 	
     /**
-     * Returns all the patient programs that fall within a specific date range
+     * Returns all the patient programs for a given patient that fall within a specific date range
      */
     @Transactional(readOnly=true)
     public List<MdrtbPatientProgram> getMdrtbPatientProgramsInDateRange(Patient patient, Date startDate, Date endDate);
@@ -121,7 +127,13 @@ public interface MdrtbService extends OpenmrsService {
     public List<Specimen> getSpecimens(Patient patient);
     
     /**
-     * Fetches all specimens for a patient within a certain date range
+     * Fetches all specimens within a certain data range
+     * 
+     * @param patient: only include specimens associated with this patient
+     * @param startDate: only include specimens with a date collected after (or equal to) this start date
+     * @param endDate: only include specimens with a date collected before (or equal to) this end date
+     * 
+     * All parameters can be set to null
      */
     public List<Specimen> getSpecimens(Patient patient, Date startDateCollected, Date endDateCollected);
     

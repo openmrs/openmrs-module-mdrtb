@@ -27,9 +27,12 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
+import org.openmrs.module.mdrtb.reporting.definition.MdrtbBacResultAfterTreatmentStartedCohortDefinition;
 import org.openmrs.module.mdrtb.reporting.definition.MdrtbPatientProgramStateCohortDefinition;
+import org.openmrs.module.mdrtb.reporting.definition.MdrtbProgramClosedAfterTreatmentStartedCohortDefintion;
 import org.openmrs.module.mdrtb.reporting.definition.MdrtbProgramLocationCohortDefinition;
 import org.openmrs.module.mdrtb.reporting.definition.MdrtbTreatmentStartedCohortDefinition;
+import org.openmrs.module.mdrtb.reporting.definition.MdrtbBacResultAfterTreatmentStartedCohortDefinition.Result;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -179,6 +182,14 @@ public class Cohorts {
 		return startedTreatmentCohort;
 	}
 	
+	public static CohortDefinition getProgramClosedAfterTreatmentStartedFilter(Date startDate, Date endDate, Integer monthsFromTreatmentStart) {
+		MdrtbProgramClosedAfterTreatmentStartedCohortDefintion programClosedAfterTreatmentStartedCohort = new MdrtbProgramClosedAfterTreatmentStartedCohortDefintion();
+		programClosedAfterTreatmentStartedCohort.setFromDate(startDate);
+		programClosedAfterTreatmentStartedCohort.setToDate(endDate);
+		programClosedAfterTreatmentStartedCohort.setMonthsFromTreatmentStart(monthsFromTreatmentStart);
+		return programClosedAfterTreatmentStartedCohort;
+	}
+	
 	public static CohortDefinition getConfirmedMdrFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition confirmed = new CompositionCohortDefinition();
 		
@@ -300,6 +311,16 @@ public class Cohorts {
 		q.append("		(select obs_group_id from obs ");
 		q.append("		 where concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE) +" and value_datetime <= '" + DateUtil.formatDate(effectiveDate, "yyyy-MM-dd") + "') ");
 		return new SqlCohortDefinition(q.toString());
+	}
+	
+	public static CohortDefinition getMdrtbBacResultAfterTreatmentStart(Date startDate, Date endDate, Integer fromTreatmentMonth, Integer toTreatmentMonth, Result overallResult) {
+		MdrtbBacResultAfterTreatmentStartedCohortDefinition cd = new MdrtbBacResultAfterTreatmentStartedCohortDefinition();
+		cd.setFromDate(startDate);
+		cd.setToDate(endDate);		
+		cd.setFromTreatmentMonth(fromTreatmentMonth);
+		cd.setToTreatmentMonth(toTreatmentMonth);
+		cd.setOverallResult(overallResult);
+		return cd;
 	}
 	
 	/**

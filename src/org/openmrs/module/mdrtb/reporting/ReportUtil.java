@@ -361,14 +361,14 @@ public class ReportUtil {
 	}
 	
 	/**
-	 * Returns a map of patients ids to the list of mdrtb patient programs for that patient
+	 * Returns a map of patients ids to the list of active mdrtb patient programs for that patient during the given date range
 	 */
-	public static Map<Integer,List<MdrtbPatientProgram>> getMdrtbPatientProgramsMap() {
+	public static Map<Integer,List<MdrtbPatientProgram>> getMdrtbPatientProgramsInDateRangeMap(Date startDate, Date endDate) {
 		
 		Map<Integer,List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = new HashMap<Integer,List<MdrtbPatientProgram>>();
 		
 		// get all the mdrtb patient programs
-		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getAllMdrtbPatientPrograms()) {
+		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getAllMdrtbPatientProgramsInDateRange(startDate, endDate)) {
 			Integer patientId = program.getPatient().getId();
 			
 			// create a new entry for this patient if we don't already have it
