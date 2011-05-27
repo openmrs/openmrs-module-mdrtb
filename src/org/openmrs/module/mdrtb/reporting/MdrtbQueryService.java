@@ -61,6 +61,27 @@ public class MdrtbQueryService {
     	return executeQuery(q.toString(), context);
     }
     
+    /**
+     * Returns the patients who have tested resistant for x or more drugs during the given time period, where x = numberOfDrugs
+     */
+    public static Cohort getPatientsResistantToNumberOfDrugs(EvaluationContext context, Date minResultDate, Date maxResultDate, Integer numberOfDrugs) { 
+    
+    	Integer resistant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select patient from ");
+    	q.append("((select patient, count(*) as resistance_count from ");
+    	q.append("((select p.patient_id as patient, o.value_coded from patient p, obs o where p.patient_id = o.person_id and p.voided =0 ");
+    	q.append("and o.voided = 0 and o.concept_id = '" + resistant + "' ");
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", minResultDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", maxResultDate);
+    	q.append("group by o.value_coded,p.patient_id) as inner_table) ");
+    	q.append("group by patient) as inner_table_2) ");
+    	q.append("where resistance_count >= " + numberOfDrugs);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+    
     public static Cohort getCohortWithResistanceProfile(EvaluationContext context, Date maxResultDate, String profile) {
     	Map<String, Cohort> profiles = getResistanceProfiles(context, maxResultDate);
     	return ObjectUtil.nvl(profiles.get(profile), new Cohort());

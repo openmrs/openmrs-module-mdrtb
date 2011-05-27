@@ -108,8 +108,16 @@ public class WHOForm05 implements ReportSpecification {
 
 		// Add the data set definitions
 		CohortCrossTabDataSetDefinition labResultDsd = new CohortCrossTabDataSetDefinition();
-		labResultDsd.addColumn("mdr", Cohorts.getMdrDetectionFilter(startDate, endDate), null);
-		labResultDsd.addColumn("xdr", Cohorts.getXdrDetectionFilter(startDate, endDate), null);
+		CohortDefinition polydr = Cohorts.getPolydrDetectionFilter(startDate, endDate);
+		CohortDefinition mdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
+		CohortDefinition xdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
+		
+		// note that for the purpose of this report, the polydr, mdr, and xdr cohorts should be mutually exclusive
+		// that is, by the standard definition, any patients that are mdr or xdr are also polydr; but we 
+		// do not want to include the mdr and xdr patients in our poly count, hence why we use the "minus" method here
+		labResultDsd.addColumn("polydr", ReportUtil.minus(polydr, mdr, xdr), null);
+		labResultDsd.addColumn("mdr", ReportUtil.minus(mdr, xdr), null);
+		labResultDsd.addColumn("xdr", xdr, null);
 		report.addDataSetDefinition("labDetections", labResultDsd, null);
 		
 		CohortCrossTabDataSetDefinition treatmentDsd = new CohortCrossTabDataSetDefinition();

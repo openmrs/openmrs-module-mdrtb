@@ -15,6 +15,7 @@ package org.openmrs.module.mdrtb.reporting.definition;
 
 import java.util.Date;
 
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.reporting.cohort.definition.BaseCohortDefinition;
 import org.openmrs.module.reporting.common.Localized;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
@@ -31,10 +32,7 @@ public class DstResultCohortDefinition extends BaseCohortDefinition {
 	private Date maxResultDate;
 	
 	@ConfigurationProperty(group="resistanceGroup")
-	private boolean includeMdr = false;
-	
-	@ConfigurationProperty(group="resistanceGroup")
-	private boolean includeXdr = false;
+	private TbClassification tbClassification;
 	
 	@ConfigurationProperty(group="resistanceGroup")
 	private String specificProfile;
@@ -87,48 +85,19 @@ public class DstResultCohortDefinition extends BaseCohortDefinition {
 		this.maxResultDate = maxResultDate;
 	}
 
+	/**
+	 * @param tbClassification
+	 */
+	public void setTbClassification(TbClassification tbClassification) {
+	    this.tbClassification = tbClassification;
+    }
 
 	/**
-	 * @return the includeMdr
+	 * @return
 	 */
-	public boolean isIncludeMdr() {
-		return includeMdr;
-	}
-	
-	/**
-	 * @return the includeMdr
-	 */
-	public boolean getIncludeMdr() {
-		return includeMdr;
-	}
-
-	/**
-	 * @param includeMdr the includeMdr to set
-	 */
-	public void setIncludeMdr(boolean includeMdr) {
-		this.includeMdr = includeMdr;
-	}
-
-	/**
-	 * @return the includeXdr
-	 */
-	public boolean isIncludeXdr() {
-		return includeXdr;
-	}
-	
-	/**
-	 * @return the includeXdr
-	 */
-	public boolean getIncludeXdr() {
-		return includeXdr;
-	}
-
-	/**
-	 * @param includeXdr the includeXdr to set
-	 */
-	public void setIncludeXdr(boolean includeXdr) {
-		this.includeXdr = includeXdr;
-	}
+	public TbClassification getTbClassification() {
+	    return tbClassification;
+    }
 
 	/**
 	 * @return the specificProfile

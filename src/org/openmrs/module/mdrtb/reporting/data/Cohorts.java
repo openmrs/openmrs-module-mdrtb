@@ -25,6 +25,7 @@ import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
 import org.openmrs.module.mdrtb.reporting.definition.MdrtbBacResultAfterTreatmentStartedCohortDefinition;
@@ -159,9 +160,18 @@ public class Cohorts {
 
 	}
 	
+	public static CohortDefinition getPolydrDetectionFilter(Date startDate, Date endDate) {
+		DstResultCohortDefinition polydrPats = new DstResultCohortDefinition();
+		polydrPats.setTbClassification(TbClassification.POLY_RESISTANT_TB);
+		polydrPats.setMinResultDate(startDate);
+		polydrPats.setMaxResultDate(endDate);
+		return polydrPats;
+	}
+		
+	
 	public static CohortDefinition getMdrDetectionFilter(Date startDate, Date endDate) {
 		DstResultCohortDefinition mdrPats = new DstResultCohortDefinition();
-		mdrPats.setIncludeMdr(true);
+		mdrPats.setTbClassification(TbClassification.MDR_TB);
 		mdrPats.setMinResultDate(startDate);
 		mdrPats.setMaxResultDate(endDate);
 		return mdrPats;
@@ -169,7 +179,7 @@ public class Cohorts {
 		
 	public static CohortDefinition getXdrDetectionFilter(Date startDate, Date endDate) {
 		DstResultCohortDefinition xdrPats = new DstResultCohortDefinition();
-		xdrPats.setIncludeXdr(true);
+		xdrPats.setTbClassification(TbClassification.XDR_TB);
 		xdrPats.setMinResultDate(startDate);
 		xdrPats.setMaxResultDate(endDate);
 		return xdrPats;

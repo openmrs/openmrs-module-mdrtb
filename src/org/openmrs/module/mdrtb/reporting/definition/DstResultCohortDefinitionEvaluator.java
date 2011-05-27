@@ -23,6 +23,7 @@ import org.openmrs.ConceptSet;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -42,6 +43,7 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
 	
 	/**
      * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
+     * @should return confirmed poly-resistance patients for the period
      * @should return confirmed mdrtb patients for the period
      * @should return confirmed xdrtb patients for the period
      */
@@ -53,7 +55,12 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
 		Date sd = cd.getMinResultDate();
 		Date ed = cd.getMaxResultDate();
     	
-    	if (cd.getIncludeMdr() || cd.getIncludeXdr()) {
+		if (cd.getTbClassification() == TbClassification.POLY_RESISTANT_TB) {
+			// find any patients that have been resistant to two or mor drugs
+			c = MdrtbQueryService.getPatientsResistantToNumberOfDrugs(context, sd, ed, 2);
+		}
+		
+    	if (cd.getTbClassification() == TbClassification.MDR_TB || cd.getTbClassification() == TbClassification.XDR_TB) {
 
     		// Must be resistant to INH
     		Concept inh = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID); 
@@ -63,7 +70,7 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
 	    	Concept rif = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN);
 	    	c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, rif));
 	    	
-	    	if (!cd.getIncludeMdr()) {
+	    	if (cd.getTbClassification() == TbClassification.XDR_TB) {
 	    		
 	    		// Must be resistant to at least one fluoroquinolone
 	    		Concept quinoloneSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.QUINOLONES);
