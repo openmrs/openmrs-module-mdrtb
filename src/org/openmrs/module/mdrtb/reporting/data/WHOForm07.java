@@ -105,10 +105,9 @@ public class WHOForm07 implements ReportSpecification {
 		Date startDate = (Date)context.getParameterValue("startDate");
 		Date endDate = (Date)context.getParameterValue("endDate");
 		
-		// Base Cohort is confirmed mdr patients who started treatment during year, optionally at location
+		// Base Cohort is confirmed mdr patients, in program, who started treatment during year, optionally at location
 		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
-		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrFilter(startDate, endDate), null));
-		baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
+		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
 			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			if (locationFilter != null) {

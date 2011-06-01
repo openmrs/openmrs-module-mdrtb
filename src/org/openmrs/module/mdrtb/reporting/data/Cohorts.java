@@ -200,25 +200,27 @@ public class Cohorts {
 		return programClosedAfterTreatmentStartedCohort;
 	}
 	
-	public static CohortDefinition getConfirmedMdrFilter(Date startDate, Date endDate) {
+	public static CohortDefinition getConfirmedMdrInProgramAndStartedTreatmentFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition confirmed = new CompositionCohortDefinition();
 		
 		// TODO: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
 		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
+		confirmed.addSearch("inMdrProgram", getInMdrProgramEverDuring(startDate, endDate), null);
 		confirmed.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		confirmed.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
-		confirmed.setCompositionString("detectedWithMDR AND startedTreatment");
+		confirmed.setCompositionString("inMdrProgram AND detectedWithMDR AND startedTreatment");
 		return confirmed;
 	}
 	
-	public static CohortDefinition getSuspectedMdrFilter(Date startDate, Date endDate) {
+	public static CohortDefinition getSuspectedMdrInProgramAndStartedTreatmentFilter(Date startDate, Date endDate) {
 		CompositionCohortDefinition suspected = new CompositionCohortDefinition();	
 		
 		// TODO: this does not yet handle patient programs/relapses properly, as the MDR Detection filter start date is set to null,
 		// if a patient has multiple programs, it really should be set to the end date of the most recent previous program
+		suspected.addSearch("inMdrProgram", getInMdrProgramEverDuring(startDate, endDate), null);
 		suspected.addSearch("detectedWithMDR", getMdrDetectionFilter(null, endDate), null);
 		suspected.addSearch("startedTreatment", getStartedTreatmentFilter(startDate, endDate), null);
-		suspected.setCompositionString("(NOT detectedWithMDR) AND startedTreatment");
+		suspected.setCompositionString("inMdrProgram AND (NOT detectedWithMDR) AND startedTreatment");
 		return suspected;
 	}
 

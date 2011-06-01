@@ -121,8 +121,8 @@ public class WHOForm05 implements ReportSpecification {
 		report.addDataSetDefinition("labDetections", labResultDsd, null);
 		
 		CohortCrossTabDataSetDefinition treatmentDsd = new CohortCrossTabDataSetDefinition();
-		treatmentDsd.addRow("confirmed", Cohorts.getConfirmedMdrFilter(startDate, endDate), null);
-		treatmentDsd.addRow("suspected", Cohorts.getSuspectedMdrFilter(startDate, endDate), null);
+		treatmentDsd.addRow("confirmed", Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null);
+		treatmentDsd.addRow("suspected", Cohorts.getSuspectedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null);
 		
 		Map<String, CohortDefinition> columns = ReportUtil.getMdrtbPreviousDrugUseFilterSet(startDate, endDate);
 		for (String key : columns.keySet()) {
