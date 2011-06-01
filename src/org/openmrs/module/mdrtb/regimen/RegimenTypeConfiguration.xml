@@ -13,7 +13,7 @@
 				<drugComponents> 
 					<drugSuggestion> 
 						<generic>KANAMYCIN</generic> 
-						<drugId>48</drugId> 
+						<drugId>Kanamycin (Km)</drugId> 
 						<dose>1</dose> 
 						<units>g</units> 
 						<frequency>1/day x 6 days/week</frequency>  
@@ -22,7 +22,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PYRAZINAMIDE</generic> 
-						<drugId>46</drugId> 
+						<drugId>Pyrazinamide (Z)</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -31,7 +31,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>OFLOXACIN</generic> 
-						<drugId>53</drugId> 
+						<drugId>Ofloxacin (Ofx)</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -40,7 +40,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PROTHIONAMIDE</generic> 
-						<drugId>59</drugId> 
+						<drugId>Prothionamide (Pto)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -49,7 +49,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>CYCLOSERINE</generic> 
-						<drugId>58</drugId> 
+						<drugId>Cycloserine (Cs)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -65,7 +65,7 @@
 				<drugComponents> 
 					<drugSuggestion> 
 						<generic>KANAMYCIN</generic> 
-						<drugId>48</drugId> 
+						<drugId>Kanamycin (Km)</drugId> 
 						<dose>1</dose> 
 						<units>g</units> 
 						<frequency>1/day x 3 days/week</frequency>  
@@ -74,7 +74,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PYRAZINAMIDE</generic> 
-						<drugId>46</drugId> 
+						<drugId>Pyrazinamide (Z)</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -83,7 +83,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>OFLOXACIN</generic> 
-						<drugId>53</drugId> 
+						<drugId>Ofloxacin (Ofx)</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -92,7 +92,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PROTHIONAMIDE</generic> 
-						<drugId>59</drugId> 
+						<drugId>Prothionamide (Pto)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -101,7 +101,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>CYCLOSERINE</generic> 
-						<drugId>58</drugId> 
+						<drugId>Cycloserine (Cs)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -117,7 +117,7 @@
 				<drugComponents> 
 					<drugSuggestion> 
 						<generic>OFLOXACIN</generic> 
-						<drugId>53</drugId> 
+						<drugId>Ofloxacin (Ofx)</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -126,7 +126,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PROTHIONAMIDE</generic> 
-						<drugId>59</drugId> 
+						<drugId>Prothionamide (Pto)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -135,7 +135,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>CYCLOSERINE</generic> 
-						<drugId>58</drugId> 
+						<drugId>Cycloserine (Cs)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -151,7 +151,7 @@
 				<drugComponents> 
 					<drugSuggestion> 
 						<generic>OFLOXACIN</generic> 
-						<drugId>53</drugId> 
+						<drugId>Ofloxacin (Ofx)</drugId> 
 						<dose>200</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -160,7 +160,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PROTHIONAMIDE</generic> 
-						<drugId>59</drugId> 
+						<drugId>Prothionamide (Pto)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -169,7 +169,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>CYCLOSERINE</generic> 
-						<drugId>58</drugId> 
+						<drugId>Cycloserine (Cs)</drugId> 
 						<dose>250</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -178,7 +178,7 @@
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>PYRAZINAMIDE</generic> 
-						<drugId>46</drugId> 
+						<drugId>Pyrazinamide (Z)</drugId> 
 						<dose>400</dose> 
 						<units>mg</units> 
 						<frequency>1/day x 7 days/week</frequency>  
@@ -194,35 +194,35 @@
 				<drugComponents> 
 					<drugSuggestion> 
 						<generic>KANAMYCIN</generic> 
-						<drugId>48</drugId> 
+						<drugId>Kanamycin (Km)</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>LEVOFLOXACIN</generic> 
-						<drugId>54</drugId> 
+						<drugId>Levofloxacin (Lfx)</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>  
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>ETHIONAMIDE</generic> 
-						<drugId>57</drugId> 
+						<drugId>Ethionamide (Eto)</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>  
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>CYCLOSERINE</generic> 
-						<drugId>58</drugId> 
+						<drugId>Cycloserine (Cs)</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>
 					</drugSuggestion>
 					<drugSuggestion> 
 						<generic>P-AMINOSALICYLIC ACID</generic> 
-						<drugId>61</drugId> 
+						<drugId>P-aminosalyicylic acid (PAS)</drugId> 
 						<dose></dose> 
 						<units></units> 
 						<frequency></frequency>
@@ -243,7 +243,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>STAVUDINE LAMIVUDINE AND NEVIRAPINE</generic> 
-						<drugId>2</drugId>
+						<drugId>Triomune-30</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -257,7 +257,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>STAVUDINE LAMIVUDINE AND NEVIRAPINE</generic> 
-						<drugId>3</drugId>
+						<drugId>Triomune-40</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -271,7 +271,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>STAVUDINE</generic> 
-						<drugId>5</drugId>
+						<drugId>d4T 30</drugId>
 						<dose>30</dose>
 						<units>mg</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -279,7 +279,7 @@
 					</drugSuggestion>
 					<drugSuggestion>
 						<generic>LAMIVUDINE</generic> 
-						<drugId>42</drugId>
+						<drugId>3TC 150</drugId>
 						<dose>150</dose>
 						<units>mg</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -287,7 +287,7 @@
 					</drugSuggestion>
 			  		<drugSuggestion>
 			  			<generic>EFAVIRENZ</generic> 
-						<drugId>11</drugId>
+						<drugId>EFV 600</drugId>
 						<dose>600</dose>
 						<units>mg</units>
 						<frequency>1/day x 7 days/week</frequency>
@@ -301,7 +301,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>ZIDOVUDINE AND LAMIVUDINE</generic> 
-						<drugId>39</drugId>
+						<drugId>AZT+3TC (Duovir)</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -309,7 +309,7 @@
 					</drugSuggestion>
 					<drugSuggestion>
 						<generic>NEVIRAPINE</generic> 
-						<drugId>22</drugId>
+						<drugId>NVP</drugId>
 						<dose>200</dose>
 						<units>mg</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -323,7 +323,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>ZIDOVUDINE AND LAMIVUDINE</generic> 
-						<drugId>39</drugId>
+						<drugId>AZT+3TC (Duovir)</drugId>
 						<dose>1</dose>
 						<units>tab(s)</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -331,7 +331,7 @@
 					</drugSuggestion>
 					<drugSuggestion>
 						<generic>EFAVIRENZ</generic> 
-						<drugId>11</drugId>
+						<drugId>EFV 600</drugId>
 						<dose>600</dose>
 						<units>mg</units>
 						<frequency>1/day x 7 days/week</frequency>
@@ -345,7 +345,7 @@
 				<drugComponents>
 					<drugSuggestion>
 						<generic>STAVUDINE</generic> 
-						<drugId>6</drugId>
+						<drugId>d4T 40</drugId>
 						<dose>40</dose>
 						<units>mg</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -353,7 +353,7 @@
 					</drugSuggestion>
 					<drugSuggestion>
 						<generic>LAMIVUDINE</generic> 
-						<drugId>42</drugId>
+						<drugId>3TC 150</drugId>
 						<dose>150</dose>
 						<units>mg</units>
 						<frequency>2/day x 7 days/week</frequency>
@@ -361,7 +361,7 @@
 					</drugSuggestion>
 					<drugSuggestion>
 						<generic>EFAVIRENZ</generic> 
-						<drugId>11</drugId>
+						<drugId>EFV 600</drugId>
 						<dose>600</dose>
 						<units>mg</units>
 						<frequency>1/day x 7 days/week</frequency>
