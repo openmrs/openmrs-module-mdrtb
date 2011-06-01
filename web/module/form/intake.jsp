@@ -80,6 +80,31 @@
 </tr>
 
 <tr>
+<td><spring:message code="Patient.weight" text="Weight"/>:</td>
+<td>${intake.weight} ${!empty intake.weight ? 'kg' : ''}</td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.temperature" text="Temperature"/>:</td>
+<td>${intake.temperature} ${!empty intake.temperature ? 'C' : ''}</td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.pulse" text="Pulse"/>:</td>
+<td>${intake.pulse}</td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.systolicBloodPressure" text="Systolic Blood Pressure"/>:</td>
+<td>${intake.systolicBloodPressure} ${!empty intake.systolicBloodPressure ? 'mmHg' : ''}</td>
+</tr>
+
+<tr>
+<td><spring:message code="mdrtb.respiratoryRate" text="Respiratory Rate"/>:</td>
+<td>${intake.respiratoryRate}</td>
+</tr>
+
+<tr>
 <td valign="top"><spring:message code="mdrtb.clinicianNotes" text="Clinician Notes"/>:</td>
 <td><mdrtb:format obj="${intake.clinicianNotes}"/></td>
 </tr>
@@ -98,7 +123,9 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(errors.allErrors) > 0}">
 	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<c:if test="${error.code != 'methodInvocation'}">
+			<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		</c:if>	
 	</c:forEach>
 	<br/>
 </c:if>
@@ -147,6 +174,31 @@
 </c:forEach>
 </select>
 </td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="Patient.weight" text="Weight"/>:</td>
+<td><input name="weight" size="8" value="${intake.weight}"/> kg</td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.temperature" text="Temperature"/>:</td>
+<td><input name="temperature" size="8" value="${intake.temperature}"/> C</td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.pulse" text="Pulse"/>:</td>
+<td><input name="pulse" size="8" value="${intake.pulse}"/></td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.systolicBloodPressure" text="Systolic Blood Pressure"/>:</td>
+<td><input name="systolicBloodPressure" size="8" value="${intake.systolicBloodPressure}"/> mmHg</td>
+</tr>
+
+<tr>
+<td valign="top"><spring:message code="mdrtb.respiratoryRate" text="Respiratory Rate"/>:</td>
+<td><input name="respiratoryRate" size="8" value="${intake.respiratoryRate}"/></td>
 </tr>
 
 <tr>

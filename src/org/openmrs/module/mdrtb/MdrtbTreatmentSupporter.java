@@ -1,14 +1,12 @@
 package org.openmrs.module.mdrtb;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Obs;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonName;
-import org.openmrs.api.context.Context;
 
 public class MdrtbTreatmentSupporter {
     private List<Obs> phoneNumbers;

@@ -6,6 +6,13 @@ package org.openmrs.module.mdrtb;
  */
 public class MdrtbConcepts {
 	
+	// Vitals 
+	public final static String [] WEIGHT = {"WEIGHT"};
+	public final static String [] PULSE = {"PULSE"};
+	public final static String [] TEMPERATURE = {"TEMPERATURE"};
+	public final static String [] RESPIRATORY_RATE = {"RESPIRATORY RATE"};
+	public final static String [] SYSTOLIC_BLOOD_PRESSURE = {"SYSTOLIC BLOOD PRESSURE"};
+	
 	// MDR-TB Drugs
 	public final static String [] TUBERCULOSIS_DRUGS = {"TUBERCULOSIS DRUGS"};
 	public final static String [] ISONIAZID = {"ISONIAZID"};
