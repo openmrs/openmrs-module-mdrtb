@@ -5,6 +5,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
@@ -38,7 +39,7 @@ public class DstResultCohortDefinitionEvaluatorTest extends BaseModuleContextSen
 	public void evaluate_shouldReturnConfirmedMdrtbPatientsForThePeriod() throws Exception {
 		
 		DstResultCohortDefinition cd = new DstResultCohortDefinition();
-		cd.setIncludeMdr(true);
+		cd.setTbClassification(TbClassification.MDR_TB);
 		cd.addParameter(new Parameter("minResultDate", "From Date", Date.class));
 		cd.addParameter(new Parameter("maxResultDate", "To Date", Date.class));
 		
@@ -62,7 +63,7 @@ public class DstResultCohortDefinitionEvaluatorTest extends BaseModuleContextSen
 	public void evaluate_shouldReturnConfirmedXdrtbPatientsForThePeriod() throws Exception {
 		EvaluationContext context = new EvaluationContext();
 		DstResultCohortDefinition cd = new DstResultCohortDefinition();
-		cd.setIncludeXdr(true);
+		cd.setTbClassification(TbClassification.XDR_TB);
 		EvaluatedCohort cohort = Context.getService(CohortDefinitionService.class).evaluate(cd, context);
 		System.out.println("Num XDR: " + cohort.size() + " - " + cohort.getCommaSeparatedPatientIds());
 	}
