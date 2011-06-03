@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.EncounterType;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Obs;
 import org.openmrs.PatientIdentifierType;
@@ -114,14 +113,19 @@ public class MdrtbActivator implements Activator, Runnable {
 	 * Perform any custom migrations required due to changes in the data model
 	 */
 	private void performCustomMigrations() {
-		migrateClinicianNotes();
+		// commenting this out--only want it for the few cases where it was working properly
+		// migrateClinicianNotes();
 	}
 	
 	/**
 	 *  We changed the concept in the core metadata that is mapped to the mdrtb mapping CLINICIAN NOTES;
-	 *  make sure we migrate all underlying observations 
+	 *  make sure we migrate all underlying observations; this is simply a utility method I have built in case
+	 *  there are any others besides PIH who started using the MDR-TB before June 2011; more current installs,
+	 *  this method is unnecessary; it has been causing problems, so I have commented it out, but left it 
+	 *  around just in case it is needed
 	 */
 	private void migrateClinicianNotes() {	
+		
 		// try to fetch old note concept by uuid
 		Concept oldNotesConcept = Context.getConceptService().getConceptByUuid("31bbf216-0370-102d-b0e3-001ec94a0cc1");
 
@@ -135,17 +139,26 @@ public class MdrtbActivator implements Activator, Runnable {
 			oldNotesList.add(oldNotesConcept);
 			
 			// we only want to update mdr-tb module encounters
-			EncounterType intake = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"));
-			EncounterType followup = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"));
+			String intake = Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type");
+			String followup = Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type");
+			
+			// add proxy privileges here and open session, b/c sometimes activator runs without proper privileges
+			Context.openSession();
+			Context.addProxyPrivilege("View Observations");
+			Context.addProxyPrivilege("Edit Observations");
 			
 			for (Obs obs : Context.getObsService().getObservations(null, null, oldNotesList, null, null, null, null, null, null, null, null, false)) {
 				// only update mdr-tb encounters that HAVEN'T been created with a custom form
-				if (obs.getEncounter().getEncounterType().equals(intake) || obs.getEncounter().getEncounterType().equals(followup) 
+				if (obs.getEncounter().getEncounterType().getName().equals(intake) || obs.getEncounter().getEncounterType().getName().equals(followup) 
 						&& obs.getEncounter().getForm() == null && obs.getValueCoded() == null) {
 					obs.setConcept(newNotesConcept);
 					Context.getObsService().saveObs(obs, "migrated to new CLINICIAN NOTES concept");
 				}
 			}
+			
+			Context.removeProxyPrivilege("View Observations");
+			Context.removeProxyPrivilege("Edit Observations");
+			Context.closeSession();
 		}
 	}
 }
