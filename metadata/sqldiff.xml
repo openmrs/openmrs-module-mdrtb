@@ -13,6 +13,9 @@
 			- "use business-database-name;" was called prior to calling this script
 	</help>
 	 
+	 <!-- Commenting this out because this seems to cause a bug with the new version of the metadata sharing package where the UUID does exist -->
+	 <!--  only metadata packages V1.0 and V1.1 had this error... it was correct in V1.1.1, released in March -->
+	<!-- 
 	<diff>
 		<version>2.0</version>
 		<author>Mark Goodrich</author>
@@ -22,6 +25,6 @@
 			UPDATE concept_source SET uuid = 'ddb6b595-0b85-4a80-9243-efe4ba404eef' WHERE name='org.openmrs.module.mdrtb' and uuid = '';
 		</sql>
 	</diff>
-
+	-->
 
 </sqldiff>
