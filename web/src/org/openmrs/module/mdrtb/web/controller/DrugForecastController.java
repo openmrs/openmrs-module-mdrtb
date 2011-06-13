@@ -106,7 +106,7 @@ public class DrugForecastController {
         MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
         List<Concept> drugSets = new ArrayList<Concept>();
         {
-        	Concept tb = Context.getConceptService().getConceptByName("TUBERCULOSIS TREATMENT DRUGS");
+        	Concept tb = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
             tb.getConceptSets();
             drugSets.add(tb);
         }
