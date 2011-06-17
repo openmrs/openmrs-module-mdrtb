@@ -43,6 +43,13 @@ public class MdrtbConcepts {
 	
 	public final static String [] QUINOLONES = {"QUINOLONES"};
 
+	// Drug-Related concepts
+	public final static String [] CURRENT_MULTI_DRUG_RESISTANT_TUBERCULOSIS_TREATMENT_TYPE = {"CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE"};
+	public final static String [] REASON_TUBERCULOSIS_TREATMENT_CHANGED_OR_STOPPED = {"REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED"};
+	public final static String [] STANDARDIZED = {"STANDARDIZED"};
+	public final static String [] EMPIRIC = {"EMPIRIC"};
+	public final static String [] INDIVIDUALIZED = {"INDIVIDUALIZED"};
+	
     // Smear, Culture, and DSTs
     public final static String [] BACILLI = {"BACILLI"};
     public final static String [] COLONIES = {"COLONIES"};
@@ -122,7 +129,7 @@ public class MdrtbConcepts {
     public final static String [] EXTRA_PULMONARY_TB = {"EXTRA-PULMONARY TUBERCULOSIS"};
     public final static String [] ANATOMICAL_SITE_OF_TB = {"ANATOMICAL SITE OF TUBERCULOSIS"};
 
-    // Antiretrovirals (for HIV status section)
+    // Antiretrovirals (for HIV status section and HIV regimens)
     public final static String [] ANTIRETROVIRALS = {"ANTIRETROVIRAL DRUGS"};
     public final static String [] REASON_HIV_TX_STOPPED = {"REASON ANTIRETROVIRALS CHANGED OR STOPPED"};
     
