@@ -65,8 +65,10 @@ function limitDrug(selectorElement, idOfDrugSelector) {
 	if (genericId != null && genericId != '') {
 		if ($j('#'+idOfDrugSelector).find('.drugConcept'+genericId).size() > 0) {
 			$j('#'+idOfDrugSelector).show();
-			$j('#'+idOfDrugSelector + " > option").show();
-			$j('#'+idOfDrugSelector + " > option").not('.drugConcept'+genericId).hide();
+			$j('#'+idOfDrugSelector + ' > option').hide();
+			$j('#'+idOfDrugSelector + ' > .drugConcept'+genericId).show();
+			$j('#'+idOfDrugSelector + ' > .unspecified').show();
+			$j('#'+idOfDrugSelector).val('');
 		}
 	}
 }

@@ -31,7 +31,7 @@
 	</c:forEach>
 
 	var ${id}GenericOptions = '<option value=""></option><c:forEach items="${openmrs:sort(mdrtb:genericsInSet(history.type.drugSet), \'name.name\', false)}" var="c"><option value="${c.conceptId}">${c.name.name}</option></c:forEach>';
-	var ${id}DrugOptions = '<option value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
+	var ${id}DrugOptions = '<option class="unspecified" value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
 	var ${id}UnitOptions = '<option value=""></option><c:forEach items="${doseUnits}" var="u"><option value="${u}">${u}</option></c:forEach>';
 	var ${id}Index = 0;
 

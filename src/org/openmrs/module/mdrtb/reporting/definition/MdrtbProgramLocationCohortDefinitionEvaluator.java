@@ -32,7 +32,7 @@ public class MdrtbProgramLocationCohortDefinitionEvaluator implements CohortDefi
      * @should define the boundary of a program from the end date of the previous program to the end date of the current program
      *	       i.e., that is if a person has the following enrollments:
      *						April 2010 to May 2010, Location A
-     *						August 2010 to September, Location B
+     *						August 2010 to September 2010, Location B
      *          then evaluating
      *         		(location="Location B", startDate="June 2010", endDate="July 2010") will include this patient
      *              (location="Location B", startDate="April 2010", endDate="July 2010") will include this patient 

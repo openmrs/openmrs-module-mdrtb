@@ -268,7 +268,7 @@ public class MdrtbUtil {
 	}
     
     /**
-     * Auto-assign any patient identifiers as required, if the idgen module is installed, using reflection
+     * Auto-assign a patient identifier for a specific identifier type, if required, if the idgen module is installed, using reflection
      * Auto generated method comment
      */
 	@SuppressWarnings("unchecked")
@@ -278,6 +278,7 @@ public class MdrtbUtil {
 			Object idgen = Context.getService(identifierSourceServiceClass);
 	        Method generateIdentifier = identifierSourceServiceClass.getMethod("generateIdentifier", PatientIdentifierType.class, String.class);
 	        
+	        // note that generate identifier returns null if this identifier type is not set to be auto-generated
 	        return (String) generateIdentifier.invoke(idgen, type, "auto-assigned during patient creation");
 		}
 		catch (Exception e) {
