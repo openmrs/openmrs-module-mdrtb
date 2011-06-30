@@ -125,7 +125,7 @@
 						<c:forEach items="${model.data}" var="p">
 							<tr class="patientRow patientRow${p.patientId}">
 								<td class="patientTable" style="white-space:nowrap; width:20px;">
-									<a href="mdrtbPatientOverview.form?patientId=${p.patientId}">
+									<a href="dashboard/dashboard.form?patientId=${p.patientId}">
 										<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
 									</a>
 								</td>

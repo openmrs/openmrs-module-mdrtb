@@ -5,11 +5,13 @@
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>2.1.4</version>
+	<version>2.1.5</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Partners in Health</author>
 	<description>MDR TB Module</description>
 	<activator>org.openmrs.module.mdrtb.MdrtbActivator</activator>
+		
+	<updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 		
 	<require_version>1.6</require_version>
 	
