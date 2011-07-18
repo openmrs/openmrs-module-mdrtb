@@ -187,12 +187,14 @@ public class MdrtbEditPatientController {
 		// if there is no default address for this patient, create one
 		if (patient.getPersonAddress() == null) {
 			PersonAddress address = new PersonAddress();
+			address.setPreferred(true);
 			patient.addAddress(address);
 		}
 		
 		// if there is no default name for this patient, create one
 		if (patient.getPersonName() == null) {
 			PersonName name = new PersonName();
+			name.setPreferred(true);
 			patient.addName(name);
 		}
 		
@@ -348,6 +350,18 @@ public class MdrtbEditPatientController {
 		// TODO: is this correct... do we ever want to void a patient but keep the person (for instance, if the person is also a treatment supporter?)
 		patient.setPersonVoided(patient.getVoided());
 		patient.setPersonVoidReason(patient.getVoidReason());
+		
+		// remove the address if it is blank
+		if (MdrtbUtil.isBlank(patient.getPersonAddress())) {
+			patient.removeAddress(patient.getPersonAddress());
+		}
+		
+		// remove any attributes that are blank
+		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
+			if (patient.getAttribute(attr) != null  && StringUtils.isBlank(patient.getAttribute(attr).getValue())) {
+				patient.removeAttribute(patient.getAttribute(attr));
+			}
+		}
 		
 		// save the patient
 		Context.getPatientService().savePatient(patient);

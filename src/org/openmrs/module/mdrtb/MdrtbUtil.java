@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
@@ -20,6 +21,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.PersonAddress;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
@@ -34,7 +36,6 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
-import org.springframework.util.StringUtils;
 
 public class MdrtbUtil {
     
@@ -167,7 +168,7 @@ public class MdrtbUtil {
     	
     	String defaultDstDrugs = Context.getAdministrationService().getGlobalProperty("mdrtb.defaultDstDrugs");
     	
-    	if(StringUtils.hasText(defaultDstDrugs)) {
+    	if(StringUtils.isNotBlank(defaultDstDrugs)) {
     		// split on the pipe
     		for (String drugString : defaultDstDrugs.split("\\|")) {
     			
@@ -391,7 +392,7 @@ public class MdrtbUtil {
 			}	
 		}
 		
-		if (StringUtils.hasText(name) || StringUtils.hasText(identifier)) {
+		if (StringUtils.isNotBlank(name) || StringUtils.isNotBlank(identifier)) {
 			name = "".equals(name) ? null : name;
 			identifier = "".equals(identifier) ? null : identifier;
 			Cohort nameIdMatches = new Cohort(Context.getPatientService().getPatients(name, identifier, null, false));
@@ -432,4 +433,15 @@ public class MdrtbUtil {
 	    }
 	}
 	
+	
+	/**
+	 * Returns true/false if all the fields in the address are empty or null
+	 */
+	public static Boolean isBlank(PersonAddress address) {
+		return StringUtils.isBlank(address.getAddress1()) && StringUtils.isBlank(address.getAddress2()) && StringUtils.isBlank(address.getCityVillage())
+				&& StringUtils.isBlank(address.getStateProvince()) && StringUtils.isBlank(address.getCountry()) && StringUtils.isBlank(address.getCountyDistrict())
+				&& StringUtils.isBlank(address.getNeighborhoodCell()) && StringUtils.isBlank(address.getPostalCode()) && StringUtils.isBlank(address.getTownshipDivision()) 
+				&& StringUtils.isBlank(address.getLatitude()) && StringUtils.isBlank(address.getLongitude()) && StringUtils.isBlank(address.getRegion()) && StringUtils.isBlank(address.getSubregion()) 
+				&& StringUtils.isBlank(address.getPostalCode());
+	}
 }

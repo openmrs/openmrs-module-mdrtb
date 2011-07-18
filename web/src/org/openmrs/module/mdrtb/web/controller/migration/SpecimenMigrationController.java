@@ -199,6 +199,8 @@ public class SpecimenMigrationController {
 			}
 		}
 		
+		Context.getConceptService().saveConcept(referred);
+		
 		// Removed duplicate "pulmonary" mapping	
 		Concept pulmonary = Context.getConceptService().getConcept(831);
 		for(ConceptMap map : pulmonary.getConceptMappings()) {

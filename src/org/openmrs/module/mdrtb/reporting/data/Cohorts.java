@@ -319,6 +319,7 @@ public class Cohorts {
 		q.append("select 	o.person_id ");
 		q.append("from		obs o ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT) + " ");
+	//	q.append("and       o.voided='0' ");
 		q.append("and		o.obs_id not in ");
 		q.append("		(select obs_group_id from obs ");
 		q.append("		 where concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_RESULT_DATE) +" and value_datetime <= '" + DateUtil.formatDate(effectiveDate, "yyyy-MM-dd") + "') ");
