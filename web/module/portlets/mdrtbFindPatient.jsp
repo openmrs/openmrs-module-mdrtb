@@ -233,20 +233,20 @@
 								];
 							var cellFuncsHeader = [
 							function() {return " "},
-							function() {return '<b><spring:message code="mdrtb.Identifier"/></b>'},
-							function() {return '<b><spring:message code="mdrtb.first"/></b>'},
-							function() {return '<b><spring:message code="mdrtb.middle"/></b>'},
-							function() {return '<b><spring:message code="mdrtb.last"/></b>'},
-							function() {return '<b><spring:message code="mdrtb.age"/></b>'},
-							function() {return '<b><spring:message code="mdrtb.gender"/></b>'},
+							function() {return "<b><spring:message code='mdrtb.Identifier'/></b>"},
+							function() {return "<b><spring:message code='mdrtb.first'/></b>"},
+							function() {return "<b><spring:message code='mdrtb.middle'/></b>"},
+							function() {return "<b><spring:message code='mdrtb.last'/></b>"},
+							function() {return "<b><spring:message code='mdrtb.age'/></b>"},
+							function() {return "<b><spring:message code='mdrtb.gender'/></b>"},
 							<c:if test ="${!empty useTribe}">
 								<c:if test ="${useTribe}">
-									function() {return '<b><spring:message code="mdrtb.tribe"/></b>'},
+									function() {return "<b><spring:message code='mdrtb.tribe'/></b>"},
 								</c:if>
 							</c:if>	
 							<c:if test ="${!empty useMothersName}">
 								<c:if test ="${useMothersName}">
-									function() {return '<b><spring:message code="mdrtb.mothersname"/></b>'},
+									function() {return "<b><spring:message code='mdrtb.mothersname'/></b>"},
 								</c:if>
 							</c:if>	
 							function() {return " "},
@@ -254,7 +254,7 @@
 							
 							<c:if test ="${!empty useHealthCenter}">
 								<c:if test ="${useHealthCenter}">		
-									,function() {return '<b><spring:message code="mdrtb.healthcenter"/></b>'}
+									,function() {return "<b><spring:message code='mdrtb.healthcenter'/></b>"}
 								</c:if>
 							</c:if>
 							];

@@ -148,7 +148,7 @@ public abstract class AbstractSimpleForm implements SimpleForm {
 			return null;
 		}
 		else {
-			// set value numeric if concept is type numeric, otherwise set value text
+			// get the value based on the datatype
 			if (concept.getDatatype().equals(Context.getConceptService().getConceptDatatypeByName("NUMERIC"))) {
 				return obs.getValueNumeric().toString();
 			} 
