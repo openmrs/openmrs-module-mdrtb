@@ -74,8 +74,17 @@
 
 	<span id="userHelp"> <a href='<%= request.getContextPath() %>/moduleResources/mdrtb/MDR-TB_OpenMRS_Documentation.pdf'>
 	<spring:message code="mdrtb.title" /> <spring:message code="header.help" /></a> </span>
+	
 	<span id="classicViewLink">
-		<a href="${pageContext.request.contextPath}/index.htm"><spring:message code="mdrtb.switchToclassicView"/></a>
+		<c:set var="id" value="${!empty patientId ? patientId : program.patient.id}"/>
+		<c:if test="${!empty id}">
+			<a href="${pageContext.request.contextPath}/patientDashboard.form?patientId=${id}">
+		</c:if>
+		<c:if test="${empty id}">
+			<a href="${pageContext.request.contextPath}/index.htm">
+		</c:if>
+				<spring:message code="mdrtb.switchToclassicView"/>
+			</a>
 	</span>
 	
 </div>
