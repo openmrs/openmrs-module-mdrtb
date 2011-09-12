@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.PatientService;
@@ -39,7 +38,7 @@ public class MdrtbFindPatient {
                 PatientListItem patientListItem = new PatientListItem(p);
                 
                 // make sure the correct patient identifier is set on the patient list item
-                if (StringUtils.isNotBlank(primaryIdentifier)) {
+                if (StringUtils.isNotBlank(primaryIdentifier) && p.getPatientIdentifier(primaryIdentifier) != null) {
                 	patientListItem.setIdentifier(p.getPatientIdentifier(primaryIdentifier).getIdentifier());
                 }
                 	
