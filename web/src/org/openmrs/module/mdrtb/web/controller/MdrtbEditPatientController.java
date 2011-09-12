@@ -200,7 +200,7 @@ public class MdrtbEditPatientController {
 		
 		// if all the standard attributes haven't been configured, configure them
 		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
-			if (patient.getAttribute(attr) == null) {
+			if (attr != null && patient.getAttribute(attr) == null) {
 				patient.addAttribute(new PersonAttribute(attr, null));
 			}
 		}
