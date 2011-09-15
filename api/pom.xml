@@ -46,6 +46,27 @@
 			<artifactId>openmrs-test</artifactId>
 			<type>pom</type>
 		</dependency>
+		
+		<dependency>
+		  	<groupId>org.openmrs.module</groupId>
+		  	<artifactId>reporting</artifactId>
+		  	<version>0.6</version>
+		  	<type>jar</type>
+		</dependency>
+	
+		<dependency>
+		 	<groupId>org.openmrs.module</groupId>
+		  	<artifactId>logic</artifactId>
+		  	<version>0.5</version>
+		  	<type>jar</type>
+		</dependency>
+	
+		<dependency>
+			  <groupId>org.apache.poi</groupId>
+			  <artifactId>poi</artifactId>
+			  <version>3.7</version>
+		</dependency>
+		
 	</dependencies>
 
 </project>

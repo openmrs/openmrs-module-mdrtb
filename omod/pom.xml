@@ -44,6 +44,15 @@
 			<artifactId>openmrs-test</artifactId>
 			<type>pom</type>
 		</dependency>
+		
+		<dependency>
+		 	<groupId>org.openmrs.module</groupId>
+		  	<artifactId>htmlwidgets</artifactId>
+		  	<version>1.5.7.1</version>
+		  	<type>jar</type>
+		  	<scope>provided</scope>
+		</dependency>
+	
 	</dependencies>
 
 	<build>

@@ -29,15 +29,15 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 
 public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 
-	private org.openmrs.module.programlocation.PatientProgram program;
+	private PatientProgram program;
 	
 	public MdrtbPatientProgram() {
-		this.program = new org.openmrs.module.programlocation.PatientProgram();
+		this.program = new PatientProgram();
 		this.program.setProgram(Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")));
 	}
 	
 	public MdrtbPatientProgram(PatientProgram program) {
-		this.program = (org.openmrs.module.programlocation.PatientProgram) program;
+		this.program = program;
 	}
 	
 	public PatientProgram getPatientProgram() {

@@ -19,10 +19,17 @@ public class GetLatestEnrollmentDateRule implements Rule {
      */
     public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
         
-        Result lastProgram = context.read(patient, context.getLogicDataSource("pihprogram"), "MDR-TB PROGRAM");
+        Result lastProgram = context.read(patient.getId(), context.getLogicDataSource("pihprogram"), "MDR-TB PROGRAM");
         return lastProgram;
         
     }
+    
+    // TODO: do we need to implement this?
+    public Result eval(LogicContext arg0, Integer arg1, Map<String, Object> arg2) throws LogicException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     
     /**
      * @see org.openmrs.logic.Rule#getChildRules()
