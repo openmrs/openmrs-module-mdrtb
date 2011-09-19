@@ -3,7 +3,6 @@
 
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbListPatients.form" />
 
-<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
 

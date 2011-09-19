@@ -1,8 +1,6 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="../mdrtbHeader.jsp"%>
 
-<openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
-
 <form method="post">
 	<h2>Drug Usage Calculation</h2>
 	

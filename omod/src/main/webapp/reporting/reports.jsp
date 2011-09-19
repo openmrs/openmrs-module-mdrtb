@@ -1,7 +1,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+
 <%@ taglib prefix="wgt" uri="/WEB-INF/view/module/htmlwidgets/resources/htmlwidgets.tld" %>
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+
 <openmrs:require privilege="Run Reports" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbIndex.form" />			
 
 <style>

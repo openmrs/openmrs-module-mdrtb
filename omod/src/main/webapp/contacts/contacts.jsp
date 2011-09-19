@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
-<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/date_input.css""/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
