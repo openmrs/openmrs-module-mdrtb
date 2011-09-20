@@ -12,7 +12,7 @@ public class DashboardStatusRendererUtil {
 		StringBuffer profile = new StringBuffer();
     	
     	for (Concept drug : drugList) {
-    		profile.append(drug.getBestShortName(Context.getLocale()).toString() + " + ");
+    		profile.append(drug.getShortestName(Context.getLocale(), false).toString() + " + ");
     	}
     	
     	// remove the last plus sign and spaces

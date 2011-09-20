@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 
 <style type="text/css">
-	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+	#content td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 	.chartCell {border:1px solid #8FABC7; margin:0px; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; vertical-align:center}
 	.spacerCell {border:0px; padding:0px; width:1px; background-color: #8FABC7}
 </style>
@@ -36,7 +36,7 @@
 <td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <td class="spacerCell"></td>
 <c:forEach var="drugType" items="${model.chart.drugTypes}">
-	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold">${drugType.name.shortName}</td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
+	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold"><mdrtb:format obj="${drugType}"/></td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
 </c:forEach>
 </tr>
 <!-- END HEADER ROWS -->

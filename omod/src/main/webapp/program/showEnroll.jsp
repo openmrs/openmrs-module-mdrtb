@@ -14,7 +14,7 @@
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <!--  these are to make sure that the datepicker appears above the popup -->
 <style type="text/css">
-    td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
+    #content td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
 <!-- CUSTOM JQUERY  -->

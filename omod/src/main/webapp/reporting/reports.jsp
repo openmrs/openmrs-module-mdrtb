@@ -6,7 +6,7 @@
 <openmrs:require privilege="Run Reports" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbIndex.form" />			
 
 <style>
-	.reportTable th,td {
+	.reportTable th, .reportTable td {
 		text-align:left; vertical-align:top;
 	}
 	simple-html-dataset table {
@@ -39,7 +39,7 @@
 			</table>
 		</c:when>
 		<c:otherwise>
-			<table width="100%">
+			<table class="reportTable" width="100%">
 				<tr>
 					<td style="border:1px solid black; padding:5px;">
 						<form id="reportParameterForm" action="render.form" target="reportData">
