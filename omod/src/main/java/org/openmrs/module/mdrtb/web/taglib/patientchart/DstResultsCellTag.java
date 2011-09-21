@@ -9,10 +9,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.DrugOrder;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbConstants;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.DstResult;
@@ -68,7 +71,7 @@ public class DstResultsCellTag extends TagSupport {
     					concentration = dstResult.getConcentration().toString() + " - ";
     				}
     		
-    				title = title + concentration + dstResult.getResult().getBestShortName(Context.getLocale()) + "<br>";
+    				title = title + concentration + MdrtbUtil.getConceptName(dstResult.getResult(), Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName() + "<br>";
     
     				// TODO: figure out if this is the right rule: if there are multiple results for the same drug
     				// right now I'm setting the result to intermediate (so it will pick up that color)
@@ -86,7 +89,7 @@ public class DstResultsCellTag extends TagSupport {
     		
     		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\"" +
     				("true".equalsIgnoreCase(this.showTooltip) ? " title=\"" + title + "\"" : "") + " style=\"background-color:" + color + ";" + style + "\">" + 
-    				result.getBestShortName(Context.getLocale()) + "</td></tr></table></td>";
+    				MdrtbUtil.getConceptName(result, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName() + "</td></tr></table></td>";
     	}
     	else {
     		ret = "<td class=\"chartCell\" style=\"background-color:" + drugColor + "\"><table style=\"padding:0px; border:0px; margin0px; width:100%;\"><tr><td class=\"chartCell\"/></tr></table></td>";

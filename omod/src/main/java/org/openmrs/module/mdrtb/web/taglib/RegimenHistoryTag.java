@@ -16,7 +16,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
@@ -79,7 +81,7 @@ public class RegimenHistoryTag extends TagSupport {
 	        Map<String, Concept> allDrugs = new TreeMap<String, Concept>();
 	        for (Regimen r : allRegimens) {
 	        	for (Concept c : r.getUniqueGenerics()) {
-	        		allDrugs.put(c.getBestShortName(Context.getLocale()).getName(), c);
+	        		allDrugs.put(MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName(), c);
 	        	}
 	        }
 			

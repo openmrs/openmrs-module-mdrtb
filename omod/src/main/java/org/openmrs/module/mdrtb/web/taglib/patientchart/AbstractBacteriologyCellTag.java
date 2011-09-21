@@ -12,8 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Bacteriology;
 import org.openmrs.module.mdrtb.specimen.Culture;
@@ -72,7 +74,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 						}
     					
     					// append the appropriate result to the result list
-    					resultString = resultString.concat(bac.getResult().getBestShortName(Context.getLocale()).toString() + scanty);
+    					resultString = resultString.concat(MdrtbUtil.getConceptName(bac.getResult(), Context.getLocale().getLanguage(),ConceptNameType.SHORT).getName() + scanty);
     						
     					// append the appropriate title to the title list
     					titleString = titleString.concat(bac.getResult().getBestName(Context.getLocale()).toString() + " - " 

@@ -6,15 +6,17 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
+import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Smear;
-import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
+import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.status.LabResultsStatus;
 import org.openmrs.module.mdrtb.status.LabResultsStatusRenderer;
 import org.openmrs.module.mdrtb.status.StatusFlag;
@@ -29,7 +31,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		Smear smear = (Smear) item.getValue();
 		
 		if (smear != null) {
-			String[] params = { smear.getResult().getBestShortName(Context.getLocale()).toString(),
+			String[] params = { MdrtbUtil.getConceptName(smear.getResult(), Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName(),
 			        smear.getDateCollected() != null ? df.format(smear.getDateCollected()) : "(N/A)",
 			        smear.getLab() != null ? smear.getLab().getDisplayString() : "(N/A)" };
 			
@@ -51,7 +53,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		
 		if (culture != null) {
 			String[] params = {
-			        culture.getResult().getBestShortName(Context.getLocale()).toString(),
+			        MdrtbUtil.getConceptName(culture.getResult(), Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName(),
 			        culture.getDateCollected() != null ? df.format(culture.getDateCollected()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			

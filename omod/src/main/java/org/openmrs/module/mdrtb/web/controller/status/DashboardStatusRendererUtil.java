@@ -3,7 +3,9 @@ package org.openmrs.module.mdrtb.web.controller.status;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 
 
 public class DashboardStatusRendererUtil {
@@ -12,7 +14,7 @@ public class DashboardStatusRendererUtil {
 		StringBuffer profile = new StringBuffer();
     	
     	for (Concept drug : drugList) {
-    		profile.append(drug.getShortestName(Context.getLocale(), false).toString() + " + ");
+    		profile.append(MdrtbUtil.getConceptName(drug, Context.getLocale().getLanguage(), ConceptNameType.SHORT).toString() + " + ");
     	}
     	
     	// remove the last plus sign and spaces

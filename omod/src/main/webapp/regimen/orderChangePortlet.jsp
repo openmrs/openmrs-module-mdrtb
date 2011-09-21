@@ -177,7 +177,7 @@
 								<select name="reason.${drugOrder.orderId}" id="stopReason${changeOrderIndex}" class="reasonField<c:if test="${!isStopped}"> hidden</c:if>">
 									<option value=""></option>
 									<c:forEach items="${mdrtb:answersToQuestion(history.type.reasonForStoppingQuestion)}" var="a">
-										<option value="${a.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == a.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${a}" tagName="preferred"/></option>
+										<option value="${a.conceptId}" <c:if test="${drugOrder.discontinuedReason.conceptId == a.conceptId}"><c:set var="needExtraRow" value="false"/>selected</c:if>><mdrtb:format obj="${a}"/></option>
 									</c:forEach>
 									<c:if test="${needExtraRow}">
 										<option value="${drugOrder.discontinuedReason}" selected><mdrtb:format obj="${drugOrder.discontinuedReason}"/></option>

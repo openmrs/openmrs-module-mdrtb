@@ -36,7 +36,7 @@
 <td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
 <td class="spacerCell"></td>
 <c:forEach var="drugType" items="${model.chart.drugTypes}">
-	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold"><mdrtb:format obj="${drugType}"/></td>  <!-- TODO: getShortName is depreciated in 1.8, change to drugType.shortNames[0].name? -->
+	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold"><mdrtb:format obj="${drugType}" /></td>
 </c:forEach>
 </tr>
 <!-- END HEADER ROWS -->
