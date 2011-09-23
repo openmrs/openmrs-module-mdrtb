@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
-import org.openmrs.ConceptNameTag;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
@@ -24,6 +23,7 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAddress;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
@@ -290,30 +290,55 @@ public class MdrtbUtil {
 	}
 	
 	/**
-	 * Given a concept, locale, and a string that represents a concept name tag,
-	 * returns the first concept name for that concept that matches the language and is tagged with the specified tag
+	 * Given a concept, a language code, and a concept name type,
+	 * returns the first concept name for that concept that matches the language and is of the specified type
+	 * If no matches, returns any name of the specified type
+	 * If still no match, returns the fully specified name for the specified locale
+	 * If still no mathc, returns any fully qualified name
+	 * @throws Exception 
 	 */
-	public static ConceptName getConceptName(Concept concept, String language, String conceptNameTag) {
+	public static ConceptName getConceptName(Concept concept, String language, ConceptNameType conceptNameType) {
 		if (concept == null) {
-			log.error("No concept provided to findConceptName");
+			log.error("No concept provided to getConceptName");
 			return null;
 		}
 		
-		ConceptNameTag tag = Context.getConceptService().getConceptNameTagByName(conceptNameTag);
+		ConceptName name = getConceptNameHelper(concept, language, conceptNameType);
 		
-		if (tag == null) {
-			log.warn("Invalid concept name tag parameter " + conceptNameTag + " passed to findConceptName");
+		// if we haven't found a match for this language, try any language
+		if (name == null && language != null) {
+			name = getConceptNameHelper(concept, null, conceptNameType);
 		}
 		
+		// if we still haven't found a match, see if we can find a fully specified name for the language
+		if (name == null && conceptNameType != ConceptNameType.FULLY_SPECIFIED) {
+			name = getConceptNameHelper(concept, language, ConceptNameType.FULLY_SPECIFIED);
+		}
+		
+		// if we still haven't found a match, just return a fully specified name
+		if (name == null) {
+			name = getConceptNameHelper(concept, null, ConceptNameType.FULLY_SPECIFIED);
+		}
+		
+		return name;
+	}
+	
+	private static ConceptName getConceptNameHelper(Concept concept, String language, ConceptNameType conceptNameType) {
+		
 		for (ConceptName name : concept.getNames()) {
-			if ((language == null || name.getLocale() == null || name.getLocale().getLanguage() == null || name.getLocale().getLanguage().equals(language)) 
-				&& ((tag == null) || (name.getTags().contains(tag)))) {
+			// test here for a name where:
+			// 1) the language of the name = the incoming language parameter, or the language parameter is null
+			// 2) the type of the name = the incoming type parameter, or both the type of the name and the type parameter = null
+			
+			if ( (language == null || (name.getLocale() != null && name.getLocale().getLanguage() != null && name.getLocale().getLanguage().equals(language))) 
+				&& ((name.getConceptNameType() == null && conceptNameType == null) || (name.getConceptNameType() != null && name.getConceptNameType().equals(conceptNameType))) ) {
 				return name;
 			}				
 		}
 		
 		return null;
 	}
+	
 	
 	/**
      * Configures the default values for a Test, based on the existing values for other tests in the specimen

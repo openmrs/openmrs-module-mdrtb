@@ -34,9 +34,11 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
@@ -346,7 +348,7 @@ public class PatientSummaryUtil {
 			name = c.findNameTaggedWith(tag);
 		}
 		if (name == null) {
-			name = c.getShortestName(Context.getLocale(), false);
+			name = MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.SHORT);
 		}
 		if (name != null) {
 			s = name.getName();
@@ -405,7 +407,7 @@ public class PatientSummaryUtil {
     	if (c == null) {
     		return "";
     	}
-    	return c.getBestShortName(Context.getLocale()).getName();
+    	return MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName();
     }
     
 	public static int compareDates(Date d1, Date d2, String format) {
@@ -415,7 +417,6 @@ public class PatientSummaryUtil {
 		return s1.compareTo(s2);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static String formatObject(Object o, String defaultVal) {
 		if (o == null) {
 			return defaultVal;

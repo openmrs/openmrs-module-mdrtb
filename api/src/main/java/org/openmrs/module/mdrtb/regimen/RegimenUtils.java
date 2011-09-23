@@ -18,11 +18,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
+import org.openmrs.ConceptNameTag;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.MessageUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
@@ -232,7 +235,7 @@ public class RegimenUtils {
     	}
     	List<String> shortNames = new ArrayList<String>();
     	for (Concept c : concepts) {
-    		shortNames.add(c.getBestShortName(Context.getLocale()).getName());
+    		shortNames.add(MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName());
     	}
     	Collections.sort(shortNames);
     	return OpenmrsUtil.join(shortNames, separator);
