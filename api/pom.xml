@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>mdrtb-parent</artifactId>
-		<version>2.1.8.999-SNAPSHOT</version>
+		<version>2.2.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>mdrtb-api</artifactId>
