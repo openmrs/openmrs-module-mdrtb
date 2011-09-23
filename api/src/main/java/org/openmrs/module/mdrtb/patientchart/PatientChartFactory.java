@@ -107,7 +107,6 @@ public class PatientChartFactory {
 			// now all the specimens collected in the month prior to treatment start date (for the baseline row)
 			recordEndDate = (Calendar) recordStartDate.clone();
 			recordEndDate.add(Calendar.MONTH, 1); // create an end date one month after the startDate
-			recordEndDate.add(Calendar.DATE, -1); // set the end date back one day, so that the records don't overlap by a day
 			record = createChartRecord(specimens, stateChangeRecordComponents, regimenHistory, recordStartDate, recordEndDate);
 			record.setLabel(Context.getMessageSourceService().getMessage("mdrtb.baseline"));
 			chart.getRecords().add(record);
