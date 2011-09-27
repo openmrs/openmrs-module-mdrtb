@@ -159,6 +159,13 @@ public class Functions {
 	}
 	
 	/**
+	 * @return the matching drug (may be a reference to drug by id or name)
+	 */
+	public static Drug getDrug(String lookup) {
+		return Context.getConceptService().getDrugByNameOrId(lookup);
+	}
+ 	
+	/**
 	 * @return a List of Drugs who are in the set matching the passed conceptSet
 	 */
 	public static List<Concept> genericsInSet(String conceptSet) {
@@ -194,4 +201,5 @@ public class Functions {
 		}
 		return ret;
 	}
+	
 }

@@ -16,8 +16,8 @@
 				<c:forEach items="${rs.drugComponents}" var="dc" varStatus="dcStatus">
 					{
 						'orderId':'', 
-						'generic':'${dc.generic}',
-						'drugId':'${dc.drugId}',
+						'generic':'${mdrtb:getConcept(dc.generic).id}',
+						'drugId':'${mdrtb:getDrug(dc.drugId).id}',
 						'dose':'${dc.dose}',
 						'units':'${dc.units}',
 						'frequency':'${dc.frequency}',

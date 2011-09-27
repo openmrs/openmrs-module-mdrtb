@@ -715,7 +715,7 @@
 	
 	<function>
 	    <description>
-	      Returns a Concept by checking many possible sources
+	      Given a string, tries to find the matching Concept.  The string can be a mdrtb concept mapping, a concept id, a concept name, or concept uuid. 
 	    </description>
 	    <name>getConcept</name>
 	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
@@ -729,6 +729,15 @@
 	    <name>answersToQuestion</name>
 	    <function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
 	    <function-signature>java.util.List answersToQuestion(java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<description>
+			Given a string, tries to find the matching Drug.  The string can be a drug id or name. 
+		</description>
+		<name>getDrug</name>
+		<function-class>org.openmrs.module.mdrtb.web.taglib.Functions</function-class>
+	    <function-signature>org.openmrs.Drug getDrug(java.lang.String)</function-signature>
 	</function>
 
 </taglib>

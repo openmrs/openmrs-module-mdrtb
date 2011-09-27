@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	 <!--  add mock versions of some of the mdrtb concepts -->
+	 <concept concept_id="1441" retired="false" datatype_id="2" class_id="7" is_set="false" creator="1" date_created="2008-08-15 15:27:51.0" version="" uuid="31b4bce4-0370-102d-b0e3-001ec94a0cc1"/>
+	 <concept_name concept_name_id="7356" concept_id="1441" name="RESISTANT" locale="en" creator="1" concept_name_type="FULLY_SPECIFIED" locale_preferred="1" date_created="2004-08-12 00:00:00.0" voided="false" uuid="9977e374-18a1-4ec6-8ed4-4152a5a7d6a1"/>
+     <concept_map concept_map_id="1" source="4" source_code="RESISTANT TO TUBERCULOSIS DRUG" creator="1" date_created="2004-08-12 00:00:00.0" concept_id="1441"/>
+
+ 	<concept_source concept_source_id="4" name="org.openmrs.module.mdrtb" creator="1" date_created="2009-06-03 13:41:25.0" retired="false" uuid="88f5b378-5065-11de-80cb-001e378eb67e"/>
+</dataset>

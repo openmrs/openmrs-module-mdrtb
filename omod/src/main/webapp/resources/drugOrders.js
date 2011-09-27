@@ -42,7 +42,9 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, dele
 
 	$j('#'+sectionId).before($newRow);
 	
+	// limit the drug selector for the valid drugs for that generic, and then set the default value
 	limitDrug($genericSelector, 'drug'+suffix);
+	$drugSelector.val(drug.drugId);
 }
 
 // Removes the element with the passed id from the DOM
