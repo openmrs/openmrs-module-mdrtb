@@ -241,7 +241,7 @@
 		<td class="inputCell">
 			<openmrs:fieldGen 
 					type="${attrType.format}" 
-					formFieldName="attributeMap[${attrType.name}].value" 
+					formFieldName="attributeMap['${attrType.name}'].value" 
 					val="${patient.attributeMap[attrType.name].hydratedObject}" 
 					parameters="optionHeader=[blank]|showAnswers=${attrType.foreignKey}" />
 		</td>

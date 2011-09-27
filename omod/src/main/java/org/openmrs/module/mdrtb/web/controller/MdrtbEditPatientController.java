@@ -201,15 +201,14 @@ public class MdrtbEditPatientController {
 		// if all the standard attributes haven't been configured, configure them
 		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
 			if (attr != null && patient.getAttribute(attr) == null) {
-				patient.addAttribute(new PersonAttribute(attr, null));
+				patient.getAttributes().add(new PersonAttribute(attr, null));
 			}
 		}
 		
 		return patient;
 	}
 
-	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showForm(@RequestParam(required = false, value="patientId") Integer patientId,
 	                             @RequestParam(required = false, value="addName") String addName,
 	                             @RequestParam(required = false, value="addBirthdate") Date addBirthdate,
@@ -270,8 +269,7 @@ public class MdrtbEditPatientController {
 		return new ModelAndView("/module/mdrtb/mdrtbEditPatient");
 	}
 
-	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView submitForm(@ModelAttribute("patient") Patient patient, BindingResult result,
 	                               @RequestParam("identifierValue") String [] identifierValue,
 	                               @RequestParam("identifierId") String [] identifierId, 
