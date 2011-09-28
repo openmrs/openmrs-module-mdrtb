@@ -39,11 +39,22 @@
 			<type>pom</type>
 		</dependency>
 		
+		<!--  external libraries we need to include -->
+		
+		<dependency>
+			  <groupId>org.apache.poi</groupId>
+			  <artifactId>poi</artifactId>
+			  <version>3.7</version>
+		</dependency>
+		
+		<!-- jars we need to provide for compile but that will be provided at runtime (scope=provided) -->
+		
 		<dependency>
 		  	<groupId>org.openmrs.module</groupId>
 		  	<artifactId>reporting</artifactId>
 		  	<version>0.6.2</version>
 		  	<type>jar</type>
+		  	<scope>provided</scope>
 		</dependency>
 	
 		<dependency>
@@ -51,12 +62,7 @@
 		  	<artifactId>logic</artifactId>
 		  	<version>0.5</version>
 		  	<type>jar</type>
-		</dependency>
-	
-		<dependency>
-			  <groupId>org.apache.poi</groupId>
-			  <artifactId>poi</artifactId>
-			  <version>3.7</version>
+		  	<scope>provided</scope>
 		</dependency>
 		
 	</dependencies>

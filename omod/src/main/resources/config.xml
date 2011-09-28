@@ -185,7 +185,9 @@
 				<include method="findPatients"/>
 				<include method="findPeople"/>
 				<include method="findAllPeople"/>
-			</create>							
+			</create>		
+			
+			<!--   probably can delete this					
 			<create creator="new" javascript="MdrtbNextVisit">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbNextVisit"/>
 				<include method="setNextVisitDate"/>
@@ -201,6 +203,8 @@
 			<convert converter="bean" match="org.openmrs.module.mdrtb.web.dwr.MdrtbPersonListItem"/>
 			<convert converter="bean" match="org.openmrs.PersonAddress"/>
 			<convert converter="bean" match="org.openmrs.Person"/>
+			-->
+			
 		</allow>
 		
 		<signatures>
