@@ -109,6 +109,7 @@ public class MdrtbConcepts {
     public final static String [] RELAPSE = {"RELAPSE"};
     public final static String [] TRANSFER = {"TRANSFER"};
     
+    // TODO: are these still used?
     public final static String [] MDR_TB = {"MULTI-DRUG RESISTANT TUBERCULOSIS"};
     public final static String [] XDR_TB = {"EXTENSIVE DRUG RESISTANT TUBERCULOSIS"};
     public final static String [] SUSPECTED_MDR_TB = {"SUSPECTED MULTI-DRUG TUBERCULOSIS"};
