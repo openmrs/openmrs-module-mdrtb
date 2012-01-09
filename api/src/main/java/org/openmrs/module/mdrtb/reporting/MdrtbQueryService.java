@@ -193,21 +193,23 @@ public class MdrtbQueryService {
 		Map<Integer, Result> ret = new HashMap<Integer, Result>();
 		
 	   	StringBuilder q = new StringBuilder();
-    	q.append("select	o.person_id, o.value_coded, o.obs_datetime ");
+    	q.append("select	o.person_id, o.obs_datetime, o.value_coded, o.value_numeric, o.value_datetime ");
     	q.append("from		patient p, obs o ");
     	q.append("where		p.patient_id = o.person_id ");
     	q.append("and		p.voided = 0 and o.voided = 0 ");
-    	q.append("and		o.value_coded is not null ");
+    	q.append("and		(o.value_coded is not null or o.value_datetime is not null or o.value_numeric is not null) ");
     	q.append("and		o.concept_id = " + question.getConceptId() + " ");
     	q.append("order by	o.obs_datetime asc ");
     	
     	for (List<Object> row : Context.getAdministrationService().executeSQL(q.toString(), true)) {
     		Integer patientId = (Integer)row.get(0);
     		Result r = new Result();
-    		Concept result = Context.getConceptService().getConcept((Integer)row.get(1));
-    		r.setValueCoded(result);
-    		r.setResultObject(result);
-    		r.setResultDate((Date) row.get(2));
+    		r.setResultDate((Date) row.get(1));
+    		r.setResultObject(ObjectUtil.coalesce(row.get(2), row.get(3), row.get(4)));
+    		if (row.get(2) != null) {
+        		Concept result = Context.getConceptService().getConcept((Integer)row.get(2));
+        		r.setResultObject(result);    			
+    		}
     		ret.put(patientId, r);
     	}
     	
