@@ -86,6 +86,11 @@ public class PatientSummaryUtil {
     public static final String HIV_TEST_RESULT = MdrtbConcepts.RESULT_OF_HIV_TEST[0];
     public static final String SMEAR_RESULT = MdrtbConcepts.SMEAR_RESULT[0];
     public static final String CULTURE_RESULT = MdrtbConcepts.CULTURE_RESULT[0];
+    public static final String WEIGHT_RESULT = MdrtbConcepts.WEIGHT[0];
+    public static final String PULSE_RESULT = MdrtbConcepts.PULSE[0];
+    public static final String TEMPERATURE_RESULT = MdrtbConcepts.TEMPERATURE[0];
+    public static final String RESPIRATORY_RATE_RESULT = MdrtbConcepts.RESPIRATORY_RATE[0];
+    public static final String SYSTOLIC_BLOOD_PRESSURE_RESULT = MdrtbConcepts.SYSTOLIC_BLOOD_PRESSURE[0];
     
     public static final String[] DEMOGRAPHICS_KEYS = {
     	PATIENT_ID, FULL_NAME, FIRST_NAME, LAST_NAME, GENDER, AGE, BIRTHDATE, DEAD, DEATH_DATE, CAUSE_OF_DEATH, 
@@ -102,7 +107,8 @@ public class PatientSummaryUtil {
     };
     
     public static final String[] OBS_KEYS = {
-    	HIV_TEST_RESULT, SMEAR_RESULT, CULTURE_RESULT
+    	HIV_TEST_RESULT, SMEAR_RESULT, CULTURE_RESULT, WEIGHT_RESULT, PULSE_RESULT, TEMPERATURE_RESULT, 
+    	RESPIRATORY_RATE_RESULT, SYSTOLIC_BLOOD_PRESSURE_RESULT
     };
     
     public static final String[] TEST_KEYS = {
@@ -282,7 +288,7 @@ public class PatientSummaryUtil {
         				}
         				Result r = m.get(p.getPatientId());
         				if (r != null) {
-        					map.put(split[0]+"."+split[1]+".latest", formatConcept(r.toConcept()));
+        					map.put(split[0]+"."+split[1]+".latest", formatObject(r.getResultObject(), "Error"));
         					map.put(split[0]+"."+split[1]+".latestDate", formatDate(r.getResultDate(), null, null));
         				}
         			}
@@ -415,10 +421,12 @@ public class PatientSummaryUtil {
 		return s1.compareTo(s2);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static String formatObject(Object o, String defaultVal) {
 		if (o == null) {
 			return defaultVal;
+		}
+		if (o instanceof Date) {
+			return formatDate((Date)o, null, null);
 		}
 		if (o instanceof Regimen) {
 			return RegimenUtils.formatRegimenGenerics((Regimen)o, " + ", defaultVal);
@@ -436,7 +444,7 @@ public class PatientSummaryUtil {
 			return OpenmrsUtil.join((Collection<?>)o, ", ");
 		}
 		if (o instanceof Result) {
-			return ((Result)o).toString();
+			return formatObject(((Result)o).getResultObject(), defaultVal);
 		}
 		return o.toString();
 	}
