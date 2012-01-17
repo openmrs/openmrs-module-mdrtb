@@ -66,6 +66,6 @@
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/junit/hsqldb-1.8.0.10.jar" sourcepath="/openmrs-source/hsqldb_1_8_0_9.zip"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/liquibase/liquibase-1.9.4-mod.jar" sourcepath="/liquibase-19x"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/dwr/dwr-205.jar"/>
-	<classpathentry kind="lib" path="lib-common/reporting-0.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/reporting-0.7.1.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

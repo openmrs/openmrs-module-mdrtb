@@ -8,6 +8,7 @@ import org.openmrs.Cohort;
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -27,7 +28,7 @@ public class MdrtbProgramClosedAfterTreatmentStartedCohortDefinitionEvaluator ex
      * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
      * @should return patients whose first TB regimen was during the passed period
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
  
     	// first evaluate MdrtbTreatmentStartedCohort
     	Cohort baseCohort = super.evaluate(cohortDefinition, context); 
@@ -70,6 +71,6 @@ public class MdrtbProgramClosedAfterTreatmentStartedCohortDefinitionEvaluator ex
     			}
     		}
     	}
-		return resultCohort;
+    	return new EvaluatedCohort(resultCohort, cohortDefinition, context);
 	}
 }

@@ -26,6 +26,7 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -47,7 +48,7 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
      * @should return confirmed mdrtb patients for the period
      * @should return confirmed xdrtb patients for the period
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
     	
     	DstResultCohortDefinition cd = (DstResultCohortDefinition) cohortDefinition;
     	Cohort c = null;
@@ -99,6 +100,6 @@ public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvalu
     		}
     	}
     	
-    	return c;
+    	return new EvaluatedCohort(c, cohortDefinition, context);
     }
 }

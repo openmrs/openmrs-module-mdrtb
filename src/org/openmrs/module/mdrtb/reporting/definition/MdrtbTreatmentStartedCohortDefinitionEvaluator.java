@@ -20,6 +20,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -39,9 +40,10 @@ public class MdrtbTreatmentStartedCohortDefinitionEvaluator implements CohortDef
      * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
      * @should return patients whose first TB regimen was during the passed period
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {	
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {	
     	MdrtbTreatmentStartedCohortDefinition cd = (MdrtbTreatmentStartedCohortDefinition) cohortDefinition;
     	Concept tbDrugSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
-    	return MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
+    	Cohort c = MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
+    	return new EvaluatedCohort(c, cohortDefinition, context);
 	}
 }
