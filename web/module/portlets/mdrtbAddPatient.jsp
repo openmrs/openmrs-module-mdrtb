@@ -12,9 +12,7 @@
 	
 	
 	<div id="createPatient">
-		<b class="boxHeader">
-				<spring:message code="mdrtb.enrollNewPatient"/>
-		</b>
+		<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="mdrtb.enrollNewPatient"/></b>
 		<div class="box" style="padding: 15px 15px 15px 15px;">
 			<spring:message code="mdrtb.search.instructions"/> <br/><br/>
 			
