@@ -6,38 +6,43 @@
 <openmrs:globalProperty key="use_patient_attribute.mothersName" var="useMothersName"/>
 <openmrs:globalProperty key="use_patient_attribute.tribe" var="useTribe"/>
 <openmrs:globalProperty key="mdrtb.findPatientNumResults" var="numResults" defaultValue="5"/>
+
 <script type="text/javascript">
-		var classTmp = "";
-		var from = 0;
-		var jumps = ${numResults}; //this many patients at a time
-		var to = jumps-1;
-		var retSize = 0;
-		var headerShown = 0;
-		var savedRet = new Array();
-		var mappedRet = new Array();
-		var showLoading = 0;
-		var $j = jQuery.noConflict();		
-		$j(document).ready(function(){
-   				$j('#results').css('display','none');
-   				$j('#searchBox').val('');
-   					$j('#searchBox').keyup(function(){
-   						if ($j('#searchBox').val().length > 2){
-	   						if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on')
-	   							includeRet = true;
-	   						MdrtbFindPatient.findPatients($j('#searchBox').val(), false, function(ret){
-	   						from = 0; 
-	   						to = jumps-1; 
-							if (ret.length <= to)
-								to = ret.length -1;
-	   						savedRet = ret; 
-	   						retSize = ret.length;
-	   						drawTable(savedRet);});
-   						}
-   						else {
-   	   						$j('#results').hide();
-   						}
-   			});	
- 		});
+	var classTmp = "";
+	var from = 0;
+	var jumps = ${numResults}; //this many patients at a time
+	var to = jumps-1;
+	var retSize = 0;
+	var headerShown = 0;
+	var savedRet = new Array();
+	var mappedRet = new Array();
+	var showLoading = 0;
+	var $j = jQuery.noConflict();
+	$j(document).ready(function(){
+		$j('#results').css('display','none');
+		$j('#searchBox').val('');
+		$j('#searchBox').keyup(function(event){
+			$j('#results').hide();
+			if (event.keyCode == 13 ) { // User pressed enter key.
+				$j('#mdrtbFindPatientSearchButton').click();
+			}
+		});
+		$j('#mdrtbFindPatientSearchButton').click(function(){
+			if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
+				includeRet = true;
+			}
+			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, function(ret){
+				from = 0; 
+				to = jumps-1; 
+				if (ret.length <= to) {
+					to = ret.length -1;
+				}
+	   			savedRet = ret; 
+	   			retSize = ret.length;
+	   			drawTable(savedRet);
+	   		});
+   		});	
+ 	});
 	
 	function addRowEventsFindPatient(){
 		var tbody = document.getElementById('resTableBody');
@@ -422,6 +427,7 @@ function useMdrtbLoadingMessage(message) {
 					<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
 				</c:choose>
 				<input type="text" value="" id="searchBox" name="searchBox">
+				<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
 				<div id="results" style="position:absolute; z-index:1000; border:2px solid black; background-color:#CCCCCC; ${model.resultStyle}">
 					<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
 						<thead id="resTableHeader" class="resTableHeader"/>	
@@ -434,15 +440,16 @@ function useMdrtbLoadingMessage(message) {
 		<c:otherwise>
 			<div id="findPatient">
 				
-				<b class="boxHeader"><spring:message code="Patient.find" /></b>
+				<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="Patient.find" /></b>
 				<div class="box" style="padding: 15px 15px 15px 15px;">
 					
 					<c:choose>
 						<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
 						<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
 					</c:choose>
-					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">   &nbsp;&nbsp;<br>
-
+					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">
+					<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+					&nbsp;&nbsp;<br>
 					<div id="results">
 						<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
 							<thead id="resTableHeader" class="resTableHeader"/>	
