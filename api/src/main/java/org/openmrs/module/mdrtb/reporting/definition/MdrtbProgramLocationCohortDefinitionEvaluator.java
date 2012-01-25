@@ -10,6 +10,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Program;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -38,7 +39,7 @@ public class MdrtbProgramLocationCohortDefinitionEvaluator implements CohortDefi
      *              (location="Location B", startDate="April 2010", endDate="July 2010") will include this patient 
      *          
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
       	
       	MdrtbProgramLocationCohortDefinition cd = (MdrtbProgramLocationCohortDefinition) cohortDefinition;
       	if (cd.getLocation() == null) {
@@ -96,6 +97,6 @@ public class MdrtbProgramLocationCohortDefinitionEvaluator implements CohortDefi
     			}
     		}
     	}
-    	return resultCohort;
+    	return new EvaluatedCohort(resultCohort, cohortDefinition, context);
     }
 }

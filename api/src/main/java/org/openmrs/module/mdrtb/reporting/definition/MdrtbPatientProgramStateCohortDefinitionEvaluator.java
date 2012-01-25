@@ -12,6 +12,7 @@ import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -25,7 +26,7 @@ public class MdrtbPatientProgramStateCohortDefinitionEvaluator implements Cohort
 	public MdrtbPatientProgramStateCohortDefinitionEvaluator(){
 	}
 	
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
 	
     	MdrtbPatientProgramStateCohortDefinition cd = (MdrtbPatientProgramStateCohortDefinition) cohortDefinition;
     	Cohort baseCohort = (context.getBaseCohort() != null ? context.getBaseCohort() : new Cohort(Context.getPatientService().getAllPatients()));
@@ -70,7 +71,7 @@ public class MdrtbPatientProgramStateCohortDefinitionEvaluator implements Cohort
     			}
     		}
     	}	
-	    return resultCohort;
+    	return new EvaluatedCohort(resultCohort, cohortDefinition, context);
     }
 
 }

@@ -20,6 +20,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -38,7 +39,7 @@ public class MdrtbBacResultAfterTreatmentStartedCohortDefinitionEvaluator extend
 	/**
      * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
  
     	// first evaluate MdrtbTreatmentStartedCohort
     	Cohort baseCohort = super.evaluate(cohortDefinition, context); 
@@ -135,6 +136,6 @@ public class MdrtbBacResultAfterTreatmentStartedCohortDefinitionEvaluator extend
     			}
     		}
     	}
-		return resultCohort;
+		return new EvaluatedCohort(resultCohort, cohortDefinition, context);
 	}
 }
