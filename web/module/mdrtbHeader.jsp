@@ -47,6 +47,13 @@
 			var openmrsContextPath = '${pageContext.request.contextPath}';
 			var $j = jQuery.noConflict();
 		</script>
+
+		<openmrs:extensionPoint pointId="org.openmrs.headerFullIncludeExt" type="html" requiredClass="org.openmrs.module.web.extension.HeaderIncludeExt">
+			<c:forEach var="file" items="${extension.headerFiles}">
+				<openmrs:htmlInclude file="${file}" />
+			</c:forEach>
+		</openmrs:extensionPoint>
+
 	</head>
 
 <body>
@@ -71,9 +78,6 @@
 		</span>
 	</c:if>
 	</openmrs:authentication> 
-
-	<span id="userHelp"> <a href='<%= request.getContextPath() %>/moduleResources/mdrtb/MDR-TB_OpenMRS_Documentation.pdf'>
-	<spring:message code="mdrtb.title" /> <spring:message code="header.help" /></a> </span>
 	
 	<span id="classicViewLink">
 		<c:set var="id" value="${!empty patientId ? patientId : program.patient.id}"/>
@@ -89,16 +93,10 @@
 	
 </div>
 
-<div id="banner"><%@ include file="/WEB-INF/template/banner.jsp"%>
-</div>
-
-
+<div id="banner"><%@ include file="/WEB-INF/template/banner.jsp"%></div>
 
 <openmrs:hasPrivilege privilege="View Navigation Menu">
-
-	<div id="gutter"><%@ include file="mdrtbGutter.jsp"%>
-	</div>
-
+	<div id="gutter"><%@ include file="mdrtbGutter.jsp"%></div>
 </openmrs:hasPrivilege>
 
 <div id="content"><script type="text/javascript">

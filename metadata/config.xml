@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDR TB</name>
-	<version>2.2.1</version>
+	<version>2.2.2</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Partners in Health</author>
 	<description>MDR TB Module</description>
@@ -186,10 +186,6 @@
 				<include method="findPatients"/>
 				<include method="findPeople"/>
 				<include method="findAllPeople"/>
-			</create>							
-			<create creator="new" javascript="MdrtbNextVisit">
-				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbNextVisit"/>
-				<include method="setNextVisitDate"/>
 			</create>
 			<create creator="new" javascript="MdrtbContactsDWRService">
 				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbContactsDWRService"/>

@@ -17,7 +17,6 @@
     	<property name="order"><value>10</value></property>
     	<property name="mappings">
             <props>
-            	<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
             	<prop key="**/patientChart.portlet">patientChartPortletController</prop>
             	<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
             	<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>  
@@ -28,14 +27,7 @@
 	    	</props>
 		</property>
     </bean>
-    
-    <!-- Controllers -->
-    
-	<bean id="mdrtbCohortBuilderController" class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
-		<property name="formView"><value>/module/@MODULE_ID@/reporting/cohortBuilder</value></property>
-		<property name="successView"><value>cohortBuilder.list</value></property>
-	</bean>
-    
+     
     <!-- Portlet controllers -->    
     <bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController"/>
     <bean id="mdrtbPatientHeaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbPatientHeaderPortletController"/> 
