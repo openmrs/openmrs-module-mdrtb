@@ -81,6 +81,20 @@
 					</tr>
 					
 					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollment"/></th></tr>
+ 					<tr>
+						<td colspan="2">
+							<spring:message code="mdrtb.enrollment.startedOnOrAfter"/>: 
+							<openmrs:fieldGen type="java.util.Date" formFieldName="enrolledOnOrAfter" val="${enrolledOnOrAfter}"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<spring:message code="mdrtb.enrollment.startedOnOrBefore"/>: 
+							<openmrs:fieldGen type="java.util.Date" formFieldName="enrolledOnOrBefore" val="${enrolledOnOrBefore}"/>
+						</td>
+					</tr>
+					
+					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollmentStatus"/></th></tr>
 					<tr>
 						<td><input type="radio" name="enrollment" value="ever"<c:if test="${empty enrollment || enrollment == 'ever'}"> checked</c:if>/>&nbsp;</td>
 						<td><spring:message code="mdrtb.enrollment.ever"/></td>
