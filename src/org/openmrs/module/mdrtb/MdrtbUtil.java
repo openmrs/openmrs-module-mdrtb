@@ -33,6 +33,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -365,30 +366,56 @@ public class MdrtbUtil {
 	 * @return Cohort
 	 */
 	public static Cohort getMdrPatients(String identifier, String name, String enrollment, Location location, List<ProgramWorkflowState> states) {
+		return getMdrPatients(identifier, name, null, null, enrollment, location, states);
+	}
+    
+    /**
+	 * Utility method to return patients matching passed criteria
+	 * @return Cohort
+	 */
+	public static Cohort getMdrPatients(String identifier, String name, Date enrolledOnOrAfter, Date enrolledOnOrBefore,
+									    String enrollment, Location location, List<ProgramWorkflowState> states) {
 		
-		Cohort cohort = Context.getPatientSetService().getAllPatients();
+		Cohort cohort = null;
 		
 		MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
 		
 		Date now = new Date();
 		Program mdrtbProgram = ms.getMdrtbProgram();
 		
+		if (enrolledOnOrAfter != null || enrolledOnOrBefore != null) {
+			ProgramEnrollmentCohortDefinition cd = new ProgramEnrollmentCohortDefinition();
+			cd.addProgram(mdrtbProgram);
+			cd.setEnrolledOnOrAfter(enrolledOnOrAfter);
+			cd.setEnrolledOnOrBefore(enrolledOnOrBefore);
+            try {
+            	Cohort c = Context.getService(CohortDefinitionService.class).evaluate(cd, new EvaluationContext());
+            	cohort = nullSafeIntersect(cohort, c);
+            }
+            catch (EvaluationException e) {
+            	  throw new MdrtbAPIException("Unable to evalute program enrollment cohort",e);
+            }
+		}
+		
 		if ("current".equals(enrollment)) {
 			Cohort current = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, now, now);
-			cohort = Cohort.intersect(cohort, current);
+			cohort = nullSafeIntersect(cohort, current);
 		}
 		else {
 			Cohort ever = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, null, null);
 			if ("previous".equals(enrollment)) {
 				Cohort current = Context.getPatientSetService().getPatientsInProgram(mdrtbProgram, now, now);
 				Cohort previous = Cohort.subtract(ever, current);
-				cohort = Cohort.intersect(cohort, previous);   			
+				cohort = nullSafeIntersect(cohort, previous);   			
 			}
 			else if ("never".equals(enrollment)) {
+				if (cohort == null) {
+					cohort = Context.getPatientSetService().getAllPatients();
+				}
 				cohort = Cohort.subtract(cohort, ever);
 			}
 			else {
-				cohort = Cohort.intersect(cohort, ever);
+				cohort = nullSafeIntersect(cohort, ever);
 			}	
 		}
 		
@@ -396,7 +423,7 @@ public class MdrtbUtil {
 			name = "".equals(name) ? null : name;
 			identifier = "".equals(identifier) ? null : identifier;
 			Cohort nameIdMatches = new Cohort(Context.getPatientService().getPatients(name, identifier, null, false));
-			cohort = Cohort.intersect(cohort, nameIdMatches);
+			cohort = nullSafeIntersect(cohort, nameIdMatches);
 		}
 		
 		// If Location is specified, limit to patients at this Location
@@ -409,12 +436,12 @@ public class MdrtbUtil {
             catch (EvaluationException e) {
             	  throw new MdrtbAPIException("Unable to evalute location cohort",e);
             }
-			cohort = Cohort.intersect(cohort, locationCohort);
+			cohort = nullSafeIntersect(cohort, locationCohort);
 		}
 		
 		if (states != null) {
 			Cohort inStates = Context.getPatientSetService().getPatientsByProgramAndState(null, states, now, now);
-			cohort = Cohort.intersect(cohort, inStates);
+			cohort = nullSafeIntersect(cohort, inStates);
 		}
 		
 		return cohort;
@@ -443,5 +470,15 @@ public class MdrtbUtil {
 				&& StringUtils.isBlank(address.getNeighborhoodCell()) && StringUtils.isBlank(address.getPostalCode()) && StringUtils.isBlank(address.getTownshipDivision()) 
 				&& StringUtils.isBlank(address.getLatitude()) && StringUtils.isBlank(address.getLongitude()) && StringUtils.isBlank(address.getRegion()) && StringUtils.isBlank(address.getSubregion()) 
 				&& StringUtils.isBlank(address.getPostalCode());
+	}
+	
+	public static Cohort nullSafeIntersect(Cohort c1, Cohort c2) {
+		if (c1 == null) {
+			return c2;
+		}
+		if (c2 == null) {
+			return c1;
+		}
+		return Cohort.intersect(c1, c2);
 	}
 }
