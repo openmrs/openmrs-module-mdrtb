@@ -244,7 +244,10 @@ public class MdrtbEditPatientController {
 					
 					// make sure the correct patient identifier is set on the patient list item
 					if (StringUtils.isNotBlank(primaryIdentifier)) {
-	                	patientListItem.setIdentifier(((Patient) person).getPatientIdentifier(primaryIdentifier).getIdentifier());
+						PatientIdentifier pi = ((Patient) person).getPatientIdentifier(primaryIdentifier);
+						if (pi != null) {
+							patientListItem.setIdentifier(pi.getIdentifier());
+						}
 	                }
 					
 					similarPatients.add(patientListItem);
