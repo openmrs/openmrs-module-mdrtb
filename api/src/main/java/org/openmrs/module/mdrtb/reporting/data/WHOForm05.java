@@ -110,7 +110,7 @@ public class WHOForm05 implements ReportSpecification {
 		CohortCrossTabDataSetDefinition labResultDsd = new CohortCrossTabDataSetDefinition();
 		CohortDefinition polydr = Cohorts.getPolydrDetectionFilter(startDate, endDate);
 		CohortDefinition mdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
-		CohortDefinition xdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
+		CohortDefinition xdr = Cohorts.getXdrDetectionFilter(startDate, endDate);
 		
 		// note that for the purpose of this report, the polydr, mdr, and xdr cohorts should be mutually exclusive
 		// that is, by the standard definition, any patients that are mdr or xdr are also polydr; but we 
