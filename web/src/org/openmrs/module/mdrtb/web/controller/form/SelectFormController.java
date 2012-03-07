@@ -64,6 +64,7 @@ public class SelectFormController {
 			map.put("patientProgramId", patientProgramId);
 			map.put("formType", formType);
 			map.put("forms", forms);
+			map.put("returnUrl", returnUrl);
 			return new ModelAndView("/module/mdrtb/form/select", map);
 		}
 	}
