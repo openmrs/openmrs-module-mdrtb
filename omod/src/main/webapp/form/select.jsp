@@ -31,7 +31,7 @@
 </td></tr>
 <c:forEach var="form" items="${forms}">
 <tr><td>
-<a href="${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${patientId}&formId=${form.id}&mode=NEW">
+<a href="${pageContext.request.contextPath}/module/htmlformentry/htmlFormEntry.form?personId=${patientId}&formId=${form.id}&mode=NEW&returnUrl=${returnUrl}">
 ${form.name}
 </a>
 </td></tr>
