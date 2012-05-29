@@ -29,7 +29,7 @@ public class CacheResetListener implements GlobalPropertyListener {
     }
 
     public void globalPropertyDeleted(String property) {
-	    throw new MdrtbAPIException("Required global property has been deleted.");
+	    throw new MdrtbAPIException("Attempted to delete required global property.");
     }
 
 }
