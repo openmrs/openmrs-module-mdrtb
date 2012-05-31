@@ -13,12 +13,14 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.web.dwr.PatientListItem;
 
 public class MdrtbFindPatient {
     protected final Log log = LogFactory.getLog(getClass());
     
-    public Collection findPatients(String searchValue, boolean includeVoided) {
+    public Collection findPatients(String searchValue, boolean includeVoided, boolean onlyMdrTbPatients) {
         
         Collection<Object> patientList = new Vector<Object>();
 
@@ -28,21 +30,26 @@ public class MdrtbFindPatient {
         log.info(userId + "|" + searchValue);
         
         PatientService ps = Context.getPatientService();
-        List<Patient> patients;
-        
-
+        List<Patient> patients;        
             patients = ps.getPatients(searchValue);
             patientList = new Vector<Object>(patients.size());
             String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
             for (Patient p : patients) {
-                PatientListItem patientListItem = new PatientListItem(p);
-                
+            	PatientListItem patientListItem = new PatientListItem(p);                
                 // make sure the correct patient identifier is set on the patient list item
                 if (StringUtils.isNotBlank(primaryIdentifier) && p.getPatientIdentifier(primaryIdentifier) != null) {
                 	patientListItem.setIdentifier(p.getPatientIdentifier(primaryIdentifier).getIdentifier());
-                }
-                	
-            	patientList.add(patientListItem);
+                }  
+                boolean includePatient = true;
+            	if(onlyMdrTbPatients){
+	            	List<MdrtbPatientProgram> mdrtbPatientProgram = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(p);
+	                if(mdrtbPatientProgram==null || (mdrtbPatientProgram!=null && mdrtbPatientProgram.size()<1)){
+	                	includePatient=false;
+	                }
+            	}
+            	if(includePatient){
+            		patientList.add(patientListItem);
+            	}
             }
                    
         
