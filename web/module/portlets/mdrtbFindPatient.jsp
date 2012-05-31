@@ -31,7 +31,12 @@
 			if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
 				includeRet = true;
 			}
-			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, function(ret){
+			var onlyMdrTb = false;
+			if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
+				onlyMdrTb =true;				
+			}
+			console.log("onlyMdrTb=" + onlyMdrTb);
+			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
 				from = 0; 
 				to = jumps-1; 
 				if (ret.length <= to) {
@@ -422,12 +427,21 @@ function useMdrtbLoadingMessage(message) {
 	<c:choose>
 		<c:when test="${model.size=='mini'}">
 			<span id="findPatient">
-				<c:choose>
-					<c:when test="${!empty model.labelCode}"><span style="font-weight:bold"><spring:message code="${model.labelCode}"/></span></c:when>
-					<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
-				</c:choose>
-				<input type="text" value="" id="searchBox" name="searchBox">
-				<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+				<table>
+					<tr>
+						<td style="width:70%;">
+							<c:choose>
+								<c:when test="${!empty model.labelCode}"><span style="font-weight:bold"><spring:message code="${model.labelCode}"/></span></c:when>
+								<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
+							</c:choose>
+							<input type="text" value="" id="searchBox" name="searchBox">
+							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+						</td>	
+						<td>
+							<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/>
+						</td>	
+					</tr>
+				</table>
 				<div id="results" style="position:absolute; z-index:1000; border:2px solid black; background-color:#CCCCCC; ${model.resultStyle}">
 					<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
 						<thead id="resTableHeader" class="resTableHeader"/>	
@@ -442,14 +456,23 @@ function useMdrtbLoadingMessage(message) {
 				
 				<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="Patient.find" /></b>
 				<div class="box" style="padding: 15px 15px 15px 15px;">
-					
-					<c:choose>
-						<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
-						<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
-					</c:choose>
-					<input type="text" value="" id="searchBox" name="searchBox" style="width:50%;">
-					<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
-					&nbsp;&nbsp;<br>
+					<table>
+						<tr>
+							<td style="width:70%;">
+								<c:choose>
+									<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
+									<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
+								</c:choose>
+								<input type="text" value="" id="searchBox" name="searchBox">
+								<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+								&nbsp;&nbsp;
+							</td>
+							<td>	
+								<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/> 
+							</td>	
+						</tr>
+					</table>	
+					<br>
 					<div id="results">
 						<table id="resTable" class="resTable" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
 							<thead id="resTableHeader" class="resTableHeader"/>	
