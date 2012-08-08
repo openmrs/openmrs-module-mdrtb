@@ -52,13 +52,15 @@
 			var jsLocale = '<%= org.openmrs.api.context.Context.getLocale() %>';
 			
 			var $j = jQuery.noConflict();
-			
-			<openmrs:extensionPoint pointId="org.openmrs.headerFullIncludeExt" type="html" requiredClass="org.openmrs.module.web.extension.HeaderIncludeExt">
-				<c:forEach var="file" items="${extension.headerFiles}">
-					<openmrs:htmlInclude file="${file}" />
-				</c:forEach>
-			</openmrs:extensionPoint>
-		</script>
+
+        </script>
+
+        <openmrs:extensionPoint pointId="org.openmrs.headerFullIncludeExt" type="html" requiredClass="org.openmrs.module.web.extension.HeaderIncludeExt">
+            <c:forEach var="file" items="${extension.headerFiles}">
+                <openmrs:htmlInclude file="${file}" />
+            </c:forEach>
+        </openmrs:extensionPoint>
+
 	</head>
 
 <body>
