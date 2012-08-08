@@ -60,16 +60,37 @@
 				<scope>test</scope>
 			</dependency>
 
-            <!-- TODO: I'm not quite sure why this is now needed, but compliation was failing without it -->
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-                <scope>provided</scope>
-            </dependency>
 		</dependencies>
 
 	</dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting</artifactId>
+            <version>0.7.0</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- TODO: I'm not quite sure why this is now needed, but compliation was failing without it -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+
+        </dependency>
+
+    </dependencies>
 
 	<properties>
 		<openMRSVersion>1.8.3</openMRSVersion>
