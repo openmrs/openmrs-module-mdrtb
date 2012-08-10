@@ -440,7 +440,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public void saveScannedLabReport(ScannedLabReport report) {
 		if (report == null) {
-			log.warn("Unable to save dst: dst object is null");
+			log.warn("Unable to save scanned lab report: scanned lab report object is null");
 			return;
 		}
 		

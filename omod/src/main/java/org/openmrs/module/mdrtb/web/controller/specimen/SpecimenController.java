@@ -235,22 +235,18 @@ public class SpecimenController extends AbstractSpecimenController {
 				}
 			}
 		}
-		
-		// save the actual update
+
+        // add any new scanned lab report
+        if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
+            // create the new result
+            ScannedLabReport report = specimen.addScannedLabReport();
+
+            report.setLab(scannedLabReportLocation);
+            report.setFile(scannedLabReport);
+        }
+
+        // save the actual update
 		Context.getService(MdrtbService.class).saveSpecimen(specimen);
-		
-		// (somewhat) hacky way to manually handle the addition of new scanned lab report
-		// (this has to happen after the specimen is saved for some reason)
-		if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
-			// create the new result
-			ScannedLabReport report = specimen.addScannedLabReport();
-			
-			report.setLab(scannedLabReportLocation);
-			report.setFile(scannedLabReport);
-		
-			// need to save this explicitly for the obs handler to pick it up and handle it properly
-			Context.getService(MdrtbService.class).saveScannedLabReport(report);
-		}
 			
 		// clears the command object from the session
 		status.setComplete();

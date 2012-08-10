@@ -65,20 +65,6 @@
 		</property>
 	</bean>
     <!-- /Controllers -->
-    
-    
-    <!-- Define the Complex Obs Handler -->
-   	<!--  TO DO: remove this once it gets added to core -->
-    <bean parent="obsServiceTarget">
-        <property name="handlers">
-            <map>
-                <entry>
-                    <key><value>BinaryDataHandler</value></key>
-                    <bean class="org.openmrs.module.mdrtb.obs.handler.BinaryDataHandler"/>
-                </entry>
-            </map>
-        </property>
-	</bean>
 
 	<!-- Add an event listener -->
 	<bean id="mdrtbEventListeners" parent="openmrsEventListeners">
