@@ -200,12 +200,8 @@ public class SpecimenController extends AbstractSpecimenController {
     	
     	for (Object e : specimenErrors.getFieldErrors()) {
     		FieldError error = (FieldError) e;
-    		
-    		System.out.println("error = " + error.getCode() + " with message " + error.getDefaultMessage() + " and for field " + error.getField());
     	}
-    	
-    	
-    	
+
 		// validate
     	if(specimen != null) {
     		new SpecimenValidator().validate(specimen, specimenErrors);
