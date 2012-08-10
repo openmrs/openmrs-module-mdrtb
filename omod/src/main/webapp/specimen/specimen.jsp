@@ -466,6 +466,7 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.scannedLabReports" text="Scanned Lab Reports"/>:</nobr></td>
 <td colspan="3">
 <c:forEach var="report" items="${specimen.scannedLabReports}">
+<span class="scannedLabReport">
 <c:choose>
 	<c:when test="${! empty report.filename && ! empty report.file}">
 		<nobr><a href="${pageContext.request.contextPath}/complexObsServlet?obsId=${report.id}&view=download&viewType=download">${report.filename}</a> - <spring:message code="mdrtb.lab"/>: ${report.lab.displayString}</nobr>
@@ -478,8 +479,9 @@
 	</c:otherwise>
 </c:choose>
 <button class="removeScannedLabReport" value="${report.id}" type="button"><spring:message code="mdrtb.remove" text="Remove"/></button></nobr>
-<input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/></span>
+<input type="hidden" id="removeScannedLabReport${report.id}" name="removeScannedLabReport" value=""/>
 <br/>
+</span>
 </c:forEach>
 <nobr><input type="file" name="addScannedLabReport" size="50" value="${! empty addScannedLabReport ? addScannedLabReport.originalFilename : ''}"/> <spring:message code="mdrtb.lab"/>:
 <select name="addScannedLabReportLocation">
