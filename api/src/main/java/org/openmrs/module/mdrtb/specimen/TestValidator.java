@@ -25,7 +25,10 @@ public class TestValidator implements Validator {
 	    Date started = test.getStartDate();
 	    Date completed = test.getResultDate();
 	    Date today = new Date();
-	    
+
+        // make sure that we at least some date or a result
+
+
 	    // make sure none of the dates are in the future
 	    if (ordered != null && ordered.after(today)) {
 	    	errors.rejectValue("dateOrdered", "mdrtb.specimen.errors.dateOrderedInFuture", "The date ordered cannot be in the future.");

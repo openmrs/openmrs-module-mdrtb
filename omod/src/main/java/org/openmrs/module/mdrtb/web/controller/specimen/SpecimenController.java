@@ -25,6 +25,7 @@ import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.openmrs.module.mdrtb.specimen.TestValidator;
+import org.openmrs.module.mdrtb.specimen.reporting.BacteriologyValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -280,7 +281,7 @@ public class SpecimenController extends AbstractSpecimenController {
     	
 		// validate
     	if(smear != null) {
-    		new TestValidator().validate(smear, errors);
+    		new BacteriologyValidator().validate(smear, errors);
     	}
 		
     	// if validation fails
@@ -330,7 +331,7 @@ public class SpecimenController extends AbstractSpecimenController {
 	                     
     	// validate
     	if(culture != null) {
-    		new TestValidator().validate(culture, errors);
+            new BacteriologyValidator().validate(culture, errors);
     	}
 		
     	// if validation fails
