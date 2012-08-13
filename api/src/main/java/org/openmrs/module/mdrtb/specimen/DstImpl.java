@@ -237,8 +237,7 @@ public class DstImpl extends TestImpl implements Dst {
 		}
 		
 		// now save the value
-		// is this the proper way to cast from Boolean to Double?
-		obs.setValueNumeric(direct ? 1.0 : 0.0);
+        obs.setValueBoolean(direct);
     }
 
     public void setMethod(Concept method) {
