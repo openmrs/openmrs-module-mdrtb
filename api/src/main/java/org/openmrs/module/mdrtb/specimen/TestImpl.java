@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 
+import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
@@ -36,7 +37,14 @@ public abstract class TestImpl implements Test {
 	}
 	
 	public String getSpecimenId() {
-		return this.test.getEncounter().getEncounterId().toString();
+        Encounter encounter = this.test.getEncounter();
+
+        if (encounter == null) {
+            return null;
+        }
+        else {
+            return encounter.getEncounterId().toString();
+        }
 	}
 	
 	public String getAccessionNumber() {
@@ -233,7 +241,21 @@ public abstract class TestImpl implements Test {
 		 obs.setValueDatetime(startDate);
 	 }
 
-	 /**
+    /**
+     * Utility method for copying a test
+     */
+    public void copyMembersFrom(Test source) {
+        this.setAccessionNumber(source.getAccessionNumber());
+        this.setDateOrdered(source.getDateOrdered());
+        this.setDateReceived(source.getDateReceived());
+        this.setLab(source.getLab());
+        this.setResultDate(source.getResultDate());
+        this.setStartDate(source.getStartDate());
+        this.setComments(source.getComments());
+    }
+
+
+    /**
 	  * Comparable interface method and utility methods
 	  */
 	 
@@ -318,3 +340,4 @@ public abstract class TestImpl implements Test {
 	    }
 	 }
 }
+

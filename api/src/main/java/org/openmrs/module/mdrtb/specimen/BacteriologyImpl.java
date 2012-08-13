@@ -48,10 +48,22 @@ public abstract class BacteriologyImpl extends TestImpl implements Bacteriology 
 			// now save the data
 			obs.setValueCoded(result);
 	    }
-	
-	
-	
-	private Concept getResultConcept() {
+
+
+    /**
+     * Utility method for copying a bacteriology
+     */
+    public void copyMembersFrom(Test source) {
+        super.copyMembersFrom(source);
+        this.setResult(((Bacteriology)source).getResult());
+    }
+
+
+    /**
+     * Private utility methods
+     */
+
+    private Concept getResultConcept() {
 		if(getTestType() == "smear") {
 			return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_RESULT);
 		}
@@ -62,4 +74,5 @@ public abstract class BacteriologyImpl extends TestImpl implements Bacteriology 
 			throw new RuntimeException("Invalid test type for bacteriology.");
 		}
 	}
+
 }

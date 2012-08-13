@@ -167,9 +167,14 @@ public interface MdrtbService extends OpenmrsService {
     public void deleteTest(Integer testId);
     
     /**
-     * Creates a new Smear, associated with the given encounter
+     * Creates a new Smear, associated with the given specimen
      */
     public Smear createSmear(Specimen specimen);
+
+    /**
+     * Creates a new Smear, associated with the given specimen, by copying the member properties of the given smear
+     */
+    public Smear createSmear(Specimen specimen, Smear smear);
     
     /**
      * Fetches a smear given the obs of a Tuberculosis Smear Test Construct
@@ -193,10 +198,15 @@ public interface MdrtbService extends OpenmrsService {
     public void saveSmear(Smear smear);
      
     /**
-     * Creates a new culture, associated with the given encounter
+     * Creates a new culture, associated with the given specimen
      */
     public Culture createCulture(Specimen specimen);
-    
+
+    /**
+     * Creates a new culture, associated with the given specimen, by copying the member properties of the given culture
+     */
+    public Culture createCulture(Specimen specimen, Culture culture);
+
     /**
      * Fetches a culture given the obs of a Tuberculosis Smear Test Construct
      * 

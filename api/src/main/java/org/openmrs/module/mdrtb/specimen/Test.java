@@ -62,4 +62,7 @@ public interface Test extends Comparable<Test> {
 	
 	public String getComments();
 	public void setComments(String comments);
+
+    // utility method to copy member properties from another test into this test
+    public void copyMembersFrom(Test source);
 }

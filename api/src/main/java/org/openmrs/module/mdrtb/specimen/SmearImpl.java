@@ -16,7 +16,8 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 public class SmearImpl extends BacteriologyImpl implements Smear {
 	
 	public SmearImpl() {
-	}
+        test = new Obs (null, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT), null, null);
+    }
 
 	// set up a smear object, given an existing obs
 	public SmearImpl(Obs smear) {
@@ -149,5 +150,16 @@ public class SmearImpl extends BacteriologyImpl implements Smear {
 		// now save the value
 		obs.setValueCoded(method);
     }
+
+    /**
+     * Utility method for copying a smear
+     */
+    public void copyMembersFrom(Test source) {
+        super.copyMembersFrom(source);
+        this.setBacilli(((Smear) source).getBacilli());
+        this.setMethod(((Smear) source).getMethod());
+    }
+
+
 }
 

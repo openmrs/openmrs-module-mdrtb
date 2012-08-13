@@ -326,8 +326,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		// add the smear to the specimen
 		return specimen.addSmear();
 	}
-	
-	public Smear getSmear(Obs obs) {
+
+    public Smear createSmear(Specimen specimen, Smear smear) {
+        Smear newSmear = specimen.addSmear();
+        newSmear.copyMembersFrom(smear);
+        return newSmear;
+    }
+
+    public Smear getSmear(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
 		return new SmearImpl(obs);
 	}
@@ -363,8 +369,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		// add the culture to the specimen
 		return specimen.addCulture();
 	}
-	
-	public Culture getCulture(Obs obs) {
+
+    public Culture createCulture(Specimen specimen, Culture culture) {
+        Culture newCulture = specimen.addCulture();
+        newCulture.copyMembersFrom(culture);
+        return newCulture;
+    }
+
+    public Culture getCulture(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
 		return new CultureImpl(obs);
 	}

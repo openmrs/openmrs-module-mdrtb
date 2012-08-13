@@ -18,10 +18,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
+import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
+import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.openmrs.module.mdrtb.specimen.TestValidator;
@@ -72,8 +74,7 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new smear if needed
 			if (smear == null) {
-				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-				smear = Context.getService(MdrtbService.class).createSmear(specimen);
+				smear = new SmearImpl();
 			}
 		}
 				
@@ -101,8 +102,7 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new culture if needed
 			if (culture == null) {
-				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-				culture = Context.getService(MdrtbService.class).createCulture(specimen);
+				culture = new CultureImpl();
 			}
 		}
 				
@@ -290,7 +290,13 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-				
+
+        // handle the case that this is a new smear
+        if (smear.getSpecimenId() == null) {
+            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+            smear = Context.getService(MdrtbService.class).createSmear(specimen, smear);
+        }
+
 		// save the actual update
 		Context.getService(MdrtbService.class).saveSmear(smear);
 			
@@ -340,7 +346,13 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-		
+
+        // handle the case that this is a new culture
+        if (culture.getSpecimenId() == null) {
+            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+            culture = Context.getService(MdrtbService.class).createCulture(specimen, culture);
+        }
+
 		// save the actual update
 		Context.getService(MdrtbService.class).saveCulture(culture);
 			

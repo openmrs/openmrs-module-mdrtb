@@ -16,6 +16,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 public class CultureImpl extends BacteriologyImpl implements Culture {
 
 	public CultureImpl() {
+        test = new Obs (null, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), null, null);
 	}
 	
 	// set up a culture object, given an existing obs
@@ -258,5 +259,17 @@ public class CultureImpl extends BacteriologyImpl implements Culture {
 		
 		// now save the value
 		obs.setValueText(organismType);
+    }
+
+    /**
+     * Utility method for copying a culture
+     */
+    public void copyMembersFrom(Test source) {
+        super.copyMembersFrom(source);
+        this.setColonies(((Culture) source).getColonies());
+        this.setMethod(((Culture) source).getMethod());
+        this.setOrganismType(((Culture) source).getOrganismType());
+        this.setOrganismTypeNonCoded(((Culture) source).getOrganismTypeNonCoded());
+        this.setDaysToPositivity(((Culture) source).getDaysToPositivity());
     }
 }

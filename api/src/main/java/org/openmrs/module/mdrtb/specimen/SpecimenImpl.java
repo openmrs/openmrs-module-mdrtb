@@ -131,7 +131,7 @@ public class SpecimenImpl implements Specimen {
 		this.encounter.addObs(smear.getObs());
 		
 		// we need to set the location back to null, since it will be set to the encounter location
-		// when it is added to the location
+		// when it is added to the encounter
 		smear.setLab(null);
 		
 		return smear;
