@@ -211,6 +211,16 @@ public class DstResultImpl implements DstResult {
     }
 
     /**
+     * Utility method for copying a dst result
+     */
+    public void copyMembersFrom(DstResult source) {
+       this.setColonies(source.getColonies());
+       this.setConcentration(source.getConcentration());
+       this.setDrug(source.getDrug());
+       this.setResult(source.getResult());
+    }
+
+    /**
 	  * Comparable interface method and utility methods
 	  * 
 	  * (TODO: This simply sorts by concentration for now, so it doesn't really

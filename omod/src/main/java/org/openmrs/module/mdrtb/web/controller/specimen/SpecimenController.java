@@ -20,6 +20,7 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
+import org.openmrs.module.mdrtb.specimen.DstImpl;
 import org.openmrs.module.mdrtb.specimen.DstResult;
 import org.openmrs.module.mdrtb.specimen.ScannedLabReport;
 import org.openmrs.module.mdrtb.specimen.Smear;
@@ -130,8 +131,7 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			// create the new dst if needed
 			if (dst == null) {
-				Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-				dst = Context.getService(MdrtbService.class).createDst(specimen);
+				dst = new DstImpl();
 			}
 		}
 				
@@ -426,7 +426,13 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-    	
+
+        // handle the case that this is a new dst
+        if (dst.getSpecimenId() == null) {
+            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+            dst = Context.getService(MdrtbService.class).createDst(specimen, dst);
+        }
+
 		// hacky way to manually handle the addition of new dsts
     	// note that we only add dsts that have a result and drug specified
 		int i = 1;

@@ -27,7 +27,8 @@ public class DstImpl extends TestImpl implements Dst {
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	public DstImpl() {
-	}
+        test = new Obs (null, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT), null, null);
+    }
 	
 	// set up a dst object, given an existing obs
 	public DstImpl(Obs dst) {
@@ -317,6 +318,23 @@ public class DstImpl extends TestImpl implements Dst {
 		
 		// now save the value
 		obs.setValueText(organismType);
+    }
+
+    /**
+     * Utility method for copying a DST
+     */
+    public void copyMembersFrom(Test source) {
+        super.copyMembersFrom(source);
+        this.setColoniesInControl(((Dst) source).getColoniesInControl());
+        this.setMethod(((Dst) source).getMethod());
+        this.setOrganismType(((Dst) source).getOrganismType());
+        this.setOrganismTypeNonCoded(((Dst) source).getOrganismTypeNonCoded());
+        this.setDirect(((Dst) source).getDirect());
+
+        for (DstResult dstResult : ((Dst) source).getResults()) {
+            DstResult newDstResult = this.addResult();
+            newDstResult.copyMembersFrom(dstResult);
+        }
     }
     
 }

@@ -38,5 +38,7 @@ public interface DstResult extends Comparable<DstResult>{
 	
 	public Integer getColonies();
 	public void setColonies(Integer colonies);
+
+    public void copyMembersFrom(DstResult source);
 	
 }

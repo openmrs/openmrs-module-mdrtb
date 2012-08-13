@@ -230,10 +230,15 @@ public interface MdrtbService extends OpenmrsService {
     
     
     /**
-     * Creates a new dst, associated with the given encounter
+     * Creates a new dst, associated with the given specimen
      */
     public Dst createDst(Specimen specimen);
-    
+
+    /**
+     * Creates a new dst, associated with the given specimen, by copying the member properties of the given dst
+     */
+    public Dst createDst(Specimen specimen, Dst dst);
+
     /**
      * Fetches a dst given the obs of a Tuberculosis Smear Test Construct
      * 

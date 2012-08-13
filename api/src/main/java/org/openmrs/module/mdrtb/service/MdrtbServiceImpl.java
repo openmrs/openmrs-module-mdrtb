@@ -411,7 +411,13 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		// add the culture to the specimen
 		return specimen.addDst();
 	}
-	
+
+    public Dst createDst(Specimen specimen, Dst dst) {
+        Dst newDst = specimen.addDst();
+        newDst.copyMembersFrom(dst);
+        return newDst;
+    }
+
 	public Dst getDst(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle it
 		return new DstImpl(obs);
