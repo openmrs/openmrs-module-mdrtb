@@ -443,7 +443,7 @@
 
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="dateCollected_specimen" formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></nobr></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.appearance" text="Appearance"/>:</nobr></td>
 <td>
 <select name="appearance">
@@ -675,7 +675,7 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
 <td><input type="text" name="accessionNumber" value="${test.accessionNumber}"/></td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="dateOrdered_${test.id}" formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -688,7 +688,7 @@
 </select>
 </td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="dateReceived__${test.id}" formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -702,7 +702,7 @@
 </select>
 </td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="startDate_${test.id}" formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -728,7 +728,7 @@
 </c:if>
 
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="resultDate_${test.id}" formFieldName="resultDate" startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -889,7 +889,7 @@
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.accessionNumber" text="Accession #"/>:</nobr></td>
 <td><input type="text" name="accessionNumber" value="${! empty test.accessionNumber ? test.accessionNumber : specimen.identifier}"/></td>  <!--  if no accession number, default for the accession number of the first test -->
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateOrdered" text="Date ordered"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="dateOrdered_${type}" formFieldName="dateOrdered" startValue="${test.dateOrdered}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -902,7 +902,7 @@
 </select>
 </td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateSampleReceived" text="Date sample received"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="dateReceived_${type}" formFieldName="dateReceived" startValue="${test.dateReceived}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -916,7 +916,7 @@
 </select>
 </td>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateStarted" text="Date started"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="startDate_${type}" formFieldName="startDate" startValue="${test.startDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
@@ -942,7 +942,7 @@
 </c:if>
 
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.dateCompleted" text="Date completed"/>:</nobr></td>
-<td><nobr><openmrs_tag:dateField formFieldName="resultDate"  startValue="${test.resultDate}"/></nobr></td>
+<td><nobr><openmrs_tag:dateField formFieldId="resultDate_${type}" formFieldName="resultDate"  startValue="${test.resultDate}"/></nobr></td>
 <td width="100%">&nbsp;</td>
 </tr>
 
