@@ -15,9 +15,10 @@
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
+    #ui-datepicker-div { z-index: 9999 !important; }  /* make sure the datepicker appears on top of any dialog boxes */
 	#content td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
-	.ac_results {  z-index: 9999; } <!-- make any auto-completes appear on top of modal dialogs -->
-	.ui-dialog-titlebar-close{display: none;}  <!--hides the close button on the pop-ups -->
+	.ac_results {  z-index: 9999; } /* make any auto-completes appear on top of modal dialogs */
+	.ui-dialog-titlebar-close{display: none;}  /* hides the close button on the pop-ups --> */
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
@@ -494,10 +495,10 @@ ${regimen.displayString}
 <input type="hidden" id="hospitalizationStateId" name="hospitalizationStateId" value="${hospitalizationStateId}"/>
 <table cellspacing="2" cellpadding="2">
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" value="<openmrs:formatDate date='${admissionDate}'/>" onFocus="showCalendar(this)" style="z-index:1"/>
+<spring:message code="mdrtb.admissionDate" text="Admission Date"/>:</td><td><input id="startDate" type="text" size="14" tabindex="-1" name="startDate" value="<openmrs:formatDate date='${admissionDate}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 <tr><td style="font-weight:bold">
-<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>" onFocus="showCalendar(this)" style="z-index:99999"/>
+<spring:message code="mdrtb.dischargeDate" text="Discharge Date"/>:</td><td><input id="endDate" type="text" size="14" tabindex="-1" name="endDate" value="<openmrs:formatDate date='${dischargeDate}'/>" onFocus="showCalendar(this)"/>
 </td></tr>
 </table>
 <button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button type="reset" id="hospitalizationsEditCancelButton"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
