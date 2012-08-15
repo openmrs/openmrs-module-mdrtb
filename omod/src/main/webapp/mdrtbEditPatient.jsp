@@ -105,7 +105,7 @@
 <td>
 <table cellspacing="0" cellpadding="0" border="0">
 <openmrs:portlet url="nameLayout" id="namePortlet" size="columnHeaders" parameters="layoutShowTable=false|layoutShowExtended=false" /></td>
-<spring:nestedPath path="patient.personName">
+<spring:nestedPath path="patientCommand.patient.personName">
 <openmrs:portlet url="nameLayout" id="namePortlet" size="inOneRow" parameters="layoutMode=edit|layoutShowTable=false|layoutShowExtended=false" />
 </spring:nestedPath>
 </table>
@@ -180,7 +180,7 @@
 <tr>
 <th class="headerCell"><spring:message code="mdrtb.address"/></th>
 <td>
-<spring:nestedPath path="patient.personAddress">
+<spring:nestedPath path="patientCommand.address">
 <openmrs:portlet url="addressLayout" id="addressPortlet" size="full" parameters="layoutMode=edit|layoutShowTable=true|layoutShowExtended=false" />
 </spring:nestedPath>
 </td>
@@ -196,7 +196,7 @@
 <td><spring:message code="mdrtb.gender"/></td>
 <td>
 <openmrs:forEachRecord name="gender">
-<input type="radio" name="gender" id="${record.key}" value="${record.key}" <c:if test="${record.key == patient.gender}">checked</c:if> />
+<input type="radio" name="patient.gender" id="${record.key}" value="${record.key}" <c:if test="${record.key == patientCommand.patient.gender}">checked</c:if> />
 <label for="${record.key}"> <spring:message code="mdrtb.${record.value}"/> </label>
 </openmrs:forEachRecord>
 </td>
@@ -204,10 +204,10 @@
 <tr>
 <td><spring:message code="mdrtb.birthdate"/></td>
 <td>
-<openmrs_tag:dateField formFieldName="birthdate" startValue="${patient.birthdate}"/>
+<openmrs_tag:dateField formFieldName="patient.birthdate" startValue="${patientCommand.patient.birthdate}"/>
 <spring:message code="mdrtb.estimated"/>
-<input type="hidden" id="birthdateEstimated" name="birthdateEstimated" value="${patient.birthdateEstimated}"/>
-<input type="checkbox" id="birthdateEstimatedCheckbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patient.birthdateEstimated == true}">checked</c:if> />
+<input type="hidden" id="birthdateEstimated" name="patient.birthdateEstimated" value="${patientCommand.patient.birthdateEstimated}"/>
+<input type="checkbox" id="birthdateEstimatedCheckbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patientCommand.patient.birthdateEstimated == true}">checked</c:if> />
 </td>
 </tr>
 </table>
@@ -219,17 +219,17 @@
 <tr>
 <th><spring:message code="mdrtb.deceased" text="Deceased"/></th>
 <td>
-<input type="hidden" id="dead" name="dead" value="${patient.dead}"/>
-<input type="checkbox" id="deadCheckbox" name="deadCheckbox" value="true" <c:if test="${patient.dead == true}">checked</c:if> />
+<input type="hidden" id="dead" name="patient.dead" value="${patientCommand.patient.dead}"/>
+<input type="checkbox" id="deadCheckbox" name="deadCheckbox" value="true" <c:if test="${patientCommand.patient.dead == true}">checked</c:if> />
 </td>
 </tr>
 <tr id="deathDateRow" <c:if test="${!patient.dead}">style="display:none"</c:if>>
 <th><spring:message code="mdrtb.deathDate"/></th>
-<td><openmrs_tag:dateField formFieldName="deathDate" startValue="${patient.deathDate}"/></td>
+<td><openmrs_tag:dateField formFieldName="patient.deathDate" startValue="${patientCommand.patient.deathDate}"/></td>
 </tr>
-<tr id="causeOfDeathRow" <c:if test="${!patient.dead}">style="display:none"</c:if>>
+<tr id="causeOfDeathRow" <c:if test="${!patientCommand.patient.dead}">style="display:none"</c:if>>
 <th><spring:message code="mdrtb.causeOfDeath"/></th>
-<td><wgt:widget id="causeOfDeath" name="causeOfDeath" type="org.openmrs.Concept" object="${patient}" property="causeOfDeath"/></td>
+<td><wgt:widget id="causeOfDeath" name="patient.causeOfDeath" type="org.openmrs.Concept" object="${patientCommand.patient}" property="causeOfDeath"/></td>
 </tr>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
@@ -241,8 +241,8 @@
 		<td class="inputCell">
 			<openmrs:fieldGen 
 					type="${attrType.format}" 
-					formFieldName="attributeMap['${attrType.name}'].value" 
-					val="${patient.attributeMap[attrType.name].hydratedObject}" 
+					formFieldName="patient.attributeMap['${attrType.name}'].value"
+					val="${patientCommand.patient.attributeMap[attrType.name].hydratedObject}"
 					parameters="optionHeader=[blank]|showAnswers=${attrType.foreignKey}" />
 		</td>
 	</tr>
@@ -253,14 +253,14 @@
 <tr>
 <th><spring:message code="general.voided"/></th>
 <td>
-<input type="hidden" id="voided" name="voided" value="${patient.voided}"/>
-<input type="checkbox" id="voidedCheckbox" name="voidedCheckbox" value="true" <c:if test="${patient.voided}">checked</c:if> />
+<input type="hidden" id="voided" name="patient.voided" value="${patientCommand.patient.voided}"/>
+<input type="checkbox" id="voidedCheckbox" name="voidedCheckbox" value="true" <c:if test="${patientCommand.patient.voided}">checked</c:if> />
 </td>
 </tr>
 
-<tr id="voidReasonRow" <c:if test="${!patient.voided}">style="display:none"</c:if>>
+<tr id="voidReasonRow" <c:if test="${!patientCommand.patient.voided}">style="display:none"</c:if>>
 <th><spring:message code="general.voidReason"/></th>
-<td><input id="voidReason" name="voidReason" value="${patient.voidReason}"/></td>
+<td><input id="voidReason" name="patient.voidReason" value="${patientCommand.patient.voidReason}"/></td>
 </tr>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>

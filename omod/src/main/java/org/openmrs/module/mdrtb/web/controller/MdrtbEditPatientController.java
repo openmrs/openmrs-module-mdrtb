@@ -37,6 +37,7 @@ import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.validator.PatientValidator;
+import org.openmrs.module.mdrtb.web.controller.command.PatientCommand;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientIdentifierTypeEditor;
@@ -46,6 +47,7 @@ import org.openmrs.web.dwr.PatientListItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -156,13 +158,13 @@ public class MdrtbEditPatientController {
 		return ListUtils.subtract(Context.getPatientService().getAllPatientIdentifierTypes(),  getPatientIdentifierTypesAutoAssigned());	
 	}
 	    
-	@ModelAttribute("patient")
-	public Patient getPatient(@RequestParam(required = false, value="patientId") Integer patientId,
-	                          @RequestParam(required = false, value="addName") String addName,
-	                          @RequestParam(required = false, value="addBirthdate") String addBirthdate,
-	                          @RequestParam(required = false, value="addAge") String addAge,
-	                          @RequestParam(required = false, value="addGender") String addGender,
-	                          HttpServletRequest request){
+	@ModelAttribute("patientCommand")
+	public PatientCommand getPatient(@RequestParam(required = false, value="patientId") Integer patientId,
+                                  @RequestParam(required = false, value="addName") String addName,
+                                  @RequestParam(required = false, value="addBirthdate") String addBirthdate,
+                                  @RequestParam(required = false, value="addAge") String addAge,
+                                  @RequestParam(required = false, value="addGender") String addGender,
+                                  HttpServletRequest request){
 		
 		Patient patient = null;
 		
@@ -183,29 +185,36 @@ public class MdrtbEditPatientController {
 				PersonFormController.getMiniPerson(patient, addName, addGender, addBirthdate, addAge);
 			}
 		}
-		
-		// if there is no default address for this patient, create one
-		if (patient.getPersonAddress() == null) {
-			PersonAddress address = new PersonAddress();
-			address.setPreferred(true);
-			patient.addAddress(address);
-		}
-		
+
 		// if there is no default name for this patient, create one
 		if (patient.getPersonName() == null) {
 			PersonName name = new PersonName();
 			name.setPreferred(true);
 			patient.addName(name);
 		}
-		
-		// if all the standard attributes haven't been configured, configure them
-		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
-			if (attr != null && patient.getAttribute(attr) == null) {
-				patient.getAttributes().add(new PersonAttribute(attr, null));
-			}
-		}
-		
-		return patient;
+
+
+		// if we are handling a form submission, make sure we initialize all the person attributes so we can bind to them
+	    if (request.getMethod().equals("POST")) {
+            for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
+                if (attr != null && patient.getAttribute(attr) == null) {
+                    patient.getAttributes().add(new PersonAttribute(attr, null));
+                }
+            }
+        }
+
+        PatientCommand patientCommand = new PatientCommand();
+        patientCommand.setPatient(patient);
+
+        // if there is no default address for this patient, create one
+        PersonAddress address = patient.getPersonAddress();
+        if (address == null) {
+            address = new PersonAddress();
+        }
+        // add the address to the command object separately
+        patientCommand.setAddress(address);
+
+		return patientCommand;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -273,7 +282,7 @@ public class MdrtbEditPatientController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView submitForm(@ModelAttribute("patient") Patient patient, BindingResult result,
+	public ModelAndView submitForm(@ModelAttribute("patientCommand") PatientCommand patientCommand, BindingResult result,
 	                               @RequestParam("identifierValue") String [] identifierValue,
 	                               @RequestParam("identifierId") String [] identifierId, 
 	                               @RequestParam(required = false, value = "identifierLocation") Location [] identifierLocation,
@@ -281,7 +290,10 @@ public class MdrtbEditPatientController {
 	                               @RequestParam(required = false, value ="patientProgramId") Integer patientProgramId,
 	                               @RequestParam("successURL") String successUrl,
 	                               SessionStatus status, ModelMap map) {
-		
+
+        // fetch the patient off the command object
+        Patient patient = patientCommand.getPatient();
+
 		// first, we need to set the patient id to null if it's been set to -1
 		if (patient.getId() != null && patient.getId() == -1) {
 			patient.setId(null);
@@ -341,6 +353,10 @@ public class MdrtbEditPatientController {
 		}
 		
 		// perform validation
+
+        // (don't know if this is the exact right thing to do, but we need to create a new binding result
+        // since we are validating the patient, not the patient command)
+        result = new BeanPropertyBindingResult(patient,"patient");
 		validator.validate(patient, result);
 		if (result.hasErrors()) {
 			map.put("errors", result);
@@ -351,13 +367,13 @@ public class MdrtbEditPatientController {
 		// TODO: is this correct... do we ever want to void a patient but keep the person (for instance, if the person is also a treatment supporter?)
 		patient.setPersonVoided(patient.getVoided());
 		patient.setPersonVoidReason(patient.getVoidReason());
-		
-		// remove the address if it is blank
-		if (MdrtbUtil.isBlank(patient.getPersonAddress())) {
-			patient.removeAddress(patient.getPersonAddress());
-		}
-		
-		// remove any attributes that are blank
+
+		// if this is a new address (ie, not yet linked to patient), link it to the patient
+        if (patientCommand.getAddress() != null) {
+            patientCommand.getAddress().setPreferred(true);
+            patient.addAddress(patientCommand.getAddress());
+        }
+
 		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
 			if (patient.getAttribute(attr) != null  && StringUtils.isBlank(patient.getAttribute(attr).getValue())) {
 				patient.removeAttribute(patient.getAttribute(attr));
