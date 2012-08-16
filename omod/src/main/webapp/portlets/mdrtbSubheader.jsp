@@ -86,24 +86,39 @@
 <td align="left">
 	<ul id="menu">	
 		<li style="border-left-width: 0px;" <c:if test='<%= request.getRequestURI().contains("dashboard") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.overview" text="Overview"/></a></li>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.overview" text="Overview"/></a></li>
 
-		<li <c:if test='<%= request.getRequestURI().contains("chart") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/chart/chart.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.chart" text="Chart"/></a></li>
-		
-		<li <c:if test='<%= request.getRequestURI().contains("visits") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.visits" text="Visits"/></a></li>
+        <!-- only show the chart, visits, and treatment tabs if the patient is enrolled in a program -->
 
-		<li <c:if test='<%= request.getRequestURI().contains("manageDrugOrders") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/regimen/manageDrugOrders.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.treatment" text="Treatment"/></a></li>	
-		
+        <c:if test="${ not empty patientProgramId && patientProgramId != -1 }">
+
+            <li <c:if test='<%= request.getRequestURI().contains("chart") %>'>class="active"</c:if>>
+            <a href="${pageContext.request.contextPath}/module/mdrtb/chart/chart.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.chart" text="Chart"/></a></li>
+
+            <li <c:if test='<%= request.getRequestURI().contains("visits") %>'>class="active"</c:if>>
+            <a href="${pageContext.request.contextPath}/module/mdrtb/visits/visits.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.visits" text="Visits"/></a></li>
+
+            <li <c:if test='<%= request.getRequestURI().contains("manageDrugOrders") %>'>class="active"</c:if>>
+            <a href="${pageContext.request.contextPath}/module/mdrtb/regimen/manageDrugOrders.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.treatment" text="Treatment"/></a></li>
+
+       </c:if>
+
 		<li <c:if test='<%= request.getRequestURI().contains("specimen") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.labResults" text="Lab Results"/></a></li>
 	
 		<li <c:if test='<%= request.getRequestURI().contains("mdrtbEditPatient") %>'>class="active"</c:if>>
-		<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbEditPatient.form?patientId=${model.patient.patientId}&patientProgramId=${patientProgramId}"><spring:message code="mdrtb.patientDetails" text="Patient Details"/></a></li>
+		<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbEditPatient.form?patientId=${model.patient.patientId}&patientProgramId=${!empty patientProgramId ? patientProgramId : '-1'}"><spring:message code="mdrtb.patientDetails" text="Patient Details"/></a></li>
 	
 	</ul>
 </td>
 </tr>
+
+<c:if test="${ empty patientProgramId || patientProgramId == -1 }">
+<tr>
+    <td align="left">
+        <b><spring:message code="mdrtb.pleaseEnroll" text="Please enroll patient in MDR-TB program to initialize chart, visits, and treatment tabs"/></b>
+    </td>
+</tr>
+</c:if>
+
 </table>
