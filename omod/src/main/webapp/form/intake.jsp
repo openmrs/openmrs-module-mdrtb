@@ -20,6 +20,7 @@
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
 		});
+		validateForm(false);
 
 		$j('#cancel').click(function(){
 			if (${(empty intake.id) || (intake.id == -1) || fn:length(errors.allErrors) > 0}) {
@@ -35,6 +36,30 @@
 		
 	});
 
+	function validateForm(submitIfNoErrors) {
+		
+		var errors = false;
+		var requiredText = '<spring:message code="mdrtb.required"/>';
+		jQuery("#dateError").html(requiredText).hide();
+		jQuery("#locationError").html(requiredText).hide();
+		jQuery("#providerError").html(requiredText).hide();
+		
+		if (jQuery("#encounterDatetime").val() == '') {
+			jQuery("#dateError").show();
+			errors = true;
+		}
+		if (jQuery("#locationField").val() == '') {
+			jQuery("#locationError").show();
+			errors = true;
+		}
+		if (jQuery("#providerField").val() == '') {
+			jQuery("#providerError").show();
+			errors = true;
+		}
+		if (submitIfNoErrors && !errors) {
+			jQuery("#intakeForm").submit();
+		}
+	}
 
 -->
 
@@ -127,37 +152,39 @@
 	<br/>
 </c:if>
 
-<form name="intake" action="intake.form?patientId=${patientId}&patientProgramId=${patientProgramId}&encounterId=${!empty intake.id ? intake.id : -1}" method="post">
+<form id="intakeForm" name="intake" action="intake.form?patientId=${patientId}&patientProgramId=${patientProgramId}&encounterId=${!empty intake.id ? intake.id : -1}" method="post">
 <input type="hidden" name="returnUrl" value="${returnUrl}" />
 
 <table>
  
 <tr>
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
-<td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${intake.encounterDatetime}"/></td>
+<td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${intake.encounterDatetime}"/><span class="error" id="dateError"></span></td>
 </tr>
  
 <tr>
 <td><spring:message code="mdrtb.location" text="Location"/>:</td>
 <td>
-<select name="location">
+<select name="location" id="locationField">
 <option value=""></option>
 <c:forEach var="location" items="${locations}">
 	<option value="${location.id}" <c:if test="${intake.location == location}">selected</c:if>>${location.displayString}</option>
 </c:forEach>
 </select>
+<span class="error" id="locationError"></span>
 </td>
 </tr>
  
 <tr>
 <td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
 <td>
-<select name="provider">
+<select name="provider" id="providerField">
 <option value=""></option>
 <c:forEach var="provider" items="${providers}">
 	<option value="${provider.id}" <c:if test="${intake.provider == provider}">selected</c:if>>${provider.personName}</option>
 </c:forEach>
 </select>
+<span class="error" id="providerError"></span>
 </td>
 </tr>
  
@@ -205,7 +232,7 @@
 
 </table>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button> <button id="cancel" type="reset"><spring:message code="mdrtb.cancel" text="Cancel"/></button>
+<input type="button" value="<spring:message code="mdrtb.save" text="Save"/>" onclick="validateForm(true);"> <input id="cancel" type="reset" value="<spring:message code="mdrtb.cancel" text="Cancel"/>"/>
 	
 </form>
 
