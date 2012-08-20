@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>mdrtb</artifactId>
-	<version>3.0</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>MDR TB</name>
 	<description>Parent project for MDR TB</description>
@@ -11,9 +11,9 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/tags/3.0</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/tags/3.0</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/mdrtb/tags/3.0</url>
+		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</connection>
+		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</developerConnection>
+		<url>http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</url>
 	</scm>
 
     <distributionManagement>
