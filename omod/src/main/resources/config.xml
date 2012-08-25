@@ -12,8 +12,8 @@
 	<activator>org.openmrs.module.mdrtb.MdrtbActivator</activator>
 		
 	<updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
-		
-	<require_version>1.8</require_version>
+
+	<require_version>1.9.1</require_version>
 	
 	<require_modules>
 		<require_module version="0.7">org.openmrs.module.reporting</require_module>
