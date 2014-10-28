@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com/
+
+[OpenMRS.mdr-tb-module]
+source_file = omod/src/main/resources/messages.properties
+source_lang = en
+trans.fr = omod/src/main/resources/messages_fr.properties
+trans.ru = omod/src/main/resources/messages_ru.properties
+
