@@ -6,4 +6,5 @@ source_file = omod/src/main/resources/messages.properties
 source_lang = en
 trans.fr = omod/src/main/resources/messages_fr.properties
 trans.ru = omod/src/main/resources/messages_ru.properties
+trans.de = omod/src/main/resources/messages_de.properties
 
