@@ -1,12 +1,5 @@
 package org.openmrs.module.mdrtb;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,10 +26,18 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
+
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class MdrtbUtil {
     
@@ -465,8 +466,15 @@ public class MdrtbUtil {
 		}
 		
 		if (states != null) {
-			Cohort inStates = Context.getPatientSetService().getPatientsByProgramAndState(null, states, now, now);
-			cohort = nullSafeIntersect(cohort, inStates);
+            InStateCohortDefinition iscd = new InStateCohortDefinition();
+            iscd.setStates(states);
+            try {
+                Cohort inStates = Context.getService(CohortDefinitionService.class).evaluate(iscd, new EvaluationContext());
+                cohort = nullSafeIntersect(cohort, inStates);
+            }
+            catch (EvaluationException e) {
+                throw new MdrtbAPIException("Unable to evalute patients in states", e);
+            }
 		}
 		
 		return cohort;
