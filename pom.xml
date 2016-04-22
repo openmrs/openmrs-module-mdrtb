@@ -11,9 +11,10 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/mdrtb/trunk/</url>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-mdrtb.git</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-mdrtb.git</developerConnection>
+		<url>scm:git:git@github.com:openmrs/openmrs-module-mdrtb.git</url>
+		<tag>HEAD</tag>
 	</scm>
 
     <distributionManagement>
