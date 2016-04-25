@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>mdrtb</artifactId>
-	<version>3.0.3</version>
+	<version>3.0.4</version>
 	<packaging>pom</packaging>
 	<name>MDR TB</name>
 	<description>Parent project for MDR TB</description>
