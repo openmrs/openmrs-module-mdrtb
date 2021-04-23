@@ -188,8 +188,8 @@
 													</a>
 												</openmrs:extensionPoint>
 											</td>
-											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.patientIdentifier.identifier}"/></c:out></td>
-											<td class="patientTable" ><c:out value="${p.familyName}"/>, <c:out value="${p.givenName}"/> <c:out value="p.middleName"/> </td>
+											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.patientIdentifier.identifier}"/></td>
+											<td class="patientTable" ><c:out value="${p.familyName}"/>, <c:out value="${p.givenName}"/> <c:out value="${p.middleName}"/> </td>
 											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.age}"/></td>
 											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.gender}"/></td>
 										</tr>
