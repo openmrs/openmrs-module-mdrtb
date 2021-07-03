@@ -33,29 +33,29 @@
 						<td>
 							<span class="mdrListBigValue">
 								<a href="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=${patient.patientId}">
-									${patient.fullName}
+									<c:out value="${patient.fullName}"/>
 								</a>
 							</span><br/>
 							<span class="mdrListLabel">Identifier:</span>
-							<span class="mdrListValue">${patient.primaryIdentifier}</span><br/>
+							<span class="mdrListValue"><c:out value="${patient.primaryIdentifier}"/></span><br/>
 							<span class="mdrListLabel">Age:</span>
-							<span class="mdrListValue">${patient.age}</span>&nbsp;|&nbsp;
+							<span class="mdrListValue"><c:out value="${patient.age}"/></span>&nbsp;|&nbsp;
 							<span class="mdrListLabel">Sexe:</span>
-							<span class="mdrListValue">${patient.gender}</span><br/>
+							<span class="mdrListValue"><c:out value="${patient.gender}"/></span><br/>
 							<span class="mdrListLabel">Statut VIH:</span> 
 							<span class="mdrListValue">
-								${patient['obs.RESULT OF HIV TEST.latest']}
+								<c:out value="${patient['obs.RESULT OF HIV TEST.latest']}"/>								
 								<c:if test="${!empty patient['obs.RESULT OF HIV TEST.latestDate']}">
-									(${patient['obs.RESULT OF HIV TEST.latestDate']})
+									(<c:out value="${patient['obs.RESULT OF HIV TEST.latestDate']}"/>)
 								</c:if>
 							</span>
 						</td>
 						<td style="white-space:normal;">
 							<span class="mdrListLabel">Regime Actuel:</span> 
-							<span class="mdrListValue"><br/>${patient.currentTbRegimen}</span>
+							<span class="mdrListValue"><br/><c:out value="${patient.currentTbRegimen}"/></span>
 							<br/>
 							<span class="mdrListLabel">Hebergement:</span>
-							<span class="mdrListValue"><br/>${patient['state.6']}</span>
+							<span class="mdrListValue"><br/><c:out value="${patient['state.6']}"/></span>
 						</td>
 					</tr>
 				</c:forEach>
