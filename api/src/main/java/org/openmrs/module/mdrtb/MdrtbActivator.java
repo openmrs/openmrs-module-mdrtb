@@ -41,11 +41,13 @@ public class MdrtbActivator implements Activator, Runnable {
 	
 	public void shutdown() {
 		log.info("Shutting down MDR-TB module.");
+		unregisterAddressTemplates();
 	}
 	
 	public void startup() {
 		log.info("Starting up MDR-TB module.");
 		configureGlobalProperties();
+		registerAddressTemplates();
 		performCustomMigrations();
 	}
 	
@@ -53,6 +55,41 @@ public class MdrtbActivator implements Activator, Runnable {
 		// TODO Auto-generated method stub  
 	}
 	
+	/**
+	 * Sets up the Default Address Template
+	 */
+	public void registerAddressTemplates() {
+		
+		log.info("Registering default address format.");
+		AddressTemplate at = new AddressTemplate("default");
+		at.setDisplayName("Default Address Format");
+		at.setCountry("default");
+		Map<String, String> nameMappings = new HashMap<String, String>();
+		nameMappings.put("cityVillage", "Location.cityVillage");
+		nameMappings.put("address1", "PersonAddress.address1");
+		at.setNameMappings(nameMappings);
+		Map<String, String> sizeMappings = new HashMap<String, String>();
+		sizeMappings.put("cityVillage", "20");
+		sizeMappings.put("address1", "60");
+		at.setSizeMappings(sizeMappings);
+		Map<String, String> elementDefaults = new HashMap<String, String>();
+		elementDefaults.put("country", "default");
+		at.setElementDefaults(elementDefaults);
+		at.setLineByLineFormat(Arrays.asList("cityVillage address1"));
+		AddressSupport.getInstance().getLayoutTemplates().add(at);
+	}
+	
+	/**
+	 * Unregisters the Default Address Template
+	 */
+	public void unregisterAddressTemplates() {
+		for (Iterator<AddressTemplate> i = AddressSupport.getInstance().getLayoutTemplates().iterator(); i.hasNext();) {
+			AddressTemplate at = i.next();
+			if ("default".equals(at.getCodeName())) {
+				i.remove();
+			}
+		}
+	}
 
 	/**
 	 * Configures any global properties that need to be configured

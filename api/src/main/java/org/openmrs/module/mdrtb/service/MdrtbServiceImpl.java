@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -22,6 +23,7 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Program;
@@ -32,13 +34,32 @@ import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.mdrtb.Country;
+import org.openmrs.module.mdrtb.District;
+import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.Oblast;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.form.custom.AEForm;
+import org.openmrs.module.mdrtb.form.custom.CultureForm;
+import org.openmrs.module.mdrtb.form.custom.DSTForm;
+import org.openmrs.module.mdrtb.form.custom.DrugResistanceDuringTreatmentForm;
+import org.openmrs.module.mdrtb.form.custom.Form89;
+import org.openmrs.module.mdrtb.form.custom.HAIN2Form;
+import org.openmrs.module.mdrtb.form.custom.HAINForm;
+import org.openmrs.module.mdrtb.form.custom.RegimenForm;
+import org.openmrs.module.mdrtb.form.custom.SmearForm;
+import org.openmrs.module.mdrtb.form.custom.TB03Form;
+import org.openmrs.module.mdrtb.form.custom.TB03uForm;
+import org.openmrs.module.mdrtb.form.custom.TransferInForm;
+import org.openmrs.module.mdrtb.form.custom.TransferOutForm;
+import org.openmrs.module.mdrtb.form.custom.XpertForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.service.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
@@ -49,6 +70,9 @@ import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN2;
+import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.openmrs.module.reporting.common.ObjectUtil;
 
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
@@ -695,4 +719,587 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
     	
     	return map;
     }
+
+	public List<Specimen> getSpecimens(Patient patient, Integer programId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Program getTbProgram() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Set<ProgramWorkflowState> getPossibleTbProgramOutcomes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPatientGroups() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<String> getAllRayonsTJK() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<MdrtbPatientProgram> getAllMdrtbPatientProgramsEnrolledInDateRange(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void saveXpert(Xpert xpert) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Xpert createXpert(Specimen specimen) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Xpert getXpert(Obs obs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Xpert getXpert(Integer obsId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void saveHAIN(HAIN hain) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HAIN createHAIN(Specimen specimen) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HAIN getHAIN(Obs obs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HAIN getHAIN(Integer obsId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HAIN2 getHAIN2(Obs obs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public HAIN2 createHAIN2(Specimen specimen) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void saveHAIN2(HAIN2 hain) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public HAIN2 getHAIN2(Integer obsId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleMtbResults() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleRifResistanceResults() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleInhResistanceResults() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleFqResistanceResults() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleInjResistanceResults() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleXpertMtbBurdens() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Oblast> getOblasts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Oblast getOblast(Integer oblastId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Location> getLocationsFromOblastName(Oblast oblast) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Facility> getFacilities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Facility> getRegFacilities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Location getLocation(Integer o, Integer d, Integer f) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Facility> getFacilities(int parentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Facility> getRegFacilities(int parentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Facility getFacility(Integer facilityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Location> getLocationsFromFacilityName(Facility facility) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<District> getDistricts(int parentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<District> getRegDistricts(int parentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public District getDistrict(Integer districtId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public District getDistrict(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<District> getDistricts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<District> getRegDistricts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Location> getLocationsFromDistrictName(District district) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Location> getEnrollmentLocations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PatientIdentifier getPatientProgramIdentifier(MdrtbPatientProgram mpp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PatientIdentifier getGenPatientProgramIdentifier(PatientProgram mpp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getAllTbPatientProgramsEnrolledInDateRange(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addIdentifierToProgram(Integer patientIdenifierId, Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Collection<ConceptAnswer> getPossibleIPTreatmentSites() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleCPTreatmentSites() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleRegimens() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleHIVStatuses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleResistanceTypes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<ConceptAnswer> getPossibleConceptAnswers(String[] conceptQuestion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int countPDFRows() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int countPDFColumns() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public List<List<Integer>> PDFRows(String reportType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<String> PDFColumns() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void unlockReport(Integer oblast, Integer district, Integer facility, Integer year, String quarter,
+			String month, String name, String date, String reportType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void doPDF(Integer oblast, Integer district, Integer facility, Integer year, String quarter, String month,
+			String reportDate, String tableData, boolean reportStatus, String reportName, String reportType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean readReportStatus(Integer oblast, Integer district, Integer facility, Integer year, String quarter,
+			String month, String name, String type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public List<String> readTableData(Integer oblast, Integer district, Integer facility, Integer year, String quarter,
+			String month, String name, String date, String reportType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Encounter> getEncountersByEncounterTypes(List<String> encounterTypeNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Encounter> getEncountersByEncounterTypes(List<String> reportEncounterTypes, Date startDate,
+			Date endDate, Date closeDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<SmearForm> getSmearForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<CultureForm> getCultureForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<XpertForm> getXpertForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<HAINForm> getHAINForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<HAIN2Form> getHAIN2Forms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<DSTForm> getDstForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<DrugResistanceDuringTreatmentForm> getDrdtForms(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Encounter> getEncountersWithNoProgramId(EncounterType ec, Patient p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addProgramIdToEncounter(Integer encounterId, Integer programId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<TB03Form> getTB03FormsFilled(Location location, String oblast, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03Form> getTB03FormsFilled(ArrayList<Location> locList, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03uForm> getTB03uFormsFilled(Location location, String oblast, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03uForm> getTB03uFormsFilled(ArrayList<Location> locList, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Form89> getForm89FormsFilled(Location location, String oblast, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Form89> getForm89FormsFilled(ArrayList<Location> locList, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Form89> getForm89FormsFilledForPatientProgram(Patient p, Location location, Integer patProgId,
+			Integer year, String quarter, String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TransferOutForm> getTransferOutFormsFilled(ArrayList<Location> locList, Integer year,
+			String quarter, String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TransferInForm> getTransferInFormsFilled(ArrayList<Location> locList, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TransferOutForm> getTransferOutFormsFilledForPatient(Patient p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TransferInForm> getTransferInFormsFilledForPatient(Patient p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Set<ProgramWorkflowState> getPossibleDOTSClassificationsAccordingToPreviousDrugUse() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TB03Form getClosestTB03Form(Location location, Date encounterDate, Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Location> getCultureLocations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Location> getLocationList(Integer oblastId, Integer districtId, Integer facilityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PatientIdentifier getPatientIdentifierById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03uForm> getTB03uFormsFilledWithTxStartDateDuring(ArrayList<Location> locList, Integer year,
+			String quarter, String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Country> getCountries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Oblast> getOblasts(int parentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03Form> getTB03FormsForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Form89> getForm89FormsForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void evict(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public TB03uForm getTB03uFormForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<RegimenForm> getRegimenFormsForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<RegimenForm> getRegimenFormsFilled(ArrayList<Location> locList, Integer year, String quarter,
+			String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Patient> getAllPatientsWithRegimenForms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public RegimenForm getPreviousRegimenFormForPatient(Patient p, ArrayList<Location> locList, Date beforeDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public RegimenForm getCurrentRegimenFormForPatient(Patient p, Date beforeDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<AEForm> getAEFormsFilled(ArrayList<Location> locList, Integer year, String quarter, String month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<AEForm> getAEFormsForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<Location> getLocationListForDushanbe(Integer oblastId, Integer districtId, Integer facilityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getAllTbPatientProgramsEnrolledInDateRangeAndLocations(Date startDate, Date endDate,
+			ArrayList<Location> locList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<MdrtbPatientProgram> getAllMdrtbPatientProgramsEnrolledInDateRangeAndLocations(Date startDate,
+			Date endDate, ArrayList<Location> locList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<TB03uForm> getTB03uFormsForProgram(Patient p, Integer patientProgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Encounter> getTbEncounters(Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getAllTbPatientPrograms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getAllTbPatientProgramsInDateRange(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getTbPatientPrograms(Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TbPatientProgram getMostRecentTbPatientProgram(Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<TbPatientProgram> getTbPatientProgramsInDateRange(Patient patient, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TbPatientProgram getTbPatientProgramOnDate(Patient patient, Date date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TbPatientProgram getTbPatientProgram(Integer patientProgramId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

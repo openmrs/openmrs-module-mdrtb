@@ -20,6 +20,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN2;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN2Impl;
+import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
+import org.openmrs.module.mdrtb.specimen.custom.Xpert;
+import org.openmrs.module.mdrtb.specimen.custom.XpertImpl;
 
 /**
  * An implementation of the MdrtbSpecimen. This wraps an Encounter and provides access to the
@@ -285,7 +291,8 @@ public class SpecimenImpl implements Specimen {
 		tests.addAll(getSmears());
 		tests.addAll(getCultures());
 		tests.addAll(getDsts());
-	
+		tests.addAll(getXperts());
+		tests.addAll(getHAINs());
 		return tests;
 	}
 	
@@ -298,6 +305,28 @@ public class SpecimenImpl implements Specimen {
 		else {
 			return obs.getValueCoded();
 		}
+	}
+	
+	public Double getMonthOfTreatment() {
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
+		
+		if(obs == null) {
+			return null;
+		}
+		
+		else
+			return obs.getValueNumeric();
+	}
+	
+	public Integer getPatProgId() {
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		
+		if(obs == null) {
+			return null;
+		}
+		
+		else
+			return obs.getValueNumeric().intValue();
 	}
 	
 	public void removeScannedLabReport(ScannedLabReport report) {
@@ -432,6 +461,7 @@ public class SpecimenImpl implements Specimen {
 			type.setPerson(patient);
 		}
 	}
+	
 	public void setProvider(Person provider) {
 		encounter.setProvider(provider);
 	}
@@ -462,6 +492,90 @@ public class SpecimenImpl implements Specimen {
 				encounter.addObs(obs);
 			}
 		}
+	}
+	
+	public Xpert addXpert() {
+		// cast to an Impl so we can access protected methods from within the specimen impl
+		XpertImpl xpert = new XpertImpl(this.encounter);
+		
+		// add the smear to the master encounter
+		this.encounter.addObs(xpert.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		xpert.setLab(null);
+		
+		return xpert;
+	}
+	
+	public List<Xpert> getXperts() {
+		List<Xpert> xperts = new LinkedList<Xpert>();		
+		// iterate through all the obs groups, create xperts from them, and add them to the list
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XPERT_CONSTRUCT))) {
+					xperts.add(new XpertImpl(obs));
+				}
+			}
+		}
+		Collections.sort(xperts);
+		return xperts;
+	}
+	
+	public HAIN addHAIN() {
+		// cast to an Impl so we can access protected methods from within the specimen impl
+		HAINImpl hain = new HAINImpl(this.encounter);
+		
+		// add the smear to the master encounter
+		this.encounter.addObs(hain.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		hain.setLab(null);
+		
+		return hain;
+	}
+	
+	public List<HAIN> getHAINs() {
+		List<HAIN> hains = new LinkedList<HAIN>();		
+		// iterate through all the obs groups, create hains from them, and add them to the list
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT))) {
+					hains.add(new HAINImpl(obs));
+				}
+			}
+		}
+		Collections.sort(hains);
+		return hains;
+	}
+	
+	public HAIN2 addHAIN2() {
+		// cast to an Impl so we can access protected methods from within the specimen impl
+		HAIN2Impl hain2 = new HAIN2Impl(this.encounter);
+		
+		// add the smear to the master encounter
+		this.encounter.addObs(hain2.getObs());
+		
+		// we need to set the location back to null, since it will be set to the encounter location
+		// when it is added to the location
+		hain2.setLab(null);
+		
+		return hain2;
+	}
+	
+	public List<HAIN2> getHAIN2s() {
+		List<HAIN2> hains = new LinkedList<HAIN2>();		
+		// iterate through all the obs groups, create hains from them, and add them to the list
+		if(encounter.getObsAtTopLevel(false) != null) {
+			for(Obs obs : encounter.getObsAtTopLevel(false)) {
+				if (obs.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN2_CONSTRUCT))) {
+					hains.add(new HAIN2Impl(obs));
+				}
+			}
+		}
+		Collections.sort(hains);
+		return hains;
 	}
 	
 	/**

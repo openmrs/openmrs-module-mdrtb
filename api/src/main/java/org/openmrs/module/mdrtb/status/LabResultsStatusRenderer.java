@@ -24,4 +24,13 @@ public interface LabResultsStatusRenderer {
 	public StatusFlag createNoSmearsFlag();
 	
 	public StatusFlag createNoCulturesFlag();
+
+	public void renderXpert(StatusItem diagnosticXpert, LabResultsStatus status);
+	
+	public void renderHAIN(StatusItem diagnosticHAIN, LabResultsStatus status);
+	
+	public void renderHAIN2(StatusItem diagnosticHAIN2, LabResultsStatus status);
+
+	public void renderDst(StatusItem dst, LabResultsStatus status);
+	
 }

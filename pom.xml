@@ -18,6 +18,11 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<properties>
+		<openMRSVersion>1.9.1</openMRSVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
     <distributionManagement>
         <repository>
             <id>openmrs-repo-modules</id>
@@ -99,12 +104,18 @@
 
         </dependency>
 
+        <dependency>
+        	<groupId>joda-time</groupId>
+        	<artifactId>joda-time</artifactId>
+        	<version>2.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>com.itextpdf.tool</groupId>
+        	<artifactId>xmlworker</artifactId>
+        	<version>5.5.4</version>
+        </dependency>
     </dependencies>
-
-	<properties>
-		<openMRSVersion>1.9.1</openMRSVersion>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<build>
 		<pluginManagement>
