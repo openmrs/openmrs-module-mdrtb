@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>mdrtb</artifactId>
-	<version>3.0.4</version>
+	<version>3.0.5</version>
 	<packaging>pom</packaging>
 	<name>MDR TB</name>
 	<description>Parent project for MDR TB</description>
@@ -107,7 +107,7 @@
         <dependency>
         	<groupId>joda-time</groupId>
         	<artifactId>joda-time</artifactId>
-        	<version>2.9</version>
+        	<version>2.10.14</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
