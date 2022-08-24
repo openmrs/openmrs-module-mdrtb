@@ -4,11 +4,20 @@
 package org.openmrs.module.mdrtb.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openmrs.Encounter;
+import org.openmrs.Location;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
@@ -33,9 +42,10 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getLocationsWithAnyProgramEnrollments()}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetLocationsWithAnyProgramEnrollments() {
-		fail("Not yet implemented"); // TODO
+		List<Location> list = dao.getLocationsWithAnyProgramEnrollments();
+		assertTrue(list.contains(hogwarts));
+		assertTrue(list.contains(diagonAlley));
 	}
 
 	/**
@@ -45,7 +55,7 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testGetAllRayonsTJK() {
-		fail("Not yet implemented"); // TODO
+		// TODO
 	}
 
 	/**
@@ -56,7 +66,7 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	public final void testGetPatientIdentifierById() {
 		Context.clearSession();
 		PatientIdentifier identifier = dao.getPatientIdentifierById(1001);
-		assertEquals(identifier, harry.getPatientIdentifier(hogwartzIdType));
+		assertEquals(identifier.getPatient(), harry);
 	}
 
 	/**
@@ -144,18 +154,24 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getEncountersByEncounterTypes(java.util.List)}.
 	 */
 	@Test
-	@Ignore
-	public final void testGetEncountersByEncounterTypesListOfString() {
-		fail("Not yet implemented"); // TODO
+	public final void testGetEncountersByEncounterTypes() {
+		List<String> encounterTypeNames = Arrays.asList(owlExam.getName(), transferIn.getName(), transferOut.getName());
+		List<Encounter> list = dao.getEncountersByEncounterTypes(encounterTypeNames);
+		assertTrue(list.size() > 1);
+		Encounter encounter = Context.getEncounterService().getEncounter(100001);
+		assertTrue(list.contains(encounter));
 	}
-
+	
 	/**
 	 * Test method for
 	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getEncountersByEncounterTypes(java.util.List, java.util.Date, java.util.Date, java.util.Date)}.
 	 */
 	@Test
-	@Ignore
-	public final void testGetEncountersByEncounterTypesListOfStringDateDateDate() {
-		fail("Not yet implemented"); // TODO
+	public final void testGetEncountersByEncounterTypesAndDates() {
+		List<String> encounterTypeNames = Arrays.asList(owlExam.getName(), transferIn.getName(), transferOut.getName());
+		LocalDate startDate = new LocalDate(2022, 8, 1);
+		LocalDate endDate = new LocalDate(2022, 8, 8);
+		List<Encounter> list = dao.getEncountersByEncounterTypes(encounterTypeNames, startDate.toDate(), endDate.toDate(), null);
+		assertEquals(list.size(), 5);
 	}
 }

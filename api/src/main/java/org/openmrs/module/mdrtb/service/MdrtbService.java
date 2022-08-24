@@ -50,6 +50,7 @@ import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.springframework.transaction.annotation.Transactional;
 
 //TODO: A ton of documentation missing. Complete...
+@Transactional
 public interface MdrtbService extends OpenmrsService {
 
 	/**

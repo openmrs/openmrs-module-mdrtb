@@ -13,8 +13,16 @@
  */
 package org.openmrs.module.mdrtb.service;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.openmrs.Concept;
+import org.openmrs.EncounterType;
+import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.PatientProgram;
+import org.openmrs.Program;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -28,11 +36,27 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 
 	protected Provider owais;
 
-	protected Patient harry;
-	
-	protected PatientIdentifierType hogwartzIdType;
+	protected Patient harry, hermione;
 
-	protected Patient hermione;
+	protected PatientIdentifierType hogwartsIdType;
+
+	protected Location hogwarts, diagonAlley, leakyCauldron;
+
+	protected EncounterType owlExam;
+
+	protected EncounterType transferIn;
+
+	protected EncounterType transferOut;
+	
+	protected Program mdrtbProgram;
+	protected Program dotsProgram;
+
+	protected Concept unknownConcept;
+	protected Concept noConcept;
+	protected Concept yesConcept;
+	protected Concept mdrStartDateConcept;
+	
+	protected PatientProgram harryMdrProgram, harryDotsProgram;
 
 	/**
 	 * Initialize all data objects before each test
@@ -47,8 +71,32 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 
 		harry = Context.getPatientService().getPatient(1000);
 		hermione = Context.getPatientService().getPatient(2000);
-		
-		hogwartzIdType = Context.getPatientService().getPatientIdentifierType(5);
 
+		hogwartsIdType = Context.getPatientService().getPatientIdentifierType(5);
+
+		hogwarts = Context.getLocationService().getLocation(101);
+		diagonAlley = Context.getLocationService().getLocation(102);
+		leakyCauldron = Context.getLocationService().getLocation(103);
+		
+		owlExam = Context.getEncounterService().getEncounterType(91);
+		transferIn = Context.getEncounterService().getEncounterType(92);
+		transferOut = Context.getEncounterService().getEncounterType(93);
+		
+		mdrtbProgram = Context.getProgramWorkflowService().getProgram(1);
+		dotsProgram = Context.getProgramWorkflowService().getProgram(2);
+		
+		unknownConcept = Context.getConceptService().getConcept(1);
+		noConcept = Context.getConceptService().getConcept(10);
+		yesConcept = Context.getConceptService().getConcept(11);
+		mdrStartDateConcept = Context.getConceptService().getConcept(436);
+		
+		harryMdrProgram = Context.getProgramWorkflowService().getPatientProgram(10001);
+		harryDotsProgram = Context.getProgramWorkflowService().getPatientProgram(10002);
+	}
+
+	@Test
+	public void shouldInitiateTestData() throws Exception {
+		this.initTestData();
+		assertNotNull(owais);
 	}
 }
