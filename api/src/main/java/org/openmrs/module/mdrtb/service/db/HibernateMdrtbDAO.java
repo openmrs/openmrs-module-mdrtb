@@ -366,18 +366,36 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 
 	public BaseLocation getLocationParent(Integer childId) {
 		String query = "select parent_id from address_hierarchy_entry where address_hierarchy_entry_id=" + childId;
-		return (BaseLocation) sessionFactory.getCurrentSession().createSQLQuery(query).uniqueResult();
+		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
+		for (List<Object> list : results) {
+			Integer id = (Integer)(list.get(0));
+			String name = (String)(list.get(0));
+			return new BaseLocation(id, name);
+		}
+		return null;
 	}
 
 	public List<BaseLocation> getLocationsByHierarchyLevel(Integer level) {
 		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where level_id=" + level;
-		List list = sessionFactory.getCurrentSession().createSQLQuery(query).list();
-		return list;
+		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
+		List<BaseLocation> locations = new ArrayList<BaseLocation>();
+		for (List<Object> list : results) {
+			Integer id = (Integer)(list.get(0));
+			String name = (String)(list.get(0));
+			locations.add(new BaseLocation(id, name));
+		}
+		return locations;
 	}
 
 	public List<BaseLocation> getLocationsByParent(BaseLocation parent) {
 		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where parent_id=" + parent.getId();
-		List list = sessionFactory.getCurrentSession().createSQLQuery(query).list();
-		return list;
+		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
+		List<BaseLocation> locations = new ArrayList<BaseLocation>();
+		for (List<Object> list : results) {
+			Integer id = (Integer)(list.get(0));
+			String name = (String)(list.get(0));
+			locations.add(new BaseLocation(id, name));
+		}
+		return locations;
 	}
 }

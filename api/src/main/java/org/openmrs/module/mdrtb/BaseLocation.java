@@ -8,7 +8,7 @@ package org.openmrs.module.mdrtb;
  * @author owais.hussain@esquaredsystems.com
  *
  */
-public abstract class BaseLocation {
+public class BaseLocation {
 	
 	private String name;
 	private Integer id;
