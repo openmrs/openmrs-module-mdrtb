@@ -288,8 +288,8 @@ $(document).ready(function(){
 		 <th class="normal" rowspan="3" rowspan="2"><spring:message code="mdrtb.tb03.dstSampleCollectionDate"/></th>
 		 <th class="normal" rowspan="3"><spring:message code="mdrtb.tb03.dstResultDate"/></th>
 		 <th class="reggroup" colspan="17" rowspan="2"><spring:message code="mdrtb.tb03.dst"/></th>
-		 <th class="normal" colspan="4"><spring:message code="dotsreports.tb03.genexpert"/></th>
-	   	 <th class="normal" colspan="6" ><spring:message code="dotsreports.tb03.hain"/></th>
+		 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.genexpert"/></th>
+	   	 <th class="normal" colspan="6" ><spring:message code="mdrtb.tb03.hain"/></th>
 	   	 <th class="normal" colspan="6" ><spring:message code="mdrtb.tb03.hain2"/></th>
 		 <th class="normal" rowspan="3"><spring:message code="mdrtb.tb03.drugResistance"/></th>
 	     <th class="normal" rowspan="3"><spring:message code="mdrtb.tb03.diagnosticMethod"/></th>
@@ -315,21 +315,21 @@ $(document).ready(function(){
 	    
 	   	 
 	   	 
-	   	 <th class="normal" rowspan="2"><spring:message code="dotsreports.tb03.xpertResult"/></th>
-	   	  <th rowspan="2"><spring:message code="dotsreports.tb03.date"/></th>
-	   		<th rowspan="2"><spring:message code="dotsreports.tb03.testNumber"/></th>
+	   	 <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.xpertResult"/></th>
+	   	  <th rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
+	   		<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
 	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
 	   		
-	   	   <th class="normal" rowspan="2"><spring:message code="dotsreports.tb03.date"/></th>
+	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
 	   	   <th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="dotsreports.tb03.hainCultureResult"/></th>
-	   	   <th rowspan="2"><spring:message code="dotsreports.tb03.hResult"/></th>
-	   		<th rowspan="2"><spring:message code="dotsreports.tb03.rResult"/></th>
+	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
+	   	   <th rowspan="2"><spring:message code="mdrtb.tb03.hResult"/></th>
+	   		<th rowspan="2"><spring:message code="mdrtb.tb03.rResult"/></th>
 	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
 	   		
-	   	   <th class="normal" rowspan="2"><spring:message code="dotsreports.tb03.date"/></th>
-	   	   <th rowspan="2"><spring:message code="dotsreports.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2" ><spring:message code="dotsreports.tb03.hainCultureResult"/></th>
+	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
+	   	   <th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+	   	   <th class="normal" rowspan="2" ><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
 	   		<th rowspan="2"><spring:message code="mdrtb.tb03.iResult"/></th>
 	   		<th rowspan="2"><spring:message code="mdrtb.tb03.fResult"/></th>
 	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>

@@ -51,19 +51,12 @@ function fun2()
 		var val2 = e.options[e.selectedIndex].value;
 		var e = document.getElementById("facility");
 		var val3 = e.options[e.selectedIndex].value;
-		
-		
 		if(val1==186) {
-			
 			if(val3!="") {
 				document.getElementById("district").selectedIndex = 0;
 			}
-			
-		
 		}
-		
 		return;
-	  
   }
   
 
@@ -126,19 +119,19 @@ $(document).ready(function(){
 		<tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
-			<td align="right"><spring:message code="dotsreports.year" /></td>
+			<td align="right"><spring:message code="mdrtb.year" /></td>
 			<td><input name="year" id="year" type="text" size="4"/></td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr>
-			<td align="right"><spring:message code="dotsreports.quarter" /></td>
+			<td align="right"><spring:message code="mdrtb.quarter" /></td>
 			<td><input name="quarter" id="quarter" type="text" size="7"/></td>
 		</tr>
 		 <tr>
-		    <td align="right"><spring:message code="dotsreports.or" /></td>
+		    <td align="right"><spring:message code="mdrtb.or" /></td>
 		    </tr>
 		<tr>
-			<td align="right"><spring:message code="dotsreports.month" /></td>
+			<td align="right"><spring:message code="mdrtb.month" /></td>
 			<td><input name="month" id="month" type="text" size="7"/></td>
 		</tr>
 

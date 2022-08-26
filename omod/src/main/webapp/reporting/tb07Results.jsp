@@ -25,7 +25,7 @@ response.setDateHeader ("Expires", -1);
 		function printForm() {
 			var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		    mywindow.document.write('<html><head><title><spring:message code="dotsreports.tb07.title" text="TB07"/></title>');
+		    mywindow.document.write('<html><head><title><spring:message code="mdrtb.tb07.title" text="TB07"/></title>');
 		    mywindow.document.write('</head><body >');
 		   // mywindow.document.write('<h1><spring:message code="mdrtb.pv.aeForm" text="AE"/></h1>');
 		    mywindow.document.write(document.getElementById("tb07").innerHTML);
@@ -166,7 +166,7 @@ response.setDateHeader ("Expires", -1);
 			}
 			$(document).ready(function(){
 				$("#tableToSql").bind("click", function() {
-					if(confirm('<spring:message code="dotsreports.closeReportMessage" />') ) {
+					if(confirm('<spring:message code="mdrtb.closeReportMessage" />') ) {
 						savePdf("closeReport.form", "TB-07", "tb07Results");
 					}
 				});
@@ -185,7 +185,7 @@ response.setDateHeader ("Expires", -1);
 <table border="0" width="100%">
 	<tbody>
 		<tr>
-			<td align="center" style="font-size:14px; font-weight:bold;border:0px" width="90%"><spring:message code="dotsreports.tb07.title"/></td>
+			<td align="center" style="font-size:14px; font-weight:bold;border:0px" width="90%"><spring:message code="mdrtb.tb07.title"/></td>
 			<td align="right" style="font-size:14px; font-weight:bold;border:0px" valign="top" width="10%">TB 07</td>
 		</tr>
 	</tbody>
@@ -194,15 +194,15 @@ response.setDateHeader ("Expires", -1);
 <table width="100%" border="1">
 <tr>
 <td>
-<spring:message code="dotsreports.tb07.nameOfFacility"/> <u>&nbsp; ${fName} &nbsp;</u></br>
-<spring:message code="dotsreports.tb07.regionCityDistrict"/> <u> ${oName}/${dName} </u></br>
-<spring:message code="dotsreports.tb07.tbCoordinatorName"/> ___________________ </br>
-<spring:message code="dotsreports.tb07.signature"/>_________________
+<spring:message code="mdrtb.tb07.nameOfFacility"/> <u>&nbsp; ${fName} &nbsp;</u></br>
+<spring:message code="mdrtb.tb07.regionCityDistrict"/> <u> ${oName}/${dName} </u></br>
+<spring:message code="mdrtb.tb07.tbCoordinatorName"/> ___________________ </br>
+<spring:message code="mdrtb.tb07.signature"/>_________________
 </td>
 
 <td>
-<spring:message code="dotsreports.tb07.tbCasesDetectedDuringQuarterYear" arguments="${quarter},${year}" /></br>
-<spring:message code="dotsreports.tb07.dateOfReport"/> ${reportDate }
+<spring:message code="mdrtb.tb07.tbCasesDetectedDuringQuarterYear" arguments="${quarter},${year}" /></br>
+<spring:message code="mdrtb.tb07.dateOfReport"/> ${reportDate }
 </td>
 </tr>
 
@@ -211,12 +211,12 @@ response.setDateHeader ("Expires", -1);
 
 
 
-<h5><spring:message code="dotsreports.tb07.table1.title"/></h5>
+<h5><spring:message code="mdrtb.tb07.table1.title"/></h5>
 	<table border="1" cellpadding="1" cellspacing="1" dir="ltr"
 			style="width: 980px;">
 			<tbody>
 				<tr>
-					<td colspan="2" rowspan="1"><spring:message code="dotsreports.tb07.type"/></td>
+					<td colspan="2" rowspan="1"><spring:message code="mdrtb.tb07.type"/></td>
 					<td colspan="2" rowspan="1" style="text-align: center;">0-4</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">5-14</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">15-17</td>
@@ -227,42 +227,42 @@ response.setDateHeader ("Expires", -1);
 					<td colspan="2" rowspan="1" style="text-align: center;">45-54</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">55-64</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">&gt;65</td>
-					<td colspan="3" rowspan="1" style="text-align: center;"><spring:message code="dotsreports.tb07.total"/></td>
+					<td colspan="3" rowspan="1" style="text-align: center;"><spring:message code="mdrtb.tb07.total"/></td>
 				</tr>
 				<tr>
 
 					<td style="text-align: center;">&nbsp;</td>
 					<td style="text-align: center;">&nbsp;</td>
-					<td style="text-align: center;width: 3%"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="dotsreports.tb07.total"/></td>
+					<td style="text-align: center;width: 3%"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb07.total"/></td>
 					
 				</tr>
 				<tr>
 					<td rowspan="6">
-						<spring:message code="dotsreports.tb07.new" />
+						<spring:message code="mdrtb.tb07.new" />
 					</td>
-					<td><spring:message code="dotsreports.tb07.pulmonaryBC" /></td>
+					<td><spring:message code="mdrtb.tb07.pulmonaryBC" /></td>
 					
 					<td>${table1.newMalePulmonaryBC04}</td>
 					<td>${table1.newFemalePulmonaryBC04}</td>
@@ -305,7 +305,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newPulmonaryBC}</td>                       
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /> </td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /> </td>
 					
 					<td>${table1.newMalePulmonaryBCHIV04}</td>
 					<td>${table1.newFemalePulmonaryBCHIV04}</td>
@@ -349,7 +349,7 @@ response.setDateHeader ("Expires", -1);
 					                   
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.pulmonaryCD" /> </td>
+					<td><spring:message code="mdrtb.tb07.pulmonaryCD" /> </td>
 					<td>${table1.newMalePulmonaryCD04}</td>
 					<td>${table1.newFemalePulmonaryCD04}</td>
 					
@@ -391,7 +391,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newPulmonaryCD}</td>                         
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.newMalePulmonaryCDHIV04}</td>
 					<td>${table1.newFemalePulmonaryCDHIV04}</td>
 					
@@ -433,7 +433,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newPulmonaryCDHIV}</td>                      
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.eptb" /></td>
+					<td><spring:message code="mdrtb.tb07.eptb" /></td>
 					<td>${table1.newMaleExtrapulmonary04}</td>
 					<td>${table1.newFemaleExtrapulmonary04}</td>
 					
@@ -475,7 +475,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newExtrapulmonary}</td>                   
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.newMaleExtrapulmonaryHIV04}</td>
 					<td>${table1.newFemaleExtrapulmonaryHIV04}</td>
 					
@@ -517,7 +517,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newExtrapulmonaryHIV}</td>  
 				</tr>
 				<tr>
-					<td colspan="2" align="left"><spring:message code="dotsreports.tb07.total"/></td>
+					<td colspan="2" align="left"><spring:message code="mdrtb.tb07.total"/></td>
 
 					<td>${table1.newMale04}</td>
 					<td>${table1.newFemale04}</td>
@@ -560,7 +560,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newAll}</td> 
 				</tr>
 				<tr bgcolor="yellow">
-					<td colspan="2"><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td colspan="2"><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 
 					<td>${table1.newMaleHIV04}</td>
 					<td>${table1.newFemaleHIV04}</td>
@@ -632,9 +632,9 @@ response.setDateHeader ("Expires", -1);
 				</tr>
 				<tr>
 					<td rowspan="6">
-						<spring:message code="dotsreports.tb07.relapses" />
+						<spring:message code="mdrtb.tb07.relapses" />
 					</td>
-						<td><spring:message code="dotsreports.tb07.pulmonaryBC" /></td>
+						<td><spring:message code="mdrtb.tb07.pulmonaryBC" /></td>
 					<td>${table1.relapseMalePulmonaryBC04}</td>
 					<td>${table1.relapseFemalePulmonaryBC04}</td>
 					
@@ -676,7 +676,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.relapsePulmonaryBC}</td>                       
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /> </td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /> </td>
 					
 					<td>${table1.relapseMalePulmonaryBCHIV04}</td>
 					<td>${table1.relapseFemalePulmonaryBCHIV04}</td>
@@ -720,7 +720,7 @@ response.setDateHeader ("Expires", -1);
 					                   
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.pulmonaryCD" /> </td>
+					<td><spring:message code="mdrtb.tb07.pulmonaryCD" /> </td>
 					<td>${table1.relapseMalePulmonaryCD04}</td>
 					<td>${table1.relapseFemalePulmonaryCD04}</td>
 					
@@ -762,7 +762,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.relapsePulmonaryCD}</td>                         
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.relapseMalePulmonaryCDHIV04}</td>
 					<td>${table1.relapseFemalePulmonaryCDHIV04}</td>
 					
@@ -806,7 +806,7 @@ response.setDateHeader ("Expires", -1);
 				</tr>
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.eptb" /></td>
+					<td><spring:message code="mdrtb.tb07.eptb" /></td>
 					<td>${table1.relapseMaleExtrapulmonary04}</td>
 					<td>${table1.relapseFemaleExtrapulmonary04}</td>
 					
@@ -848,7 +848,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.relapseExtrapulmonary}</td>                   
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.relapseMaleExtrapulmonaryHIV04}</td>
 					<td>${table1.relapseFemaleExtrapulmonaryHIV04}</td>
 					
@@ -891,7 +891,7 @@ response.setDateHeader ("Expires", -1);
 					                   
 				</tr>
 				<tr>
-					<td colspan="2" align="left"><spring:message code="dotsreports.tb07.total"/></td>
+					<td colspan="2" align="left"><spring:message code="mdrtb.tb07.total"/></td>
 					<td>${table1.relapseMale04}</td>
 					<td>${table1.relapseFemale04}</td>
 					
@@ -933,7 +933,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.relapseAll}</td> 
 				</tr>
 				<tr bgcolor="yellow">
-					<td colspan="2"><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td colspan="2"><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 
 					<td>${table1.relapseMaleHIV04}</td>
 					<td>${table1.relapseFemaleHIV04}</td>
@@ -1003,9 +1003,9 @@ response.setDateHeader ("Expires", -1);
 				</tr>
 				<tr>
 					<td rowspan="6">
-						<spring:message code="dotsreports.tb07.totalNewRelapse" />
+						<spring:message code="mdrtb.tb07.totalNewRelapse" />
 					</td>
-					<td><spring:message code="dotsreports.tb07.pulmonaryBC" /></td>
+					<td><spring:message code="mdrtb.tb07.pulmonaryBC" /></td>
 					<td>${table1.newMalePulmonaryBC04 + table1.relapseMalePulmonaryBC04 }</td>
 					<td>${table1.newFemalePulmonaryBC04 + table1.relapseFemalePulmonaryBC04 }</td>
 					<td>${table1.newMalePulmonaryBC0514 + table1.relapseMalePulmonaryBC0514 }</td>
@@ -1032,7 +1032,7 @@ response.setDateHeader ("Expires", -1);
 					
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.newMalePulmonaryBCHIV04 + table1.relapseMalePulmonaryBCHIV04 }</td>
 					<td>${table1.newFemalePulmonaryBCHIV04 + table1.relapseFemalePulmonaryBCHIV04 }</td>
 					<td>${table1.newMalePulmonaryBCHIV0514 + table1.relapseMalePulmonaryBCHIV0514 }</td>
@@ -1059,7 +1059,7 @@ response.setDateHeader ("Expires", -1);
 					                   
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.pulmonaryCD" /> </td>
+					<td><spring:message code="mdrtb.tb07.pulmonaryCD" /> </td>
 					<td>${table1.newMalePulmonaryCD04 + table1.relapseMalePulmonaryCD04 }</td>
 					<td>${table1.newFemalePulmonaryCD04 + table1.relapseFemalePulmonaryCD04 }</td>
 					<td>${table1.newMalePulmonaryCD0514 + table1.relapseMalePulmonaryCD0514 }</td>
@@ -1086,7 +1086,7 @@ response.setDateHeader ("Expires", -1);
 					
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.newMalePulmonaryCDHIV04 + table1.relapseMalePulmonaryCDHIV04 }</td>
 					<td>${table1.newFemalePulmonaryCDHIV04 + table1.relapseFemalePulmonaryCDHIV04 }</td>
 					<td>${table1.newMalePulmonaryCDHIV0514 + table1.relapseMalePulmonaryCDHIV0514 }</td>
@@ -1112,7 +1112,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newPulmonaryCDHIV + table1.relapsePulmonaryCDHIV }
 				</tr>
 				<tr>
-					<td><spring:message code="dotsreports.tb07.eptb" /></td>
+					<td><spring:message code="mdrtb.tb07.eptb" /></td>
 					<td>${table1.newMaleExtrapulmonary04 + table1.relapseMaleExtrapulmonary04 }</td>
 					<td>${table1.newFemaleExtrapulmonary04 + table1.relapseFemaleExtrapulmonary04 }</td>
 					<td>${table1.newMaleExtrapulmonary0514 + table1.relapseMaleExtrapulmonary0514 }</td>
@@ -1139,7 +1139,7 @@ response.setDateHeader ("Expires", -1);
 					
 				</tr>
 				<tr bgcolor="yellow">
-					<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 					<td>${table1.newMaleExtrapulmonaryHIV04 + table1.relapseMaleExtrapulmonaryHIV04 }</td>
 					<td>${table1.newFemaleExtrapulmonaryHIV04 + table1.relapseFemaleExtrapulmonaryHIV04 }</td>
 					<td>${table1.newMaleExtrapulmonaryHIV0514 + table1.relapseMaleExtrapulmonaryHIV0514 }</td>
@@ -1165,7 +1165,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newExtrapulmonaryHIV + table1.relapseExtrapulmonaryHIV }
 				</tr>
 				<tr>
-					<td colspan="2" align="left"><spring:message code="dotsreports.tb07.total"/></td>
+					<td colspan="2" align="left"><spring:message code="mdrtb.tb07.total"/></td>
 
 					<td>${table1.newMale04 + table1.relapseMale04 }</td>
 					<td>${table1.newFemale04 + table1.relapseFemale04 }</td>
@@ -1192,7 +1192,7 @@ response.setDateHeader ("Expires", -1);
 					<td>${table1.newAll + table1.relapseAll }</td>
 				</tr>
 				<tr bgcolor="yellow">
-					<td colspan="2"><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+					<td colspan="2"><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 
 					<td>${table1.newMaleHIV04 + table1.relapseMaleHIV04 }</td>
 					<td>${table1.newFemaleHIV04 + table1.relapseFemaleHIV04 }</td>
@@ -1226,41 +1226,41 @@ response.setDateHeader ("Expires", -1);
 		
 
 
-<h5><spring:message code="dotsreports.tb07.table2.title" /></h5>
+<h5><spring:message code="mdrtb.tb07.table2.title" /></h5>
 <table style="width: 900px;" border="1">
 <tbody>
 <tr>
 <td>&nbsp;</td>
-<td style="text-align: center;" colspan="3"><spring:message code="dotsreports.tb07.afterFailure"/></td>
-<td style="text-align: center;" colspan="3"><spring:message code="dotsreports.tb07.afterDefault"/></td>
+<td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07.afterFailure"/></td>
+<td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07.afterDefault"/></td>
 <td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07.others"/></td>
-<td style="text-align: center;" colspan="3"><spring:message code="dotsreports.tb07.total"/></td>
+<td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07.total"/></td>
 <td colspan="3">
-<p style="text-align: center;"><spring:message code="dotsreports.tb07.total"/></p>
-<p style="text-align: center;"><spring:message code="dotsreports.tb07.t1t2"/>)</p>
+<p style="text-align: center;"><spring:message code="mdrtb.tb07.total"/></p>
+<p style="text-align: center;"><spring:message code="mdrtb.tb07.t1t2"/>)</p>
 </td>
 </tr>
 <tr>
 <td>&nbsp;</td>
-<td align="center"><spring:message code="dotsreports.tb07.maleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.total"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.maleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.total"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.maleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.total"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.maleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.total"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.maleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.femaleShort"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.total"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.total"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.total"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.total"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.total"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.total"/></td>
 </tr>
 <tr>
 <td>
-<p><spring:message code="dotsreports.tb07.pulmonaryBC" /></p>
+<p><spring:message code="mdrtb.tb07.pulmonaryBC" /></p>
 </td>
 <td>${table1.failureMalePulmonaryBC}</td>
 <td>${table1.failureFemalePulmonaryBC}</td>
@@ -1280,7 +1280,7 @@ response.setDateHeader ("Expires", -1);
                       
 </tr>
 <tr bgcolor="yellow">
-<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 <td>${table1.failureMalePulmonaryBCHIV}</td>
 <td>${table1.failureFemalePulmonaryBCHIV}</td>
 <td>${table1.failurePulmonaryBCHIV}</td>
@@ -1298,7 +1298,7 @@ response.setDateHeader ("Expires", -1);
 <td>${table1.totalPulmonaryBCHIV}</td>
 </tr>
 <tr>
-<td><spring:message code="dotsreports.tb07.pulmonaryCD" /> </td>
+<td><spring:message code="mdrtb.tb07.pulmonaryCD" /> </td>
 <td>${table1.failureMalePulmonaryCD}</td>
 <td>${table1.failureFemalePulmonaryCD}</td>
 <td>${table1.failurePulmonaryCD}</td>
@@ -1316,7 +1316,7 @@ response.setDateHeader ("Expires", -1);
 <td>${table1.totalPulmonaryCD}</td>
 </tr>
 <tr bgcolor="yellow">
-<td><spring:message code="dotsreports.tb07.ofTheseHIV" />&nbsp;</td>
+<td><spring:message code="mdrtb.tb07.ofTheseHIV" />&nbsp;</td>
 <td>${table1.failureMalePulmonaryCDHIV}</td>
 <td>${table1.failureFemalePulmonaryCDHIV}</td>
 <td>${table1.failurePulmonaryCDHIV}</td>
@@ -1334,7 +1334,7 @@ response.setDateHeader ("Expires", -1);
 <td>${table1.totalPulmonaryCDHIV}</td>
 </tr>
 <tr>
-<td><spring:message code="dotsreports.tb07.eptb" /></td>
+<td><spring:message code="mdrtb.tb07.eptb" /></td>
 <td>${table1.failureMaleExtrapulmonary}</td>
 <td>${table1.failureFemaleExtrapulmonary}</td>
 <td>${table1.failureExtrapulmonary}</td>
@@ -1352,7 +1352,7 @@ response.setDateHeader ("Expires", -1);
 <td>${table1.totalExtrapulmonary}</td>
 </tr>
 <tr bgcolor="yellow">
-<td><spring:message code="dotsreports.tb07.ofTheseHIV" /></td>
+<td><spring:message code="mdrtb.tb07.ofTheseHIV" /></td>
 <td>${table1.failureMaleExtrapulmonaryHIV}</td>
 <td>${table1.failureFemaleExtrapulmonaryHIV}</td>
 <td>${table1.failureExtrapulmonaryHIV}</td>
@@ -1369,7 +1369,7 @@ response.setDateHeader ("Expires", -1);
 <td>${table1.totalFemaleExtrapulmonaryHIV}</td>
 <td>${table1.totalExtrapulmonaryHIV}</td>
 <tr>
-<td style="margin-left: 30px; text-align: center;"><strong><spring:message code="dotsreports.tb07.total"/></strong></td>
+<td style="margin-left: 30px; text-align: center;"><strong><spring:message code="mdrtb.tb07.total"/></strong></td>
 <td>${table1.failureMale}</td>
 <td>${table1.failureFemale}</td>
 <td>${table1.failureAll}</td>
@@ -1388,7 +1388,7 @@ response.setDateHeader ("Expires", -1);
 </tr>
 
 <tr bgcolor="yellow">
-<td style="text-align: center;"><strong><spring:message code="dotsreports.tb07.ofTheseHIV" /></strong></td>
+<td style="text-align: center;"><strong><spring:message code="mdrtb.tb07.ofTheseHIV" /></strong></td>
 <td>${table1.failureMaleHIV}</td>
 <td>${table1.failureFemaleHIV}</td>
 <td>${table1.failureAllHIV}</td>
@@ -1413,14 +1413,14 @@ response.setDateHeader ("Expires", -1);
 </table>
 
 <br/><br/>
-<h5><spring:message code="dotsreports.tb07.table3.title" /></h5>
+<h5><spring:message code="mdrtb.tb07.table3.title" /></h5>
 <table style="width: 900px;" border="1">
 <tbody>	
 <tr>
-<td align="center"><spring:message code="dotsreports.tb07.testedForHIV"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.confirmedHIV"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.artStarted"/></td>
-<td align="center"><spring:message code="dotsreports.tb07.ptcStarted"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.testedForHIV"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.confirmedHIV"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.artStarted"/></td>
+<td align="center"><spring:message code="mdrtb.tb07.ptcStarted"/></td>
 </tr>
 <tr>
 <td align="center">${table1.hivTested }</td>
@@ -1433,10 +1433,10 @@ response.setDateHeader ("Expires", -1);
 
 </div>
 		
-		<input type="button" onclick="tableToExcel('tb07', 'TB07')" value="<spring:message code='dotsreports.exportToExcelBtn' />" />
-		<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='dotsreports.exportToPdfBtn' />" /> -->
+		<input type="button" onclick="tableToExcel('tb07', 'TB07')" value="<spring:message code='mdrtb.exportToExcelBtn' />" />
+		<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='mdrtb.exportToPdfBtn' />" /> -->
 		<openmrs:hasPrivilege privilege="Manage Report Closing">
-		<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='dotsreports.closeReportBtn' />" />
+		<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='mdrtb.closeReportBtn' />" />
 		</openmrs:hasPrivilege>
 		<input type="button" id="back" name="back" value="<spring:message code='mdrtb.back' />" onclick="document.location.href='${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form';" />
 		<input type="button" onclick="printForm()" value="<spring:message code='mdrtb.print' />" />

@@ -153,7 +153,7 @@ function savePdf(action, reportName, formPath) {
 }
 $(document).ready(function(){
 	$("#tableToSql").bind("click", function() {
-		if(confirm('<spring:message code="dotsreports.closeReportMessage" />') ) {
+		if(confirm('<spring:message code="mdrtb.closeReportMessage" />') ) {
 			savePdf("closeReport.form", "form89", "form89results");
 		}
 	});
@@ -297,7 +297,7 @@ $(document).ready(function(){
 		 <th class="normal" rowspan="2"><spring:message code="mdrtb.form89.dateOfDecaySurvey"/></th>
 		 <th class="normal" rowspan="2"><spring:message code="mdrtb.form89.complication"/></th>
 		 <th class="normal" rowspan="1" colspan="4"><spring:message code="mdrtb.smear"/></th>
-		 <th class="normal" rowspan="1" colspan="4"><spring:message code="dotsreports.tb03.genexpert"/></th>
+		 <th class="normal" rowspan="1" colspan="4"><spring:message code="mdrtb.tb03.genexpert"/></th>
 		 <th class="normal" rowspan="1" colspan="6"><spring:message code="mdrtb.hain"/></th>
 		 <th class="normal" rowspan="1" colspan="6"><spring:message code="mdrtb.hain2"/></th>
 		 <th class="normal" rowspan="1" colspan="10"><spring:message code="mdrtb.form89.comorbidities"/></th>
@@ -313,26 +313,26 @@ $(document).ready(function(){
 	   	 <th class="normal" rowspan="1"><spring:message code="mdrtb.result"/></th>
 		 <th class="normal" rowspan="1"><spring:message code="mdrtb.date"/></th>
 		 <th class="normal" rowspan="1"><spring:message code="mdrtb.lab"/></th>
-		 <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.testNumber"/></th>
+		 <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.testNumber"/></th>
 		 
-	   	 <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.xpertResult"/></th>
+	   	 <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.xpertResult"/></th>
 		 <th class="normal" rowspan="1"><spring:message code="mdrtb.date"/></th>
 		 <th class="normal" rowspan="1"><spring:message code="mdrtb.lab"/></th>
-		 <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.testNumber"/></th>
+		 <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.testNumber"/></th>
 		 
-		  <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.hainCultureResult"/></th>
-		  <th rowspan="1"><spring:message code="dotsreports.tb03.hResult"/></th>
-	   	  <th rowspan="1"><spring:message code="dotsreports.tb03.rResult"/></th>
+		  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
+		  <th rowspan="1"><spring:message code="mdrtb.tb03.hResult"/></th>
+	   	  <th rowspan="1"><spring:message code="mdrtb.tb03.rResult"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.date"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.lab"/></th>
-		  <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.testNumber"/></th>
+		  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.testNumber"/></th>
 		  
-		  <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.hainCultureResult"/></th>
+		  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.iResult"/></th>
 	   	  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.fResult"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.date"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.lab"/></th>
-		  <th class="normal" rowspan="1"><spring:message code="dotsreports.tb03.testNumber"/></th>
+		  <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.testNumber"/></th>
 		  
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.form89.diabetes"/></th>
 		  <th class="normal" rowspan="1"><spring:message code="mdrtb.form89.cnsdl"/></th>
@@ -432,7 +432,7 @@ $(document).ready(function(){
 
 	<c:if test="${locale == 'tj' }"></font></c:if>
 </div>
-<input type="button" onclick="tableToExcel('tb03', 'TB03')" value="<spring:message code='dotsreports.exportToExcelBtn' />" />
+<input type="button" onclick="tableToExcel('tb03', 'TB03')" value="<spring:message code='mdrtb.exportToExcelBtn' />" />
 
 <input type="button" id="back" name="back" value="<spring:message code='mdrtb.back' />" onclick="document.location.href='${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form';" />
 <input type="button" onclick="printForm()" value="<spring:message code='mdrtb.print' />" />

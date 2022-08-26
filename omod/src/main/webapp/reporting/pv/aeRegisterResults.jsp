@@ -167,7 +167,7 @@ response.setDateHeader ("Expires", -1);
 			}
 			$(document).ready(function(){
 				$("#tableToSql").bind("click", function() {
-					if(confirm('<spring:message code="dotsreports.closeReportMessage" />') ) {
+					if(confirm('<spring:message code="mdrtb.closeReportMessage" />') ) {
 						savePdf("closeReport.form", "AE", "aeResults");
 					}
 				});
@@ -195,10 +195,10 @@ response.setDateHeader ("Expires", -1);
 <table width="100%" border="1">
 <tr>
 <td>
-<spring:message code="dotsreports.tb07.nameOfFacility"/>: <u>${fName}</u><br/>
-<spring:message code="dotsreports.tb07.regionCityDistrict"/>: <u> ${oName}/${dName} </u><br/>
-<spring:message code="dotsreports.tb07.tbCoordinatorName"/>: ___________________ </br>
-<spring:message code="dotsreports.tb07.signature"/>: _________________
+<spring:message code="mdrtb.tb07.nameOfFacility"/>: <u>${fName}</u><br/>
+<spring:message code="mdrtb.tb07.regionCityDistrict"/>: <u> ${oName}/${dName} </u><br/>
+<spring:message code="mdrtb.tb07.tbCoordinatorName"/>: ___________________ </br>
+<spring:message code="mdrtb.tb07.signature"/>: _________________
 </td>
 
 <td>
@@ -315,10 +315,10 @@ response.setDateHeader ("Expires", -1);
 
 </div>
 		
-		<input type="button" onclick="tableToExcel('ae', 'AE')" value="<spring:message code='dotsreports.exportToExcelBtn' />" />
-		<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='dotsreports.exportToPdfBtn' />" /> -->
+		<input type="button" onclick="tableToExcel('ae', 'AE')" value="<spring:message code='mdrtb.exportToExcelBtn' />" />
+		<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='mdrtb.exportToPdfBtn' />" /> -->
 		<openmrs:hasPrivilege privilege="Manage Report Closing">
-		<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='dotsreports.closeReportBtn' />" />
+		<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='mdrtb.closeReportBtn' />" />
 		</openmrs:hasPrivilege>
 		<input type="button" id="back" name="back" value="<spring:message code='mdrtb.back' />" onclick="document.location.href='${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form';" />
 		<input type="button" onclick="printForm()" value="<spring:message code='mdrtb.print' />" />

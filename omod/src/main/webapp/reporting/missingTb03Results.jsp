@@ -12,7 +12,7 @@
 function printForm() {
 	var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-    mywindow.document.write('<html><head><title><spring:message code="dotsreports.dq.missingTb03" text="dq"/></title>');
+    mywindow.document.write('<html><head><title><spring:message code="mdrtb.dq.missingTb03" text="dq"/></title>');
     mywindow.document.write('</head><body >');
    // mywindow.document.write('<h1><spring:message code="mdrtb.pv.aeForm" text="AE"/></h1>');
     mywindow.document.write(document.getElementById("dq").innerHTML);
@@ -146,7 +146,7 @@ function savePdf(action, reportName, formPath) {
 }
 $(document).ready(function(){
 	$("#tableToSql").bind("click", function() {
-		if(confirm('<spring:message code="dotsreports.closeReportMessage" />') ) {
+		if(confirm('<spring:message code="mdrtb.closeReportMessage" />') ) {
 			savePdf("closeReport.form", "DOTSDQ", "dqResults");
 		}
 	});
@@ -261,7 +261,7 @@ $(document).ready(function(){
 
 	<table class="resultsTable">
 	   	<tr>
-	   		<th class=normal colspan="4"><spring:message code="dotsreports.dq.missingtb03" /></th>
+	   		<th class=normal colspan="4"><spring:message code="mdrtb.dq.missingtb03" /></th>
 	  	</tr>
 		<tr>
 			<th colspan="2"><spring:message code="mdrtb.oblast" /></td>
@@ -276,38 +276,38 @@ $(document).ready(function(){
 			<td colspan="2">${fName}</td>
 		</tr>
 	  	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.year" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.year" /></td>
 	     	<td  colspan="2" align="right">${year}</td>
 	  	</tr>
 	  	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.quarter" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.quarter" /></td>
 	     	<td align="right"  colspan="2">${quarter}</td>
 	  	</tr>
 	   	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.month" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.month" /></td>
 	     	<td align="right"  colspan="2">${month}</td>
 	  	</tr>
 	  	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.dq.numberOfPatients" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.dq.numberOfPatients" /></td>
 	     	<td align="right"  colspan="2">${num}</td>
 	  	</tr>
 	  	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.dq.numberWithErrors" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.dq.numberWithErrors" /></td>
 	     	<td align="right"  colspan="2">${errorCount}</td>
 	  	</tr>
 	  	<tr>
-	     	<th colspan="2"><spring:message code="dotsreports.dq.errorPercentage" /></td>
+	     	<th colspan="2"><spring:message code="mdrtb.dq.errorPercentage" /></td>
 	     	<td align="right"  colspan="2">${errorPercentage}</td>
 	  	</tr>
 	  	<tr><td colspan="4">&nbsp;</td></tr>
 	    <tr><td colspan="4">&nbsp;</td></tr>
 	  	<tr>
-	   		<th class=normal colspan="4"><spring:message code="dotsreports.dq.missingtb03" /></th>
+	   		<th class=normal colspan="4"><spring:message code="mdrtb.dq.missingtb03" /></th>
 	  	</tr>
 	  	<tr>
-	     	<td colspan="2"><spring:message code="dotsreports.dq.fullName" /></td>
-	     	<td><spring:message code="dotsreports.dq.dob" /></td>
-	     	<td align="center"><spring:message code="dotsreports.dq.gender" /></td>
+	     	<td colspan="2"><spring:message code="mdrtb.dq.fullName" /></td>
+	     	<td><spring:message code="mdrtb.dq.dob" /></td>
+	     	<td align="center"><spring:message code="mdrtb.dq.gender" /></td>
 	  	</tr>
 	  	<c:forEach var="row" items="${missingTB03}">
 	    	<tr>
@@ -324,10 +324,10 @@ $(document).ready(function(){
 
 <c:if test="${locale == 'tj' }"></font></c:if>
 
-<input type="button" onclick="tableToExcel('dq', 'missingTB03')" value="<spring:message code='dotsreports.exportToExcelBtn' />" />
-<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='dotsreports.exportToPdfBtn' />" /> -->
+<input type="button" onclick="tableToExcel('dq', 'missingTB03')" value="<spring:message code='mdrtb.exportToExcelBtn' />" />
+<!-- <input type="button" id="tableToPdf" name="tableToPdf" value="<spring:message code='mdrtb.exportToPdfBtn' />" /> -->
 <%-- <openmrs:hasPrivilege privilege="Manage Report Closing">
-<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='dotsreports.closeReportBtn' />" />
+<input type="button" id="tableToSql" name="tableToSql" value="<spring:message code='mdrtb.closeReportBtn' />" />
 </openmrs:hasPrivilege> --%>
 <input type="button" id="back" name="back" value="<spring:message code='mdrtb.back' />" onclick="document.location.href='${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form';" />
 	<input type="button" onclick="printForm()" value="<spring:message code='mdrtb.print' />" />

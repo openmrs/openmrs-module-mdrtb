@@ -147,9 +147,9 @@
 					<a href="../mdrtb/reporting/viewClosedReports.form?type=DOTSTB"><spring:message code="mdrtb.viewClosedReports" /></a><br/>
 					<!-- <a href="drugforecast/simpleUsage.list"><spring:message code="mdrtb.simpleDrugUsage"/></a><br/>
 					<a href="drugforecast/patientsTakingDrugs.list"><spring:message code="mdrtb.numberofpatientstakingeachdrug" /></a><br/> -->
-					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.dotsreports.reporting.data.DOTS07TJKUpdatedTB03"><spring:message code="mdrtb.dotsreport07" /></a><br/> -->
+					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.mdrtb.reporting.data.DOTS07TJKUpdatedTB03"><spring:message code="mdrtb.dotsreport07" /></a><br/> -->
 					<a href="../mdrtb/reporting/tb07.form"><spring:message code="mdrtb.dotsreport07" /></a><br/>
-					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.dotsreports.reporting.data.DOTS08TJKUpdatedTB03"><spring:message code="mdrtb.dotsreport08" /></a><br/> -->
+					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.mdrtb.reporting.data.DOTS08TJKUpdatedTB03"><spring:message code="mdrtb.dotsreport08" /></a><br/> -->
 					<a href="../mdrtb/reporting/tb08.form"><spring:message code="mdrtb.dotsreport08" /></a><br/>
 					<a href="../mdrtb/reporting/tb03.form"><spring:message code="mdrtb.tb03Export" /></a><br/>
 					<a href="../mdrtb/reporting/tb03Single.form"><spring:message code="mdrtb.tb03ExportSingleLine" /></a><br/>
@@ -202,7 +202,7 @@
 					<a href="../mdrtb/reporting/form8.form"><spring:message code="mdrtb.form8.title" /></a><br/>
 					<a href="../mdrtb/reporting/pv/ae.form"><spring:message code="mdrtb.pv.qtrReportTitle" /></a><br/>
 					<a href="../mdrtb/reporting/pv/aeRegister.form"><spring:message code="mdrtb.pv.register.title" /></a><br/>
-					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.dotsreports.reporting.data.DOTSMDRReport"><spring:message code="mdrtb.dotsmdrreport" /></a><br/> -->
+					<!-- <a href="../dotsreports/reporting/reports.form?type=org.openmrs.module.mdrtb.reporting.data.DOTSMDRReport"><spring:message code="mdrtb.dotsmdrreport" /></a><br/> -->
 				</td></tr>
 			
 				

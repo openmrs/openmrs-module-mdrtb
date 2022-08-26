@@ -56,7 +56,7 @@ ${report}
 
 <br/>
 </div>
-<input type="button" onclick="tableToExcel('list', 'list')" value="<spring:message code='dotsreports.exportToExcelBtn' />" />
+<input type="button" onclick="tableToExcel('list', 'list')" value="<spring:message code='mdrtb.exportToExcelBtn' />" />
 <input type="button" onclick="printForm()" value="<spring:message code='mdrtb.print' />" />
 <br><br>
 <a href="${pageContext.request.contextPath}/module/mdrtb/reporting/patientLists.form"><spring:message code="mdrtb.back" text="Back"/></a><br/><br/>
