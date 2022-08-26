@@ -16,6 +16,7 @@
 	
 	<require_modules>
 		<require_module version="0.7">org.openmrs.module.reporting</require_module>
+		<require_module version="2.1">org.openmrs.module.addresshierarchy</require_module>
 	</require_modules>
 		
 	<extension>

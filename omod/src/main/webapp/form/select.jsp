@@ -1,6 +1,9 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
@@ -25,9 +28,9 @@
 <br/>
 <table>
 <tr><td>
-<a href="${pageContext.request.contextPath}/module/mdrtb/form/${formType eq 'intake' ? 'intake' : 'followup'}.form?patientId=${patientId}&patientProgramId=${patientProgramId}&returnUrl=${returnUrl}&encounterId=-1">
+<!-- <a href="${pageContext.request.contextPath}/module/mdrtb/form/${formType eq 'intake' ? 'intake' : 'followup'}.form?patientId=${patientId}&patientProgramId=${patientProgramId}&returnUrl=${returnUrl}&encounterId=-1">
 <spring:message code="mdrtb.basicForm" text="Basic Form"/>
-</a>
+</a> -->
 </td></tr>
 <c:forEach var="form" items="${forms}">
 <tr><td>

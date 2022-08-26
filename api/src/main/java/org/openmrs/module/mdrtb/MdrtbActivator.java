@@ -31,29 +31,34 @@ import org.openmrs.api.context.Context;
 import org.openmrs.layout.web.address.AddressSupport;
 import org.openmrs.layout.web.address.AddressTemplate;
 import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.ModuleActivator;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class MdrtbActivator implements Activator, Runnable {
+public class MdrtbActivator extends BaseModuleActivator implements ModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
-	public void shutdown() {
-		log.info("Shutting down MDR-TB module.");
-		unregisterAddressTemplates();
-	}
-	
-	public void startup() {
+	@Override
+	public void started() {
 		log.info("Starting up MDR-TB module.");
 		configureGlobalProperties();
 		registerAddressTemplates();
 		performCustomMigrations();
 	}
-	
-	public void run() {
-		// TODO Auto-generated method stub  
+
+	@Override
+	public void stopped() {
+		log.info("Shutting down MDR-TB module.");
+		unregisterAddressTemplates();
 	}
+
+	@Override
+    public void contextRefreshed() {
+        // initialize the caches on module startup
+    }
 	
 	/**
 	 * Sets up the Default Address Template

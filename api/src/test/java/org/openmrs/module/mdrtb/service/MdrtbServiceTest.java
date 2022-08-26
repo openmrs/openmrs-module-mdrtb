@@ -3,42 +3,26 @@
  */
 package org.openmrs.module.mdrtb.service;
 
-import static org.hamcrest.CoreMatchers.any;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import java.util.Date;
-import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.LocalDate;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
-import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
-import org.openmrs.Program;
 import org.openmrs.api.context.Context;
-import org.openmrs.api.db.ProgramWorkflowDAO;
-import org.openmrs.api.db.hibernate.HibernateConceptDAO;
-import org.openmrs.api.db.hibernate.HibernateEncounterDAO;
-import org.openmrs.api.db.hibernate.HibernateObsDAO;
-import org.openmrs.api.db.hibernate.HibernateOrderDAO;
+import org.openmrs.module.mdrtb.Country;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
+import org.openmrs.module.mdrtb.specimen.Specimen;
+import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author owais.hussain@esquaredsystems.com
@@ -46,49 +30,35 @@ import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
  */
 public class MdrtbServiceTest extends MdrtbBase {
 
-	@InjectMocks
-	MdrtbServiceImpl service = new MdrtbServiceImpl();
-
-	@Mock
-	HibernateMdrtbDAO dao;
-
-	@Mock
-	HibernateConceptDAO conceptDao;
-
-	@Mock
-	HibernateOrderDAO orderDao;
-
-	@Mock
-	HibernateEncounterDAO encounterDao;
-
-	@Mock
-	HibernateObsDAO obsDao;
+	@Autowired
+	MdrtbService service;
 	
-	@Mock
-	ProgramWorkflowDAO programWorkflowDao;
+	LocalDate startDate = new LocalDate(2022, 8, 1);
+	LocalDate endDate = new LocalDate(2022, 8, 31);
+	LocalDate now = new LocalDate();
 
 	@Before
 	public void runBeforeEachTest() throws Exception {
 		super.initTestData();
-		MockitoAnnotations.initMocks(this);
+		//MockitoAnnotations.initMocks(this);
+		now = new LocalDate();
 	}
 	
 	/**
 	 * Test whether the service has initiated
 	 */
 	@Test
-	public void setupMdrtbService() {
+	public void testMdrtbService() {
 		assertNotNull(service);
 	}
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#findMatchingConcept(java.lang.String)}.
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getConcept(java.lang.String)}.
 	 */
 	@Test
 	public final void testFindMatchingConceptWithExactString() {
-		when(conceptDao.getConceptsByMapping(anyString(), anyString(), anyBoolean())).thenReturn(Arrays.asList(mdrStartDateConcept));
-		Concept concept = service.findMatchingConcept("DATE OF MDR TREATMENT START");
+		Concept concept = service.getConcept("DATE OF MDR TREATMENT START");
 		assertNotNull(concept);
 	}
 
@@ -98,10 +68,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 */
 	@Test
 	public final void testGetAllMdrtbPatientProgramsInDateRange() {
-		Date now = new Date();
-		List<PatientProgram> patientPrograms = Arrays.asList(harryMdrProgram, harryDotsProgram);
-		when(programWorkflowDao.getPatientPrograms(harry, mdrtbProgram, now, now, now, now, false)).thenReturn(patientPrograms);
-		List<MdrtbPatientProgram> list = service.getAllMdrtbPatientProgramsEnrolledInDateRange(now, now);
+		List<MdrtbPatientProgram> list = service.getAllMdrtbPatientProgramsEnrolledInDateRange(startDate.toDate(), endDate.toDate());
 		assertTrue(list.contains(new MdrtbPatientProgram(harryMdrProgram)));
 	}
 
@@ -110,11 +77,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMdrtbPatientPrograms(org.openmrs.Patient)}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetMdrtbPatientPrograms() {
-		Date now = new Date();
-		List<PatientProgram> patientPrograms = Arrays.asList(harryMdrProgram);
-		when(programWorkflowDao.getPatientPrograms(harry, mdrtbProgram, now, now, now, now, false)).thenReturn(patientPrograms);
 		List<MdrtbPatientProgram> list = service.getMdrtbPatientPrograms(harry);
 		assertTrue(list.contains(new MdrtbPatientProgram(harryMdrProgram)));
 	}
@@ -124,10 +87,9 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMostRecentMdrtbPatientProgram(org.openmrs.Patient)}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetMostRecentMdrtbPatientProgram() {
 		MdrtbPatientProgram program = service.getMostRecentMdrtbPatientProgram(harry);
-		assertTrue(program.getId() == harry.getId());
+		assertTrue(program.getId() == new MdrtbPatientProgram(harryMdrProgram).getId());
 	}
 
 	/**
@@ -135,11 +97,8 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMdrtbPatientProgramsInDateRange(org.openmrs.Patient, java.util.Date, java.util.Date)}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetMdrtbPatientProgramsInDateRange() {
-		LocalDate start = new LocalDate(2022, 8, 1);
-		LocalDate end = new LocalDate(2022, 8, 31);
-		List<MdrtbPatientProgram> list = service.getMdrtbPatientProgramsInDateRange(harry, start.toDate(), end.toDate());
+		List<MdrtbPatientProgram> list = service.getMdrtbPatientProgramsInDateRange(harry, startDate.toDate(), endDate.toDate());
 		assertTrue(list.contains(new MdrtbPatientProgram(harryMdrProgram)));
 	}
 
@@ -150,7 +109,8 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testGetMdrtbPatientProgramOnDate() {
-		fail("Not yet implemented"); // TODO
+		MdrtbPatientProgram program = service.getMdrtbPatientProgramOnDate(harry, startDate.toDate());
+		assertTrue(program.equals(new MdrtbPatientProgram(harryMdrProgram)));
 	}
 
 	/**
@@ -158,9 +118,9 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMdrtbPatientProgram(java.lang.Integer)}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetMdrtbPatientProgram() {
-		fail("Not yet implemented"); // TODO
+		MdrtbPatientProgram program = service.getMdrtbPatientProgram(10001);
+		assertTrue(program.equals(new MdrtbPatientProgram(harryMdrProgram)));
 	}
 
 	/**
@@ -168,49 +128,9 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createSpecimen(org.openmrs.Patient)}.
 	 */
 	@Test
-	@Ignore
 	public final void testCreateSpecimen() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSpecimen(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSpecimenInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSpecimen(org.openmrs.Encounter)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSpecimenEncounter() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSpecimens(org.openmrs.Patient)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSpecimensPatient() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSpecimens(org.openmrs.Patient, java.util.Date, java.util.Date)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSpecimensPatientDateDate() {
-		fail("Not yet implemented"); // TODO
+		Specimen specimen = service.createSpecimen(harry);
+		assertNotNull(specimen);
 	}
 
 	/**
@@ -220,7 +140,8 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testGetSpecimensPatientDateDateLocation() {
-		fail("Not yet implemented"); // TODO
+		List<Specimen> list = service.getSpecimens(harry, startDate.toDate(), endDate.toDate(), hogwarts);
+		assertTrue(list.contains(new SpecimenImpl(harrySpecimenEncounter)));
 	}
 
 	/**
@@ -228,19 +149,22 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#saveSpecimen(org.openmrs.module.mdrtb.specimen.Specimen)}.
 	 */
 	@Test
-	@Ignore
 	public final void testSaveSpecimen() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#deleteSpecimen(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testDeleteSpecimen() {
-		fail("Not yet implemented"); // TODO
+		now = new LocalDate();
+		Encounter encounter = new Encounter();
+		encounter.setPatient(hermione);
+		encounter.setEncounterDatetime(now.toDate());
+		encounter.setEncounterType(specimen);
+		Specimen specimenEncounter = new SpecimenImpl(encounter);
+		service.saveSpecimen(specimenEncounter);
+		List<Encounter> list = Context.getEncounterService().getEncountersByPatient(hermione);
+		boolean exists = false;
+		for (Encounter e : list) {
+			if (e.getEncounterType().equals(specimen) && e.getEncounterDatetime().equals(now.toDate())) {
+				exists = true;
+			}
+		}
+		assertTrue(exists);
 	}
 
 	/**
@@ -249,187 +173,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 */
 	@Test
 	@Ignore
-	public final void testDeleteTest() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createSmear(org.openmrs.module.mdrtb.specimen.Specimen)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateSmearSpecimen() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createSmear(org.openmrs.module.mdrtb.specimen.Specimen, org.openmrs.module.mdrtb.specimen.Smear)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateSmearSpecimenSmear() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSmear(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSmearObs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSmear(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSmearInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#saveSmear(org.openmrs.module.mdrtb.specimen.Smear)}.
-	 */
-	@Test
-	@Ignore
-	public final void testSaveSmear() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createCulture(org.openmrs.module.mdrtb.specimen.Specimen)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateCultureSpecimen() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createCulture(org.openmrs.module.mdrtb.specimen.Specimen, org.openmrs.module.mdrtb.specimen.Culture)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateCultureSpecimenCulture() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getCulture(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetCultureObs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getCulture(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetCultureInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#saveCulture(org.openmrs.module.mdrtb.specimen.Culture)}.
-	 */
-	@Test
-	@Ignore
-	public final void testSaveCulture() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createDst(org.openmrs.module.mdrtb.specimen.Specimen)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateDstSpecimen() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createDst(org.openmrs.module.mdrtb.specimen.Specimen, org.openmrs.module.mdrtb.specimen.Dst)}.
-	 */
-	@Test
-	@Ignore
-	public final void testCreateDstSpecimenDst() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDst(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDstObs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDst(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDstInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#saveDst(org.openmrs.module.mdrtb.specimen.Dst)}.
-	 */
-	@Test
-	@Ignore
-	public final void testSaveDst() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#deleteDstResult(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testDeleteDstResult() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#saveScannedLabReport(org.openmrs.module.mdrtb.specimen.ScannedLabReport)}.
-	 */
-	@Test
-	@Ignore
-	public final void testSaveScannedLabReport() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#deleteScannedLabReport(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testDeleteScannedLabReport() {
+	public final void shouldNOTDeleteTest() {
 		fail("Not yet implemented"); // TODO
 	}
 
@@ -440,17 +184,20 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testProcessDeath() {
-		fail("Not yet implemented"); // TODO
-	}
+		Concept causeOfDeath = Context.getConceptService().getConcept(27);
+		service.processDeath(harry, now.toDate(), causeOfDeath);
+		MdrtbPatientProgram mdrtbPatientProgram = new MdrtbPatientProgram(Context.getProgramWorkflowService().getPatientProgram(harryMdrProgram.getId()));
 
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMdrtbProgram()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetMdrtbProgram() {
-		fail("Not yet implemented"); // TODO
+		// Test if patient is labeled as dead
+		Concept died = Context.getConceptService().getConcept(71);
+		assertEquals(died, mdrtbPatientProgram.getOutcome().getConcept());		
+		
+		// Test if the MdrTB program is deactivated
+		assertFalse(mdrtbPatientProgram.getActive());
+		
+		// TODO: Test if hospitalization status has changed
+		// Concept hospitalizationWorkflow = Context.getConceptService().getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW[0]);
+		// ProgramWorkflowState hospitalizationState = mdrtbPatientProgram.getCurrentHospitalizationState();
 	}
 
 	/**
@@ -465,232 +212,13 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleSmearResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleSmearResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleSmearMethods()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleSmearMethods() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleCultureResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleCultureResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleCultureMethods()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleCultureMethods() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleDstMethods()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleDstMethods() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleDstResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleDstResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleOrganismTypes()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleOrganismTypes() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleSpecimenTypes()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleSpecimenTypes() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleSpecimenAppearances()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleSpecimenAppearances() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleAnatomicalSites()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleAnatomicalSites() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDrugsInSet(java.lang.String[])}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDrugsInSetStringArray() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDrugsInSet(org.openmrs.Concept)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDrugsInSetConcept() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getMdrtbDrugs()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetMdrtbDrugs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getAntiretrovirals()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetAntiretrovirals() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleMdrtbProgramOutcomes()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleMdrtbProgramOutcomes() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleClassificationsAccordingToPreviousDrugUse()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleClassificationsAccordingToPreviousDrugUse() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleClassificationsAccordingToPreviousTreatment()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleClassificationsAccordingToPreviousTreatment() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getColorForConcept(org.openmrs.Concept)}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetColorForConcept() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#resetColorMapCache()}.
-	 */
-	@Test
-	@Ignore
-	public final void testResetColorMapCache() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getSpecimens(org.openmrs.Patient, java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetSpecimensPatientInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getTbProgram()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetTbProgram() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleTbProgramOutcomes()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleTbProgramOutcomes() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleClassificationsAccordingToPatientGroups()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleClassificationsAccordingToPatientGroups() {
-		fail("Not yet implemented"); // TODO
+		Concept contaminated = Context.getConceptService().getConcept(47);
+		String color = service.getColorForConcept(contaminated);
+		assertEquals(color, "lightgrey");
 	}
 
 	/**
@@ -1540,7 +1068,9 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testGetCountries() {
-		fail("Not yet implemented"); // TODO
+		List<Country> list = service.getCountries();
+		Country england = new Country("England", 1);
+		assertTrue(list.contains(england));
 	}
 
 	/**

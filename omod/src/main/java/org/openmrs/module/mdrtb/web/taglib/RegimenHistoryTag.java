@@ -81,7 +81,7 @@ public class RegimenHistoryTag extends TagSupport {
 	        Map<String, Concept> allDrugs = new TreeMap<String, Concept>();
 	        for (Regimen r : allRegimens) {
 	        	for (Concept c : r.getUniqueGenerics()) {
-	        		allDrugs.put(MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName(), c);
+	        		allDrugs.put(MdrtbUtil.getConceptName(c, Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED).getName(), c);
 	        	}
 	        }
 			

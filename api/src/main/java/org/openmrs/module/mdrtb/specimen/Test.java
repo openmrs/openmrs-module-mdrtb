@@ -2,6 +2,7 @@ package org.openmrs.module.mdrtb.specimen;
 
 import java.util.Date;
 
+import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
 
@@ -67,4 +68,8 @@ public interface Test extends Comparable<Test> {
     public void copyMembersFrom(Test source);
 
 	public String getRealSpecimenId();
+
+	public Concept getMethod();
+	public void setMethod(Concept method);
+	
 }

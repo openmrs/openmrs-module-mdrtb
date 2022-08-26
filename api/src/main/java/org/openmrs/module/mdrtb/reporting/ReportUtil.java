@@ -208,7 +208,26 @@ public class ReportUtil {
 		return null;
 	}
 
-	public static Map<String, Date> getPeriodDates(Integer year, Integer quarter, Integer month) {
+	// TODO: Accepting year, quarter and month as Objects is criminal. Must fix this
+	public static Map<String, Date> getPeriodDates(Object yearObj, Object quarterObj, Object monthObj) {
+		
+		Integer year, quarter, month;
+		
+		if (yearObj instanceof Integer) {
+			year = (Integer) yearObj;
+		} else {
+			year = Integer.parseInt(String.valueOf(yearObj));
+		}
+		if (quarterObj instanceof Integer) {
+			quarter = (Integer) quarterObj;
+		} else {
+			quarter = Integer.parseInt(String.valueOf(quarterObj));
+		}
+		if (monthObj instanceof Integer) {
+			month = (Integer) monthObj;
+		} else {
+			month = Integer.parseInt(String.valueOf(monthObj));
+		}
 
 		// Validate input and construct start and end months
 		int startMonth = 1;

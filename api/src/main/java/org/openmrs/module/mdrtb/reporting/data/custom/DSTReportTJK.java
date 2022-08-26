@@ -223,9 +223,9 @@ public class DSTReportTJK implements ReportSpecification {
 		CohortDefinition culturePositive = Cohorts.getAnyCulturePositiveDuring(startDate, endDate);
 		CohortDefinition confirmedMdrtb = Cohorts.getMdrDetectionFilter(startDate, endDate);
 		CohortDefinition dstResultExists = ReportUtil.getDstResultCohort(endDate);
-		CohortDefinition referredXpert = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.GENEXPERT[0]);
-		CohortDefinition referredHAIN = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.HAIN_TEST[0]);
-		CohortDefinition referredCulture = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.CULTURE_RESULT[0]);
+		CohortDefinition referredXpert = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.GENEXPERT);
+		CohortDefinition referredHAIN = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.HAIN_TEST);
+		CohortDefinition referredCulture = Cohorts.getPatientsReferredToTestFilter(null, endDate, MdrtbConcepts.CULTURE_RESULT);
 		
 		
 		CohortDefinition referredCultureOnly = ReportUtil.minus(referredCulture, culturePositive);

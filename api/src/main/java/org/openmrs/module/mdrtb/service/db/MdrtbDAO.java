@@ -8,6 +8,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.module.mdrtb.BaseLocation;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface MdrtbDAO {
 
@@ -41,4 +43,10 @@ public interface MdrtbDAO {
     public List<Encounter> getEncountersByEncounterTypes(List<String> encounterTypeNames, Date startDate, Date endDate, Date closeDate);
 	
 	public void evict(Object obj);
+
+	public List<BaseLocation> getLocationsByHierarchyLevel(Integer level);
+	
+	public BaseLocation getLocationParent(Integer childId);
+
+	public List<BaseLocation> getLocationsByParent(BaseLocation parent);
 }

@@ -229,7 +229,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		PatientState currentState = getCurrentPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW));
 		
 		// if the current state is hospitalized, we need to close it
-		if (currentState != null && currentState.getState() != null && currentState.getState().getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED))) {			
+		Concept hospitalized = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED);
+		if (currentState != null && currentState.getState() != null && currentState.getState().getConcept().equals(hospitalized)) {			
 			currentState.setEndDate(dischargeDate);
 		}
 	}
@@ -451,7 +452,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	 */
 	private MdrtbPatientProgram getPreviousProgram() {
 		
-		ListIterator<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient()).listIterator();
+		List<MdrtbPatientProgram> mdrtbPatientPrograms = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient());
+		ListIterator<MdrtbPatientProgram> programs = mdrtbPatientPrograms.listIterator();
 		
 		while (programs.hasNext()) {
 			if (programs.next().equals(this)) {

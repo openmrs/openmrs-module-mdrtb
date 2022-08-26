@@ -2,11 +2,11 @@
 //******************************
 // Adds a new drug entry row immediately before the sectionId element of a table
 //******************************
-function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, deleteButtonText, perDayText, perWeekText, suffix) {
+function addDrug(sectionId, drug, genericOptions, /*drugOptions,*/ unitOptions, deleteButtonText, perDayText, perWeekText, suffix) {
 	$hiddenOrderIndex = $j('<input type="hidden" name="newOrderKey"/>').val(suffix);
 	$hiddenOrderId = $j('<input type="hidden" name="orderId:' + suffix + '"/>').val(drug.orderId);
 	$genericSelector = $j('<select class="genericDrugInput" name="generic:' + suffix + '" onchange="limitDrug(this, \'drug'+suffix + '\');">' + genericOptions + '</select>').val(drug.generic);
-	$drugSelector = $j('<select id="drug' + suffix + '" name="drug:' + suffix + '">' + drugOptions + '</select>').val(drug.drugId);
+	//$drugSelector = $j('<select id="drug' + suffix + '" name="drug:' + suffix + '">' + drugOptions + '</select>').val(drug.drugId);
 	$doseSelector = $j('<input class="doseInput" type="text" size="6" name="dose:' + suffix + '"/>').val(drug.dose);
 	$unitSelector = $j('<select name="unit:' + suffix + '">' + unitOptions + '</select>').val(drug.units);
 	$daySelector = $j('<input type="text" size="5" name="perDay:' + suffix + '"/>');
@@ -22,7 +22,7 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, dele
 	$newRow.append($hiddenOrderIndex);
 	$newRow.append($hiddenOrderId);
 	$newRow.append($j('<td>').html($genericSelector));
-	$newRow.append($j('<td>').html($drugSelector));
+	//$newRow.append($j('<td>').html($drugSelector));
 	$newRow.append($j('<td>').html($doseSelector).append($unitSelector));
 	if (drug.frequency != null && drug.frequency != '') {
 		$newRow.append($j('<td>').html($frequencySelector));
@@ -44,7 +44,7 @@ function addDrug(sectionId, drug, genericOptions, drugOptions, unitOptions, dele
 	
 	// limit the drug selector for the valid drugs for that generic, and then set the default value
 	limitDrug($genericSelector, 'drug'+suffix);
-	$drugSelector.val(drug.drugId);
+	//$drugSelector.val(drug.drugId);
 }
 
 // Removes the element with the passed id from the DOM

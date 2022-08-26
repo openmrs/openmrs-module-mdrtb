@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>mdrtb</artifactId>
-		<version>3.0.5</version>
+		<version>3.1.0</version>
 	</parent>
 	<artifactId>mdrtb-api</artifactId>
 	<packaging>jar</packaging>
@@ -46,11 +46,10 @@
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>logic</artifactId>
-			<version>0.5</version>
+			<version>${openmrs.logic.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
   			<groupId>org.codehaus.groovy</groupId>
   			<artifactId>groovy</artifactId>
@@ -58,21 +57,14 @@
   			<type>jar</type>
   			<scope>test</scope>
 		</dependency>
+		<dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting</artifactId>
+            <version>${openmrs.reporting.version}</version>
+  			<type>jar</type>
+			<scope>provided</scope>
+        </dependency>
 		
-		<dependency>
-		 	<groupId>org.openmrs.module</groupId>
-		  	<artifactId>htmlwidgets</artifactId>
-		  	<version>1.6.0</version>
-		  	<type>jar</type>
-		  	<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>serialization.xstream-api</artifactId>
-			<version>0.2.10</version>
-		</dependency>
-
 	</dependencies>
 
 </project>

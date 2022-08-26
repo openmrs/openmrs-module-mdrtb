@@ -17,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -31,33 +32,51 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
  * @author owais.hussain@esquaredsystems.com
  */
 public class MdrtbBase extends BaseModuleContextSensitiveTest {
-
-	protected static final String DATA_XML = "MdrtbTestService-initialData.xml";
-
+	
+	protected static final String[] DATASETS = { "MdrtbTestService-initialData.xml", "concept.xml", "concept_answer.xml",
+	        "concept_class.xml", "concept_datatype.xml", "concept_description.xml", "concept_map_type.xml",
+	        "concept_name_tag_map.xml", "concept_name_tag.xml", "concept_name.xml", "concept_numeric.xml",
+	        "concept_reference_map.xml", "concept_reference_source.xml", "concept_reference_term.xml", "concept_set.xml",
+	        "concept_stop_word.xml" };
+	
 	protected Provider owais;
-
+	
 	protected Patient harry, hermione;
-
+	
 	protected PatientIdentifierType hogwartsIdType;
-
+	
 	protected Location hogwarts, diagonAlley, leakyCauldron;
-
+	
 	protected EncounterType owlExam;
-
+	
 	protected EncounterType transferIn;
-
+	
 	protected EncounterType transferOut;
 	
+	protected EncounterType specimen;
+	
 	protected Program mdrtbProgram;
+	
 	protected Program dotsProgram;
-
+	
 	protected Concept unknownConcept;
+	
 	protected Concept noConcept;
+	
 	protected Concept yesConcept;
+	
 	protected Concept mdrStartDateConcept;
 	
-	protected PatientProgram harryMdrProgram, harryDotsProgram;
-
+	protected PatientProgram harryMdrProgram;
+	
+	protected PatientProgram hermioneMdrProgram;
+	
+	protected PatientProgram harryDotsProgram;
+	
+	protected PatientProgram hermioneDotsProgram;
+	
+	protected Encounter harrySpecimenEncounter;
+	
 	/**
 	 * Initialize all data objects before each test
 	 * 
@@ -65,15 +84,18 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 	 */
 	public void initTestData() throws Exception {
 		initializeInMemoryDatabase();
-		executeDataSet(DATA_XML);
-
+		
+		for (String dataFile : DATASETS) {
+			executeDataSet(dataFile);
+		}
+		
 		owais = Context.getProviderService().getProvider(300);
-
+		
 		harry = Context.getPatientService().getPatient(1000);
 		hermione = Context.getPatientService().getPatient(2000);
-
+		
 		hogwartsIdType = Context.getPatientService().getPatientIdentifierType(5);
-
+		
 		hogwarts = Context.getLocationService().getLocation(101);
 		diagonAlley = Context.getLocationService().getLocation(102);
 		leakyCauldron = Context.getLocationService().getLocation(103);
@@ -81,6 +103,7 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 		owlExam = Context.getEncounterService().getEncounterType(91);
 		transferIn = Context.getEncounterService().getEncounterType(92);
 		transferOut = Context.getEncounterService().getEncounterType(93);
+		specimen = Context.getEncounterService().getEncounterType(94);
 		
 		mdrtbProgram = Context.getProgramWorkflowService().getProgram(1);
 		dotsProgram = Context.getProgramWorkflowService().getProgram(2);
@@ -92,8 +115,12 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 		
 		harryMdrProgram = Context.getProgramWorkflowService().getPatientProgram(10001);
 		harryDotsProgram = Context.getProgramWorkflowService().getPatientProgram(10002);
+		hermioneMdrProgram = Context.getProgramWorkflowService().getPatientProgram(10003);
+		hermioneDotsProgram = Context.getProgramWorkflowService().getPatientProgram(10004);
+		
+		harrySpecimenEncounter = Context.getEncounterService().getEncounter(100008);
 	}
-
+	
 	@Test
 	public void shouldInitiateTestData() throws Exception {
 		this.initTestData();

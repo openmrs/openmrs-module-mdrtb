@@ -25,9 +25,6 @@ public interface Dst extends Test {
 	 * 
 	 */
 	
-	public Concept getMethod();
-	public void setMethod(Concept method);
-	
 	public Boolean getDirect();
 	public void setDirect(Boolean direct);
 	

@@ -17,7 +17,8 @@
 					{
 						'orderId':'', 
 						'generic':'${mdrtb:getConcept(dc.generic).id}',
-						'drugId':'${mdrtb:getDrug(dc.drugId).id}',
+						//COMMENTED FOR TAJIKISTAN
+						//'drugId':'${mdrtb:getDrug(dc.drugId).id}',
 						'dose':'${dc.dose}',
 						'units':'${dc.units}',
 						'frequency':'${dc.frequency}',
@@ -31,7 +32,7 @@
 	</c:forEach>
 
 	var ${id}GenericOptions = '<option value=""></option><c:forEach items="${openmrs:sort(mdrtb:genericsInSet(history.type.drugSet), \'name.name\', false)}" var="c"><option value="${c.conceptId}">${c.name.name}</option></c:forEach>';
-	var ${id}DrugOptions = '<option class="unspecified" value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
+	//var ${id}DrugOptions = '<option class="unspecified" value=""><spring:message code="mdrtb.unspecified" text="Unspecified"/></option><c:forEach items="${mdrtb:drugsInSet(history.type.drugSet)}" var="d"><option class="drugConcept drugConcept${d.concept.conceptId}" value="${d.drugId}">${d.name}</option></c:forEach>';
 	var ${id}UnitOptions = '<option value=""></option><c:forEach items="${doseUnits}" var="u"><option value="${u}">${u}</option></c:forEach>';
 	var ${id}Index = 0;
 
@@ -40,12 +41,12 @@
 			var codeName = $j('#${id}standardRegimenSelector').val();
 			var regToAdd = ${id}StandardRegimens[codeName];
 			for (var i=0; i<regToAdd.drugComponents.length; i++) {
-				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++);
+				addDrug('${id}NewOrderMarker', regToAdd.drugComponents[i], ${id}GenericOptions, /*${id}DrugOptions,*/ ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++);
 			}
 			$j('#${id}standardRegimenSelector').val('');
 		});
 
-		$j('#${id}individualDrugSelector').append(${id}DrugOptions);
+		//$j('#${id}individualDrugSelector').append(${id}DrugOptions);
 		$j('#${id}individualGenericSelector').append(${id}GenericOptions).change(function() {
 			limitDrug(this, '${id}individualDrugSelector');
 		});
@@ -54,31 +55,31 @@
 			addDrug('${id}NewOrderMarker', {
 						'orderId':'', 
 						'generic':$j('#${id}individualGenericSelector').val(), 
-						'drugId':$j('#${id}individualDrugSelector').val(), 
+						//'drugId':$j('#${id}individualDrugSelector').val(), 
 						'dose':'', 
 						'units':'', 
 						'frequency':'', 
 						'instructions':'', 
 						'startDate':'<openmrs:formatDate date="${changeDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':''
-					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
+					}, ${id}GenericOptions, /*${id}DrugOptions,*/ ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
 			);
 			$j('#${id}individualGenericSelector').val('');
-			$j('#${id}individualDrugSelector').hide('');
+			//$j('#${id}individualDrugSelector').hide('');
 		});
 
 		<c:forEach items="${change.ordersStarted}" var="d" varStatus="orderStatus">
 			addDrug('${id}NewOrderMarker', {
 						'orderId':'${d.orderId}', 
 						'generic':'${d.concept.conceptId}', 
-						'drugId':'${d.drug.drugId}', 
+						//'drugId':'${d.drug.drugId}', 
 						'dose':'${d.dose}', 
 						'units':'${d.units}', 
 						'frequency':'${d.frequency}', 
 						'instructions':'${d.instructions}', 
 						'startDate':'<openmrs:formatDate date="${d.startDate}" format="${_dateFormatDisplay}"/>', 
 						'autoExpireDate':'<openmrs:formatDate date="${d.autoExpireDate}" format="dd/MM/yyyy"/>'
-					}, ${id}GenericOptions, ${id}DrugOptions, ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
+					}, ${id}GenericOptions, /*${id}DrugOptions,*/ ${id}UnitOptions, '${deleteText}', '${perDayText}', '${perWeekText}', ${id}Index++
 			);
 		</c:forEach>
 	});
@@ -145,7 +146,8 @@
 				<table>
 					<tr>
 						<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
+						<!-- COMMENTED FOR TAJIKISTAN -->
+						<!--  <th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th> -->
 						<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.action" text="Action"/></th>
@@ -156,7 +158,8 @@
 						<c:set var="isStopped" value="${mdrtb:collectionContains(change.ordersEnded, drugOrder)}"/>
 						<tr>
 							<td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.concept.name.name}</td>
-							<td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.drug.name}</td>						
+							<!-- COMMENTED FOR TAJIKISTAN -->
+							<!-- <td style="text-align:left; padding-left:10px; padding-right:10px; white-space:nowrap;">${drugOrder.drug.name}</td> -->						
 							<td class="cellStyle">
 								<c:if test="${!empty drugOrder.dose}">
 									${drugOrder.dose} ${drugOrder.units}
@@ -228,7 +231,8 @@
 		<table>
 			<tr>
 				<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
-				<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
+				<!-- COMMENTED FOR TAJIKISTAN -->
+				<!-- <th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th> -->
 				<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/>/<spring:message code="mdrtb.unit" text="Unit"/></th>
 				<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
 				<th class="headerStyle"><spring:message code="mdrtb.startDate" text="Start Date"/></th>
@@ -240,7 +244,7 @@
 	</div>
 	
 	<br/>
-	<c:if test="${!empty history.type.suggestions}">
+	<%-- COMMENTED FOR TAJIKISTAN <c:if test="${!empty history.type.suggestions}">
 		<spring:message code="mdrtb.startStandardRegimen" text="Start a standard regimen"/>:
 		<select id="${id}standardRegimenSelector" name="${id}standardRegimenSelector">
 			<option value=""></option>
@@ -250,7 +254,7 @@
 		</select>
 		<input type="button" id="${id}AddStandardRegimen" value="<spring:message code="mdrtb.add" text="Add"/>"/>
 		<br/><b> - <spring:message code="mdrtb.or" text="or"/> - </b><br/>
-	</c:if>
+	</c:if> --%>
 	<spring:message code="mdrtb.startIndividualDrugs" text="Start individual drugs"/>:
 	<select id="${id}individualGenericSelector" name="${id}individualGenericSelector"></select>
 	<select id="${id}individualDrugSelector" name="${id}individualDrugSelector" style="display:none;"></select>

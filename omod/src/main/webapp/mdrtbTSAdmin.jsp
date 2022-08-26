@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/template/header.jsp" %>
 <style><%@ include file="resources/mdrtb.css"%></style>
 <style><%@ include file="resources/date_input.css"%></style>
-
+<script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery-1.2.3.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dimensions.pack.js'></script>
 <script src='<%= request.getContextPath() %>/moduleResources/mdrtb/date_input.js'></script>
 <script type="text/javascript">

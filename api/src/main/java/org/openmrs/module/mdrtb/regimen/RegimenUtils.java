@@ -24,6 +24,8 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConceptMap;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.MessageUtil;
@@ -68,14 +70,14 @@ public class RegimenUtils {
 			if (drugSet.equals("*")) {
 				for (RegimenType t : RegimenUtils.getRegimenTypes()) {
 					if (!"*".equals(t.getDrugSet())) {
-						Concept c = getMdrtbService().findMatchingConcept(drugSet);
+						Concept c = getMdrtbService().getConcept(drugSet);
 						generics.removeAll(Context.getConceptService().getConceptsByConceptSet(c));
 					}
 				}
 			}
 		}
 		else {
-			Concept c = getMdrtbService().findMatchingConcept(drugSet);
+			Concept c = getMdrtbService().getConcept(drugSet);
 			generics = Context.getConceptService().getConceptsByConceptSet(c);
 		}
 		return generics;
@@ -140,7 +142,7 @@ public class RegimenUtils {
     	for (RegimenType type : RegimenUtils.getRegimenTypes()) {
     		List<Concept> concepts = null;
     		if (type.getDrugSet() != null) {
-    			concepts = getMdrtbService().getDrugsInSet(new String[] {type.getDrugSet()});
+    			concepts = getMdrtbService().getDrugsInSet(getMdrtbService().getConcept(type.getDrugSet()));
     		}
     		RegimenHistory history = new RegimenHistory(patient, type);
     		

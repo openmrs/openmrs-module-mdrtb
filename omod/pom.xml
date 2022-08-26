@@ -1,14 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>mdrtb</artifactId>
-		<version>3.0.5</version>
+		<version>3.1.0</version>
 	</parent>
 	<artifactId>mdrtb-omod</artifactId>
 	<packaging>jar</packaging>
 	<name>MDR TB OMOD</name>
 	<description>OpenMRS module project for MDR TB</description>
+
+	<properties>
+		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
+		<MODULE_NAME>${project.parent.name}</MODULE_NAME>
+		<MODULE_VERSION>${project.parent.version}</MODULE_VERSION>
+		<MODULE_PACKAGE>${project.parent.groupId}.${project.parent.artifactId}</MODULE_PACKAGE>
+		<modulePath>C:/Users/owais/AppData/Roaming/OpenMRS/modules</modulePath>
+		<deployPath>C:/apache-tomcat-6/webapps/openmrs</deployPath>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -16,7 +27,7 @@
 			<artifactId>mdrtb-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
@@ -42,38 +53,26 @@
 			<artifactId>openmrs-test</artifactId>
 			<type>pom</type>
 		</dependency>
-		
-		<!-- jars we need to provide for compile but that will be provided at runtime (scope=provided) -->
 
-		<dependency>
-		 	<groupId>org.openmrs.module</groupId>
-		  	<artifactId>htmlwidgets</artifactId>
-		  	<version>1.6.0</version>
-		  	<type>jar</type>
-		  	<scope>provided</scope>
-		</dependency>
-	
-		<!-- jars required only to run test scripts (scope=test) -->
-	
-		
-		<dependency>
-  			<groupId>org.codehaus.groovy</groupId>
-  			<artifactId>groovy</artifactId>
-  			<version>1.7.6</version>
-  			<type>jar</type>
-  			<scope>test</scope>
-		</dependency>
+		<!-- jars we need to provide for compile but that will be provided at runtime 
+			(scope=provided) -->
 
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
-			<artifactId>serialization.xstream-api</artifactId>
-			<version>0.2.10</version>
+			<artifactId>htmlwidgets</artifactId>
+			<version>${htmlwidgets.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.10.14</version>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting</artifactId>
+            <version>${openmrs.reporting.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -118,80 +117,98 @@
 				<artifactId>maven-openmrs-plugin</artifactId>
 				<extensions>true</extensions>
 				<executions>
- 	 	        	 <execution>
-                     		<id>init</id>
-                     		<phase>initialize</phase>
-                     		<goals>
-                             	<goal>initialize-module</goal>
-                     		</goals>
-             			</execution>
-             			<execution>
-                     		<id>pack</id>
-                     		<phase>package</phase>
-                     		<goals>
-                            	<goal>package-module</goal>
-                     		</goals>
-             			</execution>
-     			</executions>
+					<execution>
+						<id>init</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>initialize-module</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>pack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>package-module</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-		
-			<!-- manually configure tests so we exclude TestReportRenderer and the tests that require an in-memory database -->
-		      <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-surefire-plugin</artifactId>
-		        <version>2.9</version>
-		        <configuration>
-		          <excludes>
-		          	<exclude>**/WHOForm05Test.java</exclude>
-		          	<exclude>**/MOHReportTest.java</exclude>
-		          	<exclude>**/DstResultCohortDefinitionEvaluatorTest.java</exclude>
-		          	<exclude>**/MdrtbTreatmentStartedCohortDefinitionEvaluatorTest.java</exclude>
-		            <exclude>**/TestReportRenderer.java</exclude>
-		          </excludes>
-		        </configuration>
-		      </plugin>
-    </plugins>
-		
+
+			<!-- manually configure tests so we exclude TestReportRenderer and the 
+				tests that require an in-memory database -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<excludes>
+						<exclude>**/WHOForm05Test.java</exclude>
+						<exclude>**/MOHReportTest.java</exclude>
+						<exclude>**/DstResultCohortDefinitionEvaluatorTest.java</exclude>
+						<exclude>**/MdrtbTreatmentStartedCohortDefinitionEvaluatorTest.java</exclude>
+						<exclude>**/TestReportRenderer.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- Deploy to modules directory -->
+<!-- 			<plugin> -->
+<!-- 				<artifactId>maven-resources-plugin</artifactId> -->
+<!-- 				<version>3.1.0</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>copy-omod</id> -->
+<!-- 						<phase>install</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>copy-resources</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<resources> -->
+<!-- 								<resource> -->
+<!-- 									<directory>/target</directory> -->
+<!-- 									<includes> -->
+<!-- 										<include>*.omod</include> -->
+<!-- 									</includes> -->
+<!-- 								</resource> -->
+<!-- 							</resources> -->
+<!-- 							<outputDirectory>${modulePath}</outputDirectory> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
+		</plugins>
+
 	</build>
 
-	<properties>
-		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
-		<MODULE_NAME>${project.parent.name}</MODULE_NAME>
-		<MODULE_VERSION>${project.parent.version}</MODULE_VERSION>
-		<MODULE_PACKAGE>${project.parent.groupId}.${project.parent.artifactId}</MODULE_PACKAGE>
-	</properties>
-
-    <!-- profile for deploying to the ebe -->
-    <profiles>
-        <profile>
-            <id>deploy-web</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <tasks>
-                                        <copy todir="${deploy.path}/WEB-INF/view/module/${project.parent.artifactId}">
-                                            <fileset dir="src/main/webapp" includes="**/*" />
-                                        </copy>
-                                    </tasks>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-
-
+	<!-- profile for deploying to the server -->
+	<profiles>
+		<profile>
+			<id>deploy-web</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<copy
+											todir="${deployPath}/WEB-INF/view/module/${project.parent.artifactId}">
+											<fileset dir="src/main/webapp" includes="**/*" />
+										</copy>
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

@@ -14,6 +14,7 @@ import org.openmrs.Location;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.module.mdrtb.BaseLocation;
 import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -361,5 +362,22 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 
 	public void evict(Object obj) {
 		sessionFactory.getCurrentSession().evict(obj);
+	}
+
+	public BaseLocation getLocationParent(Integer childId) {
+		String query = "select parent_id from address_hierarchy_entry where address_hierarchy_entry_id=" + childId;
+		return (BaseLocation) sessionFactory.getCurrentSession().createSQLQuery(query).uniqueResult();
+	}
+
+	public List<BaseLocation> getLocationsByHierarchyLevel(Integer level) {
+		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where level_id=" + level;
+		List list = sessionFactory.getCurrentSession().createSQLQuery(query).list();
+		return list;
+	}
+
+	public List<BaseLocation> getLocationsByParent(BaseLocation parent) {
+		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where parent_id=" + parent.getId();
+		List list = sessionFactory.getCurrentSession().createSQLQuery(query).list();
+		return list;
 	}
 }

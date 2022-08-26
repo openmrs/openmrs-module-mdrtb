@@ -50,7 +50,6 @@ import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.springframework.transaction.annotation.Transactional;
 
 //TODO: A ton of documentation missing. Complete...
-@Transactional
 public interface MdrtbService extends OpenmrsService {
 
 	/**
@@ -61,20 +60,10 @@ public interface MdrtbService extends OpenmrsService {
 	public List<Location> getLocationsWithAnyProgramEnrollments();
 
 	/**
-	 * Fetches a concept specified by a MdrtbConcepts mapping
-	 */
-	public Concept getConcept(String... conceptMapping);
-
-	/**
-	 * Fetches a concept specified by a MdrtbConcepts mapping
-	 */
-	public Concept getConcept(String conceptMapping);
-
-	/**
 	 * @return the Concept specified by the passed lookup string. Checks
 	 *         MdrtbConcepts mapping, id, name, and uuid before returning null
 	 */
-	public Concept findMatchingConcept(String lookup);
+	public Concept getConcept(String lookup);
 
 	/**
 	 * Resets the concept map cache
@@ -418,12 +407,6 @@ public interface MdrtbService extends OpenmrsService {
 	public Collection<ConceptAnswer> getPossibleAnatomicalSites();
 
 	/**
-	 * @return all of the Drugs within the ConceptSets which match the
-	 *         conceptMapKeys
-	 */
-	public List<Concept> getDrugsInSet(String... conceptMapKey);
-
-	/**
 	 * @return all of the Drugs within the ConceptSet which match the conceptMapKeys
 	 */
 	public List<Concept> getDrugsInSet(Concept concept);
@@ -569,13 +552,11 @@ public interface MdrtbService extends OpenmrsService {
 
 	public List<Location> getLocationsFromOblastName(Oblast oblast);
 
-	// FOR LOCATIONS
 	public List<Facility> getFacilities();
 
 	public List<Facility> getRegFacilities();
 
-	/* public Location getLocation(Oblast o, District d, Facility f); */
-	public Location getLocation(Integer o, Integer d, Integer f);
+	public Location getLocation(Integer oblast, Integer district, Integer facility);
 
 	public List<Facility> getFacilities(int parentId);
 
@@ -593,9 +574,9 @@ public interface MdrtbService extends OpenmrsService {
 
 	public District getDistrict(String name);
 
-	List<District> getDistricts();
+	public List<District> getDistricts();
 
-	List<District> getRegDistricts();
+	public List<District> getRegDistricts();
 
 	public List<Location> getLocationsFromDistrictName(District district);
 
@@ -626,7 +607,7 @@ public interface MdrtbService extends OpenmrsService {
 	public Collection<ConceptAnswer> getPossibleResistanceTypes();
 
 	@Transactional(readOnly = true)
-	public Collection<ConceptAnswer> getPossibleConceptAnswers(String[] conceptQuestion);
+	public Collection<ConceptAnswer> getPossibleConceptAnswers(String conceptQuestion);
 
 	// ADDED BY ZOHAIB
 	public int countPDFRows();

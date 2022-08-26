@@ -1,9 +1,14 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${! empty patientId ? patientId : specimen.patient.patientId}" parameters="patientProgramId=${patientProgramId}"/>
@@ -63,7 +68,8 @@
 </td></tr>
 
 <tr><td colspan="2">
-<spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/>
+<!-- Replaced with tb03 for Tajikistan <spring:message code="mdrtb.previousTreatmentClassification" text="Registration Group - Previous Treatment"/>:<br/> -->
+<spring:message code="mdrtb.tb03.registrationGroup" text="Registration Group - Previous Treatment"/>:<br/>
 <select name="classificationAccordingToPreviousTreatment">
 <option value=""/>
 <c:forEach var="classificationAccordingToPreviousTreatment" items="${classificationsAccordingToPreviousTreatment}">

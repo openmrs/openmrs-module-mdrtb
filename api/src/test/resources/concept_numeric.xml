@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <concept_numeric concept_id="43" units="" precise="0"/>
+    <concept_numeric concept_id="103" units="" precise="0"/>
+    <concept_numeric concept_id="106" units="" precise="0"/>
+    <concept_numeric concept_id="111" units="" precise="0"/>
+    <concept_numeric concept_id="125" units="" precise="0"/>
+    <concept_numeric concept_id="133" units="" precise="0"/>
+    <concept_numeric concept_id="136" units="" precise="0"/>
+    <concept_numeric concept_id="161" hi_absolute="230.0000000000000000000000000000000" low_absolute="0.0000000000000000000000000000000" units="rate/min" precise="0"/>
+    <concept_numeric concept_id="165" low_absolute="0.0000000000000000000000000000000" units="" precise="0"/>
+    <concept_numeric concept_id="168" hi_absolute="250.0000000000000000000000000000000" low_absolute="0.0000000000000000000000000000000" units="kg" precise="1"/>
+    <concept_numeric concept_id="190" hi_absolute="43.0000000000000000000000000000000" low_absolute="25.0000000000000000000000000000000" units="DEG C" precise="1"/>
+    <concept_numeric concept_id="199" hi_absolute="250.0000000000000000000000000000000" low_absolute="20.0000000000000000000000000000000" units="mmHg" precise="0"/>
+    <concept_numeric concept_id="248" hi_absolute="300.0000000000000000000000000000000" low_absolute="0.0000000000000000000000000000000" units="cm" precise="1"/>
+    <concept_numeric concept_id="249" hi_absolute="250.0000000000000000000000000000000" low_absolute="20.0000000000000000000000000000000" units="mmHg" precise="0"/>
+    <concept_numeric concept_id="272" units="" precise="0"/>
+    <concept_numeric concept_id="281" units="" precise="0"/>
+    <concept_numeric concept_id="282" units="" precise="0"/>
+    <concept_numeric concept_id="283" units="" precise="0"/>
+    <concept_numeric concept_id="284" units="" precise="0"/>
+    <concept_numeric concept_id="429" units="" precise="0"/>
+    <concept_numeric concept_id="432" units="" precise="0"/>
+    <concept_numeric concept_id="458" units="" precise="0"/>
+    <concept_numeric concept_id="464" units="" precise="0"/>
+    <concept_numeric concept_id="465" units="" precise="0"/>
+    <concept_numeric concept_id="500" units="" precise="0"/>
+    <concept_numeric concept_id="509" units="" precise="0"/>
+    <concept_numeric concept_id="513" units="" precise="0"/>
+    <concept_numeric concept_id="576" units="" precise="0"/>
+    <concept_numeric concept_id="577" units="" precise="0"/>
+    <concept_numeric concept_id="625" units="" precise="0"/>
+    <concept_numeric concept_id="626" units="" precise="0"/>
+    <concept_numeric concept_id="627" units="" precise="0"/>
+    <concept_numeric concept_id="628" units="" precise="0"/>
+    <concept_numeric concept_id="629" units="" precise="0"/>
+    <concept_numeric concept_id="630" units="" precise="0"/>
+    <concept_numeric concept_id="631" units="" precise="0"/>
+    <concept_numeric concept_id="632" units="" precise="0"/>
+    <concept_numeric concept_id="633" units="" precise="0"/>
+    <concept_numeric concept_id="634" units="" precise="0"/>
+    <concept_numeric concept_id="635" units="" precise="0"/>
+    <concept_numeric concept_id="636" units="" precise="0"/>
+    <concept_numeric concept_id="637" units="" precise="0"/>
+    <concept_numeric concept_id="638" units="" precise="0"/>
+    <concept_numeric concept_id="639" units="" precise="0"/>
+    <concept_numeric concept_id="640" units="" precise="0"/>
+    <concept_numeric concept_id="641" units="" precise="0"/>
+    <concept_numeric concept_id="642" units="" precise="0"/>
+    <concept_numeric concept_id="643" units="" precise="0"/>
+    <concept_numeric concept_id="644" units="" precise="0"/>
+    <concept_numeric concept_id="645" units="" precise="0"/>
+</dataset>

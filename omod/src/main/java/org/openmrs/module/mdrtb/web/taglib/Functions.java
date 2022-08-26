@@ -155,7 +155,7 @@ public class Functions {
 	 * @return the matching Concept
 	 */
 	public static Concept getConcept(String lookup) {
-		return Context.getService(MdrtbService.class).findMatchingConcept(lookup);
+		return Context.getService(MdrtbService.class).getConcept(lookup);
 	}
 	
 	/**

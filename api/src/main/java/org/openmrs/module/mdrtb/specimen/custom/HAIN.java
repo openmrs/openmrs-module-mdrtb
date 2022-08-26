@@ -1,7 +1,7 @@
 package org.openmrs.module.mdrtb.specimen.custom;
 
 import org.openmrs.Concept;
-import org.openmrs.module.mdrtb.specimen.Test;
+import org.openmrs.module.mdrtb.specimen.Bacteriology;
 
 /**
  * Interface that defines how to interaction with a smear
@@ -9,7 +9,7 @@ import org.openmrs.module.mdrtb.specimen.Test;
  * An implementation of this interface will help us encapsulate the 
  * the messiness of storing the smear data in obsgroups
  */
-public interface HAIN extends Test {
+public interface HAIN extends Bacteriology {
 	
 	/**
 	 * Data points this interface provides access to:
@@ -25,13 +25,11 @@ public interface HAIN extends Test {
 	public Concept getInhResistance();
 	public void setInhResistance(Concept inhResistance);
 	
-	
 	public Concept getRifResistance();
 	public void setRifResistance(Concept rifResistance);
 	
 	public String getErrorCode();
 	public void setErrorCode(String code);
-	
 
 	public Concept getMtbBurden();
 	public void setMtbBurden(Concept mtbBurden);

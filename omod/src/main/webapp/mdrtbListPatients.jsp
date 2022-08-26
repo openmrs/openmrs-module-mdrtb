@@ -3,6 +3,7 @@
 
 <openmrs:require privilege="View Patients" otherwise="/login.htm" redirect="/module/mdrtb/mdrtbListPatients.form" />
 
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
 
@@ -55,7 +56,7 @@
 						<spring:message code="mdrtb.choosePatientsToDisplay" text="Choose patients to display"/>:
 						<input type="submit" value="<spring:message code="mdrtb.listPatients" text="List"/>"/>
 					</td></tr>
-					<tr><td colspan="2">
+					<!-- <tr><td colspan="2">
 						<br/>
 						<table>
 							<tr>
@@ -68,11 +69,19 @@
 							</tr>
 						</table>
 						<br/>
-					</td></tr>
-
+					</td></tr> -->
+					<tr><th colspan="2"><spring:message code="mdrtb.oblast" text="Oblast"/>
+							<select name="oblast">
+								<option value=""></option>
+								<c:forEach items="${oblasts}" var="o">
+									<option value="${o.id}" <c:if test="${oblast == o}">selected</c:if>>${o.name}</option>
+								</c:forEach>
+							</select>
+						</th>
+					</tr>
 					<tr><th colspan="2"><spring:message code="mdrtb.enrolledLocation" text="Enrolled Location"/>
 							<select name="location">
-								<option value=""><spring:message code="mdrtb.all" text="All"/></option>
+								<option value=""></option>
 								<c:forEach items="${patientLocations}" var="l">
 									<option value="${l.locationId}" <c:if test="${location == l}">selected</c:if>>${l.name}</option>
 								</c:forEach>
@@ -80,22 +89,42 @@
 						</th>
 					</tr>
 					
+					<tr><td colspan="2">
+						<br/>
+						<!-- <table>
+						
+					<tr><th><spring:message code="mdrtb.minimumAgeAtTxStart" text="Minimum Age at<br>Treatment Start"/>&nbsp;</th><td><input type="text" name="minage" value="${minage}" /></td></tr>
+					<tr><th><spring:message code="mdrtb.maximumAgeAtTxStart" text="Maximum Age at<br>Treatment Start"/>&nbsp;</th><td><input type="text" name="maxage" value="${maxage}" /></td></tr>
+					
+				
+						</table> -->
+						<br/>
+					<tr>
+					<th colspan="2"><spring:message code="mdrtb.gender" text="Gender"/>&nbsp;<select name="gender" >
+					<option value=""></option>
+					<option value="M"><spring:message code="mdrtb.male" text="Male"/></option>
+					<option value="F"><spring:message code="mdrtb.female" text="Female"/></option>
+					</select>
+					</th>
+					</tr>
 					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollment"/></th></tr>
- 					<tr>
-						<td colspan="2">
-							<spring:message code="mdrtb.enrollment.startedOnOrAfter"/>: 
-							<openmrs:fieldGen type="java.util.Date" formFieldName="enrolledOnOrAfter" val="${enrolledOnOrAfter}"/>
-						</td>
+					<tr>
+						<td><spring:message code="mdrtb.year"/></td>
+						<td><input type="text" name="year" value="${year}"/>
 					</tr>
 					<tr>
-						<td colspan="2">
-							<spring:message code="mdrtb.enrollment.startedOnOrBefore"/>: 
-							<openmrs:fieldGen type="java.util.Date" formFieldName="enrolledOnOrBefore" val="${enrolledOnOrBefore}"/>
-						</td>
+						<td><spring:message code="mdrtb.quarter"/></td>
+						<td><input type="quarter" name="quarter" value="${quarter}"/>
+					</tr>
+					<tr>
+						<td><spring:message code="mdrtb.or"/></td>
+					</tr>
+					<tr>
+						<td><spring:message code="mdrtb.month"/></td>
+						<td><input type="quarter" name="month" value="${month}"/>
 					</tr>
 					
-					<tr><th colspan="2"><br/><spring:message code="mdrtb.enrollmentStatus"/></th></tr>
-					<tr>
+					<!-- <tr>
 						<td><input type="radio" name="enrollment" value="ever"<c:if test="${empty enrollment || enrollment == 'ever'}"> checked</c:if>/>&nbsp;</td>
 						<td><spring:message code="mdrtb.enrollment.ever"/></td>
 					</tr>
@@ -110,7 +139,7 @@
 					<tr>
 						<td><input type="radio" name="enrollment" value="never"<c:if test="${enrollment == 'never'}"> checked</c:if>/>&nbsp;</td>
 						<td><spring:message code="mdrtb.enrollment.never"/></td>
-					</tr>
+					</tr> -->
 					
 					<c:forEach items="${openmrs:sort(mdrProgram.workflows, 'concept.name.name', false)}" var="wf">
 						<c:if test="${!wf.retired}">

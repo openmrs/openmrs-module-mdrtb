@@ -1,32 +1,28 @@
 package org.openmrs.module.mdrtb;
 
 
-public class Oblast {
+public class Oblast extends BaseLocation {
+	
+	public static Integer HIERARCHY_LEVEL = 4;
+
+	private BaseLocation parent;
 
 	public Oblast(String name, Integer id) {
-		super();
-		this.name = name;
-		this.id = id;
+		super(id, name);
 	}
 	
-	public Oblast() {
-		// TODO Auto-generated constructor stub
+	/**
+	 * @return the parent
+	 */
+	public BaseLocation getParent() {
+		return parent;
 	}
 
-	String name;
-	Integer id;
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(BaseLocation parent) {
+		this.parent = parent;
 	}
 
 }

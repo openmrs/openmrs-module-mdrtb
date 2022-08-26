@@ -60,7 +60,7 @@ public class GermCellTag extends TagSupport {
     			ret = organismTypeNonCoded;
     		}
     		else {
-    			ret = MdrtbUtil.getConceptName(organismType, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName();
+    			ret = MdrtbUtil.getConceptName(organismType, Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED).getName();
     		}
     	}
     	

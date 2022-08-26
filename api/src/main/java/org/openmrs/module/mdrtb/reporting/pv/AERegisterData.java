@@ -11,6 +11,7 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.form.custom.AEForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
+//TODO: Rename AE to Adverse Events wherever found
 public class AERegisterData implements Comparable <AERegisterData>{
 	
 	//private Patient patient;

@@ -269,5 +269,44 @@ public class HAIN2Impl extends TestImpl implements HAIN2 {
 			// now save the value
 			obs.setValueCoded(mtbBurden);
 	}
+
+	public Concept getMethod() {
+		Obs obs = MdrtbUtil
+		        .getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN2_CONSTRUCT), test);
+		
+		if (obs == null) {
+			return null;
+		} else {
+			return obs.getValueCoded();
+		}
+	}
+	
+	public void setMethod(Concept method) {
+		Obs obs = MdrtbUtil
+		        .getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN2_CONSTRUCT), test);
+		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && method == null) {
+			return;
+		}
+		
+		// if we are trying to set the obs to null, simply void the obs
+		if (method == null) {
+			obs.setVoided(true);
+			obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+			return;
+		}
+		
+		// initialize the obs if needed
+		if (obs == null) {
+			obs = new Obs(test.getPerson(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN2_CONSTRUCT),
+			        test.getObsDatetime(), test.getLocation());
+			obs.setEncounter(test.getEncounter());
+			test.addGroupMember(obs);
+		}
+		
+		// now save the value
+		obs.setValueCoded(method);
+	}
 }
 

@@ -1,6 +1,5 @@
 package org.openmrs.module.mdrtb.web.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -10,11 +9,11 @@ import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.Oblast;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -33,32 +32,42 @@ public class MdrtbListPatientsController {
     public void initBinder(WebDataBinder binder) { 
      	binder.registerCustomEditor(Location.class, new LocationEditor());
      	binder.registerCustomEditor(ProgramWorkflowState.class, new ProgramWorkflowStateEditor());
-     	binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true));
     }  
     
     @RequestMapping("/module/mdrtb/mdrtbListPatients")
     public void listPatients(ModelMap model,
-    				@RequestParam(required=false, value="displayMode") 			String displayMode,
-	    			@RequestParam(required=false, value="identifier") 			String identifier,
-	    			@RequestParam(required=false, value="name") 				String name,
-	    			@RequestParam(required=false, value="enrolledOnOrAfter") 	Date enrolledOnOrAfter,
-	    			@RequestParam(required=false, value="enrolledOnOrBefore") 	Date enrolledOnOrBefore,
-	    			@RequestParam(required=false, value="enrollment")			String enrollment,
-	    			@RequestParam(required=false, value="location") 			Location location,
-	    			@RequestParam(required=false, value="states") 				List<ProgramWorkflowState> states
+    				@RequestParam(required=false, value="displayMode") 		String displayMode,
+	    			@RequestParam(required=false, value="identifier") 		String identifier,
+	    			@RequestParam(required=false, value="name") 			String name,
+	    			//@RequestParam(required=false, value="enrollment")		String enrollment,
+	    			@RequestParam(required=false, value="location") 		Location location,
+	    			@RequestParam(required=false, value="oblast") 			String oblast,
+	    			@RequestParam(required=false, value="states") 			List<ProgramWorkflowState> states,
+	    			@RequestParam(required=false, value="minage")			Integer minage,
+	    			@RequestParam(required=false, value="maxage")			Integer maxage,
+	    			@RequestParam(required=false, value="gender")			String gender,
+	    			@RequestParam(required=false, value="year")				Integer year,
+	    			@RequestParam(required=false, value="quarter")			String quarter,
+	    			@RequestParam(required=false, value="month")			String month
+	    			
 	            ) {
     	
     	model.addAttribute("displayMode", displayMode);
     	model.addAttribute("identifier", identifier);
     	model.addAttribute("name", name);
-    	model.addAttribute("enrolledOnOrAfter", enrolledOnOrAfter);
-    	model.addAttribute("enrolledOnOrBefore", enrolledOnOrBefore);
-    	model.addAttribute("enrollment", enrollment);
-    	model.addAttribute("location", location);;
+    	//model.addAttribute("enrollment", enrollment);
+    	model.addAttribute("location", location);
+    	model.addAttribute("oblast", oblast);
     	model.addAttribute("states", states);
+    	model.addAttribute("minage", minage);
+    	model.addAttribute("maxage", maxage);
+    	model.addAttribute("gender", gender);
+    	model.addAttribute("year", year);
+    	model.addAttribute("quarter", quarter);
+    	model.addAttribute("month", month);
     	
     	if (StringUtils.hasText(displayMode)) {
-    		Cohort cohort = MdrtbUtil.getMdrPatients(identifier, name, enrolledOnOrAfter, enrolledOnOrBefore, enrollment, location, states);
+    		Cohort cohort = MdrtbUtil.getMdrPatientsTJK(identifier, name, /*enrollment,*/ location, oblast, states, minage, maxage, gender,year, quarter, month);
         	model.addAttribute("patientIds", cohort.getCommaSeparatedPatientIds());
         	model.addAttribute("patients", Context.getPatientSetService().getPatients(cohort.getMemberIds()));
     	}
@@ -68,7 +77,12 @@ public class MdrtbListPatientsController {
     	Program mdrtbProgram = svc.getMdrtbProgram();
     	model.addAttribute("mdrProgram", mdrtbProgram);
     	
-    	List<Location> patientLocations = svc.getLocationsWithAnyProgramEnrollments();
+    	/*List<Location> patientLocations = svc.getLocationsWithAnyProgramEnrollments();
+    	model.addAttribute("patientLocations", patientLocations);*/
+    	List<Location> patientLocations = Context.getLocationService().getAllLocations(false);
     	model.addAttribute("patientLocations", patientLocations);
+    	
+    	List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+		model.addAttribute("oblasts", oblasts);
     }
 }

@@ -85,14 +85,14 @@ public class PatientSummaryUtil {
     
     public static final String RESISTANCE_LIST = "resistanceProfile";
     
-    public static final String HIV_TEST_RESULT = MdrtbConcepts.RESULT_OF_HIV_TEST[0];
-    public static final String SMEAR_RESULT = MdrtbConcepts.SMEAR_RESULT[0];
-    public static final String CULTURE_RESULT = MdrtbConcepts.CULTURE_RESULT[0];
-    public static final String WEIGHT_RESULT = MdrtbConcepts.WEIGHT[0];
-    public static final String PULSE_RESULT = MdrtbConcepts.PULSE[0];
-    public static final String TEMPERATURE_RESULT = MdrtbConcepts.TEMPERATURE[0];
-    public static final String RESPIRATORY_RATE_RESULT = MdrtbConcepts.RESPIRATORY_RATE[0];
-    public static final String SYSTOLIC_BLOOD_PRESSURE_RESULT = MdrtbConcepts.SYSTOLIC_BLOOD_PRESSURE[0];
+    public static final String HIV_TEST_RESULT = MdrtbConcepts.RESULT_OF_HIV_TEST;
+    public static final String SMEAR_RESULT = MdrtbConcepts.SMEAR_RESULT;
+    public static final String CULTURE_RESULT = MdrtbConcepts.CULTURE_RESULT;
+    public static final String WEIGHT_RESULT = MdrtbConcepts.WEIGHT;
+    public static final String PULSE_RESULT = MdrtbConcepts.PULSE;
+    public static final String TEMPERATURE_RESULT = MdrtbConcepts.TEMPERATURE;
+    public static final String RESPIRATORY_RATE_RESULT = MdrtbConcepts.RESPIRATORY_RATE;
+    public static final String SYSTOLIC_BLOOD_PRESSURE_RESULT = MdrtbConcepts.SYSTOLIC_BLOOD_PRESSURE;
     
     public static final String[] DEMOGRAPHICS_KEYS = {
     	PATIENT_ID, FULL_NAME, FIRST_NAME, LAST_NAME, GENDER, AGE, BIRTHDATE, DEAD, DEATH_DATE, CAUSE_OF_DEATH, 

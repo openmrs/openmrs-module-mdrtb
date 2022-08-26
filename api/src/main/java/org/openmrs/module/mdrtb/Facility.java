@@ -1,31 +1,27 @@
 package org.openmrs.module.mdrtb;
 
-public class Facility {
+public class Facility extends BaseLocation {
+
+	public static Integer HIERARCHY_LEVEL = 6;
+	
+	private BaseLocation parent;
 
 	public Facility(String name, Integer id) {
-		super();
-		this.name = name;
-		this.id = id;
-	}
-	
-	public Facility() {
-		// TODO Auto-generated constructor stub
+		super(id, name);
 	}
 
-	String name;
-	Integer id;
-	
-	public String getName() {
-		return name;
+	/**
+	 * @return the parent
+	 */
+	public BaseLocation getParent() {
+		return parent;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(BaseLocation parent) {
+		this.parent = parent;
 	}
 
 }

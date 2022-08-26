@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,8 +14,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
+import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.exception.ErrorFetchingConceptException;
 import org.openmrs.module.mdrtb.exception.MissingConceptException;
@@ -36,45 +39,40 @@ public class MdrtbConceptMap {
 	/**
 	 * Utility method which retrieves a mapped MDR-TB concept by code
 	 */
-	public Concept lookup(String [] conceptMapping) {
-		
+	public Concept lookup(String conceptMapping) {
 		try {
 			// see if we have have the concept in the cache
-			Concept concept = cache.get(conceptMapping[0]);
+			Concept concept = cache.get(conceptMapping);
 		
 			// if we've found a concept, return it
 			if(concept != null) {
 				return concept;
-			}
-		
+			}		
 			// if not, test all the mappings in the array
-			for(String mapName : conceptMapping) {		
-				concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
+			List<Concept> concepts = Context.getConceptService().getConceptsByName(conceptMapping);
 			
-				// if we've found a match, initialize it and return it
-				if(concept != null) {
-					initializeEverythingAboutConcept(concept);
-					cache.put(conceptMapping[0], concept);
-					return concept;
+			for (Concept c : concepts) {
+				List<Concept> mappings = Context.getConceptService().getConceptsByMapping(String.valueOf(c.getConceptId()), MDRTB_CONCEPT_MAPPING_CODE);
+				for (Concept mapConcept : mappings) {
+					if (mapConcept.getName(Context.getLocale()).equals(c.getName(Context.getLocale()))) {
+						concept = c;
+						// concept = Context.getConceptService().getConceptByMapping(mapName, MDRTB_CONCEPT_MAPPING_CODE);
+						// if we've found a match, initialize it and return it
+						if(concept != null) {
+							initializeEverythingAboutConcept(concept);
+							cache.put(conceptMapping, concept);
+							return concept;
+						}
+					}
 				}
 			}
 		}
 		catch(Exception e) {
-			throw new ErrorFetchingConceptException("Error fetching concept for mapping " + conceptMapping[0], e);
+			throw new ErrorFetchingConceptException("Error fetching concept for mapping " + conceptMapping, e);
 		}
 		
 		// if we didn't find a match, fail hard
-		throw new MissingConceptException("Can't find concept for mapping " + conceptMapping[0]);
-	}
-	
-
-	/**
-	 * Utility method which retrieves a mapped MDR-TB concept by code
-	 */
-	public Concept lookup(String conceptMapping) {
-		String [] search = new String[1];
-		search[0] = conceptMapping;
-		return lookup(search);
+		throw new MissingConceptException("Can't find concept for mapping " + conceptMapping);
 	}
 	
 	/**

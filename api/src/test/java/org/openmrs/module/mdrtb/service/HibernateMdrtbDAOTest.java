@@ -172,6 +172,6 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 		LocalDate startDate = new LocalDate(2022, 8, 1);
 		LocalDate endDate = new LocalDate(2022, 8, 8);
 		List<Encounter> list = dao.getEncountersByEncounterTypes(encounterTypeNames, startDate.toDate(), endDate.toDate(), null);
-		assertEquals(list.size(), 5);
+		assertEquals(5, list.size());
 	}
 }
