@@ -6,41 +6,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.AEForm;
 import org.openmrs.module.mdrtb.form.custom.RegimenForm;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
-import org.openmrs.module.mdrtb.reporting.custom.TB07Table1Data;
-import org.openmrs.module.mdrtb.reporting.custom.TB07Util;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.pv.PVDataTable1;
 import org.openmrs.module.mdrtb.reporting.pv.PVDataTable2;
 import org.openmrs.module.mdrtb.reporting.pv.PVDataTable3;
 import org.openmrs.module.mdrtb.reporting.pv.PVDataTable4;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
-import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -75,7 +57,7 @@ public class AEReportController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -142,7 +124,7 @@ public class AEReportController {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -201,10 +183,10 @@ public class AEReportController {
     	//Integer regimenTypeConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SLD_REGIMEN_TYPE).getId();
     	Integer standardRegimenConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STANDARD_MDR_REGIMEN).getId();
     	Integer shortRegimenConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SHORT_MDR_REGIMEN).getId();
-    	Integer regimenWithBdqConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_BDQ).getId();
-    	Integer regimenWithDlmConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_DLM).getId();
-    	Integer regimenWithBdqDlmConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_BDQ_AND_DLM).getId();
-    	Integer regimenWithCfzLzdConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_CFZ_LZD).getId();
+    	Integer regimenWithBdqConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_BEDAQUILINE).getId();
+    	Integer regimenWithDlmConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_DELAMANID).getId();
+    	Integer regimenWithBdqDlmConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_BEDAQUILINE_AND_DELAMANID).getId();
+    	Integer regimenWithCfzLzdConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INDIVIDUAL_WITH_CLOFAZIMIN_AND_LINEZOLID).getId();
     	Integer otherRegimenConceptId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MDRTB_REGIMEN).getId();
     	
     	PVDataTable1 table1 = new PVDataTable1();
@@ -322,7 +304,7 @@ public class AEReportController {
     	
     	
     	Integer ancillaryDrugsId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANCILLARY_DRUG_GIVEN).getId();
-    	//Integer actionId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AE_ACTION).getId();
+    	//Integer actionId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION).getId();
     	//Integer aeId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT).getId();
     	Integer nauseaId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NAUSEA).getId();
     	Integer diarrhoeaId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIARRHOEA).getId();
@@ -2164,7 +2146,7 @@ public class AEReportController {
 		String fName = null;
 		
 		if(oblastId!=null) {
-			Oblast o = Context.getService(MdrtbService.class).getOblast(oblastId);
+			Region o = Context.getService(MdrtbService.class).getOblast(oblastId);
 			if(o!=null) {
 				oName = o.getName();
 			}

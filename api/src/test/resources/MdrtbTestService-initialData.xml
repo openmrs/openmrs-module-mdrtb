@@ -407,27 +407,11 @@
 	<encounter encounter_id="100002" encounter_type="92" patient_id="1000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 15:45:55" voided="0" uuid="5743ee15-61fe-4cba-88ebf086d-adbcfa" />
 	<encounter encounter_id="100003" encounter_type="93" patient_id="1000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 15:48:31" voided="0" uuid="774abb8e-d763-4d1d-96ebf0dad-afed74" />
 	<encounter encounter_id="100004" encounter_type="91" patient_id="2000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 18:44:57" voided="0" uuid="aeaa43cd-5168-4f99-bdebf08dd-a7e856" />
-	<encounter encounter_id="100005" encounter_type="92" patient_id="2000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 23:02:48" voided="0" uuid="a7c8ec8a-45e9-4f63-8cebf050d-a6a200" />
-	<encounter encounter_id="100007" encounter_type="91" patient_id="2000" location_id="102" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 23:19:20" voided="0" uuid="c2aa76dd-27d0-4c7c-92ebf070d-a4bcfe" />
-	<encounter encounter_id="100008" encounter_type="92" patient_id="2000" location_id="102" encounter_datetime="2022-08-11 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="bd4fd19a-9847-455e-bbebf02ed-a32ace" />
-	<encounter encounter_id="100008" encounter_type="94" patient_id="1000" location_id="102" encounter_datetime="2022-08-11 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="5060f963-2396-11ed-881f-00ff10882c85" />
+	<encounter encounter_id="100005" encounter_type="92" patient_id="2000" location_id="101" encounter_datetime="2022-08-11 00:00:00" creator="2" date_created="2022-08-08 23:02:48" voided="0" uuid="a7c8ec8a-45e9-4f63-8cebf050d-a6a200" />
+	<encounter encounter_id="100007" encounter_type="91" patient_id="2000" location_id="102" encounter_datetime="2022-08-16 00:00:00" creator="2" date_created="2022-08-08 23:19:20" voided="0" uuid="c2aa76dd-27d0-4c7c-92ebf070d-a4bcfe" />
+	<encounter encounter_id="100008" encounter_type="92" patient_id="2000" location_id="102" encounter_datetime="2022-08-22 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="bd4fd19a-9847-455e-bbebf02ed-a32ace" />
+	<encounter encounter_id="100008" encounter_type="94" patient_id="1000" location_id="102" encounter_datetime="2022-08-31 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="5060f963-2396-11ed-881f-00ff10882c85" />
 
 	<!-- Observations -->
-
-	<!-- Address hierarchy 
-    <address_hierarchy_level address_hierarchy_level_id="1" name="Country" address_field="COUNTRY" uuid="763acac2-e9ed-4ea7-b024-4d4260de722c" required="1"/>
-    <address_hierarchy_level address_hierarchy_level_id="2" name="State or Province" parent_level_id="1" address_field="STATE_PROVINCE" uuid="d95debba-31a8-4dd7-ad3f-e05d1a592f3d" required="1"/>
-    <address_hierarchy_level address_hierarchy_level_id="3" name="County or District" parent_level_id="2" address_field="COUNTY_DISTRICT" uuid="63934f87-ac03-415c-9b30-36a0d251882e" required="1"/>
-    <address_hierarchy_level address_hierarchy_level_id="4" name="Region" parent_level_id="3" address_field="REGION" uuid="95c667cc-c72a-44ef-85d3-6d76e1692e6a" required="0"/>
-
-    <address_hierarchy_entry address_hierarchy_entry_id="1" name="England" level_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c20"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="2" name="Scotland" level_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c21"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="3" name="Yorkshire" level_id="2" parent="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c22"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="4" name="Sussex" level_id="2" parent="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c23"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="5" name="East Midlands" level_id="2" parent="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c24"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="6" name="London" level_id="3" parent="5" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c25"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="7" name="Douglas" level_id="3" parent="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
-    <address_hierarchy_entry address_hierarchy_entry_id="8" name="Isle of Man" level_id="4" parent="7" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
-	-->
 
 </dataset>

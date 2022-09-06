@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,25 +13,17 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-import org.openmrs.Obs;
-import org.openmrs.PatientState;
 import org.openmrs.Person;
-import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.Form89;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
-import org.openmrs.PatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -50,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.openmrs.ProgramWorkflowState;
 
 @Controller
 @RequestMapping("/module/mdrtb/form/form89.form")
@@ -105,7 +94,7 @@ public class Form89Controller {
 			  	@RequestParam(required = false, value = "mode") String mode,
 			  ModelMap model) {
 		//ModelMap map = new ModelMap();
-		List<Oblast> oblasts;
+		List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
         
@@ -142,7 +131,7 @@ public class Form89Controller {
         	if(location!=null) {
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
         	model.addAttribute("oblasts", oblasts);
-        	for(Oblast o : oblasts) {
+        	for(Region o : oblasts) {
         		if(o.getName().equals(location.getStateProvince())) {
         			System.out.println(o.getName() + " Set");
         			model.addAttribute("oblastSelected", o.getId());
@@ -251,20 +240,20 @@ public class Form89Controller {
 			form89.setLocation(location);
 		}
 		
-		if(form89.getPopulationCategory()!=null && form89.getPopulationCategory().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(TbConcepts.FOREIGNER).getId().intValue()) {
+		if(form89.getPopulationCategory()!=null && form89.getPopulationCategory().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOREIGNER).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setCountryOfOrigin(null);
 		}
 		
-		if(form89.getCircumstancesOfDetection()!=null && form89.getCircumstancesOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(TbConcepts.MIGRANT).getId().intValue()) {
+		if(form89.getCircumstancesOfDetection()!=null && form89.getCircumstancesOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setCityOfOrigin(null);
 			form89.setDateOfReturn(null);
 		}
 		
-		if(form89.getMethodOfDetection()!=null && form89.getMethodOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER).getId().intValue()) {
+		if(form89.getMethodOfDetection()!=null && form89.getMethodOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setOtherMethodOfDetection(null);
@@ -303,7 +292,7 @@ public class Form89Controller {
 			HashSet<PatientState> states = new HashSet<PatientState>();
 			PatientState newState = new PatientState();
 			ProgramWorkflowState pwfs = new ProgramWorkflowState();
-			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_TX_OUTCOME));
+			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
 			newState.setState(pwfs);
 			states.add(newState);
 			pp.setStates(states);	
@@ -376,64 +365,64 @@ public class Form89Controller {
 	
 	@ModelAttribute("locationtypes")
 	public Collection<ConceptAnswer> getPossibleLocationTypes() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.LOCATION_TYPE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.LOCATION_TYPE);
 	}
 	
 	@ModelAttribute("populationcategories")
 	public Collection<ConceptAnswer> getPossiblePopulationCategories() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.POPULATION_CATEGORY);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.POPULATION_CATEGORY);
 	}
 	
 	@ModelAttribute("professions")
 	public Collection<ConceptAnswer> getPossibleProfessions() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.PROFESSION);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PROFESSION);
 	}
 	
 	@ModelAttribute("places")
 	public Collection<ConceptAnswer> getPossiblePlacesOfDetection() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.PLACE_OF_DETECTION);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PLACE_OF_DETECTION);
 	}
 	
 	@ModelAttribute("circumstances")
 	public Collection<ConceptAnswer> getPossibleCircumstancesOfDetection() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.CIRCUMSTANCES_OF_DETECTION);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.CIRCUMSTANCES_OF_DETECTION);
 	}
 	
 	@ModelAttribute("methods")
 	public Collection<ConceptAnswer> getPossibleMethodsOfDetection() {
-		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.METHOD_OF_DETECTION);
+		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
 		ArrayList<ConceptAnswer> stateArray = new ArrayList<ConceptAnswer>();
 		for(int i=0; i< 9; i++) {
 			stateArray.add(null);
 		}
-		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.METHOD_OF_DETECTION);
+		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
 		MdrtbService ms = Context.getService(MdrtbService.class);
 		for(ConceptAnswer ca : bases) {
-			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.HISTOLOGY).getId().intValue()) {
+			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HISTOLOGY).getId().intValue()) {
 				stateArray.set(0, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.GENEXPERT).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.GENEXPERT).getId().intValue()) {
 				stateArray.set(1, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.FLURORESCENT_MICROSCOPY).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY).getId().intValue()) {
 				stateArray.set(2, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.CXR_RESULT).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CXR_RESULT).getId().intValue()) {
 				stateArray.set(3, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.FLUOROGRAPHY).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.FLUOROGRAPHY).getId().intValue()) {
 				stateArray.set(4, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.HAIN_TEST).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HAIN_TEST).getId().intValue()) {
 				stateArray.set(5, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.CULTURE_DETECTION).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CULTURE_TEST).getId().intValue()) {
 				stateArray.set(6, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.TUBERCULIN_TEST).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TUBERCULIN_TEST).getId().intValue()) {
 				stateArray.set(7, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.OTHER).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
 				stateArray.set(8, ca);
 			}
 		}
@@ -442,84 +431,84 @@ public class Form89Controller {
 	
 	@ModelAttribute("epsites")
 	public Collection<ConceptAnswer> getPossibleEpSites() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.SITE_OF_EPTB);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.SITE_OF_EPTB);
 	}
 	
 	@ModelAttribute("psites")
 	public Collection<ConceptAnswer> getPossiblePSites() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.PTB_SITE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PTB_SITE);
 	}
 	
 	@ModelAttribute("eplocations")
 	public Collection<ConceptAnswer> getPossibleEPLocations() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.EPTB_SITE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.EPTB_SITE);
 	}	
 	
 	@ModelAttribute("diabetesOptions")
 	public Collection<ConceptAnswer> getPossibleDiabetes() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.DIABETES);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.DIABETES);
 	}
 	
 	@ModelAttribute("cnsdlOptions")
 	public Collection<ConceptAnswer> getPossibleCNSDL() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.CNSDL);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.CNSDL);
 	}
 	
 	@ModelAttribute("htHeartDiseaseOptions")
 	public Collection<ConceptAnswer> getPossibleHeartDisease() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.HYPERTENSION_OR_HEART_DISEASE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.HYPERTENSION_OR_HEART_DISEASE);
 	}
 
 	@ModelAttribute("ulcerOptions")
 	public Collection<ConceptAnswer> getPossibleUlcers() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.ULCER);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.ULCER);
 	}
 	
 	@ModelAttribute("presences")
 	public Collection<ConceptAnswer> getPossibleDecay() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.PRESENCE_OF_DECAY);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PRESENCE_OF_DECAY);
 	}
 		
 	@ModelAttribute("mentalDisorderOptions")
 	public Collection<ConceptAnswer> mentalDisorderOptions() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.MENTAL_DISORDER);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.MENTAL_DISORDER);
 	}
 	
 	@ModelAttribute("ibc20Options")
 	public Collection<ConceptAnswer> getPossibleIbc20() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.ICD20);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.ICD20);
 	}
 	
 	@ModelAttribute("cancerOptions")
 	public Collection<ConceptAnswer> getPossibleCancer() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.CANCER);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.CANCER);
 	}
 	
 	@ModelAttribute("hepatitisOptions")
 	public Collection<ConceptAnswer> getPossibleHepatitis() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.COMORBID_HEPATITIS);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.COMORBID_HEPATITIS);
 	}
 	
 	@ModelAttribute("kidneyDiseaseOptions")
 	public Collection<ConceptAnswer> getPossibleKidneyDisease() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.KIDNEY_DISEASE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.KIDNEY_DISEASE);
 	}
 	
 	@ModelAttribute("noDiseaseOptions")
 	public Collection<ConceptAnswer> getPossibleND() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.NO_DISEASE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.NO_DISEASE);
 	}
 	
 	
 	
 	@ModelAttribute("gptOptions")
 	public Collection<ConceptAnswer> getPossibleGPT() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.GPT);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.GPT);
 	}
 	
 	@ModelAttribute("cecOptions")
 	public Collection<ConceptAnswer> getPossibleCMACPlace() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.PLACE_OF_ELECTORAL_COMMISSION);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PLACE_OF_CENTRAL_COMMISSION);
 	}
 	
 	@ModelAttribute("yesno")

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,25 +13,19 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
-
 import org.openmrs.api.context.Context;
-
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.SmearForm;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
-import org.openmrs.PatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -146,7 +139,7 @@ public class SmearFormController {
     								  ModelMap model){
 		//ModelMap map = new ModelMap();
 		
-		List<Oblast> oblasts;
+		List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
         
@@ -180,7 +173,7 @@ public class SmearFormController {
         	Location location  = smear.getLocation();
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
         	model.addAttribute("oblasts", oblasts);
-        	for(Oblast o : oblasts) {
+        	for(Region o : oblasts) {
         		if(o.getName().equals(location.getStateProvince())) {
         			model.addAttribute("oblastSelected", o.getId());
         			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
@@ -364,23 +357,23 @@ public class SmearFormController {
 			System.out.println(ca.getId());
 			System.out.println(ca.getAnswerConcept().getId());
 			
-			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.LOWAFB).getId().intValue()) {
+			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOWAFB).getId().intValue()) {
 				resultArray.set(0,ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.WEAKLY_POSITIVE).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.WEAKLY_POSITIVE).getId().intValue()) {
 				resultArray.set(1,ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.MODERATELY_POSITIVE).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.MODERATELY_POSITIVE).getId().intValue()) {
 				resultArray.set(2,ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.STRONGLY_POSITIVE).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.STRONGLY_POSITIVE).getId().intValue()) {
 				resultArray.set(3,ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.NEGATIVE).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEGATIVE).getId().intValue()) {
 				resultArray.set(4,ca);
 			}
 		}

@@ -10,8 +10,8 @@ import org.openmrs.Obs;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.DSTForm;
 import org.openmrs.module.mdrtb.form.custom.HAIN2Form;
@@ -286,7 +286,7 @@ public class TB03Util {
     	String val = "";
     	PatientIdentifier pi = null;
     	Integer ppid = null;
-    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
     	Obs idObs  = MdrtbUtil.getObsFromEncounter(ppidConcept, form.getEncounter());
     	if(idObs==null) {
     		val = null;
@@ -322,7 +322,7 @@ public class TB03Util {
     	String val = "";
     	PatientIdentifier pi = null;
     	Integer ppid = null;
-    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
     	Obs idObs  = MdrtbUtil.getObsFromEncounter(ppidConcept, form.getEncounter());
     	if(idObs==null) {
     		val = null;

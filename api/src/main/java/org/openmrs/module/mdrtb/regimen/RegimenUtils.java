@@ -24,8 +24,6 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConceptMap;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.MessageUtil;

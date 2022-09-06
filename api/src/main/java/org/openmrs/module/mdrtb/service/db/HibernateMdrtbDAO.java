@@ -16,11 +16,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.mdrtb.BaseLocation;
 import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 //TODO: This entire class will be heavily refactored
-@Component
 public class HibernateMdrtbDAO implements MdrtbDAO {
 
 	protected static final Log log = LogFactory.getLog(HibernateMdrtbDAO.class);
@@ -28,8 +25,11 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 	/**
 	 * Hibernate session factory
 	 */
-	@Autowired
 	private SessionFactory sessionFactory;
+	
+	public SessionFactory getSessionFactory() {
+		return this.sessionFactory;
+	}
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -73,7 +73,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 					+ oblast + ", " + district + ", " + facility + ", " + year + ", '" + quarter + "', '" + month
 					+ "', '" + reportDate + "', '" + tableData + "', " + status + ", '" + reportName + "', '"
 					+ reportType + "')";
-			System.out.println(sql);
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.createSQLQuery(sql).executeUpdate();
@@ -187,7 +186,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 
 		sql += " and report_type= '" + reportType + "'";
 
-		System.out.println(sql);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		List<String> list = (List<String>) session.createSQLQuery(sql).list();
@@ -197,63 +195,37 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 	public void unlockReport(Integer oblast, Integer district, Integer facility, Integer year, String quarter,
 			String month, String name, String date, String reportType) {
 		String sql = "delete from report_data ";
-		if (name != null && !name.equals("")) {
+		if (name != null && !name.equals(""))
 			sql += " where report_name='" + name + "'";
-		}
-		if (date != null && !date.equals("")) {
+		if (date != null && !date.equals(""))
 			sql += " and report_date='" + date + "'";
-		}
-		if (oblast != null) {
+		if (oblast != null)
 			sql += " and oblast_id=" + oblast;
-		}
-
-		else {
+		else
 			sql += " and oblast_id IS NULL";
-		}
-		if (district != null) {
+		if (district != null)
 			sql += " and district_id=" + district;
-		}
-
-		else {
+		else
 			sql += " and district_id IS NULL";
-		}
-
-		if (facility != null) {
+		if (facility != null)
 			sql += " and facility_id=" + facility;
-		}
-
-		else {
+		else
 			sql += " and facility_id IS NULL";
-		}
-		if (year != null) {
+		if (year != null)
 			sql += " and year=" + year;
-		}
-
-		else {
+		else
 			sql += " and year IS NULL";
-		}
-		if (quarter != null && !quarter.equals(Context.getMessageSourceService().getMessage("mdrtb.annual"))) {
+		if (quarter != null && !quarter.equals(Context.getMessageSourceService().getMessage("mdrtb.annual")))
 			sql += " and quarter='" + quarter + "'";
-		}
-
-		else if (quarter.equals(Context.getMessageSourceService().getMessage("mdrtb.annual"))) {
+		else if (quarter.equals(Context.getMessageSourceService().getMessage("mdrtb.annual")))
 			sql += " and quarter='" + "" + "'";
-		}
-
-		else {
+		else
 			sql += " and quarter IS NULL";
-		}
-		if (month != null) {
+		if (month != null)
 			sql += " and month='" + month + "'";
-		}
-
-		else {
+		else
 			sql += " and month IS NULL";
-		}
-
 		sql += " and report_type='" + reportType + "'";
-
-		System.out.println(sql);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.createSQLQuery(sql).executeUpdate();
@@ -270,22 +242,18 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 			sql += " and oblast_id IS NULL";
 		else
 			sql += " and oblast_id=" + oblast;
-
 		if (district == null)
 			sql += " and district_id IS NULL";
 		else
 			sql += " and district_id=" + district;
-
 		if (facility == null)
 			sql += " and facility_id IS NULL";
 		else
 			sql += " and facility_id=" + facility;
-
 		if (year == null)
 			sql += " and year IS NULL";
 		else
 			sql += " and year=" + year;
-
 		if (quarter == null)
 			sql += " and quarter IS NULL";
 		else
@@ -296,7 +264,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 			sql += " and month='" + month + "'";
 		sql += " and report_type='" + reportType + "'";
 
-		System.out.println(sql);
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		List<String> statusList = (List<String>) session.createSQLQuery(sql).list();
@@ -340,8 +307,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 						+ dbDateFormat.format(endDate) + "'";
 			}
 			sql += ";";
-			System.out.println(sql);
-
 			tempList = (List<Integer>) session.createSQLQuery(sql).list();
 
 			for (Integer encounterId : tempList) {
@@ -364,37 +329,55 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 		sessionFactory.getCurrentSession().evict(obj);
 	}
 
-	public BaseLocation getLocationParent(Integer childId) {
-		String query = "select parent_id from address_hierarchy_entry where address_hierarchy_entry_id=" + childId;
+	public BaseLocation getAddressHierarchyLocation(Integer locationId) {
+		String query = "select address_hierarchy_entry_id, name, level_id from address_hierarchy_entry where address_hierarchy_entry_id=" + locationId;
 		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
 		for (List<Object> list : results) {
 			Integer id = (Integer)(list.get(0));
-			String name = (String)(list.get(0));
-			return new BaseLocation(id, name);
+			String name = String.valueOf(list.get(1));
+			Integer levelId = (Integer)(list.get(2));
+			BaseLocation baseLocation = new BaseLocation(id, name, levelId);
+			baseLocation.setLevelId(levelId);
+			return baseLocation;
 		}
 		return null;
 	}
 
-	public List<BaseLocation> getLocationsByHierarchyLevel(Integer level) {
+	public BaseLocation getAddressHierarchyLocationParent(BaseLocation child) {
+		String query = "select parent_id from address_hierarchy_entry where address_hierarchy_entry_id=" + child.getId();
+		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
+		for (List<Object> list : results) {
+			Integer id = (Integer)(list.get(0));
+			return getAddressHierarchyLocation(id);
+		}
+		return null;
+	}
+
+	public List<BaseLocation> getAddressHierarchyLocationsByHierarchyLevel(Integer level) {
 		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where level_id=" + level;
 		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
 		List<BaseLocation> locations = new ArrayList<BaseLocation>();
 		for (List<Object> list : results) {
 			Integer id = (Integer)(list.get(0));
-			String name = (String)(list.get(0));
-			locations.add(new BaseLocation(id, name));
+			String name = String.valueOf(list.get(1));
+			BaseLocation baseLocation = new BaseLocation(id, name, level);
+			baseLocation.setLevelId(level);
+			locations.add(baseLocation);
 		}
 		return locations;
 	}
 
-	public List<BaseLocation> getLocationsByParent(BaseLocation parent) {
-		String query = "select distinct address_hierarchy_entry_id, name from address_hierarchy_entry where parent_id=" + parent.getId();
+	public List<BaseLocation> getAddressHierarchyLocationsByParent(BaseLocation parent) {
+		String query = "select distinct address_hierarchy_entry_id, name, level_id from address_hierarchy_entry where parent_id=" + parent.getId();
 		List<List<Object>> results = Context.getAdministrationService().executeSQL(query, true);
 		List<BaseLocation> locations = new ArrayList<BaseLocation>();
 		for (List<Object> list : results) {
 			Integer id = (Integer)(list.get(0));
-			String name = (String)(list.get(0));
-			locations.add(new BaseLocation(id, name));
+			String name = String.valueOf(list.get(1));
+			Integer levelId = (Integer)(list.get(2));
+			BaseLocation baseLocation = new BaseLocation(id, name, levelId);
+			baseLocation.setLevelId(levelId);
+			locations.add(baseLocation);
 		}
 		return locations;
 	}

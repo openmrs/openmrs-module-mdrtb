@@ -9,8 +9,8 @@ import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.Oblast;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.ProgramWorkflowStateEditor;
@@ -82,7 +82,7 @@ public class MdrtbListPatientsController {
     	List<Location> patientLocations = Context.getLocationService().getAllLocations(false);
     	model.addAttribute("patientLocations", patientLocations);
     	
-    	List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+    	List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
 		model.addAttribute("oblasts", oblasts);
     }
 }

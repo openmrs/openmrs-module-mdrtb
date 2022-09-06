@@ -9,21 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.Oblast;
 import org.openmrs.module.htmlwidgets.web.WidgetUtil;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.reporting.PreviewReportRenderer;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
-import org.openmrs.module.mdrtb.reporting.data.MOHReport;
-import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
-import org.openmrs.module.mdrtb.reporting.data.WHOForm05;
-import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
 import org.openmrs.module.mdrtb.reporting.data.custom.DSTReportTJK;
-import org.openmrs.module.mdrtb.reporting.data.custom.MOHReportTJK;
-import org.openmrs.module.mdrtb.reporting.data.custom.OutcomeReportTJK;
 import org.openmrs.module.mdrtb.reporting.data.custom.TB07TJK;
 import org.openmrs.module.mdrtb.reporting.data.custom.TB08TJK;
-import org.openmrs.module.mdrtb.reporting.data.custom.WHOForm05TJK;
-import org.openmrs.module.mdrtb.reporting.data.custom.WHOForm07TJK;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -59,7 +51,7 @@ public class ReportingController {
 			model.addAttribute("report", type.newInstance());
 		}
 		
-		List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+		List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
 		model.addAttribute("oblasts", oblasts);
     }
     

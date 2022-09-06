@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,26 +12,14 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-
-import org.openmrs.Person;
-
-import org.openmrs.api.context.Context;
-
-import org.openmrs.module.mdrtb.District;
-import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-
-import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
-import org.openmrs.module.mdrtb.form.custom.DrugResistanceDuringTreatmentForm;
-import org.openmrs.module.mdrtb.form.custom.SmearForm;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
-import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.program.TbPatientProgram;
-import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
 import org.openmrs.PatientProgram;
+import org.openmrs.Person;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.form.custom.DrugResistanceDuringTreatmentForm;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -234,7 +220,7 @@ public class DrugResistanceDuringFormController {
 	public ArrayList<ConceptAnswer> getPossibleResistanceTypes() {
 		
 		ArrayList<ConceptAnswer> typeArray = new ArrayList<ConceptAnswer>();
-		Collection<ConceptAnswer> ca= Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.DRUG_RESISTANCE_DURING_TX);
+		Collection<ConceptAnswer> ca= Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT);
 		for(int i=0; i< 4; i++) {
 			typeArray.add(null);
 		}
@@ -260,7 +246,7 @@ public class DrugResistanceDuringFormController {
 			else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TDR_TB).getId().intValue()) {
 				typeArray.set(3, c);
 			}
-			/*else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(TbConcepts.NO).getId().intValue()) {
+			/*else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NO).getId().intValue()) {
 				typeArray.set(7, c);
 			}
 			else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN).getId().intValue()) {
@@ -270,7 +256,7 @@ public class DrugResistanceDuringFormController {
 		
 		return typeArray;
 		
-		/*return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.RESISTANCE_TYPE);*/
+		/*return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);*/
 	}
 	
 	

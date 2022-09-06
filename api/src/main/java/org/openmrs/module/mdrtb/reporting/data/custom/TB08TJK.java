@@ -33,11 +33,8 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
-
-
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
@@ -138,7 +135,7 @@ public class TB08TJK implements ReportSpecification {
 		Date endDate = (Date)context.getParameterValue("endDate");
 		
 		//OBLAST
-		Oblast o = null;
+		Region o = null;
 		if(!oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		
@@ -232,7 +229,7 @@ public class TB08TJK implements ReportSpecification {
 	/*	CohortDefinition curedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.CURED[0]);
 		CohortDefinition txCompletedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_COMPLETE[0]);
 		CohortDefinition defaultMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.LOST_TO_FOLLOWUP[0]);
-		CohortDefinition failureMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.FAILED[0]);
+		CohortDefinition failureMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_FAILED[0]);
 		CohortDefinition relapseMDR = ReportUtil.getCompositionCohort("OR", curedMDR,txCompletedMDR);*/
 		
 		

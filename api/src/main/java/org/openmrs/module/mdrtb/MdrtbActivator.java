@@ -30,7 +30,6 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.layout.web.address.AddressSupport;
 import org.openmrs.layout.web.address.AddressTemplate;
-import org.openmrs.module.Activator;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleActivator;
 

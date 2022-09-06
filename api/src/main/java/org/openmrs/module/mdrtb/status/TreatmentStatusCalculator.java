@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb.status;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 

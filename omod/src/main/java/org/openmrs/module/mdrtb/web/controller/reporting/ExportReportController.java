@@ -2,8 +2,6 @@ package org.openmrs.module.mdrtb.web.controller.reporting;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -14,10 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -43,7 +40,7 @@ public class ExportReportController {
     public void exportReportGet(ModelMap model) {
         System.out.println("-----Export Report GET-----");
         List<Location> locations = Context.getLocationService().getAllLocations(false);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         model.addAttribute("locations", locations);
         model.addAttribute("oblasts", oblasts);
 	}

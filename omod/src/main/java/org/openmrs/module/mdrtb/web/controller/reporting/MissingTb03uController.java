@@ -4,59 +4,29 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-
-import org.openmrs.Encounter;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.Person;
-
 import org.openmrs.api.context.Context;
-
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.custom.DQItem;
-import org.openmrs.module.mdrtb.reporting.custom.DQUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
-import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
-import org.openmrs.module.mdrtb.reporting.custom.TB03uUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
-import org.openmrs.module.mdrtb.specimen.Dst;
-import org.openmrs.module.mdrtb.specimen.DstResult;
-import org.openmrs.module.mdrtb.specimen.Smear;
-import org.openmrs.module.mdrtb.specimen.custom.HAIN;
-import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
-
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
-
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,7 +53,7 @@ public class MissingTb03uController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -148,7 +118,7 @@ public class MissingTb03uController {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -176,7 +146,7 @@ public class MissingTb03uController {
 		
     	//String oName = null;
     	
-//    	Oblast o = null;
+//    	Region o = null;
 //		if(!oblast.equals("")) {
 //			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 //			oName = o.getName();
@@ -332,7 +302,7 @@ public class MissingTb03uController {
     		errorPercentage = (errorCount*100)/num;
     	
     	String oName = null;
-    	Oblast obl = Context.getService(MdrtbService.class).getOblast(oblastId);
+    	Region obl = Context.getService(MdrtbService.class).getOblast(oblastId);
     	if(obl!=null)
     		oName = obl.getName();
     	
@@ -411,7 +381,7 @@ public class MissingTb03uController {
 			
 	    	String oName = null;
 	    	
-	//    	Oblast o = null;
+	//    	Region o = null;
 	//		if(!oblast.equals("")) {
 	//			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 	//			oName = o.getName();
@@ -513,7 +483,7 @@ public class MissingTb03uController {
 	    	    	errorFlag = Boolean.TRUE;
 	    	    }
 	    	    //MISSING REGISTRATION GROUP
-	    	    //Concept q = tf.getRegistrationGroup();// Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+	    	    //Concept q = tf.getRegistrationGroup();// Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
 	    	    conceptQuestionList.clear();
 	    	    conceptQuestionList.add(q);
 	    	    

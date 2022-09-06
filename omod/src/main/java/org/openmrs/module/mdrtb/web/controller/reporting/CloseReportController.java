@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -41,7 +41,7 @@ public class CloseReportController {
     public void closeReportGet(ModelMap model) {
         System.out.println("-----Close Report GET-----");
         List<Location> locations = Context.getLocationService().getAllLocations(false);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         model.addAttribute("locations", locations);
         model.addAttribute("oblasts", oblasts);
 	}

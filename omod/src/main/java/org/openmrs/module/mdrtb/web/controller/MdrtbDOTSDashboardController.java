@@ -22,7 +22,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
-
 /*import org.openmrs.module.mdrtb.program.MdrtbPatientProgramHospitalizationValidator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgramValidator;*/
 import org.openmrs.module.mdrtb.program.TbPatientProgram;

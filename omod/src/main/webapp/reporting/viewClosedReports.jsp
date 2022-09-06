@@ -6,8 +6,8 @@
 	<head>
 		<title>Closed Reports</title>
 
-		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/moduleResources/mdrtb/css/datatables.min.css"/>
-		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery/jquery.dataTables.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/moduleResources/mdrtb/datatables.min.css"/>
+		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.dataTables.min.js"></script>
 	</head>
 	<body>
 		<h2>

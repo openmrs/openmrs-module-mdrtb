@@ -168,7 +168,7 @@ public class MdrtbUtil {
 		positiveResults.add(service.getConcept(MdrtbConcepts.WEAKLY_POSITIVE));
 		positiveResults.add(service.getConcept(MdrtbConcepts.POSITIVE));
 		positiveResults.add(service.getConcept(MdrtbConcepts.SCANTY));
-		positiveResults.add(service.getConcept(TbConcepts.LOWAFB));
+		positiveResults.add(service.getConcept(MdrtbConcepts.LOWAFB));
 
 		return positiveResults;
 	}
@@ -641,7 +641,7 @@ public class MdrtbUtil {
 			cohort = Cohort.intersect(cohort, inStates);
 		}
 
-		Oblast o = null;
+		Region o = null;
 		if (!oblast.equals("") && location == null)
 			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 
@@ -746,7 +746,7 @@ public class MdrtbUtil {
 			// all fields selected
 			Facility fac = Context.getService(MdrtbService.class).getFacility(Integer.parseInt(facilityId));
 			District dist = Context.getService(MdrtbService.class).getDistrict(Integer.parseInt(districtId));
-			Oblast obl = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblastId));
+			Region obl = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblastId));
 			location = Context.getService(MdrtbService.class).getLocation(obl.getId(), dist.getId(), fac.getId());
 		}
 
@@ -757,7 +757,7 @@ public class MdrtbUtil {
 		}
 
 		else if (oblastId != null && oblastId.length() != 0) {
-			Oblast obl = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblastId));
+			Region obl = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblastId));
 			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(obl);
 		}
 		Cohort cohort = Context.getPatientSetService().getAllPatients();
@@ -899,9 +899,9 @@ public class MdrtbUtil {
 		}
 
 		List<XpertForm> xperts = tf.getXperts();
-		Concept positive = Context.getService(MdrtbService.class).getConcept(TbConcepts.MTB_POSITIVE);
-		Concept mtbResult = Context.getService(MdrtbService.class).getConcept(TbConcepts.MTB_RESULT);
-		Concept xpertConstructs = Context.getService(MdrtbService.class).getConcept(TbConcepts.XPERT_CONSTRUCT);
+		Concept positive = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_POSITIVE);
+		Concept mtbResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT);
+		Concept xpertConstructs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XPERT_CONSTRUCT);
 		Obs constructObs = null;
 		Obs resultObs = null;
 		for (XpertForm xf : xperts) {
@@ -919,7 +919,7 @@ public class MdrtbUtil {
 
 		List<HAINForm> hains = tf.getHains();
 
-		Concept hainConstructs = Context.getService(MdrtbService.class).getConcept(TbConcepts.HAIN_CONSTRUCT);
+		Concept hainConstructs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT);
 		constructObs = null;
 		resultObs = null;
 		for (HAINForm hf : hains) {
@@ -959,9 +959,9 @@ public class MdrtbUtil {
 		}
 
 		List<XpertForm> xperts = tf.getXperts();
-		Concept positive = Context.getService(MdrtbService.class).getConcept(TbConcepts.MTB_POSITIVE);
-		Concept mtbResult = Context.getService(MdrtbService.class).getConcept(TbConcepts.MTB_RESULT);
-		Concept xpertConstructs = Context.getService(MdrtbService.class).getConcept(TbConcepts.XPERT_CONSTRUCT);
+		Concept positive = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_POSITIVE);
+		Concept mtbResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT);
+		Concept xpertConstructs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XPERT_CONSTRUCT);
 		Obs constructObs = null;
 		Obs resultObs = null;
 		for (XpertForm xf : xperts) {
@@ -981,7 +981,7 @@ public class MdrtbUtil {
 
 		List<HAINForm> hains = tf.getHains();
 
-		Concept hainConstructs = Context.getService(MdrtbService.class).getConcept(TbConcepts.HAIN_CONSTRUCT);
+		Concept hainConstructs = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT);
 		constructObs = null;
 		resultObs = null;
 		for (HAINForm hf : hains) {

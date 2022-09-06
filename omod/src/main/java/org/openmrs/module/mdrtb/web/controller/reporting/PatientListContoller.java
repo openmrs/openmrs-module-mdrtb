@@ -15,6 +15,11 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.District;
+import org.openmrs.module.mdrtb.Facility;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.DSTForm;
 import org.openmrs.module.mdrtb.form.custom.Form89;
@@ -26,24 +31,15 @@ import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.form.custom.TransferInForm;
 import org.openmrs.module.mdrtb.form.custom.XpertForm;
-import org.openmrs.module.mdrtb.District;
-import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.DstImpl;
-
-
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
-
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -72,11 +68,11 @@ public class PatientListContoller {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         model.addAttribute("locations", locations);
         model.addAttribute("oblasts", oblasts);*/
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -326,7 +322,7 @@ public class PatientListContoller {
     		    		
     		    		if(ds.getSmearResult()!=null) {
     		    			
-    		    			if(ds.getSmearResult().getConceptId().intValue()==ms.getConcept(TbConcepts.NEGATIVE).getConceptId().intValue()) {
+    		    			if(ds.getSmearResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.NEGATIVE).getConceptId().intValue()) {
     		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
     		    			}
     		    			
@@ -365,18 +361,18 @@ public class PatientListContoller {
     		    		}
     		    		
     		    		else {
-    		    			if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
+    		    			if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
     		    				String xr = getMessage("mdrtb.positiveShort");
     		    				
     		    				if(res!=null) {
     		    					int resId = res.getConceptId().intValue();
     		    					
-    		    					if(resId == ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+    		    					if(resId == ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
     		    						xr += "/" + getMessage("mdrtb.resistantShort");
     		    						report += openTD() + xr + closeTD();
     		    					}
     		    					
-    		    					else if(resId == ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+    		    					else if(resId == ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
     		    						xr += "/" + getMessage("mdrtb.sensitiveShort");
     		    						report += openTD() + xr + closeTD();
     		    					}
@@ -391,7 +387,7 @@ public class PatientListContoller {
     		    				}
     		    			} 
     		    			
-    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
+    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
     		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
     		    			}
     		    			
@@ -441,30 +437,30 @@ public class PatientListContoller {
     		    		/*if(ih!=null) {
     		    			int concId = ih.getConceptId().intValue();
     		    			
-    		    			if(concId==ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
-    		    				res = ms.getConcept(TbConcepts.ISONIAZID).getName().getShortName();
+    		    			if(concId==ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
+    		    				res = ms.getConcept(MdrtbConcepts.ISONIAZID).getName().getShortName();
     		    			}
     		    			
-    		    			else if(concId==ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
-    		    				sen = ms.getConcept(TbConcepts.ISONIAZID).getName().getShortName();
+    		    			else if(concId==ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+    		    				sen = ms.getConcept(MdrtbConcepts.ISONIAZID).getName().getShortName();
     		    			}
     		    		}
     		    		
     		    		if(rh!=null) {
     		    			int concId = rh.getConceptId().intValue();
     		    			
-    		    			if(concId==ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+    		    			if(concId==ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
     		    				if(res.length()==0)
-    		    					res = ms.getConcept(TbConcepts.RIFAMPICIN).getName().getShortName();
+    		    					res = ms.getConcept(MdrtbConcepts.RIFAMPICIN).getName().getShortName();
     		    				else 
-    		    					res += "," + ms.getConcept(TbConcepts.RIFAMPICIN).getName().getShortName();
+    		    					res += "," + ms.getConcept(MdrtbConcepts.RIFAMPICIN).getName().getShortName();
     		    			}
     		    			
-    		    			else if(concId==ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+    		    			else if(concId==ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
     		    				if(sen.length()==0)
-    		    					sen = ms.getConcept(TbConcepts.RIFAMPICIN).getName().getShortName();
+    		    					sen = ms.getConcept(MdrtbConcepts.RIFAMPICIN).getName().getShortName();
     		    				else 
-    		    					sen += "," + ms.getConcept(TbConcepts.RIFAMPICIN).getName().getShortName();
+    		    					sen += "," + ms.getConcept(MdrtbConcepts.RIFAMPICIN).getName().getShortName();
     		    			}
     		    		}
     		    		
@@ -520,11 +516,11 @@ public class PatientListContoller {
     		    		if(ih!=null) {
     		    			int concId = ih.getConceptId().intValue();
     		    			
-    		    			if(concId==ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+    		    			if(concId==ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
     		    				res = getMessage("mdrtb.lists.injShort");
     		    			}
     		    			
-    		    			else if(concId==ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+    		    			else if(concId==ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
     		    				sen = getMessage("mdrtb.lists.injShort");
     		    			}
     		    		}
@@ -532,14 +528,14 @@ public class PatientListContoller {
     		    		if(fh!=null) {
     		    			int concId = fh.getConceptId().intValue();
     		    			
-    		    			if(concId==ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+    		    			if(concId==ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
     		    				if(res.length()==0)
     		    					res = getMessage("mdrtb.lists.fqShort");
     		    				else 
     		    					res += "," + getMessage("mdrtb.lists.fqShort");
     		    			}
     		    			
-    		    			else if(concId==ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+    		    			else if(concId==ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
     		    				if(sen.length()==0)
     		    					sen = getMessage("mdrtb.lists.fqShort");
     		    				else 
@@ -567,11 +563,11 @@ public class PatientListContoller {
     		    		
     		    		if(dc.getCultureResult()!=null) {
     		    			
-    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.NEGATIVE).getConceptId().intValue()) {
+    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.NEGATIVE).getConceptId().intValue()) {
     		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
     		    			}
     		    			
-    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
+    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
     		    				report += openTD() + getMessage("mdrtb.lists.growth") + closeTD();
     		    			}
     		    			
@@ -699,7 +695,7 @@ public class PatientListContoller {
     		model.addAttribute("listName", getMessage("mdrtb.dotsCasesByRegistrationGroup"));
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.PATIENT_GROUP);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.PATIENT_GROUP);
     		
     		
     		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class).getTB03FormsFilled(locList,year,quarter,month);
@@ -711,7 +707,7 @@ public class PatientListContoller {
     		Collections.sort(tb03s);
     		
     		//NEW CASES 
-    		Concept newConcept = ms.getConcept(TbConcepts.NEW);
+    		Concept newConcept = ms.getConcept(MdrtbConcepts.NEW);
     		report += "<h4>" + getMessage("mdrtb.lists.new") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -752,8 +748,8 @@ public class PatientListContoller {
     		
     		//Relapse
     		
-    		Concept relapse1Concept = ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_1);
-    		Concept relapse2Concept = ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_2);
+    		Concept relapse1Concept = ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1);
+    		Concept relapse2Concept = ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2);
     		report += "<h4>" + getMessage("mdrtb.lists.relapses") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -796,8 +792,8 @@ public class PatientListContoller {
     		report += "<br/>";
     		
     		//AfterDefault
-    		Concept default1Concept = ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_1);
-    		Concept default2Concept = ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_2);
+    		Concept default1Concept = ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1);
+    		Concept default2Concept = ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2);
     		
     		report += "<h4>" + getMessage("mdrtb.tb03.ltfu") + "</h4>";
     		report += openTable();
@@ -842,8 +838,8 @@ public class PatientListContoller {
     		report += "<br/>";
     		
     		//AfterFailure
-    		Concept failure1Concept = ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_1);
-    		Concept failure2Concept = ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_2);
+    		Concept failure1Concept = ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1);
+    		Concept failure2Concept = ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2);
     		
     		report += "<h4>" + getMessage("mdrtb.tb03.failure") + "</h4>";
     		report += openTable();
@@ -888,7 +884,7 @@ public class PatientListContoller {
     		report += "<br/>";
     		
     		//Transfer In
-    		Concept transferInConcept = ms.getConcept(TbConcepts.TRANSFER);
+    		Concept transferInConcept = ms.getConcept(MdrtbConcepts.TRANSFER);
     		
     		report += "<h4>" + getMessage("mdrtb.lists.transferIn") + "</h4>";
     		report += openTable();
@@ -934,7 +930,7 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		
     		//OTHER CASES 
-    		Concept otherConcept = ms.getConcept(TbConcepts.OTHER);
+    		Concept otherConcept = ms.getConcept(MdrtbConcepts.OTHER);
     		report += "<h4>" + getMessage("mdrtb.tb03.other") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -1030,7 +1026,7 @@ public class PatientListContoller {
     		model.addAttribute("listName", getMessage("mdrtb.dotsCasesByAnatomicalSite"));
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.ANATOMICAL_SITE_OF_TB);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB);
     		
     		
     		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class).getTB03FormsFilled(locList,year,quarter,month);
@@ -1040,7 +1036,7 @@ public class PatientListContoller {
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
     		//NEW CASES 
-    		Concept pulmonaryConcept = ms.getConcept(TbConcepts.PULMONARY_TB);
+    		Concept pulmonaryConcept = ms.getConcept(MdrtbConcepts.PULMONARY_TB);
     		report += "<h4>" + getMessage("mdrtb.pulmonary") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -1083,7 +1079,7 @@ public class PatientListContoller {
     		
     		//Relapse
     		
-    		Concept epConcept = ms.getConcept(TbConcepts.EXTRA_PULMONARY_TB);
+    		Concept epConcept = ms.getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB);
     		
     		report += "<h4>" + getMessage("mdrtb.extrapulmonary") + "</h4>";
     		report += openTable();
@@ -1188,7 +1184,7 @@ public class PatientListContoller {
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.RESISTANCE_TYPE);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.RESISTANCE_TYPE);
 
 		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class)
 				.getTB03FormsFilled(locList, year, quarter, month);
@@ -1617,7 +1613,7 @@ public class PatientListContoller {
 		report += "<br/>";
 
 		// NO
-		q = ms.getConcept(TbConcepts.NO);
+		q = ms.getConcept(MdrtbConcepts.NO);
 		report += "<h4>" + getMessage("mdrtb.sensitive") + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -1722,9 +1718,9 @@ public class PatientListContoller {
     	            
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.PATIENT_GROUP);
-    		Concept siteConcept = ms.getConcept(TbConcepts.ANATOMICAL_SITE_OF_TB);
-    		Concept pulConcept = ms.getConcept(TbConcepts.PULMONARY_TB);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.PATIENT_GROUP);
+    		Concept siteConcept = ms.getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB);
+    		Concept pulConcept = ms.getConcept(MdrtbConcepts.PULMONARY_TB);
     		
     		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class).getTB03FormsFilled(locList,year,quarter,month);
     		Collections.sort(tb03s);
@@ -1734,7 +1730,7 @@ public class PatientListContoller {
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
     		//NEW CASES + Positive
-    		Concept newConcept = ms.getConcept(TbConcepts.NEW);
+    		Concept newConcept = ms.getConcept(MdrtbConcepts.NEW);
     		report += "<h4>" + getMessage("mdrtb.lists.newPulmonaryBacPositive") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -1824,8 +1820,8 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		report += "<br/>";
     		//Relapse + positive
-    		Concept relapse1Concept = ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_1);
-    		Concept relapse2Concept = ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_2);
+    		Concept relapse1Concept = ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1);
+    		Concept relapse2Concept = ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2);
     		report += "<h4>" + getMessage("mdrtb.lists.relapsePulmonaryBacPositive") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -1914,10 +1910,10 @@ public class PatientListContoller {
     		report += "<br/>";
     		
     		//Retreament - Negative
-    		Concept default1Concept = ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_1);
-    		Concept default2Concept = ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_2);
-    		Concept failure1Concept = ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_1);
-    		Concept failure2Concept = ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_2);
+    		Concept default1Concept = ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1);
+    		Concept default2Concept = ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2);
+    		Concept failure1Concept = ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1);
+    		Concept failure2Concept = ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2);
     		report += "<h4>" + getMessage("mdrtb.lists.retreatmentPulmonaryBacPositive") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -2024,7 +2020,7 @@ public class PatientListContoller {
     		report += "<br/>";
     		
     		//Transfer In
-    		Concept transferInConcept = ms.getConcept(TbConcepts.TRANSFER);
+    		Concept transferInConcept = ms.getConcept(MdrtbConcepts.TRANSFER);
     		
     		report += "<h4>" + getMessage("mdrtb.lists.transferInPulmonaryBacPositive") + "</h4>";
     		report += openTable();
@@ -2173,7 +2169,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.RESISTANCE_TYPE);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.RESISTANCE_TYPE);
     		Concept treatmentStartDate = ms.getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE);
     		
     		
@@ -2223,7 +2219,7 @@ public class PatientListContoller {
     		report += closeTable();
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		
-    		Concept xdr = ms.getConcept(TbConcepts.XDR_TB);
+    		Concept xdr = ms.getConcept(MdrtbConcepts.XDR_TB);
     		
     		report += "<h4>" + getMessage("mdrtb.xdrtb") + "</h4>";
     		report += openTable();
@@ -2319,7 +2315,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     		Concept curedConcept = ms.getConcept(MdrtbConcepts.CURED);
     		Concept txCompleted = ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE);
     		
@@ -2423,7 +2419,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.RESISTANCE_TYPE);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.RESISTANCE_TYPE);
     		
     		
     		ArrayList<TB03uForm> tb03s = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList,year,quarter,month);
@@ -2469,7 +2465,7 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		
     		//EP
-    		Concept xdr = ms.getConcept(TbConcepts.XDR_TB);
+    		Concept xdr = ms.getConcept(MdrtbConcepts.XDR_TB);
     		
     		report += "<h4>" + getMessage("mdrtb.xdrtb") + "</h4>";
     		report += openTable();
@@ -2564,7 +2560,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.AGE_AT_FORM89_REGISTRATION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.AGE_AT_FORM89_REGISTRATION);
 
     		/*ArrayList<Form89> forms = Context.getService(MdrtbService.class).getForm89FormsFilled(locList,year,quarter,month);*/
     		
@@ -2688,7 +2684,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.AGE_AT_FORM89_REGISTRATION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.AGE_AT_FORM89_REGISTRATION);
     		
     		
     		
@@ -2797,7 +2793,7 @@ public class PatientListContoller {
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.DIABETES);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.DIABETES);
     		
     		
     		
@@ -2806,7 +2802,7 @@ public class PatientListContoller {
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withDiabetes") + "</h4>";
     		report += openTable();
@@ -2953,8 +2949,8 @@ public class PatientListContoller {
     			forms.add(f89);
     		}
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.DIABETES);
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.DIABETES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withDiabetes") + "</h4>";
     		report += openTable();
@@ -3002,7 +2998,7 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		report += "<br/>";
     				
-    		groupConcept = ms.getConcept(TbConcepts.CANCER);
+    		groupConcept = ms.getConcept(MdrtbConcepts.CANCER);
     		report += "<h4>" + getMessage("mdrtb.withCancer") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3048,7 +3044,7 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;	
     		report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.CNSDL);
+    		groupConcept = ms.getConcept(MdrtbConcepts.CNSDL);
     		report += "<h4>" + getMessage("mdrtb.withCOPD") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3094,7 +3090,7 @@ public class PatientListContoller {
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;	
 report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.HYPERTENSION_OR_HEART_DISEASE);
+    		groupConcept = ms.getConcept(MdrtbConcepts.HYPERTENSION_OR_HEART_DISEASE);
     		report += "<h4>" + getMessage("mdrtb.withHypertension") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3140,7 +3136,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.ULCER);
+    		groupConcept = ms.getConcept(MdrtbConcepts.ULCER);
     		report += "<h4>" + getMessage("mdrtb.withUlcer") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3185,7 +3181,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
 report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.MENTAL_DISORDER);
+    		groupConcept = ms.getConcept(MdrtbConcepts.MENTAL_DISORDER);
     		report += "<h4>" + getMessage("mdrtb.withMentalDisorder") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3231,7 +3227,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
 report += "<br/>";
 			
-    		/*groupConcept = ms.getConcept(TbConcepts.CNSDL);
+    		/*groupConcept = ms.getConcept(MdrtbConcepts.CNSDL);
     		report += "<h4>" + getMessage("mdrtb.withCOPD") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3278,7 +3274,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
 report += "<br/>";*/
 			
-    		groupConcept = ms.getConcept(TbConcepts.ICD20);
+    		groupConcept = ms.getConcept(MdrtbConcepts.ICD20);
     		report += "<h4>" + getMessage("mdrtb.withHIV") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3325,7 +3321,7 @@ report += "<br/>";*/
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
 report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.COMORBID_HEPATITIS);
+    		groupConcept = ms.getConcept(MdrtbConcepts.COMORBID_HEPATITIS);
     		report += "<h4>" + getMessage("mdrtb.withHepatitis") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3371,7 +3367,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
     		report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.KIDNEY_DISEASE);
+    		groupConcept = ms.getConcept(MdrtbConcepts.KIDNEY_DISEASE);
     		report += "<h4>" + getMessage("mdrtb.withKidneyDisease") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3417,7 +3413,7 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + i;
 report += "<br/>";
 			
-    		groupConcept = ms.getConcept(TbConcepts.OTHER_DISEASE);
+    		groupConcept = ms.getConcept(MdrtbConcepts.OTHER_DISEASE);
     		report += "<h4>" + getMessage("mdrtb.withOtherDisease") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -3517,7 +3513,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.CANCER);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.CANCER);
     		
     		
     		
@@ -3526,7 +3522,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withCancer") + "</h4>";
     		report += openTable();
@@ -3626,7 +3622,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.CIRCUMSTANCES_OF_DETECTION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.CIRCUMSTANCES_OF_DETECTION);
     		
     		
     		
@@ -3636,7 +3632,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
-    		Concept fromContact = ms.getConcept(TbConcepts.CONTACT_INVESTIGATION);
+    		Concept fromContact = ms.getConcept(MdrtbConcepts.CONTACT_INVESTIGATION);
     		
     		report += "<h4>" + getMessage("mdrtb.detectedFromContact") + "</h4>";
     		report += openTable();
@@ -3732,7 +3728,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.DIABETES);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.DIABETES);
     		
     		
     		
@@ -3741,7 +3737,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withDiabetes") + "</h4>";
     		report += openTable();
@@ -3835,7 +3831,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.CANCER);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.CANCER);
     		
     		
     		
@@ -3844,7 +3840,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withCancer") + "</h4>";
     		report += openTable();
@@ -3947,7 +3943,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.CNSDL);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.CNSDL);
     		
     		
     		
@@ -3956,7 +3952,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withCOPD") + "</h4>";
     		report += openTable();
@@ -4060,7 +4056,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.HYPERTENSION_OR_HEART_DISEASE);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.HYPERTENSION_OR_HEART_DISEASE);
     		
     		
     		
@@ -4069,7 +4065,7 @@ report += "<br/>";
  	
     		Date startDate = (Date)(dateMap.get("startDate"));
     		Date endDate = (Date)(dateMap.get("endDate"));*/
-    		Concept yes = ms.getConcept(TbConcepts.YES);
+    		Concept yes = ms.getConcept(MdrtbConcepts.YES);
     		
     		report += "<h4>" + getMessage("mdrtb.withHypertension") + "</h4>";
     		report += openTable();
@@ -4171,7 +4167,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.ULCER);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.ULCER);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4182,7 +4178,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withUlcer") + "</h4>";
 		report += openTable();
@@ -4286,7 +4282,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.MENTAL_DISORDER);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.MENTAL_DISORDER);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4297,7 +4293,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withMentalDisorder") + "</h4>";
 		report += openTable();
@@ -4400,7 +4396,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.ICD20);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.ICD20);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4411,7 +4407,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withHIV") + "</h4>";
 		report += openTable();
@@ -4514,7 +4510,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.COMORBID_HEPATITIS);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.COMORBID_HEPATITIS);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4525,7 +4521,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withHepatitis") + "</h4>";
 		report += openTable();
@@ -4628,7 +4624,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.KIDNEY_DISEASE);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.KIDNEY_DISEASE);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4639,7 +4635,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withKidneyDisease") + "</h4>";
 		report += openTable();
@@ -4741,7 +4737,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.OTHER_DISEASE);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.OTHER_DISEASE);
 
 		ArrayList<Form89> forms = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -4752,7 +4748,7 @@ report += "<br/>";
 		 * Date startDate = (Date)(dateMap.get("startDate")); Date endDate =
 		 * (Date)(dateMap.get("endDate"));
 		 */
-		Concept yes = ms.getConcept(TbConcepts.YES);
+		Concept yes = ms.getConcept(MdrtbConcepts.YES);
 
 		report += "<h4>" + getMessage("mdrtb.withOtherDisease") + "</h4>";
 		report += openTable();
@@ -4859,7 +4855,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.PROFESSION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.PROFESSION);
     		
     		
     		
@@ -4901,31 +4897,31 @@ report += "<br/>";
     		Concept status = null;
     		
     		//category
-        	Concept workerConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.WORKER);
+        	Concept workerConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.WORKER);
         	int workerId = workerConcept.getConceptId().intValue();
-        	Concept govtConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.GOVT_SERVANT);
+        	Concept govtConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GOVT_SERVANT);
         	int govtId = govtConcept.getConceptId().intValue();
-        	Concept studentConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.STUDENT);
+        	Concept studentConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.STUDENT);
         	int studentId = studentConcept.getConceptId().intValue();
-        	Concept disabledConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.DISABLED);
+        	Concept disabledConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DISABLED);
         	int disabledId = disabledConcept.getConceptId().intValue();
-        	Concept unemployedConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.UNEMPLOYED);
+        	Concept unemployedConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNEMPLOYED);
         	int unemployedId = unemployedConcept.getConceptId().intValue();
-        	Concept phcConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PHC_WORKER);
+        	Concept phcConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PHC_WORKER);
         	int phcId = phcConcept.getConceptId().intValue();
-        	Concept militaryConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.MILITARY_SERVANT);
+        	Concept militaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY_SERVANT);
         	int militaryId = militaryConcept.getConceptId().intValue();
-        	Concept schoolConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.SCHOOLCHILD);
+        	Concept schoolConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCHOOLCHILD);
         	int schoolId = schoolConcept.getConceptId().intValue();
-        	Concept tbWorkerConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_SERVICES_WORKER);
+        	Concept tbWorkerConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_SERVICES_WORKER);
         	int tbWorkerId = tbWorkerConcept.getConceptId().intValue();
-        	Concept privateConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PRIVATE_SECTOR);
+        	Concept privateConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRIVATE_SECTOR);
         	int privateId = privateConcept.getConceptId().intValue();
-        	Concept housewifeConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.HOUSEWIFE);
+        	Concept housewifeConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOUSEWIFE);
         	int housewifeId = housewifeConcept.getConceptId().intValue();
-        	Concept preschoolConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PRESCHOOL_CHILD);
+        	Concept preschoolConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRESCHOOL_CHILD);
         	int preschoolId = preschoolConcept.getConceptId().intValue();
-        	Concept pensionerConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PENSIONER);
+        	Concept pensionerConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PENSIONER);
         	int pensionerId = pensionerConcept.getConceptId().intValue();
     		
         	int statusId = 0;
@@ -5027,7 +5023,7 @@ report += "<br/>";
     		}
     		
     		//WORKER
-    		Concept q = ms.getConcept(TbConcepts.WORKER);
+    		Concept q = ms.getConcept(MdrtbConcepts.WORKER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5073,7 +5069,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//GOVT SERVANT
-    		q = ms.getConcept(TbConcepts.GOVT_SERVANT);
+    		q = ms.getConcept(MdrtbConcepts.GOVT_SERVANT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5117,7 +5113,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//STUDENT
-    		q = ms.getConcept(TbConcepts.STUDENT);
+    		q = ms.getConcept(MdrtbConcepts.STUDENT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5163,7 +5159,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//DISABLED
-    		q = ms.getConcept(TbConcepts.DISABLED);
+    		q = ms.getConcept(MdrtbConcepts.DISABLED);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5207,7 +5203,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//UNEMPLOYED
-    		q = ms.getConcept(TbConcepts.UNEMPLOYED);
+    		q = ms.getConcept(MdrtbConcepts.UNEMPLOYED);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5254,7 +5250,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//PHC WORKER
-    		q = ms.getConcept(TbConcepts.PHC_WORKER);
+    		q = ms.getConcept(MdrtbConcepts.PHC_WORKER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5299,7 +5295,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//MILITARY SERVANT
-    		q = ms.getConcept(TbConcepts.MILITARY_SERVANT);
+    		q = ms.getConcept(MdrtbConcepts.MILITARY_SERVANT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5344,7 +5340,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//SCHOOLCHILD
-    		q = ms.getConcept(TbConcepts.SCHOOLCHILD);
+    		q = ms.getConcept(MdrtbConcepts.SCHOOLCHILD);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5388,7 +5384,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//TB SERVICES WORKER
-    		q = ms.getConcept(TbConcepts.TB_SERVICES_WORKER);
+    		q = ms.getConcept(MdrtbConcepts.TB_SERVICES_WORKER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5433,7 +5429,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//PRIVATE SECTOR WORKER
-    		q = ms.getConcept(TbConcepts.PRIVATE_SECTOR);
+    		q = ms.getConcept(MdrtbConcepts.PRIVATE_SECTOR);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5479,7 +5475,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//HOUSEWIFE
-    		q = ms.getConcept(TbConcepts.HOUSEWIFE);
+    		q = ms.getConcept(MdrtbConcepts.HOUSEWIFE);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5525,7 +5521,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//PRE-SCHOOL CHILD
-    		q = ms.getConcept(TbConcepts.PRESCHOOL_CHILD);
+    		q = ms.getConcept(MdrtbConcepts.PRESCHOOL_CHILD);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5571,7 +5567,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//PENSIONER
-    		q = ms.getConcept(TbConcepts.PENSIONER);
+    		q = ms.getConcept(MdrtbConcepts.PENSIONER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5671,7 +5667,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.POPULATION_CATEGORY);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.POPULATION_CATEGORY);
     		
     		/*ArrayList<Form89> tb03s = Context.getService(MdrtbService.class).getForm89FormsFilled(locList,year,quarter,month);
     		Collections.sort(tb03s);*/
@@ -5707,19 +5703,19 @@ report += "<br/>";
     		Concept category = null;
     		
     		//CATEGORY
-        	Concept thisConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.RESIDENT_OF_TERRITORY);
+        	Concept thisConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESIDENT_OF_TERRITORY);
         	int thisId = thisConcept.getConceptId().intValue();
-        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.RESIDENT_OTHER_TERRITORY);
+        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESIDENT_OTHER_TERRITORY);
         	int otherId = otherConcept.getConceptId().intValue();
-        	Concept foreignerConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.FOREIGNER);
+        	Concept foreignerConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOREIGNER);
         	int foreignerId = foreignerConcept.getConceptId().intValue();
-        	Concept welfareConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.RESIDENT_SOCIAL_SECURITY_FACILITY);
+        	Concept welfareConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESIDENT_SOCIAL_SECURITY_FACILITY);
         	int welfareId = welfareConcept.getConceptId().intValue();
-        	Concept homelessConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.HOMELESS);
+        	Concept homelessConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOMELESS);
         	int homelessId = homelessConcept.getConceptId().intValue();
-        	Concept prisonerConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CONVICTED);
+        	Concept prisonerConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONVICTED);
         	int prisonerId = prisonerConcept.getConceptId().intValue();
-        	Concept investigationConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.ON_REMAND);
+        	Concept investigationConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ON_REMAND);
         	int investigationId = investigationConcept.getConceptId().intValue();
         	
     		
@@ -5800,7 +5796,7 @@ report += "<br/>";
     		}
     		
     		//RESIDENT_OF_TERRITORY
-    		Concept q = ms.getConcept(TbConcepts.RESIDENT_OF_TERRITORY);
+    		Concept q = ms.getConcept(MdrtbConcepts.RESIDENT_OF_TERRITORY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5843,7 +5839,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//RESIDENT_OTHER_TERRITORY
-    		q = ms.getConcept(TbConcepts.RESIDENT_OTHER_TERRITORY);
+    		q = ms.getConcept(MdrtbConcepts.RESIDENT_OTHER_TERRITORY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5887,7 +5883,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//FOREIGNER
-    		q = ms.getConcept(TbConcepts.FOREIGNER);
+    		q = ms.getConcept(MdrtbConcepts.FOREIGNER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5934,7 +5930,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//RESIDENT_SOCIAL_SECURITY_FACILITY
-    		q = ms.getConcept(TbConcepts.RESIDENT_SOCIAL_SECURITY_FACILITY);
+    		q = ms.getConcept(MdrtbConcepts.RESIDENT_SOCIAL_SECURITY_FACILITY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -5977,7 +5973,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//HOMELESS
-    		q = ms.getConcept(TbConcepts.HOMELESS);
+    		q = ms.getConcept(MdrtbConcepts.HOMELESS);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6022,7 +6018,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//CONVICTED
-    		q = ms.getConcept(TbConcepts.CONVICTED);
+    		q = ms.getConcept(MdrtbConcepts.CONVICTED);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6068,7 +6064,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//ON_REMAND
-    		q = ms.getConcept(TbConcepts.ON_REMAND);
+    		q = ms.getConcept(MdrtbConcepts.ON_REMAND);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6173,7 +6169,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.LOCATION_TYPE);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.LOCATION_TYPE);
     		
     		/*ArrayList<Form89> tb03s = Context.getService(MdrtbService.class).getForm89FormsFilled(locList,year,quarter,month);
     		Collections.sort(tb03s);*/
@@ -6195,9 +6191,9 @@ report += "<br/>";
     		Concept type = null;
     		
     		//PLACE
-        	Concept cityConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CITY);
+        	Concept cityConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CITY);
         	int cityId = cityConcept.getConceptId().intValue();
-        	Concept villageConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.VILLAGE);
+        	Concept villageConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.VILLAGE);
         	int villageId = villageConcept.getConceptId().intValue();
         	
         	
@@ -6262,7 +6258,7 @@ report += "<br/>";
         	}
     		
     		//RESIDENT_OF_TERRITORY
-    		Concept q = ms.getConcept(TbConcepts.CITY);
+    		Concept q = ms.getConcept(MdrtbConcepts.CITY);
     		report += "<h4>" + getMessage("mdrtb.lists.city") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6308,7 +6304,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//RESIDENT_OTHER_TERRITORY
-    		q = ms.getConcept(TbConcepts.VILLAGE);
+    		q = ms.getConcept(MdrtbConcepts.VILLAGE);
     		report += "<h4>" + getMessage("mdrtb.lists.village") + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6409,7 +6405,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.PLACE_OF_DETECTION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.PLACE_OF_DETECTION);
     		
     		/*ArrayList<Form89> tb03s = Context.getService(MdrtbService.class).getForm89FormsFilled(locList,year,quarter,month);
     		Collections.sort(tb03s);*/
@@ -6433,13 +6429,13 @@ report += "<br/>";
     		Concept circSite = null;
     		
     		//PLACE
-        	Concept tbConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_FACILITY);
+        	Concept tbConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_FACILITY);
         	int tbId = tbConcept.getConceptId().intValue();
-        	Concept privateConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PRIVATE_SECTOR_FACILITY);
+        	Concept privateConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRIVATE_SECTOR_FACILITY);
         	int privateId = privateConcept.getConceptId().intValue();
-        	Concept phcConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PHC_FACILITY);
+        	Concept phcConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PHC_FACILITY);
         	int phcId = phcConcept.getConceptId().intValue();
-        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER_MEDICAL_FACILITY);
+        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MEDICAL_FACILITY);
         	int otherId = otherConcept.getConceptId().intValue();
         	
         	
@@ -6509,7 +6505,7 @@ report += "<br/>";
         	}
     		
     		//TB FACILITY
-    		Concept q = ms.getConcept(TbConcepts.TB_FACILITY);
+    		Concept q = ms.getConcept(MdrtbConcepts.TB_FACILITY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6554,7 +6550,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//PHC
-    		q = ms.getConcept(TbConcepts.PHC_FACILITY);
+    		q = ms.getConcept(MdrtbConcepts.PHC_FACILITY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6602,7 +6598,7 @@ report += "<br/>";
     		
     		
     		//Private Sector
-    		q = ms.getConcept(TbConcepts.PRIVATE_SECTOR_FACILITY);
+    		q = ms.getConcept(MdrtbConcepts.PRIVATE_SECTOR_FACILITY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6650,7 +6646,7 @@ report += "<br/>";
     		
     		
     		//OTHER MED FAC
-    		q = ms.getConcept(TbConcepts.OTHER_MEDICAL_FACILITY);
+    		q = ms.getConcept(MdrtbConcepts.OTHER_MEDICAL_FACILITY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6752,7 +6748,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.CIRCUMSTANCES_OF_DETECTION);
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.CIRCUMSTANCES_OF_DETECTION);
     		
     		//ArrayList<Form89> tb03s = Context.getService(MdrtbService.class).getForm89FormsFilled(locList,year,quarter,month);
     		ArrayList<Form89> selfRefList = new ArrayList<Form89>();
@@ -6770,15 +6766,15 @@ report += "<br/>";
     		Concept circSite = null;
     		
     		//CIRCUMSTANCES
-        	Concept selfRefConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.SELF_REFERRAL);
+        	Concept selfRefConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SELF_REFERRAL);
         	int selfRefId = selfRefConcept.getConceptId().intValue();
-        	Concept baselineExamConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.BASELINE_EXAM);
+        	Concept baselineExamConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BASELINE_EXAM);
         	int baselineExamId = baselineExamConcept.getConceptId().intValue();
-        	Concept postmortemConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.POSTMORTERM_IDENTIFICATION);
+        	Concept postmortemConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.POSTMORTERM_IDENTIFICATION);
         	int postMortemId = postmortemConcept.getConceptId().intValue();
-        	Concept contactConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CONTACT);
+        	Concept contactConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT);
         	int contactId = contactConcept.getConceptId().intValue();
-        	Concept migrantConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.MIGRANT);
+        	Concept migrantConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT);
         	int migrantId = migrantConcept.getConceptId().intValue();
         	
         	int circId = 0;
@@ -6849,7 +6845,7 @@ report += "<br/>";
         	}
     		
     		//SELF_REFERRAL
-    		Concept q = ms.getConcept(TbConcepts.SELF_REFERRAL);
+    		Concept q = ms.getConcept(MdrtbConcepts.SELF_REFERRAL);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6890,7 +6886,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//BASELINE_EXAM
-    		q = ms.getConcept(TbConcepts.BASELINE_EXAM);
+    		q = ms.getConcept(MdrtbConcepts.BASELINE_EXAM);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6931,7 +6927,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//POSTMORTERM_IDENTIFICATION
-    		q = ms.getConcept(TbConcepts.POSTMORTERM_IDENTIFICATION);
+    		q = ms.getConcept(MdrtbConcepts.POSTMORTERM_IDENTIFICATION);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -6974,7 +6970,7 @@ report += "<br/>";
     		report += closeTable();
     		report += getMessage("mdrtb.numberOfRecords") + ": " + postmortemList.size();
     		//CONTACT
-    		q = ms.getConcept(TbConcepts.CONTACT);
+    		q = ms.getConcept(MdrtbConcepts.CONTACT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7018,7 +7014,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//MIGRANT
-    		q = ms.getConcept(TbConcepts.MIGRANT);
+    		q = ms.getConcept(MdrtbConcepts.MIGRANT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7123,9 +7119,7 @@ report += "<br/>";
     		
     		String report = "";
     		
-    		Concept groupConcept = ms.getConcept(TbConcepts.BASIS_FOR_TB_DIAGNOSIS);
-    		
-    		
+    		Concept groupConcept = ms.getConcept(MdrtbConcepts.METHOD_OF_DETECTION);
     		
     		ArrayList<Form89> fluorographyList = new ArrayList<Form89>();
     		ArrayList<Form89> genexpertList = new ArrayList<Form89>();
@@ -7162,23 +7156,23 @@ report += "<br/>";
     		ArrayList<Form89> otherList = new ArrayList<Form89>();*/
     		
     		//METHOD
-        	Concept fluorographyConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.FLUOROGRAPHY);
+        	Concept fluorographyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLUOROGRAPHY);
         	int fluorographyId = fluorographyConcept.getConceptId().intValue();
-        	Concept genexpertConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.GENEXPERT);
+        	Concept genexpertConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENEXPERT);
         	int genexpertId = genexpertConcept.getConceptId().intValue();
-        	Concept microscopyConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.FLURORESCENT_MICROSCOPY);
+        	Concept microscopyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
         	int microscopyId = microscopyConcept.getConceptId().intValue();
-        	Concept tuberculinConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULIN_TEST);
+        	Concept tuberculinConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULIN_TEST);
         	int tuberculinId = tuberculinConcept.getConceptId().intValue();
-        	Concept hainConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.HAIN_TEST);
+        	Concept hainConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_TEST);
         	int hainId = hainConcept.getConceptId().intValue();
-        	Concept cultureConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_DETECTION);
+        	Concept cultureConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_TEST);
         	int cultureId = cultureConcept.getConceptId().intValue();
-        	Concept histologyConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.HISTOLOGY);
+        	Concept histologyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HISTOLOGY);
         	int histologyId = histologyConcept.getConceptId().intValue();
-        	Concept cxrConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CXR_RESULT);
+        	Concept cxrConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CXR_RESULT);
         	int cxrId = cxrConcept.getConceptId().intValue();
-        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER);
+        	Concept otherConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER);
         	int otherId = otherConcept.getConceptId().intValue();
         	
         	int methodId = 0;
@@ -7266,7 +7260,7 @@ report += "<br/>";
     		}
     		
     		//FLUOROGRAPHY
-    		Concept q = ms.getConcept(TbConcepts.FLUOROGRAPHY);
+    		Concept q = ms.getConcept(MdrtbConcepts.FLUOROGRAPHY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7309,7 +7303,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//GENEXPERT
-    		q = ms.getConcept(TbConcepts.GENEXPERT);
+    		q = ms.getConcept(MdrtbConcepts.GENEXPERT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7353,7 +7347,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//FLURORESCENT_MICROSCOPY
-    		q = ms.getConcept(TbConcepts.FLURORESCENT_MICROSCOPY);
+    		q = ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7397,7 +7391,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//TUBERCULIN_TEST
-    		q = ms.getConcept(TbConcepts.TUBERCULIN_TEST);
+    		q = ms.getConcept(MdrtbConcepts.TUBERCULIN_TEST);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7437,7 +7431,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		/*//ZIEHLNELSEN
-    		q = ms.getConcept(TbConcepts.ZIEHLNELSEN);
+    		q = ms.getConcept(MdrtbConcepts.ZIEHLNELSEN);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7481,7 +7475,7 @@ report += "<br/>";
     		report += "<br/>";*/
     		
     		//HAIN_TEST
-    		q = ms.getConcept(TbConcepts.HAIN_TEST);
+    		q = ms.getConcept(MdrtbConcepts.HAIN_TEST);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7523,8 +7517,8 @@ report += "<br/>";
     		report += getMessage("mdrtb.numberOfRecords") + ": " + hainList.size();
     		report += "<br/>";
     		
-    		//CULTURE_DETECTION
-    		q = ms.getConcept(TbConcepts.CULTURE_DETECTION);
+    		//CULTURE_TEST
+    		q = ms.getConcept(MdrtbConcepts.CULTURE_TEST);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7567,7 +7561,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//HISTOLOGY
-    		q = ms.getConcept(TbConcepts.HISTOLOGY);
+    		q = ms.getConcept(MdrtbConcepts.HISTOLOGY);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7610,7 +7604,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//CXR_RESULT
-    		q = ms.getConcept(TbConcepts.CXR_RESULT);
+    		q = ms.getConcept(MdrtbConcepts.CXR_RESULT);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7652,7 +7646,7 @@ report += "<br/>";
     		report += "<br/>";
     		
     		//OTHER
-    		q = ms.getConcept(TbConcepts.OTHER);
+    		q = ms.getConcept(MdrtbConcepts.OTHER);
     		report += "<h4>" + q.getName().getName() + "</h4>";
     		report += openTable();
     		report += openTR();
@@ -7778,25 +7772,25 @@ report += "<br/>";
 		Concept pulSite = null;
 		
 		//PULMONARY
-    	Concept fibroCavConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.FIBROUS_CAVERNOUS);
+    	Concept fibroCavConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FIBROUS_CAVERNOUS);
     	int fibroCavId = fibroCavConcept.getConceptId().intValue();
-    	Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.MILIARY);
+    	Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILIARY);
     	int miliaryId = miliaryConcept.getConceptId().intValue();
-    	Concept focalConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.FOCAL);
+    	Concept focalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOCAL);
     	int focalId = focalConcept.getConceptId().intValue();
-    	Concept infiltrativeConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.INFILTRATIVE);
+    	Concept infiltrativeConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.INFILTRATIVE);
     	int infiltrativeId = infiltrativeConcept.getConceptId().intValue();
-    	Concept disseminatedConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.DISSEMINATED);
+    	Concept disseminatedConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DISSEMINATED);
     	int disseminatedId = disseminatedConcept.getConceptId().intValue();
-    	Concept cavernousConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CAVERNOUS);
+    	Concept cavernousConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAVERNOUS);
     	int cavernousId = cavernousConcept.getConceptId().intValue();
-    	Concept cirrhoticConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.CIRRHOTIC);
+    	Concept cirrhoticConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CIRRHOTIC);
     	int cirrhoticId = cirrhoticConcept.getConceptId().intValue();
-    	Concept primaryComplexConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_PRIMARY_COMPLEX);
+    	Concept primaryComplexConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_PRIMARY_COMPLEX);
     	int primaryComplexId = primaryComplexConcept.getConceptId().intValue();
-    	Concept tuberculomaConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULOMA);
+    	Concept tuberculomaConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOMA);
     	int tuberculomaId = tuberculomaConcept.getConceptId().intValue();
-    	Concept bronchiConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.BRONCHUS);
+    	Concept bronchiConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BRONCHUS);
     	int bronchiId = bronchiConcept.getConceptId().intValue();
 		
     	int pulId = 0;
@@ -7888,7 +7882,7 @@ report += "<br/>";
     	
     	
 		// FOCAL
-		Concept q = ms.getConcept(TbConcepts.FOCAL);
+		Concept q = ms.getConcept(MdrtbConcepts.FOCAL);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -7928,7 +7922,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// INFILTRATIVE
-		q = ms.getConcept(TbConcepts.INFILTRATIVE);
+		q = ms.getConcept(MdrtbConcepts.INFILTRATIVE);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -7969,7 +7963,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// DISSEMINATED
-		q = ms.getConcept(TbConcepts.DISSEMINATED);
+		q = ms.getConcept(MdrtbConcepts.DISSEMINATED);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8010,7 +8004,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// CAVERNOUS
-		q = ms.getConcept(TbConcepts.CAVERNOUS);
+		q = ms.getConcept(MdrtbConcepts.CAVERNOUS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8051,7 +8045,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// FIBROUS_CAVERNOUS
-		q = ms.getConcept(TbConcepts.FIBROUS_CAVERNOUS);
+		q = ms.getConcept(MdrtbConcepts.FIBROUS_CAVERNOUS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8092,7 +8086,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// CIRRHOTIC
-		q = ms.getConcept(TbConcepts.CIRRHOTIC);
+		q = ms.getConcept(MdrtbConcepts.CIRRHOTIC);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8133,7 +8127,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// TB_PRIMARY_COMPLEX
-		q = ms.getConcept(TbConcepts.TB_PRIMARY_COMPLEX);
+		q = ms.getConcept(MdrtbConcepts.TB_PRIMARY_COMPLEX);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8174,7 +8168,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// MILIARY
-		q = ms.getConcept(TbConcepts.MILIARY);
+		q = ms.getConcept(MdrtbConcepts.MILIARY);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8215,7 +8209,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// TUBERCULOMA
-		q = ms.getConcept(TbConcepts.TUBERCULOMA);
+		q = ms.getConcept(MdrtbConcepts.TUBERCULOMA);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8256,7 +8250,7 @@ report += "<br/>";
 		report += "<br/>";
 		
 		// BRONCHUS
-		q = ms.getConcept(TbConcepts.BRONCHUS);
+		q = ms.getConcept(MdrtbConcepts.BRONCHUS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8379,25 +8373,25 @@ report += "<br/>";
 		Concept pulSite = null;
 		
 		//PULMONARY
-    	Concept plevConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PLEVRITIS);
+    	Concept plevConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PLEVRITIS);
     	int plevId = plevConcept.getConceptId().intValue();
-    	Concept ofLymphConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OF_LYMPH_NODES);
+    	Concept ofLymphConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_LYMPH_NODES);
     	int ofLymphId = ofLymphConcept.getConceptId().intValue();
-    	Concept osteoConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OSTEOARTICULAR);
+    	Concept osteoConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OSTEOARTICULAR);
     	int osteoId = osteoConcept.getConceptId().intValue();
-    	Concept uroConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.GENITOURINARY);
+    	Concept uroConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENITOURINARY);
     	int uroId = uroConcept.getConceptId().intValue();
-    	Concept periLymphConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+    	Concept periLymphConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
     	int periLymphId = periLymphConcept.getConceptId().intValue();
-    	Concept abdConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.ABDOMINAL);
+    	Concept abdConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ABDOMINAL);
     	int abdId = abdConcept.getConceptId().intValue();
-    	Concept skinConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULODERMA);
+    	Concept skinConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULODERMA);
     	int skinId = skinConcept.getConceptId().intValue();
-    	Concept eyeConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OCULAR);
+    	Concept eyeConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OCULAR);
     	int eyeId = eyeConcept.getConceptId().intValue();
-    	Concept cnsConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OF_CNS);
+    	Concept cnsConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_CNS);
     	int cnsId = cnsConcept.getConceptId().intValue();
-    	Concept liverConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.OF_LIVER);
+    	Concept liverConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_LIVER);
     	int liverId = liverConcept.getConceptId().intValue();
 		
     	int pulId = 0;
@@ -8489,7 +8483,7 @@ report += "<br/>";
     	
     	
 		// FOCAL
-		Concept q = ms.getConcept(TbConcepts.PLEVRITIS);
+		Concept q = ms.getConcept(MdrtbConcepts.PLEVRITIS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8529,7 +8523,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// INFILTRATIVE
-		q = ms.getConcept(TbConcepts.OF_LYMPH_NODES);
+		q = ms.getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8570,7 +8564,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// DISSEMINATED
-		q = ms.getConcept(TbConcepts.OSTEOARTICULAR);
+		q = ms.getConcept(MdrtbConcepts.OSTEOARTICULAR);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8611,7 +8605,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// CAVERNOUS
-		q = ms.getConcept(TbConcepts.GENITOURINARY);
+		q = ms.getConcept(MdrtbConcepts.GENITOURINARY);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8652,7 +8646,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// FIBROUS_CAVERNOUS
-		q = ms.getConcept(TbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+		q = ms.getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8693,7 +8687,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// CIRRHOTIC
-		q = ms.getConcept(TbConcepts.ABDOMINAL);
+		q = ms.getConcept(MdrtbConcepts.ABDOMINAL);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8734,7 +8728,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// TB_PRIMARY_COMPLEX
-		q = ms.getConcept(TbConcepts.TUBERCULODERMA);
+		q = ms.getConcept(MdrtbConcepts.TUBERCULODERMA);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8775,7 +8769,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// MILIARY
-		q = ms.getConcept(TbConcepts.OCULAR);
+		q = ms.getConcept(MdrtbConcepts.OCULAR);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8816,7 +8810,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// TUBERCULOMA
-		q = ms.getConcept(TbConcepts.OF_CNS);
+		q = ms.getConcept(MdrtbConcepts.OF_CNS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8857,7 +8851,7 @@ report += "<br/>";
 		report += "<br/>";
 		
 		// BRONCHUS
-		q = ms.getConcept(TbConcepts.OF_LIVER);
+		q = ms.getConcept(MdrtbConcepts.OF_LIVER);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -8939,7 +8933,7 @@ report += "<br/>";
 
 		String report = "";
 
-		Concept groupConcept = ms.getConcept(TbConcepts.EPTB_SITE);
+		Concept groupConcept = ms.getConcept(MdrtbConcepts.EPTB_SITE);
 
 		ArrayList<Form89> tb03s = Context.getService(MdrtbService.class)
 				.getForm89FormsFilled(locList, year, quarter, month);
@@ -8955,7 +8949,7 @@ report += "<br/>";
 		 
 
 		// PLEVRITIS
-		Concept q = ms.getConcept(TbConcepts.PLEVRITIS);
+		Concept q = ms.getConcept(MdrtbConcepts.PLEVRITIS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9010,7 +9004,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OF_LYMPH_NODES
-		q = ms.getConcept(TbConcepts.OF_LYMPH_NODES);
+		q = ms.getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9063,7 +9057,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OSTEOARTICULAR
-		q = ms.getConcept(TbConcepts.OSTEOARTICULAR);
+		q = ms.getConcept(MdrtbConcepts.OSTEOARTICULAR);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9116,7 +9110,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// GENITOURINARY
-		q = ms.getConcept(TbConcepts.GENITOURINARY);
+		q = ms.getConcept(MdrtbConcepts.GENITOURINARY);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9169,7 +9163,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OF_PERIPHERAL_LYMPH_NODES
-		q = ms.getConcept(TbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+		q = ms.getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9222,7 +9216,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// ABDOMINAL
-		q = ms.getConcept(TbConcepts.ABDOMINAL);
+		q = ms.getConcept(MdrtbConcepts.ABDOMINAL);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9275,7 +9269,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// TUBERCULODERMA
-		q = ms.getConcept(TbConcepts.TUBERCULODERMA);
+		q = ms.getConcept(MdrtbConcepts.TUBERCULODERMA);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9328,7 +9322,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OCULAR
-		q = ms.getConcept(TbConcepts.OCULAR);
+		q = ms.getConcept(MdrtbConcepts.OCULAR);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9381,7 +9375,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OF_CNS
-		q = ms.getConcept(TbConcepts.OF_CNS);
+		q = ms.getConcept(MdrtbConcepts.OF_CNS);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9435,7 +9429,7 @@ report += "<br/>";
 		report += "<br/>";
 
 		// OF_CNS
-		q = ms.getConcept(TbConcepts.OF_LIVER);
+		q = ms.getConcept(MdrtbConcepts.OF_LIVER);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -9650,18 +9644,18 @@ report += "<br/>";
 	    		    		}
 	    		    		
 	    		    		else {
-	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
+	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
 	    		    				String xr = getMessage("mdrtb.positiveShort");
 	    		    				
 	    		    				if(res!=null) {
 	    		    					int resId = res.getConceptId().intValue();
 	    		    					
-	    		    					if(resId == ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+	    		    					if(resId == ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.resistantShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
 	    		    					
-	    		    					else if(resId == ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+	    		    					else if(resId == ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.sensitiveShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
@@ -9676,7 +9670,7 @@ report += "<br/>";
 	    		    				}
 	    		    			} 
 	    		    			
-	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
+	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
@@ -9782,11 +9776,11 @@ report += "<br/>";
 	    		    		
 	    		    		if(dc.getCultureResult()!=null) {
 	    		    			
-	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.NEGATIVE).getConceptId().intValue()) {
+	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
-	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
+	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.lists.growth") + closeTD();
 	    		    			}
 	    		    			
@@ -10037,7 +10031,7 @@ report += "<br/>";
 	    		
 	    		//RegimenForm rf = null;
 	    		
-	    		int noId = Context.getService(MdrtbService.class).getConcept(TbConcepts.NO).getConceptId().intValue();
+	    		int noId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NO).getConceptId().intValue();
 	    		int unknownId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN).getConceptId().intValue();
 	    		int monoId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONO).getConceptId().intValue();
 	    		
@@ -10118,18 +10112,18 @@ report += "<br/>";
 	    		    		}
 	    		    		
 	    		    		else {
-	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
+	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
 	    		    				String xr = getMessage("mdrtb.positiveShort");
 	    		    				
 	    		    				if(res!=null) {
 	    		    					int resId = res.getConceptId().intValue();
 	    		    					
-	    		    					if(resId == ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+	    		    					if(resId == ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.resistantShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
 	    		    					
-	    		    					else if(resId == ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+	    		    					else if(resId == ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.sensitiveShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
@@ -10144,7 +10138,7 @@ report += "<br/>";
 	    		    				}
 	    		    			} 
 	    		    			
-	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
+	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
@@ -10250,11 +10244,11 @@ report += "<br/>";
 	    		    		
 	    		    		if(dc.getCultureResult()!=null) {
 	    		    			
-	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.NEGATIVE).getConceptId().intValue()) {
+	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
-	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
+	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.lists.growth") + closeTD();
 	    		    			}
 	    		    			
@@ -10497,18 +10491,18 @@ report += "<br/>";
 	    		    		}
 	    		    		
 	    		    		else {
-	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
+	    		    			if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.POSITIVE).getConceptId().intValue() || mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_POSITIVE).getConceptId().intValue()) {
 	    		    				String xr = getMessage("mdrtb.positiveShort");
 	    		    				
 	    		    				if(res!=null) {
 	    		    					int resId = res.getConceptId().intValue();
 	    		    					
-	    		    					if(resId == ms.getConcept(TbConcepts.DETECTED).getConceptId().intValue()) {
+	    		    					if(resId == ms.getConcept(MdrtbConcepts.DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.resistantShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
 	    		    					
-	    		    					else if(resId == ms.getConcept(TbConcepts.NOT_DETECTED).getConceptId().intValue()) {
+	    		    					else if(resId == ms.getConcept(MdrtbConcepts.NOT_DETECTED).getConceptId().intValue()) {
 	    		    						xr += "/" + getMessage("mdrtb.sensitiveShort");
 	    		    						report += openTD() + xr + closeTD();
 	    		    					}
@@ -10523,7 +10517,7 @@ report += "<br/>";
 	    		    				}
 	    		    			} 
 	    		    			
-	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(TbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
+	    		    			else if(mtb.getConceptId().intValue()==ms.getConcept(MdrtbConcepts.MTB_NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
@@ -10629,11 +10623,11 @@ report += "<br/>";
 	    		    		
 	    		    		if(dc.getCultureResult()!=null) {
 	    		    			
-	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.NEGATIVE).getConceptId().intValue()) {
+	    		    			if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.NEGATIVE).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.negativeShort") + closeTD();
 	    		    			}
 	    		    			
-	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(TbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
+	    		    			else if(dc.getCultureResult().getConceptId().intValue()==ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getConceptId().intValue()) {
 	    		    				report += openTD() + getMessage("mdrtb.lists.growth") + closeTD();
 	    		    			}
 	    		    			
@@ -10846,7 +10840,7 @@ report += "<br/>";
     	String val = "";
     	/*PatientIdentifier pi = null;
     	Integer ppid = null;
-    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
     	Obs idObs  = MdrtbUtil.getObsFromEncounter(ppidConcept, form.getEncounter());
     	if(idObs==null) {
     		val = null;
@@ -10883,7 +10877,7 @@ report += "<br/>";
     	String val = "";
     	PatientIdentifier pi = null;
     	Integer ppid = null;
-    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+    	Concept ppidConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
     	Obs idObs  = MdrtbUtil.getObsFromEncounter(ppidConcept, form.getEncounter());
     	if(idObs==null) {
     		val = null;

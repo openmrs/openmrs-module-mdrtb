@@ -10,8 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.web.controller.PortletController;
 
 public class MdrtbSubheaderPortletController extends PortletController {

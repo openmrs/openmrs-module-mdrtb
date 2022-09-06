@@ -24,7 +24,6 @@ public class PatientValidator implements Validator {
 	 * @param c The class to check for support.
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean supports(Class c) {
 		return Patient.class.isAssignableFrom(c);
 	}

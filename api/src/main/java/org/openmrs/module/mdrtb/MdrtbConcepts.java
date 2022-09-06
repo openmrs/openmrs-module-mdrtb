@@ -5,8 +5,12 @@ package org.openmrs.module.mdrtb;
  * Note that mappings are defined as arrays in case we want to rename the mappings and temporarily support multiple mappings for a single concept
  */
 public class MdrtbConcepts {
-	
-	// Vitals 
+
+	// General
+    public final static String YES = "YES";
+    public final static String NO = "NO";
+
+	// Vitals
 	public final static String WEIGHT = "WEIGHT";
 	public final static String PULSE = "PULSE";
 	public final static String TEMPERATURE = "TEMPERATURE";
@@ -26,11 +30,11 @@ public class MdrtbConcepts {
 	public final static String PROTHIONAMIDE = "PROTHIONAMIDE";
 	public final static String GATIFLOXACIN = "GATIFLOXACIN";
 	public final static String OFLOXACIN = "OFLOXACIN";
-	public final static String P_AMINOSALICYLIC_ACID = "P-AMINOSALICYLIC ACID ";
+	public final static String P_AMINOSALICYLIC_ACID = "P-AMINOSALICYLIC ACID";
 	public final static String TERIZIDONE = "TERIZIDONE";
 	public final static String VIOMYCIN = "VIOMYCIN";
 	public final static String CLARITHROMYCIN = "CLARITHROMYCIN";
-	public final static String RIFABUTINE = "RIFABUTINE";
+	public final static String RIFABUTIN = "RIFABUTIN";
 	public final static String STREPTOMYCIN = "STREPTOMYCIN";
 	public final static String PYRAZINAMIDE = "PYRAZINAMIDE";
 	public final static String CIPROFLOXACIN = "CIPROFLOXACIN";
@@ -45,7 +49,7 @@ public class MdrtbConcepts {
 	public final static String LINEZOLID = "LINEZOLID";
 	public final static String IMIPENEM = "IMIPENEM";
 	public final static String QUINOLONES = "QUINOLONES";	
-	
+
 	// Drug-Related concepts
 	public final static String CURRENT_MULTI_DRUG_RESISTANT_TUBERCULOSIS_TREATMENT_TYPE = "CURRENT MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT TYPE";
 	public final static String REASON_TUBERCULOSIS_TREATMENT_CHANGED_OR_STOPPED = "REASON TUBERCULOSIS TREATMENT CHANGED OR STOPPED";
@@ -89,7 +93,7 @@ public class MdrtbConcepts {
     public final static String DST_CONTAMINATED = "DST CONTAMINATED";
     public final static String SCANNED_LAB_REPORT = "SCANNED LAB REPORT";
     public final static String DAYS_TO_POSITIVITY = "DAYS TO POSITIVITY";
-
+    public final static String CULTURE_GROWTH = "GROWTH";
 
     // GeneXpert and HAIN Test
     public final static String GENEXPERT = "GENEXPERT";
@@ -119,19 +123,23 @@ public class MdrtbConcepts {
     public final static String NEGATIVE = "NEGATIVE";
     public final static String CONTAMINATED = "CONTAMINATED";
     public final static String UNSATISFACTORY_SAMPLE = "UNSATISFACTORY SAMPLE";
-    
+	public final static String LOWAFB = "LOW AFB";
+
     // MDR-TB Classification
-    public final static String CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE = "CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE";
     public final static String NEW = "NEW";
     public final static String PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY = "PREVIOUSLY TREATED WITH FIRST LINE DRUGS ONLY";
     public final static String PREVIOUSLY_TREATED_SECOND_LINE_DRUGS = "PREVIOUSLY TREATED WITH SECOND LINE DRUGS";
-    
-    public final static String CAT_4_CLASSIFICATION_PREVIOUS_TX = "CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT";
+	public final static String PATIENT_GROUP = "TUBERCULOSIS PATIENT TYPE";
+
+	public final static String CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE = "CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE";
+    public final static String CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT = "CATEGORY 4 TUBERCULOSIS CLASSIFICATION ACCORDING TO RESULT OF PREVIOUS TREATMENT";
+    public final static String TREATMENT_AFTER_FAILURE = "TREATMENT AFTER FAILURE";
     public final static String TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT = "TREATMENT AFTER FAILURE OF FIRST TREATMENT MDR-TB PATIENT";
     public final static String TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT = "TREATMENT AFTER FAILURE OF RE-TREATMENT MDR-TB PATIENT";
     public final static String OTHER = "OTHER";
-    public final static String RELAPSE = "RELAPSE";
+    // public final static String RELAPSE = "RELAPSE"; // Replaced with RELAPSED
     public final static String TRANSFER = "TRANSFER";
+    public final static String CANCELLED = "DIAGNOSIS CANCELLED";
 
     // Custom classifications
     public final static String RELAPSE_AFTER_REGIMEN_1 = "RELAPSE AFTER REGIMEN 1";
@@ -143,8 +151,8 @@ public class MdrtbConcepts {
 
     
     // TODO: are these still used?
-    public final static String MDR_TB = "MULTI-DRUG RESISTANT TUBERCULOSIS";
-    public final static String XDR_TB = "EXTENSIVE DRUG RESISTANT TUBERCULOSIS";
+    public final static String MDR_TB = "MDR-TB";//"MULTI-DRUG RESISTANT TUBERCULOSIS";
+    public final static String XDR_TB = "XDR TB";// "EXTENSIVE DRUG RESISTANT TUBERCULOSIS";
     public final static String SUSPECTED_MDR_TB = "SUSPECTED MULTI-DRUG TUBERCULOSIS";
     public final static String TB = "TUBERCULOSIS";
     public final static String RR_TB = "RR-TB";
@@ -154,20 +162,22 @@ public class MdrtbConcepts {
     public final static String TDR_TB = "TDR-TB";
     
     // Treatment Outcome
-    public final static String MDR_TB_TX_OUTCOME = "MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME";
+    public final static String MDR_TB_TREATMENT_OUTCOME = "MULTI-DRUG RESISTANT TUBERCULOSIS TREATMENT OUTCOME";
     public final static String CURED = "CURED";
     public final static String DEFAULTED = "DEFAULTED";
     public final static String DIED = "DIED";
-    public final static String FAILED = "FAILED";
+    public final static String TREATMENT_FAILED = "TREATMENT FAILED";
     public final static String TREATMENT_COMPLETE = "TREATMENT COMPLETE";
     public final static String PATIENT_TRANSFERRED_OUT = "PATIENT TRANSFERRED OUT";
     public final static String STILL_ON_TREATMENT = "STILL ON TREATMENT";
 
-    public final static String LOST_TO_FOLLOWUP = "LOST TO FOLLOWUP";
+	public final static String TB_TREATMENT_OUTCOME = "TUBERCULOSIS TREATMENT OUTCOME";
+
+    public final static String LOST_TO_FOLLOWUP = "LOST TO FOLLOW UP";
     // TODO: Rename to "Treatment started on second line drugs"
-    public final static String STARTED_SLD_TX = "Started SLD Treatment";
+    public final static String STARTED_SLD_TREATMENT = "Started SLD Treatment";
     // TODO: Rename to "Date of Treatment Outcome"
-    public final static String TX_OUTCOME_DATE = "TX OUTCOME DATE";
+    public final static String TREATMENT_OUTCOME_DATE = "TREATMENT OUTCOME DATE";
     
     // TB Type
     public final static String PULMONARY_TB = "PULMONARY TUBERCULOSIS";
@@ -176,19 +186,19 @@ public class MdrtbConcepts {
 
     // Antiretrovirals (for HIV status section and HIV regimens)
     public final static String ANTIRETROVIRALS = "ANTIRETROVIRAL DRUGS";
-    public final static String REASON_HIV_TX_STOPPED = "REASON ANTIRETROVIRALS CHANGED OR STOPPED";
+    public final static String REASON_HIV_TREATMENT_STOPPED = "REASON ANTIRETROVIRALS CHANGED OR STOPPED";
     
     // HIV Co-infection
     public final static String COINFECTED_ARVS = "COINFECTED AND ON ANTIRETROVIRALS";
     public final static String CD4_COUNT = "CD4 COUNT";
     public final static String RESULT_OF_HIV_TEST = "RESULT OF HIV TEST";
     public final static String DATE_OF_HIV_TEST = "DATE OF HIV TEST";
-    public final static String DATE_OF_ART_TREATMENT_START = "DATE OF ART TREATMENT START ";
-    public final static String DATE_OF_PCT_TREATMENT_START = "DATE OF PCT TREATMENT START ";
+    public final static String DATE_OF_ART_TREATMENT_START = "DATE OF ART TREATMENT START";
+    public final static String DATE_OF_PCT_TREATMENT_START = "DATE OF PCT TREATMENT START";
 
     // Hospitalization states
     public final static String HOSPITALIZATION_WORKFLOW = "HOSPITALIZATION WORKFLOW";
-    public final static String HOSPITALIZED = "HOSPITALIZED";
+    public final static String PATIENT_HOSPITALIZED = "PATIENT HOSPITALIZED";
     public final static String AMBULATORY = "AMBULATORY";   // legacy, has been retired
     
     // Other
@@ -197,35 +207,28 @@ public class MdrtbConcepts {
     public final static String RETURN_VISIT_DATE = "RETURN VISIT DATE";
     public final static String TELEPHONE_NUMBER = "TELEPHONE NUMBER";
     public final static String NONE = "NONE";
-    
 
     // Contacts (potentially legacy?)
-    public final static String PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE = "PATIENT CONTACT IS A KNOWN PRIOR OR CURRENT MDR-TB CASE";
+    public final static String CONTACT_KNOWN_OR_CURRENT_MDR_CASE = "PATIENT CONTACT IS KNOWN MDR-TB CASE";
     public final static String PATIENT_CONTACT_TB_TEST_RESULT = "PATIENT CONTACT TUBERCULOSIS TEST RESULT";
     public final static String SIMPLE_TB_TEST_RESULT = "SIMPLE TUBERCULOSIS TEST RESULT";
     public final static String SIMPLE_TB_TEST_TYPE = "SIMPLE TUBERCULOSIS TEST TYPE";
     public final static String TREATMENT_SUPPORTER_CURRENTLY_ACTIVE = "TREATMENT SUPPORTER IS CURRENTLY ACTIVE";
-    
-    
+
     // Adverse Effects (potentially legacy?)
     public final static String ADVERSE_EFFECT = "ADVERSE EFFECT";
-    public final static String ADVERSE_EFFECT_ACTION_TAKEN = "ADVERSE EFFECT ACTION TAKEN, NON-CODED";
+    public final static String ADVERSE_EFFECT_ACTION_TAKEN = "ADVERSE EFFECT ACTION TAKEN NON-CODED";
     public final static String ADVERSE_EFFECT_CONSTRUCT = "ADVERSE EFFECT CONSTRUCT";
     public final static String ADVERSE_EFFECT_DATE = "ADVERSE EFFECT DATE";
     public final static String ADVERSE_EFFECT_MEDICATION = "ADVERSE EFFECT MEDICATION";
     public final static String ADVERSE_EFFECT_MEDICATION_NON_CODED = "ADVERSE EFFECT MEDICATION NON-CODED";
-    public final static String ADVERSE_EFFECT_NON_CODED = "ADVERSE EFFECT, NON-CODED";
-    
-    
+    public final static String ADVERSE_EFFECT_NON_CODED = "ADVERSE EFFECT NON-CODED";
+
     // Legacy (only used by migration controller)
     public final static String CULTURE_STATUS = "MULTI-DRUG RESISTANT TUBERCULOSIS CULTURE STATUS";
 
-    
-    
     // Custom concepts for Tajikistan
 	// TODO: Find the right place and groups for these
-    public final static String YES = "YES";
-    public final static String NO = "NO";
     
     public final static String PREGNANT = "PREGNANT";
 
@@ -248,11 +251,10 @@ public class MdrtbConcepts {
     public final static String REGIMEN_2_SHORT = "REGIMEN 2 SHORT";
     public final static String REGIMEN_2_INDIVIDUALIZED = "REGIMEN 2 INDIVIDUALIZED";
     
-    public final static String MDR_STATUS = "MDR TB STATUS";
+    public final static String MDR_STATUS = "MDR-TB STATUS";
     public final static String DATE_OF_MDR_CONFIRMATION = "DATE OF MDR CONFIRMATION";
     public final static String TREATMENT_LOCATION = "TREATMENT LOCATION";
     
-    public final static String METHOD_OF_DIAGNOSTIC = "BASIS FOR TB DIAGNOSIS";
     public final static String RELAPSED = "RELAPSED";
     public final static String RELAPSE_MONTH = "RELAPSE MONTH";
     
@@ -262,44 +264,44 @@ public class MdrtbConcepts {
     
     public final static String MDTRB_CONFIRMATION_DATE = "DATE OF MDR CONFIRMATION";
     
-    public final static String MDR_TB_PROGRAM = "MDR TB PROGRAM";
+    public final static String MDR_TB_PROGRAM = "MDR-TB PROGRAM";
     
     public final static String FUNDING_SOURCE = "FUNDING SOURCE";
-    public final static String PROJECT_HOPE = "HOPE";
+    public final static String PROJECT_HOPE = "PROJECT HOPE";
     public final static String MSF = "MSF";
     
-    public final static String CM_DOSE = "CM DOSE";
-    public final static String AM_DOSE = "AM DOSE";
-    public final static String MFX_DOSE = "MFX DOSE";
-    public final static String LFX_DOSE = "LFX DOSE";
-    public final static String PTO_DOSE = "PTO DOSE";
-    public final static String CS_DOSE = "CS DOSE";
-    public final static String PAS_DOSE = "PAS DOSE";
-    public final static String Z_DOSE = "Z DOSE";
-    public final static String E_DOSE = "E DOSE";
-    public final static String H_DOSE = "H DOSE";
-    public final static String LZD_DOSE = "LZD DOSE";
-    public final static String CFZ_DOSE = "CFZ DOSE";
-    public final static String BDQ_DOSE = "BDQ DOSE";
-    public final static String DLM_DOSE = "DLM DOSE";
-    public final static String IMP_DOSE = "IMP DOSE";
-    public final static String AMX_DOSE = "AMX DOSE";
+    public final static String CM_DOSE = "CAPREOMYCIN DOSE";
+    public final static String AM_DOSE = "AMIKACIN DOSE";
+    public final static String MFX_DOSE = "MOXIFLOXACIN DOSE";
+    public final static String LFX_DOSE = "LEVOFLOXACIN DOSE";
+    public final static String PTO_DOSE = "PROTHIONAMIDE DOSE";
+    public final static String CS_DOSE = "CYCLOSERINE DOSE";
+    public final static String PAS_DOSE = "P-AMINOSALICYLIC DOSE";
+    public final static String Z_DOSE = "PYRAZINAMIDE DOSE";
+    public final static String E_DOSE = "ETHAMNBUTOL DOSE";
+    public final static String H_DOSE = "ISONIAZID DOSE";
+    public final static String LZD_DOSE = "LINEZOLID DOSE";
+    public final static String CFZ_DOSE = "CLOFAZAMINE DOSE";
+    public final static String BDQ_DOSE = "BEDAQUILINE DOSE";
+    public final static String DLM_DOSE = "DELAMANID DOSE";
+    public final static String IMP_DOSE = "IMIPENEM DOSE";
+    public final static String AMX_DOSE = "AMOXICLAV DOSE";
     public final static String HR_DOSE = "HR DOSE";
     public final static String HRZE_DOSE = "HRZE DOSE";
-    public final static String S_DOSE = "S DOSE";
+    public final static String S_DOSE = "STREPTOMYCIN DOSE";
     public final static String OTHER_DRUG_1_DOSE = "OTHER DRUG 1 DOSE";
     public final static String OTHER_DRUG_1_NAME = "OTHER DRUG 1 NAME";
     public final static String OTHER_DRUG_2_DOSE = "OTHER DRUG 2 DOSE";
     
     public final static String SHORT_MDR_REGIMEN = "SHORT MDR REGIMEN";
     public final static String STANDARD_MDR_REGIMEN = "STANDARD MDR REGIMEN";
-    public final static String INDIVIDUAL_WITH_BDQ = "INDIVIDUAL WITH BDQ";
-    public final static String INDIVIDUAL_WITH_DLM = "INDIVIDUAL WITH DLM";
-    public final static String INDIVIDUAL_WITH_BDQ_AND_DLM = "INDIVIDUAL WITH BDQ AND DLM";
-    public final static String INDIVIDUAL_WITH_CFZ_LZD = "INDIVIDUAL WITH CFZ LZD";
-    public final static String OTHER_MDRTB_REGIMEN = "OTHER MDRTB REGIMEN";
+    public final static String INDIVIDUAL_WITH_BEDAQUILINE = "INDIVIDUAL WITH BEDAQUILINE";
+    public final static String INDIVIDUAL_WITH_DELAMANID = "INDIVIDUAL WITH DELAMANID";
+    public final static String INDIVIDUAL_WITH_BEDAQUILINE_AND_DELAMANID = "INDIVIDUAL WITH BEDAQUILINE AND DELAMANID";
+    public final static String INDIVIDUAL_WITH_CLOFAZIMIN_AND_LINEZOLID = "INDIVIDUAL WITH CLOFAZIMIN AND LINEZOLID";
+    public final static String OTHER_MDRTB_REGIMEN = "OTHER MDR-TB REGIMEN";
     public final static String SLD_TREATMENT_REGIMEN = "SLD TREATMENT REGIMEN";
-    public final static String SLD_REGIMEN_TYPE = "SLD REGIMEN TYPE "; 
+    public final static String SLD_REGIMEN_TYPE = "SLD REGIMEN TYPE"; 
     
     public final static String ADVERSE_EVENT = "ADVERSE EVENT";
     public final static String NAUSEA = "NAUSEA";
@@ -316,14 +318,14 @@ public class MdrtbConcepts {
     public final static String PERIPHERAL_NEUROPATHY = "PERIPHERAL NEUROPATHY";
     public final static String DEPRESSION = "DEPRESSION";
     public final static String TINNITUS = "TINNITUS";
-    public final static String ALLERGIC_REACTION = "ALLERGIC REACTION ";
+    public final static String ALLERGIC_REACTION = "ALLERGIC REACTION";
     public final static String RASH = "RASH";
     public final static String VISUAL_DISTURBANCES = "VISUAL DISTURBANCES";
     public final static String SEIZURES = "SEIZURES";
     public final static String HYPOTHYROIDISM = "HYPOTHYROIDISM";
     public final static String PSYCHOSIS = "PSYCHOSIS";
     public final static String SUICIDAL_IDEATION = "SUICIDAL IDEATION";
-    public final static String HEPATITIS_AE = "HEPATITIS AE";
+    public final static String HEPATITIS_AE = "HEPATITIS (HEPATOTOXICITY)";
     public final static String RENAL_FAILURE = "RENAL FAILURE";
     public final static String QT_PROLONGATION = "QT PROLONGATION";
    
@@ -333,10 +335,10 @@ public class MdrtbConcepts {
     public final static String SIMPLE_HEARING_TEST = "SIMPLE HEARING TEST";
     public final static String AUDIOGRAM = "AUDIOGRAM";
     public final static String NEURO_INVESTIGATION = "NEURO INVESTIGATION";
-    public final static String CREATNINE = "CREATNINE ";
+    public final static String CREATININE = "CREATININE";
     public final static String ALT = "ALT";
     public final static String AST = "AST";
-    public final static String BILIRUBIN = "BILIRUBIN ";
+    public final static String BILIRUBIN = "BILIRUBIN";
     public final static String ALKALINE_PHOSPHATASE = "ALKALINE PHOSPHATASE";
     public final static String YGT = "YGT";
     public final static String ECG = "ECG";
@@ -355,7 +357,7 @@ public class MdrtbConcepts {
     public final static String SIMPLE_HEARING_TEST_DONE = "SIMPLE HEARING TEST DONE";
     public final static String AUDIOGRAM_DONE = "AUDIOGRAM DONE";
     public final static String NEURO_INVESTIGATION_DONE = "NEURO INVESTIGATION DONE";
-    public final static String CREATNINE_DONE = "CREATNINE DONE";
+    public final static String CREATNINE_DONE = "CREATININE DONE";
     public final static String ALT_DONE = "ALT DONE";
     public final static String AST_DONE = "AST DONE";
     public final static String BILIRUBIN_DONE = "BILIRUBIN DONE";
@@ -373,15 +375,15 @@ public class MdrtbConcepts {
     public final static String THYROID_TEST_DONE = "THYROID TEST DONE";
     public final static String OTHER_TEST_DONE = "OTHER TEST DONE";
     
-    public final static String AE_REGIMEN = "AE REGIMEN";
+    public final static String ADVERSE_EVENT_REGIMEN = "ADVERSE EVENT REGIMEN";
     
-    public final static String AE_TYPE = "AE TYPE";
+    public final static String ADVERSE_EVENT_TYPE = "AE TYPE";
     public final static String SERIOUS = "SERIOUS";
     public final static String OF_SPECIAL_INTEREST = "OF SPECIAL INTEREST";
     
     public final static String SAE_TYPE = "SAE TYPE";
     public final static String DEATH = "DEATH";
-    public final static String HOSPITALIZATION = "HOSPITALIZATION ";
+    public final static String HOSPITALIZATION = "HOSPITALIZATION";
     public final static String DISABILITY = "DISABILITY";
     public final static String CONGENITAL_ANOMALY = "CONGENITAL ANOMALY";
     public final static String LIFE_THREATENING_EXPERIENCE = "LIFE THREATENING EXPERIENCE";
@@ -389,7 +391,7 @@ public class MdrtbConcepts {
     public final static String SPECIAL_INTEREST_EVENT_TYPE = "SPECIAL INTEREST EVENT TYPE";
     public final static String MYELOSUPPRESSION = "MYELOSUPPRESSION";
     public final static String LACTIC_ACIDOSIS = "LACTIC ACIDOSIS";
-    public final static String HYPOKALEMIA = "HYPOKALEMIA";
+    public final static String HYPOKALEMIA = "HYPOKALAEMIA";
     public final static String PANCREATITIS = "PANCREATITIS";
     public final static String PHOSPHOLIPIDOSIS = "PHOSPHOLIPIDOSIS";
     
@@ -406,17 +408,17 @@ public class MdrtbConcepts {
     public final static String DEFINITE = "DEFINITE";
     public final static String PROBABLE = "PROBABLE";
     public final static String POSSIBLE = "POSSIBLE";
-    public final static String SUSPECTED_CA = "SUSPECTED CA";
+    public final static String SUSPECTED = "SUSPECTED";
     public final static String NOT_CLASSIFIED = "NOT CLASSIFIED";
     
-    public final static String AE_ACTION = "AE ACTION";
-    public final static String AE_ACTION_2 = "AE ACTION 2";
-    public final static String AE_ACTION_3 = "AE ACTION 3";
-    public final static String AE_ACTION_4 = "AE ACTION 4";
-    public final static String AE_ACTION_5 = "AE ACTION 5";
+    public final static String ADVERSE_EVENT_ACTION = "AE ACTION";
+    public final static String ADVERSE_EVENT_ACTION_2 = "AE ACTION 2";
+    public final static String ADVERSE_EVENT_ACTION_3 = "AE ACTION 3";
+    public final static String ADVERSE_EVENT_ACTION_4 = "AE ACTION 4";
+    public final static String ADVERSE_EVENT_ACTION_5 = "AE ACTION 5";
     public final static String DOSE_NOT_CHANGED = "DOSE NOT CHANGED";
     public final static String DOSE_REDUCED = "DOSE REDUCED";
-    public final static String DRUG_INTERRUPTED = "DRUG INTERRUPTED ";
+    public final static String DRUG_INTERRUPTED = "DRUG INTERRUPTED";
     public final static String DRUG_WITHDRAWN = "DRUG WITHDRAWN";
     public final static String ANCILLARY_DRUG_GIVEN = "ANCILLARY DRUG GIVEN";
     public final static String ADDITIONAL_EXAMINATION = "ADDITIONAL EXAMINATION";
@@ -424,14 +426,14 @@ public class MdrtbConcepts {
     public final static String REQUIRES_ANCILLARY_DRUGS = "REQUIRES ANCILLARY DRUGS";
     public final static String REQUIRES_DOSE_CHANGE = "REQUIRES DOSE CHANGE";
     
-    public final static String AE_OUTCOME = "AE OUTCOME";
+    public final static String ADVERSE_EVENT_OUTCOME = "AE OUTCOME";
     public final static String RESOLVED = "RESOLVED";
     public final static String RESOLVED_WITH_SEQUELAE = "RESOLVED WITH SEQUELAE";
-    public final static String FATAL = "FATAL ";
+    public final static String FATAL = "FATAL";
     public final static String RESOLVING = "RESOLVING";
     public final static String NOT_RESOLVED = "NOT RESOLVED";
     
-    public final static String AE_OUTCOME_DATE = "AE OUTCOME DATE";
+    public final static String ADVERSE_EVENT_OUTCOME_DATE = "AE OUTCOME DATE";
     
     public final static String DRUG_RECHALLENGE = "DRUG RECHALLENGE";
     public final static String NO_RECHALLENGE = "NO RECHALLENGE";
@@ -449,6 +451,150 @@ public class MdrtbConcepts {
     public final static String GASTROINTESTINAL_DISORDER = "GASTROINTESTINAL DISORDER";
     public final static String LIVER_DISORDER = "LIVER DISORDER";
     public final static String METABOLIC_DISORDER = "METABOLIC DISORDER";
-    public final static String ENDOCRINE_DISORDER = "ENDOCRINE DISORDER ";
+    public final static String ENDOCRINE_DISORDER = "ENDOCRINE DISORDER";
     public final static String CARDIAC_DISORDER = "CARDIAC DISORDER";
+
+
+    // For DOTS Reports
+    public final static String TB_CLINICAL_DIAGNOSIS = "TB CLINICAL DIAGNOSIS";
+    public final static String DOTS_TREATMENT_START_DATE = "DATE OF DOTS TREATMENT START";
+    public final static String AGE_AT_DOTS_REGISTRATION = "AGE AT DOTS REGISTRATION";
+    public final static String TREATMENT_CENTER_FOR_IP = "TREATMENT CENTER FOR IP";
+    public final static String TREATMENT_CENTER_FOR_CP = "TREATMENT CENTER FOR CP";
+ 	
+ 	public final static String REGIMEN_1_NEW = "REGIMEN 1 NEW";
+ 	public final static String REGIMEN_1_RETREATMENT = "REGIMEN 1 RETREATMENT";
+ 	
+ 	public final static String DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME = "DATE OF DEATH AFTER TREATMENT OUTCOME";
+ 	
+ 	public final static String TB03_REGISTRATION_NUMBER = "TB03 REGISTRATION NUMBER";
+ 	public final static String TB03_REGISTRATION_YEAR = "TB03 REG YEAR";
+ 	
+ 	public final static String LOCATION_TYPE = "LOCATION TYPE";
+ 	public final static String PROFESSION = "PROFESSION";
+ 	public final static String POPULATION_CATEGORY = "POPULATION CATEGORY";
+ 	public final static String PLACE_OF_DETECTION  = "PLACE OF DETECTION";
+ 	public final static String DATE_FIRST_SEEKING_HELP = "DATE FIRST SEEKING HELP";
+ 	public final static String CIRCUMSTANCES_OF_DETECTION = "CIRCUMSTANCES OF DETECTION";
+ 	public final static String METHOD_OF_DETECTION = "METHOD OF DETECTION";
+ 	public final static String SITE_OF_EPTB = "SITE OF EPTB";
+ 	public final static String PTB_SITE = "PTB SITE";
+ 	public final static String EPTB_SITE = "EPTB SITE";
+ 	public final static String PRESENCE_OF_DECAY = "PRESENCE OF DECAY";
+ 	public final static String DATE_OF_DECAY_SURVEY = "DATE OF DECAY SURVEY";
+ 	public final static String DIABETES = "DIABETES";
+ 	public final static String CNSDL = "CNSDL";
+ 	public final static String HYPERTENSION_OR_HEART_DISEASE = "HYPERTENSION OR HEART DISEASE";
+ 	public final static String ULCER = "ULCER OF STOMACH OR DUODENUM";
+ 	public final static String MENTAL_DISORDER = "MENTAL DISEASE";
+ 	public final static String ICD20 = "ICD В20.9";
+ 	public final static String CANCER = "CANCER";
+ 	public final static String COMORBID_HEPATITIS = "COMORBID HEPATITIS";
+ 	public final static String KIDNEY_DISEASE = "KIDNEY DISEASE";
+ 	public final static String NO_DISEASE = "NO COMORBIDITY";
+ 	public final static String OTHER_DISEASE = "OTHER CONCOMITANT DISEASE";
+ 	public final static String CENTRAL_COMMISSION_DATE = "DATE OF TB DIAGNOSIS IN CENTRAL COMMISSION";
+ 	public final static String CENTRAL_COMMISSION_NUMBER = "CENTRAL COMMISSION NUMBER";
+ 	public final static String PLACE_OF_CENTRAL_COMMISSION = "PLACE OF CENTRAL COMMISSION";
+ 	public final static String GPT = "GPT";
+ 	public final static String FORM89_DATE = "FORM89 DATE";
+ 	public final static String AGE_AT_FORM89_REGISTRATION = "FORM89 AGE";
+ 	
+ 	public final static String MTB_POSITIVE = "MTB POSITIVE";
+ 	public final static String MTB_NEGATIVE = "MTB NEGATIVE";
+ 	
+ 	public final static String CONTACT_INVESTIGATION = "CONTACT INVESTIGATION";
+ 	public final static String NAME_OF_DOCTOR = "NAME OF DOCTOR";
+ 	public final static String NAME_OF_IP_FACILITY = "NAME OF IP FACILITY";
+ 	public final static String NAME_OF_CP_FACILITY = "NAME OF CP FACILITY";
+ 	
+ 	public final static String DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE = "DOTS CLASSIFICATION ACCORDING TO PREVIOUS DRUG USE";
+ 	public final static String PREVIOUS_PROGRAM_ID = "PREVIOUS PROGRAM ID";
+ 	
+ 	public final static String XRAY_DATE = "XRAY DATE";
+ 	
+ 	public final static String WORKER = "WORKER";
+ 	public final static String GOVT_SERVANT = "GOVERNMENT SERVANT";
+ 	public final static String STUDENT  = "STUDENT";
+ 	public final static String DISABLED  = "DISABLED";
+ 	public final static String UNEMPLOYED = "UNEMPLOYED";
+ 	public final static String PHC_WORKER = "PHC WORKER";
+ 	public final static String PRIVATE_SECTOR = "PRIVATE SECTOR";
+ 	public final static String MILITARY_SERVANT = "MILITARY SERVANT";
+ 	public final static String SCHOOLCHILD = "SCHOOLCHILD";
+ 	public final static String TB_SERVICES_WORKER  = "TB SERVICES WORKER";
+ 	public final static String HOUSEWIFE  = "HOUSEWIFE";	
+ 	public final static String PRESCHOOL_CHILD = "PRESCHOOL CHILD";
+ 	public final static String PENSIONER = "PENSIONER";
+ 	
+ 	public final static String RESIDENT_OF_TERRITORY = "RESIDENT OF TERRITORY";
+ 	public final static String RESIDENT_OTHER_TERRITORY = "RESIDENT OTHER TERRITORY";
+ 	public final static String FOREIGNER = "FOREIGNER";
+ 	public final static String RESIDENT_SOCIAL_SECURITY_FACILITY = "RESIDENT SOCIAL SECURITY FACILITY";
+ 	public final static String HOMELESS = "HOMELESS";
+ 	public final static String CONVICTED  = "CONVICTED";
+ 	public final static String ON_REMAND = "ON REMAND";
+ 	
+ 	public final static String CITY = "CITY";
+ 	public final static String VILLAGE = "VILLAGE";
+ 	
+ 	public final static String PHC_FACILITY = "PHC FACILITY";
+ 	public final static String OTHER_MEDICAL_FACILITY = "OTHER MEDICAL FACILITY";
+ 	public final static String PRIVATE_SECTOR_FACILITY = "PRIVATE SECTOR FACILITY";
+ 	public final static String TB_FACILITY  = "TB FACILITY";
+ 
+ 	public final static String SELF_REFERRAL = "SELF-REFERRAL";
+ 	public final static String BASELINE_EXAM= "BASELINE EXAM";
+ 	public final static String POSTMORTERM_IDENTIFICATION = "POSTMORTERM IDENTIFICATION";
+ 	public final static String CONTACT  = "CONTACT";
+ 	public final static String MIGRANT  = "MIGRANT";
+ 	public final static String COUNTRY_OF_ORIGIN = "COUNTRY OF ORIGIN";
+ 	public final static String CITY_OF_ORIGIN = "CITY OF ORIGIN";
+ 	public final static String DATE_OF_RETURN = "DATE OF RETURN";
+ 	
+ 	public final static String FLUOROGRAPHY = "FLUOROGRAPHY";
+ 	public final static String TUBERCULIN_TEST = "TUBERCULIN TEST";
+ 	public final static String ZIEHLNELSEN = "ZIEHLNELSEN";
+ 	public final static String FLURORESCENT_MICROSCOPY  = "FLURORESCENT MICROSCOPY";
+ 	public final static String HISTOLOGY = "HISTOLOGY";
+ 	public final static String CULTURE_TEST = "CULTURE TEST";
+ 	public final static String HAIN_1_DETECTION = "HAIN 1 DETECTION";
+ 	public final static String HAIN_2_DETECTION = "HAIN 2 DETECTION";
+ 	public final static String DST = "DST";
+ 	public final static String CXR_RESULT = "CXR RESULT";
+ 	public final static String OTHER_METHOD_OF_DETECTION = "OTHER METHOD OF DETECTION";
+ 	
+ 	public final static String FOCAL  = "FOCAL";
+ 	public final static String INFILTRATIVE  = "INFILTRATIVE";
+ 	public final static String DISSEMINATED  = "DISSEMINATED";
+ 	public final static String CAVERNOUS  = "CAVERNOUS";
+ 	public final static String FIBROUS_CAVERNOUS = "FIBROUS CAVERNOUS";
+ 	public final static String CIRRHOTIC  = "CIRRHOTIC";
+ 	public final static String TB_PRIMARY_COMPLEX = "TB PRIMARY COMPLEX";
+ 	public final static String MILIARY = "MILIARY";
+ 	public final static String TUBERCULOMA  = "TUBERCULOMA";
+ 	public final static String BRONCHUS  = "BRONCHUS";
+ 	
+ 	public final static String PLEVRITIS = "PLEVRITIS";
+ 	public final static String OF_LYMPH_NODES = "OF LYMPH NODES";
+ 	public final static String OSTEOARTICULAR = "OSTEOARTICULAR";
+ 	public final static String GENITOURINARY = "GENITOURINARY";
+ 	public final static String OF_PERIPHERAL_LYMPH_NODES = "OF PERIPHERAL LYMPH NODES";
+ 	public final static String ABDOMINAL = "ABDOMINAL";
+ 	public final static String TUBERCULODERMA = "TUBERCULODERMA";
+ 	public final static String OCULAR = "OCULAR";
+ 	public final static String OF_CNS = "OF CNS";
+ 	public final static String OF_LIVER = "OF LIVER";
+ 	
+ 	public final static String COMPLICATION = "COMPLICATION";
+ 	public final static String OTHER_CAUSE_OF_DEATH = "OTHER CAUSE OF DEATH";
+ 	
+ 	public final static String UNDETERMINED = "UNDETERMINED";
+ 	
+ 	public final static String DRUG_RESISTANCE_DURING_TREATMENT = "DRUG RESISTANCE DURING TREATMENT";
+ 	public final static String DATE_OF_DRUG_RESISTANCE_DURING_TREATMENT = "DATE OF DRUG RESISTANCE DURING TREATMENT";
+ 	
+ 	public final static String NAME_OF_TREATMENT_LOCATION = "NAME OF TREATMENT LOCATION";
+ 	
+ 	public final static String HOSPITAL = "HOSPITAL"; 	
 }

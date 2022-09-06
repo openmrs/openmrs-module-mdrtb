@@ -12,7 +12,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.reporting.custom.TB08uData;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -49,7 +49,7 @@ public class TB08uController {
 			@RequestParam(value = "monthSelected", required = false) String month,
 			ModelMap model) {
 
-		List<Oblast> oblasts;
+		List<Region> oblasts;
 		List<Facility> facilities;
 		List<District> districts;
 
@@ -127,7 +127,7 @@ public class TB08uController {
 		 * Context.getLocationService().getAllLocations(false);//
 		 * Context.getLocationService().getAllLocations();//ms =
 		 * (MdrtbDrugForecastService)
-		 * Context.getService(MdrtbDrugForecastService.class); List<Oblast>
+		 * Context.getService(MdrtbDrugForecastService.class); List<Region>
 		 * oblasts = Context.getService(MdrtbService.class).getOblasts();
 		 * //drugSets = ms.getMdrtbDrugs();
 		 * 
@@ -156,7 +156,7 @@ public class TB08uController {
     	sdf.applyPattern("dd.MM.yyyy");
     	SimpleDateFormat rdateSDF = new SimpleDateFormat();
     	rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
-    	/*Oblast o = null;
+    	/*Region o = null;
     	if(oblast!=null && !oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		*/
@@ -281,7 +281,7 @@ public class TB08uController {
     	    	txStarted = Boolean.FALSE;
     	    }
     	    
-    	    q = tf.getTreatmentOutcome();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	    q = tf.getTreatmentOutcome();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     	   /* conceptQuestionList.clear();
     	    conceptQuestionList.add(q);*/
     	    
@@ -339,7 +339,7 @@ public class TB08uController {
 	    	}
     	    
     	    //REGISTRATION GROUP
-    	    q = tf.getRegistrationGroup();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	    q = tf.getRegistrationGroup();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
     	    regimen = tf.getPatientCategory();
     	    
     	    if(regimen==null)
@@ -1570,7 +1570,7 @@ public class TB08uController {
 		String fName = null;
 		
 		if(oblastId!=null) {
-			Oblast o = Context.getService(MdrtbService.class).getOblast(oblastId);
+			Region o = Context.getService(MdrtbService.class).getOblast(oblastId);
 			if(o!=null) {
 				oName = o.getName();
 			}

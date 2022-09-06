@@ -1,7 +1,6 @@
 package org.openmrs.module.mdrtb.web.controller.form;
 
 import org.openmrs.module.mdrtb.form.custom.HAIN2Form;
-import org.openmrs.module.mdrtb.form.custom.HAINForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

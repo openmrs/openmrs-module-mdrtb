@@ -170,9 +170,6 @@ response.setDateHeader ("Expires", -1);
 						savePdf("closeReport.form", "TB-07", "tb07Results");
 					}
 				});
-				/* $("#tableToPdf").click(function(){
-					savePdf("exportReport.form", "TB 07", "tb07Results");
-				}); */
 			});
 		</script>
 		
@@ -233,34 +230,34 @@ response.setDateHeader ("Expires", -1);
 
 					<td style="text-align: center;">&nbsp;</td>
 					<td style="text-align: center;">&nbsp;</td>
-					<td style="text-align: center;width: 3%"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.maleShort"/></td>
-					<td style="text-align: center;"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+					<td style="text-align: center;width: 3%"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.male"/></td>
+					<td style="text-align: center;"><spring:message code="mdrtb.tb03.gender.female"/></td>
 					<td style="text-align: center;"><spring:message code="mdrtb.tb07.total"/></td>
 					
 				</tr>
 				<tr>
 					<td rowspan="6">
-						<spring:message code="mdrtb.tb07.new" />
+						<spring:message code="mdrtb.tb07.newCases" />
 					</td>
 					<td><spring:message code="mdrtb.tb07.pulmonaryBC" /></td>
 					
@@ -632,7 +629,7 @@ response.setDateHeader ("Expires", -1);
 				</tr>
 				<tr>
 					<td rowspan="6">
-						<spring:message code="mdrtb.tb07.relapses" />
+						<spring:message code="mdrtb.tb07.relapse" />
 					</td>
 						<td><spring:message code="mdrtb.tb07.pulmonaryBC" /></td>
 					<td>${table1.relapseMalePulmonaryBC04}</td>
@@ -1237,25 +1234,25 @@ response.setDateHeader ("Expires", -1);
 <td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07.total"/></td>
 <td colspan="3">
 <p style="text-align: center;"><spring:message code="mdrtb.tb07.total"/></p>
-<p style="text-align: center;"><spring:message code="mdrtb.tb07.t1t2"/>)</p>
+<p style="text-align: center;">()<spring:message code="mdrtb.tb07.t1t2"/>)</p>
 </td>
 </tr>
 <tr>
 <td>&nbsp;</td>
-<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.male"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.female"/></td>
 <td align="center"><spring:message code="mdrtb.tb07.total"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.male"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.female"/></td>
 <td align="center"><spring:message code="mdrtb.tb07.total"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.male"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.female"/></td>
 <td align="center"><spring:message code="mdrtb.tb07.total"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.male"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.female"/></td>
 <td align="center"><spring:message code="mdrtb.tb07.total"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.maleShort"/></td>
-<td align="center"><spring:message code="mdrtb.tb07.femaleShort"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.male"/></td>
+<td align="center"><spring:message code="mdrtb.tb03.gender.female"/></td>
 <td align="center"><spring:message code="mdrtb.tb07.total"/></td>
 </tr>
 <tr>

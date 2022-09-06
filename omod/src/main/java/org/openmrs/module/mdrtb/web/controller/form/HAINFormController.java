@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,25 +12,19 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
-
 import org.openmrs.api.context.Context;
-
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.HAINForm;
-import org.openmrs.module.mdrtb.form.custom.SmearForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
-import org.openmrs.PatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -143,7 +136,7 @@ public class HAINFormController {
 			  @RequestParam(required = false, value = "mode") String mode,
 			  ModelMap model) {
 		
-		List<Oblast> oblasts;
+		List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
         
@@ -177,7 +170,7 @@ public class HAINFormController {
         	Location location  = hain.getLocation();
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
         	model.addAttribute("oblasts", oblasts);
-        	for(Oblast o : oblasts) {
+        	for(Region o : oblasts) {
         		if(o.getName().equals(location.getStateProvince())) {
         			model.addAttribute("oblastSelected", o.getId());
         			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
@@ -289,7 +282,7 @@ public class HAINFormController {
 		System.out.println("PROC RIF:" + hain.getRifResult());
 		System.out.println("PROF MTB:" + hain.getMtbResult());
 		
-		if(hain.getMtbResult()!=null && hain.getMtbResult().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(TbConcepts.MTB_POSITIVE).getId().intValue()) {
+		if(hain.getMtbResult()!=null && hain.getMtbResult().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_POSITIVE).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			hain.setRifResult(null);
@@ -328,7 +321,7 @@ public class HAINFormController {
 			HashSet<PatientState> states = new HashSet<PatientState>();
 			PatientState newState = new PatientState();
 			ProgramWorkflowState pwfs = new ProgramWorkflowState();
-			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_TX_OUTCOME));
+			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
 			newState.setState(pwfs);
 			states.add(newState);
 			pp.setStates(states);	

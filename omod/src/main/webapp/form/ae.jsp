@@ -14,9 +14,7 @@
 <script type="text/javascript"><!--
 
 	var $j = jQuery.noConflict();	
-
 	$j(document).ready(function(){
-
 		$j('#edit').click(function(){
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
@@ -26,7 +24,6 @@
 			car2Toggle();
 			car3Toggle();
 		});
-
 		$j('#cancel').click(function(){
 			if (${(empty intake.id) || (intake.id == -1) || fn:length(errors.allErrors) > 0}) {
 				// if we are in the middle of a validation error, or doing an "add" we need to do a page reload on cancel
@@ -38,45 +35,33 @@
 				$j('#viewVisit').show();
 			}
 		});
-		
 		if(${mode eq 'edit'}) {
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
 		}
-		
-		
 	/* 	
 		$('#oblast').val(${oblastSelected});
 		$('#district').val(${districtSelected});
 		$('#facility').val(${facilitySelected}); */
-		
-		
-		
-		
 	});
 	
 	function typeToggle () {
-		
 		var statusBox = document.getElementById('typeOfEvent');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideTypes(choice);
 	}
 	
 	function showHideTypes(val) {
-	
        	if(val==710) {
-       		
        		document.getElementById('typeOfSpecialEvent').disabled = true;
    			document.getElementById('typeOfSpecialEvent').selectedIndex = 0;
    			document.getElementById('typeOfSAE').disabled = false;
-       		
        	}
        	else if(val==711) {
        		document.getElementById('typeOfSAE').disabled = true;
    			document.getElementById('typeOfSAE').selectedIndex = 0;
    			document.getElementById('typeOfSpecialEvent').disabled = false;
        	}
-       	
        	else {
        		document.getElementById('typeOfSpecialEvent').disabled = true;
    			document.getElementById('typeOfSpecialEvent').selectedIndex = 0;
@@ -87,103 +72,68 @@
      }
 	
 	function dateToggle () {
-		
 		var statusBox = document.getElementById('actionOutcome');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideDate(choice);
 	}
 	
 	function showHideDate(val) {
-	
        	if(val==731 || val==730) {
-       		
        		document.getElementById('outcomeDate').disabled = true;
        		document.getElementById('outcomeDate').value = "";
-   			
-       		
        	}
        	else {
-       		
        		document.getElementById('outcomeDate').disabled = false;
        	}
-       	
-      
      }
 	
      function car1Toggle () {
-		
 		var statusBox = document.getElementById('causalityDrug1');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideCar1(choice);
 	}
 	
 	function showHideCar1(val) {
-	
        	if(val=="") {
-       		
        		document.getElementById('causalityAssessmentResult1').disabled = true;
        		document.getElementById('causalityAssessmentResult1').selectedIndex = 0;
-   			
-       		
        	}
        	else {
-       		
        		document.getElementById('causalityAssessmentResult1').disabled = false;
        	}
-       	
-      
      }	
 	
 	 function car2Toggle () {
-			
-			var statusBox = document.getElementById('causalityDrug2');
-			var choice  = statusBox.options[statusBox.selectedIndex].value;
-			showHideCar2(choice);
-		}
+		var statusBox = document.getElementById('causalityDrug2');
+		var choice  = statusBox.options[statusBox.selectedIndex].value;
+		showHideCar2(choice);
+	}
 		
 	function showHideCar2(val) {
+       	if(val=="") {
+       		document.getElementById('causalityAssessmentResult2').disabled = true;
+       		document.getElementById('causalityAssessmentResult2').selectedIndex = 0;
+       	}
+       	else {
+       		document.getElementById('causalityAssessmentResult2').disabled = false;
+       	}
+     }	
+	
+	function car3Toggle () {
+		var statusBox = document.getElementById('causalityDrug3');
+		var choice  = statusBox.options[statusBox.selectedIndex].value;
+		showHideCar3(choice);
+	}
 		
-	       	if(val=="") {
-	       		
-	       		document.getElementById('causalityAssessmentResult2').disabled = true;
-	       		document.getElementById('causalityAssessmentResult2').selectedIndex = 0;
-	   			
-	       		
-	       	}
-	       	else {
-	       		
-	       		document.getElementById('causalityAssessmentResult2').disabled = false;
-	       	}
-	       	
-	      
-	     }	
-	
-	 function car3Toggle () {
-			
-			var statusBox = document.getElementById('causalityDrug3');
-			var choice  = statusBox.options[statusBox.selectedIndex].value;
-			showHideCar3(choice);
-		}
-		
-		function showHideCar3(val) {
-		
-	       	if(val=="") {
-	       		
-	       		document.getElementById('causalityAssessmentResult3').disabled = true;
-	       		document.getElementById('causalityAssessmentResult3').selectedIndex = 0;
-	   			
-	       		
-	       	}
-	       	else {
-	       		
-	       		document.getElementById('causalityAssessmentResult3').disabled = false;
-	       	}
-	       	
-	      
-	     }	
-	
-	
-	
+	function showHideCar3(val) {
+       	if(val=="") {
+       		document.getElementById('causalityAssessmentResult3').disabled = true;
+       		document.getElementById('causalityAssessmentResult3').selectedIndex = 0;
+       	}
+       	else {
+       		document.getElementById('causalityAssessmentResult3').disabled = false;
+       	}
+     }	
     
 	var tableToExcel = (function() {
 		  var uri = 'data:application/vnd.ms-excel;base64,'
@@ -290,72 +240,54 @@
 			alert(errorText);
 			return false;
 		}
-		
 		if(document.getElementById("adverseEvent").value=="") {
-			
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingAdverseEvent"/>' + "";
 			alert(errorText);
 			return false;
 		}
-		
 		encDate = encDate.replace(/\//g,".");
-		
-		
 		var parts = encDate.split(".");
 		var day = parts[0];
 		var month = parts[1]-1;
 		var year = parts[2];
-		
-		
-		
 		var onsetDate = new Date(year,month,day);
-
 		var now = new Date();
-		
 		if(onsetDate.getTime() > now.getTime()) {
 			errorText = ""  + '<spring:message code="mdrtb.pv.onsetDateInFuture"/>' + "";
 			alert(errorText);
 			return false;
 		}
-		
 		if(document.getElementById("diagnosticInvestigation").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingDiagnosticInvestigation"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("suspectedDrug").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingSuspectedDrug"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("typeOfEvent").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingTypeOfEvent"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("typeOfEvent").value==710 && document.getElementById("typeOfSAE").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingSAEType"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("typeOfEvent").value==711 && document.getElementById("typeOfSpecialEvent").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingSpecialEventType"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		var ycDateString = document.getElementById("yellowCardDate").value;
-		
 		if(ycDateString!="") {
 			ycDateString = ycDateString.replace(/\//g,".");
 			parts = ycDateString.split(".");
@@ -373,28 +305,24 @@
 		}
 		
 		if(document.getElementById("causalityDrug1").value!="" && document.getElementById("causalityAssessmentResult1").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingCAR1"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("causalityDrug2").value!="" && document.getElementById("causalityAssessmentResult2").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingCAR2"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("causalityDrug3").value!="" && document.getElementById("causalityAssessmentResult3").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingCAR3"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(document.getElementById("actionTaken").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.actionTaken"/>' + "";
 			alert(errorText);
 			return false;
@@ -403,22 +331,17 @@
 		var outcomeDateString = document.getElementById("outcomeDate").value;
 		
 		if(document.getElementById("actionOutcome").value!="" && document.getElementById("actionOutcome").value!=731 && document.getElementById("actionOutcome").value!=730 && outcomeDateString=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingOutcomeDate"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		if(outcomeDateString != "") {
-			
 			if(document.getElementById("actionOutcome").value=="") {
-				
 				errorText = ""  + '<spring:message code="mdrtb.pv.missingOutcome"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 			outcomeDateString = outcomeDateString.replace(/\//g,".");
 			parts = outcomeDateString.split(".");
 			day = parts[0];
@@ -434,7 +357,6 @@
 		}
 		
 		if(document.getElementById("meddraCode").value=="") {
-			
 			errorText = ""  + '<spring:message code="mdrtb.pv.missingMeddraCode"/>' + "";
 			alert(errorText);
 			return false;

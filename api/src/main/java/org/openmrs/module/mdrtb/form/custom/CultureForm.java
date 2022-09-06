@@ -1,14 +1,12 @@
 package org.openmrs.module.mdrtb.form.custom;
 
-
-
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
@@ -36,7 +34,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 
 	public Integer getMonthOfTreatment() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.MONTH_OF_TREATMENT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -47,7 +45,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public void setMonthOfTreatment(Integer month) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.MONTH_OF_TREATMENT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && month == null) {
@@ -66,7 +64,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 				
 			// now create the new Obs and add it to the encounter	
 			if(month != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.MONTH_OF_TREATMENT), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(month));
 				encounter.addObs(obs);
 			}
@@ -74,7 +72,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public String getSpecimenId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.SPECIMEN_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -85,7 +83,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public void setSpecimenId(String id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.SPECIMEN_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -104,7 +102,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 				
 			// now create the new Obs and add it to the encounter	
 			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.SPECIMEN_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(id);
 				encounter.addObs(obs);
 			}
@@ -112,11 +110,11 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public Concept getCultureResult() {
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_CONSTRUCT), encounter);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter);
 		Obs obs = null;
 		
 		if(obsgroup!=null)
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_RESULT), obsgroup);
+			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT), obsgroup);
 		
 		if (obs == null) {
 			System.out.println("Null result");
@@ -130,17 +128,17 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	
 	public void setCultureResult(Concept result) {
 		System.out.println("result" + result);
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_CONSTRUCT), encounter);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter);
 		Obs obs = null;
 		
 		if(obsgroup!=null)
 		{
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_RESULT), obsgroup);
+			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT), obsgroup);
 			
 		}
 		
 		else {
-			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
+			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
 		}
 		
 		// if this obs have not been created, and there is no data to add, do nothing
@@ -167,8 +165,8 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 			// now create the new Obs and add it to the encounter	
 			if(result != null) {
 				System.out.println("creating new obs");
-				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_RESULT), encounter.getEncounterDatetime(), encounter.getLocation());
+				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(result);
 				obs.setObsGroup(obsgroup);
 				obsgroup.addGroupMember(obs);
@@ -180,7 +178,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public Integer getPatProgId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -191,7 +189,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 	}
 	
 	public void setPatProgId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -210,7 +208,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 				
 			// now create the new Obs and add it to the encounter	
 			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(id));
 				encounter.addObs(obs);
 			}

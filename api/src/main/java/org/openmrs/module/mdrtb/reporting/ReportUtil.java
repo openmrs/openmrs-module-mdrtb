@@ -23,17 +23,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.OpenmrsMetadata;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.definition.DstResultCohortDefinition;
 import org.openmrs.module.mdrtb.reporting.definition.custom.DstResultExistsCohortDefinition;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -211,61 +212,49 @@ public class ReportUtil {
 	// TODO: Accepting year, quarter and month as Objects is criminal. Must fix this
 	public static Map<String, Date> getPeriodDates(Object yearObj, Object quarterObj, Object monthObj) {
 		
-		Integer year, quarter, month;
+		// if the year is null, we don't have start and end dates, want to query from
+		// the beginning of time until today
+		boolean yearProvided = yearObj != null && !"".equals(yearObj);
+		boolean quarterProvided = quarterObj != null && !"".equals(quarterObj);
+		boolean monthProvided = monthObj != null && !"".equals(monthObj);
+		if (!(yearProvided || quarterProvided || monthProvided)) {
+			Map<String, Date> periodDates = new HashMap<String, Date>();
+			periodDates.put("startDate", null);
+			periodDates.put("endDate", new Date());
+			return periodDates;
+		}
+		if (!quarterProvided && !monthProvided) {
+			throw new IllegalArgumentException("Please enter either a quarter or a month");
+		}
 		
-		if (yearObj instanceof Integer) {
-			year = (Integer) yearObj;
-		} else {
-			year = Integer.parseInt(String.valueOf(yearObj));
-		}
-		if (quarterObj instanceof Integer) {
-			quarter = (Integer) quarterObj;
-		} else {
-			quarter = Integer.parseInt(String.valueOf(quarterObj));
-		}
-		if (monthObj instanceof Integer) {
-			month = (Integer) monthObj;
-		} else {
-			month = Integer.parseInt(String.valueOf(monthObj));
-		}
-
+		Integer year = Calendar.getInstance().get(Calendar.YEAR), quarter, month;
 		// Validate input and construct start and end months
 		int startMonth = 1;
 		int endMonth = 12;
-
-		// if the year is null, we don't have start and end dates, want to query from
-		// the beginning of time until today
-		if (year == null && month == null && quarter == null) {
-			Map<String, Date> periodDates = new HashMap<String, Date>();
-			;
-			periodDates.put("startDate", null);
-			periodDates.put("endDate", new Date());
-
-			return periodDates;
+		
+		if (yearProvided && yearObj instanceof Integer) {
+			year = Integer.parseInt(String.valueOf(yearObj));
+			// Check range
+			if (year < 1900 || year > 2100) {
+				throw new IllegalArgumentException("Please enter a valid year");
+			}
 		}
-
-		if (year == null || year < 1900 || year > 2100) {
-			throw new IllegalArgumentException("Please enter a valid year");
-		}
-
-		if (quarter != null) {
+		if (quarterProvided && (quarterObj instanceof Integer || quarterObj instanceof String)) {
+			quarter = Integer.parseInt(String.valueOf(quarterObj));
 			if (quarter < 1 || quarter > 4) {
 				throw new IllegalArgumentException("Please enter a valid quarter (1-4)");
-			}
-			if (month != null) {
-				throw new IllegalArgumentException("Please enter either a quarter or a month");
 			}
 			endMonth = quarter * 3;
 			startMonth = endMonth - 2;
 		}
-		if (month != null) {
+		if (monthProvided && monthObj instanceof Integer) {
+			month = Integer.parseInt(String.valueOf(monthObj));
 			if (month < 1 || month > 12) {
 				throw new IllegalArgumentException("Please enter a valid month (1-12)");
 			}
 			startMonth = month;
 			endMonth = month;
 		}
-
 		Map<String, Date> periodDates = new HashMap<String, Date>();
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, year);
@@ -275,15 +264,13 @@ public class ReportUtil {
 		c.set(Calendar.MONTH, endMonth - 1);
 		c.set(Calendar.DATE, c.getActualMaximum(Calendar.DATE));
 		periodDates.put("endDate", c.getTime());
-
 		return periodDates;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Map<String, CohortDefinition> getMdrtbOutcomesFilterSet(Date startDate, Date endDate) {
 		Map<String, CohortDefinition> map = new HashMap<String, CohortDefinition>();
 
-		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+		Concept workflowConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
 
 		CohortDefinition cured = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED), startDate, endDate);
@@ -293,7 +280,7 @@ public class ReportUtil {
 				endDate);
 
 		CohortDefinition failed = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
-				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED), startDate, endDate);
+				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_FAILED), startDate, endDate);
 
 		//TODO: Replace with LOST_TO_FOLLOWUP
 		CohortDefinition defaulted = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
@@ -306,7 +293,7 @@ public class ReportUtil {
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_OUT), startDate,
 				endDate);
 
-		CohortDefinition stillEnrolled = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(),
+		CohortDefinition stillEnrolled = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList<Concept>(),
 				startDate, endDate);
 
 		map.put("Cured", cured);
@@ -339,7 +326,7 @@ public class ReportUtil {
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS),
 				startDate, endDate);
 
-		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(),
+		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList<Concept>(),
 				startDate, endDate);
 
 		map.put("New", newPatient);
@@ -355,7 +342,7 @@ public class ReportUtil {
 		Map<String, CohortDefinition> map = new HashMap<String, CohortDefinition>();
 
 		Concept workflowConcept = Context.getService(MdrtbService.class)
-				.getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+				.getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
 
 		CohortDefinition newPatient = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW), startDate, endDate);
@@ -386,7 +373,7 @@ public class ReportUtil {
 		CohortDefinition other = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER), startDate, endDate);
 
-		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList(),
+		CohortDefinition unknown = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, new ArrayList<Concept>(),
 				startDate, endDate);
 
 		//TODO: Thoroughly investigate this usage. MUST write unit tests for all of these cases

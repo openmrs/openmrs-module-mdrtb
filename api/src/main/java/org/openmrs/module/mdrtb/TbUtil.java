@@ -2,19 +2,15 @@ package org.openmrs.module.mdrtb;
 
 import java.lang.reflect.Method;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
@@ -26,24 +22,13 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAddress;
-import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
-import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
-import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
-
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.Test;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
-import org.openmrs.module.reporting.evaluation.EvaluationContext;
-import org.openmrs.module.reporting.evaluation.EvaluationException;
 
 public class TbUtil {
     
@@ -144,15 +129,15 @@ public class TbUtil {
     	
     	// create a list of all concepts that represent positive results
     	Set<Concept> positiveResults = new HashSet<Concept>();
-    	positiveResults.add(service.getConcept(TbConcepts.STRONGLY_POSITIVE));
-    	positiveResults.add(service.getConcept(TbConcepts.MODERATELY_POSITIVE));
-    	positiveResults.add(service.getConcept(TbConcepts.WEAKLY_POSITIVE));
-    	positiveResults.add(service.getConcept(TbConcepts.POSITIVE));
-    	positiveResults.add(service.getConcept(TbConcepts.SCANTY));
-    	positiveResults.add(service.getConcept(TbConcepts.LOWAFB));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.STRONGLY_POSITIVE));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.MODERATELY_POSITIVE));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.WEAKLY_POSITIVE));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.POSITIVE));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.SCANTY));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.LOWAFB));
     	
     	//Xpert and HAIN
-    	positiveResults.add(service.getConcept(TbConcepts.DETECTED));
+    	positiveResults.add(service.getConcept(MdrtbConcepts.DETECTED));
     	
     	
     	return positiveResults;
@@ -534,7 +519,7 @@ public class TbUtil {
 			cohort = Cohort.intersect(cohort, locationCohort);
 		}
 		
-		Oblast o = null;
+		Region o = null;
 		if(!oblast.equals("") && location == null)
 			o =  Context.getService(TbService.class).getOblast(Integer.parseInt(oblast));
 		

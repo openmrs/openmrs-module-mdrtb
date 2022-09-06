@@ -1,6 +1,5 @@
 package org.openmrs.module.mdrtb.reporting.custom;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import org.openmrs.Patient;

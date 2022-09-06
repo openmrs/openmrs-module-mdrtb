@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,28 +14,20 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientState;
 import org.openmrs.Person;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
-
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
-import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.form.custom.TB03uXDRForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.program.TbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
-import org.openmrs.PatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -53,7 +44,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.openmrs.ProgramWorkflowState;
 
 @Controller
 @RequestMapping("/module/mdrtb/form/tb03u-xdr.form")
@@ -112,7 +102,7 @@ public class TB03uXDRFormController {
 			  	@RequestParam(required = true, value = "encounterId") Integer encounterId,
 			  	@RequestParam(required = false, value = "mode") String mode,
 			  ModelMap model) {
-		List<Oblast> oblasts;
+		List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
         
@@ -148,7 +138,7 @@ public class TB03uXDRFormController {
         	System.out.println("show:" + location.getDisplayString());
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
         	model.addAttribute("oblasts", oblasts);
-        	for(Oblast o : oblasts) {
+        	for(Region o : oblasts) {
         		if(o.getName().equals(location.getStateProvince())) {
         			System.out.println(o.getName() + " Set");
         			model.addAttribute("oblastSelected", o.getId());
@@ -256,7 +246,7 @@ public class TB03uXDRFormController {
 				MdrtbPatientProgram tpp = getMdrtbPatientProgram(patientProgramId);
 				
 				if(outcome!=null) {
-					ProgramWorkflow outcomeFlow = Context.getProgramWorkflowService().getWorkflow(tpp.getPatientProgram().getProgram(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME).getName().toString()); 
+					ProgramWorkflow outcomeFlow = Context.getProgramWorkflowService().getWorkflow(tpp.getPatientProgram().getProgram(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME).getName().toString()); 
 					ProgramWorkflowState outcomeState = Context.getProgramWorkflowService().getState(outcomeFlow, outcome.getName().toString());
 					tpp.setOutcome(outcomeState);
 					tpp.setDateCompleted(tb03uxdr.getTreatmentOutcomeDate());
@@ -267,7 +257,7 @@ public class TB03uXDRFormController {
 				}
 				
 				if(group!=null) {
-					ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(tpp.getPatientProgram().getProgram(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX).getName().getName()); 
+					ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(tpp.getPatientProgram().getProgram(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT).getName().getName()); 
 					ProgramWorkflowState groupState = Context.getProgramWorkflowService().getState(groupFlow, group.getName().getName());
 					tpp.setClassificationAccordingToPreviousTreatment(groupState);
 				}
@@ -388,30 +378,30 @@ public class TB03uXDRFormController {
 		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 		MdrtbService ms = Context.getService(MdrtbService.class);
 		for(ProgramWorkflowState pws : states) {
-			if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.NEW).getId().intValue()) {
+			if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEW).getId().intValue()) {
 				stateArray.set(0, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_1).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1).getId().intValue()) {
 				stateArray.set(1, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.RELAPSE_AFTER_REGIMEN_2).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2).getId().intValue()) {
 				stateArray.set(2, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_1).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1).getId().intValue()) {
 				stateArray.set(3, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.DEFAULT_AFTER_REGIMEN_2).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2).getId().intValue()) {
 				stateArray.set(4, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_1).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1).getId().intValue()) {
 				stateArray.set(5, pws);
 			}
 			
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.AFTER_FAILURE_REGIMEN_2).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2).getId().intValue()) {
 				stateArray.set(6, pws);
 			}
 			
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.OTHER).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
 				stateArray.set(7, pws);
 			}
 		}
@@ -428,13 +418,13 @@ public class TB03uXDRFormController {
 		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
 		MdrtbService ms = Context.getService(MdrtbService.class);
 		for(ProgramWorkflowState pws : states) {
-			if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.NEW).getId().intValue()) {
+			if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEW).getId().intValue()) {
 				stateArray.set(0, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY).getId().intValue()) {
 				stateArray.set(1, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS).getId().intValue()) {
 				stateArray.set(2, pws);
 			}
 		
@@ -451,7 +441,7 @@ public class TB03uXDRFormController {
 	public ArrayList<ConceptAnswer> getPossibleResistanceTypes() {
 		
 		ArrayList<ConceptAnswer> typeArray = new ArrayList<ConceptAnswer>();
-		Collection<ConceptAnswer> ca= Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.RESISTANCE_TYPE);
+		Collection<ConceptAnswer> ca= Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);
 		for(int i=0; i< 3; i++) {
 			typeArray.add(null);
 		}
@@ -477,7 +467,7 @@ public class TB03uXDRFormController {
 			else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TDR_TB).getId().intValue()) {
 				typeArray.set(2, c);
 			}
-			/*else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(TbConcepts.NO).getId().intValue()) {
+			/*else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NO).getId().intValue()) {
 				typeArray.set(7, c);
 			}
 			else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN).getId().intValue()) {
@@ -487,7 +477,7 @@ public class TB03uXDRFormController {
 		
 		return typeArray;
 		
-		/*return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.RESISTANCE_TYPE);*/
+		/*return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);*/
 	}
 	
 	@ModelAttribute("outcomes")
@@ -500,22 +490,22 @@ public class TB03uXDRFormController {
 		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleTbProgramOutcomes();
 		MdrtbService ms = Context.getService(MdrtbService.class);
 		for(ProgramWorkflowState pws : states) {
-			if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.CURED).getId().intValue()) {
+			if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CURED).getId().intValue()) {
 				stateArray.set(0, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.TREATMENT_COMPLETE).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE).getId().intValue()) {
 				stateArray.set(1, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.DIED).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DIED).getId().intValue()) {
 				stateArray.set(2, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.FAILED).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_FAILED).getId().intValue()) {
 				stateArray.set(3, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.LOST_TO_FOLLOWUP).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP).getId().intValue()) {
 				stateArray.set(4, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(TbConcepts.CANCELLED).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CANCELLED).getId().intValue()) {
 				stateArray.set(5, pws);
 			}
 		}
@@ -532,7 +522,7 @@ public class TB03uXDRFormController {
 	@ModelAttribute("txlocations")
 	public Collection<ConceptAnswer> getPossibleTxLocations() {
 		
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.TX_LOCATION);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.TREATMENT_LOCATION);
 	}
 	
 	@ModelAttribute("basesfordiagnosis")
@@ -541,45 +531,45 @@ public class TB03uXDRFormController {
 		for(int i=0; i< 6; i++) {
 			stateArray.add(null);
 		}
-		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.BASIS_FOR_TB_DIAGNOSIS);
+		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
 		MdrtbService ms = Context.getService(MdrtbService.class);
 		for(ConceptAnswer ca : bases) {
-			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.GENEXPERT).getId().intValue()) {
+			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.GENEXPERT).getId().intValue()) {
 				stateArray.set(0, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.HAIN_1_DETECTION).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HAIN_1_DETECTION).getId().intValue()) {
 				stateArray.set(1, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.HAIN_2_DETECTION).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HAIN_2_DETECTION).getId().intValue()) {
 				stateArray.set(2, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.DST_DETECTION).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DST).getId().intValue()) {
 				stateArray.set(3, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.CONTACT).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CONTACT).getId().intValue()) {
 				stateArray.set(4, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(TbConcepts.TB_CLINICAL_DIAGNOSIS).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TB_CLINICAL_DIAGNOSIS).getId().intValue()) {
 				stateArray.set(5, ca);
 			}
 		}
 		return stateArray;
-		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.BASIS_FOR_TB_DIAGNOSIS);
+		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.BASIS_FOR_TB_DIAGNOSIS);
 	}
 
 	@ModelAttribute("hivstatuses")
 	public Collection<ConceptAnswer> getPossibleHivStatuses() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.RESULT_OF_HIV_TEST);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESULT_OF_HIV_TEST);
 	}
 	
 	@ModelAttribute("relapses")
 	public Collection<ConceptAnswer> getPossibleRelapses() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.RELAPSED);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RELAPSED);
 	}
 	
 	@ModelAttribute("causes")
 	public Collection<ConceptAnswer> getPossibleCausesOfDeath() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(TbConcepts.CAUSE_OF_DEATH);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.CAUSE_OF_DEATH);
 	}
 		
 }

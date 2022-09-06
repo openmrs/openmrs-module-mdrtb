@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.Patient;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.form.custom.AEForm;
@@ -34,8 +33,8 @@ public class AEViewController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -44,30 +43,21 @@ public class AEViewController {
 		
 	}
 	
-    @SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/pv/aeView.form")
-	public ModelAndView showRegimens(
-	                               @RequestParam(required = true, value = "patientId") Integer patientId,
-	                               @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                               
-	                               ModelMap map) {
-  
-    	Patient p = Context.getPatientService().getPatient(patientId);
-    	MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-    	
-    	map.put("patientProgramId", program.getId());
-    	
-    	// add the patientId
-    	map.put("patientId", program.getPatient().getId());
-    	
-    	ArrayList<AEForm> forms = Context.getService(MdrtbService.class).getAEFormsForProgram(program.getPatient(), program.getId());
+	@RequestMapping("/module/mdrtb/pv/aeView.form")
+	public ModelAndView showRegimens(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId, ModelMap map) {
+		MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+		
+		map.put("patientProgramId", program.getId());
+		
+		// add the patientId
+		map.put("patientId", program.getPatient().getId());
+		
+		ArrayList<AEForm> forms = Context.getService(MdrtbService.class).getAEFormsForProgram(program.getPatient(),
+		    program.getId());
 		
 		map.put("forms", forms);
 		
 		return new ModelAndView("/module/mdrtb/pv/aeView", map);
-
 	}
-    
-    
-   
 }

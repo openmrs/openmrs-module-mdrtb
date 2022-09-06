@@ -1,10 +1,5 @@
 package org.openmrs.module.mdrtb.reporting.custom;
 
-import java.util.HashMap;
-
-import org.openmrs.Patient;
-import org.openmrs.api.context.Context;
-
 public class TB08Data {
 	
 	private Integer newPulmonaryBCDetected;

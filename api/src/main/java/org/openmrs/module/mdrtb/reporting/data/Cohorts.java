@@ -152,7 +152,7 @@ public class Cohorts {
 	}
 	
 	public static CohortDefinition getFailedDuringFilter(Date startDate, Date endDate) {
-		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED)), startDate, endDate);
+		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_FAILED)), startDate, endDate);
 	}
 	
 	public static CohortDefinition getDefaultedDuringFilter(Date startDate, Date endDate) {
@@ -239,15 +239,15 @@ public class Cohorts {
 	}
 
 	public static CohortDefinition getNewlyHospitalizedDuringPeriod(Date startDate, Date endDate) {	
-		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)), startDate, endDate);
+		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED)), startDate, endDate);
 	}
 		
 	public static CohortDefinition getEverHospitalizedDuringPeriod(Date startDate, Date endDate) {
-		return getInStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)), startDate, endDate);
+		return getInStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED)), startDate, endDate);
 	}
 	
 	public static CohortDefinition getMostRecentlyAmbulatoryByEnd(Date startDate, Date endDate) {
-		return getNotInStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)), startDate, endDate);
+		return getNotInStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED)), startDate, endDate);
 	}
 	
 	// TODO: figure out what obs to look for here--see ticket HATB-358

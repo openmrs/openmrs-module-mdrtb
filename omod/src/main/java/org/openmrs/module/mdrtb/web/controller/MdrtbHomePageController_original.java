@@ -33,7 +33,6 @@ import org.openmrs.module.mdrtb.reporting.data.WHOForm06;
 import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.util.OpenmrsClassLoader;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 

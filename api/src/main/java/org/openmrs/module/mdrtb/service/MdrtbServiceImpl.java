@@ -44,8 +44,7 @@ import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConceptMap;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.TbUtil;
 import org.openmrs.module.mdrtb.comparator.PatientProgramComparator;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
@@ -68,7 +67,6 @@ import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
-import org.openmrs.module.mdrtb.service.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -85,18 +83,14 @@ import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
 import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.openmrs.module.mdrtb.specimen.custom.XpertImpl;
 import org.openmrs.module.reporting.common.ObjectUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
 	private static final String UUID_REGEX = "^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]+$";
 	
 	protected final Log log = LogFactory.getLog(getClass());
-
-	@Autowired
+	
 	protected HibernateMdrtbDAO dao;
 	
 	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?
@@ -144,6 +138,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			}
 			catch (Exception e) {}
 		}
+		log.warn("Concept: " + lookup + " was not found!");
 		return null;
 	}
 	
@@ -646,7 +641,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes() {
-		return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME));
+		return getPossibleWorkflowStates(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME));
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousDrugUse() {
@@ -656,7 +652,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousTreatment() {
 		return getPossibleWorkflowStates(
-		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT));
 	}
 	
 	public String getColorForConcept(Concept concept) {
@@ -754,7 +750,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Obs temp = null;
 		for (Encounter encounter : specimenEncounters) {
 			temp = MdrtbUtil.getObsFromEncounter(
-			    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 			if (temp != null && temp.getValueNumeric() != null && temp.getValueNumeric().intValue() == programId.intValue())
 				specimens.add(new SpecimenImpl(encounter));
 		}
@@ -770,19 +766,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleTbProgramOutcomes() {
-		
-		return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB_TX_OUTCOME));
-		
+		return getPossibleWorkflowStates(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPatientGroups() {
-		
-		Set<ProgramWorkflowState> temp = getPossibleWorkflowStates(
-		    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_GROUP));
-		
-		return temp;
-		// return
-		// getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_GROUP));
+		return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP));
 	}
 	
 	public List<String> getAllRayonsTJK() {
@@ -951,64 +940,82 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return this.getConcept(MdrtbConcepts.XPERT_MTB_BURDEN).getAnswers();
 	}
 	
-	public List<Oblast> getOblasts() {		
-//		List<Oblast> oblastList = new ArrayList<Oblast>();
-//		AddressHierarchyLevel oblastLevel = new AddressHierarchyLevel();
-//		oblastLevel.setLevelId(2);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(oblastLevel);		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			oblastList.add(new Oblast(name, id));
-//		}
-//		List<Location> countries = Context.getLocationService().getRootLocations(false);
-		List<Oblast> oblasts = new ArrayList<Oblast>();
-		List<BaseLocation> list = dao.getLocationsByHierarchyLevel(Oblast.HIERARCHY_LEVEL);
+	public Location getLocation(Integer oblastId, Integer districtId, Integer facilityId) {
+		if (oblastId == null || districtId == null)
+			return null;
+		Region o = getOblast(oblastId);
+		District d = getDistrict(districtId);
+		Facility f = null;
+		if (facilityId != null)
+			f = getFacility(facilityId);
+		Location location = null;
+		List<Location> locations = Context.getLocationService().getAllLocations(false);
+		if (f != null) {
+			for (Location loc : locations) {
+				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
+				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
+				        && loc.getRegion() != null && loc.getRegion().equals(f.getName())) {
+					location = loc;
+					break;
+				}
+			}
+		} else {
+			for (Location loc : locations) {
+				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
+				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
+				        && (loc.getRegion() == null || loc.getRegion().length() == 0)) {
+					location = loc;
+					break;
+				}
+			}
+		}
+		return location;
+	}
+	
+	public List<Region> getOblasts() {
+		//		List<Region> oblastList = new ArrayList<Region>();
+		//		AddressHierarchyLevel oblastLevel = new AddressHierarchyLevel();
+		//		oblastLevel.setLevelId(2);
+		//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(oblastLevel);		
+		//		for (AddressHierarchyEntry add : list) {
+		//			Integer id = add.getId();
+		//			String name = add.getName();
+		//			
+		//			oblastList.add(new Region(name, id));
+		//		}
+		//		List<Location> countries = Context.getLocationService().getRootLocations(false);
+		List<Region> oblasts = new ArrayList<Region>();
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Region.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
-			oblasts.add(new Oblast(baseLocation.getName(), baseLocation.getId()));
+			oblasts.add(new Region(baseLocation));
 		}
 		return oblasts;
 	}
 	
-	public List<Oblast> getOblasts(int parentId) {
-		List<Oblast> oblasts = new ArrayList<Oblast>();
-		BaseLocation parent = new District("", parentId);
-		List<BaseLocation> list = dao.getLocationsByParent(parent);
+	public List<Region> getOblasts(int parentId) {
+		List<Region> oblasts = new ArrayList<Region>();
+		BaseLocation parent = new District("", parentId, District.HIERARCHY_LEVEL);
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
 		for (BaseLocation baseLocation : list) {
-			oblasts.add(new Oblast(baseLocation.getName(), baseLocation.getId()));
+			oblasts.add(new Region(baseLocation));
 		}
 		return oblasts;
 	}
 	
-	public Oblast getOblast(Integer oblastId) {
-//		Oblast oblast = null;
-//		if (oblastId == null)
-//			return null;
-//		
-//		AddressHierarchyEntry add = getAddressService().getAddressHierarchyEntry(oblastId.intValue());
-//		
-//		if (add != null) {
-//			oblast = new Oblast();
-//			oblast.setId(oblastId);
-//			oblast.setName(add.getName());
-//		}
-		List<BaseLocation> list = dao.getLocationsByHierarchyLevel(Oblast.HIERARCHY_LEVEL);
+	public Region getOblast(Integer oblastId) {
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Region.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
 			if (baseLocation.getId().equals(oblastId)) {
-				return new Oblast(baseLocation.getName(), baseLocation.getId());
+				return new Region(baseLocation);
 			}
 		}
 		return null;
 	}
 	
-	public List<Location> getLocationsFromOblastName(Oblast oblast) {
+	public List<Location> getLocationsFromOblastName(Region oblast) {
 		List<Location> locationList = new ArrayList<Location>();
-		
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
-		
 		for (Location loc : locations) {
-			
 			if (loc.getStateProvince() != null) {
 				if (loc.getStateProvince().equals(oblast.getName()))
 					locationList.add(loc);
@@ -1018,27 +1025,16 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<Facility> getFacilities() {
-//		List<Facility> facilityList = new ArrayList<Facility>();
-//		AddressHierarchyLevel facLevel = new AddressHierarchyLevel();
-//		facLevel.setLevelId(6);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(facLevel);
-//		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			facilityList.add(new Facility(name, id));
-//		}
 		List<Facility> facilities = new ArrayList<Facility>();
-		List<BaseLocation> list = dao.getLocationsByHierarchyLevel(Facility.HIERARCHY_LEVEL);
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Facility.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
-			facilities.add(new Facility(baseLocation.getName(), baseLocation.getId()));
+			facilities.add(new Facility(baseLocation));
 		}
 		return facilities;
 	}
 	
 	public List<Facility> getRegFacilities() {
-		//TODO: Horrific way to identify labs. Use location properties
+		//TODO: horrible way to identify labs. Use location properties
 		List<Facility> facilityList = getFacilities();
 		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
 		String labIds[] = labIdsProperty.split("\\|");
@@ -1051,86 +1047,41 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 							labs.add(f);
 						}
 					}
-				} catch(Exception e) {}
+				}
+				catch (Exception e) {}
 			}
 		}
 		return facilityList;
-	}
-	
-	public Location getLocation(Integer oblastId, Integer districtId, Integer facilityId) {
-		
-		if (oblastId == null || districtId == null)
-			return null;
-		
-		Oblast o = getOblast(oblastId);
-		District d = getDistrict(districtId);
-		
-		Facility f = null;
-		
-		if (facilityId != null)
-			f = getFacility(facilityId);
-		
-		Location location = null;
-		
-		List<Location> locations = Context.getLocationService().getAllLocations(false);
-		
-		if (f != null) {
-			for (Location loc : locations) {
-				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
-				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
-				        && loc.getRegion() != null && loc.getRegion().equals(f.getName())) {
-					location = loc;
-					break;
-				}
-			}
-		}
-		
-		else {
-			for (Location loc : locations) {
-				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
-				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
-				        && (loc.getRegion() == null || loc.getRegion().length() == 0)) {
-					location = loc;
-					break;
-				}
-			}
-		}
-		
-		return location;
 	}
 	
 	public List<Facility> getFacilities(int parentId) {
-		List<Facility> facilityList = new ArrayList<Facility>();
-//		List<AddressHierarchyEntry> list = getAddressService().getChildAddressHierarchyEntries(parentId);
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			facilityList.add(new Facility(name, id));
-//		}
-		return facilityList;
+		List<Facility> facilities = new ArrayList<Facility>();
+		BaseLocation parent = dao.getAddressHierarchyLocation(parentId);
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
+		for (BaseLocation baseLocation : list) {
+			if (baseLocation.getLevelId().equals(Facility.HIERARCHY_LEVEL)) {
+				facilities.add(new Facility(baseLocation));
+			}
+		}
+		return facilities;
 	}
 	
 	public List<Facility> getRegFacilities(int parentId) {
-		List<Facility> facilityList = new ArrayList<Facility>();
-//		List<AddressHierarchyEntry> list = getAddressService().getChildAddressHierarchyEntries(parentId);
-//		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
-//		String labIds[] = labIdsProperty.split("\\|");
-//		HashSet<Integer> labs = new HashSet<Integer>();
-//		if (labIds != null) {
-//			for (int i = 0; i < labIds.length; i++) {
-//				if (labIds[i].length() != 0) {
-//					labs.add(Integer.parseInt(labIds[i]));
-//				}
-//			}
-//		}
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			if (!labs.contains(id))
-//				facilityList.add(new Facility(name, id));
-//		}
-		return facilityList;
+		List<Facility> facilities = getFacilities(parentId);
+		Set<Facility> filtered = new HashSet<Facility>();
+		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
+		String labIds[] = labIdsProperty.split("\\|");
+		for (String id : labIds) {
+			if (!StringUtils.isNumeric(id)) {
+				continue;
+			}
+			for (Facility facility : facilities) {
+				if (facility.getId().equals(Integer.parseInt(id))) {
+					filtered.add(facility);
+				}
+			}
+		}
+		return new ArrayList<Facility>(filtered);
 	}
 	
 	public Facility getFacility(Integer facilityId) {
@@ -1145,11 +1096,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	
 	public List<Location> getLocationsFromFacilityName(Facility facility) {
 		List<Location> locationList = new ArrayList<Location>();
-		
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
-		
 		for (Location loc : locations) {
-			
 			if (loc.getRegion() != null) {
 				if (loc.getRegion().equals(facility.getName()))
 					locationList.add(loc);
@@ -1159,134 +1107,81 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<District> getDistricts(int parentId) {
-		
-		List<District> districtList = new ArrayList<District>();
-//		List<AddressHierarchyEntry> list = getAddressService().getChildAddressHierarchyEntries(parentId);
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			districtList.add(new District(name, id));
-//		}
-//		
-		return districtList;
+		List<District> districts = new ArrayList<District>();
+		BaseLocation parent = dao.getAddressHierarchyLocation(parentId);
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
+		for (BaseLocation baseLocation : list) {
+			if (baseLocation.getLevelId().equals(District.HIERARCHY_LEVEL)) {
+				districts.add(new District(baseLocation));
+			}
+		}
+		return districts;
 		
 	}
 	
 	public List<District> getRegDistricts(int parentId) {
-		
-		List<District> districtList = new ArrayList<District>();
-//		List<AddressHierarchyEntry> list = getAddressService().getChildAddressHierarchyEntries(parentId);
-//		
-//		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
-//		String labIds[] = labIdsProperty.split("\\|");
-//		HashSet<Integer> labs = new HashSet<Integer>();
-//		if (labIds != null) {
-//			for (int i = 0; i < labIds.length; i++) {
-//				if (labIds[i].length() != 0) {
-//					labs.add(Integer.parseInt(labIds[i]));
-//				}
-//			}
-//		}
-//		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			if (!labs.contains(id))
-//				districtList.add(new District(name, id));
-//		}
-//		
-		return districtList;
-		
+		List<District> districts = getDistricts(parentId);
+		Set<District> filtered = new HashSet<District>();
+		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
+		String labIds[] = labIdsProperty.split("\\|");
+		for (String id : labIds) {
+			if (!StringUtils.isNumeric(id)) {
+				continue;
+			}
+			for (District district : districts) {
+				if (district.getId().equals(Integer.parseInt(id))) {
+					filtered.add(district);
+				}
+			}
+		}
+		return new ArrayList<District>(filtered);
 	}
 	
 	public District getDistrict(Integer districtId) {
-		District district = null;
-//		
-//		if (districtId == null)
-//			return null;
-//		AddressHierarchyEntry add = getAddressService().getAddressHierarchyEntry(districtId.intValue());
-//		
-//		if (add != null) {
-//			district = new District();
-//			district.setId(districtId);
-//			district.setName(add.getName());
-//		}
-//		
-		return district;
+		return new District(dao.getAddressHierarchyLocation(districtId));
 	}
 	
-	public District getDistrict(String dName) {
-		District district = null;
-//		
-//		if (dName == null)
-//			return null;
-//		AddressHierarchyLevel distLevel = new AddressHierarchyLevel();
-//		distLevel.setLevelId(3);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevelAndName(distLevel, dName);
-//		if (list != null) {
-//			Integer id = list.get(0).getId();
-//			String name = list.get(0).getName();
-//			
-//			return (new District(name, id));
-//		}
-//		
-		return district;
+	public District getDistrict(String districtName) {
+		List<District> list = getDistricts();
+		for (District district : list) {
+			if (district.getName().equalsIgnoreCase(districtName)) {
+				return district;
+			}
+		}
+		return null;
 	}
 	
 	public List<District> getDistricts() {
-		
-		List<District> districtList = new ArrayList<District>();
-//		
-//		AddressHierarchyLevel distLevel = new AddressHierarchyLevel();
-//		distLevel.setLevelId(3);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(distLevel);
-//		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			districtList.add(new District(name, id));
-//		}
-//		
-		return districtList;
+		List<District> districts = new ArrayList<District>();
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(District.HIERARCHY_LEVEL);
+		for (BaseLocation baseLocation : list) {
+			districts.add(new District(baseLocation));
+		}
+		return districts;
 	}
 	
 	public List<District> getRegDistricts() {
-		
-		List<District> districtList = new ArrayList<District>();
-//		AddressHierarchyLevel distLevel = new AddressHierarchyLevel();
-//		distLevel.setLevelId(3);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(distLevel);
-//		
-//		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
-//		String labIds[] = labIdsProperty.split("\\|");
-//		HashSet<Integer> labs = new HashSet<Integer>();
-//		if (labIds != null) {
-//			for (int i = 0; i < labIds.length; i++) {
-//				if (labIds[i].length() != 0) {
-//					labs.add(Integer.parseInt(labIds[i]));
-//				}
-//			}
-//		}
-//		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			if (!labs.contains(id))
-//				districtList.add(new District(name, id));
-//		}
-//		
-		return districtList;
+		List<District> districts = getDistricts();
+		Set<District> filtered = new HashSet<District>();
+		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
+		String labIds[] = labIdsProperty.split("\\|");
+		for (String id : labIds) {
+			if (!StringUtils.isNumeric(id)) {
+				continue;
+			}
+			for (District district : districts) {
+				if (district.getId().equals(Integer.parseInt(id))) {
+					filtered.add(district);
+				}
+			}
+		}
+		return new ArrayList<District>(filtered);
 	}
 	
 	public List<Location> getLocationsFromDistrictName(District district) {
 		List<Location> locationList = new ArrayList<Location>();
-		
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
-		
 		for (Location loc : locations) {
-			
 			if (loc.getCountyDistrict() != null) {
 				if (loc.getCountyDistrict().equals(district.getName()))
 					locationList.add(loc);
@@ -1296,11 +1191,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<Location> getEnrollmentLocations() {
+		// TODO: Deal with these hard-coded strings
 		List<Location> allLocations = Context.getLocationService().getAllLocations();
 		List<Location> enrollmentLocations = new ArrayList<Location>();
-		
 		for (Location loc : allLocations) {
-			
 			String locName = loc.getName();
 			if (!(locName.length() >= 2 && MdrtbUtil.areRussianStringsEqual(locName.substring(0, 2), "БЛ")
 			        && !(locName.length() >= 2 && MdrtbUtil.areRussianStringsEqual(locName.substring(0, 2), "ГЦ"))
@@ -1308,72 +1202,33 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			        && !MdrtbUtil.areRussianStringsEqual(locName, "РЦЗНТ Душанбе")
 			        && !MdrtbUtil.areRussianStringsEqual(locName, "НРЛ")
 			        && !MdrtbUtil.areRussianStringsEqual(locName, "НЛОЗ")))
-				
 				enrollmentLocations.add(loc);
-			
 		}
-		
 		return enrollmentLocations;
 	}
 	
 	public PatientIdentifier getPatientProgramIdentifier(MdrtbPatientProgram mpp) {
-		
-		Integer id = null;
-		
-		String query = "select patient_identifier_id from patient_program where patient_program_id = "
-		        + mpp.getPatientProgram().getPatientProgramId();
-		List<List<Object>> result = Context.getAdministrationService().executeSQL(query, true);
-		
-		for (List<Object> temp : result) {
-			
-			for (int i = 0; i < temp.size(); i++) {
-				Object value = temp.get(i);
-				if (value != null) {
-					
-					id = (Integer) value;
-					
-				}
-			}
-			
-		}
-		PatientIdentifier pi = null;
-		if (id != null) {
-			
-			pi = getPatientIdentifierById(id);
-		}
-		
-		return pi;
-		
+		return getGenPatientProgramIdentifier(mpp.getPatientProgram());
 	}
 	
 	public PatientIdentifier getGenPatientProgramIdentifier(PatientProgram pp) {
-		
 		Integer id = null;
-		
-		String query = "select patient_identifier_id from patient_program where patient_program_id = "
-		        + pp.getPatientProgramId();
+		String query = "select patient_id from patient_program where patient_program_id = " + pp.getPatientProgramId();
 		List<List<Object>> result = Context.getAdministrationService().executeSQL(query, true);
-		
 		for (List<Object> temp : result) {
-			
 			for (int i = 0; i < temp.size(); i++) {
 				Object value = temp.get(i);
 				if (value != null) {
-					
 					id = (Integer) value;
-					
 				}
 			}
-			
 		}
-		PatientIdentifier pi = null;
 		if (id != null) {
-			
-			pi = getPatientIdentifierById(id);
+			Patient patient = Context.getPatientService().getPatient(id);
+			PatientIdentifier pi = patient.getPatientIdentifier();
+			return pi;
 		}
-		
-		return pi;
-		
+		return null;
 	}
 	
 	public List<TbPatientProgram> getAllTbPatientProgramsEnrolledInDateRange(Date startDate, Date endDate) {
@@ -1396,38 +1251,34 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public void addIdentifierToProgram(Integer patientIdenifierId, Integer patientProgramId) {
-		
-		Integer id = null;
-		
-		String query = "update patient_program set patient_identifier_id= " + patientIdenifierId
-		        + " where patient_program_id=" + patientProgramId + ";";
-		List<List<Object>> result = Context.getAdministrationService().executeSQL(query, false);
-		
+		String query = "UPDATE patient_program SET patient_identifier_id= " + patientIdenifierId
+		        + " WHERE patient_program_id=" + patientProgramId + ";";
+		Context.getAdministrationService().executeSQL(query, false);
 	}
 	
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleIPTreatmentSites() {
-		return this.getConcept(TbConcepts.TREATMENT_CENTER_FOR_IP).getAnswers();
+		return this.getConcept(MdrtbConcepts.TREATMENT_CENTER_FOR_IP).getAnswers();
 	}
 	
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleCPTreatmentSites() {
-		return this.getConcept(TbConcepts.TREATMENT_CENTER_FOR_CP).getAnswers();
+		return this.getConcept(MdrtbConcepts.TREATMENT_CENTER_FOR_CP).getAnswers();
 	}
 	
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleRegimens() {
-		return this.getConcept(TbConcepts.TUBERCULOSIS_PATIENT_CATEGORY).getSortedAnswers(Context.getLocale());
+		return this.getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY).getAnswers();
 	}
 	
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleHIVStatuses() {
-		return this.getConcept(TbConcepts.RESULT_OF_HIV_TEST).getAnswers();
+		return this.getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST).getAnswers();
 	}
 	
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleResistanceTypes() {
-		return this.getConcept(TbConcepts.RESISTANCE_TYPE).getSortedAnswers(Context.getLocale());
+		return this.getConcept(MdrtbConcepts.RESISTANCE_TYPE).getAnswers();
 	}
 	
 	@Transactional(readOnly = true)
@@ -1500,11 +1351,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		    false);
 		// System.out.println("Encs: " + encs.size());
 		for (Encounter e : encs) {
-			if (MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.SMEAR_CONSTRUCT),
-			    e) != null) {
+			if (MdrtbUtil.getObsFromEncounter(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SMEAR_CONSTRUCT), e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					SmearForm sf = new SmearForm(e);
 					sf.setPatient(tpp.getPatient());
@@ -1528,10 +1379,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		// System.out.println("Encs: " + encs.size());
 		for (Encounter e : encs) {
 			if (MdrtbUtil.getObsFromEncounter(
-			    Context.getService(MdrtbService.class).getConcept(TbConcepts.CULTURE_CONSTRUCT), e) != null) {
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					CultureForm sf = new CultureForm(e);
 					sf.setPatient(tpp.getPatient());
@@ -1554,11 +1405,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		    false);
 		// System.out.println("Encs: " + encs.size());
 		for (Encounter e : encs) {
-			if (MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.XPERT_CONSTRUCT),
-			    e) != null) {
+			if (MdrtbUtil.getObsFromEncounter(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XPERT_CONSTRUCT), e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					XpertForm sf = new XpertForm(e);
 					sf.setPatient(tpp.getPatient());
@@ -1581,11 +1432,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		    false);
 		// System.out.println("Encs: " + encs.size());
 		for (Encounter e : encs) {
-			if (MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.HAIN_CONSTRUCT),
-			    e) != null) {
+			if (MdrtbUtil.getObsFromEncounter(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					HAINForm sf = new HAINForm(e);
 					sf.setPatient(tpp.getPatient());
@@ -1612,7 +1463,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN2_CONSTRUCT), e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					HAIN2Form sf = new HAIN2Form(e);
 					sf.setPatient(tpp.getPatient());
@@ -1635,11 +1486,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		    false);
 		// System.out.println("Encs: " + encs.size());
 		for (Encounter e : encs) {
-			if (MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DST_CONSTRUCT),
+			if (MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT),
 			    e) != null) {
 				// System.out.println("found SC");
 				Obs temp = MdrtbUtil.getObsFromEncounter(
-				    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 				if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 					DSTForm sf = new DSTForm(e);
 					sf.setPatient(tpp.getPatient());
@@ -1664,7 +1515,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			// e)!=null) {
 			// System.out.println("found SC");
 			Obs temp = MdrtbUtil.getObsFromEncounter(
-			    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e);
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e);
 			if (temp != null && temp.getValueNumeric().intValue() == patientProgramId.intValue()) {
 				DrugResistanceDuringTreatmentForm drdt = new DrugResistanceDuringTreatmentForm(e);
 				drdt.setPatient(tpp.getPatient());
@@ -1686,7 +1537,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		for (Encounter e : all) {
 			if (MdrtbUtil.getObsFromEncounter(
-			    Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e) == null) {
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), e) == null) {
 				encs.add(e);
 			}
 		}
@@ -1698,8 +1549,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(programId);
 		Encounter e = Context.getEncounterService().getEncounter(encounterId);
 		Obs idObs = new Obs(pp.getPatient(),
-		        Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), e.getEncounterDatetime(),
-		        e.getLocation());
+		        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID),
+		        e.getEncounterDatetime(), e.getLocation());
 		idObs.setEncounter(e);
 		idObs.setObsDatetime(e.getEncounterDatetime());
 		idObs.setLocation(e.getLocation());
@@ -1723,7 +1574,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		ArrayList<EncounterType> typeList = new ArrayList<EncounterType>();
 		typeList.add(eType);
 		
-		Oblast o = null;
+		Region o = null;
 		if (!oblast.equals("") && location == null)
 			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		
@@ -1804,7 +1655,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		ArrayList<EncounterType> typeList = new ArrayList<EncounterType>();
 		typeList.add(eType);
 		
-		Oblast o = null;
+		Region o = null;
 		if (!oblast.equals("") && location == null)
 			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		
@@ -1879,7 +1730,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		ArrayList<EncounterType> typeList = new ArrayList<EncounterType>();
 		typeList.add(eType);
 		
-		Oblast o = null;
+		Region o = null;
 		if (!oblast.equals("") && location == null)
 			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		
@@ -1956,7 +1807,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			endDate = (Date) (dateMap.get("endDate"));
 		}
 		
-		Concept ppid = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept ppid = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		EncounterType eType = Context.getEncounterService()
 		        .getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"));
 		ArrayList<EncounterType> typeList = new ArrayList<EncounterType>();
@@ -2092,7 +1943,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public Set<ProgramWorkflowState> getPossibleDOTSClassificationsAccordingToPreviousDrugUse() {
 		
 		Set<ProgramWorkflowState> temp = getPossibleWorkflowStates(Context.getService(MdrtbService.class)
-		        .getConcept(TbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE));
+		        .getConcept(MdrtbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE));
 		
 		return temp;
 	}
@@ -2276,24 +2127,24 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public List<Country> getCountries() {
-//		AddressHierarchyLevel countryLevel = new AddressHierarchyLevel();
-//		countryLevel.setLevelId(1);
-//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(countryLevel);
-//		
-//		for (AddressHierarchyEntry add : list) {
-//			Integer id = add.getId();
-//			String name = add.getName();
-//			
-//			ret.add(new Country(name, id));
-//		}
+		//		AddressHierarchyLevel countryLevel = new AddressHierarchyLevel();
+		//		countryLevel.setLevelId(1);
+		//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(countryLevel);
+		//		
+		//		for (AddressHierarchyEntry add : list) {
+		//			Integer id = add.getId();
+		//			String name = add.getName();
+		//			
+		//			ret.add(new Country(name, id));
+		//		}
 		List<Country> countries = new ArrayList<Country>();
-		List<BaseLocation> list = dao.getLocationsByHierarchyLevel(Country.HIERARCHY_LEVEL);
+		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Country.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
 			countries.add(new Country(baseLocation.getName(), baseLocation.getId()));
 		}
 		return countries;
 	}
-		
+	
 	public ArrayList<TB03Form> getTB03FormsForProgram(Patient p, Integer patientProgId) {
 		
 		ArrayList<TB03Form> forms = new ArrayList<TB03Form>();
@@ -2304,7 +2155,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
 		System.out.println("TEMP: " + temp.size());
 		for (Encounter e : temp) {
@@ -2330,7 +2181,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
 		System.out.println("TEMP: " + temp.size());
 		for (Encounter e : temp) {
@@ -2360,7 +2211,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
 		
 		for (Encounter e : temp) {
@@ -2386,9 +2237,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
-		System.out.println("TEMP: " + temp.size());
 		for (Encounter e : temp) {
 			Obs idObs = MdrtbUtil.getObsFromEncounter(idConcept, e);
 			if (idObs != null && idObs.getValueNumeric() != null
@@ -2584,9 +2434,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
-		System.out.println("TEMP: " + temp.size());
 		for (Encounter e : temp) {
 			Obs idObs = MdrtbUtil.getObsFromEncounter(idConcept, e);
 			if (idObs != null && idObs.getValueNumeric() != null
@@ -2596,9 +2445,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			
 		}
 		Collections.sort(forms);
-		// Collections.reverse(forms);
 		return forms;
-		
 	}
 	
 	public ArrayList<Location> getLocationListForDushanbe(Integer oblastId, Integer districtId, Integer facilityId) {
@@ -2728,9 +2575,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 					break;
 				}
 			}
-			
 		}
-		
 		return mdrtbPrograms;
 	}
 	
@@ -2743,7 +2588,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		typeList.add(eType);
 		
 		List<Encounter> temp = null;
-		Concept idConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID);
+		Concept idConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
 		temp = Context.getEncounterService().getEncounters(p, null, null, null, null, typeList, null, false);
 		System.out.println("TEMP: " + temp.size());
 		for (Encounter e : temp) {
@@ -2868,11 +2713,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			return null;
 		} else {
 			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-			
 			if (program == null || !program.getProgram().equals(getTbProgram())) {
-				throw new MdrtbAPIException(patientProgramId + " does not reference a TB patient program");
+				return null;
+				// TODO: Figure out why this was throwing an exception before
+				// throw new MdrtbAPIException(patientProgramId + " does not reference a TB patient program");
 			}
-			
 			else {
 				return new TbPatientProgram(program);
 			}

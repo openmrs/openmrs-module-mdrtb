@@ -13,6 +13,10 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+  	<!-- Annotation based controllers -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	<context:component-scan base-package="org.openmrs.module.mdrtb.web.controller" />
+	
 	<bean id="MdrtbMappings"
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="order">
@@ -33,7 +37,6 @@
 	</bean>
 
 	<!-- Controllers -->
-
 	<bean id="mdrtbCohortBuilderController"
 		class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
 		<property name="formView">
@@ -43,7 +46,7 @@
 			<value>cohortBuilder.list</value>
 		</property>
 	</bean>
-
+	
 	<!-- Portlet controllers -->
 	<bean id="patientChartPortletController"
 		class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController" />
@@ -94,7 +97,7 @@
 		</property>
 	</bean>
 	<!-- /Controllers -->
-
+	
 	<!-- Add an event listener -->
 	<bean id="mdrtbEventListeners" parent="openmrsEventListeners">
 		<property name="globalPropertyListeners">

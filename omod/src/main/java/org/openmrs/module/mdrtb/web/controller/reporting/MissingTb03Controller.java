@@ -13,7 +13,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
@@ -65,7 +65,7 @@ public class MissingTb03Controller {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -137,7 +137,7 @@ public class MissingTb03Controller {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -308,7 +308,7 @@ public class MissingTb03Controller {
     		errorPercentage = (errorCount*100)/num;
     	
     	String oName = null;
-    	Oblast obl = Context.getService(MdrtbService.class).getOblast(oblastId);
+    	Region obl = Context.getService(MdrtbService.class).getOblast(oblastId);
     	if(obl!=null)
     		oName = obl.getName();
     	

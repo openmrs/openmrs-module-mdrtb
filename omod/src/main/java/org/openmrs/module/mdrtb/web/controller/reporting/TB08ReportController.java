@@ -5,33 +5,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.MdrtbConstants;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.TB03Form;
-import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
-import org.openmrs.module.mdrtb.reporting.custom.TB07Util;
 import org.openmrs.module.mdrtb.reporting.custom.TB08Data;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
-import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -66,7 +52,7 @@ public class TB08ReportController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -129,7 +115,7 @@ public class TB08ReportController {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -155,7 +141,7 @@ public class TB08ReportController {
     	
     	
     	
-    	/*Oblast o = null;
+    	/*Region o = null;
     	if(oblast!=null && !oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		*/
@@ -251,8 +237,8 @@ public class TB08ReportController {
     
     	Integer ageAtRegistration = 0;
     	
-    	Concept pulmonaryConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.PULMONARY_TB);
-    	Concept extrapulmonaryConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.EXTRA_PULMONARY_TB);
+    	Concept pulmonaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB);
+    	Concept extrapulmonaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB);
     	
     
     	
@@ -305,7 +291,7 @@ public class TB08ReportController {
     	    }*/
     	      
     	   /* patientList.add(patient);
-    	    Concept q = Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_DOTS_REGISTRATION);
+    	    Concept q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_DOTS_REGISTRATION);
     	    
     	    conceptQuestionList.add(q);*/
     	    ageAtRegistration = tf.getAgeAtTB03Registration();
@@ -315,7 +301,7 @@ public class TB08ReportController {
     	    	ageAtRegistration = obsList.get(0).getValueNumeric().intValue();
     	    else {
     	    	
-    	    	 q = Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_MDR_REGISTRATION);
+    	    	 q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_MDR_REGISTRATION);
     	    	    
     	    	 	conceptQuestionList.clear();
     	    	    conceptQuestionList.add(q);
@@ -337,7 +323,7 @@ public class TB08ReportController {
     	    
     	    
     	    //get disease site
-    	    Concept q = tf.getAnatomicalSite();// Context.getService(MdrtbService.class).getConcept(TbConcepts.ANATOMICAL_SITE_OF_TB);
+    	    Concept q = tf.getAnatomicalSite();// Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB);
     	    /*conceptQuestionList.clear();
     	    conceptQuestionList.add(q);*/
     	    
@@ -399,13 +385,13 @@ public class TB08ReportController {
     	    	
     	    	else if(q.getId().intValue() == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.died.conceptId"))) {
     	    		System.out.println("DIED");
-    	    		q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH);
+    	    		q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH);
     	     	   
     	     	    
     	     	   
     	     	    if(q!=null)
     	     	    {	
-    	     	    	if(q.getId().intValue() == Context.getService(MdrtbService.class).getConcept(TbConcepts.DEATH_BY_TB).getConceptId().intValue())
+    	     	    	if(q.getId().intValue() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEATH_BY_TB).getConceptId().intValue())
     	     	    		diedTB = Boolean.TRUE;
     	     	    	else
     	     	    		diedNotTB = Boolean.TRUE;
@@ -3292,7 +3278,7 @@ public class TB08ReportController {
 		String fName = null;
 		
 		if(oblastId!=null) {
-			Oblast o = Context.getService(MdrtbService.class).getOblast(oblastId);
+			Region o = Context.getService(MdrtbService.class).getOblast(oblastId);
 			if(o!=null) {
 				oName = o.getName();
 			}

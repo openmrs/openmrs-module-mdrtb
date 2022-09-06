@@ -15,8 +15,8 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.Form89;
 import org.openmrs.module.mdrtb.form.custom.HAINForm;
@@ -76,7 +76,7 @@ public class DOTSDQController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -148,7 +148,7 @@ public class DOTSDQController {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -177,7 +177,7 @@ public class DOTSDQController {
     	//Cohort patients = TbUtil.getDOTSPatientsTJK(null, null, location, oblast, null, null, null, null,year,quarter,month);
     	//Cohort patients = 
     	
-    	/*Oblast o = null;
+    	/*Region o = null;
     	if(oblast!=null && !oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
     	String oName = "";
@@ -267,7 +267,7 @@ public class DOTSDQController {
 	    Boolean child = Boolean.FALSE;
 	    DQItem dqi = null;
 	    
-	    Integer eptbConcept = Context.getService(MdrtbService.class).getConcept(TbConcepts.EXTRA_PULMONARY_TB).getConceptId();
+	    Integer eptbConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB).getConceptId();
 	    
     	sdf.applyPattern("dd.MM.yyyy");
     	SimpleDateFormat rdateSDF = new SimpleDateFormat();
@@ -343,7 +343,7 @@ public class DOTSDQController {
     	   */
     	    
     	    //Missing Age at Registration
-    	    /*Concept q = Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_DOTS_REGISTRATION);
+    	    /*Concept q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_DOTS_REGISTRATION);
     	    
     	    conceptQuestionList.add(q);
     	    
@@ -434,7 +434,7 @@ public class DOTSDQController {
     	    	errorFlag = Boolean.TRUE;
     	    }
     	    //MISSING REGISTRATION GROUP
-    	   /* q = Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_GROUP);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
@@ -448,7 +448,7 @@ public class DOTSDQController {
     	    
     	    
     	    
-    	    else if(tf.getRegistrationGroup().getId().intValue()== (Context.getService(MdrtbService.class).getConcept(TbConcepts.NEW).getId().intValue())) {
+    	    else if(tf.getRegistrationGroup().getId().intValue()== (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW).getId().intValue())) {
     	    	ArrayList<Form89> f89 = Context.getService(MdrtbService.class).getForm89FormsFilledForPatientProgram(tf.getPatient(), null, tf.getPatProgId(), year, quarter, month);
     	    	if(f89==null || f89.size()==0) {
     	    		noForm89.add(dqi);
@@ -457,7 +457,7 @@ public class DOTSDQController {
     	    }
     	    
     	    //NOT STARTED TREATMENT
-    	   /* q = Context.getService(MdrtbService.class).getConcept(TbConcepts.DOTS_TREATMENT_START_DATE);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DOTS_TREATMENT_START_DATE);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
@@ -509,7 +509,7 @@ public class DOTSDQController {
     	    	 }*/
     	    //NO SITE
     	    
-    	   /* q = Context.getService(MdrtbService.class).getConcept(TbConcepts.ANATOMICAL_SITE_OF_TB);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
@@ -532,7 +532,7 @@ public class DOTSDQController {
     	    
     	    
     	    
-    	   /* q = Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_DOTS_REGISTRATION);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_DOTS_REGISTRATION);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
@@ -757,7 +757,7 @@ public class DOTSDQController {
     		errorPercentage = (errorCount*100)/num;
     	
     	String oName = null;
-    	Oblast obl = Context.getService(MdrtbService.class).getOblast(oblastId);
+    	Region obl = Context.getService(MdrtbService.class).getOblast(oblastId);
     	if(obl!=null)
     		oName = obl.getName();
     	

@@ -1,19 +1,20 @@
 package org.openmrs.module.mdrtb;
 
-public class Facility extends BaseLocation {
 
-	public static Integer HIERARCHY_LEVEL = 6;
+public class Region extends BaseLocation {
 	
+	public static Integer HIERARCHY_LEVEL = 2;
+
 	private BaseLocation parent;
 	
-	public Facility(BaseLocation baseLocation) {
+	public Region(BaseLocation baseLocation) {
 		super(baseLocation.getId(), baseLocation.getName(), baseLocation.getLevelId());		
 	}
 
-	public Facility(String name, Integer id, Integer levelId) {
+	public Region(String name, Integer id, Integer levelId) {
 		super(id, name, levelId);
 	}
-
+	
 	/**
 	 * @return the parent
 	 */

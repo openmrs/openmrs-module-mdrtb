@@ -11,11 +11,8 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
-import org.openmrs.module.mdrtb.specimen.CultureImpl;
 
 
 public class RegimenForm extends AbstractSimpleForm implements Comparable<RegimenForm>{
@@ -38,7 +35,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 
 	public Date getCouncilDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_DATE), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -49,7 +46,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public void setCouncilDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_DATE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -68,7 +65,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 				
 			// now create the new Obs and add it to the encounter	
 			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
@@ -76,7 +73,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public String getCmacNumber() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_NUMBER), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_NUMBER), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -87,7 +84,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public void setCmacNumber(String number) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_NUMBER), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_NUMBER), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && number == null) {
@@ -106,7 +103,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 				
 			// now create the new Obs and add it to the encounter	
 			if(number != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CMAC_NUMBER), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CENTRAL_COMMISSION_NUMBER), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(number);
 				encounter.addObs(obs);
 			}
@@ -114,7 +111,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public Concept getPlaceOfCommission() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PLACE_OF_ELECTORAL_COMMISSION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PLACE_OF_CENTRAL_COMMISSION), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -126,7 +123,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public void setPlaceOfCommission(Concept place) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PLACE_OF_ELECTORAL_COMMISSION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PLACE_OF_CENTRAL_COMMISSION), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && place == null) {
@@ -145,7 +142,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 				
 			// now create the new Obs and add it to the encounter	
 			if(place != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PLACE_OF_ELECTORAL_COMMISSION), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PLACE_OF_CENTRAL_COMMISSION), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(place);
 				encounter.addObs(obs);
 			}
@@ -153,7 +150,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public Concept getResistanceType() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -164,7 +161,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public void setResistanceType(Concept type) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -183,7 +180,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 				
 			// now create the new Obs and add it to the encounter	
 			if(type != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(type);
 				encounter.addObs(obs);
 			}
@@ -191,7 +188,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public Integer getPatProgId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -202,7 +199,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	public void setPatProgId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -221,7 +218,7 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 				
 			// now create the new Obs and add it to the encounter	
 			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(id));
 				encounter.addObs(obs);
 			}
@@ -306,7 +303,6 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	}
 	
 	
-	//////////////////////
 	public Double getCmDose() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CM_DOSE), encounter);
 		
@@ -345,9 +341,6 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 			}
 		} 
 	}
-	//////////////////
-	
-	///////////////
 	
 	public Double getAmDose() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(

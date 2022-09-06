@@ -33,7 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
@@ -127,7 +127,7 @@ public class DSTReportTJK implements ReportSpecification {
 		Date endDate = (Date)context.getParameterValue("endDate");
 		
 		//OBLAST
-		Oblast o = null;
+		Region o = null;
 		if(!oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		

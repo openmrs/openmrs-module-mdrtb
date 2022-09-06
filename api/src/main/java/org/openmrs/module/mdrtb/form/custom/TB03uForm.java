@@ -17,28 +17,25 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
-
-
 public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uForm> {
 	
-	private Integer  tb03Id;
+	private Integer tb03Id;
 	
 	public TB03uForm() {
 		super();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("TB03u - MDR"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("TB03u - MDR"));
 		
 	}
 	
 	public TB03uForm(Patient patient) {
 		super(patient);
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("TB03u - MDR"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("TB03u - MDR"));
 	}
 	
 	public TB03uForm(Encounter encounter) {
@@ -52,23 +49,14 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public String getTb03RegistrationNumber() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_NUMBER), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueText();
-		}*/
-		
 		String ret = null;
 		TB03Form tb03 = getTb03();
-		if(tb03!=null) {
+		if (tb03 != null) {
 			Integer patProgId = tb03.getPatProgId();
-			if(patProgId!=null) {
+			if (patProgId != null) {
 				TbPatientProgram tpp = Context.getService(MdrtbService.class).getTbPatientProgram(patProgId);
 				PatientIdentifier pi = tpp.getPatientIdentifier();
-				if(pi!=null)
+				if (pi != null)
 					return pi.getIdentifier();
 			}
 			
@@ -78,137 +66,36 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 		
 	}
 	
-	
-	
-	/*public void setTb03RegistrationNumber(String number) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_NUMBER), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && number == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueText() == null || !obs.getValueText().equals(number)) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(number != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_NUMBER), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueText(number);
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
-	
 	public Integer getTb03RegistrationYear() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_YEAR), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueNumeric().intValue();
-		}*/
 		String ret = null;
 		TB03Form tb03 = getTb03();
-		if(tb03!=null) {
+		if (tb03 != null) {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(tb03.getEncounterDatetime());
 			return gc.get(GregorianCalendar.YEAR);
 			
 		}
-		
 		return null;
 	}
 	
-	/*public void setTb03RegistrationYear(Integer year) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_YEAR), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && year == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != year.intValue()) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(year != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TB03_REGISTRATION_YEAR), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueNumeric(new Double(year));
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
-	
-	
-	
 	public Integer getAgeAtMDRRegistration() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_MDR_REGISTRATION), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueNumeric().intValue();
-		}*/
 		return MdrtbUtil.calculateAge(getPatient().getBirthdate(), getEncounterDatetime());
 	}
 	
-	/*public void setAgeAtMDRRegistration(Integer age) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_MDR_REGISTRATION), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && age == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != age.intValue()) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(age != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_MDR_REGISTRATION), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueNumeric(new Double(age));
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
-	
 	public String getSldRegisterNumber() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueText();
 		}
 	}
 	
 	public void setSldRegisterNumber(String number) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && number == null) {
@@ -224,20 +111,22 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(number != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (number != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(number);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public String getGender() {
-		if(getPatient().getGender().equals("M"))
+		if (getPatient().getGender().equals("M"))
 			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.male");
-		if(getPatient().getGender().equals("F"))
+		if (getPatient().getGender().equals("F"))
 			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.female");
 		
 		return "";
@@ -251,39 +140,33 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 		
 		PersonAddress pa = getPatient().getPersonAddress();
 		
-		if(pa==null)
+		if (pa == null)
 			return null;
 		
 		String address = pa.getCountry() + "," + pa.getStateProvince() + "," + pa.getCountyDistrict();
-		if(pa.getAddress1()!=null && pa.getAddress1().length()!=0) {
+		if (pa.getAddress1() != null && pa.getAddress1().length() != 0) {
 			address += "," + pa.getAddress1();
-			if(pa.getAddress2()!=null && pa.getAddress2().length()!=0)
+			if (pa.getAddress2() != null && pa.getAddress2().length() != 0)
 				address += "," + pa.getAddress2();
 		}
-
+		
 		return address;
 	}
 	
-	
-	
 	public Concept getAnatomicalSite() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
-//		TB03Form tb03 = getTb03();
-//		if(tb03!=null)
-//			return tb03.getAnatomicalSite();
-//		else
-//			return null;
 	}
 	
 	public void setAnatomicalSite(Concept site) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && site == null) {
@@ -299,30 +182,23 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(site != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (site != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(site);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getRegistrationGroup() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueCoded();
-		}*/
-		
-		if(getPatProgId()!=null) {
-			MdrtbPatientProgram tp  = Context.getService(MdrtbService.class).getMdrtbPatientProgram(getPatProgId());
+		if (getPatProgId() != null) {
+			MdrtbPatientProgram tp = Context.getService(MdrtbService.class).getMdrtbPatientProgram(getPatProgId());
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousTreatment();
-			if(pws!=null)
+			if (pws != null)
 				return pws.getConcept();
 			else
 				return null;
@@ -334,7 +210,9 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public void setRegistrationGroup(Concept group) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT),
+		    encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && group == null) {
@@ -350,29 +228,24 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(group != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (group != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class)
+				                .getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(group);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getRegistrationGroupByDrug() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueCoded();
-		}*/
-		if(getPatProgId()!=null) {
-			MdrtbPatientProgram tp  = Context.getService(MdrtbService.class).getMdrtbPatientProgram(getPatProgId());
+		if (getPatProgId() != null) {
+			MdrtbPatientProgram tp = Context.getService(MdrtbService.class).getMdrtbPatientProgram(getPatProgId());
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousDrugUse();
-			if(pws!=null)
+			if (pws != null)
 				return pws.getConcept();
 			else
 				return null;
@@ -384,7 +257,9 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public void setRegistrationGroupByDrug(Concept group) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE),
+		    encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && group == null) {
@@ -400,29 +275,33 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(group != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (group != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class)
+				                .getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(group);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getMdrStatus() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS),
+		    encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setMdrStatus(Concept status) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS),
+		    encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && status == null) {
@@ -438,29 +317,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(status != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (status != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(status);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getConfirmationDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE) , encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setConfirmationDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -476,97 +358,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
-	}
-	
-	
-	
-	/*public void setTreatmentSiteIP(Concept site) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TREATMENT_CENTER_FOR_IP), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && site == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(site)) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(site != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TREATMENT_CENTER_FOR_IP), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueCoded(site);
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
-	
-	
-	/*public Concept getTreatmentSiteCP() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TREATMENT_CENTER_FOR_CP), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueCoded();
 		}
 	}
-	
-	public void setTreatmentSiteCP(Concept site) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TREATMENT_CENTER_FOR_CP), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && site == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(site)) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(site != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TREATMENT_CENTER_FOR_CP), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueCoded(site);
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
 	
 	public Concept getPatientCategory() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setPatientCategory(Concept cat) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && cat == null) {
@@ -582,29 +399,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(cat != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (cat != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(cat);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getMdrTreatmentStartDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.MDR_TREATMENT_START_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setMdrTreatmentStartDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.MDR_TREATMENT_START_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -620,29 +440,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.MDR_TREATMENT_START_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getTxLocation() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_LOCATION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_LOCATION), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setTxLocation(Concept cat) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_LOCATION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_LOCATION), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && cat == null) {
@@ -658,29 +481,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(cat != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_LOCATION), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (cat != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_LOCATION),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(cat);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public String getNameOfTxLocation() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.NAME_OF_TX_LOCATION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NAME_OF_TREATMENT_LOCATION), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueText();
 		}
 	}
 	
 	public void setNameOfTxLocation(String name) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.NAME_OF_TX_LOCATION), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NAME_OF_TREATMENT_LOCATION), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && name == null) {
@@ -696,29 +522,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(name != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.NAME_OF_TX_LOCATION), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (name != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NAME_OF_TREATMENT_LOCATION),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(name);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getResistanceType() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setResistanceType(Concept type) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -734,29 +563,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(type != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (type != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(type);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getBasisForDiagnosis() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.BASIS_FOR_TB_DIAGNOSIS), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.METHOD_OF_DETECTION), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setBasisForDiagnosis(Concept basis) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.BASIS_FOR_TB_DIAGNOSIS), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.METHOD_OF_DETECTION), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && basis == null) {
@@ -772,29 +604,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(basis != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.BASIS_FOR_TB_DIAGNOSIS), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (basis != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.METHOD_OF_DETECTION),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(basis);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getHivTestDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_HIV_TEST), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_HIV_TEST), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setHivTestDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_HIV_TEST), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_HIV_TEST), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -810,30 +645,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_HIV_TEST), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_HIV_TEST),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
-	
 	public Concept getHivStatus() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESULT_OF_HIV_TEST), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setHivStatus(Concept status) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RESULT_OF_HIV_TEST), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && status == null) {
@@ -849,29 +686,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(status != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.RESULT_OF_HIV_TEST), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (status != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(status);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getArtStartDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_ART_TREATMENT_START), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_ART_TREATMENT_START), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setArtStartDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_ART_TREATMENT_START), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_ART_TREATMENT_START), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -887,29 +727,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_ART_TREATMENT_START), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_ART_TREATMENT_START),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getPctStartDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_PCT_TREATMENT_START), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_PCT_TREATMENT_START), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setPctStartDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_PCT_TREATMENT_START), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_PCT_TREATMENT_START), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -925,31 +768,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_PCT_TREATMENT_START), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_PCT_TREATMENT_START),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
-	
-	
 	public Concept getTreatmentOutcome() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setTreatmentOutcome(Concept outcome) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.MDR_TB_TX_OUTCOME), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && outcome == null) {
@@ -965,29 +809,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(outcome != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.MDR_TB_TX_OUTCOME), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (outcome != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(outcome);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getTreatmentOutcomeDate() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_OUTCOME_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_OUTCOME_DATE), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setTreatmentOutcomeDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_OUTCOME_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_OUTCOME_DATE), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -1003,40 +850,45 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.TX_OUTCOME_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_OUTCOME_DATE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Date getDateOfDeathAfterOutcome() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_DEATH_AFTER_OUTCOME), encounter);*/
+		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME), encounter);*/
 		
-		List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(Context.getPersonService().getPerson(getPatient().getId()), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_DEATH_AFTER_OUTCOME));
+		List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(
+		    Context.getPersonService().getPerson(getPatient().getId()),
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME));
 		Obs obs = null;
 		
-		if(obsList!=null && obsList.size()>0)
+		if (obsList != null && obsList.size() > 0)
 			obs = obsList.get(0);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueDatetime();
 		}
 	}
 	
 	public void setDateOfDeathAfterOutcome(Date date) {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_DEATH_AFTER_OUTCOME), encounter);*/
-		List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(Context.getPersonService().getPerson(getPatient().getId()), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_DEATH_AFTER_OUTCOME));
+		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME), encounter);*/
+		List<Obs> obsList = Context.getObsService().getObservationsByPersonAndConcept(
+		    Context.getPersonService().getPerson(getPatient().getId()),
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME));
 		
 		Obs obs = null;
 		
-		if(obsList!=null && obsList.size()>0)
+		if (obsList != null && obsList.size() > 0)
 			obs = obsList.get(0);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
@@ -1053,29 +905,33 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.DATE_OF_DEATH_AFTER_OUTCOME), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (date != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class)
+				                .getConcept(MdrtbConcepts.DATE_OF_DEATH_AFTER_TREATMENT_OUTCOME),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getRelapsed() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSED), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSED),
+		    encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setRelapsed(Concept rel) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RELAPSED), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSED),
+		    encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && rel == null) {
@@ -1091,29 +947,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(rel != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.RELAPSED), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (rel != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSED),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(rel);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Integer getRelapseMonth() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RELAPSE_MONTH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MONTH), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueNumeric().intValue();
 		}
 	}
 	
 	public void setRelapseMonth(Integer month) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.RELAPSE_MONTH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MONTH), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && month == null) {
@@ -1129,29 +988,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(month != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.RELAPSE_MONTH), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (month != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MONTH),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(month));
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public String getCliniciansNotes() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CLINICIAN_NOTES), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICIAN_NOTES), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueText();
 		}
 	}
 	
 	public void setCliniciansNotes(String notes) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CLINICIAN_NOTES), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICIAN_NOTES), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && notes == null) {
@@ -1167,29 +1029,32 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(notes != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CLINICIAN_NOTES), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (notes != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICIAN_NOTES),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(notes);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Integer getPatProgId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueNumeric().intValue();
 		}
 	}
 	
 	public void setPatProgId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -1205,120 +1070,20 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueNumeric(new Double(id));
-				encounter.addObs(obs);
-			}
-		} 
-	}
-	
-	/*public Integer getPreviousProgramId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PREVIOUS_PROGRAM_ID), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueNumeric().intValue();
-		}
-	}
-	
-	public void setPreviousProgramId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PREVIOUS_PROGRAM_ID), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && id == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != id.intValue()) {
 			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+			// now create the new Obs and add it to the encounter
+			if (id != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(id));
 				encounter.addObs(obs);
 			}
-		} 
-	}
-	
-	public TB03Form getTb03() {
-		Integer ppId = getPreviousProgramId();
-		if(ppId==null)
-			return null;
-		TbPatientProgram tpp = Context.getService(MdrtbService.class).getTbPatientProgram(ppId);
-		return tpp.getTb03();
-	}*/
-	
-//	public List<SmearForm> getSmears() {
-//		if(getPatProgId()==null) {
-//			//System.out.println("GM: null program");
-//			return new ArrayList<SmearForm>();
-//		}
-//		return Context.getService(MdrtbService.class).getSmearForms(getPatProgId());
-//		
-//	}
-	
-	
-	/*public Integer getPreviousProgramId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PREVIOUS_PROGRAM_ID), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueNumeric().intValue();
 		}
 	}
-	
-	public void setPreviousProgramId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.PREVIOUS_PROGRAM_ID), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && id == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != id.intValue()) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueNumeric(new Double(id));
-				encounter.addObs(obs);
-			}
-		} 
-	}
-	
-	public TB03Form getTb03() {
-		Integer ppId = getPreviousProgramId();
-		if(ppId==null)
-			return null;
-		TbPatientProgram tpp = Context.getService(MdrtbService.class).getTbPatientProgram(ppId);
-		return tpp.getTb03();
-	}*/
 	
 	public List<SmearForm> getSmears() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<SmearForm>();
 		}
@@ -1327,7 +1092,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public List<XpertForm> getXperts() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<XpertForm>();
 		}
@@ -1336,7 +1101,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public List<HAINForm> getHains() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<HAINForm>();
 		}
@@ -1345,16 +1110,16 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public List<HAIN2Form> getHain2s() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<HAIN2Form>();
 		}
 		return Context.getService(MdrtbService.class).getHAIN2Forms(getPatProgId());
 		
 	}
-
+	
 	public List<DrugResistanceDuringTreatmentForm> getDrdts() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<DrugResistanceDuringTreatmentForm>();
 		}
@@ -1362,18 +1127,17 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 		
 	}
 	
-
 	public List<CultureForm> getCultures() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<CultureForm>();
 		}
 		return Context.getService(MdrtbService.class).getCultureForms(getPatProgId());
-	
+		
 	}
 	
 	public List<DSTForm> getDsts() {
-		if(getPatProgId()==null) {
+		if (getPatProgId() == null) {
 			//System.out.println("GM: null program");
 			return new ArrayList<DSTForm>();
 		}
@@ -1384,19 +1148,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public String getLink() {
 		return "/module/mdrtb/form/tb03u.form?patientProgramId=" + getPatProgId() + "&encounterId=" + getEncounter().getId();
 	}
-	
-	/*public TB03Form getTb03() {
-		return  new TB03Form(Context.getEncounterService().getEncounter(tb03Id));
-	}
-	
-	public void setTB03Id(Integer id) {
-		
-	}
-	
-	public void setTB03Form(Integer id) {
-		this.tb03 = new TB03Form(Context.getEncounterService().getEncounter(id));
-	}
-	*/
 	
 	public TB03Form getTb03() {
 		TB03Form ret = null;
@@ -1415,18 +1166,19 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public Concept getCauseOfDeath() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setCauseOfDeath(Concept type) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -1442,30 +1194,33 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(type != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (type != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(type);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public String getOtherCauseOfDeath() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER_CAUSE_OF_DEATH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_CAUSE_OF_DEATH), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueText();
 		}
 		
 	}
 	
 	public void setOtherCauseOfDeath(String name) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER_CAUSE_OF_DEATH), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_CAUSE_OF_DEATH), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && name == null) {
@@ -1481,25 +1236,24 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(name != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(TbConcepts.OTHER_CAUSE_OF_DEATH), encounter.getEncounterDatetime(), encounter.getLocation());
+			
+			// now create the new Obs and add it to the encounter
+			if (name != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_CAUSE_OF_DEATH),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(name);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
-		
 	
 	public int compareTo(TB03uForm form) {
-		if(TB03Util.getRegistrationNumber(this)==null)
+		if (TB03Util.getRegistrationNumber(this) == null)
 			return 1;
-		if(TB03Util.getRegistrationNumber(form)==null)
+		if (TB03Util.getRegistrationNumber(form) == null)
 			return -1;
 		
 		return TB03Util.getRegistrationNumber(this).compareTo(TB03Util.getRegistrationNumber(form));
-	}
-	
-
+	}	
 }

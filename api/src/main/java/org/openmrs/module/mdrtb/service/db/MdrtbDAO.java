@@ -9,7 +9,6 @@ import org.openmrs.Location;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.mdrtb.BaseLocation;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface MdrtbDAO {
 
@@ -44,9 +43,11 @@ public interface MdrtbDAO {
 	
 	public void evict(Object obj);
 
-	public List<BaseLocation> getLocationsByHierarchyLevel(Integer level);
-	
-	public BaseLocation getLocationParent(Integer childId);
+	public BaseLocation getAddressHierarchyLocation(Integer locationId);
 
-	public List<BaseLocation> getLocationsByParent(BaseLocation parent);
+	public List<BaseLocation> getAddressHierarchyLocationsByHierarchyLevel(Integer level);
+	
+	public BaseLocation getAddressHierarchyLocationParent(BaseLocation child);
+
+	public List<BaseLocation> getAddressHierarchyLocationsByParent(BaseLocation parent);
 }

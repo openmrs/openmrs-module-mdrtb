@@ -15,7 +15,6 @@ package org.openmrs.module.mdrtb.reporting.definition.custom;
 
 import java.util.Date;
 
-
 import org.openmrs.Concept;
 import org.openmrs.module.reporting.cohort.definition.BaseCohortDefinition;
 import org.openmrs.module.reporting.common.Localized;

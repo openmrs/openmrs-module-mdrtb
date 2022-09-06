@@ -1,27 +1,16 @@
 package org.openmrs.module.mdrtb.reporting.definition.custom;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.openmrs.Cohort;
-import org.openmrs.Concept;
-import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
-import org.openmrs.module.mdrtb.reporting.definition.MdrtbBacResultAfterTreatmentStartedCohortDefinition.Result;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
-import org.openmrs.module.mdrtb.specimen.Smear;
-import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;

@@ -6,65 +6,36 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.hssf.model.Sheet;
-import org.apache.poi.hssf.model.Workbook;
-import org.apache.poi.hssf.record.formula.functions.Cell;
-import org.apache.poi.hssf.record.formula.functions.Row;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Encounter;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
-import org.openmrs.module.mdrtb.reporting.custom.TB03Data;
-import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.reporting.regimen.RegimenReportRow;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
-import org.openmrs.module.mdrtb.specimen.Dst;
-import org.openmrs.module.mdrtb.specimen.DstResult;
-import org.openmrs.module.mdrtb.specimen.Smear;
-import org.openmrs.module.mdrtb.specimen.custom.HAIN;
-import org.openmrs.module.mdrtb.specimen.custom.Xpert;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
-import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -91,9 +62,6 @@ import org.openmrs.module.mdrtbdrugforecast.status.TreatmentStatusCalculator;
 import org.openmrs.module.mdrtbdrugforecast.web.controller.status.DashboardTreatmentStatusRenderer;*/
 import org.springframework.web.servlet.ModelAndView;
 
-
-import com.itextpdf.text.Font.FontStyle;
-
 @Controller
 
 public class RegimenController {
@@ -114,7 +82,7 @@ public class RegimenController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -255,7 +223,7 @@ public class RegimenController {
     		if(rh!=null) {
     			Regimen regimen = rh.getRegimenOnDate(endDate);
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.CAPREOMYCIN))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CAPREOMYCIN))) {
     				rrr.setCm(Boolean.TRUE);
     			}
     			
@@ -263,7 +231,7 @@ public class RegimenController {
     				rrr.setCm(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.AMIKACIN))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.AMIKACIN))) {
     				rrr.setAm(Boolean.TRUE);
     			}
     			
@@ -271,7 +239,7 @@ public class RegimenController {
     				rrr.setAm(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.MOXIFLOXACIN))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.MOXIFLOXACIN))) {
     				rrr.setMfx(Boolean.TRUE);
     				
     			}
@@ -280,7 +248,7 @@ public class RegimenController {
     				rrr.setMfx(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.LEVOFLOXACIN))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LEVOFLOXACIN))) {
     				rrr.setLfx(Boolean.TRUE);
     			}
     			
@@ -289,7 +257,7 @@ public class RegimenController {
     			}
     		
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.PROTHIONAMIDE))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PROTHIONAMIDE))) {
     				rrr.setPto(Boolean.TRUE);
     			}
     			
@@ -297,7 +265,7 @@ public class RegimenController {
     				rrr.setPto(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.CYCLOSERINE))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CYCLOSERINE))) {
     				rrr.setCs(Boolean.TRUE);
     			}
     			
@@ -305,7 +273,7 @@ public class RegimenController {
     				rrr.setCs(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.P_AMINOSALICYLIC_ACID))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.P_AMINOSALICYLIC_ACID))) {
     				rrr.setPas(Boolean.TRUE);
     			}
     			
@@ -313,7 +281,7 @@ public class RegimenController {
     				rrr.setPas(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.PYRAZINAMIDE))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PYRAZINAMIDE))) {
     				rrr.setZ(Boolean.TRUE);
     			}
     			
@@ -321,14 +289,14 @@ public class RegimenController {
     				rrr.setZ(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.ISONIAZID)) && regimen.containsGeneric(ms.getConcept(TbConcepts.RIFAMPICIN))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID)) && regimen.containsGeneric(ms.getConcept(MdrtbConcepts.RIFAMPICIN))) {
     				rrr.setHr(Boolean.TRUE);
     				rrr.setH(Boolean.FALSE);
     			}
     			
     			else {
     				rrr.setHr(Boolean.FALSE);
-    				if(regimen.containsGeneric(ms.getConcept(TbConcepts.ISONIAZID))) {
+    				if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID))) {
     					rrr.setH(Boolean.TRUE);
     				}
     				else {
@@ -336,7 +304,7 @@ public class RegimenController {
     				}
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.ETHAMBUTOL))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ETHAMBUTOL))) {
     				rrr.setE(Boolean.TRUE);
     			}
     			
@@ -344,7 +312,7 @@ public class RegimenController {
     				rrr.setE(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.LINEZOLID))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LINEZOLID))) {
     				rrr.setLzd(Boolean.TRUE);
     			}
     			
@@ -352,7 +320,7 @@ public class RegimenController {
     				rrr.setLzd(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.CLOFAZIMINE))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CLOFAZIMINE))) {
     				rrr.setCfz(Boolean.TRUE);
     			}
     			
@@ -360,7 +328,7 @@ public class RegimenController {
     				rrr.setCfz(Boolean.FALSE);
     			}
     			
-    			if(regimen.containsGeneric(ms.getConcept(TbConcepts.BEDAQUILINE))) {
+    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.BEDAQUILINE))) {
     				rrr.setBdq(Boolean.TRUE);
     			}
     			
@@ -396,7 +364,7 @@ public class RegimenController {
        }
        
        if(oblastId!=null) {
-    	   Oblast o = ms.getOblast(oblastId);
+    	   Region o = ms.getOblast(oblastId);
     	   if(o!=null) {
     		   oName = o.getName();
     	   }

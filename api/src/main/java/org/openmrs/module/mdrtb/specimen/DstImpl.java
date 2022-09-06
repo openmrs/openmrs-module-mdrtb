@@ -15,7 +15,6 @@ import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
@@ -384,7 +383,7 @@ public class DstImpl extends TestImpl implements Dst {
 			if(dstResultsMap.get(drug.getId())!=null) {
 				
 				for(DstResult result : dstResultsMap.get(drug.getId())) {
-					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANT_TO_TB_DRUG).getId().intValue()) {					
+					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getId().intValue()) {					
 						results += result.getDrug().getName().getShortName() + ",";
 				
 					}
@@ -416,7 +415,7 @@ public class DstImpl extends TestImpl implements Dst {
 			if(dstResultsMap.get(drug.getId())!=null) {
 				
 				for(DstResult result : dstResultsMap.get(drug.getId())) {
-					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(TbConcepts.SUSCEPTIBLE_TO_TB_DRUG).getId().intValue()) {					
+					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG).getId().intValue()) {					
 						results += result.getDrug().getName().getShortName() + ",";
 				
 					}

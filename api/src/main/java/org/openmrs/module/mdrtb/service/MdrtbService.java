@@ -22,7 +22,7 @@ import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.mdrtb.Country;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.Oblast;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.AEForm;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.DSTForm;
@@ -546,11 +546,11 @@ public interface MdrtbService extends OpenmrsService {
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleXpertMtbBurdens();
 
-	public List<Oblast> getOblasts();
+	public List<Region> getOblasts();
 
-	public Oblast getOblast(Integer oblastId);
+	public Region getOblast(Integer oblastId);
 
-	public List<Location> getLocationsFromOblastName(Oblast oblast);
+	public List<Location> getLocationsFromOblastName(Region oblast);
 
 	public List<Facility> getFacilities();
 
@@ -717,7 +717,7 @@ public interface MdrtbService extends OpenmrsService {
 
 	public List<Country> getCountries();
 
-	public List<Oblast> getOblasts(int parentId);
+	public List<Region> getOblasts(int parentId);
 
 	public ArrayList<TB03Form> getTB03FormsForProgram(Patient p, Integer patientProgId);
 

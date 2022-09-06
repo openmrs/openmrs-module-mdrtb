@@ -19,13 +19,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.openmrs.Cohort;
-
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
-import org.openmrs.Form;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;

@@ -45,7 +45,6 @@ import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 import org.openmrs.web.controller.person.PersonFormController;
 import org.openmrs.web.dwr.PatientListItem;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -61,7 +60,7 @@ import org.springframework.web.servlet.ModelAndView;
 // @Controller
 // @RequestMapping("/module/mdrtb/mdrtbEditPatient.form")
 public class MdrtbEditPatientController_original {
-
+	
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	PatientValidator validator = new PatientValidator();
@@ -70,11 +69,11 @@ public class MdrtbEditPatientController_original {
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
-    	
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
+		
 		// register other custom binders
-    	binder.registerCustomEditor(Concept.class, new ConceptEditor());
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(PatientIdentifierType.class, new PatientIdentifierTypeEditor());
 	}
@@ -85,15 +84,16 @@ public class MdrtbEditPatientController_original {
 	}
 	
 	@ModelAttribute("patientProgramId")
-	public Integer getPatientProgramId(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
+	public Integer getPatientProgramId(
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
 	
 	@ModelAttribute("successURL")
-	public String getSuccessUrl(@RequestParam(required=false, value="successURL") String successUrl) {
+	public String getSuccessUrl(@RequestParam(required = false, value = "successURL") String successUrl) {
 		// as a default, just reload the same page
 		if (StringUtils.isBlank(successUrl)) {
-			successUrl="mdrtbEditPatient.form";
+			successUrl = "mdrtbEditPatient.form";
 		}
 		
 		return successUrl;
@@ -103,7 +103,7 @@ public class MdrtbEditPatientController_original {
 	public Collection<Location> getPossibleLocations() {
 		return Context.getLocationService().getAllLocations(false);
 	}
-
+	
 	// checks to see if the "fixedIdentifierLocation" global prop has been specified, which is used to determine if we
 	// should show the location selector for identifiers
 	@ModelAttribute("showIdentifierLocationSelector")
@@ -112,71 +112,75 @@ public class MdrtbEditPatientController_original {
 	}
 	
 	@ModelAttribute("patientIdentifierMap")
-	public Map<Integer, PatientIdentifier> getPatientIdentifierMap(@RequestParam(required = false, value="patientId") Integer patientId) {
+	public Map<Integer, PatientIdentifier> getPatientIdentifierMap(
+	        @RequestParam(required = false, value = "patientId") Integer patientId) {
 		
-		final Map<Integer,PatientIdentifier> map = new HashMap<Integer,PatientIdentifier>();
+		final Map<Integer, PatientIdentifier> map = new HashMap<Integer, PatientIdentifier>();
 		
-		if (patientId !=null && patientId != -1) {
+		if (patientId != null && patientId != -1) {
 			Patient patient = Context.getPatientService().getPatient(patientId);
-		
+			
 			if (patient != null) {
-				for (PatientIdentifierType type : Context.getPatientService().getAllPatientIdentifierTypes()) {			
+				for (PatientIdentifierType type : Context.getPatientService().getAllPatientIdentifierTypes()) {
 					map.put(type.getId(), patient.getPatientIdentifier(type));
 				}
 			}
 		}
 		
 		return map;
-	}	
+	}
 	
 	@SuppressWarnings("unchecked")
-    @ModelAttribute("patientIdentifierTypesAutoAssigned")
+	@ModelAttribute("patientIdentifierTypesAutoAssigned")
 	public List<PatientIdentifierType> getPatientIdentifierTypesAutoAssigned() {
 		// this is only relevant if we are using the idgen module
-		if(!ModuleFactory.getStartedModulesMap().containsKey("idgen")) {
-			return new LinkedList<PatientIdentifierType>();  // return an empty list
-		}
-		else {
+		if (!ModuleFactory.getStartedModulesMap().containsKey("idgen")) {
+			return new LinkedList<PatientIdentifierType>(); // return an empty list
+		} else {
 			// access the idgen module via reflection
 			try {
-				Class identifierSourceServiceClass = Context.loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
+				Class identifierSourceServiceClass = Context
+				        .loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
 				Object idgen = Context.getService(identifierSourceServiceClass);
-				Method getPatientIdentifierTypesByAutoGenerationOption = identifierSourceServiceClass.getMethod("getPatientIdentifierTypesByAutoGenerationOption", Boolean.class, Boolean.class);
+				Method getPatientIdentifierTypesByAutoGenerationOption = identifierSourceServiceClass
+				        .getMethod("getPatientIdentifierTypesByAutoGenerationOption", Boolean.class, Boolean.class);
 				
-				return (List<PatientIdentifierType>) getPatientIdentifierTypesByAutoGenerationOption.invoke(idgen, false, true);
+				return (List<PatientIdentifierType>) getPatientIdentifierTypesByAutoGenerationOption.invoke(idgen, false,
+				    true);
 			}
-			catch(Exception e) {
-				log.error("Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?", e);
-				return new LinkedList<PatientIdentifierType>();  // return an empty list
+			catch (Exception e) {
+				log.error(
+				    "Unable to access IdentifierSourceService for automatic id generation.  Is the Idgen module installed and up-to-date?",
+				    e);
+				return new LinkedList<PatientIdentifierType>(); // return an empty list
 			}
 		}
 	}
 	
-    @SuppressWarnings("unchecked")
-    @ModelAttribute("patientIdentifierTypes")
+	@SuppressWarnings("unchecked")
+	@ModelAttribute("patientIdentifierTypes")
 	public List<PatientIdentifierType> getPatientIdentifierTypes() {
-		return ListUtils.subtract(Context.getPatientService().getAllPatientIdentifierTypes(),  getPatientIdentifierTypesAutoAssigned());	
+		return ListUtils.subtract(Context.getPatientService().getAllPatientIdentifierTypes(),
+		    getPatientIdentifierTypesAutoAssigned());
 	}
-	    
+	
 	@ModelAttribute("patientCommand")
-	public PatientCommand getPatient(@RequestParam(required = false, value="patientId") Integer patientId,
-                                  @RequestParam(required = false, value="addName") String addName,
-                                  @RequestParam(required = false, value="addBirthdate") String addBirthdate,
-                                  @RequestParam(required = false, value="addAge") String addAge,
-                                  @RequestParam(required = false, value="addGender") String addGender,
-                                  HttpServletRequest request){
+	public PatientCommand getPatient(@RequestParam(required = false, value = "patientId") Integer patientId,
+	        @RequestParam(required = false, value = "addName") String addName,
+	        @RequestParam(required = false, value = "addBirthdate") String addBirthdate,
+	        @RequestParam(required = false, value = "addAge") String addAge,
+	        @RequestParam(required = false, value = "addGender") String addGender, HttpServletRequest request) {
 		
 		Patient patient = null;
 		
 		// see if we have a patient id (-1 signifies that we are looking to add a new patient)
-		if (patientId != null && patientId != -1) {  
+		if (patientId != null && patientId != -1) {
 			patient = Context.getPatientService().getPatient(patientId);
 			
 			if (patient == null) {
 				throw new APIException("Invalid patient id passed to edit patient controller");
 			}
-		}
-		else {
+		} else {
 			// handle a new patient
 			patient = new Patient();
 			
@@ -185,58 +189,57 @@ public class MdrtbEditPatientController_original {
 				PersonFormController.getMiniPerson(patient, addName, addGender, addBirthdate, addAge);
 			}
 		}
-
+		
 		// if there is no default name for this patient, create one
 		if (patient.getPersonName() == null) {
 			PersonName name = new PersonName();
 			name.setPreferred(true);
 			patient.addName(name);
 		}
-
-
+		
 		// if we are handling a form submission, make sure we initialize all the person attributes so we can bind to them
-	    if (request.getMethod().equals("POST")) {
-            for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
-                if (attr != null && patient.getAttribute(attr) == null) {
-                    patient.getAttributes().add(new PersonAttribute(attr, null));
-                }
-            }
-        }
-
-        PatientCommand patientCommand = new PatientCommand();
-        patientCommand.setPatient(patient);
-
-        // if there is no default address for this patient, create one
-        PersonAddress address = patient.getPersonAddress();
-        if (address == null) {
-            address = new PersonAddress();
-        }
-        // add the address to the command object separately
-        patientCommand.setAddress(address);
-
+		if (request.getMethod().equals("POST")) {
+			for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT,
+			    ATTR_VIEW_TYPE.VIEWING)) {
+				if (attr != null && patient.getAttribute(attr) == null) {
+					patient.getAttributes().add(new PersonAttribute(attr, null));
+				}
+			}
+		}
+		
+		PatientCommand patientCommand = new PatientCommand();
+		patientCommand.setPatient(patient);
+		
+		// if there is no default address for this patient, create one
+		PersonAddress address = patient.getPersonAddress();
+		if (address == null) {
+			address = new PersonAddress();
+		}
+		// add the address to the command object separately
+		patientCommand.setAddress(address);
+		
 		return patientCommand;
 	}
-
+	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showForm(@RequestParam(required = false, value="patientId") Integer patientId,
-	                             @RequestParam(required = false, value="addName") String addName,
-	                             @RequestParam(required = false, value="addBirthdate") Date addBirthdate,
-	                             @RequestParam(required = false, value="addAge") String addAge,
-	                             @RequestParam(required = false, value="addGender") String addGender,
-	                             @RequestParam(required = false, value="skipSimilarCheck") Boolean skipSimilarCheck,
-	                             ModelMap map) throws ParseException {
+	public ModelAndView showForm(@RequestParam(required = false, value = "patientId") Integer patientId,
+	        @RequestParam(required = false, value = "addName") String addName,
+	        @RequestParam(required = false, value = "addBirthdate") Date addBirthdate,
+	        @RequestParam(required = false, value = "addAge") String addAge,
+	        @RequestParam(required = false, value = "addGender") String addGender,
+	        @RequestParam(required = false, value = "skipSimilarCheck") Boolean skipSimilarCheck, ModelMap map)
+	        throws ParseException {
 		
 		// if we are dealing with a new patient (one with no id, or id=-1) we need to check for similar patients first
 		if ((skipSimilarCheck == null || !skipSimilarCheck) && (patientId == null || patientId == -1)) {
 			
 			Integer birthYear = null;
 			
-			if (addBirthdate != null) {				
+			if (addBirthdate != null) {
 				Calendar birthDate = Calendar.getInstance();
 				birthDate.setTime(addBirthdate);
 				birthYear = birthDate.get(Calendar.YEAR);
-			}
-			else if (StringUtils.isNotBlank(addAge)) {
+			} else if (StringUtils.isNotBlank(addAge)) {
 				Calendar currentDate = Calendar.getInstance();
 				currentDate.setTime(new Date());
 				birthYear = currentDate.get(Calendar.YEAR) - Integer.valueOf(addAge);
@@ -244,12 +247,13 @@ public class MdrtbEditPatientController_original {
 			
 			Set<Person> similarPersons = Context.getPersonService().getSimilarPeople(addName, birthYear, addGender);
 			Set<PatientListItem> similarPatients = new HashSet<PatientListItem>();
-	        String primaryIdentifier = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
+			String primaryIdentifier = Context.getAdministrationService()
+			        .getGlobalProperty("mdrtb.primaryPatientIdentifierType");
 			
 			// we only want to pass on similar persons who are patients in this case
 			for (Person person : similarPersons) {
 				if (person instanceof Patient) {
-					PatientListItem  patientListItem = new PatientListItem((Patient) person);
+					PatientListItem patientListItem = new PatientListItem((Patient) person);
 					
 					// make sure the correct patient identifier is set on the patient list item
 					if (StringUtils.isNotBlank(primaryIdentifier)) {
@@ -257,7 +261,7 @@ public class MdrtbEditPatientController_original {
 						if (pi != null) {
 							patientListItem.setIdentifier(pi.getIdentifier());
 						}
-	                }
+					}
 					
 					similarPatients.add(patientListItem);
 				}
@@ -280,20 +284,18 @@ public class MdrtbEditPatientController_original {
 		
 		return new ModelAndView("/module/mdrtb/mdrtbEditPatient");
 	}
-
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView submitForm(@ModelAttribute("patientCommand") PatientCommand patientCommand, BindingResult result,
-	                               @RequestParam("identifierValue") String [] identifierValue,
-	                               @RequestParam("identifierId") String [] identifierId, 
-	                               @RequestParam(required = false, value = "identifierLocation") Location [] identifierLocation,
-	                               @RequestParam("identifierType") PatientIdentifierType [] identifierType,
-	                               @RequestParam(required = false, value ="patientProgramId") Integer patientProgramId,
-	                               @RequestParam("successURL") String successUrl,
-	                               SessionStatus status, ModelMap map) {
-
-        // fetch the patient off the command object
-        Patient patient = patientCommand.getPatient();
-
+	        @RequestParam("identifierValue") String[] identifierValue, @RequestParam("identifierId") String[] identifierId,
+	        @RequestParam(required = false, value = "identifierLocation") Location[] identifierLocation,
+	        @RequestParam(required = false, value = "identifierType") PatientIdentifierType[] identifierType,
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam("successURL") String successUrl, SessionStatus status, ModelMap map) {
+		
+		// fetch the patient off the command object
+		Patient patient = patientCommand.getPatient();
+		
 		// first, we need to set the patient id to null if it's been set to -1
 		if (patient.getId() != null && patient.getId() == -1) {
 			patient.setId(null);
@@ -305,12 +307,13 @@ public class MdrtbEditPatientController_original {
 		if (StringUtils.isNotBlank(fixedLocationName)) {
 			fixedLocation = Context.getLocationService().getLocation(fixedLocationName);
 			if (fixedLocation == null) {
-				throw new MdrtbAPIException("Location referenced by mdrtb.fixedIdentifierLocation global prop does not exist.");
+				throw new MdrtbAPIException(
+				        "Location referenced by mdrtb.fixedIdentifierLocation global prop does not exist.");
 			}
 		}
 		
 		// handle patient identifiers
-		for (Integer i=0; i<identifierValue.length; i++) {
+		for (Integer i = 0; i < identifierValue.length; i++) {
 			
 			//  if this identifier is blank and the idgen module is installed, see if we need to auto-generate this identifier
 			if (StringUtils.isBlank(identifierValue[i]) && ModuleFactory.getStartedModulesMap().containsKey("idgen")) {
@@ -329,34 +332,36 @@ public class MdrtbEditPatientController_original {
 					if (fixedLocation == null) {
 						identifier.setLocation(identifierLocation[i]);
 					}
-				}
-				else {
+				} else {
 					// otherwise, remove it
 					patient.removeIdentifier(identifier);
 				}
 			}
 			// now add any identifiers that have a value, but no id
 			else if (StringUtils.isNotBlank(identifierValue[i])) {
-				PatientIdentifier identifier = new PatientIdentifier(identifierValue[i], identifierType[i], (fixedLocation == null ? identifierLocation[i] : fixedLocation));
+				PatientIdentifier identifier = new PatientIdentifier(identifierValue[i], identifierType[i],
+				        (fixedLocation == null ? identifierLocation[i] : fixedLocation));
 				
 				// set this identifier as preferred if it is of the preferred tyoe
-				String preferredIdentifierTypeName = Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType");
+				String preferredIdentifierTypeName = Context.getAdministrationService()
+				        .getGlobalProperty("mdrtb.primaryPatientIdentifierType");
 				if (StringUtils.isNotBlank(preferredIdentifierTypeName)) {
-					PatientIdentifierType preferredIdentifierType = Context.getPatientService().getPatientIdentifierTypeByName(preferredIdentifierTypeName);
+					PatientIdentifierType preferredIdentifierType = Context.getPatientService()
+					        .getPatientIdentifierTypeByName(preferredIdentifierTypeName);
 					if (preferredIdentifierType != null && preferredIdentifierType == identifierType[i]) {
 						identifier.setPreferred(true);
 					}
 				}
 				
-				patient.addIdentifier(identifier);	
+				patient.addIdentifier(identifier);
 			}
 		}
 		
 		// perform validation
-
-        // (don't know if this is the exact right thing to do, but we need to create a new binding result
-        // since we are validating the patient, not the patient command)
-        result = new BeanPropertyBindingResult(patient,"patient");
+		
+		// (don't know if this is the exact right thing to do, but we need to create a new binding result
+		// since we are validating the patient, not the patient command)
+		result = new BeanPropertyBindingResult(patient, "patient");
 		validator.validate(patient, result);
 		if (result.hasErrors()) {
 			map.put("errors", result);
@@ -367,15 +372,16 @@ public class MdrtbEditPatientController_original {
 		// TODO: is this correct... do we ever want to void a patient but keep the person (for instance, if the person is also a treatment supporter?)
 		patient.setPersonVoided(patient.getVoided());
 		patient.setPersonVoidReason(patient.getVoidReason());
-
+		
 		// if this is a new address (ie, not yet linked to patient), link it to the patient
-        if (patientCommand.getAddress() != null) {
-            patientCommand.getAddress().setPreferred(true);
-            patient.addAddress(patientCommand.getAddress());
-        }
-
-		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT, ATTR_VIEW_TYPE.VIEWING)) {
-			if (patient.getAttribute(attr) != null  && StringUtils.isBlank(patient.getAttribute(attr).getValue())) {
+		if (patientCommand.getAddress() != null) {
+			patientCommand.getAddress().setPreferred(true);
+			patient.addAddress(patientCommand.getAddress());
+		}
+		
+		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT,
+		    ATTR_VIEW_TYPE.VIEWING)) {
+			if (patient.getAttribute(attr) != null && StringUtils.isBlank(patient.getAttribute(attr).getValue())) {
 				patient.removeAttribute(patient.getAttribute(attr));
 			}
 		}
@@ -385,20 +391,18 @@ public class MdrtbEditPatientController_original {
 		
 		// if the patient has been set to dead, exit him/her from care
 		if (patient.getDead()) {
-			Context.getService(MdrtbService.class).processDeath(patient, patient.getDeathDate(), 
-				patient.getCauseOfDeath());
+			Context.getService(MdrtbService.class).processDeath(patient, patient.getDeathDate(), patient.getCauseOfDeath());
 		}
 		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
 		
-		String returnUrl = "redirect:" + successUrl + (successUrl.contains("?") ? "&" : "?") + "patientId=" + patient.getId() + 
-			(patientProgramId != null ? "&patientProgramId=" + patientProgramId : "");
-
+		String returnUrl = "redirect:" + successUrl + (successUrl.contains("?") ? "&" : "?") + "patientId=" + patient.getId()
+		        + (patientProgramId != null ? "&patientProgramId=" + patientProgramId : "");
+		
 		return new ModelAndView(returnUrl);
 	}
-	
 	
 	/**
 	 * Utility methods

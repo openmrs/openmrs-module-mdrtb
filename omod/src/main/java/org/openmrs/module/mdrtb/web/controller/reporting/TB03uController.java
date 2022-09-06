@@ -5,43 +5,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Encounter;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.HAIN2Form;
 import org.openmrs.module.mdrtb.form.custom.HAINForm;
 import org.openmrs.module.mdrtb.form.custom.SmearForm;
-import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.form.custom.TB03uForm;
 import org.openmrs.module.mdrtb.form.custom.XpertForm;
-import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
 import org.openmrs.module.mdrtb.reporting.custom.TB03uData;
 import org.openmrs.module.mdrtb.reporting.custom.TB03uUtil;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
-import org.openmrs.module.mdrtb.specimen.Smear;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -75,7 +59,7 @@ public class TB03uController {
     									  @RequestParam(value = "monthSelected", required = false) String month,
     									  ModelMap model) {
 
-		List<Oblast> oblasts;
+		List<Region> oblasts;
 		List<Facility> facilities;
 		List<District> districts;
 
@@ -156,7 +140,7 @@ public class TB03uController {
 		 * Context.getLocationService().getAllLocations(false);//
 		 * Context.getLocationService().getAllLocations();//ms =
 		 * (MdrtbDrugForecastService)
-		 * Context.getService(MdrtbDrugForecastService.class); List<Oblast>
+		 * Context.getService(MdrtbDrugForecastService.class); List<Region>
 		 * oblasts = Context.getService(MdrtbService.class).getOblasts();
 		 * //drugSets = ms.getMdrtbDrugs();
 		 * 
@@ -344,7 +328,7 @@ public class TB03uController {
     	    tb03uData.setReg2Number(reg2Number);
 
     	    //REGISTRATION GROUP
-    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
@@ -1016,12 +1000,12 @@ public class TB03uController {
     	    else
 	    		tb03Data.setDiedOfTB(false);*/
     	    
-    	    q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH);
+    	    q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH);
     	    
     	    if(q!=null)
     	    {	
     	    	codId = q.getConceptId();
-    	    	if(codId.equals(Context.getService(MdrtbService.class).getConcept(TbConcepts.DEATH_BY_TB).getConceptId()))
+    	    	if(codId.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEATH_BY_TB).getConceptId()))
     	    		tb03uData.setDiedOfTB(true);
     	    	else
     	    		tb03uData.setDiedOfTB(false);
@@ -1064,14 +1048,14 @@ public class TB03uController {
         	    	
         	//TX OUTCOME
     	    
-    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	   /* q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     	    conceptQuestionList.clear();
     	    conceptQuestionList.add(q);
     	    
     	    obsList = Context.getObsService().getObservations(patientList, null, conceptQuestionList, null, null, null, null, null, null, startDate, endDate, false);
     	    if(obsList.size()>0 && obsList.get(0)!=null) {
     	    	tb03Data.setTb03uTreatmentOutcome(obsList.get(0).getValueCoded().getConceptId());
-    	    	 q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TX_OUTCOME_DATE);
+    	    	 q = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_OUTCOME_DATE);
  	    	    conceptQuestionList.clear();
  	    	    conceptQuestionList.add(q);
  	    	    

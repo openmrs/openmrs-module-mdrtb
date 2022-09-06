@@ -22,7 +22,6 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.TbConcepts;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.DrugResistanceDuringTreatmentForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
@@ -237,7 +236,7 @@ public class MdrtbDashboardController {
 			int preXdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRE_XDR_TB).getId().intValue();
 			int xdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XDR_TB).getId().intValue();
 			int tdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TDR_TB).getId().intValue();
-			Concept resDuringTx = Context.getService(MdrtbService.class).getConcept(TbConcepts.DRUG_RESISTANCE_DURING_TX);
+			Concept resDuringTx = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT);
 			List<DrugResistanceDuringTreatmentForm> drdts = Context.getService(MdrtbService.class).getDrdtForms(program.getId());
 			if(drdts!=null && drdts.size()!=0) {
 				for(DrugResistanceDuringTreatmentForm drdt : drdts) {
@@ -271,7 +270,6 @@ public class MdrtbDashboardController {
 	public ModelAndView processEditPopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors, 
 	                                     @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath,
 	                                     SessionStatus status, HttpServletRequest request, ModelMap map) {
-		  
 		// perform validation 
 		if (program != null) {
     		new MdrtbPatientProgramValidator().validate(program, errors);
@@ -282,10 +280,9 @@ public class MdrtbDashboardController {
 			// call the show status method to redisplay the page with errors
 			return showStatus(program, null, map);
 		}
-		   
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-				
+
 		// mark the patient as died if required
 		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
 		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
@@ -336,7 +333,6 @@ public class MdrtbDashboardController {
 			
 	}
 	
-	@SuppressWarnings("unchecked")
     @RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)
 	public ModelAndView editHospitalization(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
 	                                        @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,

@@ -102,7 +102,7 @@
 				</td></tr>
 				
 				<tr><td>
-					<a href="${pageContext.request.contextPath}/module/mergePatient/search.form"><spring:message code="mdrtb.mergePatients"/></a>
+					<a href="${pageContext.request.contextPath}/admin/patients/findDuplicatePatients.htm"><spring:message code="mdrtb.mergePatients"/></a>
 					<br/>
 				 	<a href="${pageContext.request.contextPath}/module/mdrtb/reporting/patientLists.form"><spring:message code="mdrtb.patientLists"/></a>
 					<br/>

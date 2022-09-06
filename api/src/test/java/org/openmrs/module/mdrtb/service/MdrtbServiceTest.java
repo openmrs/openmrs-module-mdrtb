@@ -22,7 +22,6 @@ import org.openmrs.module.mdrtb.Country;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author owais.hussain@esquaredsystems.com
@@ -30,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class MdrtbServiceTest extends MdrtbBase {
 
-	@Autowired
 	MdrtbService service;
 	
 	LocalDate startDate = new LocalDate(2022, 8, 1);
@@ -40,8 +38,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Before
 	public void runBeforeEachTest() throws Exception {
 		super.initTestData();
-		//MockitoAnnotations.initMocks(this);
-		now = new LocalDate();
 	}
 	
 	/**
@@ -443,7 +439,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationsFromOblastName(org.openmrs.module.mdrtb.Oblast)}.
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationsFromOblastName(org.openmrs.module.mdrtb.Region)}.
 	 */
 	@Test
 	@Ignore

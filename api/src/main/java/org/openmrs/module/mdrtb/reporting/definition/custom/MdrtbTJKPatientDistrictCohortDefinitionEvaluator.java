@@ -22,7 +22,6 @@ import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PatientService;
-import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;

@@ -12,10 +12,12 @@ public class BaseLocation {
 	
 	private String name;
 	private Integer id;
+	private Integer levelId;
 	
-	public BaseLocation(Integer id, String name) {
+	public BaseLocation(Integer id, String name, Integer levelId) {
 		this.name = name;
 		this.id = id;
+		this.levelId = levelId;
 	}
 	/**
 	 * @return the name
@@ -44,5 +46,17 @@ public class BaseLocation {
 	
 	public String toString() {
 		return getName();
+	}
+	/**
+	 * @return the levelId
+	 */
+	public Integer getLevelId() {
+		return levelId;
+	}
+	/**
+	 * @param levelId the levelId to set
+	 */
+	public void setLevelId(Integer levelId) {
+		this.levelId = levelId;
 	}
 }

@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.specimen.Test;
 import org.openmrs.module.mdrtb.specimen.SpecimenConstants.TestStatus;
+import org.openmrs.module.mdrtb.specimen.Test;
 
 
 public class TestStatusRenderer {

@@ -2,12 +2,9 @@ package org.openmrs.module.mdrtb.web.controller.status;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
 
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
-import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;

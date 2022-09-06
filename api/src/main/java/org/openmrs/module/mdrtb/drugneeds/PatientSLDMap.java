@@ -1,8 +1,6 @@
 package org.openmrs.module.mdrtb.drugneeds;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.openmrs.Patient;
 

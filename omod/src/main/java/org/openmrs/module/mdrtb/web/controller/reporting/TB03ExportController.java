@@ -6,45 +6,26 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Encounter;
-import org.openmrs.Form;
 import org.openmrs.Location;
-import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
-import org.openmrs.module.mdrtb.MdrtbConstants;
-import org.openmrs.module.mdrtb.Oblast;
-import org.openmrs.module.mdrtb.TbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.HAIN2Form;
 import org.openmrs.module.mdrtb.form.custom.HAINForm;
 import org.openmrs.module.mdrtb.form.custom.SmearForm;
 import org.openmrs.module.mdrtb.form.custom.TB03Form;
 import org.openmrs.module.mdrtb.form.custom.XpertForm;
-import org.openmrs.module.mdrtb.reporting.ReportUtil;
-import org.openmrs.module.mdrtb.reporting.custom.PDFHelper;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Data;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
-import org.openmrs.module.mdrtb.reporting.data.Cohorts;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.Dst;
 import org.openmrs.module.mdrtb.specimen.DstResult;
-import org.openmrs.module.mdrtb.specimen.Smear;
-import org.openmrs.module.mdrtb.specimen.custom.HAIN;
-import org.openmrs.module.mdrtb.specimen.custom.Xpert;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
-import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -91,7 +72,7 @@ public class TB03ExportController {
 			@RequestParam(value="monthSelected", required=false) String month,
 			ModelMap model) {
     	
-    	List<Oblast> oblasts;
+    	List<Region> oblasts;
         List<Facility> facilities;
         List<District> districts;
     	
@@ -155,7 +136,7 @@ public class TB03ExportController {
     	 model.addAttribute("quarterSelected", quarter);
        
         /*List<Location> locations = Context.getLocationService().getAllLocations(false);// Context.getLocationService().getAllLocations();//ms = (MdrtbDrugForecastService) Context.getService(MdrtbDrugForecastService.class);
-        List<Oblast> oblasts = Context.getService(MdrtbService.class).getOblasts();
+        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
         //drugSets =  ms.getMdrtbDrugs();
         
        
@@ -183,7 +164,7 @@ public class TB03ExportController {
     	
     	System.out.println("---POST-----");
     	System.out.println("PARAMS:" + oblastId + " " + districtId + " " + facilityId + " " + year + " " + quarter + " " + month);
-    	/*Oblast o = null;
+    	/*Region o = null;
     	if(oblast!=null && !oblast.equals("") && location == null)
 			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
 		
@@ -254,8 +235,8 @@ public class TB03ExportController {
     	Integer codId = null;
     	//List<Obs> obsList = null;
     	
-    	Concept reg1New = Context.getService(MdrtbService.class).getConcept(TbConcepts.REGIMEN_1_NEW);
-    	Concept reg1Rtx = Context.getService(MdrtbService.class).getConcept(TbConcepts.REGIMEN_1_RETREATMENT);
+    	Concept reg1New = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_1_NEW);
+    	Concept reg1Rtx = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_1_RETREATMENT);
     	HashMap<Integer,Integer> idMap = new HashMap<Integer,Integer>();
     	sdf.applyPattern("dd.MM.yyyy");
     	
@@ -301,7 +282,7 @@ public class TB03ExportController {
     	    	tb03Data.setDateOfBirth(sdf.format(patient.getBirthdate()));
     	    
     	    //AGE AT TB03 Registration
-    	    Integer age = tf.getAgeAtTB03Registration();//Context.getService(MdrtbService.class).getConcept(TbConcepts.AGE_AT_DOTS_REGISTRATION);
+    	    Integer age = tf.getAgeAtTB03Registration();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_DOTS_REGISTRATION);
     	    if(age!=null)
     	    	tb03Data.setAgeAtTB03Registration(age);
     	    
@@ -626,7 +607,7 @@ public class TB03ExportController {
     	    
     	    //DRUG RESISTANCE
     	    
-    	    q = tf.getResistanceType();//Context.getService(MdrtbService.class).getConcept(TbConcepts.RESISTANCE_TYPE);
+    	    q = tf.getResistanceType();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE);
     	   
     	    
     	    if(q!=null)
@@ -820,12 +801,12 @@ public class TB03ExportController {
     	    //TX OUTCOME
     	    //CHECK CAUSE OF DEATH
     	   
-    	    q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(TbConcepts.CAUSE_OF_DEATH);
+    	    q = tf.getCauseOfDeath();//Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH);
     	    
     	    if(q!=null)
     	    {	
     	    	codId = q.getConceptId();
-    	    	if(codId.equals(Context.getService(MdrtbService.class).getConcept(TbConcepts.DEATH_BY_TB).getConceptId()))
+    	    	if(codId.equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEATH_BY_TB).getConceptId()))
     	    		tb03Data.setDiedOfTB(true);
     	    	else
     	    		tb03Data.setDiedOfTB(false);
