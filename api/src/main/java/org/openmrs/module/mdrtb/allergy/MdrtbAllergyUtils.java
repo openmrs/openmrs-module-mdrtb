@@ -27,17 +27,15 @@ public class MdrtbAllergyUtils {
     
         Map<Patient, List<MdrtbAllergyStringObj>> ret = new HashMap<Patient, List<MdrtbAllergyStringObj>>();
         List<Concept> cList = new ArrayList<Concept>();
-        cList.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_CONSTRUCT));
+        cList.add(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT));
         List<Person> persList = new ArrayList<Person>();
         for (Patient p: pList)
             persList.add(p);
         List<Obs> oList = Context.getObsService().getObservations(persList, null, cList, null, null, null, null, null, null, null, null, false);
-        Concept effect = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT);
-        Concept effectNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_NON_CODED);
-        Concept medication = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION);
-        Concept medicationNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION_NON_CODED);
-        Concept actionTaken = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_ACTION_TAKEN);
-        Concept adverseEffectDate = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_DATE);
+        Concept effect = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT);
+        Concept medication = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_REGIMEN);
+        Concept actionTaken = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION);
+        Concept adverseEffectDate = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_OUTCOME_DATE);
         
         for (Patient p : pList){
            ArrayList<MdrtbAllergyStringObj> allergyList = new ArrayList<MdrtbAllergyStringObj>(); 
@@ -45,19 +43,29 @@ public class MdrtbAllergyUtils {
                if (oParent.getPersonId().equals(p.getPatientId())){
                    MdrtbAllergyStringObj maso = new MdrtbAllergyStringObj();
                    for (Obs o : oParent.getGroupMembers()){
-                       if (o.getConcept().getConceptId().equals(effectNC.getConceptId())){
-                           maso.setEffect(o.getValueText());
-                       } else if (o.getConcept().getConceptId().equals(effect.getConceptId()) && o.getValueCoded() != null){
+                       if (o.getConcept().getConceptId().equals(effect.getConceptId()) && o.getValueCoded() != null){
                            maso.setEffect(o.getValueCoded().getBestShortName(Context.getLocale()).getName());
-                       } else if (o.getConcept().getConceptId().equals(medicationNC.getConceptId())){
-                           maso.setMedication(o.getValueText());
-                       } else if (o.getConcept().getConceptId().equals(medication.getConceptId()) && o.getValueCoded() != null){
+                       } 
+						/* TODO: These concepts are marked for removal for being legacy concepts
+						//	Concept effectNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_NON_CODED);
+						//	Concept medicationNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION_NON_CODED);
+						   else if (o.getConcept().getConceptId().equals(effectNC.getConceptId())){
+						       maso.setEffect(o.getValueText());
+						   } 
+						   else if (o.getConcept().getConceptId().equals(medicationNC.getConceptId())){
+						       maso.setMedication(o.getValueText());
+						   } 
+						*/
+                       else if (o.getConcept().getConceptId().equals(medication.getConceptId()) && o.getValueCoded() != null){
                            maso.setMedication(o.getValueCoded().getBestShortName(Context.getLocale()).getName());
-                       } else if (o.getConcept().getConceptId().equals(actionTaken.getConceptId())){
+                       } 
+                       else if (o.getConcept().getConceptId().equals(actionTaken.getConceptId())){
                            maso.setSupportingTreatment(o.getValueText());
-                       } else if (o.getConcept().getConceptId().equals(adverseEffectDate.getConceptId()) && o.getValueDatetime() != null){
+                       } 
+                       else if (o.getConcept().getConceptId().equals(adverseEffectDate.getConceptId()) && o.getValueDatetime() != null){
                            maso.setDate(o.getValueDatetime());
-                       } else if (o.getConcept().getConceptId().equals(adverseEffectDate.getConceptId()) && o.getValueDatetime() == null){
+                       } 
+                       else if (o.getConcept().getConceptId().equals(adverseEffectDate.getConceptId()) && o.getValueDatetime() == null){
                            maso.setDate(o.getObsDatetime());
                        }
                    }

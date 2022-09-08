@@ -17,7 +17,7 @@ response.setDateHeader ("Expires", -1);
 	
 	</head>
 	<body>
-	    <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery/jquery.min.js"></script>
+	    <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.min.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/tableExport.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jquery.base64.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jspdf/libs/sprintf.js"></script>

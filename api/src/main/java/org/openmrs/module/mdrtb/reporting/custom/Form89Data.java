@@ -140,11 +140,11 @@ public class Form89Data implements Comparable <Form89Data>{
 	public String getXpertRIFResult() {
 		if(xpertRIFResult != null) {
 			if(xpertRIFResult.equals("+"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifPosShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifPosShort");
 			else if (xpertRIFResult.equals("-"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifNegShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifNegShort");
 			else if (xpertRIFResult.equals("U"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifIndShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifIndShort");
 			else
 				return "/" + xpertRIFResult;
 		}
@@ -248,9 +248,9 @@ public class Form89Data implements Comparable <Form89Data>{
 
 	public String getGender() {
 		if(patient.getGender().equals("M"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.male");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.male");
 		else if (patient.getGender().equals("F"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.female");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.female");
 		
 		return "";
 	}

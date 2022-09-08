@@ -21,6 +21,9 @@ function submitForm(url) {
 	var year = document.getElementById("year").value;
 	var quarter = document.getElementById("quarter").value;
 	var month = document.getElementById("month").value;
+	if (val1=="") {
+		window.alert("Providing Oblast is mandatory");
+	}
 	var submitPath = "${pageContext.request.contextPath}/module/mdrtb/reporting/" + url + ".form?oblast="+val1+"&district="+val2+ "&facility="+val3+"&year="+year+"&quarter="+quarter+"&month="+month;
 	
 	window.location.replace(submitPath);
@@ -45,16 +48,6 @@ function fun2()
 	var val2 = e.options[e.selectedIndex].value;
 	var year = document.getElementById("year").value;
 	
-	if(val1==186) {
-		
-		if(val2!="") {
-			document.getElementById("facility").selectedIndex = 0;
-		}
-		
-		return;
-	}
-	
-	
 	var quarter = "\"" + document.getElementById("quarter").value +  "\"";
 	var month =  "\"" + document.getElementById("month").value +  "\"";
 	if(val2!="")
@@ -69,16 +62,11 @@ function fun3() {
 	var e = document.getElementById("facility");
 	var val3 = e.options[e.selectedIndex].value;
 	
-	
 	if(val1==186) {
-		
 		if(val3!="") {
 			document.getElementById("district").selectedIndex = 0;
 		}
-		
-	
 	}
-	
 	return;
   
 }
@@ -93,7 +81,6 @@ $(document).ready(function(){
 	$('#year').val(${yearSelected});
 	$('#quarter').val(${quarterSelected});
 	$('#month').val(${monthSelected});
-
 });
 </script>
 

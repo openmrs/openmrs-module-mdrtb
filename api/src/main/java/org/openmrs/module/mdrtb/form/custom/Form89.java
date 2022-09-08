@@ -45,7 +45,8 @@ public class Form89 extends AbstractSimpleForm  implements Comparable<Form89> {
 		
 		TbPatientProgram tpp = Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
 		List<Encounter> encounters = null;
-		EncounterType intakeType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"));
+		String property = Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type");
+		EncounterType intakeType = Context.getEncounterService().getEncounterType(property);
 		if (tpp != null) {
     		encounters = tpp.getTb03EncountersDuringProgramObs();
     	}

@@ -657,7 +657,7 @@ public class SpecimenMigrationController {
     	previousTreatment.addState(afterFailiureCat2);
     	
     	ProgramWorkflowState transfer = new ProgramWorkflowState();
-    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN));
     	transfer.setInitial(true);
     	transfer.setTerminal(false);
     	previousTreatment.addState(transfer);
@@ -1258,9 +1258,9 @@ public class SpecimenMigrationController {
     
     @RequestMapping("/module/mdrtb/migration/migrateRegistrationGroupStates.form")
     public ModelAndView migrateRegistrationGroupStates() {
-    	// create the new concepts for NEW and TRANSFER
+    	// create the new concepts for NEW and PATIENT_TRANSFERRED_IN
     	addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
-    	addConcept("TRANSFER", "Misc", "N/A", "TRANSFER", "org.openmrs.module.mdrtb");
+    	addConcept("PATIENT_TRANSFERRED_IN", "Misc", "N/A", "PATIENT_TRANSFERRED_IN", "org.openmrs.module.mdrtb");
     	
     	// add other new concept mapping
     	addConceptMapping("RELAPSE","RELAPSE");
@@ -1290,7 +1290,7 @@ public class SpecimenMigrationController {
     	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
     	
     	ProgramWorkflowState transfer = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1529));
-    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN));
     
     	ProgramWorkflowState relapse = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1524));
     	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1));
@@ -1306,7 +1306,7 @@ public class SpecimenMigrationController {
     	// retire old concepts
     	//  TODO: IMPORTANT: are the concept ids the same on all systems?
     	retireConcept(1523);  // NEW MDR-TB PATIENT
-    	retireConcept(1529);  // TRANSFER IN MDR-TB PATIENT
+    	retireConcept(1529);  // PATIENT_TRANSFERRED_IN IN MDR-TB PATIENT
     	retireConcept(1524);  // RELAPSE MDR-TB PATIENT
     	retireConcept(1530);  // OTHER MDR-TB PATIENT
     	retireConcept(1525);  // TREATMENT AFTER DEFAULT MDR-TB PATIENT

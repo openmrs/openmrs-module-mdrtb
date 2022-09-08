@@ -556,6 +556,14 @@ public interface MdrtbService extends OpenmrsService {
 
 	public List<Facility> getRegFacilities();
 
+	/**
+	 * Find the {@link Location} object mapped with given parameters
+	 * 
+	 * @param oblast
+	 * @param district
+	 * @param facility
+	 * @return
+	 */
 	public Location getLocation(Integer oblast, Integer district, Integer facility);
 
 	public List<Facility> getFacilities(int parentId);

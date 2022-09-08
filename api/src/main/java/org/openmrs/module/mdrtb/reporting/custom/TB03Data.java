@@ -197,23 +197,23 @@ public class TB03Data implements Comparable <TB03Data>{
 
 	public void setRegGroup(Integer regGroup) {
 		
-		if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.new.conceptId")))
+		if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.new.conceptId")))
 			this.regGroup = 0;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterRelapse1.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse1.conceptId")))
 			this.regGroup = 1;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterRelapse2.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse2.conceptId")))
 			this.regGroup = 2;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterDefault1.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault1.conceptId")))
 			this.regGroup = 3;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterDefault2.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault2.conceptId")))
 			this.regGroup = 4;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterFailure1.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure1.conceptId")))
 			this.regGroup = 5;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.afterFailure2.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure2.conceptId")))
 			this.regGroup = 6;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.other.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.other.conceptId")))
 			this.regGroup = 7;
-		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.transferIn.conceptId")))
+		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.transferIn.conceptId")))
 			this.regGroup = 8;
 		
 		
@@ -286,11 +286,11 @@ public class TB03Data implements Comparable <TB03Data>{
 	public String getXpertRIFResult() {
 		if(xpertRIFResult != null) {
 			if(xpertRIFResult.equals("+"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifPosShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifPosShort");
 			else if (xpertRIFResult.equals("-"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifNegShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifNegShort");
 			else if (xpertRIFResult.equals("U"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifIndShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifIndShort");
 			else
 				return "/" + xpertRIFResult;
 		}
@@ -501,13 +501,13 @@ public class TB03Data implements Comparable <TB03Data>{
 
 	public void setTb03TreatmentOutcome(Integer tb03TreatmentOutcome) {
 		//System.out.println("---->" + tb03TreatmentOutcome);
-		if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.cured.conceptId")))
+		if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.cured.conceptId")))
 			this.tb03TreatmentOutcome = 0;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.txCompleted.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.txCompleted.conceptId")))
 			this.tb03TreatmentOutcome = 1;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.txFailure.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.txFailure.conceptId")))
 			this.tb03TreatmentOutcome = 2;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.died.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.died.conceptId")))
 		{
 			if(diedOfTB)
 				this.tb03TreatmentOutcome = 3;
@@ -516,13 +516,13 @@ public class TB03Data implements Comparable <TB03Data>{
 		}
 			
 		
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.ltfu.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.ltfu.conceptId")))
 			this.tb03TreatmentOutcome = 5;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.canceled.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.canceled.conceptId")))
 			this.tb03TreatmentOutcome = 6;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.sld2.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.sld2.conceptId")))
 			this.tb03TreatmentOutcome = 7;
-		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.transferout.conceptId")))
+		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.transferout.conceptId")))
 			this.tb03TreatmentOutcome = 8;
 		
 		//System.out.println("---->" + this.tb03TreatmentOutcome);
@@ -824,9 +824,9 @@ public class TB03Data implements Comparable <TB03Data>{
 
 	public String getGender() {
 		if(patient.getGender().equals("M"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.male");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.male");
 		else if (patient.getGender().equals("F"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.female");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.female");
 		
 		return "";
 	}

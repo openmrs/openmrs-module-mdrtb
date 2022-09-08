@@ -226,21 +226,15 @@ public class TB03uData implements Comparable <TB03uData> {
 			this.tb03uTreatmentOutcome = 5;
 		/*else if(tb03uTreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.canceled.conceptId")))
 			this.tb03uTreatmentOutcome = 6;
-		else if(tb03uTreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.outcome.sld2.conceptId")))
+		else if(tb03uTreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.sld2.conceptId")))
 			this.tb03uTreatmentOutcome = 7;*/
 		else if(tb03uTreatmentOutcome.intValue() == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.transferout.conceptId")))
 			this.tb03uTreatmentOutcome = 6;
-		
-		//System.out.println("---->" + this.tb03uTreatmentOutcome);
 	}
 
-	
-
-	
 	public HashMap getDstResults() {
 		return dstResults;
 	}
-
 
 	public String getDstCollectionDate() {
 		return dstCollectionDate;
@@ -1747,9 +1741,9 @@ public class TB03uData implements Comparable <TB03uData> {
 	
 	public String getGender() {
 		if(patient.getGender().equals("M"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.male");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.male");
 		else if (patient.getGender().equals("F"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.female");
+			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.female");
 		
 		return "";
 	}
@@ -1775,11 +1769,11 @@ public class TB03uData implements Comparable <TB03uData> {
 	public String getXpertRIFResult() {
 		if(xpertRIFResult != null) {
 			if(xpertRIFResult.equals("+"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifPosShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifPosShort");
 			else if (xpertRIFResult.equals("-"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifNegShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifNegShort");
 			else if (xpertRIFResult.equals("U"))
-				return "/" + Context.getMessageSourceService().getMessage("dotsreports.tb03.xpertRifIndShort");
+				return "/" + Context.getMessageSourceService().getMessage("mdrtb.tb03.xpertRifIndShort");
 			else
 				return "/" + xpertRIFResult;
 		}

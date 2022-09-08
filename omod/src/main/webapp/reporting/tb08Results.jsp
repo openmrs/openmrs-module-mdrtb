@@ -17,7 +17,7 @@ response.setDateHeader ("Expires", -1);
 	
 	</head>
 	<body>
-	    <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery/jquery.min.js"></script>
+	    <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.min.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/tableExport.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jquery.base64.js"></script>
 		<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jspdf/libs/sprintf.js"></script>
@@ -28,7 +28,7 @@ response.setDateHeader ("Expires", -1);
 		function printForm() {
 			var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		    mywindow.document.write('<html><head><title><spring:message code="mdrtb.tb08.title" text="TB08"/></title>');
+		    mywindow.document.write('<html><head><title><spring:message code="mdrtb.tb08" text="TB08"/></title>');
 		    mywindow.document.write('</head><body >');
 		   // mywindow.document.write('<h1><spring:message code="mdrtb.pv.aeForm" text="AE"/></h1>');
 		    mywindow.document.write(document.getElementById("tb08").innerHTML);
@@ -206,14 +206,14 @@ response.setDateHeader ("Expires", -1);
 		<table border="1" width="100%">
 		<tr>
 		<td>
-		<spring:message code="mdrtb.tb08.nameOfFacility"/> <u>&nbsp; ${fName} &nbsp;</u> <br/>
-		<spring:message code="mdrtb.tb08.regionCityDistrict"/>  <u> ${oName}/${dName} </u><br/>
-		<spring:message code="mdrtb.tb08.tbCoordinator"/> ____________________<spring:message code="mdrtb.tb08.signature"/> ____________<br/>
+		<spring:message code="mdrtb.tb08u.nameOfFacility"/> <u>&nbsp; ${fName} &nbsp;</u> <br/>
+		<spring:message code="mdrtb.tb08u.regionCityDistrict"/>  <u> ${oName}/${dName} </u><br/>
+		<spring:message code="mdrtb.tb08u.tbCoordinatorName"/> ____________________<spring:message code="mdrtb.tb08u.signature"/> ____________<br/>
 		</td>
 		
 		<td>
-		<spring:message code="mdrtb.tb08.tbCasesDetectedDuringQuarterYear" arguments="${quarter},${year}"/> <br/>
-		<spring:message code="mdrtb.tb08.dateOfReport"/> ${reportDate }
+		<spring:message code="mdrtb.tb08u.tbCasesDetectedDuringQuarterYear" arguments="${quarter},${year}"/> <br/>
+		<spring:message code="mdrtb.tb08u.dateOfReport"/> ${reportDate }
 		</td>
 		</tr>
 		</table>	
@@ -228,55 +228,55 @@ response.setDateHeader ("Expires", -1);
 					<td rowspan="2">
 						&nbsp;</td>
 					<td rowspan="2" style="text-align: center;">
-						<spring:message code="mdrtb.tb08.totatTBCasesDetected"/></td>
+						<spring:message code="mdrtb.tb08u.totatTBCasesDetected"/></td>
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.eligibleCohort"/> &nbsp;</div>
+							<spring:message code="mdrtb.tb08u.eligibleCohort"/> &nbsp;</div>
 						
 					</td>
 					<td rowspan="2" style="text-align: center;">
-						<spring:message code="mdrtb.tb08.cured"/></td>
+						<spring:message code="mdrtb.tb08u.cured"/></td>
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.txCompleted"/></div>
+							<spring:message code="mdrtb.tb08u.txCompleted"/></div>
 					</td>
 					<td colspan="2" rowspan="1">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.died"/> &nbsp;</div>
+							<spring:message code="mdrtb.tb08u.died"/> &nbsp;</div>
 						
 					</td>
 					<td rowspan="2" style="text-align: center;">
-						<spring:message code="mdrtb.tb08.txFailure"/></td>
+						<spring:message code="mdrtb.tb08u.failure"/></td>
 					<td rowspan="2" style="text-align: center;">
-						<spring:message code="mdrtb.tb08.ltfu"/></td>
+						<spring:message code="mdrtb.tb08u.ltfu"/></td>
 					
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.totalEvaluated"/>&nbsp;</div>
+							<spring:message code="mdrtb.tb08u.totalEvaluated"/>&nbsp;</div>
 						
 					</td>
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.startedSLD"/>&nbsp;</div>
+							<spring:message code="mdrtb.tb08u.startedSLD"/>&nbsp;</div>
 					</td>
 					
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.canceled"/> &nbsp;</div>
+							<spring:message code="mdrtb.tb08u.canceled"/> &nbsp;</div>
 					</td>
 					
 					<td rowspan="2">
 						<div style="text-align: center;">
-							<spring:message code="mdrtb.tb08.notEvaluated"/>&nbsp;</div>
+							<spring:message code="mdrtb.tb08u.notEvaluated"/>&nbsp;</div>
 						
 					</td>
 					
 				</tr>
 				<tr align="center">
 					<td>
-						<spring:message code="mdrtb.tb08.tb"/></td>
+						<spring:message code="mdrtb.tb08u.tb"/></td>
 					<td>
-						<spring:message code="mdrtb.tb08.nontb"/></td>
+						<spring:message code="mdrtb.tb08u.notTb"/></td>
 					
 				</tr>
 				<tr align="center">
@@ -312,7 +312,7 @@ response.setDateHeader ("Expires", -1);
 					<td style="font: bold;">
 						1</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.newCases"/></td>
+						<spring:message code="mdrtb.tb08u.newCases"/></td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
@@ -333,7 +333,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						1.1</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/>&nbsp;</td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/>&nbsp;</td>
 					<td>
 						${table1.newPulmonaryBCDetected }</td>
 					<td>
@@ -459,7 +459,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						1.2</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/> </td>
 					<td>
 						${table1.newPulmonaryCDDetected }</td>
 					<td>
@@ -584,7 +584,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;1.3</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/></td>
+						<spring:message code="mdrtb.tb08u.eptb"/></td>
 					<td>
 						${table1.newExtrapulmonaryDetected }</td>
 					<td>

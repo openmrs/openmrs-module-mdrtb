@@ -155,10 +155,6 @@ public class RegimenController {
     	
     }
     
-  
-    
-    
-    @SuppressWarnings({ "deprecation", "unchecked" })
 	@RequestMapping(method=RequestMethod.POST, value="/module/mdrtb/reporting/regimen")
     public static void doRegimen(
     		@RequestParam("district") Integer districtId,
@@ -455,8 +451,7 @@ public class RegimenController {
 		//TxStartDate
 		HSSFCell txStartHeaderCell =  headerRow.createCell((short) 2);
 		txStartHeaderCell.setCellStyle(headerStyle);
-		txStartHeaderCell.setCellValue(Context.getMessageSourceService().getMessage("mdrtb.sldreport..treatmentStartDate"));
-		
+		txStartHeaderCell.setCellValue(Context.getMessageSourceService().getMessage("mdrtb.sldreport.treatmentStartDate"));
 		
 		//Cm
 		HSSFCell cmHeaderCell =  headerRow.createCell((short) 3);
@@ -765,8 +760,4 @@ public class RegimenController {
         }
         return index;
      }
-    
-    
-  
-    
 }

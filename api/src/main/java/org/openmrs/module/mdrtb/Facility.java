@@ -2,7 +2,7 @@ package org.openmrs.module.mdrtb;
 
 public class Facility extends BaseLocation {
 
-	public static Integer HIERARCHY_LEVEL = 6;
+	public static Integer HIERARCHY_LEVEL = 4;
 	
 	private BaseLocation parent;
 	

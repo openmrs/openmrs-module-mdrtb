@@ -235,9 +235,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			PatientProgram program = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 			
 			if (program == null || !program.getProgram().equals(getMdrtbProgram())) {
-				throw new MdrtbAPIException(patientProgramId + " does not reference an MDR-TB patient program");
+				return null;
+				// TODO: Figure out why this was throwing an exception before
+				// throw new MdrtbAPIException(patientProgramId + " does not reference a TB patient program");
 			}
-			
 			else {
 				return new MdrtbPatientProgram(program);
 			}
@@ -641,17 +642,17 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleMdrtbProgramOutcomes() {
-		return getPossibleWorkflowStates(
+		return getPossibleMdrtbWorkflowStates(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME));
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousDrugUse() {
-		return getPossibleWorkflowStates(
+		return getPossibleMdrtbWorkflowStates(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE));
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPreviousTreatment() {
-		return getPossibleWorkflowStates(
+		return getPossibleMdrtbWorkflowStates(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT));
 	}
 	
@@ -687,8 +688,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	/**
 	 * Utility functions
 	 */
-	
-	private Set<ProgramWorkflowState> getPossibleWorkflowStates(Concept workflowConcept) {
+	private Set<ProgramWorkflowState> getPossibleMdrtbWorkflowStates(Concept workflowConcept) {
 		// get the mdrtb program via the name listed in global properties
 		Program mdrtbProgram = Context.getProgramWorkflowService()
 		        .getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name"));
@@ -701,7 +701,24 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		}
 		return null;
 	}
-	
+
+	private Set<ProgramWorkflowState> getPossibleTbWorkflowStates(Concept workflowConcept) {
+		// get the mdrtb program via the name listed in global properties
+		String programName = Context.getAdministrationService().getGlobalProperty("dotsreports.program_name");
+		List<Program> allPrograms = Context.getProgramWorkflowService().getAllPrograms();
+		for (Program program : allPrograms) {
+			if (program.getName().equalsIgnoreCase(programName)) {
+				for (ProgramWorkflow workflow : program.getAllWorkflows()) {
+					if (workflow.getConcept().equals(workflowConcept)) {
+						return workflow.getStates(false);
+					}
+				}
+			}
+		}
+		// get the workflow via the concept name
+		return null;
+	}
+
 	private Map<Integer, String> loadCache(String mapAsString) {
 		Map<Integer, String> map = new HashMap<Integer, String>();
 		
@@ -761,17 +778,23 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Program getTbProgram() {
-		return Context.getProgramWorkflowService()
-		        .getProgramByName(Context.getAdministrationService().getGlobalProperty("dotsreports.program_name"));
+		List<Program> allPrograms = Context.getProgramWorkflowService().getAllPrograms();
+		String programName = Context.getAdministrationService().getGlobalProperty("dotsreports.program_name");
+		for (Program program : allPrograms) {
+			if (program.getName().equalsIgnoreCase(programName)) {
+				return program;
+			}
+		}
+		return null;
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleTbProgramOutcomes() {
-		return getPossibleWorkflowStates(
+		return getPossibleMdrtbWorkflowStates(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPatientGroups() {
-		return getPossibleWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP));
+		return getPossibleTbWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP));
 	}
 	
 	public List<String> getAllRayonsTJK() {
@@ -946,44 +969,28 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		Region o = getOblast(oblastId);
 		District d = getDistrict(districtId);
 		Facility f = null;
-		if (facilityId != null)
+		if (facilityId != null) {
 			f = getFacility(facilityId);
-		Location location = null;
+		}
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
-		if (f != null) {
-			for (Location loc : locations) {
-				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
-				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
-				        && loc.getRegion() != null && loc.getRegion().equals(f.getName())) {
-					location = loc;
-					break;
-				}
+		for (Location loc : locations) {
+			boolean regionFlag = loc.getStateProvince().equalsIgnoreCase(o.getName());
+			if (!regionFlag) {
+				continue;
 			}
-		} else {
-			for (Location loc : locations) {
-				if (loc.getStateProvince() != null && loc.getStateProvince().equals(o.getName())
-				        && loc.getCountyDistrict() != null && loc.getCountyDistrict().equals(d.getName())
-				        && (loc.getRegion() == null || loc.getRegion().length() == 0)) {
-					location = loc;
-					break;
-				}
+			boolean districtFlag = loc.getCountyDistrict().equalsIgnoreCase(d.getName());
+			if (!districtFlag) {
+				continue;
+			}
+			boolean stateFlag = f == null ? true : loc.getAddress4().equalsIgnoreCase(f.getName());
+			if (regionFlag && districtFlag && stateFlag) {
+				return loc;
 			}
 		}
-		return location;
+		return null;
 	}
 	
 	public List<Region> getOblasts() {
-		//		List<Region> oblastList = new ArrayList<Region>();
-		//		AddressHierarchyLevel oblastLevel = new AddressHierarchyLevel();
-		//		oblastLevel.setLevelId(2);
-		//		List<AddressHierarchyEntry> list = getAddressService().getAddressHierarchyEntriesByLevel(oblastLevel);		
-		//		for (AddressHierarchyEntry add : list) {
-		//			Integer id = add.getId();
-		//			String name = add.getName();
-		//			
-		//			oblastList.add(new Region(name, id));
-		//		}
-		//		List<Location> countries = Context.getLocationService().getRootLocations(false);
 		List<Region> oblasts = new ArrayList<Region>();
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Region.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
@@ -1250,10 +1257,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return tbPrograms;
 	}
 	
+	/* TODO: Is this method required? There's no patient program ID in the patient_program table any more */
+	@Deprecated
 	public void addIdentifierToProgram(Integer patientIdenifierId, Integer patientProgramId) {
-		String query = "UPDATE patient_program SET patient_identifier_id= " + patientIdenifierId
-		        + " WHERE patient_program_id=" + patientProgramId + ";";
-		Context.getAdministrationService().executeSQL(query, false);
+//		String query = "UPDATE patient_program SET patient_identifier_id= " + patientIdenifierId
+//		        + " WHERE patient_program_id=" + patientProgramId + ";";
+//		Context.getAdministrationService().executeSQL(query, false);
 	}
 	
 	@Transactional(readOnly = true)
@@ -1941,8 +1950,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Set<ProgramWorkflowState> getPossibleDOTSClassificationsAccordingToPreviousDrugUse() {
-		
-		Set<ProgramWorkflowState> temp = getPossibleWorkflowStates(Context.getService(MdrtbService.class)
+		Set<ProgramWorkflowState> temp = getPossibleTbWorkflowStates(Context.getService(MdrtbService.class)
 		        .getConcept(MdrtbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE));
 		
 		return temp;
@@ -2459,8 +2467,6 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			List<District> distList = getDistricts(oblastId);
 			if (distList != null && distList.size() != 0) {
 				System.out.println("DIST:" + distList.size());
-			} else {
-				System.out.println("DIST: EMPTY");
 			}
 			for (District d : distList) {
 				location = getLocation(oblastId, d.getId(), null);

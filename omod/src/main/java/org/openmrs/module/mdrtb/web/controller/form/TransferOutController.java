@@ -52,8 +52,8 @@ public class TransferOutController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -64,13 +64,15 @@ public class TransferOutController {
 	
 	@ModelAttribute("transferOut")
 	public TransferOutForm getTransferOutForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException,
+	        IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
-		if(pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
-			mdr=true;
+		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
+		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
+			mdr = true;
 			System.out.println("mdr");
 		}
 		
@@ -81,28 +83,28 @@ public class TransferOutController {
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			TransferOutForm form = null;
-			if(!mdr) {
+			if (!mdr) {
 				TbPatientProgram tbProgram = Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-			
+				
 				form = new TransferOutForm(tbProgram.getPatient());
-			
+				
 				// prepopulate the intake form with any program information
 				//form.setEncounterDatetime(tbProgram.getDateEnrolled());
 				form.setLocation(tbProgram.getLocation());
 			}
 			
 			else {
-				MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+				MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class)
+				        .getMdrtbPatientProgram(patientProgramId);
 				
 				form = new TransferOutForm(mdrtbProgram.getPatient());
-			
+				
 				// prepopulate the intake form with any program information
 				//form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
 				form.setLocation(mdrtbProgram.getLocation());
 			}
 			return form;
-		}
-		else {
+		} else {
 			return new TransferOutForm(Context.getEncounterService().getEncounter(encounterId));
 		}
 	}
@@ -110,7 +112,7 @@ public class TransferOutController {
 	/*@ModelAttribute("smearmdr")
 	public SmearForm getMdrSmearForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
 	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
@@ -129,140 +131,132 @@ public class TransferOutController {
 	}*/
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showTransferOutForm(@RequestParam(value="loc", required=false) String district,
-    								  @RequestParam(value="ob", required=false) String oblast,
-    								  @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-    								  @RequestParam(required = false, value = "encounterId") Integer encounterId,
-    								  @RequestParam(required = false, value = "mode") String mode,
-    								  ModelMap model){
+	public ModelAndView showTransferOutForm(@RequestParam(value = "loc", required = false) String district,
+	        @RequestParam(value = "ob", required = false) String oblast,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "encounterId") Integer encounterId,
+	        @RequestParam(required = false, value = "mode") String mode, ModelMap model) {
 		//ModelMap map = new ModelMap();
 		
 		List<Region> oblasts;
-        List<Facility> facilities;
-        List<District> districts;
-        
-        if(oblast==null)
-        {
-        	TransferOutForm form = null;
-        	if(encounterId!=-1) {  //we are editing an existing encounter
-        		 form = new TransferOutForm(Context.getEncounterService().getEncounter(encounterId));
-        	}
-        	else {
-        		try {
+		List<Facility> facilities;
+		List<District> districts;
+		
+		if (oblast == null) {
+			TransferOutForm form = null;
+			if (encounterId != -1) { //we are editing an existing encounter
+				form = new TransferOutForm(Context.getEncounterService().getEncounter(encounterId));
+			} else {
+				try {
 					form = getTransferOutForm(-1, patientProgramId);
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
+				}
+				catch (SecurityException e) {
 					e.printStackTrace();
 				}
-        	}
-        	
-        	Location location  = form.getLocation();
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	model.addAttribute("oblasts", oblasts);
-        	for(Region o : oblasts) {
-        		if(o.getName().equals(location.getStateProvince())) {
-        			model.addAttribute("oblastSelected", o.getId());
-        			districts = Context.getService(MdrtbService.class).getRegDistricts(o.getId());
-        			model.addAttribute("districts", districts);
-        			for(District d : districts) {
-        				if(d.getName().equals(location.getCountyDistrict())) {
-        					model.addAttribute("districtSelected", d.getId());
-        					facilities = Context.getService(MdrtbService.class).getRegFacilities(d.getId());
-        					if(facilities != null ) {
-        						model.addAttribute("facilities", facilities);
-        						for(Facility f : facilities) {
-        							if(f.getName().equals(location.getRegion())) {
-        								System.out.println("setting");
-        								model.addAttribute("facilitySelected", f.getId());
-        								break;
-        							}
-        						}
-        					}
-        					break;
-        				}
-        			}
-        			
-        			break;
-        		}
-        	}
-        }
-        
-       
-        else if(district==null)
-        { 
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	districts= Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-        	model.addAttribute("oblastSelected", oblast);
-            model.addAttribute("oblasts", oblasts);
-            model.addAttribute("districts", districts);
-        }
-        else
-        {
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	districts= Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-        	facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
-            model.addAttribute("oblastSelected", oblast);
-            model.addAttribute("oblasts", oblasts);
-            model.addAttribute("districts", districts);
-            model.addAttribute("districtSelected", district);
-            model.addAttribute("facilities", facilities);
-        }
-        model.addAttribute("encounterId", encounterId);
-        if(mode!=null && mode.length()!=0) {
-        	model.addAttribute("mode", mode);
-        }
-		return new ModelAndView("/module/mdrtb/form/transferOut", model);	
+				catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
+				catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+				catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			model.addAttribute("oblasts", oblasts);
+			Location location = form.getLocation();
+			if (location != null) {
+				for (Region o : oblasts) {
+					if (o.getName().equals(location.getStateProvince())) {
+						model.addAttribute("oblastSelected", o.getId());
+						districts = Context.getService(MdrtbService.class).getRegDistricts(o.getId());
+						model.addAttribute("districts", districts);
+						for (District d : districts) {
+							if (d.getName().equals(location.getCountyDistrict())) {
+								model.addAttribute("districtSelected", d.getId());
+								facilities = Context.getService(MdrtbService.class).getRegFacilities(d.getId());
+								if (facilities != null) {
+									model.addAttribute("facilities", facilities);
+									for (Facility f : facilities) {
+										if (f.getName().equals(location.getRegion())) {
+											model.addAttribute("facilitySelected", f.getId());
+											break;
+										}
+									}
+								}
+								break;
+							}
+						}
+						
+						break;
+					}
+				}
+			}
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			model.addAttribute("oblastSelected", oblast);
+			model.addAttribute("oblasts", oblasts);
+			model.addAttribute("districts", districts);
+		} else {
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
+			model.addAttribute("oblastSelected", oblast);
+			model.addAttribute("oblasts", oblasts);
+			model.addAttribute("districts", districts);
+			model.addAttribute("districtSelected", district);
+			model.addAttribute("facilities", facilities);
+		}
+		model.addAttribute("encounterId", encounterId);
+		if (mode != null && mode.length() != 0) {
+			model.addAttribute("mode", mode);
+		}
+		return new ModelAndView("/module/mdrtb/form/transferOut", model);
 	}
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processTransferOutForm (@ModelAttribute("transferOut") TransferOutForm tof, BindingResult errors, 
-	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                       @RequestParam(required = true, value = "oblast") String oblastId,
-	                                       @RequestParam(required = true, value = "district") String districtId,
-	                                       @RequestParam(required = false, value = "facility") String facilityId,
-	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processTransferOutForm(@ModelAttribute("transferOut") TransferOutForm tof, BindingResult errors,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "oblast") String oblastId,
+	        @RequestParam(required = true, value = "district") String districtId,
+	        @RequestParam(required = false, value = "facility") String facilityId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
 		
-		Location location=null;
-    	
-    	System.out.println("TOF ID:" + tof.getId());
-    	System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
-    	
-    	if(facilityId!=null && facilityId.length()!=0)
-    		location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),Integer.parseInt(districtId),Integer.parseInt(facilityId));
-    	else
-    		location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),Integer.parseInt(districtId),null);
-    	
-    	
-    	if(location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
-    		throw new MdrtbAPIException("Invalid Hierarchy Set selected");
-    	}
-    	
-    	
-		if(tof.getLocation()==null || !location.equals(tof.getLocation())) {
+		Location location = null;
+		
+		System.out.println("TOF ID:" + tof.getId());
+		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
+		
+		if (facilityId != null && facilityId.length() != 0)
+			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
+			    Integer.parseInt(districtId), Integer.parseInt(facilityId));
+		else
+			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
+			    Integer.parseInt(districtId), null);
+		
+		if (location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
+			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
+		}
+		
+		if (tof.getLocation() == null || !location.equals(tof.getLocation())) {
 			System.out.println("setting loc");
 			tof.setLocation(location);
 		}
-   
 		
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-		if(pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
-		//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
-			mdr=true;
+		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
+		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
+			//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
+			mdr = true;
 		}
 		
 		else {
@@ -271,8 +265,8 @@ public class TransferOutController {
 		
 		// perform validation and check for errors
 		/*if (tb03 != null) {
-    		new SimpleFormValidator().validate(tb03, errors);
-    	}*/
+			new SimpleFormValidator().validate(tb03, errors);
+		}*/
 		
 		/*if (errors.hasErrors()) {
 			map.put("errors", errors);
@@ -284,28 +278,27 @@ public class TransferOutController {
 		
 		boolean programModified = false;
 		
-
 		// clears the command object from the session
 		status.setComplete();
 		
-		
-		
 		map.clear();
-
+		
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
-			if(!mdr) {
+			if (!mdr) {
 				returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/tbdashboard.form";
-				returnUrl = MdrtbWebUtil.appendParameters(returnUrl, Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(), patientProgramId);
+				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
+				    Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(),
+				    patientProgramId);
 			}
 			
 			else {
 				returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";
-				returnUrl = MdrtbWebUtil.appendParameters(returnUrl, Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId).getPatient().getId(), patientProgramId);
+				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
+				    Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId).getPatient().getId(),
+				    patientProgramId);
 			}
 		}
-		
-		
 		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}
@@ -314,7 +307,6 @@ public class TransferOutController {
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
-	
 	
 	/*@ModelAttribute("tbProgram")
 	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
@@ -341,9 +333,4 @@ public class TransferOutController {
 		return Context.getLocationService().getAllLocations(false);
 	}
 	
-	
-	
-	
-
-		
 }

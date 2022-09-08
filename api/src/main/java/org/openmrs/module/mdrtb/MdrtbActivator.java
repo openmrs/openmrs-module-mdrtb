@@ -32,6 +32,7 @@ import org.openmrs.layout.web.address.AddressSupport;
 import org.openmrs.layout.web.address.AddressTemplate;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleActivator;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -47,17 +48,17 @@ public class MdrtbActivator extends BaseModuleActivator implements ModuleActivat
 		registerAddressTemplates();
 		performCustomMigrations();
 	}
-
+	
 	@Override
 	public void stopped() {
 		log.info("Shutting down MDR-TB module.");
 		unregisterAddressTemplates();
 	}
-
+	
 	@Override
-    public void contextRefreshed() {
-        // initialize the caches on module startup
-    }
+	public void contextRefreshed() {
+		// initialize the caches on module startup
+	}
 	
 	/**
 	 * Sets up the Default Address Template
@@ -94,17 +95,19 @@ public class MdrtbActivator extends BaseModuleActivator implements ModuleActivat
 			}
 		}
 	}
-
+	
 	/**
 	 * Configures any global properties that need to be configured
 	 */
 	private void configureGlobalProperties() {
 		// configure the primary patient identifier type if needed
-		if (StringUtils.isBlank(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType"))) {
+		if (StringUtils
+		        .isBlank(Context.getAdministrationService().getGlobalProperty("mdrtb.primaryPatientIdentifierType"))) {
 			List<PatientIdentifierType> types = Context.getPatientService().getAllPatientIdentifierTypes();
 			// just pick the first identifier to use as the primary
-			if(types.size() > 0) {
-				GlobalProperty primaryIdType = Context.getAdministrationService().getGlobalPropertyObject("mdrtb.primaryPatientIdentifierType");
+			if (types.size() > 0) {
+				GlobalProperty primaryIdType = Context.getAdministrationService()
+				        .getGlobalPropertyObject("mdrtb.primaryPatientIdentifierType");
 				primaryIdType.setPropertyValue(types.get(0).getName());
 				Context.getAdministrationService().saveGlobalProperty(primaryIdType);
 			}
@@ -120,17 +123,17 @@ public class MdrtbActivator extends BaseModuleActivator implements ModuleActivat
 	}
 	
 	/**
-	 *  We changed the concept in the core metadata that is mapped to the mdrtb mapping CLINICIAN NOTES;
-	 *  make sure we migrate all underlying observations; this is simply a utility method I have built in case
-	 *  there are any others besides PIH who started using the MDR-TB before June 2011; more current installs,
-	 *  this method is unnecessary; it has been causing problems, so I have commented it out, but left it 
-	 *  around just in case it is needed
+	 * We changed the concept in the core metadata that is mapped to the mdrtb mapping CLINICIAN
+	 * NOTES; make sure we migrate all underlying observations; this is simply a utility method I
+	 * have built in case there are any others besides PIH who started using the MDR-TB before June
+	 * 2011; more current installs, this method is unnecessary; it has been causing problems, so I
+	 * have commented it out, but left it around just in case it is needed
 	 */
-	private void migrateClinicianNotes() {	
+	private void migrateClinicianNotes() {
 		
 		// try to fetch old note concept by uuid
 		Concept oldNotesConcept = Context.getConceptService().getConceptByUuid("31bbf216-0370-102d-b0e3-001ec94a0cc1");
-
+		
 		// try the same with the new notes concept by uuid
 		Concept newNotesConcept = Context.getConceptService().getConceptByUuid("31b474e6-0370-102d-b0e3-001ec94a0cc1");
 		
@@ -149,10 +152,12 @@ public class MdrtbActivator extends BaseModuleActivator implements ModuleActivat
 			Context.addProxyPrivilege("View Observations");
 			Context.addProxyPrivilege("Edit Observations");
 			
-			for (Obs obs : Context.getObsService().getObservations(null, null, oldNotesList, null, null, null, null, null, null, null, null, false)) {
+			for (Obs obs : Context.getObsService().getObservations(null, null, oldNotesList, null, null, null, null, null,
+			    null, null, null, false)) {
 				// only update mdr-tb encounters that HAVEN'T been created with a custom form
-				if (obs.getEncounter().getEncounterType().getName().equals(intake) || obs.getEncounter().getEncounterType().getName().equals(followup) 
-						&& obs.getEncounter().getForm() == null && obs.getValueCoded() == null) {
+				if (obs.getEncounter().getEncounterType().getName().equals(intake)
+				        || obs.getEncounter().getEncounterType().getName().equals(followup)
+				                && obs.getEncounter().getForm() == null && obs.getValueCoded() == null) {
 					obs.setConcept(newNotesConcept);
 					Context.getObsService().saveObs(obs, "migrated to new CLINICIAN NOTES concept");
 				}

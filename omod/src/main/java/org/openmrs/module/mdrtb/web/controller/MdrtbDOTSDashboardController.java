@@ -15,6 +15,7 @@ import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.User;
@@ -127,11 +128,10 @@ public class MdrtbDOTSDashboardController {
     	}
     	// fetch the program that is being requested
     	else {
-    		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
+			return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
     	}
 	}
 	
-	//////////////////////////////
 	@ModelAttribute("labtech")
 	public Boolean getLabTech() {
 		User mdrUser = Context.getAuthenticatedUser();

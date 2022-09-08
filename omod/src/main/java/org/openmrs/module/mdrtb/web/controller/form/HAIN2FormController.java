@@ -167,40 +167,37 @@ public class HAIN2FormController {
 				}
         	}
         	
-        	Location location  = hain2.getLocation();
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	model.addAttribute("oblasts", oblasts);
-        	for(Region o : oblasts) {
-        		if(o.getName().equals(location.getStateProvince())) {
-        			model.addAttribute("oblastSelected", o.getId());
-        			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
-        			model.addAttribute("districts", districts);
-        			for(District d : districts) {
-        				if(d.getName().equals(location.getCountyDistrict())) {
-        					model.addAttribute("districtSelected", d.getId());
-        					facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
-        					if(facilities != null ) {
-        						model.addAttribute("facilities", facilities);
-        						for(Facility f : facilities) {
-        							if(f.getName().equals(location.getRegion())) {
-        								System.out.println("setting");
-        								model.addAttribute("facilitySelected", f.getId());
-        								break;
-        							}
-        						}
-        					}
-        					break;
-        				}
-        			}
-        			
-        			break;
-        		}
-        	}
+			model.addAttribute("oblasts", oblasts);
+			Location location = hain2.getLocation();
+			if (location != null) {
+				for (Region o : oblasts) {
+	        		if(o.getName().equals(location.getStateProvince())) {
+	        			model.addAttribute("oblastSelected", o.getId());
+	        			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
+	        			model.addAttribute("districts", districts);
+	        			for(District d : districts) {
+	        				if(d.getName().equals(location.getCountyDistrict())) {
+	        					model.addAttribute("districtSelected", d.getId());
+	        					facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+	        					if(facilities != null ) {
+	        						model.addAttribute("facilities", facilities);
+	        						for(Facility f : facilities) {
+	        							if(f.getName().equals(location.getRegion())) {
+	        								model.addAttribute("facilitySelected", f.getId());
+	        								break;
+	        							}
+	        						}
+	        					}
+	        					break;
+	        				}
+	        			}
+	        			break;
+	        		}
+				}
+			}        	
         }
-        
-       
-        else if(district==null)
-        { 
+        else if(district == null) { 
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
         	districts= Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
         	model.addAttribute("oblastSelected", oblast);

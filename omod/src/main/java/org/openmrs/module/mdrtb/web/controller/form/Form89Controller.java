@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -390,40 +392,28 @@ public class Form89Controller {
 	
 	@ModelAttribute("methods")
 	public Collection<ConceptAnswer> getPossibleMethodsOfDetection() {
-		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
+		
 		ArrayList<ConceptAnswer> stateArray = new ArrayList<ConceptAnswer>();
-		for(int i=0; i< 9; i++) {
-			stateArray.add(null);
-		}
-		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
-		MdrtbService ms = Context.getService(MdrtbService.class);
-		for(ConceptAnswer ca : bases) {
-			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HISTOLOGY).getId().intValue()) {
-				stateArray.set(0, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.GENEXPERT).getId().intValue()) {
-				stateArray.set(1, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY).getId().intValue()) {
-				stateArray.set(2, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CXR_RESULT).getId().intValue()) {
-				stateArray.set(3, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.FLUOROGRAPHY).getId().intValue()) {
-				stateArray.set(4, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.HAIN_TEST).getId().intValue()) {
-				stateArray.set(5, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CULTURE_TEST).getId().intValue()) {
-				stateArray.set(6, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TUBERCULIN_TEST).getId().intValue()) {
-				stateArray.set(7, ca);
-			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
-				stateArray.set(8, ca);
+		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class)
+		        .getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
+		if (bases != null) {
+			MdrtbService ms = Context.getService(MdrtbService.class);
+			Set<Concept> classificationConcepts = new HashSet<Concept>();
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HISTOLOGY));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.GENEXPERT));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CXR_RESULT));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.FLUOROGRAPHY));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HAIN_TEST));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CULTURE_TEST));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TUBERCULIN_TEST));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.OTHER));
+			for (ConceptAnswer pws : bases) {
+				for (Concept classification : classificationConcepts) {
+					if (pws.getAnswerConcept().getId().equals(classification.getId())) {
+						stateArray.add(pws);
+					}
+				}
 			}
 		}
 		return stateArray;

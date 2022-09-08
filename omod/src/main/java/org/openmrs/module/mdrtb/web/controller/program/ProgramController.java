@@ -19,6 +19,7 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.PatientProgram;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
@@ -483,6 +484,7 @@ public class ProgramController {
 		
 		// set the patient
 		program.setPatient(patient);
+		program.setPatientIdentifier(patient.getPatientIdentifier());
 		
 		// perform validation (validation needs to happen after patient is set since patient is used to pull up patient's previous programs)
 		if (program != null) {
@@ -498,8 +500,12 @@ public class ProgramController {
 			return new ModelAndView("/module/mdrtb/program/enrollment", map);
 		}
 		
+		// Set program
+		PatientProgram patientProgram = program.getPatientProgram();
+		patientProgram.setProgram(Context.getService(MdrtbService.class).getTbProgram());
+
 		// save the actual update
-		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+		Context.getProgramWorkflowService().savePatientProgram(patientProgram);
 		Context.getService(MdrtbService.class).addIdentifierToProgram(idId,
 		    program.getPatientProgram().getPatientProgramId());
 		// clears the command object from the session
@@ -813,7 +819,7 @@ public class ProgramController {
 		}
 		
 		PatientIdentifier identifier = new PatientIdentifier(identifierValue, getDotsIdentifier(), program.getLocation());
-		
+		identifier.setPreferred(true);
 		patient.addIdentifier(identifier);
 		
 		Integer idId = null;

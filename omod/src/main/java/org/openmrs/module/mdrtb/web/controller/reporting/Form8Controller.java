@@ -237,7 +237,7 @@ public class Form8Controller {
 		//PULMONARY
 		Concept fibroCavConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FIBROUS_CAVERNOUS);
 		int fibroCavId = fibroCavConcept.getConceptId().intValue();
-		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILIARY);
+		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY);
 		int miliaryId = miliaryConcept.getConceptId().intValue();
 		Concept focalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOCAL);
 		int focalId = focalConcept.getConceptId().intValue();

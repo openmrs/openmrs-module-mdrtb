@@ -167,35 +167,35 @@ public class HAINFormController {
 				}
         	}
         	
-        	Location location  = hain.getLocation();
         	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	model.addAttribute("oblasts", oblasts);
-        	for(Region o : oblasts) {
-        		if(o.getName().equals(location.getStateProvince())) {
-        			model.addAttribute("oblastSelected", o.getId());
-        			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
-        			model.addAttribute("districts", districts);
-        			for(District d : districts) {
-        				if(d.getName().equals(location.getCountyDistrict())) {
-        					model.addAttribute("districtSelected", d.getId());
-        					facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
-        					if(facilities != null ) {
-        						model.addAttribute("facilities", facilities);
-        						for(Facility f : facilities) {
-        							if(f.getName().equals(location.getRegion())) {
-        								System.out.println("setting");
-        								model.addAttribute("facilitySelected", f.getId());
-        								break;
-        							}
-        						}
-        					}
-        					break;
-        				}
-        			}
-        			
-        			break;
-        		}
-        	}
+			model.addAttribute("oblasts", oblasts);
+			Location location = hain.getLocation();
+			if (location != null) {
+				for (Region o : oblasts) {
+					if(o.getName().equals(location.getStateProvince())) {
+	        			model.addAttribute("oblastSelected", o.getId());
+	        			districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
+	        			model.addAttribute("districts", districts);
+	        			for(District d : districts) {
+	        				if(d.getName().equals(location.getCountyDistrict())) {
+	        					model.addAttribute("districtSelected", d.getId());
+	        					facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+	        					if(facilities != null ) {
+	        						model.addAttribute("facilities", facilities);
+	        						for(Facility f : facilities) {
+	        							if(f.getName().equals(location.getRegion())) {
+	        								model.addAttribute("facilitySelected", f.getId());
+	        								break;
+	        							}
+	        						}
+	        					}
+	        					break;
+	        				}
+	        			}
+	        			break;
+	        		}
+				}
+			}
         }
         
        

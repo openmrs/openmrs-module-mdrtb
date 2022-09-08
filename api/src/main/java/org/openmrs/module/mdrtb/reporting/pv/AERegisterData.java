@@ -411,23 +411,4 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		return q;
 	
 	}
-
-	/*public String getGender() {
-		if(patient.getGender().equals("M"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.male");
-		else if (patient.getGender().equals("F"))
-			return Context.getMessageSourceService().getMessage("dotsreports.tb03.gender.female");
-		
-		return "";
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}*/
-	
-		
-	
-	
-	
-
 }

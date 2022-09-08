@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="../mdrtbHeader.jsp"%>
 <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
-<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.min.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/tableExport.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jquery.base64.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jspdf/libs/sprintf.js"></script>
@@ -265,176 +265,155 @@ $(document).ready(function(){
 	</style>
 
 	<table border="1" cellspacing="0">
-	   <tr>
-	     <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.registrationNumber"/></span></div></th>
-	     <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.dateOfRegistration"/></span></div></th>
-	     <th rowspan="4"><spring:message code="mdrtb.tb03.fullName"/></th>
-	     <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.gender"/></span></div></th>
-	     <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.age"/></th>
-	     <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.dateOfBirth"/></th>
-	     <th rowspan="4"><spring:message code="mdrtb.oblast"/></th>
-	     <th rowspan="4"><spring:message code="mdrtb.district"/></th>
-	     <th rowspan="4"><spring:message code="mdrtb.facility"/></th>
-	     <th rowspan="4"><spring:message code="mdrtb.tb03.address"/></th>
-	     <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.mfForIP"/></th>
-	     <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.mfForFP"/></th>
-		 <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentRegimen"/></th>
-		 <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentStartDate"/></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.tbLocalization"/></span></div></th>
-		 <th class="reggroup" colspan="8" ><spring:message code="mdrtb.tb03.registrationGroup"/></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferFrom"/></span></div></th>
-		 <th class="reggroup" colspan="4" ><spring:message code="mdrtb.tb03.tbHivActivities"/></th>
-		 <th class="reggroup" colspan="24" ><spring:message code="mdrtb.tb03.diagnosticTestResults"/></th>
-		 <th class="normal" rowspan="4" rowspan="2"><spring:message code="mdrtb.tb03.dstSampleCollectionDate"/></th>
-		 <th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.dstResultDate"/></th>
-		 <th class="reggroup" colspan="17" rowspan="1"><spring:message code="mdrtb.tb03.dst"/></th>
-		 
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.drugResistance"/></span></div></th>
-		 <th class="reggroup" colspan="12" ><spring:message code="mdrtb.tb03.smearMonitoring"/></th>
-		 <th class="reggroup" colspan="6" ><spring:message code="mdrtb.tb03.treatmentOutcome"/></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.canceled"/></span></div></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedRegimen2"/></span></div></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferOut"/></span></div></th>
-		 <th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.notes"/></span></div></th>
-	  </tr>
-	   <tr>
-	   	 
-	   	  <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.new"/></span></div></th>
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.relapseAfter"/></span></div></th>
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.relapseAfter"/></span></div></th>
-	   	
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.defaultAfter"/></span></div></th>
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.defaultAfter"/> </span></div></th>
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.failureAfter"/></span></div></th>
-	   	 <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.failureAfter"/></span></div></th>
-	   	 <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.other"/></span></div></th>
-	   	 <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.hivTest"/></span></div></th>
-	   	 <th class="subrotate" rowspan="3"><spring:message code="mdrtb.tb03.date"/></th>
-	   	 <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.artTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
-	   	 <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cpTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
-	   	 
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.microscopy"/></th>
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.genexpert"/></th>
-	   	 <th class="normal" colspan="6"><spring:message code="mdrtb.tb03.hain"/></th>
-	   	 <th class="normal" colspan="6"><spring:message code="mdrtb.tb03.hain2"/></th>
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.culture"/></th>
-	   	 <th class="dst" rowspan="3"><div>R</div></th>
-	   	 <th class="dst" rowspan="3"><div>H</div></th>
-	   	 <th class="dst" rowspan="3"><div>E</div></th>
-	   	 <th class="dst" rowspan="3"><div>S</div></th>
-	   	 <th class="dst" rowspan="3"><div>Z</div></th>
-	   	 <th class="dst" rowspan="3"><div>Km</div></th>
-	   	 <th class="dst" rowspan="3"><div>Am</div></th>
-	   	 <th class="dst" rowspan="3"><div>Cm</div></th>
-	   	 <th class="widedst" rowspan="3"><div>Ofx/Lfx</div></th>
-	   	 <th class="dst" rowspan="3"><div>Mfx</div></th>
-	   	 <th class="dst" rowspan="3"><div>Pto</div></th>
-	   	 <th class="dst" rowspan="3"><div>Cs</div></th>
-	   	 <th class="dst" rowspan="3"><div>PAS</div></th>
-	   	 <th class="dst" rowspan="3"><div>Lzd</div></th>
-	   	 <th class="dst" rowspan="3"><div>Cfz</div></th>
-	   	 <th class="dst" rowspan="3"><div>Bdq</div></th>
-	   	 <th class="dst" rowspan="3"><div>Dlm</div></th>
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.m234"/><br style="mso-data-placement:same-cell;" /><spring:message code="mdrtb.tb03.month"/></th>
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.five"/> <spring:message code="mdrtb.tb03.month"/></th>
-	   	 <th class="normal" colspan="4"><spring:message code="mdrtb.tb03.m68"/> <spring:message code="mdrtb.tb03.month"/></th>
-	   	  <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cured"/></span></div></th>
-	   	   <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.txCompleted"/></span></div></th>
-	   	   <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.failure"/></span></div></th>
-	   	 <th class="normal" colspan="2"><spring:message code="mdrtb.tb03.died"/></th>
-	   	  <th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.ltfu"/></span></div></th>
-	   	 
-	   </tr>
-	   <tr>
-	      
-	   	 
-	   	 
-	   	 <!-- <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th>
-	   	 <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th>
-	   	 <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th> -->
-	   	
-	       <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.microscopyResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.xpertResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	    <th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.rResult"/></th>
-	   	    <th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.iResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.fResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
+		<tr>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.registrationNumber"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.dateOfRegistration"/></span></div></th>
+			<th rowspan="4"><spring:message code="mdrtb.tb03.fullName"/></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.gender"/></span></div></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.age"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.dateOfBirth"/></th>
+			<th rowspan="4"><spring:message code="mdrtb.oblast"/></th>
+			<th rowspan="4"><spring:message code="mdrtb.district"/></th>
+			<th rowspan="4"><spring:message code="mdrtb.facility"/></th>
+			<th rowspan="4"><spring:message code="mdrtb.tb03.address"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentSiteCP"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentSiteFP"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentRegimen"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.treatmentStartDate"/></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.tbLocalization"/></span></div></th>
+			<th class="reggroup" colspan="8" ><spring:message code="mdrtb.tb03.registrationGroup"/></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferFrom"/></span></div></th>
+			<th class="reggroup" colspan="4" ><spring:message code="mdrtb.tb03.tbHivActivities"/></th>
+			<th class="reggroup" colspan="24" ><spring:message code="mdrtb.tb03.diagnosticTestResults"/></th>
+			<th class="normal" rowspan="4" rowspan="2"><spring:message code="mdrtb.tb03.dstSampleCollectionDate"/></th>
+			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.dstResultDate"/></th>
+			<th class="reggroup" colspan="17" rowspan="1"><spring:message code="mdrtb.tb03.dst"/></th>
+			
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.drugResistance"/></span></div></th>
+			<th class="reggroup" colspan="12" ><spring:message code="mdrtb.tb03.smearMonitoring"/></th>
+			<th class="reggroup" colspan="6" ><spring:message code="mdrtb.tb03.treatmentOutcome"/></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.cancelled"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedRegimen2"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferOut"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.notes"/></span></div></th>
+		</tr>
+		<tr>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.new"/></span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.relapseAfter"/></span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.relapseAfter"/></span></div></th>
+			
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.defaultAfter"/></span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.defaultAfter"/> </span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.failureAfter"/></span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.failureAfter"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.other"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.hivTest"/></span></div></th>
+			<th class="subrotate" rowspan="3"><spring:message code="mdrtb.date"/></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.artTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cpTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
+			
+			<th class="normal" colspan="4"><spring:message code="mdrtb.microscopy"/></th>
+			<th class="normal" colspan="4"><spring:message code="mdrtb.genexpert"/></th>
+			<th class="normal" colspan="6"><spring:message code="mdrtb.hain1"/></th>
+			<th class="normal" colspan="6"><spring:message code="mdrtb.hain2"/></th>
+			<th class="normal" colspan="4"><spring:message code="mdrtb.culture"/></th>
+			<th class="dst" rowspan="3"><div>R</div></th>
+			<th class="dst" rowspan="3"><div>H</div></th>
+			<th class="dst" rowspan="3"><div>E</div></th>
+			<th class="dst" rowspan="3"><div>S</div></th>
+			<th class="dst" rowspan="3"><div>Z</div></th>
+			<th class="dst" rowspan="3"><div>Km</div></th>
+			<th class="dst" rowspan="3"><div>Am</div></th>
+			<th class="dst" rowspan="3"><div>Cm</div></th>
+			<th class="widedst" rowspan="3"><div>Ofx/Lfx</div></th>
+			<th class="dst" rowspan="3"><div>Mfx</div></th>
+			<th class="dst" rowspan="3"><div>Pto</div></th>
+			<th class="dst" rowspan="3"><div>Cs</div></th>
+			<th class="dst" rowspan="3"><div>PAS</div></th>
+			<th class="dst" rowspan="3"><div>Lzd</div></th>
+			<th class="dst" rowspan="3"><div>Cfz</div></th>
+			<th class="dst" rowspan="3"><div>Bdq</div></th>
+			<th class="dst" rowspan="3"><div>Dlm</div></th>
+			<th class="normal" colspan="4"><spring:message code="mdrtb.tb03.m234"/><br style="mso-data-placement:same-cell;" /><spring:message code="mdrtb.tb03.month"/></th>
+			<th class="normal" colspan="4"><spring:message code="mdrtb.tb03.five"/> <spring:message code="mdrtb.tb03.month"/></th>
+			<th class="normal" colspan="4"><spring:message code="mdrtb.tb03.m68"/> <spring:message code="mdrtb.tb03.month"/></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cured"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.txCompleted"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.failure"/></span></div></th>
+			<th class="normal" colspan="2"><spring:message code="mdrtb.tb03.died"/></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.ltfu"/></span></div></th>
+		</tr>
+		<tr>
+			<!-- <th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th>
+			<th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th>
+			<th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th> -->
+			
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.microscopyResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.xpertResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.rResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.iResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.fResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.lab"/></th>
 	   	    
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.result"/></th>
-	   	    <th rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.result"/></th>
-	   	   <th rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   	   <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.result"/></th>
-	   	  <th rowspan="2"><spring:message code="mdrtb.tb03.date"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
-	   		<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
-	   		
-	   		
-	   	
-	   	   <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofTb"/></span></div></th>
-	   	   <th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofOther"/></span></div></th>
-	   	   
-	   	    
-	   	 
-	   	   
-	   	   
-	   </tr>
-	   <tr>
-	        <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th>
-	   	 <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th>
-	   	 <th class="normal" rowspan="1">I</th>
-	   	 <th class="normal" rowspan="1">II</th>
-	      
-	       
-	       
-	   		
-	   		
-	   		
-	   		
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.result"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.result"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="normal" rowspan="2"><spring:message code="mdrtb.result"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.date"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
+			<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofTb"/></span></div></th>
+			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofOther"/></span></div></th>
+		</tr>
+		<tr>
+			<th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th>
+			<th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th>
+			<th class="normal" rowspan="1">I</th>
+			<th class="normal" rowspan="1">II</th>
 	   		   
-	   	  <!--  <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	   <th class="normal">Date</th>
-	   	    -->
-	   		
+			<!--  <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			 <th class="normal">Date</th>
+			  -->
 	   </tr>
 	
 	
@@ -448,7 +427,7 @@ $(document).ready(function(){
 	 <td>${row.dateOfBirth}</td>
 	 <td>${row.patient.personAddress.stateProvince}</td>
 	 <td>${row.patient.personAddress.countyDistrict}</td>
-	  <td>${row.patient.personAddress.region}</td>
+	 <td>${row.patient.personAddress.region}</td>
 	 <td>${row.patient.personAddress.address1}</td> 
 	 <td>${row.intensivePhaseFacility }</td>
 	 <td>${row.continuationPhaseFacility }</td>
@@ -488,25 +467,25 @@ $(document).ready(function(){
 	 <td>${row.cultureTestDate }</td>
 	 <td>${row.cultureTestNumber }</td>
 	 <td>${row.cultureLab }</td>
-	  <td>${ row.dstCollectionDate}</td>
-	  <td>${ row.dstResultDate}</td>
-	  <td  align="center">${ row.dstR}</td>
-	  <td  align="center">${ row.dstH }</td>
-	 <td  align="center">${ row.dstE }</td>
-	  <td  align="center">${ row.dstS }</td>
-	  <td  align="center">${ row.dstZ }</td>
-	  <td  align="center">${ row.dstKm }</td>
-	 <td  align="center">${ row.dstAm }</td>
-	 <td  align="center">${ row.dstCm }</td>
-	  <td  align="center">${ row.dstOfx }</td>
-	  <td  align="center">${ row.dstMfx }</td>
-	 <td  align="center">${ row.dstPto }</td>
-	 <td  align="center">${ row.dstCs }</td>
-	  <td  align="center">${ row.dstPAS }</td>
-	  <td  align="center">${ row.dstLzd }</td>
-	 <td  align="center">${ row.dstCfz }</td>
-	 <td  align="center">${ row.dstBdq}</td>
-	 <td  align="center">${ row.dstDlm }</td>
+	 <td>${ row.dstCollectionDate}</td>
+	 <td>${ row.dstResultDate}</td>
+	 <td align="center">${ row.dstR}</td>
+	 <td align="center">${ row.dstH }</td>
+	 <td align="center">${ row.dstE }</td>
+	 <td align="center">${ row.dstS }</td>
+	 <td align="center">${ row.dstZ }</td>
+	 <td align="center">${ row.dstKm }</td>
+	 <td align="center">${ row.dstAm }</td>
+	 <td align="center">${ row.dstCm }</td>
+	 <td align="center">${ row.dstOfx }</td>
+	 <td align="center">${ row.dstMfx }</td>
+	 <td align="center">${ row.dstPto }</td>
+	 <td align="center">${ row.dstCs }</td>
+	 <td align="center">${ row.dstPAS }</td>
+	 <td align="center">${ row.dstLzd }</td>
+	 <td align="center">${ row.dstCfz }</td>
+	 <td align="center">${ row.dstBdq}</td>
+	 <td align="center">${ row.dstDlm }</td>
 	  
 	  <td>${row.drugResistance }</td>
 	  <c:choose>

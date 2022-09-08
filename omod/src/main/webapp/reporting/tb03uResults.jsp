@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="../mdrtbHeader.jsp"%>
 <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
-<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/jquery.min.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/tableExport.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jquery.base64.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/moduleResources/mdrtb/tableExport/js/jspdf/libs/sprintf.js"></script>
@@ -283,10 +283,10 @@ $(document).ready(function(){
 		 <th class="rotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.ambulatoryHosp"/></span></div></th>
 		 <th class="normal" rowspan="1" rowspan="2"><spring:message code="mdrtb.tb03.dstSampleCollectionDate"/></th>
 		 <th class="reggroup" colspan="17" rowspan="2"><spring:message code="mdrtb.tb03.dst"/></th>
-		 <th class="normal" colspan="3"><spring:message code="mdrtb.tb03.genexpert"/></th>
-	   	 <th class="normal" colspan="4" ><spring:message code="mdrtb.tb03.hain"/></th>
-	   	 <th class="normal" colspan="4" ><spring:message code="mdrtb.tb03.hain2"/></th>
-		 <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.drugResistance"/></th>
+		 <th class="normal" colspan="3"><spring:message code="mdrtb.xpert"/></th>
+	   	 <th class="normal" colspan="4" ><spring:message code="mdrtb.hain1"/></th>
+	   	 <th class="normal" colspan="4" ><spring:message code="mdrtb.hain2"/></th>
+		 <th class="normal" rowspan="1"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
 	    
 		 <th class="reggroup" rowspan="1" colspan="4"><spring:message code="mdrtb.tb03.tbHivActivities"/></th>
 		 <th class="normal" colspan="42"><spring:message code="mdrtb.tb03.bacCultureResults"/></th>
@@ -310,9 +310,9 @@ $(document).ready(function(){
 	   	 <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.treatmentStartDate"/></th>
 	   	 <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.dstResultDate"/></th>
 	   	 <th class="normal" colspan="3"><spring:message code="mdrtb.tb03.xpertResult"/></th>
-	   	   <th class="normal"><spring:message code="mdrtb.tb03.date"/></th>
+	   	   <th class="normal"><spring:message code="mdrtb.date"/></th>
 	   	   <th class="normal" colspan="3"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
-	   	   <th class="normal"><spring:message code="mdrtb.tb03.date"/></th>
+	   	   <th class="normal"><spring:message code="mdrtb.date"/></th>
 	   	   <th class="normal" colspan="3"><spring:message code="mdrtb.tb03.hainCultureResult"/></th>
 	   	  
 	   	 <th class="normal" rowspan="2"><spring:message code="mdrtb.tb03.diagnosticMethod"/></th>
@@ -357,10 +357,6 @@ $(document).ready(function(){
 	   	 <th class="normal" rowspan="1">II</th>
 	   	 <th class="normal" rowspan="1">I</th>
 	   	 <th class="normal" rowspan="1">II</th>
-	   	
-	   	 
-	   
-	   	 
 	   	 <th class="dst" rowspan="1"><div>R</div></th>
 	   	 <th class="dst" rowspan="1"><div>H</div></th>
 	   	 <th class="dst" rowspan="1"><div>E</div></th>
@@ -378,7 +374,7 @@ $(document).ready(function(){
 	   	 <th class="dst" rowspan="1"><div>Cfz</div></th>
 	   	 <th class="dst" rowspan="1"><div>Bdq</div></th>
 	   	 <th class="dst" rowspan="1"><div>Dlm</div></th>
-	   	 <th><spring:message code="mdrtb.tb03.date"/></th>
+	   	 <th><spring:message code="mdrtb.date"/></th>
 	   		<th><spring:message code="mdrtb.tb03.testNumber"/></th>
 	   		<th><spring:message code="mdrtb.lab"/></th>
 	   		]

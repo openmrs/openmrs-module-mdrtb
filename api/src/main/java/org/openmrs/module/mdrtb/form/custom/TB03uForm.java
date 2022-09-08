@@ -197,6 +197,9 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getRegistrationGroup() {
 		if (getPatProgId() != null) {
 			MdrtbPatientProgram tp = Context.getService(MdrtbService.class).getMdrtbPatientProgram(getPatProgId());
+			if (tp == null) {
+				return null;
+			}
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousTreatment();
 			if (pws != null)
 				return pws.getConcept();

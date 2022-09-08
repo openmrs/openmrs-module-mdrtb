@@ -359,16 +359,18 @@ public class ReportUtil {
 		CohortDefinition afterDefaultII = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2), startDate, endDate);
 
+		// Modified for Tajikistan, original concepts was "TREATMENT AFTER FAILURE OF RE-TREATMENT MDR-TB PATIENT"
 		CohortDefinition failureCatI = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, Context
-				.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT),
+				.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1),
 				startDate, endDate);
 
+		// Modified for Tajikistan, original concepts was "TREATMENT AFTER FAILURE OF FIRST TREATMENT MDR-TB PATIENT"
 		CohortDefinition failureCatII = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept, Context
-				.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT),
+				.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2),
 				startDate, endDate);
 
 		CohortDefinition transferred = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
-				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER), startDate, endDate);
+				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN), startDate, endDate);
 
 		CohortDefinition other = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER), startDate, endDate);

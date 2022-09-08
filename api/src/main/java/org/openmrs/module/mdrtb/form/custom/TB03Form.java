@@ -352,21 +352,19 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	}
 	
 	public Concept getRegistrationGroup() {
-		if (getPatProgId() != null) {
-			Integer programId = getPatProgId();
-			TbPatientProgram tp = Context.getService(MdrtbService.class).getTbPatientProgram(programId);
-			if (tp == null) {
-				return null;
-			}
-			ProgramWorkflowState pws = tp.getClassificationAccordingToPatientGroups();
-			if (pws != null)
-				return pws.getConcept();
-			else
-				return null;
-		}
-		else {
+		if (getPatProgId() == null) {
 			return null;
 		}
+		Integer programId = getPatProgId();
+		ProgramWorkflowState pws = null;
+		try {
+			pws = Context.getService(MdrtbService.class).getTbPatientProgram(programId)
+			        .getClassificationAccordingToPatientGroups();
+		}
+		catch (Exception e) {}
+		if (pws == null)
+			return null;
+		return pws.getConcept();
 	}
 	
 	public void setRegistrationGroup(Concept group) {
@@ -400,14 +398,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	}
 	
 	public Concept getRegistrationGroupByDrug() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueCoded();
-		}*/
 		if (getPatProgId() != null) {
 			TbPatientProgram tp = Context.getService(MdrtbService.class).getTbPatientProgram(getPatProgId());
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousDrugUse();
