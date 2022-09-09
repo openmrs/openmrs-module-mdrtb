@@ -31,6 +31,10 @@
 		<point>org.openmrs.gutter.tools</point>
 		<class>org.openmrs.module.mdrtb.extension.html.MdrtbGutterItem</class>
 	</extension>
+	<extension>
+		<point>org.openmrs.gutter.tools</point>
+		<class>org.openmrs.module.mdrtb.extension.html.LabGutterItem</class>
+	</extension>
 
 	<!--  AOP advice points -->
 	<advice>
@@ -74,6 +78,11 @@
 		<defaultValue>1.0.0</defaultValue>
 		<description>The version trigger for the contents of sqldiff.xml
 		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.test_result_encounter_type</property>
+		<defaultValue>Lab Result</defaultValue>
+		<description>Name of the lab result encounter type.</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
@@ -186,6 +195,35 @@
 				<include method="findPeople"/>
 				<include method="findAllPeople"/>
 			</create>		
+		</allow>
+		<allow>
+			<create creator="new" javascript="LabFindPatient">
+				<param name="class" value="org.openmrs.module.labmodule.web.dwr.LabFindPatient"/>
+				<include method="findPatients"/>
+				<include method="findPeople"/>
+				<include method="findAllPeople"/>
+				<include method="findTestsThroughSuspect"/>
+				<include method="findTestsThroughId"/>
+				<include method="findTestThroughDates"/>
+				<include method="findLatestEncounterByUserId"/>
+			</create>						
+			<convert converter="bean" match="org.openmrs.module.labmodule.web.dwr.LabPersonListItem"/>
+			<convert converter="bean" match="org.openmrs.PersonAddress"/>
+			<convert converter="bean" match="org.openmrs.Person"/>
+		</allow>
+		<allow>
+			<create creator="new" javascript="LabFindlocation">
+				<param name="class" value="org.openmrs.module.labmodule.web.dwr.LabFindlocation"/>
+				<include method="getDistricts"/>
+				<include method="getfacilities"/>
+				<include method="getAllOblasts"/>
+				<include method="getAllFacilities"/>
+				<include method="getAllDistricts"/>
+				<include method="getlocation"/>
+				
+			</create>							
+			<convert converter="bean" match="org.openmrs.module.labmodule.specimen.reporting.District"/>
+			<convert converter="bean" match="org.openmrs.module.labmodule.specimen.reporting.Facility"/>
 		</allow>
 		
 		<signatures>

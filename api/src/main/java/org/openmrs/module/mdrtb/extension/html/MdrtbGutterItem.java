@@ -32,5 +32,4 @@ public class MdrtbGutterItem extends LinkExt {
     public String getRequiredPrivilege() {
         return "";
     }
-
 }
