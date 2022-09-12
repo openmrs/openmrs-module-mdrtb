@@ -13,15 +13,56 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-	<!-- Enable annotation-driven Spring MVC -->
-	<context:component-scan base-package="org.openmrs.module.mdrtb" />
-	<context:component-scan base-package="org.openmrs.module.mdrtb" />
-	
   	<!-- Annotation based controllers -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 	<context:component-scan base-package="org.openmrs.module.mdrtb.web.controller" />
 	
-	<!-- Service -->
+	<bean id="MdrtbMappings"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order">
+			<value>10</value>
+		</property>
+		<property name="mappings">
+			<props>
+				<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
+				<prop key="**/patientChart.portlet">patientChartPortletController</prop>
+				<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
+				<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
+				<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
+				<prop key="**/mdrtbShortSummary.portlet">shortSummaryPortletController</prop>
+				<prop key="**/mdrtbCustomList.portlet">customSummaryPortletController</prop>
+				<prop key="**/specimenReport.portlet">specimenReportPortletController</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Controllers -->
+	<bean id="mdrtbCohortBuilderController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
+		<property name="formView">
+			<value>/module/@MODULE_ID@/reporting/cohortBuilder</value>
+		</property>
+		<property name="successView">
+			<value>cohortBuilder.list</value>
+		</property>
+	</bean>
+	
+	<!-- Portlet controllers -->
+	<bean id="patientChartPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController" />
+	<bean id="mdrtbPatientHeaderPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbPatientHeaderPortletController" />
+	<bean id="mdrtbSubheaderPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbSubheaderPortletController" />
+	<bean id="patientSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.PatientSummaryPortletController" />
+	<bean id="shortSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.ShortSummaryPortletController" />
+	<bean id="customSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.CustomSummaryPortletController" />
+	<bean id="specimenReportPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.SpecimenReportPortletController" />
+
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
@@ -55,56 +96,7 @@
 			</list>
 		</property>
 	</bean>
-	
-	<!-- Service beans -->
-<!-- 	<bean id="mdrtbService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"> -->
-<!--         <property name="transactionManager" ref="transactionManager"/> -->
-<!--         <property name="target" ref="mdrtbServiceImpl"/> -->
-<!--         <property name="preInterceptors" ref="serviceInterceptors"/> -->
-<!--         <property name="transactionAttributeSource"> -->
-<!--             <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/> -->
-<!--         </property> -->
-<!--     </bean> -->
-<!--     <bean id="mdrtbServiceImpl" class="org.openmrs.module.mdrtb.service.MdrtbServiceImpl"> -->
-<!--         <property name="dao"> -->
-<!--             <bean class="org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO"> -->
-<!--                 <property name="sessionFactory" ref="sessionFactory"/> -->
-<!--             </bean> -->
-<!--         </property> -->
-<!--     </bean> -->
-<!--     <bean parent="serviceContext"> -->
-<!-- 		<property name="moduleService"> -->
-<!-- 			<list> -->
-<!-- 				<value>org.openmrs.module.mdrtb.service.MdrtbServiceImpl</value> -->
-<!-- 				<ref bean="mdrtbServiceImpl"/> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
-<!-- 	<bean parent="serviceContext"> -->
-<!-- 		<property name="moduleService"> -->
-<!-- 			<list> -->
-<!-- 				<value>org.openmrs.module.mdrtb.service.MdrtbService</value> service interface name -->
-<!-- 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"> -->
-<!-- 					<property name="transactionManager"><ref bean="transactionManager" /></property> -->
-<!-- 					<property name="target"> -->
-<!-- 						<bean class="org.openmrs.module.mdrtb.service.MdrtbServiceImpl"> -->
-<!-- 							<property name="dao"> -->
-<!-- 								<bean class="org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO"> -->
-<!-- 									<property name="sessionFactory"><ref bean="sessionFactory" /></property> -->
-<!-- 								</bean> -->
-<!-- 							</property> -->
-<!-- 						</bean> -->
-<!-- 					</property> -->
-<!-- 					<property name="preInterceptors"> -->
-<!-- 						<ref bean="serviceInterceptors" /> -->
-<!-- 					</property> -->
-<!-- 					<property name="transactionAttributeSource"> -->
-<!-- 						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" /> -->
-<!-- 					</property> -->
-<!-- 				</bean> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<!-- /Controllers -->
 	
 	<!-- Add an event listener -->
 	<bean id="mdrtbEventListeners" parent="openmrsEventListeners">
@@ -115,71 +107,10 @@
 			</list>
 		</property>
 	</bean>
-	
-	<!-- Mappings -->
-	<bean id="MdrtbMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="order"><value>10</value></property>
-		<property name="mappings">
-			<props>
-				<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
-				<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
-				<prop key="**/mdrtbShortSummary.portlet">shortSummaryPortletController</prop>
-				<prop key="**/mdrtbCustomList.portlet">customSummaryPortletController</prop>
-				<prop key="**/specimenReport.portlet">specimenReportPortletController</prop>
-				<prop key="**/patientChart.portlet">patientChartPortletController</prop>
-				<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
-				<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
-			</props>
-		</property>
-	</bean>
-	<bean id="LabModuleMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    	<property name="order"><value>10</value></property>
-    	<property name="mappings">
-            <props>
-            	<prop key="**/nameLayout.portlet">nameLayoutPortletController</prop>
-            	<prop key="module/labmodule/lab/newPatient.form">newPatient</prop>
-	    	</props>
-		</property>
-    </bean>
 
-	<!-- Controllers -->
-	<bean id="mdrtbCohortBuilderController" class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
-		<property name="formView"><value>/module/@MODULE_ID@/reporting/cohortBuilder</value></property>
-		<property name="successView"><value>cohortBuilder.list</value></property>
-	</bean>
-	
-	<bean id="newPatient" class="org.openmrs.module.labmodule.web.controller.suspect.NewPatientFormController">
-		<property name="commandName"><value>patient</value></property>
-		<property name="commandClass"><value>org.openmrs.web.controller.patient.ShortPatientModel</value></property>
-		<property name="formView"><value>/module/labmodule/lab/newPatient</value></property>
-		<property name="successView"><value>../../labmodule/lab/labEntry.form</value></property>
-	</bean>
-	
-	<!-- Portlet controllers -->
-	
-	<bean id="patientSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.PatientSummaryPortletController" />
-	<bean id="shortSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.ShortSummaryPortletController" />
-	<bean id="customSummaryPortletController" class="org.openmrs.module.mdrtb.web.controller.reporting.CustomSummaryPortletController" />
-	<bean id="specimenReportPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.SpecimenReportPortletController" />
-	<bean id="nameLayoutPortletController" class="org.openmrs.module.labmodule.web.controller.portlet.NameLayoutPortletController" />
-	<bean id="patientChartPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController" />
-	<bean id="mdrtbPatientHeaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbPatientHeaderPortletController" />
-	<bean id="mdrtbSubheaderPortletController" class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbSubheaderPortletController" />
-
-	<!-- /Controllers -->
-	
-    <!-- Define the Complex Obs Handler -->
-   	<!--  TO DO: remove this once it gets added to core -->
-    <bean parent="obsServiceTarget">
-        <property name="handlers">
-            <map>
-                <entry>
-                    <key><value>BinaryDataHandler</value></key>
-                    <bean class="org.openmrs.module.labmodule.obs.handler.BinaryDataHandler"/>
-                </entry>
-            </map>
-        </property>
-	</bean>
+	<!-- Enable annotation-driven Spring MVC -->
+	<context:component-scan
+		base-package="org.openmrs.module.mdrtb" />
 
 </beans>
 

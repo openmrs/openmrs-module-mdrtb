@@ -14,12 +14,10 @@
 package org.openmrs.module.mdrtb.extension.html;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openmrs.module.Extension;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
-import org.openmrs.util.OpenmrsClassLoader;
 
 /**
  * This class defines the links that will appear on the administration page
@@ -50,9 +48,11 @@ public class AdminList extends AdministrationSectionExt {
 	public Map<String, String> getLinks() {
 		
 		Map<String, String> map = new HashMap<String, String>();
+		
 		map.put("module/mdrtb/mdrtbIndex.form", "mdrtb.title.homepage");
-		map.put("module/labmodule/labIndex.form", "labmodule.title.homepage");
 		//map.put("module/mdrtb/migration/migration.form", "mdrtb.migration");
+		
 		return map;
 	}
+	
 }
