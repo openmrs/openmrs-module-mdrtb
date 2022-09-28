@@ -32,7 +32,6 @@ import org.openmrs.layout.web.address.AddressSupport;
 import org.openmrs.layout.web.address.AddressTemplate;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleActivator;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown

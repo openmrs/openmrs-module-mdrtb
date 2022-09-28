@@ -195,10 +195,10 @@ response.setDateHeader ("Expires", -1);
 <table width="100%" border="1">
 <tr>
 <td>
-<spring:message code="mdrtb.tb07.nameOfFacility"/>: <u>${fName}</u><br/>
-<spring:message code="mdrtb.tb07.regionCityDistrict"/>: <u> ${oName}/${dName} </u><br/>
-<spring:message code="mdrtb.tb07.tbCoordinatorName"/>: ___________________ </br>
-<spring:message code="mdrtb.tb07.signature"/>: _________________
+<spring:message code="mdrtb.tb07u.nameOfFacility"/>: <u>${fName}</u><br/>
+<spring:message code="mdrtb.tb07u.regionCityDistrict"/>: <u> ${oName}/${dName} </u><br/>
+<spring:message code="mdrtb.tb07u.tbCoordinatorName"/>: ___________________ </br>
+<spring:message code="mdrtb.tb07u.signature"/>: _________________
 </td>
 
 <td>

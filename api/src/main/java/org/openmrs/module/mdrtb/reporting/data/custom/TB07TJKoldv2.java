@@ -50,7 +50,7 @@ public class TB07TJKoldv2 implements ReportSpecification {
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return Context.getMessageSourceService().getMessage("mdrtb.tb07.title");
+		return Context.getMessageSourceService().getMessage("mdrtb.tb07u.title");
 	}
 	
 	/**
