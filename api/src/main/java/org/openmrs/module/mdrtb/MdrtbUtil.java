@@ -31,6 +31,7 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonAddress;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.api.APIException;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.PatientIdentifierException;
 import org.openmrs.api.PatientService;
@@ -1047,30 +1048,28 @@ public class MdrtbUtil {
 	 *      org.springframework.validation.Errors)
 	 */
 	public static void validateIdentifier(PatientIdentifier pi, Errors errors) throws PatientIdentifierException {
-
 		// Validate that the identifier is non-null
 		if (pi == null) {
 			errors.reject(Context.getMessageSourceService().getMessage("mdrtb.emptyId"));
-			// BlankIdentifierException("Patient Identifier cannot be null.");
 		}
-
 		// Only validate if the PatientIdentifier is not voided
 		if (!pi.isVoided()) {
-
 			// Check is already in use by another patient
-			String id = pi.getIdentifier();
-			System.out.println("VAL_ID:" + id);
-			GregorianCalendar now = new GregorianCalendar();
-			int year = now.get(GregorianCalendar.YEAR);
-			String yearString = "" + year;
-			String firstTwoDigits = yearString.substring(0, 2);
-			System.out.println("FTD:" + firstTwoDigits);
-			int centuryYear = Integer.parseInt(firstTwoDigits) * 100;
-			System.out.println("CY:" + centuryYear);
-			int yearFromId = Integer.parseInt(id.substring(2, 4)) + centuryYear;
-			System.out.println("YFI:" + yearFromId);
-
-			if (yearFromId > year) {
+			try {
+				String id = pi.getIdentifier();
+				log.debug("Validating Identifier:" + id);
+				GregorianCalendar now = new GregorianCalendar();
+				int year = now.get(GregorianCalendar.YEAR);
+				String yearString = "" + year;
+				String firstTwoDigits = yearString.substring(0, 2);
+				int centuryYear = Integer.parseInt(firstTwoDigits) * 100;
+				int yearFromId = Integer.parseInt(id.substring(2, 4)) + centuryYear;
+				if (yearFromId > year) {
+					throw new APIException("Invalid identifier!");
+				}
+			}
+			catch (Exception e) {
+				log.error(e.getMessage());
 				errors.reject(Context.getMessageSourceService().getMessage("mdrtb.yearInIdInFuture"));
 			}
 		}

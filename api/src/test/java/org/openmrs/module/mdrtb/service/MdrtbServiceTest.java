@@ -719,7 +719,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#PDFRows(java.lang.String)}.
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPDFRows(java.lang.String)}.
 	 */
 	@Test
 	@Ignore
@@ -729,7 +729,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#PDFColumns()}.
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPDFColumns()}.
 	 */
 	@Test
 	@Ignore

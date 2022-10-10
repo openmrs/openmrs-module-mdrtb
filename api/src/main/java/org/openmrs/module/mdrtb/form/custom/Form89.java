@@ -1293,7 +1293,7 @@ public class Form89 extends AbstractSimpleForm  implements Comparable<Form89> {
 	////////////////
 	
 	public Concept getPrescribedTreatment() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GPT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENERAL_PRESCRIBED_TREATMENT), encounter);
 		
 		if (obs == null) {
 			return null;
@@ -1304,7 +1304,7 @@ public class Form89 extends AbstractSimpleForm  implements Comparable<Form89> {
 	}
 	
 	public void setPrescribedTreatment(Concept type) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GPT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENERAL_PRESCRIBED_TREATMENT), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && type == null) {
@@ -1323,7 +1323,7 @@ public class Form89 extends AbstractSimpleForm  implements Comparable<Form89> {
 				
 			// now create the new Obs and add it to the encounter	
 			if(type != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GPT), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENERAL_PRESCRIBED_TREATMENT), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(type);
 				encounter.addObs(obs);
 			}

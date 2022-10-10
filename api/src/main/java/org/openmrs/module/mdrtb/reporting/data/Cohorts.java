@@ -148,7 +148,7 @@ public class Cohorts {
 	}
 	
 	public static CohortDefinition getTreatmentCompletedDuringFilter(Date startDate, Date endDate) {
-		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE)), startDate, endDate);
+		return getEnteredStateDuringFilter(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED)), startDate, endDate);
 	}
 	
 	public static CohortDefinition getFailedDuringFilter(Date startDate, Date endDate) {

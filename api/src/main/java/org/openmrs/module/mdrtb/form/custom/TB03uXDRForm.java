@@ -455,7 +455,7 @@ public class TB03uXDRForm extends AbstractSimpleForm {
 	}
 	
 	public Date getConfirmationDate() {
-		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE) , encounter);
+		/*Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_MDR_CONFIRMATION) , encounter);
 		
 		if (obs == null) {
 			return null;
@@ -471,7 +471,7 @@ public class TB03uXDRForm extends AbstractSimpleForm {
 	}
 	
 	public void setConfirmationDate(Date date) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_MDR_CONFIRMATION), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && date == null) {
@@ -490,7 +490,7 @@ public class TB03uXDRForm extends AbstractSimpleForm {
 				
 			// now create the new Obs and add it to the encounter	
 			if(date != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDTRB_CONFIRMATION_DATE), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_MDR_CONFIRMATION), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueDatetime(date);
 				encounter.addObs(obs);
 			}

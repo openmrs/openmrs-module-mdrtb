@@ -165,7 +165,7 @@ public class MdrtbConcepts {
     public final static String DEFAULTED = "DEFAULTED";
     public final static String DIED = "DIED";
     public final static String TREATMENT_FAILED = "TREATMENT FAILED";
-    public final static String TREATMENT_COMPLETE = "TREATMENT COMPLETE";
+    public final static String TREATMENT_COMPLETED = "TREATMENT COMPLETED";
     public final static String PATIENT_TRANSFERRED_OUT = "PATIENT TRANSFERRED OUT";
     public final static String STILL_ON_TREATMENT = "STILL ON TREATMENT";
 
@@ -234,8 +234,8 @@ public class MdrtbConcepts {
     public final static String REGIMEN_2_INDIVIDUALIZED = "REGIMEN 2 INDIVIDUALIZED";
     
     public final static String MDR_STATUS = "MDR-TB STATUS";
-    public final static String DATE_OF_MDR_CONFIRMATION = "DATE OF MDR CONFIRMATION";
     public final static String TREATMENT_LOCATION = "TREATMENT LOCATION";
+    public final static String DATE_OF_MDR_CONFIRMATION = "DATE OF MDR CONFIRMATION";
     
     public final static String RELAPSED = "RELAPSED";
     public final static String RELAPSE_MONTH = "RELAPSE MONTH";
@@ -244,7 +244,6 @@ public class MdrtbConcepts {
     
     public final static String PATIENT_PROGRAM_ID = "PATIENT PROGRAM ID";
     
-    public final static String MDTRB_CONFIRMATION_DATE = "DATE OF MDR CONFIRMATION";
     
     public final static String MDR_TB_PROGRAM = "MDR-TB PROGRAM";
     
@@ -478,7 +477,7 @@ public class MdrtbConcepts {
  	public final static String CENTRAL_COMMISSION_DATE = "DATE OF TB DIAGNOSIS IN CENTRAL COMMISSION";
  	public final static String CENTRAL_COMMISSION_NUMBER = "CMAC NUMBER";
  	public final static String PLACE_OF_CENTRAL_COMMISSION = "CMAC PLACE";
- 	public final static String GPT = "GPT";
+ 	public final static String GENERAL_PRESCRIBED_TREATMENT = "GENERAL PRESCRIBED TREATMENT";
  	public final static String FORM89_DATE = "FORM89 DATE";
  	public final static String AGE_AT_FORM89_REGISTRATION = "FORM89 AGE";
  	

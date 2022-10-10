@@ -27,12 +27,15 @@ import org.openmrs.Program;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.BaseContextSensitiveTest;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author owais.hussain@esquaredsystems.com
  */
-public class MdrtbBase extends BaseModuleContextSensitiveTest {
+public class MdrtbBase extends BaseModuleWebContextSensitiveTest {
 	
 	protected static final String[] DATASETS = { "MdrtbTestService-initialData.xml", "concept.xml", "concept_answer.xml",
 	        "concept_class.xml", "concept_datatype.xml", "concept_description.xml", "concept_map_type.xml",
@@ -78,6 +81,7 @@ public class MdrtbBase extends BaseModuleContextSensitiveTest {
 	
 	protected Encounter harrySpecimenEncounter;
 
+	@Autowired
 	protected HibernateMdrtbDAO dao;
 	
 	/**

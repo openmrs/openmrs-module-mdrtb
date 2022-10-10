@@ -276,7 +276,7 @@ public class ReportUtil {
 				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED), startDate, endDate);
 
 		CohortDefinition complete = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,
-				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE), startDate,
+				Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED), startDate,
 				endDate);
 
 		CohortDefinition failed = Cohorts.getMdrtbPatientProgramStateFilter(workflowConcept,

@@ -24,6 +24,7 @@
 		<openmrs.reporting.version>0.7.0</openmrs.reporting.version>
 		<openmrs.addresshierarchy-api.version>2.11.0-1.0.0</openmrs.addresshierarchy-api.version>
 		<openmrs.logic.version>0.5</openmrs.logic.version>
+		<openmrs.wsrest.version>2.1</openmrs.wsrest.version>
 		<javax.servlet.version>2.5</javax.servlet.version>
 		<jodatime.version>2.10.14</jodatime.version>
 		<xmlworker.version>5.5.4</xmlworker.version>
@@ -131,6 +132,18 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>reporting</artifactId>
             <version>${openmrs.reporting.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>webservices.rest-omod-common</artifactId>
+            <version>${openmrs.wsrest.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>webservices.rest-omod</artifactId>
+            <version>${openmrs.wsrest.version}</version>
             <scope>provided</scope>
         </dependency>
 <!-- 		<dependency> -->
