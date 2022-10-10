@@ -1,15 +1,15 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
-
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --%>
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
 <openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
 
-<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
-<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" />
 
@@ -26,30 +26,34 @@ td {padding-left: 4px; padding-right: 4px; padding-top: 2px; padding-bottom: 2px
 <!-- CUSTOM JQUERY  -->
 <script>
 
-$j(document).ready(function(){
-	
-	$('#oblast').val(${oblastSelected});
-	$('#district').val(${districtSelected});
-	$('#facility').val(${facilitySelected});
-	<c:if test="${! empty dateEnrolled}">
-		$('#dateEnrolled').val("" + ${dateEnrolled});
+$j(document).ready(function() {
+	$('dateEnrolled').attr('autocomplete', 'off');
+	document.getElementById('oblast').value = ${oblastSelected};
+	<c:if test="${! empty districtSelected}">
+		document.getElementById('district').value = ${districtSelected};
 	</c:if>
-	$('#classificationAccordingToPatientGroups').val(${patientGroup});
-	$('#classificationAccordingToPreviousDrugUse').val(${previousDrugUse});
-	
+	<c:if test="${! empty facilitySelected}">
+		document.getElementById('facility').value = ${facilitySelected};
+	</c:if>
+	<c:if test="${! empty dateEnrolled}">
+		document.getElementById('dateEnrolled').value = "" + ${dateEnrolled};
+	</c:if>
+	<c:if test="${! empty patientGroup}" >
+		$('#classificationAccordingToPatientGroups').val(${patientGroup});
+	</c:if>
+	<c:if test="${! empty previousDrugUse}" >
+		$('#classificationAccordingToPreviousDrugUse').val(${previousDrugUse});
+	</c:if>	
 });
 
 
-function addId(ppid)
-{
+function addId(ppid) {
 	var e = document.getElementById("id_" + ppid);
 	var idToAdd = e.options[e.selectedIndex].value;
-	
 	window.location.replace("${pageContext.request.contextPath}/module/mdrtb/program/addId.form?ppid="+ppid+"&idToAdd="+idToAdd)
 }
 
-function fillDistricts()
-{
+function fun1() {
 	var e = document.getElementById("oblast");
 	var val = e.options[e.selectedIndex].value;
 	var dt = "\"" + document.getElementById("dateEnrolled").value + "\"";
@@ -71,8 +75,7 @@ function fillDistricts()
 	</c:if>
 }
 
-function fillFacilities()
-{
+function fun2() {
 	var e = document.getElementById("oblast");
 	var val1 = e.options[e.selectedIndex].value;
 	var e = document.getElementById("district");
@@ -96,10 +99,6 @@ function fillFacilities()
 	</c:if>
 }
 
-</script>
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 </script>
 
 <br/><br/>
@@ -242,7 +241,7 @@ function fillFacilities()
 <table>
 <tr id="oblastDiv">
 		<td align="right"><spring:message code="mdrtb.oblast" /></td>
-		<td><select name="oblast" id="oblast" onchange="fillDistricts()">
+		<td><select name="oblast" id="oblast" onchange="fun1()">
 				<option value=""></option>
 				<c:forEach var="o" items="${oblasts}" varStatus="loop">
 					<option value="${o.id}" <c:if test="${loop.index == 0 && fn:length(oblasts) == 1 }"> selected</c:if>>${o.name}</option>
@@ -252,7 +251,7 @@ function fillFacilities()
 
 	<tr id="districtDiv">
 		<td align="right"><spring:message code="mdrtb.district" /></td>
-		<td><select name="district" id="district" onchange="fillFacilities()">
+		<td><select name="district" id="district" onchange="fun2()">
 				<option value=""></option>
 				<c:forEach var="dist" items="${districts}" varStatus="loop">
 					<option value="${dist.id}" <c:if test="${loop.index == 0 && fn:length(districts) == 1 }"> selected</c:if>>${dist.name}</option>

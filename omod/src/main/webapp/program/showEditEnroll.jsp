@@ -52,7 +52,7 @@
 
 
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/></td>
 <td><openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/></td>
 </td></tr>
 
@@ -63,7 +63,7 @@
 
 
 <tr><td colspan="2">
-<spring:message code="mdrtb.patientGroup" text="Registration Group"/>:<br/>
+<spring:message code="mdrtb.tb03.registrationGroup" text="Registration Group"/>:<br/>
 <select name="classificationAccordingToPatientGroups" id="classificationAccordingToPatientGroups">
 <option value=""/>
 <c:forEach var="classificationAccordingToPatientGroups" items="${classificationsAccordingToPatientGroups}">
@@ -93,7 +93,7 @@
 <table cellspacing="2" cellpadding="2">
 
 <tr><td>
-<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/>:</td>
+<spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/></td>
 <td><openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/></td>
 </tr>
 
@@ -133,7 +133,7 @@
 </td></tr>
 
 </table>
-<button type="submit"><spring:message code="mdrtb.submit" text="Submitz"/>
+<button type="submit"><spring:message code="mdrtb.submit" text="Submit"/>
 </form>
 
 </c:otherwise>

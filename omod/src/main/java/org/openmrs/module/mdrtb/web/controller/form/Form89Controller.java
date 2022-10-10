@@ -493,7 +493,7 @@ public class Form89Controller {
 	
 	@ModelAttribute("gptOptions")
 	public Collection<ConceptAnswer> getPossibleGPT() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.GPT);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.GENERAL_PRESCRIBED_TREATMENT);
 	}
 	
 	@ModelAttribute("cecOptions")

@@ -493,7 +493,7 @@ public class TB03uXDRFormController {
 			if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CURED).getId().intValue()) {
 				stateArray.set(0, pws);
 			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE).getId().intValue()) {
+			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId().intValue()) {
 				stateArray.set(1, pws);
 			}
 			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DIED).getId().intValue()) {

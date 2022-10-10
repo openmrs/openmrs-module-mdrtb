@@ -791,7 +791,7 @@ public class ProgramController {
 	        @RequestParam(required = true, value = "identifierValue") String identifierValue, SessionStatus status,
 	        HttpServletRequest request, ModelMap map) throws SecurityException, IllegalArgumentException,
 	        NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		System.out.println("ProgramCont:processEnroll -= OtherTB");
+		System.out.println("ProgramCont:processEnroll = OtherTB");
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		
 		if (patient == null) {
@@ -809,7 +809,7 @@ public class ProgramController {
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), null);
 		
-		if (location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
+		if (location == null) {
 			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
 		}
 		
@@ -834,16 +834,13 @@ public class ProgramController {
 			}
 		}
 		
-		System.out.println("Save Patient");
-		Context.getPatientService().savePatient(patient);
-		
 		// set the patient
 		if (program != null)
 			program.setPatient(patient);
 		
-		/*PatientValidator validator = new PatientValidator();
-		validator.validate(patient, errors);*/
-		
+//		PatientValidator validator = new PatientValidator();
+//		validator.validate(patient, errors);
+
 		// perform validation (validation needs to happen after patient is set since patient is used to pull up patient's previous programs)
 		if (program != null) {
 			new TbPatientProgramValidator().validate(program, errors);
@@ -870,14 +867,16 @@ public class ProgramController {
 			map.put("identifierValue", identifierValue);
 			//map.put("patientProgramId", -1);
 			System.out.println("ERRORS");
-			return new ModelAndView("/module/mdrtb/program/otherEnrollment", map);//?patientId=" + patient.getId() + "&patientProgramId=-1&type=tb", map);
-			//http://localhost:8080/openmrs/module/mdrtb/program/otherEnrollment.form?patientId=47407&patientProgramId=-1&type=tb
+			return new ModelAndView("/module/mdrtb/program/otherEnrollment", map);
 		}
 		
 		// save the actual update
-		
-		System.out.println("Save Program");
-		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
+		System.out.println("Saving Patient");
+		Context.getPatientService().savePatient(patient);
+		System.out.println("Saving Program");
+		PatientProgram patientProgram = program.getPatientProgram();
+		patientProgram.setProgram(Context.getService(MdrtbService.class).getTbProgram());
+		Context.getProgramWorkflowService().savePatientProgram(patientProgram);
 		System.out.println("Add ID to Program");
 		Context.getService(MdrtbService.class).addIdentifierToProgram(idId,
 		    program.getPatientProgram().getPatientProgramId());

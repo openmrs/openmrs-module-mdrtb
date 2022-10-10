@@ -117,19 +117,7 @@ public class TB03FormController {
 				try {
 					tb03 = getTB03Form(-1, patientProgramId);
 				}
-				catch (SecurityException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
-				catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				catch (InvocationTargetException e) {
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -207,6 +195,16 @@ public class TB03FormController {
 	        @RequestParam(required = false, value = "facility") String facilityId,
 	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
 	        HttpServletRequest request, ModelMap map) {
+		
+		// perform validation and check for errors
+		/*if (tb03 != null) {
+			new SimpleFormValidator().validate(tb03, errors);
+		}*/
+		
+		/*if (errors.hasErrors()) {
+			map.put("errors", errors);
+			return new ModelAndView("/module/mdrtb/form/intake", map);
+		}*/
 		
 		Location location = null;
 		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
@@ -495,7 +493,7 @@ public class TB03FormController {
 		for (ProgramWorkflowState pws : states) {
 			if (pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CURED).getId().intValue()) {
 				stateArray.set(0, pws);
-			} else if (pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE).getId()
+			} else if (pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId()
 			        .intValue()) {
 				stateArray.set(1, pws);
 			} else if (pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DIED).getId().intValue()) {

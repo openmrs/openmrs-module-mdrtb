@@ -40,7 +40,7 @@ public class ViewClosedReportsController {
 	
 	@RequestMapping(method=RequestMethod.GET, value="/module/mdrtb/reporting/viewClosedReports")
     public void viewClosedReportsGet(@RequestParam(required = true, value = "type") String reportType, ModelMap model) {
-		List<List<Integer>> closedReports = Context.getService(MdrtbService.class).PDFRows(reportType);
+		List<List<Integer>> closedReports = Context.getService(MdrtbService.class).getPDFRows(reportType);
 		List<Integer> reportIds = closedReports.get(0);
 		List<Integer> oblastIds = closedReports.get(1);
 		List<Integer> districtIds = closedReports.get(2);

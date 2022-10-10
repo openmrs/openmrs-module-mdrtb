@@ -187,7 +187,7 @@ public class TB08uController {
 		        .intValue();
 		int outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED).getId().intValue();
 		int neww = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW).getId().intValue();
-		int txComplete = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE).getId().intValue();
+		int txComplete = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId().intValue();
 		int txFailure = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_FAILED).getId().intValue();
 		int died = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED).getId().intValue();
 		int lostFup = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP).getId().intValue();

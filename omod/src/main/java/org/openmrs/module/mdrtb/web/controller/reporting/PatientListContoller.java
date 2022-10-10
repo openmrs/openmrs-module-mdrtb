@@ -2145,7 +2145,7 @@ public class PatientListContoller {
 		
 		Concept groupConcept = ms.getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
 		Concept curedConcept = ms.getConcept(MdrtbConcepts.CURED);
-		Concept txCompleted = ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE);
+		Concept txCompleted = ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED);
 		
 		ArrayList<TB03uForm> tb03s = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter,
 		    month);
@@ -8821,7 +8821,7 @@ public class PatientListContoller {
 		RegimenForm rf = null;
 		Concept outcomeConcept = null;
 		int curedId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED).getConceptId().intValue();
-		int txCompId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETE).getConceptId()
+		int txCompId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getConceptId()
 		        .intValue();
 		int i = 0;
 		Person p = null;

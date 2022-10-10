@@ -442,7 +442,7 @@ public class TB03uFormController {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CURED));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETE));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_FAILED));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CANCELLED));

@@ -21,32 +21,31 @@
 	$j(document).ready(function(){
 		$j('#results').css('display','none');
 		$j('#searchBox').val('');
-		$j('#searchBox').keyup(function(event){
-			$j('#results').hide();
-			if (event.keyCode == 13 ) { // User pressed enter key.
-				$j('#mdrtbFindPatientSearchButton').click();
-			}
-		});
-		$j('#mdrtbFindPatientSearchButton').click(function(){
-			if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
-				includeRet = true;
-			}
-			var onlyMdrTb = false;
-			if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
-				onlyMdrTb =true;				
-			}
-			console.log("onlyMdrTb=" + onlyMdrTb);
-			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
-				from = 0; 
-				to = jumps-1; 
-				if (ret.length <= to) {
-					to = ret.length -1;
+		$j('#searchBox').keyup(function(){
+			if ($j('#searchBox').val().length > 2){
+				if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
+					includeRet = true;
 				}
-	   			savedRet = ret; 
-	   			retSize = ret.length;
-	   			drawTable(savedRet);
-	   		});
-   		});	
+				var onlyMdrTb = false;
+				if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
+					onlyMdrTb =true;				
+				}
+				console.log("onlyMdrTb=" + onlyMdrTb);
+				MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
+					from = 0; 
+					to = jumps-1; 
+					if (ret.length <= to) {
+						to = ret.length -1;
+					}
+					savedRet = ret; 
+					retSize = ret.length;
+					drawTable(savedRet);
+				});
+			}
+			else {
+				$j('#results').hide();
+			}
+		});		
  	});
 	
 	function addRowEventsFindPatient(){
@@ -443,7 +442,7 @@ function useMdrtbLoadingMessage(message) {
 								<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
 							</c:choose>
 							<input type="text" value="" id="searchBox" name="searchBox">
-							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+<%-- 							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/> --%>
 						</td>	
 						<td>
 							<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/>
