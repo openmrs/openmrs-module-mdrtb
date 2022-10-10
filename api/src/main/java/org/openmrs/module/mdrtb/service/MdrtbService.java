@@ -50,6 +50,7 @@ import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.springframework.transaction.annotation.Transactional;
 
 //TODO: A ton of documentation missing. Complete...
+@Transactional
 public interface MdrtbService extends OpenmrsService {
 
 	/**
@@ -620,11 +621,9 @@ public interface MdrtbService extends OpenmrsService {
 	// ADDED BY ZOHAIB
 	public int countPDFRows();
 
-	public int countPDFColumns();
+	public List<List<Integer>> getPDFRows(String reportType);
 
-	public List<List<Integer>> PDFRows(String reportType);
-
-	public ArrayList<String> PDFColumns();
+	public ArrayList<String> getPDFColumns();
 
 	public void unlockReport(Integer oblast, Integer district, Integer facility, Integer year, String quarter,
 			String month, String name, String date, String reportType);
@@ -750,6 +749,14 @@ public interface MdrtbService extends OpenmrsService {
 
 	public ArrayList<AEForm> getAEFormsForProgram(Patient p, Integer patientProgId);
 
+	/**
+	 * Location hierarchy for Dushanbe is explicitly handled
+	 * 
+	 * @param oblastId
+	 * @param districtId
+	 * @param facilityId
+	 * @return
+	 */
 	public ArrayList<Location> getLocationListForDushanbe(Integer oblastId, Integer districtId, Integer facilityId);
 
 	public List<TbPatientProgram> getAllTbPatientProgramsEnrolledInDateRangeAndLocations(Date startDate, Date endDate,

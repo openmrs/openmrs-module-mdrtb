@@ -67,6 +67,7 @@ import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
+import org.openmrs.module.mdrtb.service.db.MdrtbDAO;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -83,14 +84,18 @@ import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
 import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 import org.openmrs.module.mdrtb.specimen.custom.XpertImpl;
 import org.openmrs.module.reporting.common.ObjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService {
 	
 	private static final String UUID_REGEX = "^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]+$";
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
+	@Autowired
 	protected HibernateMdrtbDAO dao;
 	
 	private MdrtbConceptMap conceptMap = new MdrtbConceptMap(); // TODO: should this be a bean?
@@ -1299,16 +1304,12 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return dao.countPDFRows();
 	}
 	
-	public int countPDFColumns() {
-		return dao.countPDFColumns();
+	public List<List<Integer>> getPDFRows(String reportType) {
+		return dao.getPDFData(reportType);
 	}
 	
-	public List<List<Integer>> PDFRows(String reportType) {
-		return dao.PDFRows(reportType);
-	}
-	
-	public ArrayList<String> PDFColumns() {
-		return dao.PDFColumns();
+	public ArrayList<String> getPDFColumns() {
+		return dao.getPDFColumns();
 	}
 	
 	public void unlockReport(Integer oblast, Integer district, Integer facility, Integer year, String quarter, String month,
@@ -2463,11 +2464,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		if (oblastId == null && districtId == null && facilityId == null)
 			return null;
 		
-		if (districtId == null && facilityId == null) { // means they stopped at oblast ??
+		if (districtId == null && facilityId == null) { // means they stopped at oblast??
 			List<District> distList = getDistricts(oblastId);
-			if (distList != null && distList.size() != 0) {
-				System.out.println("DIST:" + distList.size());
-			}
 			for (District d : distList) {
 				location = getLocation(oblastId, d.getId(), null);
 				if (location == null) {
@@ -2479,25 +2477,15 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 						}
 					}
 				}
-				
 				else {
 					locList.add(location);
 				}
 			}
 		}
-		
 		else if (facilityId == null) {// means they stopped at district - so fetch all facility data
-			System.out.println("NULL FAC ID");
 			location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, null);
-			
 			if (location == null) { // district that has a set of facilities under it
-				System.out.println("NULL LOC");
 				List<Facility> facs = Context.getService(MdrtbService.class).getFacilities(districtId.intValue());
-				if (facs == null) {
-					System.out.println("NULL FACS");
-				} else {
-					System.out.println("FACS LENGTH=" + facs.size());
-				}
 				for (Facility f : facs) {
 					location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, f.getId());
 					if (location != null) {
@@ -2505,18 +2493,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 					}
 				}
 			}
-			
 			else {
-				System.out.println("NOT NULL LOC:" + location.getLocationId());
 				locList.add(location);
 			}
 		}
-		
 		else if (districtId == null) { // they chose a facility so get all facilities with this name
 			Facility fac = Context.getService(MdrtbService.class).getFacility(facilityId);
 			if (fac == null)
 				return null;
-			
 			String facName = fac.getName();
 			List<Location> locs = Context.getLocationService().getAllLocations(false);
 			for (Location l : locs) {
@@ -2525,7 +2509,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 				}
 			}
 		}
-		System.out.println("LOCS:" + locList.size());
+		System.out.println("Dushanbe locations:" + locList.size());
 		return locList;
 	}
 	

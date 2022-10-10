@@ -49,9 +49,9 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getAllRayonsTJK()}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetAllRayonsTJK() {
-		// TODO
+		List<String> list = dao.getAllRayonsTJK();
+		assertTrue(list.contains("Fayzobod District")); // Expect a district name
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	}
 	
 	/**
-	 * Test method for {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#PDFColumns()}.
+	 * Test method for {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getPDFColumns()}.
 	 */
 	@Test
 	@Ignore
@@ -105,7 +105,7 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 	
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#PDFRows(java.lang.String)}.
+	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getPDFData(java.lang.String)}.
 	 */
 	@Test
 	@Ignore

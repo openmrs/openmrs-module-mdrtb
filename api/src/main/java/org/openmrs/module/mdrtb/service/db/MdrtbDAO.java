@@ -23,11 +23,9 @@ public interface MdrtbDAO {
   
     public int countPDFRows();
     
-    public int countPDFColumns();
+    public List<List<Integer>> getPDFData(String reportType);
     
-    public List<List<Integer>> PDFRows(String reportType);
-    
-    public ArrayList<String> PDFColumns();
+    public ArrayList<String> getPDFColumns();
     
     public void doPDF(Integer oblast, Integer district, Integer facility, Integer year, String quarter, String month, String reportDate, String tableData, boolean reportStatus, String reportName, String reportType);
    
