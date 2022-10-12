@@ -172,8 +172,8 @@ public class MdrtbDOTSDashboardController {
     	
     	// add the patientId
     	map.put("patientId", program.getPatient().getId());
-    	
-    	if(program.getClassificationAccordingToPatientGroups()!=null && program.getClassificationAccordingToPatientGroups().getConcept().getConceptId().intValue()==Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.new.conceptId"))) {
+    	Integer conceptNewId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("dotsreports.new.conceptId"));
+    	if (conceptNewId.equals(program.getClassificationAccordingToPatientGroups().getConcept().getConceptId())) {
     		map.put("isNew", "new");
     	}
     
@@ -236,13 +236,12 @@ public class MdrtbDOTSDashboardController {
 			dstFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.dst.formId"));
 		}
 		
-		map.put("xpertFormId",xpertFormId);
-		map.put("smearFormId",smearFormId);
-		map.put("cultureFormId",cultureFormId);
-		map.put("hainFormId",hainFormId);
-		map.put("dstFormId",dstFormId);
+		map.put("xpertFormId", xpertFormId);
+		map.put("smearFormId", smearFormId);
+		map.put("cultureFormId", cultureFormId);
+		map.put("hainFormId", hainFormId);
+		map.put("dstFormId", dstFormId);
 		return new ModelAndView("/module/mdrtb/dashboard/tbdashboard", map);
-
 	}
     
     

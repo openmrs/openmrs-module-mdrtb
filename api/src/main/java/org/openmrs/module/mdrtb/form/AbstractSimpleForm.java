@@ -3,6 +3,8 @@ package org.openmrs.module.mdrtb.form;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
@@ -16,6 +18,9 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 
 
 public abstract class AbstractSimpleForm implements SimpleForm {
+	
+	protected static final Log log = LogFactory.getLog(AbstractSimpleForm.class);
+	
 	protected Encounter encounter;
 	
 	public AbstractSimpleForm() {

@@ -316,8 +316,6 @@ public class RegimenForm extends AbstractSimpleForm implements Comparable<Regime
 	
 	public void setCmDose(Double dose) {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CM_DOSE), encounter);
-		/*System.out.println("CM: " + dose );
-		System.out.println("Obs: " + obs ); */
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && dose == null) {
 			return;

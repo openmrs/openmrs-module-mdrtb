@@ -289,7 +289,7 @@ public class MdrtbConcepts {
     public final static String DIARRHOEA = "DIARRHOEA";
     public final static String ARTHALGIA = "ARTHALGIA";
     public final static String DIZZINESS = "DIZZINESS";
-    public final static String HEARING_DISTURBANCES = "HEARING DISTURBANCES";
+    //public final static String HEARING_DISTURBANCES = "HEARING DISTURBANCES";
     public final static String HEADACHE = "HEADACHE";
     public final static String SLEEP_DISTURBANCES = "SLEEP DISTURBANCES";
     public final static String ELECTROLYTE_DISTURBANCES = "ELECTROLYTE DISTURBANCES";
@@ -363,8 +363,8 @@ public class MdrtbConcepts {
     public final static String OF_SPECIAL_INTEREST = "OF SPECIAL INTEREST";
     
     public final static String SAE_TYPE = "SAE TYPE";
-    public final static String DEATH = "DEATH";
-    public final static String HOSPITALIZATION = "HOSPITALIZATION";
+    //public final static String DEATH = "DEATH";
+    //public final static String HOSPITALIZATION = "HOSPITALIZATION";
     public final static String DISABILITY = "DISABILITY";
     public final static String CONGENITAL_ANOMALY = "CONGENITAL ANOMALY";
     public final static String LIFE_THREATENING_EXPERIENCE = "LIFE THREATENING EXPERIENCE";
@@ -459,8 +459,8 @@ public class MdrtbConcepts {
  	public final static String CIRCUMSTANCES_OF_DETECTION = "CIRCUMSTANCES OF DETECTION";
  	public final static String METHOD_OF_DETECTION = "METHOD OF DETECTION";
  	public final static String SITE_OF_EPTB = "SITE OF EPTB";
- 	public final static String PTB_SITE = "PTB SITE";
- 	public final static String EPTB_SITE = "EPTB SITE";
+ 	//public final static String PTB_SITE = "PTB SITE";
+ 	//public final static String EPTB_SITE = "EPTB SITE";
  	public final static String PRESENCE_OF_DECAY = "PRESENCE OF DECAY";
  	public final static String DATE_OF_DECAY_SURVEY = "DATE OF DECAY SURVEY";
  	public final static String DIABETES = "DIABETES";
@@ -526,13 +526,13 @@ public class MdrtbConcepts {
  	public final static String SELF_REFERRAL = "SELF-REFERRAL";
  	public final static String BASELINE_EXAM= "BASELINE EXAM";
  	public final static String POSTMORTERM_IDENTIFICATION = "POSTMORTERM IDENTIFICATION";
- 	public final static String CONTACT  = "CONTACT";
+ 	//public final static String CONTACT  = "CONTACT";
  	public final static String MIGRANT  = "MIGRANT";
  	public final static String COUNTRY_OF_ORIGIN = "COUNTRY OF ORIGIN";
  	public final static String CITY_OF_ORIGIN = "CITY OF ORIGIN";
  	public final static String DATE_OF_RETURN = "DATE OF RETURN";
  	
- 	public final static String FLUOROGRAPHY = "FLUOROGRAPHY";
+ 	//public final static String FLUOROGRAPHY = "FLUOROGRAPHY";
  	public final static String TUBERCULIN_TEST = "TUBERCULIN TEST";
  	public final static String ZIEHLNELSEN = "ZIEHLNELSEN";
  	public final static String FLURORESCENT_MICROSCOPY  = "FLURORESCENT MICROSCOPY";
@@ -551,7 +551,7 @@ public class MdrtbConcepts {
  	public final static String FIBROUS_CAVERNOUS = "FIBROUS CAVERNOUS";
  	public final static String CIRRHOTIC  = "CIRRHOTIC";
  	public final static String TB_PRIMARY_COMPLEX = "TB PRIMARY COMPLEX";
- 	public final static String MILITARY = "MILITARY";
+ 	//public final static String MILITARY = "MILITARY";
  	public final static String TUBERCULOMA  = "TUBERCULOMA";
  	public final static String BRONCHUS  = "BRONCHUS";
  	
@@ -559,7 +559,7 @@ public class MdrtbConcepts {
  	public final static String OF_LYMPH_NODES = "OF LYMPH NODES";
  	public final static String OSTEOARTICULAR = "OSTEOARTICULAR";
  	public final static String GENITOURINARY = "GENITOURINARY";
- 	public final static String OF_PERIPHERAL_LYMPH_NODES = "OF PERIPHERAL LYMPH NODES";
+ 	//public final static String OF_PERIPHERAL_LYMPH_NODES = "OF PERIPHERAL LYMPH NODES";
  	public final static String ABDOMINAL = "ABDOMINAL";
  	public final static String TUBERCULODERMA = "TUBERCULODERMA";
  	public final static String OCULAR = "OCULAR";

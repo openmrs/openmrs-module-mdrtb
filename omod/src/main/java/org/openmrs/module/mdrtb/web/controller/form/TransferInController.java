@@ -124,19 +124,7 @@ public class TransferInController {
 				try {
 					form = getTransferInForm(-1, patientProgramId);
 				}
-				catch (SecurityException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
-				catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				catch (InvocationTargetException e) {
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -173,15 +161,18 @@ public class TransferInController {
 		}
 		else if (district == null) {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		}
 		else {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			if (facilities.size() == 0) { // Maybe it's for Dushanbe
+				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);

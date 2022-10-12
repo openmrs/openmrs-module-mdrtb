@@ -5900,7 +5900,7 @@ public class PatientListContoller {
 		Concept postmortemConcept = Context.getService(MdrtbService.class)
 		        .getConcept(MdrtbConcepts.POSTMORTERM_IDENTIFICATION);
 		int postMortemId = postmortemConcept.getConceptId().intValue();
-		Concept contactConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT);
+		Concept contactConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT_INVESTIGATION);
 		int contactId = contactConcept.getConceptId().intValue();
 		Concept migrantConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT);
 		int migrantId = migrantConcept.getConceptId().intValue();
@@ -6092,7 +6092,7 @@ public class PatientListContoller {
 		report += closeTable();
 		report += getMessage("mdrtb.numberOfRecords") + ": " + postmortemList.size();
 		//CONTACT
-		q = ms.getConcept(MdrtbConcepts.CONTACT);
+		q = ms.getConcept(MdrtbConcepts.CONTACT_INVESTIGATION);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -6249,12 +6249,10 @@ public class PatientListContoller {
 		Concept method = null;
 		
 		//METHOD
-		Concept fluorographyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLUOROGRAPHY);
+		Concept fluorographyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
 		int fluorographyId = fluorographyConcept.getConceptId().intValue();
 		Concept genexpertConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENEXPERT);
 		int genexpertId = genexpertConcept.getConceptId().intValue();
-		Concept microscopyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
-		int microscopyId = microscopyConcept.getConceptId().intValue();
 		Concept tuberculinConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULIN_TEST);
 		int tuberculinId = tuberculinConcept.getConceptId().intValue();
 		Concept hainConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_TEST);
@@ -6319,10 +6317,6 @@ public class PatientListContoller {
 				genexpertList.add(f89);
 			}
 			
-			else if (methodId == microscopyId) {
-				microscopyList.add(f89);
-			}
-			
 			else if (methodId == tuberculinId) {
 				tuberculinList.add(f89);
 			}
@@ -6350,7 +6344,7 @@ public class PatientListContoller {
 		}
 		
 		//FLUOROGRAPHY
-		Concept q = ms.getConcept(MdrtbConcepts.FLUOROGRAPHY);
+		Concept q = ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -6792,7 +6786,7 @@ public class PatientListContoller {
 		//PULMONARY
 		Concept fibroCavConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FIBROUS_CAVERNOUS);
 		int fibroCavId = fibroCavConcept.getConceptId().intValue();
-		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY);
+		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY_SERVANT);
 		int miliaryId = miliaryConcept.getConceptId().intValue();
 		Concept focalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOCAL);
 		int focalId = focalConcept.getConceptId().intValue();
@@ -7183,7 +7177,7 @@ public class PatientListContoller {
 		report += "<br/>";
 		
 		// MILITARY
-		q = ms.getConcept(MdrtbConcepts.MILITARY);
+		q = ms.getConcept(MdrtbConcepts.MILITARY_SERVANT);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();
@@ -7382,7 +7376,7 @@ public class PatientListContoller {
 		Concept uroConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENITOURINARY);
 		int uroId = uroConcept.getConceptId().intValue();
 		Concept periLymphConcept = Context.getService(MdrtbService.class)
-		        .getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+		        .getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		int periLymphId = periLymphConcept.getConceptId().intValue();
 		Concept abdConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ABDOMINAL);
 		int abdId = abdConcept.getConceptId().intValue();
@@ -7644,7 +7638,7 @@ public class PatientListContoller {
 		report += "<br/>";
 		
 		// FIBROUS_CAVERNOUS
-		q = ms.getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+		q = ms.getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		report += "<h4>" + q.getName().getName() + "</h4>";
 		report += openTable();
 		report += openTR();

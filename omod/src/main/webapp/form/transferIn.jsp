@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --%>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
@@ -38,16 +39,22 @@
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
 		}
-		
-		$('#oblast').val(${oblastSelected});
-		$('#district').val(${districtSelected});
-		$('#facility').val(${facilitySelected});
-		
+		// $('#oblast').val(${oblastSelected});
+		<c:if test="${! empty oblastSelected}">
+			document.getElementById('oblast').value = ${oblastSelected};
+		</c:if>
+		// $('#district').val(${districtSelected});
+		<c:if test="${! empty districtSelected}">
+			document.getElementById('district').value = ${districtSelected};
+		</c:if>
+		// $('#facility').val(${facilitySelected});
+		<c:if test="${! empty facilitySelected}">
+			document.getElementById('facility').value = ${facilitySelected};
+		</c:if>
 		
 	});
 
-	function fun1()
-	{
+	function fun1() {
 		var e = document.getElementById("oblast");
 		var val = e.options[e.selectedIndex].value;
 		
@@ -55,8 +62,7 @@
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/transferIn.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty transferIn.id ? transferIn.id : -1})
 	}
 
-	function fun2()
-	{
+	function fun2() {
 		var e = document.getElementById("oblast");
 		var val1 = e.options[e.selectedIndex].value;
 		var e = document.getElementById("district");
@@ -65,13 +71,8 @@
 		if(val2!="")
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/transferIn.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty transferIn.id ? transferIn.id : -1})
 	}
--->
 
 </script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</script>
-
 
 <br/>
 

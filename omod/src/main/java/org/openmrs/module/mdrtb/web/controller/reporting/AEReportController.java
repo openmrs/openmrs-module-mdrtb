@@ -310,7 +310,7 @@ public class AEReportController {
     	Integer diarrhoeaId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIARRHOEA).getId();
     	Integer arthalgiaId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ARTHALGIA).getId();
     	Integer dizzinessId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIZZINESS).getId();
-    	Integer hearingDisturbancesId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HEARING_DISTURBANCES).getId();
+    	Integer hearingDisturbancesId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HEARING_DISORDER).getId();
     	Integer headachesId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HEADACHE).getId();
     	Integer sleepDisturbancesId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SLEEP_DISTURBANCES).getId();
     	Integer electrolyteDisturbancesId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ELECTROLYTE_DISTURBANCES).getId();
@@ -337,8 +337,8 @@ public class AEReportController {
     //	Integer saeTypeId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAE_TYPE).getId();
    // 	Integer specialInterestTypeId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIAL_INTEREST_EVENT_TYPE).getId();
     	
-    	Integer deathId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEATH).getId();
-    	Integer hospitilizationId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION).getId();
+    	Integer deathId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED).getId();
+    	Integer hospitilizationId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW).getId();
     	Integer disabilityId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DISABILITY).getId();
     	Integer congenitalAbnormalityId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONGENITAL_ANOMALY).getId();
     	Integer lifeThreateningExperienceId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.LIFE_THREATENING_EXPERIENCE).getId();

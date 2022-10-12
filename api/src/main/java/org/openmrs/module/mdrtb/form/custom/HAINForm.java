@@ -1,7 +1,5 @@
 package org.openmrs.module.mdrtb.form.custom;
 
-
-
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -14,27 +12,26 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.custom.HAIN;
 import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
 
-
 public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm> {
-
+	
 	private HAIN hain;
 	
 	public HAINForm() {
 		super();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));
 		
 	}
 	
 	public HAINForm(Patient patient) {
 		super(patient);
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Specimen Collection"));
 	}
 	
 	public HAINForm(Encounter encounter) {
 		super(encounter);
 		hain = new HAINImpl(encounter);
 	}
-
+	
 	/*public Integer getMonthOfTreatment() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
 		
@@ -74,18 +71,19 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 	}*/
 	
 	public String getSpecimenId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID),
+		    encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueText();
 		}
 	}
 	
 	public void setSpecimenId(String id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID),
+		    encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -101,74 +99,78 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+			if (id != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueText(id);
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Concept getMtbResult() {
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT), obsgroup);
+		if (obsgroup != null)
+			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT),
+			    obsgroup);
 		
 		if (obs == null) {
-			System.out.println("Null result");
 			return null;
-		}
-		else {
-			//System.out.println("ValCo: " + obs.getValueCoded() );
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setMtbResult(Concept result) {
-		System.out.println("result" + result);
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		log.debug("result" + result);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-		{
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT), obsgroup);
+		if (obsgroup != null) {
+			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT),
+			    obsgroup);
 			
 		}
 		
 		else {
-			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
+			obsgroup = new Obs(encounter.getPatient(),
+			        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT),
+			        encounter.getEncounterDatetime(), encounter.getLocation());
 		}
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		System.out.println("OG:" + obsgroup);
-		System.out.println("O:" + obs);
+		log.debug("Obs Group:" + obsgroup);
 		if (obs == null && result == null) {
-			System.out.println("no hain result hcange");
 			return;
 		}
 		
 		// we only need to update this if this is a new obs or if the value has changed.
 		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(result)) {
-			System.out.println("new obs or value change");
+			log.debug("new obs or value change");
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
-				System.out.println("not null obs");
-//				obsgroup.setVoided(true);
-//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+				log.debug("not null obs");
+				//				obsgroup.setVoided(true);
+				//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(result != null) {
-				System.out.println("creating new obs");
+			if (result != null) {
+				log.debug("creating new obs");
 				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(result);
 				obs.setObsGroup(obsgroup);
 				obsgroup.addGroupMember(obs);
@@ -176,67 +178,69 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				encounter.addObs(obsgroup);
 				//encounter.
 			}
-		} 
+		}
 	}
 	
 	public Concept getRifResult() {
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
+		if (obsgroup != null)
+			obs = MdrtbUtil.getObsFromObsGroup(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
 		
 		if (obs == null) {
-			System.out.println("Null result");
 			return null;
-		}
-		else {
-			//System.out.println("ValCo: " + obs.getValueCoded() );
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setRifResult(Concept result) {
-		System.out.println("result" + result);
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		log.debug("result" + result);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-		{
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
+		if (obsgroup != null) {
+			obs = MdrtbUtil.getObsFromObsGroup(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
 			
 		}
 		
 		else {
-			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
+			obsgroup = new Obs(encounter.getPatient(),
+			        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT),
+			        encounter.getEncounterDatetime(), encounter.getLocation());
 		}
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		System.out.println("OG:" + obsgroup);
-		System.out.println("O:" + obs);
+		log.debug("Obs Group:" + obsgroup);
 		if (obs == null && result == null) {
-			System.out.println("no hain result hcange");
 			return;
 		}
 		
 		// we only need to update this if this is a new obs or if the value has changed.
 		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(result)) {
-			System.out.println("new obs or value change");
+			log.debug("new obs or value change");
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
-				System.out.println("not null obs");
-//				obsgroup.setVoided(true);
-//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+				log.debug("not null obs");
+				//				obsgroup.setVoided(true);
+				//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(result != null) {
-				System.out.println("creating new obs");
+			if (result != null) {
+				log.debug("creating new obs");
 				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(result);
 				obs.setObsGroup(obsgroup);
 				obsgroup.addGroupMember(obs);
@@ -244,67 +248,69 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				encounter.addObs(obsgroup);
 				//encounter.
 			}
-		} 
+		}
 	}
 	
 	public Concept getInhResult() {
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), obsgroup);
+		if (obsgroup != null)
+			obs = MdrtbUtil.getObsFromObsGroup(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), obsgroup);
 		
 		if (obs == null) {
-			System.out.println("Null result");
 			return null;
-		}
-		else {
-		//	System.out.println("ValCo: " + obs.getValueCoded() );
+		} else {
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setInhResult(Concept result) {
-		System.out.println("result" + result);
-		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
+		log.debug("result" + result);
+		Obs obsgroup = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter);
 		Obs obs = null;
 		
-		if(obsgroup!=null)
-		{
-			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), obsgroup);
+		if (obsgroup != null) {
+			obs = MdrtbUtil.getObsFromObsGroup(
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), obsgroup);
 			
 		}
 		
 		else {
-			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
+			obsgroup = new Obs(encounter.getPatient(),
+			        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT),
+			        encounter.getEncounterDatetime(), encounter.getLocation());
 		}
 		
 		// if this obs have not been created, and there is no data to add, do nothing
-		System.out.println("OG:" + obsgroup);
-		System.out.println("O:" + obs);
+		log.debug("Obs Group:" + obsgroup);
 		if (obs == null && result == null) {
-			System.out.println("no hain result hcange");
 			return;
 		}
 		
 		// we only need to update this if this is a new obs or if the value has changed.
 		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(result)) {
-			System.out.println("new obs or value change");
+			log.debug("new obs or value change");
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
-				System.out.println("not null obs");
-//				obsgroup.setVoided(true);
-//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
+				log.debug("not null obs");
+				//				obsgroup.setVoided(true);
+				//				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(result != null) {
-				System.out.println("creating new obs");
+			if (result != null) {
+				log.debug("creating new obs");
 				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(result);
 				obs.setObsGroup(obsgroup);
 				obsgroup.addGroupMember(obs);
@@ -312,22 +318,23 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				encounter.addObs(obsgroup);
 				//encounter.
 			}
-		} 
+		}
 	}
 	
 	public Integer getPatProgId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueNumeric().intValue();
 		}
 	}
 	
 	public void setPatProgId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -343,29 +350,32 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+			if (id != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(id));
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	public Integer getMonthOfTreatment() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
 		
 		if (obs == null) {
 			return 0;
-		}
-		else {
+		} else {
 			return obs.getValueNumeric().intValue();
 		}
 	}
 	
 	public void setMonthOfTreatment(Integer month) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && month == null) {
@@ -381,14 +391,16 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(month != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter.getEncounterDatetime(), encounter.getLocation());
+			if (month != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(month));
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
 	
 	/*public int compareTo(HAINForm form) {
@@ -396,9 +408,9 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 	}*/
 	
 	public int compareTo(HAINForm form) {
-		if(this.getMonthOfTreatment()==null)
+		if (this.getMonthOfTreatment() == null)
 			return 1;
-		if(form.getMonthOfTreatment()==null)
+		if (form.getMonthOfTreatment() == null)
 			return -1;
 		return this.getMonthOfTreatment().compareTo(form.getMonthOfTreatment());
 	}

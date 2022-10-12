@@ -191,9 +191,6 @@ public class TbPatientProgram implements Comparable<TbPatientProgram> {
 	
 	public void setClassificationAccordingToPreviousDrugUse(ProgramWorkflowState classification) {
 		// first make sure that this program workflow state is valid
-		System.out.println(classification.toString());
-		System.out.println(classification.getProgramWorkflow().toString());
-		System.out.println(classification.getProgramWorkflowStateId());
 		if (classification != null && !Context.getService(MdrtbService.class)
 		        .getPossibleDOTSClassificationsAccordingToPreviousDrugUse().contains(classification)) {
 			throw new MdrtbAPIException(classification.toString()
@@ -697,7 +694,7 @@ public class TbPatientProgram implements Comparable<TbPatientProgram> {
 		List<Encounter> encs = Context.getEncounterService().getEncounters(program.getPatient(), null, null, null, null,
 		    eSet, null, false);
 		if (encs != null) {
-			System.out.println("TB03: " + encs.size());
+			System.out.println("TB03 Encounters: " + encs.size());
 		}
 		ArrayList<Encounter> ret = new ArrayList<Encounter>();
 		

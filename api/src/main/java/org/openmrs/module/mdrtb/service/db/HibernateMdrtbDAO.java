@@ -68,7 +68,7 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 	public void doPDF(Integer oblast, Integer district, Integer facility, Integer year, String quarter, String month,
 			String reportDate, String tableData, boolean reportStatus, String reportName, String reportType) {
 		try {
-			System.out.println("SavePDF-PARAMS:" + oblast + ":" + district + ":" + facility + ":" + year + ":"
+			log.debug("Save PDF-PARAMS:" + oblast + ":" + district + ":" + facility + ":" + year + ":"
 					+ reportDate + ":" + tableData + ":" + reportName + ":" + reportType);
 
 			Integer status = 0;
@@ -84,7 +84,6 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 			session.createSQLQuery(sql).executeUpdate();
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println("caught in dao: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

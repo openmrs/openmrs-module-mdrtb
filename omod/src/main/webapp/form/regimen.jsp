@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script> --%>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
@@ -11,7 +12,7 @@
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}&patientId=${regimenForm.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -40,15 +41,10 @@
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
 		}
-		
-		
-		
 		/* $('#oblast').val(${oblastSelected});
 		$('#district').val(${districtSelected});
 		$('#facility').val(${facilitySelected}); */
 		$('#otherRegimen').prop('disabled',true);
-		
-		
 		
 	});
 	
@@ -60,20 +56,13 @@
 	}
 	
 	function showHideOtherRegimen(val) {
-		
-		
-       	
        	if(val==653) {
-       		
        		document.getElementById('otherRegimen').disabled = false;
-       		
        	}
        	else {
-       		    $j('#otherRegimen').val("");
-       		 	
-       		 	document.getElementById('otherRegimen').disabled = true;
-       	      
-       	   		//set values of dates to ""
+			$j('#otherRegimen').val("");
+			document.getElementById('otherRegimen').disabled = true;
+			//set values of dates to ""
        	}
      }
 	
@@ -185,23 +174,19 @@
 		
 		return true;
 	}
--->
 
-</script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 </script>
 
 <br/>
 
 <div> <!-- start of page div -->
 
-&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Backu"/></a>
+&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Back"/></a>
 <br/><br/>
 
 <!-- VIEW BOX -->
 <div id="viewVisit" <c:if test="${(empty regimenForm.id) || (regimenForm.id == -1) || fn:length(errors.allErrors) > 0}"> style="display:none" </c:if>>
-<b class="boxHeader"><spring:message code="mdrtb.pv.regimenForm" text="Regimen Formz"/>
+<b class="boxHeader"><spring:message code="mdrtb.pv.addRegimen" text="Add Regimen"/>
 <span style="position: absolute; right:30px;"><a id="print" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'" onclick="printForm()"><spring:message code="mdrtb.print" text="Regimen"/></a>
 &nbsp;&nbsp;<a id="export" onmouseover="document.body.style.cursor='pointer'" onmouseout="document.body.style.cursor='default'" onclick="tableToExcel('regimen', 'Regimen')"><spring:message code="mdrtb.exportToExcel" text="Export"/></a>
 <openmrs:hasPrivilege privilege="Edit DOTS-MDR Data">

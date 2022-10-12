@@ -44,7 +44,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<SmearForm> getSmears() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<SmearForm>();
 		}
 		return Context.getService(MdrtbService.class).getSmearForms(getPatProgId());
@@ -53,7 +52,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<CultureForm> getCultures() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<CultureForm>();
 		}
 		return Context.getService(MdrtbService.class).getCultureForms(getPatProgId());
@@ -62,7 +60,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<XpertForm> getXperts() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<XpertForm>();
 		}
 		return Context.getService(MdrtbService.class).getXpertForms(getPatProgId());
@@ -71,7 +68,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<HAINForm> getHains() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<HAINForm>();
 		}
 		return Context.getService(MdrtbService.class).getHAINForms(getPatProgId());
@@ -80,7 +76,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<HAIN2Form> getHain2s() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<HAIN2Form>();
 		}
 		return Context.getService(MdrtbService.class).getHAIN2Forms(getPatProgId());
@@ -89,7 +84,6 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	
 	public List<DSTForm> getDsts() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<DSTForm>();
 		}
 		return Context.getService(MdrtbService.class).getDstForms(getPatProgId());
@@ -166,7 +160,7 @@ public class TB03Form extends AbstractSimpleForm implements Comparable<TB03Form>
 	}
 	
 	public Date getDateOfBirth() {
-		System.out.println("TIME:" + encounter.getPatient().getBirthdate().getTime());
+		log.debug("DOB:" + encounter.getPatient().getBirthdate());
 		return encounter.getPatient().getBirthdate();
 	}
 	

@@ -201,11 +201,11 @@ public class DrugForecastUtil {
 		ArrayList<PatientSLDMap> patients = new ArrayList<PatientSLDMap>();
 		Collection<DrugOrder> drugOrders = getDrugOrders(cohort, drugSet, fromDate, toDate);
 
-		System.out.println("DRUG ORDERS: " + drugOrders.size());
+		log.debug("DRUG ORDERS: " + drugOrders.size());
 		for (DrugOrder o : drugOrders) {
-			System.out.println("ID:" + o.getPatient().getPatientId());
+			log.debug("ID:" + o.getPatient().getPatientId());
 
-			System.out.println("CONCEPT" + o.getConcept());
+			log.debug("CONCEPT" + o.getConcept());
 			if (o.getConcept() != null) {
 				Patient tempPat = o.getPatient();
 				PatientSLDMap temp = patientDrugs.get(tempPat);
@@ -274,18 +274,18 @@ public class DrugForecastUtil {
 				patientDrugs.put(tempPat.getPatientId(), temp);
 
 			} else {
-				System.out.println("NULL DRUG");
+				log.debug("NULL DRUG");
 			}
 
 		}
 
-		System.out.println("MAP: " + patientDrugs.size());
+		log.debug("MAP: " + patientDrugs.size());
 
 		for (PatientSLDMap psm : patientDrugs.values()) {
 			patients.add(psm);
 		}
 
-		System.out.println("LIST: " + patients.size());
+		log.debug("LIST: " + patients.size());
 
 		return patients;
 	}

@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,17 @@ public class MdrtbConceptMap {
 			}		
 			// if not, test all the mappings in the array
 			List<Concept> concepts = Context.getConceptService().getConceptsByName(conceptMapping);
-			
+			for (Concept c : concepts) {
+				for (ConceptName cn : c.getNames()) {
+					if (cn.getName().equalsIgnoreCase(conceptMapping)) {
+						concept = c;
+						break;
+					}
+				}
+			}
+			if (concept != null) {
+				concepts = Arrays.asList(concept);
+			}
 			for (Concept c : concepts) {
 				List<Concept> mappings = Context.getConceptService().getConceptsByMapping(String.valueOf(c.getConceptId()), MDRTB_CONCEPT_MAPPING_CODE);
 				for (Concept mapConcept : mappings) {

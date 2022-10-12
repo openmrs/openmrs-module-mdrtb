@@ -18,74 +18,74 @@
   
     function editTest(personId){
     
-			var hiddenElement = document.getElementById("testResultAction_"+personId);
-			var testResult = document.getElementById("testResult_"+personId);
-			var testResultDate = document.getElementById("testResultDate_"+personId);
-			var testType = document.getElementById("testResultType_"+personId);
-			var hiddentestResult = document.getElementById("hiddentestResult_"+personId);
-			var hiddentestResultDate = document.getElementById("hiddentestResultDate_"+personId);
-			var hiddentestType = document.getElementById("hiddentestResultType_"+personId);
-			$j(testResult).val(hiddentestResult.value);
-			$j(testResultDate).val(hiddentestResultDate.value);
-			$j(testType).val(hiddentestType.value);
+		var hiddenElement = document.getElementById("testResultAction_"+personId);
+		var testResult = document.getElementById("testResult_"+personId);
+		var testResultDate = document.getElementById("testResultDate_"+personId);
+		var testType = document.getElementById("testResultType_"+personId);
+		var hiddentestResult = document.getElementById("hiddentestResult_"+personId);
+		var hiddentestResultDate = document.getElementById("hiddentestResultDate_"+personId);
+		var hiddentestType = document.getElementById("hiddentestResultType_"+personId);
+		$j(testResult).val(hiddentestResult.value);
+		$j(testResultDate).val(hiddentestResultDate.value);
+		$j(testType).val(hiddentestType.value);
 			
-		
-			$j(hiddenElement).val(1);
-			var direction = false;
-			$j(testResultDate).removeClass("disabledTwo");
-			$j(testResult).removeClass("disabledTwo");
-			$j(testType).removeClass("disabledTwo");	
-			$j(testResult).attr("disabled", direction);
-			$j(testResultDate).attr("disabled", direction);
-			$j(testType).attr("disabled", direction);
-			$j(testResultDate).attr("onMouseDown", "$j(this).date_input()");
+	
+		$j(hiddenElement).val(1);
+		var direction = false;
+		$j(testResultDate).removeClass("disabledTwo");
+		$j(testResult).removeClass("disabledTwo");
+		$j(testType).removeClass("disabledTwo");	
+		$j(testResult).attr("disabled", direction);
+		$j(testResultDate).attr("disabled", direction);
+		$j(testType).attr("disabled", direction);
+		$j(testResultDate).attr("onMouseDown", "$j(this).date_input()");
 
     }
     
-        function addNewTest(personId){
-    
-			var hiddenElement = document.getElementById("testResultAction_"+personId);
-			var testResult = document.getElementById("testResult_"+personId);
-			var testResultDate = document.getElementById("testResultDate_"+personId);
-			var testType = document.getElementById("testResultType_"+personId);
-			
-			var direction = false;
-			$j(testResultDate).removeClass("disabledTwo");
-			$j(testResult).removeClass("disabledTwo");
-			$j(testType).removeClass("disabledTwo");	
-			$j(testResult).attr("disabled", direction);
-			$j(testResultDate).attr("disabled", direction);
-			$j(testType).attr("disabled", direction);
-			
-			$j(hiddenElement).val(2);
-			$j(testResult).val("");
-			$j(testResultDate).val("");
-			$j(testType).val("");
-			
-			$j(testResultDate).mousedown(function(){
-				$j(this).date_input();
-			});
+       function addNewTest(personId){
+   
+		var hiddenElement = document.getElementById("testResultAction_"+personId);
+		var testResult = document.getElementById("testResult_"+personId);
+		var testResultDate = document.getElementById("testResultDate_"+personId);
+		var testType = document.getElementById("testResultType_"+personId);
+		
+		var direction = false;
+		$j(testResultDate).removeClass("disabledTwo");
+		$j(testResult).removeClass("disabledTwo");
+		$j(testType).removeClass("disabledTwo");	
+		$j(testResult).attr("disabled", direction);
+		$j(testResultDate).attr("disabled", direction);
+		$j(testType).attr("disabled", direction);
+		
+		$j(hiddenElement).val(2);
+		$j(testResult).val("");
+		$j(testResultDate).val("");
+		$j(testType).val("");
+		
+		$j(testResultDate).mousedown(function(){
+			$j(this).date_input();
+		});
     }
     
     function deleteThisTest(personId){
     
-    		var hiddenElement = document.getElementById("testResultAction_"+personId);
-			var testResult = document.getElementById("testResult_"+personId);
-			var testResultDate = document.getElementById("testResultDate_"+personId);
-			var testType = document.getElementById("testResultType_"+personId);
-    		
-    		var direction = true;
-    		$j(testResultDate).addClass("disabledTwo");
-			$j(testResult).addClass("disabledTwo");
-			$j(testType).addClass("disabledTwo");
-			$j(testResult).attr("disabled", direction);
-			$j(testResultDate).attr("disabled", direction);
-			$j(testType).attr("disabled", direction);
-				
-    		$j(hiddenElement).val(3);
-    		$j(testResult).val("");
-			$j(testResultDate).val("");
-			$j(testType).val("");
+   		var hiddenElement = document.getElementById("testResultAction_"+personId);
+		var testResult = document.getElementById("testResult_"+personId);
+		var testResultDate = document.getElementById("testResultDate_"+personId);
+		var testType = document.getElementById("testResultType_"+personId);
+   		
+   		var direction = true;
+   		$j(testResultDate).addClass("disabledTwo");
+		$j(testResult).addClass("disabledTwo");
+		$j(testType).addClass("disabledTwo");
+		$j(testResult).attr("disabled", direction);
+		$j(testResultDate).attr("disabled", direction);
+		$j(testType).attr("disabled", direction);
+			
+   		$j(hiddenElement).val(3);
+   		$j(testResult).val("");
+		$j(testResultDate).val("");
+		$j(testType).val("");
     		
     }
     
@@ -140,38 +140,29 @@
 	 		
 				 if (addressIdInQuestion > 0){   	
 						MdrtbContactsDWRService.updateAddress(contactIdInQuestion, addressIdInQuestion, popupAddressOneVal, popupAddressTwoVal, popupTownshipVal, popupCityVal, popupDistrictVal, popupRegionVal, popupPhoneVal, function(ret){
-										if (!ret) 
-											alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
-										else {
-										
-											//TODO:  this is crap:
-											var editAddressLink  =  document.getElementById("editAddress_" + contactIdInQuestion );	
-											$j(editAddressLink).addClass("displayOff");
-										
-										}
-										
-									});
+							if (!ret) 
+								alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
+							else {
+							
+								//TODO:  this is crap:
+								var editAddressLink  =  document.getElementById("editAddress_" + contactIdInQuestion );	
+								$j(editAddressLink).addClass("displayOff");
+							
+							}
+							
+						});
 				 }  else  {
 				 	//create new address
 				 	MdrtbContactsDWRService.createNewAddress(contactIdInQuestion, popupAddressOneVal, popupAddressTwoVal, popupTownshipVal, popupCityVal, popupDistrictVal, popupRegionVal, popupPhoneVal, function(ret){
-										if (ret == null) {
-										alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
-										} else {
-											
-											//TODO: this is crap
-											var editAddressLink  =  document.getElementById("editAddress_" + contactIdInQuestion );	
-											$j(editAddressLink).addClass("displayOff");
-											
-						//					$j(editAddressLink).click(function(){	
-						//						doStuffAction = 1;
-						//						addressIdInQuestion=ret.personAddressId;
-						//						contactIdInQuestion=ret.person;
-						//						return false;
-						//					});
-									   
-									   		
-										}
-									});
+						if (ret == null) {
+						alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
+						} else {
+							
+							//TODO: this is crap
+							var editAddressLink  =  document.getElementById("editAddress_" + contactIdInQuestion );	
+							$j(editAddressLink).addClass("displayOff");
+						}
+					});
 				 
 				 }   	
 		}
@@ -209,17 +200,16 @@
 	    		
 	    	//DWR
 	    	MdrtbContactsDWRService.updateContact(${obj.patient.patientId}, contactIdInQuestion, relationshipIdInQuestion, popupRelationshipVal, popupGivenNameVal, popupFamilyNameVal, popupContactIdVal , popupKnownMDRVal, function(ret){
-							if (!ret)
-								alert("<spring:message code="mdrtb.DWRfailedtoupdatecontact" />");
-							else {
-							
-								//TODO: this is crap
-								var editContactLink  =  document.getElementById("editContact_" + contactIdInQuestion );	
-							    $j(editContactLink).addClass("displayOff");
-							   
-							}
-						});
-	    	
+				if (!ret)
+					alert("<spring:message code="mdrtb.DWRfailedtoupdatecontact" />");
+				else {
+				
+					//TODO: this is crap
+					var editContactLink  =  document.getElementById("editContact_" + contactIdInQuestion );	
+				    $j(editContactLink).addClass("displayOff");
+				   
+				}
+			});
 		}	
 		
 		//new contacts:
@@ -311,8 +301,6 @@
 	//sets the patient fileds	
 	function choosePatient(input){
 			//set whatever you need to set:
-
-			
 		if (input.firstChild.firstChild.innerHTML != null && input.firstChild.firstChild.innerHTML != 'undefined' && input.firstChild.firstChild.innerHTML !=''){
 			var index = input.firstChild.firstChild.innerHTML;
 			

@@ -401,9 +401,8 @@ public class Form89Controller {
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HISTOLOGY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.GENEXPERT));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CXR_RESULT));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.FLUOROGRAPHY));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HAIN_TEST));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CULTURE_TEST));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TUBERCULIN_TEST));
@@ -426,12 +425,12 @@ public class Form89Controller {
 	
 	@ModelAttribute("psites")
 	public Collection<ConceptAnswer> getPossiblePSites() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PTB_SITE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.ANATOMICAL_SITE_OF_TB);
 	}
 	
 	@ModelAttribute("eplocations")
 	public Collection<ConceptAnswer> getPossibleEPLocations() {
-		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.EPTB_SITE);
+		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.SITE_OF_EPTB);
 	}	
 	
 	@ModelAttribute("diabetesOptions")

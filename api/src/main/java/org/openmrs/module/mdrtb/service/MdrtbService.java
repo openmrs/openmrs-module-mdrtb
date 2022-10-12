@@ -17,8 +17,11 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.module.mdrtb.Country;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
@@ -824,4 +827,13 @@ public interface MdrtbService extends OpenmrsService {
 	@Transactional(readOnly = true)
 	public TbPatientProgram getTbPatientProgram(Integer patientProgramId);
 
+	/**
+	 * Replacing the deprecated method in {@link ProgramWorkflowService} to return {@link ProgramWorkflow} by {@link Concept}
+	 * @param program
+	 * @param conceptId
+	 * @return
+	 */
+	public ProgramWorkflow getProgramWorkflow(Program program, Integer conceptId);
+
+	public ProgramWorkflowState getProgramWorkflowState(ProgramWorkflow programWorkflow, Integer conceptId) throws APIException;
 }

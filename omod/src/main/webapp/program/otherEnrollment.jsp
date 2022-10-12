@@ -28,7 +28,9 @@
 <script>
 
 $j(document).ready(function() {
-	document.getElementById('oblast').value = ${oblastSelected};
+	<c:if test="${! empty oblastSelected}">
+		document.getElementById('oblast').value = ${oblastSelected};
+	</c:if>
 	<c:if test="${! empty districtSelected}">
 		document.getElementById('district').value = ${districtSelected};
 	</c:if>
@@ -42,12 +44,18 @@ $j(document).ready(function() {
 		document.getElementById('dateEnrolled').value = "" + ${dateEnrolled};
 	</c:if>
 	<c:if test="${type eq 'tb'}" >
-		$('#classificationAccordingToPatientGroups').val(${patientGroup});
+		<c:if test="${! empty patientGroup}">
+			document.getElementById('classificationAccordingToPatientGroups').value = ${patientGroup};
+		</c:if>
 	</c:if>
-	$('#classificationAccordingToPreviousDrugUse').val(${previousDrugUse});
 	<c:if test="${type eq 'mdr'}" >
-		$('#classificationAccordingToPreviousTreatment').val(${patientGroup});
-	</c:if>	
+		<c:if test="${! empty patientGroup}">
+			document.getElementById('classificationAccordingToPreviousTreatment').value = ${patientGroup};
+		</c:if>
+	</c:if>
+	<c:if test="${! empty previousDrugUse}">
+		document.getElementById('classificationAccordingToPreviousDrugUse').value = ${previousDrugUse};
+	</c:if>
 });
 
 function fun1()
@@ -206,7 +214,7 @@ function fun2()
 </c:when>
 
 <c:otherwise>
-<form id="enrollment" action="${pageContext.request.contextPath}/module/mdrtb/program/otherEnrollment.form?patientId=${patientId}&patientProgramId=-1" method="post" >
+<form id="enrollment" action="${pageContext.request.contextPath}/module/mdrtb/program/otherEnrollmentMdrtb.form?patientId=${patientId}&patientProgramId=-1" method="post" >
 <%-- <input type="hidden" name="previousProgramId" value="${previousProgramId}"/> --%>
 <table cellspacing="2" cellpadding="2">
 
@@ -220,8 +228,7 @@ function fun2()
 <td><openmrs_tag:dateField formFieldName="dateEnrolled" startValue="${program.dateEnrolled}"/></td>
 </tr>
 
-<%--
-	<tr><td>
+<%-- <tr><td>
 	<spring:message code="mdrtb.enrollment.location" text="Enrollment Location"/>:</td><td>
 	<select name="location">
 	<option value=""/>
@@ -229,8 +236,7 @@ function fun2()
 	<option value="${location.locationId}" <c:if test="${location == initLocation}">selected</c:if> >${location.displayString}</option>
 	</c:forEach>
 	</select>
-	</td></tr>
---%>
+	</td></tr> --%>
 
 </table>
 

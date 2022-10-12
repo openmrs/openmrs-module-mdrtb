@@ -237,7 +237,7 @@ public class Form8Controller {
 		//PULMONARY
 		Concept fibroCavConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FIBROUS_CAVERNOUS);
 		int fibroCavId = fibroCavConcept.getConceptId().intValue();
-		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY);
+		Concept miliaryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MILITARY_SERVANT);
 		int miliaryId = miliaryConcept.getConceptId().intValue();
 		Concept focalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOCAL);
 		int focalId = focalConcept.getConceptId().intValue();
@@ -268,7 +268,7 @@ public class Form8Controller {
 		Concept urogenitalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENITOURINARY);
 		int urogenitalId = urogenitalConcept.getConceptId().intValue();
 		Concept peripheralLymphNodesConcept = Context.getService(MdrtbService.class)
-		        .getConcept(MdrtbConcepts.OF_PERIPHERAL_LYMPH_NODES);
+		        .getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		int peripheralLymphNodesId = peripheralLymphNodesConcept.getConceptId().intValue();
 		Concept abdominalConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ABDOMINAL);
 		int abdominalId = abdominalConcept.getConceptId().intValue();

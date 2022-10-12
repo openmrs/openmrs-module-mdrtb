@@ -32,8 +32,8 @@
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
 	td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
-	.ac_results {  z-index: 9999; } <!-- make any auto-completes appear on top of modal dialogs -->
-	.ui-dialog-titlebar-close{display: none;}  <!--hides the close button on the pop-ups -->
+	.ac_results {  z-index: 9999; }
+	.ui-dialog-titlebar-close{display: none;}
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->

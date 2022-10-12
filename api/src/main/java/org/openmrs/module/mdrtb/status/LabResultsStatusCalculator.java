@@ -622,7 +622,7 @@ public class LabResultsStatusCalculator implements StatusCalculator {
 				Collections.reverse(dsts);
 				for (Dst dst : dsts) {
 					if (dst.getResults() != null) {
-						System.out.println("MOST RECENT DST: " + dst.getId());
+						log.debug("MOST RECENT DST: " + dst.getId());
 						return dst;
 					}
 				}

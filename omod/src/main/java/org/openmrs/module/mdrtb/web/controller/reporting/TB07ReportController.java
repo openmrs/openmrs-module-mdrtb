@@ -168,7 +168,7 @@ public class TB07ReportController {
 		/*Concept hivDateConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_HIV_TEST);
 		Concept artStartConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_ART_TREATMENT_START);
 		Concept pctStartConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_PCT_TREATMENT_START);*/
-		Concept contact = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT);
+		Concept contact = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT_INVESTIGATION);
 		Concept migrant = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT);
 		Concept phcWorker = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PHC_WORKER);
 		Concept tbServices = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_SERVICES_WORKER);

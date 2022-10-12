@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
@@ -350,10 +351,7 @@ public class DstImpl extends TestImpl implements Dst {
     public String getResultsString() {
     	String results = "";
 		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
-		//System.out.println("MAP SIZE=" + dstResultsMap.size());
 		Collection<Concept> drugs = getPossibleDrugTypes();
-	//	System.out.println("DRUG SIZE=" + drugs.size());
-		
 		for(Concept drug : drugs) {
 			if(dstResultsMap.get(drug.getId())!=null) {
 				
@@ -371,34 +369,28 @@ public class DstImpl extends TestImpl implements Dst {
 	}
     
     public String getResistantDrugs() {
-    	//String ret = "";
-    	
     	String results = "";
 		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
-		//System.out.println("MAP SIZE=" + dstResultsMap.size());
 		Collection<Concept> drugs = getPossibleDrugTypes();
-	//	System.out.println("DRUG SIZE=" + drugs.size());
-		
 		for(Concept drug : drugs) {
-			if(dstResultsMap.get(drug.getId())!=null) {
-				
+			if(dstResultsMap.get(drug.getId()) != null) {
 				for(DstResult result : dstResultsMap.get(drug.getId())) {
-					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getId().intValue()) {					
-						results += result.getDrug().getName().getShortName() + ",";
-				
+					if(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getId().equals(result.getResult().getId())) {
+						ConceptName name = result.getDrug().getShortNameInLocale(Context.getLocale());
+						if (name == null) {
+							name = result.getDrug().getName(Context.getLocale());
+						}
+						results += name.getName() + ",";
 					}
 				}
 			}
 		}
-		
 		if(results.length()==0) {
 			results = "N/A";
 		}
 		else {
 			results = results.substring(0,results.length()-1);
 		}
-    	
-    	
     	return results;
     }
     
@@ -407,10 +399,7 @@ public class DstImpl extends TestImpl implements Dst {
 
     	String results = "";
 		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
-		//System.out.println("MAP SIZE=" + dstResultsMap.size());
 		Collection<Concept> drugs = getPossibleDrugTypes();
-	//	System.out.println("DRUG SIZE=" + drugs.size());
-		
 		for(Concept drug : drugs) {
 			if(dstResultsMap.get(drug.getId())!=null) {
 				

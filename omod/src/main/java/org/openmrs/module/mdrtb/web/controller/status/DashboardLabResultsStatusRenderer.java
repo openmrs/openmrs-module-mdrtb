@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
@@ -312,8 +313,16 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		for (Concept drug : drugs) {
 			if (dstResultsMap.get(drug.getId()) != null) {
 				for (DstResult result : dstResultsMap.get(drug.getId())) {
-					results += result.getDrug().getDisplayString() + ": "
-					        + result.getResult().getShortNameInLocale(Context.getLocale()) + "<br/>";
+					StringBuffer sb = new StringBuffer();
+					sb.append(result.getDrug().getDisplayString());
+					sb.append(": ");
+					ConceptName name = result.getResult().getShortNameInLocale(Context.getLocale());
+					if (name == null) {
+						name = result.getResult().getName(Context.getLocale());
+					}
+					sb.append(name.getName());
+					sb.append("<br/>");
+					results += sb.toString();
 					
 				}
 			}

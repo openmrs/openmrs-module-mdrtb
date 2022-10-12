@@ -220,7 +220,7 @@ public class AEFormController {
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DIARRHOEA));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.ARTHALGIA));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DIZZINESS));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HEARING_DISTURBANCES));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HEARING_DISORDER));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HEADACHE));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.SLEEP_DISTURBANCES));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.ELECTROLYTE_DISTURBANCES));
@@ -281,8 +281,8 @@ public class AEFormController {
 		if (bases != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DEATH));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HOSPITALIZATION));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DIED));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DISABILITY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CONGENITAL_ANOMALY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.LIFE_THREATENING_EXPERIENCE));
@@ -308,7 +308,7 @@ public class AEFormController {
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PERIPHERAL_NEUROPATHY));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PSYCHIATRIC_DISORDER));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.VISUAL_DISTURBANCES));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HEARING_DISTURBANCES));
+			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HEARING_DISORDER));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.MYELOSUPPRESSION));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.QT_PROLONGATION));
 			classificationConcepts.add(ms.getConcept(MdrtbConcepts.LACTIC_ACIDOSIS));

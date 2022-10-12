@@ -804,13 +804,9 @@ public class MdrtbUtil {
 			locList.add(location);
 		}
 
-		System.out.println("Location>>" + location);
-		if (locList == null) {
-			System.out.println("Location List >>" + null);
-		}
-
-		else {
-			System.out.println("Location List >>" + locList.size());
+		log.debug("Location:" + location);
+		if (locList != null) {
+			log.debug("Location List:" + locList.size());
 		}
 
 		CohortDefinition temp = null;
@@ -1083,18 +1079,17 @@ public class MdrtbUtil {
 
 		// Only validate if the PatientIdentifier is not voided
 		else {
-
 			// Check is already in use by another patient
-			System.out.println("VAL_ID:" + id);
+			log.debug("VAL_ID:" + id);
 			GregorianCalendar now = new GregorianCalendar();
 			int year = now.get(GregorianCalendar.YEAR);
 			String yearString = "" + year;
 			String firstTwoDigits = yearString.substring(0, 2);
-			System.out.println("FTD:" + firstTwoDigits);
+			log.debug("FTD:" + firstTwoDigits);
 			int centuryYear = Integer.parseInt(firstTwoDigits) * 100;
-			System.out.println("CY:" + centuryYear);
+			log.debug("CY:" + centuryYear);
 			int yearFromId = Integer.parseInt(id.substring(2, 4)) + centuryYear;
-			System.out.println("YFI:" + yearFromId);
+			log.debug("YFI:" + yearFromId);
 
 			if (yearFromId > year) {
 				errors.reject(Context.getMessageSourceService().getMessage("mdrtb.yearInIdInFuture"));

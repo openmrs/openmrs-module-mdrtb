@@ -11,11 +11,8 @@
 <!-- only show the headers if we are in edit mode (i.e,. we have an existing patient id) -->
 <c:if test="${! empty patientId && patientId != -1}">
 	<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
-	<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>
+	<%-- <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/> --%>
 </c:if>
-
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
@@ -208,7 +205,6 @@
 </c:otherwise>
 </c:choose>
 
-
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
@@ -273,6 +269,7 @@
 		</tr>
 	</table>
 --%>
+
 
 </td>
 </tr>

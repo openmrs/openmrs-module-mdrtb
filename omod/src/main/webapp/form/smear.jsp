@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --%>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
@@ -11,7 +12,7 @@
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/tbdashboard.form?patientProgramId=${patientProgramId}&patientId=${smear.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -38,11 +39,15 @@
 			$j('#viewVisit').hide();
 			$j('#editVisit').show();
 		}
-		
-		$('#oblast').val(${oblastSelected});
-		$('#district').val(${districtSelected});
-		$('#facility').val(${facilitySelected});
-		
+		<c:if test="${! empty oblastSelected}">
+			document.getElementById('oblast').value = ${oblastSelected};
+		</c:if>
+		<c:if test="${! empty districtSelected}">
+			document.getElementById('district').value = ${districtSelected};
+		</c:if>
+		<c:if test="${! empty facilitySelected}">
+			document.getElementById('facility').value = ${facilitySelected};
+		</c:if>
 		
 	});
 
@@ -108,11 +113,7 @@
 		
 		return true;
 	}
--->
 
-</script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </script>
 
 

@@ -117,17 +117,16 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT), obsgroup);
 		
 		if (obs == null) {
-			System.out.println("Null result");
+			log.debug("Null result");
 			return null;
 		}
 		else {
-			//System.out.println("ValCo: " + obs.getValueCoded() );
 			return obs.getValueCoded();
 		}
 	}
 	
 	public void setCultureResult(Concept result) {
-		System.out.println("result" + result);
+		log.debug("result" + result);
 		Obs obsgroup = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter);
 		Obs obs = null;
 		
@@ -140,22 +139,19 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 		else {
 			obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
 		}
-		
 		// if this obs have not been created, and there is no data to add, do nothing
-		System.out.println("OG:" + obsgroup);
-		System.out.println("O:" + obs);
+		log.debug("Obs Group:" + obsgroup);
 		if (obs == null && result == null) {
-			System.out.println("no culture result hcange");
 			return;
 		}
 		
 		// we only need to update this if this is a new obs or if the value has changed.
 		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(result)) {
-			System.out.println("new obs or value change");
+			log.debug("New obs or value change");
 			// void the existing obs if it exists
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
-				System.out.println("not null obs");
+				log.debug("Not null obs");
 //				obsgroup.setVoided(true);
 //				obsgroup.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 				obs.setVoided(true);
@@ -164,7 +160,7 @@ public class CultureForm extends AbstractSimpleForm implements Comparable<Cultur
 				
 			// now create the new Obs and add it to the encounter	
 			if(result != null) {
-				System.out.println("creating new obs");
+				log.debug("Creating new obs");
 				//obsgroup = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_CONSTRUCT), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CULTURE_RESULT), encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueCoded(result);

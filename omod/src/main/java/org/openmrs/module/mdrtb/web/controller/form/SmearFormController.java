@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -152,28 +154,10 @@ public class SmearFormController {
 				try {
 					smear = getSmearForm(-1, patientProgramId);
 				}
-				catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
 			model.addAttribute("oblasts", oblasts);
 			Location location = smear.getLocation();
@@ -199,14 +183,11 @@ public class SmearFormController {
 								break;
 							}
 						}
-						
 						break;
 					}
 				}
 			}
-		}
-		
-		else if (district == null) {
+		} else if (district == null) {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
 			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
@@ -240,9 +221,6 @@ public class SmearFormController {
 	        HttpServletRequest request, ModelMap map) {
 		
 		Location location = null;
-		
-		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
-		
 		if (facilityId != null && facilityId.length() != 0)
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), Integer.parseInt(facilityId));
@@ -255,20 +233,14 @@ public class SmearFormController {
 		}
 		
 		if (smear.getLocation() == null || !location.equals(smear.getLocation())) {
-			System.out.println("setting loc");
 			smear.setLocation(location);
 		}
 		
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
-		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
-			//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
+		if (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId()
+		        .equals(pp.getProgram().getConcept().getId())) {
 			mdr = true;
-		}
-		
-		else {
-			mdr = false;
 		}
 		
 		// perform validation and check for errors
@@ -283,8 +255,6 @@ public class SmearFormController {
 		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(smear.getEncounter());
-		
-		boolean programModified = false;
 		
 		// clears the command object from the session
 		status.setComplete();
@@ -307,7 +277,6 @@ public class SmearFormController {
 				    patientProgramId);
 			}
 		}
-		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}
 	
@@ -343,43 +312,25 @@ public class SmearFormController {
 	
 	@ModelAttribute("smearresults")
 	public ArrayList<ConceptAnswer> getSmearResults() {
-		ArrayList<ConceptAnswer> resultArray = new ArrayList<ConceptAnswer>();
-		for (int i = 0; i < 5; i++) {
-			resultArray.add(null);
-		}
-		
-		Collection<ConceptAnswer> results = Context.getService(MdrtbService.class).getPossibleSmearResults();
-		MdrtbService ms = Context.getService(MdrtbService.class);
-		System.out.println("RS:" + results.size());
-		for (ConceptAnswer ca : results) {
-			System.out.println(ca.getId());
-			System.out.println(ca.getAnswerConcept().getId());
-			
-			if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOWAFB).getId().intValue()) {
-				resultArray.set(0, ca);
-			}
-			
-			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.WEAKLY_POSITIVE).getId()
-			        .intValue()) {
-				resultArray.set(1, ca);
-			}
-			
-			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.MODERATELY_POSITIVE).getId()
-			        .intValue()) {
-				resultArray.set(2, ca);
-			}
-			
-			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.STRONGLY_POSITIVE).getId()
-			        .intValue()) {
-				resultArray.set(3, ca);
-			}
-			
-			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEGATIVE).getId().intValue()) {
-				resultArray.set(4, ca);
+		ArrayList<ConceptAnswer> answerArray = new ArrayList<ConceptAnswer>();
+		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleSmearResults();
+		if (bases != null) {
+			MdrtbService ms = Context.getService(MdrtbService.class);
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.LOWAFB));
+			concepts.add(ms.getConcept(MdrtbConcepts.WEAKLY_POSITIVE));
+			concepts.add(ms.getConcept(MdrtbConcepts.MODERATELY_POSITIVE));
+			concepts.add(ms.getConcept(MdrtbConcepts.STRONGLY_POSITIVE));
+			concepts.add(ms.getConcept(MdrtbConcepts.NEGATIVE));
+			for (ConceptAnswer pws : bases) {
+				for (Concept c : concepts) {
+					if (pws.getAnswerConcept().getId().equals(c.getId())) {
+						answerArray.add(pws);
+					}
+				}
 			}
 		}
-		
-		return resultArray;
+		return answerArray;
 	}
 	
 }
