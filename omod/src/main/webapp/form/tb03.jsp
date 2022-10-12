@@ -2,6 +2,12 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
@@ -11,7 +17,7 @@
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/tbdashboard.form?patientProgramId=${patientProgramId}&patientId=${tb03.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -41,82 +47,73 @@
 			$j('#editVisit').show();
 		}
 		
-		
-		
-		$('#oblast').val(${oblastSelected});
-		$('#district').val(${districtSelected});
-		$('#facility').val(${facilitySelected});
-		$('#oblast').prop('disabled',true);
-		$('#district').prop('disabled',true);
-		$('#facility').prop('disabled',true);
-		$('#encounterDatetime').prop('disabled',true);
-		
-		
+		// $('#oblast').val(${oblastSelected});
+		<c:if test="${! empty oblastSelected}">
+			document.getElementById('oblast').value = ${oblastSelected};
+		</c:if>
+		// $('#district').val(${districtSelected});
+		<c:if test="${! empty districtSelected}">
+			document.getElementById('district').value = ${districtSelected};
+		</c:if>
+		// $('#facility').val(${facilitySelected});
+		<c:if test="${! empty facilitySelected}">
+			document.getElementById('facility').value = ${facilitySelected};
+		</c:if>
+		<c:if test="${! empty patientGroup}" >
+			document.getElementById('classificationAccordingToPatientGroups').value = ${patientGroup};
+		</c:if>
+		<c:if test="${! empty previousDrugUse}" >
+			document.getElementById('classificationAccordingToPreviousDrugUse').value = ${previousDrugUse};
+		</c:if>
+		// document.getElementById('oblast').disabled = true;
+		// document.getElementById('district').disabled = true;
+		// document.getElementById('facility').disabled = true;
+		document.getElementById('encounterDatetime').disabled = true;
 	});
 	
 	function hivToggle () {
-		
 		var statusBox = document.getElementById('hivStatus');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideHivDates(choice);
 	}
 	
 	function showHideHivDates(val) {
-		
 		var e = document.getElementById('hivDateDiv');
-       	
        	if(val==48) {
-       		
        		document.getElementById('artStartDate').disabled = false;
        		document.getElementById('pctStartDate').disabled = false;
-       		
        	}
        	else {
-       		    $j('#artStartDate').val("");
-       		 	$j('#pctStartDate').val("");
-       		 	document.getElementById('artStartDate').disabled = true;
-        		document.getElementById('pctStartDate').disabled = true;
-       	      
-       	   		//set values of dates to ""
+			$j('#artStartDate').val("");
+			$j('#pctStartDate').val("");
+			document.getElementById('artStartDate').disabled = true;
+			document.getElementById('pctStartDate').disabled = true;
+			//set values of dates to ""
        	}
-     }
+    }
 	
 	function codToggle () {
-		
 		var statusBox = document.getElementById('causeOfDeath');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideOtherCod(choice);
 	}
 	
 	function showHideOtherCod(val) {
-		
-		
-       	
        	if(val==291) {
-       		
        		document.getElementById('otherCauseOfDeath').disabled = false;
-       		
        	}
        	else {
-       		    $j('#otherCauseOfDeath').val("");
-       		 	
-       		 	document.getElementById('otherCauseOfDeath').disabled = true;
-       	      
-       	   		//set values of dates to ""
+			$j('#otherCauseOfDeath').val("");
+			document.getElementById('otherCauseOfDeath').disabled = true;
+			//set values of dates to ""
        	}
      }
 	
 	function enable() {
-		
-			
-			$('#oblast').prop('disabled',false);
-			$('#district').prop('disabled',false);
-			$('#facility').prop('disabled',false);
-			$('#encounterDatetime').prop('disabled',false);
-			
-			
-	
-		
+		document.getElementById('oblast').disabled = false;
+		document.getElementById('district').disabled = false;
+		document.getElementById('facility').disabled = false;
+		document.getElementById('encounterDatetime').disabled = false;
 	}
     
 	var tableToExcel = (function() {
@@ -129,7 +126,8 @@
 		    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
 		    window.location.href = uri + base64(format(template, ctx))
 		  }
-		})()
+		}
+	)()
 		
 	function printForm() {
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
@@ -150,8 +148,7 @@
 	    return true;
 	}
 	
-	function fun1()
-	{
+	function fun1() {
 		var e = document.getElementById("oblast");
 		var val = e.options[e.selectedIndex].value;
 		
@@ -159,8 +156,7 @@
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/tb03.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty tb03.id ? tb03.id : -1})
 	}
 
-	function fun2()
-	{
+	function fun2() {
 		var e = document.getElementById("oblast");
 		var val1 = e.options[e.selectedIndex].value;
 		var e = document.getElementById("district");
@@ -169,9 +165,42 @@
 		if(val2!="")
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/tb03.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty tb03.id ? tb03.id : -1})
 	}
+
+	function dateInFuture(dateStr) {
+		try {
+			var format = "${_dateFormatDisplay}";
+			var date = new Date();
+			var now = new Date();
+			if (format === "dd.MM.yyyy") {
+				var parts = dateStr.split(".");
+				var day = parts[0];
+				var month = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			if (format === "dd/MM/yyyy") {
+				var parts = dateStr.split("/");
+				var day = parts[0];
+				var month = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			if (format === "MM/dd/yyyy") {
+				var parts = dateStr.split("/");
+				var month = parts[0];
+				var day = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			return date.getTime() > now.getTime();
+		}
+		catch(err) {
+			console.log(err)
+		}
+		return true;
+	}
 	
-	function validate() 
-	{
+	function validate() {
 		var encDate = document.getElementById("encounterDatetime").value;
 		var errorText = "";
 		if(encDate=="") {
@@ -179,193 +208,86 @@
 			alert(errorText);
 			return false;
 		}
-		
-		
-		
-		encDate = encDate.replace(/\//g,".");
-		
-		
-		var parts = encDate.split(".");
-		var day = parts[0];
-		var month = parts[1]-1;
-		var year = parts[2];
-		
-		
-		
-		var regDate = new Date(year,month,day);
-
-		var now = new Date();
-		
-		if(regDate.getTime() > now.getTime()) {
+		if (dateInFuture(encDate)) {
 			errorText = ""  + '<spring:message code="mdrtb.error.registrationDateInFuture"/>' + "";
 			alert(errorText);
 			return false;
 		}
 		
 		var txDate = document.getElementById("treatmentStartDate").value;
-		
 		if(txDate!="") {
-			txDate = txDate.replace(/\//g,".");
-			parts = txDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var txStartDate = new Date(year,month,day);
-			
-
-			if(txStartDate.getTime() > now.getTime()) {
+			if (dateInFuture(txDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.treatmentStartDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
 		var hivDate = document.getElementById("hivTestDate").value;
-		
 		if(hivDate!="") {
-			hivDate = hivDate.replace(/\//g,".");
-			parts = hivDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var hivTestDate = new Date(year,month,day);
-			
-
-			if(hivTestDate.getTime() > now.getTime()) {
+			if (dateInFuture(hivDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.hivTestDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
-			}
-			
-			
+			}			
 		}
 		
 		var artDate = document.getElementById("artStartDate").value;
-		
 		if(artDate!="") {
-			artDate = artDate.replace(/\//g,".");
-			parts = artDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var artStartDate = new Date(year,month,day);
-			
-
-			if(artStartDate.getTime() > now.getTime()) {
+			if (dateInFuture(artDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.artStartDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
-			}
-			
-			
+			}			
 		}
 		
 		var pctDate = document.getElementById("pctStartDate").value;
-		
 		if(pctDate!="") {
-			pctDate = pctDate.replace(/\//g,".");
-			parts = pctDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var pctStartDate = new Date(year,month,day);
-			
-
-			if(pctStartDate.getTime() > now.getTime()) {
+			if (dateInFuture(pctDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.pctStartDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
-			}
-			
-			
+			}			
 		}
 		
-	var cxrDate = document.getElementById("xrayDate").value;
+		var cxrDate = document.getElementById("xrayDate").value;
 		
 		if(cxrDate!="") {
-			cxrDate = cxrDate.replace(/\//g,".");
-			parts = cxrDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var xrayDate = new Date(year,month,day);
-			
-
-			if(xrayDate.getTime() > now.getTime()) {
+			if (dateInFuture(cxrDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.xrayDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
-	var txOutcomeDate = document.getElementById("treatmentOutcomeDate").value;
-		
+		var txOutcomeDate = document.getElementById("treatmentOutcomeDate").value;
 		if(txOutcomeDate!="") {
-			txOutcomeDate = txOutcomeDate.replace(/\//g,".");
-			parts = txOutcomeDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var treatmentOutcomeDate = new Date(year,month,day);
-			
-
-			if(treatmentOutcomeDate.getTime() > now.getTime()) {
+			if (dateInFuture(txOutcomeDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.treatmentOutcomeDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
-	var deathDate = document.getElementById("dateOfDeathAfterOutcome").value;
-		
+		var deathDate = document.getElementById("dateOfDeathAfterOutcome").value;
 		if(deathDate!="") {
-			deathDate = deathDate.replace(/\//g,".");
-			parts = deathDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var deathAfterOutcomeDate = new Date(year,month,day);
-			
-
-			if(deathAfterOutcomeDate.getTime() > now.getTime()) {
+			if (dateInFuture(deathDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.deathDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
-		
-		
 		enable();
 		return true;
 	}
 
--->
-
-</script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 </script>
 
 <br/>
 
 <div> <!-- start of page div -->
 
-&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Backu"/></a>
+&nbsp;&nbsp;<a href="${!empty returnUrl ? returnUrl : defaultReturnUrl}"><spring:message code="mdrtb.back" text="Back"/></a>
 <br/><br/>
 
 <!-- VIEW BOX -->
@@ -411,8 +333,8 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.facility" text="District"/>:</td>
-<td>${tb03.location.region}</td>
+<td><spring:message code="mdrtb.facility" text="Facility"/>:</td>
+<td>${tb03.location.address4}</td>
 </tr>
 
 <tr>
@@ -519,7 +441,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.smears" text="Smearz"/>
+<spring:message code="mdrtb.smears" text="Smear"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -541,7 +463,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.xperts" text="Xpertz"/>
+<spring:message code="mdrtb.xperts" text="Xpert"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -564,7 +486,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.hains" text="Hainz"/>
+<spring:message code="mdrtb.hains" text="Hain"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -587,7 +509,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.hain2s" text="Hainz"/>
+<spring:message code="mdrtb.hain2s" text="Hain"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -610,7 +532,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.cultures" text="Culturez"/>
+<spring:message code="mdrtb.cultures" text="Culture"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -633,7 +555,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.dsts" text="DSTz"/>
+<spring:message code="mdrtb.dsts" text="DST"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -723,6 +645,9 @@
 </div>
 <!-- END VIEW BOX -->
 
+
+
+
 <!-- EDIT BOX -->
 <div id="editVisit" <c:if test="${(!empty tb03.id) && (tb03.id != -1) && fn:length(errors.allErrors) == 0}"> style="display:none" </c:if>>
 <b class="boxHeader"><spring:message code="mdrtb.tb03Form" text="TB03 Form"/></b>
@@ -774,14 +699,13 @@
 </td>
 </tr> --%>
 </table>
-
-<table>
-<tr id="oblastDiv">
+	<table>
+		<tr id="oblastDiv">
 			<td align="right"><spring:message code="mdrtb.oblast" /></td>
 			<td><select name="oblast" id="oblast" onchange="fun1()" >
 					<option value=""></option>
 					<c:forEach var="o" items="${oblasts}">
-						<option value="${o.id}">${o.name}</option>
+						<option value="${o.id}" <c:if test="${o.name == tb03.location.stateProvince}">selected</c:if> >${o.name}</option>
 					</c:forEach>
 			</select></td>
 		</tr>
@@ -791,7 +715,7 @@
 			<td><select name="district" id="district" onchange="fun2()" >
 					<option value=""></option>
 					<c:forEach var="dist" items="${districts}">
-						<option value="${dist.id}">${dist.name}</option>
+						<option value="${dist.id}" <c:if test="${dist.name == tb03.location.countyDistrict}">selected</c:if> >${dist.name}</option>
 					</c:forEach>
 			</select></td>
 		</tr>
@@ -801,7 +725,7 @@
 			<td><select name="facility" id="facility" >
 					<option value=""></option>
 					<c:forEach var="f" items="${facilities}">
-						<option value="${f.id}">${f.name}</option>
+						<option value="${f.id}" <c:if test="${f.name == tb03.location.address4}">selected</c:if> >${f.name}</option>
 					</c:forEach>
 			</select>
 			</td>

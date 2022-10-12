@@ -3,6 +3,7 @@ package org.openmrs.module.mdrtb.web.controller.program;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +21,7 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PatientProgram;
+import org.openmrs.PersonAddress;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
@@ -173,7 +175,7 @@ public class ProgramController {
 	}
 	
 	@ModelAttribute("outcomes")
-	Collection<ProgramWorkflowState> getOutcomes() {
+	public Collection<ProgramWorkflowState> getOutcomes() {
 		return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();
 	}
 	
@@ -316,26 +318,29 @@ public class ProgramController {
 		List<Region> oblasts;
 		List<Facility> facilities;
 		List<District> districts;
-		
-		String prefix = "";
-		
+
+		Region locOb = null;
+		District locDist = null;
+		Facility locFac = null;
+
 		if (oblast == null) {
+			/* NOTE! The commented piece (of junk) used to work. 
+			 * The new approach which begins right after the comment looks for the location in patient address instead of parsing from patient identifier 
+			 */
+			//JUNK STARTED
+			/*
+			map.addAttribute("oblasts", Context.getService(MdrtbService.class).getOblasts());
+			String prefix = "";
 			if (idId != null) {
-				Region locOb = null;
-				District locDist = null;
-				Facility locFac = null;
 				PatientIdentifier pi = Context.getService(MdrtbService.class).getPatientIdentifierById(idId);
-				
 				Integer prefixInt = 0;
 				int prefInt = 0;
-				
 				if (pi != null) {
 					prefix = pi.getIdentifier().substring(0, 2);
 					prefixInt = Integer.parseInt(prefix);
 					prefInt = prefixInt.intValue();
 					prefix = "(" + prefix + ")";
 					Location idLoc = null;
-					
 					List<Location> locList = Context.getLocationService().getAllLocations(false);
 					for (Location l : locList) {
 						if (l.getName().trim().endsWith(prefix)) {
@@ -343,7 +348,6 @@ public class ProgramController {
 							break;
 						}
 					}
-					
 					if (idLoc != null) {
 						String obName = idLoc.getStateProvince();
 						List<Region> obList = Context.getService(MdrtbService.class).getOblasts();
@@ -353,10 +357,8 @@ public class ProgramController {
 								break;
 							}
 						}
-						
-						if (prefInt != 1 && prefInt != 95 && prefInt != 60 && prefInt != 11 && prefInt != 14 && prefInt != 12
-						        && prefInt != 96 && prefInt != 97 && prefInt != 52 && prefInt != 34 && prefInt != 85
-						        && prefInt != 98 && prefInt != 99 && prefInt != 15 && prefInt != 93 && prefInt != 92) {
+						List<Integer> list = Arrays.asList(1, 11, 12, 14, 15, 34, 52, 60, 85, 92, 93, 95, 96, 97, 98, 99);
+						if (!list.contains(prefixInt)) {
 							if (locOb != null && idLoc.getCountyDistrict() != null) {
 								List<District> distList = Context.getService(MdrtbService.class).getDistricts(locOb.getId());
 								for (District d : distList) {
@@ -366,7 +368,6 @@ public class ProgramController {
 									}
 								}
 							}
-							
 							if (locDist != null && idLoc.getRegion() != null) {
 								List<Facility> facList = Context.getService(MdrtbService.class)
 								        .getFacilities(locDist.getId());
@@ -380,42 +381,88 @@ public class ProgramController {
 						}
 					}
 				}
-				
 				if (locOb != null) {
 					oblasts = new ArrayList<Region>();
 					oblasts.add(locOb);
 					map.addAttribute("oblasts", oblasts);
-					
 					if (locDist != null) {
 						districts = new ArrayList<District>();
 						districts.add(locDist);
 						map.addAttribute("districts", districts);
-						
 						if (locFac != null) {
 							facilities = new ArrayList<Facility>();
 							facilities.add(locFac);
 							map.addAttribute("facilities", facilities);
 						}
 					}
-					
 					else {
-						System.out.println("all districts");
 						map.addAttribute("districts", Context.getService(MdrtbService.class).getDistricts(locOb.getId()));
 					}
 				}
-				
-				else {
-					oblasts = Context.getService(MdrtbService.class).getOblasts();
-					map.addAttribute("oblasts", oblasts);
+			}
+			*/
+			
+			PersonAddress personAddress = patient.getPersonAddress();
+			String distName = personAddress.getCountyDistrict();
+			String facName = personAddress.getAddress4();
+			List<Region> obList = Context.getService(MdrtbService.class).getOblasts();
+			// Get Region
+			String obName = personAddress.getStateProvince();
+			if (obName != null) {
+				for (Region o : obList) {
+					if (o.getName().equalsIgnoreCase(obName)) {
+						locOb = o;
+						break;
+					}
 				}
-				
 			}
-			
+			if (locOb != null) {
+				// Add this region only
+				map.addAttribute("oblasts", Arrays.asList(locOb));
+				if (distName != null) {
+					List<District> distList = Context.getService(MdrtbService.class).getDistricts(locOb.getId());
+					for (District d : distList) {
+						if (d.getName().equalsIgnoreCase(distName)) {
+							locDist = d;
+							break;
+						}
+					}
+				}
+				if (locDist != null) {
+					// Add this district only
+					map.addAttribute("districts", Arrays.asList(locDist));
+					List<Facility> facilityList = Context.getService(MdrtbService.class).getFacilities(locDist.getId());
+					if (facilityList.size() == 0) { // Maybe it's Dushanbe
+						facilityList = Context.getService(MdrtbService.class).getFacilities(locOb.getId());
+					}
+					if (facName != null) {
+						for (Facility f : facilityList) {
+							if (f.getName().equalsIgnoreCase(facName)) {
+								locFac = f;
+								break;
+							}
+						}
+					}
+					if (locFac != null) {
+						map.addAttribute("facilities", Arrays.asList(locFac));
+					}
+					else {
+						// Otherwise add all facilities
+						map.addAttribute("facilities", facilityList);
+					}
+
+				}
+				else {
+					// Otherwise add all districts
+					map.addAttribute("districts", Context.getService(MdrtbService.class).getDistricts(locOb.getId()));
+				}
+			}
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				map.addAttribute("oblasts", oblasts);
+				// Otherwise add all regions
+				map.addAttribute("oblasts", Context.getService(MdrtbService.class).getOblasts());
 			}
-			
+
+
 		}
 		
 		else if (district == null) {
@@ -442,7 +489,6 @@ public class ProgramController {
 		map.addAttribute("previousDrugUse", drugGroup);
 		
 		return new ModelAndView("/module/mdrtb/program/enrollment", map);
-		
 	}
 	
 	@RequestMapping(value = "/module/mdrtb/program/firstEnrollment.form", method = RequestMethod.POST)
@@ -534,24 +580,17 @@ public class ProgramController {
 	        @RequestParam(value = "drugGroup", required = false) Integer drugGroup,
 	        @RequestParam(value = "idSelected", required = false) String idSelected,
 	        @RequestParam(required = false, value = "programStartDate") String programStartDate,
-	        
 	        /* @RequestParam(required = false, value = "previousProgramId") Integer previousProgramId,*/
 	        ModelMap map) {
 		
-		System.out.println("SOE: " + patientId + ":" + type + ":" + idSelected);
 		Patient patient = Context.getPatientService().getPatient(patientId);
 		if (patient == null) {
-			System.out.println("bad patient");
 			throw new RuntimeException("Show enroll called with invalid patient id " + patientId);
 		}
-		
 		if (type == null || type.length() == 0) {
-			System.out.println("bad type");
 			throw new RuntimeException("No program type specified");
 		}
-		
 		map.put("patientId", patientId);
-		
 		map.put("type", type);
 		if (locationId != null) {
 			map.put("initLocation", Context.getLocationService().getLocation(locationId));
@@ -562,7 +601,6 @@ public class ProgramController {
 			if (splits == null || splits.length != 3) {
 				parsedDate = null;
 			}
-			
 			else {
 				int year = Integer.parseInt(splits[2]);
 				int month = Integer.parseInt(splits[1]) - 1;
@@ -575,10 +613,7 @@ public class ProgramController {
 				parsedDate = gc.getTime();
 			}
 			map.put("programStartDate", parsedDate);
-			
 		}
-		
-		System.out.println("OBLAST: " + oblast);
 		List<Region> oblasts;
 		List<Facility> facilities;
 		List<District> districts;
@@ -586,37 +621,32 @@ public class ProgramController {
 		if (oblast == null) {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
 			map.addAttribute("oblasts", oblasts);
-			
 		}
-		
 		else if (district == null) {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
 			map.addAttribute("oblastSelected", oblast);
 			map.addAttribute("oblasts", oblasts);
 			map.addAttribute("districts", districts);
 			
 		} else {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
 			map.addAttribute("oblastSelected", oblast);
 			map.addAttribute("oblasts", oblasts);
 			map.addAttribute("districts", districts);
 			map.addAttribute("districtSelected", district);
 			map.addAttribute("facilities", facilities);
 		}
-		
 		map.addAttribute("dateEnrolled", dateEnrolled);
 		map.addAttribute("patientGroup", patGroup);
 		map.addAttribute("previousDrugUse", drugGroup);
 		map.addAttribute("idSelected", idSelected);
 		System.out.println("IDS:" + idSelected);
-		
-		/*	if(previousProgramId!=null) {
-				map.put("previousProgramId", previousProgramId);
-			}*/
-		
+		/* if(previousProgramId!=null) {
+			map.put("previousProgramId", previousProgramId);
+		}*/
 		return new ModelAndView("/module/mdrtb/program/otherEnrollment", map);
 		
 	}
@@ -627,19 +657,15 @@ public class ProgramController {
 	        @RequestParam(required = true, value = "oblast") String oblastId,
 	        @RequestParam(required = true, value = "district") String districtId,
 	        @RequestParam(required = false, value = "facility") String facilityId,
-	        
 	        @RequestParam(required = true, value = "identifierValue") String identifierValue, SessionStatus status,
 	        HttpServletRequest request, ModelMap map) throws SecurityException, IllegalArgumentException,
 	        NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		System.out.println("ProgramCont:processEnroll -= Other MDRTB");
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		
 		if (patient == null) {
 			throw new RuntimeException("Process enroll called with invalid patient id " + patientId);
 		}
 		
 		Location location = null;
-		
 		System.out.println(
 		    "PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId + "\nID: " + identifierValue);
 		
@@ -653,12 +679,9 @@ public class ProgramController {
 		if (location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
 			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
 		}
-		
 		if (program.getLocation() == null || !location.equals(program.getLocation())) {
-			System.out.println("setting loc");
 			program.setLocation(location);
 		}
-		
 		MdrtbUtil.validateIdentifierString(identifierValue, errors);
 		
 		if (errors.hasErrors()) {
@@ -671,31 +694,21 @@ public class ProgramController {
 			map.put("type", "mdr");
 			map.put("ob", oblastId);
 			map.put("loc", districtId);
-			
 			map.put("idSelected", identifierValue);
 			map.put("dateEnrolled", program.getDateEnrolled());
 			
 			if (program.getClassificationAccordingToPreviousDrugUse() != null) {
 				map.put("previousDrugUse", program.getClassificationAccordingToPreviousDrugUse().getConcept().getId());
 			}
-			
 			if (program.getClassificationAccordingToPreviousTreatment() != null) {
 				map.put("patientGroup", program.getClassificationAccordingToPreviousTreatment().getConcept().getId());
 			}
-			
-			for (Object err : errors.getAllErrors())
-				System.out.println(err.toString());
-			
 			map.put("errors", errors);
-			
 			return new ModelAndView("/module/mdrtb/program/otherEnrollment.form?patientId=" + patientId + "&type=mdr", map);
-			
 		}
 		
 		PatientIdentifier identifier = new PatientIdentifier(identifierValue, getMdrIdentifier(), program.getLocation());
-		
 		patient.addIdentifier(identifier);
-		
 		Context.getPatientService().savePatient(patient);
 		
 		Integer idId = null;
@@ -723,7 +736,6 @@ public class ProgramController {
 		}
 		
 		if (errors.hasErrors()) {
-			System.out.println("errors");
 			MdrtbPatientProgram mostRecentProgram = Context.getService(MdrtbService.class)
 			        .getMostRecentMdrtbPatientProgram(patient);
 			map.put("hasActiveProgram", mostRecentProgram != null && mostRecentProgram.getActive() ? true : false);
@@ -744,22 +756,14 @@ public class ProgramController {
 			//map.put("facilities", facilities);
 			map.put("idSelected", identifierValue);
 			map.put("dateEnrolled", program.getDateEnrolled());
-			
 			if (program.getClassificationAccordingToPreviousDrugUse() != null) {
 				map.put("previousDrugUse", program.getClassificationAccordingToPreviousDrugUse().getConcept().getId());
 			}
-			
 			if (program.getClassificationAccordingToPreviousTreatment() != null) {
 				map.put("patientGroup", program.getClassificationAccordingToPreviousTreatment().getConcept().getId());
 			}
-			
-			for (Object err : errors.getAllErrors())
-				System.out.println(err.toString());
-			
 			map.put("errors", errors);
-			
 			return new ModelAndView("/module/mdrtb/program/otherEnrollment.form?patientId=" + patientId + "&type=mdr", map);
-			
 		}
 		
 		// save the actual update
@@ -781,7 +785,6 @@ public class ProgramController {
 		        "redirect:/module/mdrtb/form/tb03u.form?patientProgramId=" + program.getId() + "&encounterId=-1");
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/module/mdrtb/program/otherEnrollmentTb.form", method = RequestMethod.POST)
 	public ModelAndView processOtherEnrollTb(@ModelAttribute("program") TbPatientProgram program, BindingResult errors,
 	        @RequestParam(required = true, value = "patientId") Integer patientId,
@@ -791,33 +794,24 @@ public class ProgramController {
 	        @RequestParam(required = true, value = "identifierValue") String identifierValue, SessionStatus status,
 	        HttpServletRequest request, ModelMap map) throws SecurityException, IllegalArgumentException,
 	        NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		System.out.println("ProgramCont:processEnroll = OtherTB");
 		Patient patient = Context.getPatientService().getPatient(patientId);
-		
 		if (patient == null) {
 			throw new RuntimeException("Process enroll called with invalid patient id " + patientId);
 		}
-		
 		Location location = null;
-		
 		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
-		
 		if (facilityId != null && facilityId.length() != 0)
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), Integer.parseInt(facilityId));
 		else
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), null);
-		
 		if (location == null) {
 			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
 		}
-		
 		if (program.getLocation() == null || !location.equals(program.getLocation())) {
-			System.out.println("setting loc");
 			program.setLocation(location);
 		}
-		
 		PatientIdentifier identifier = new PatientIdentifier(identifierValue, getDotsIdentifier(), program.getLocation());
 		identifier.setPreferred(true);
 		patient.addIdentifier(identifier);
@@ -934,53 +928,31 @@ public class ProgramController {
 		return ids;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Boolean isIdentifierAssigned(PatientIdentifier pi, boolean mdr) {
-		
 		Collection<org.openmrs.PatientProgram> ppList = Context.getProgramWorkflowService()
 		        .getPatientPrograms(pi.getPatient());
 		PatientIdentifier temp = null;
 		for (org.openmrs.PatientProgram pp : ppList) {
-			/*if(mdr) {*/
 			temp = Context.getService(MdrtbService.class)
 			        .getGenPatientProgramIdentifier(Context.getProgramWorkflowService().getPatientProgram(pp.getId()));
-			/*if(temp!=null){
-				System.out.println("temp ID=" + temp.getId().intValue());
-			}
-			else {
-				System.out.println("temp ID=null");
-			}*/
-			//System.out.println("PI:" + pi.getId().intValue());
-			
 			if (temp != null && temp.getId().intValue() == pi.getId().intValue())
 				return true;
-			/*}
-			
-			else {
-				temp = Context.getService(MdrtbService.class).getTbPatientProgram(pp.getId()).getPatientIdentifier();
-				if(temp!=null && temp.getId().intValue()==pi.getId().intValue())
-					return false;
-			}*/
 		}
 		
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/program/addId.form")
 	public ModelAndView addIdToProgram(@RequestParam(required = true, value = "ppid") Integer patientProgramId,
 	        @RequestParam(required = true, value = "idToAdd") Integer patientIdentifierId, ModelMap map) {
-		
 		Context.getService(MdrtbService.class).addIdentifierToProgram(patientIdentifierId, patientProgramId);
-		
-		//map.put("patientId", Context.getProgramWorkflowService().getPatientProgram(patientProgramId).getPatient().getId());
-		
 		return new ModelAndView(
 		        "redirect:/module/mdrtb/program/enrollment.form?patientProgramId=" + patientProgramId + "&patientId="
 		                + Context.getProgramWorkflowService().getPatientProgram(patientProgramId).getPatient().getId());
-		
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/module/mdrtb/program/editProgramTb.form", method = RequestMethod.POST)
 	public ModelAndView processEditProgramTb(@ModelAttribute("program") TbPatientProgram program, BindingResult errors,
 	        @RequestParam(required = true, value = "programId") Integer programId,
@@ -998,26 +970,20 @@ public class ProgramController {
 		    Context.getProgramWorkflowService().getState(classificationAccordingToPatientGroups));
 		tpp.setClassificationAccordingToPreviousDrugUse(
 		    Context.getProgramWorkflowService().getState(classificationAccordingToPreviousDrugUse));
-		
 		if (tpp != null) {
-			
 			// save the actual update
 			Context.getProgramWorkflowService().savePatientProgram(tpp.getPatientProgram());
-			
 			status.setComplete();
 			map.clear();
 			
 			TB03Form tf = tpp.getTb03();
-			
 			if (tf != null) {
 				if (!tf.getEncounterDatetime().equals(tpp.getDateEnrolled())) {
 					tf.setEncounterDatetime(tpp.getDateEnrolled());
 					Context.getEncounterService().saveEncounter(tf.getEncounter());
 				}
 			}
-			
 			Form89 f89 = tpp.getForm89();
-			
 			if (f89 != null) {
 				if (!f89.getEncounterDatetime().equals(tpp.getDateEnrolled())) {
 					f89.setEncounterDatetime(tpp.getDateEnrolled());
@@ -1031,27 +997,22 @@ public class ProgramController {
 		// TODO: hacky to have to create a whole new visit status here just to determine the proper link?
 		// TODO: modeling visit as a status probably wasn't the best way to go on my part
 		/* VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculateTb(program);
-		
 		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink() + "&returnUrl=" + request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=" + program.getId());*/
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/program/showEditEnroll.form")
 	public ModelAndView showProgramForEdit(@RequestParam(required = true, value = "programId") Integer programId,
 	        @RequestParam(required = true, value = "type") String type, ModelMap map) {
 		MdrtbService ms = Context.getService(MdrtbService.class);
-		
 		if (type != null && type.equals("tb")) {
 			TbPatientProgram tpp = ms.getTbPatientProgram(programId);
 			map.put("program", tpp);
 		}
-		
 		else if (type != null && type.equals("mdr")) {
 			MdrtbPatientProgram tpp = ms.getMdrtbPatientProgram(programId);
 			map.put("program", tpp);
 		}
-		
 		map.put("type", type);
 		
 		/*Patient patient = Context.getPatientService().getPatient(patientId);
@@ -1074,12 +1035,11 @@ public class ProgramController {
 		map.put("mdrtbPrograms", mdrtbPrograms);
 		map.put("tbPrograms", tbPrograms);
 		*/
-		
 		return new ModelAndView("/module/mdrtb/program/showEditEnroll", map);
 		
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/module/mdrtb/program/editProgramMdrtb.form", method = RequestMethod.POST)
 	public ModelAndView processEditProgramMdrtb(@ModelAttribute("program") TbPatientProgram program, BindingResult errors,
 	        @RequestParam(required = true, value = "programId") Integer programId,
@@ -1099,15 +1059,11 @@ public class ProgramController {
 		    Context.getProgramWorkflowService().getState(classificationAccordingToPreviousDrugUse));
 		
 		if (tpp != null) {
-			
 			// save the actual update
 			Context.getProgramWorkflowService().savePatientProgram(tpp.getPatientProgram());
-			
 			status.setComplete();
 			map.clear();
-			
 			TB03uForm tf = tpp.getTb03u();
-			
 			if (tf != null) {
 				if (!tf.getEncounterDatetime().equals(tpp.getDateEnrolled())) {
 					tf.setEncounterDatetime(tpp.getDateEnrolled());
@@ -1116,7 +1072,6 @@ public class ProgramController {
 			}
 			
 			/*TB03uXDRForm tfx = tpp.getTb03uXDR();
-			
 			if(tfx!=null) {
 				if(!tfx.getEncounterDatetime().equals(tpp.getDateEnrolled())) {
 					tfx.setEncounterDatetime(tpp.getDateEnrolled());
@@ -1130,9 +1085,7 @@ public class ProgramController {
 		// TODO: hacky to have to create a whole new visit status here just to determine the proper link?
 		// TODO: modeling visit as a status probably wasn't the best way to go on my part
 		/* VisitStatus visitStatus = (VisitStatus) new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculateTb(program);
-		
 		return new ModelAndView("redirect:" + visitStatus.getNewIntakeVisit().getLink() + "&returnUrl=" + request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form%3FpatientProgramId=" + program.getId());*/
-		
 	}
 	
 }
