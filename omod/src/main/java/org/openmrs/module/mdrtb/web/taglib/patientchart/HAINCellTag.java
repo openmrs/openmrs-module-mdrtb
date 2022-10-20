@@ -72,10 +72,10 @@ String titleString = "";
     					Concept inhResult = hain.getInhResistance();
     					
     					// append the appropriate result to the result list
-    					resultString = resultString + hain.getResult().getBestShortName(Context.getLocale()).toString() + "/" + rifResult.getBestName(Context.getLocale()).toString();
+    					resultString = resultString + hain.getResult().getName(Context.getLocale()).getName() + "/" + rifResult.getName(Context.getLocale()).getName();
     						
     					// append the appropriate title to the title list
-    					titleString = titleString.concat(hain.getResult().getBestName(Context.getLocale()).toString() + " - " 
+    					titleString = titleString.concat(hain.getResult().getName(Context.getLocale()).getName() + " - " 
     						+ hain.getLab().getDisplayString() + "<br/>");
     					
     					// now figure the overall result for the purpose of determining the color of the cell

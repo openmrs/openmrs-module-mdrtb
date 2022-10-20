@@ -69,10 +69,10 @@ String titleString = "";
     					Concept rifResult = xpert.getRifResistance();
     					
     					// append the appropriate result to the result list
-    					resultString = resultString + xpert.getResult().getBestShortName(Context.getLocale()).toString() + "/" + rifResult.getBestName(Context.getLocale()).toString();
+    					resultString = resultString + xpert.getResult().getName(Context.getLocale()).getName() + "/" + rifResult.getName(Context.getLocale()).getName();
     						
     					// append the appropriate title to the title list
-    					titleString = titleString.concat(xpert.getResult().getBestName(Context.getLocale()).toString() + " - " 
+    					titleString = titleString.concat(xpert.getResult().getName(Context.getLocale()).getName() + " - " 
     						+ xpert.getLab().getDisplayString() + "<br/>");
     					
     					// now figure the overall result for the purpose of determining the color of the cell

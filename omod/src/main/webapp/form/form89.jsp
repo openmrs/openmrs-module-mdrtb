@@ -1,7 +1,14 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --%>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
@@ -11,7 +18,7 @@
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/tbdashboard.form?patientProgramId=${patientProgramId}&patientId=${form89.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -42,36 +49,43 @@
 			$j('#editVisit').show();
 		}
 		
-		$('#oblast').val(${oblastSelected});
-		$('#district').val(${districtSelected});
-		$('#facility').val(${facilitySelected});
-		$('#oblast').prop('disabled',true);
-		$('#district').prop('disabled',true);
-		$('#facility').prop('disabled',true);
-		$('#encounterDatetime').prop('disabled',true);
-		
+		// $('#oblast').val(${oblastSelected});
+		<c:if test="${! empty oblastSelected}">
+			document.getElementById('oblast').value = ${oblastSelected};
+		</c:if>
+		// $('#district').val(${districtSelected});
+		<c:if test="${! empty districtSelected}">
+			document.getElementById('district').value = ${districtSelected};
+		</c:if>
+		// $('#facility').val(${facilitySelected});
+		<c:if test="${! empty facilitySelected}">
+			document.getElementById('facility').value = ${facilitySelected};
+		</c:if>
+		<c:if test="${! empty patientGroup}" >
+			document.getElementById('classificationAccordingToPatientGroups').value = ${patientGroup};
+		</c:if>
+		<c:if test="${! empty previousDrugUse}" >
+			document.getElementById('classificationAccordingToPreviousDrugUse').value = ${previousDrugUse};
+		</c:if>
+		// document.getElementById('oblast').disabled = true;
+		// document.getElementById('district').disabled = true;
+		// document.getElementById('facility').disabled = true;
+		document.getElementById('encounterDatetime').disabled = true;
 	});
 	
 	function cooToggle () {
-		
 		var statusBox = document.getElementById('populationCategory');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideCoo(choice);
 	}
 	
 	function showHideCoo(val) {
-
-       	
        	if(val==341) {
-       		
        		document.getElementById('countryOfOrigin').disabled = false;
-       		
-       		
        	}
        	else {
-       		    $j('#countryOfOrigin').val("");
-        		document.getElementById('countryOfOrigin').disabled = true;
-
+			$j('#countryOfOrigin').val("");
+			document.getElementById('countryOfOrigin').disabled = true;
        	}
      }
 
@@ -83,56 +97,40 @@
 	}
 	
 	function showHideCityDate(val) {
-
-       	
        	if(val==356) {
-       		
        		document.getElementById('cityOfOrigin').disabled = false;
        		document.getElementById('dateOfReturn').disabled = false;
-       		
-       		
        	}
        	else {
-       		    $j('#cityOfOrigin').val("");
-        		document.getElementById('cityOfOrigin').disabled = true;
-        		$j('#dateOfReturn').val("");
-        		document.getElementById('dateOfReturn').disabled = true;
-
+			$j('#cityOfOrigin').val("");
+			document.getElementById('cityOfOrigin').disabled = true;
+			$j('#dateOfReturn').val("");
+			document.getElementById('dateOfReturn').disabled = true;
        	}
      }
 	
 	function modToggle () {
-		
 		var statusBox = document.getElementById('methodOfDetection');
 		var choice  = statusBox.options[statusBox.selectedIndex].value;
 		showHideOtherMod(choice);
 	}
 	
 	function showHideOtherMod(val) {
-
-       	
        	if(val==19) {
-       		
        		document.getElementById('otherMethodOfDetection').disabled = false;
-       		
-       		
        	}
        	else {
-       		    $j('#otherMethodOfDetection').val("");
-        		document.getElementById('otherMethodOfDetection').disabled = true;
-
+			$j('#otherMethodOfDetection').val("");
+			document.getElementById('otherMethodOfDetection').disabled = true;
        	}
      }
 	
 	function enable() {
-		
-		$('#oblast').prop('disabled',false);
-		$('#district').prop('disabled',false);
-		$('#facility').prop('disabled',false);
-		$('#encounterDatetime').prop('disabled',false);
-
-	
-}
+		document.getElementById('oblast').disabled = false;
+		document.getElementById('district').disabled = false;
+		document.getElementById('facility').disabled = false;
+		document.getElementById('encounterDatetime').disabled = false;
+	}
 
 	var tableToExcel = (function() {
 		  var uri = 'data:application/vnd.ms-excel;base64,'
@@ -144,7 +142,8 @@
 		    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
 		    window.location.href = uri + base64(format(template, ctx))
 		  }
-		})()
+		}
+	)()
 		
 	function printForm() {
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
@@ -165,8 +164,7 @@
 	    return true;
 	}
 	
-	function fun1()
-	{
+	function fun1() {
 		var e = document.getElementById("oblast");
 		var val = e.options[e.selectedIndex].value;
 		
@@ -174,8 +172,7 @@
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/form89.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty form89.id ? form89.id : -1})
 	}
 
-	function fun2()
-	{
+	function fun2() {
 		var e = document.getElementById("oblast");
 		var val1 = e.options[e.selectedIndex].value;
 		var e = document.getElementById("district");
@@ -184,9 +181,42 @@
 		if(val2!="")
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/form89.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty form89.id ? form89.id : -1})
 	}
+
+	function dateInFuture(dateStr) {
+		try {
+			var format = "${_dateFormatDisplay}";
+			var date = new Date();
+			var now = new Date();
+			if (format === "dd.MM.yyyy") {
+				var parts = dateStr.split(".");
+				var day = parts[0];
+				var month = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			if (format === "dd/MM/yyyy") {
+				var parts = dateStr.split("/");
+				var day = parts[0];
+				var month = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			if (format === "MM/dd/yyyy") {
+				var parts = dateStr.split("/");
+				var month = parts[0];
+				var day = parts[1]-1;
+				var year = parts[2];
+				var date = new Date(year, month, day);
+			}
+			return date.getTime() > now.getTime();
+		}
+		catch(err) {
+			console.log(err)
+		}
+		return true;
+	}
 	
-	function validate() 
-	{
+	function validate()  {
 		var encDate = document.getElementById("encounterDatetime").value;
 		var errorText = "";
 		if(encDate=="") {
@@ -194,21 +224,12 @@
 			alert(errorText);
 			return false;
 		}
-		
-		
-		
-		encDate = encDate.replace(/\//g,".");
-		
-		
-		var parts = encDate.split(".");
-		var day = parts[0];
-		var month = parts[1]-1;
-		var year = parts[2];
-		
-		
-		
+		if (dateInFuture(encDate)) {
+			errorText = ""  + '<spring:message code="mdrtb.error.registrationDateInFuture"/>' + "";
+			alert(errorText);
+			return false;
+		}
 		var regDate = new Date(year,month,day);
-
 		var now = new Date();
 		
 		if(regDate.getTime() > now.getTime()) {
@@ -219,120 +240,55 @@
 		
 		var firstDate = document.getElementById("dateFirstSeekingHelp").value;
 		
-		
 		if(firstDate!="") {
-			firstDate = firstDate.replace(/\//g,".");
-			parts = firstDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var firstEncDate = new Date(year,month,day);
-			
-
-			if(firstEncDate.getTime() > now.getTime()) {
+			if (dateInFuture(firstDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.firstEncounterDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
-		var returnDate = document.getElementById("dateOfReturn").value;
-		
+		var returnDate = document.getElementById("dateOfReturn").value;		
 		if(returnDate!="") {
-			returnDate = returnDate.replace(/\//g,".");
-			parts = returnDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var dateOfReturn = new Date(year,month,day);
-			
-
-			if(dateOfReturn.getTime() > now.getTime()) {
+			if (dateInFuture(returnDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.dateOfReturnInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
 		var surveyDate = document.getElementById("dateOfDecaySurvey").value;
 		
 		if(surveyDate!="") {
-			surveyDate = surveyDate.replace(/\//g,".");
-			parts = surveyDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var dateOfDecaySurvey = new Date(year,month,day);
-			
-
-			if(dateOfDecaySurvey.getTime() > now.getTime()) {
+			if (dateInFuture(surveyDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.dateOfDecaySurveyInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
 		var cmacDate = document.getElementById("cmacDate").value;
-		
 		if(cmacDate!="") {
-			cmacDate = cmacDate.replace(/\//g,".");
-			parts = cmacDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var confDate = new Date(year,month,day);
-			
-
-			if(confDate.getTime() > now.getTime()) {
+			if (dateInFuture(cmacDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.confirmationDateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		
 		var formDate = document.getElementById("form89Date").value;
-		
 		if(formDate!="") {
-			formDate = formDate.replace(/\//g,".");
-			parts = formDate.split(".");
-			day = parts[0];
-			month = parts[1]-1;
-			year = parts[2];
-			
-			var form89Date = new Date(year,month,day);
-			
-
-			if(form89Date.getTime() > now.getTime()) {
+			if (dateInFuture(formDate)) {
 				errorText = ""  + '<spring:message code="mdrtb.error.form89DateInFuture"/>' + "";
 				alert(errorText);
 				return false;
 			}
-			
-			
 		}
 		enable();
 		return true;
 	}
-	
-
--->
-
 </script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</script>
+
 <br/>
 
 <div> <!-- start of page div -->
@@ -381,7 +337,7 @@
 
 <tr>
 <td><spring:message code="mdrtb.facility" text="District"/>:</td>
-<td>${form89.location.region}</td>
+<td>${form89.location.address4}</td>
 </tr>
 
 <tr>
@@ -553,7 +509,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.xperts" text="Xpertz"/>
+<spring:message code="mdrtb.xperts" text="Xpert"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -576,7 +532,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.hains" text="Hainz"/>
+<spring:message code="mdrtb.hains" text="Hain"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -599,7 +555,7 @@
 
 <br/>
 
-<spring:message code="mdrtb.hain2s" text="Hainz"/>
+<spring:message code="mdrtb.hain2s" text="Hain"/>
 <table border="1">
 <tr>
 <td style="font-weight:bold"><nobr><spring:message code="mdrtb.monthOfTreatment"/></td>
@@ -614,7 +570,7 @@
 <td>${hain2.monthOfTreatment }</td>
 <td>${hain2.mtbResult.displayString }/FQ: ${hain2.fqResult.displayString }/ INJ: ${hain2.injResult.displayString }</td>
 <td><openmrs:formatDate date="${hain2.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
-<td>${hain2.location.displayString}
+<td>${hain2.location.displayString}</td>
 <td><a href="${pageContext.request.contextPath}/module/mdrtb/form/hain2.form?encounterId=${hain2.id}&patientProgramId=${patientProgramId}" target="_blank">${hain2.specimenId}</a></td>
 </c:forEach>
 </tr>
@@ -784,20 +740,22 @@
 <table>
 <tr id="oblastDiv">
 			<td align="right"><spring:message code="mdrtb.oblast" /></td>
-			<td><select name="oblast" id="oblast" onchange="fun1()">
+			<td><select name="oblast" id="oblast" onchange="fun1()" >
 					<option value=""></option>
 					<c:forEach var="o" items="${oblasts}">
-						<option value="${o.id}">${o.name}</option>
+						<%-- <option value="${o.id}">${o.name}</option> --%>
+						<option value="${o.id}" <c:if test="${o.name == form89.location.stateProvince}">selected</c:if> >${o.name}</option>
 					</c:forEach>
 			</select></td>
 		</tr>
 		
 		<tr id="districtDiv">
 			<td align="right"><spring:message code="mdrtb.district" /></td>
-			<td><select name="district" id="district" onchange="fun2()">
+			<td><select name="district" id="district" onchange="fun2()" >
 					<option value=""></option>
 					<c:forEach var="dist" items="${districts}">
-						<option value="${dist.id}">${dist.name}</option>
+						<%-- <option value="${dist.id}">${dist.name}</option> --%>
+						<option value="${dist.id}" <c:if test="${dist.name == form89.location.countyDistrict}">selected</c:if> >${dist.name}</option>
 					</c:forEach>
 			</select></td>
 		</tr>
@@ -807,7 +765,8 @@
 			<td><select name="facility" id="facility">
 					<option value=""></option>
 					<c:forEach var="f" items="${facilities}">
-						<option value="${f.id}">${f.name}</option>
+						<%-- <option value="${f.id}">${f.name}</option> --%>
+						<option value="${f.id}" <c:if test="${f.name == form89.location.address4}">selected</c:if> >${f.name}</option>
 					</c:forEach>
 			</select>
 			</td>

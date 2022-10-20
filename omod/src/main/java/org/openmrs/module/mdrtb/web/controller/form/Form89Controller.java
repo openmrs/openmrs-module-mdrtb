@@ -52,8 +52,8 @@ public class Form89Controller {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -64,8 +64,9 @@ public class Form89Controller {
 	
 	@ModelAttribute("form89")
 	public Form89 getForm89(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException,
+	        IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			TbPatientProgram tbProgram = Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
@@ -76,11 +77,10 @@ public class Form89Controller {
 			form.setEncounterDatetime(tbProgram.getDateEnrolled());
 			
 			form.initTB03(patientProgramId);
-			if(form.getTB03()!=null)
-					form.setLocation(form.getTB03().getLocation());
+			if (form.getTB03() != null)
+				form.setLocation(form.getTB03().getLocation());
 			return form;
-		}
-		else {
+		} else {
 			Form89 ret = new Form89(Context.getEncounterService().getEncounter(encounterId));
 			ret.initTB03(patientProgramId);
 			return ret;
@@ -89,173 +89,162 @@ public class Form89Controller {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showForm89(@RequestParam(required = false, value = "returnUrl") String returnUrl,
-			@RequestParam(value="loc", required=false) String district,
-			@RequestParam(value="ob", required=false) String oblast,
-			@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-			  	@RequestParam(required = true, value = "encounterId") Integer encounterId,
-			  	@RequestParam(required = false, value = "mode") String mode,
-			  ModelMap model) {
+	        @RequestParam(value = "loc", required = false) String district,
+	        @RequestParam(value = "ob", required = false) String oblast,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "encounterId") Integer encounterId,
+	        @RequestParam(required = false, value = "mode") String mode, ModelMap model) {
 		//ModelMap map = new ModelMap();
 		List<Region> oblasts;
-        List<Facility> facilities;
-        List<District> districts;
-        
-        if(oblast==null)
-        {
-        	Form89 form89 = null;
-        	if(encounterId!=-1) {  //we are editing an existing encounter
-        		 form89 = new Form89(Context.getEncounterService().getEncounter(encounterId));
-        	}
-        	else {
-        		try {
+		List<Facility> facilities;
+		List<District> districts;
+		
+		if (oblast == null) {
+			Form89 form89 = null;
+			if (encounterId != -1) { //we are editing an existing encounter
+				form89 = new Form89(Context.getEncounterService().getEncounter(encounterId));
+			} else {
+				try {
 					form89 = getForm89(-1, patientProgramId);
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
-        	}
-        	
-        	//TB03Form tb03 = new TB03Form(Context.getEncounterService().getEncounter(encounterId));
-        	Location location  = form89.getLocation();
-        	//System.out.println("show:" + location.getDisplayString());
-        	if(location!=null) {
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	model.addAttribute("oblasts", oblasts);
-        	for(Region o : oblasts) {
-        		if(o.getName().equals(location.getStateProvince())) {
-        			System.out.println(o.getName() + " Set");
-        			model.addAttribute("oblastSelected", o.getId());
-        			districts = Context.getService(MdrtbService.class).getRegDistricts(o.getId());
-        			model.addAttribute("districts", districts);
-        			for(District d : districts) {
-        				if(d.getName().equals(location.getCountyDistrict())) {
-        					model.addAttribute("districtSelected", d.getId());
-        					facilities = Context.getService(MdrtbService.class).getRegFacilities(d.getId());
-        					if(facilities != null ) {
-        						model.addAttribute("facilities", facilities);
-        						for(Facility f : facilities) {
-        							if(f.getName().equals(location.getRegion())) {
-        								System.out.println("setting");
-        								model.addAttribute("facilitySelected", f.getId());
-        								break;
-        							}
-        						}
-        					}
-        					break;
-        				}
-        			}
-        			
-        			break;
-        		}
-        	}
-        	}
-        	else {
-        		oblasts  = Context.getService(MdrtbService.class).getOblasts();
-        		model.addAttribute("oblasts", oblasts);
-        	}
-        }
-        
-//        else if(oblast==null) {
-//        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-//        	model.addAttribute("oblasts", oblasts);
-//        	
-//        }
-        else if(district==null)
-        { 
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	districts= Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-        	model.addAttribute("oblastSelected", oblast);
-            model.addAttribute("oblasts", oblasts);
-            model.addAttribute("districts", districts);
-        }
-        else
-        {
-        	oblasts = Context.getService(MdrtbService.class).getOblasts();
-        	districts= Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-        	facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
-            model.addAttribute("oblastSelected", oblast);
-            model.addAttribute("oblasts", oblasts);
-            model.addAttribute("districts", districts);
-            model.addAttribute("districtSelected", district);
-            model.addAttribute("facilities", facilities);
-        }
-        
-        model.addAttribute("encounterId", encounterId);
-        
-        if(mode!=null && mode.length()!=0) {
-        	model.addAttribute("mode", mode);
-        }
-		
-		return new ModelAndView("/module/mdrtb/form/form89", model);	
+			}
+			
+			//TB03Form tb03 = new TB03Form(Context.getEncounterService().getEncounter(encounterId));
+			Location location = form89.getLocation();
+			String obName = location.getStateProvince();
+			String distName = location.getCountyDistrict();
+			String facName = location.getAddress4();
+			
+			Region ob = null;
+			District dist = null;
+			
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			model.addAttribute("oblasts", oblasts);
+			if (obName != null) {
+				for (Region o : oblasts) {
+					if (o.getName().equalsIgnoreCase(obName)) {
+						ob = o;
+						break;
+					}
+				}
+			}
+			if (ob != null) {
+				model.addAttribute("oblastSelected", ob);
+				districts = Context.getService(MdrtbService.class).getDistricts(ob.getId());
+				model.addAttribute("districts", districts);
+				if (distName != null) {
+					for (District d : districts) {
+						if (d.getName().equalsIgnoreCase(distName)) {
+							dist = d;
+							break;
+						}
+					}
+					if (dist != null) {
+						model.addAttribute("districtSelected", dist.getId());
+					}
+				}
+			}
+			if (dist != null) {
+				facilities = Context.getService(MdrtbService.class).getFacilities(dist.getId());
+				if (facilities.size() == 0) { // Maybe it's for Dushanbe
+					facilities = Context.getService(MdrtbService.class).getFacilities(ob.getId());
+				}
+				model.addAttribute("facilities", facilities);
+				if (facName != null) {
+					for (Facility f : facilities) {
+						if (f.getName().equalsIgnoreCase(facName)) {
+							model.addAttribute("facilitySelected", f.getId());
+							break;
+						}
+					}
+				}
+			}
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			model.addAttribute("oblastSelected", oblast);
+			model.addAttribute("oblasts", oblasts);
+			model.addAttribute("districts", districts);
+		} else {
+			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			if (facilities.size() == 0) { // Maybe it's for Dushanbe
+				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+			}
+			model.addAttribute("oblastSelected", oblast);
+			model.addAttribute("oblasts", oblasts);
+			model.addAttribute("districts", districts);
+			model.addAttribute("districtSelected", district);
+			model.addAttribute("facilities", facilities);
+		}
+		model.addAttribute("encounterId", encounterId);
+		if (mode != null && mode.length() != 0) {
+			model.addAttribute("mode", mode);
+		}
+		return new ModelAndView("/module/mdrtb/form/form89", model);
 	}
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processForm89 (@ModelAttribute("form89") Form89 form89, BindingResult errors, 
-	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                       @RequestParam(required = true, value = "oblast") String oblastId,
-	                                       @RequestParam(required = true, value = "district") String districtId,
-	                                       @RequestParam(required = false, value = "facility") String facilityId,
-	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
-		
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processForm89(@ModelAttribute("form89") Form89 form89, BindingResult errors,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "oblast") String oblastId,
+	        @RequestParam(required = true, value = "district") String districtId,
+	        @RequestParam(required = false, value = "facility") String facilityId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
 		
 		// perform validation and check for errors
 		/*if (form89 != null) {
-    		new SimpleFormValidator().validate(form89, errors);
-    	}*/
+			new SimpleFormValidator().validate(form89, errors);
+		}*/
 		
 		/*if (errors.hasErrors()) {
 			map.put("errors", errors);
 			return new ModelAndView("/module/mdrtb/form/intake", map);
 		}*/
 		
-		Location location=null;
-    	
-    	
-    	System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
-    	
-    	if(facilityId!=null && facilityId.length()!=0)
-    		location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),Integer.parseInt(districtId),Integer.parseInt(facilityId));
-    	else
-    		location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),Integer.parseInt(districtId),null);
+		Location location = null;
 		
-    	if(location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
-    		throw new MdrtbAPIException("Invalid Hierarchy Set selected");
-    	}
-    	
-    	
-		if(form89.getLocation()==null || !location.equals(form89.getLocation())) {
+		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
+		
+		if (facilityId != null && facilityId.length() != 0)
+			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
+			    Integer.parseInt(districtId), Integer.parseInt(facilityId));
+		else
+			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
+			    Integer.parseInt(districtId), null);
+		
+		if (location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
+			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
+		}
+		
+		if (form89.getLocation() == null || !location.equals(form89.getLocation())) {
 			System.out.println("setting loc");
 			form89.setLocation(location);
 		}
 		
-		if(form89.getPopulationCategory()!=null && form89.getPopulationCategory().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FOREIGNER).getId().intValue()) {
+		if (form89.getPopulationCategory() != null && form89.getPopulationCategory().getId().intValue() != Context
+		        .getService(MdrtbService.class).getConcept(MdrtbConcepts.FOREIGNER).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setCountryOfOrigin(null);
 		}
 		
-		if(form89.getCircumstancesOfDetection()!=null && form89.getCircumstancesOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT).getId().intValue()) {
+		if (form89.getCircumstancesOfDetection() != null && form89.getCircumstancesOfDetection().getId()
+		        .intValue() != Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MIGRANT).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setCityOfOrigin(null);
 			form89.setDateOfReturn(null);
 		}
 		
-		if(form89.getMethodOfDetection()!=null && form89.getMethodOfDetection().getId().intValue()!=Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
+		if (form89.getMethodOfDetection() != null && form89.getMethodOfDetection().getId().intValue() != Context
+		        .getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER).getId().intValue()) {
 			
 			System.out.println("Setting null");
 			form89.setOtherMethodOfDetection(null);
@@ -287,7 +276,7 @@ public class Form89Controller {
 			pp.setStates(states);	
 			programModified = true;
 		}
-
+		
 		//outcome has been added	
 		else if(outcomePatientState == null && outcome != null) {
 			System.out.println("outcome added");
@@ -313,7 +302,7 @@ public class Form89Controller {
 		//TX OUTCOME
 		//PATIENT GROUP
 		//PATIENT DEATH AND CAUSE OF DEATH
-*/
+		*/
 		// clears the command object from the session
 		status.setComplete();
 		
@@ -323,13 +312,15 @@ public class Form89Controller {
 		}*/
 		
 		map.clear();
-
+		
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
 			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/tbdashboard.form";
 		}
 		
-		returnUrl = MdrtbWebUtil.appendParameters(returnUrl, Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(), patientProgramId);
+		returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
+		    Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(),
+		    patientProgramId);
 		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}
@@ -339,9 +330,9 @@ public class Form89Controller {
 		return patientProgramId;
 	}
 	
-	
 	@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+	public TbPatientProgram getTbPatientProgram(
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
 	}
 	
@@ -431,7 +422,7 @@ public class Form89Controller {
 	@ModelAttribute("eplocations")
 	public Collection<ConceptAnswer> getPossibleEPLocations() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.SITE_OF_EPTB);
-	}	
+	}
 	
 	@ModelAttribute("diabetesOptions")
 	public Collection<ConceptAnswer> getPossibleDiabetes() {
@@ -447,7 +438,7 @@ public class Form89Controller {
 	public Collection<ConceptAnswer> getPossibleHeartDisease() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.HYPERTENSION_OR_HEART_DISEASE);
 	}
-
+	
 	@ModelAttribute("ulcerOptions")
 	public Collection<ConceptAnswer> getPossibleUlcers() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.ULCER);
@@ -457,7 +448,7 @@ public class Form89Controller {
 	public Collection<ConceptAnswer> getPossibleDecay() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.PRESENCE_OF_DECAY);
 	}
-		
+	
 	@ModelAttribute("mentalDisorderOptions")
 	public Collection<ConceptAnswer> mentalDisorderOptions() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.MENTAL_DISORDER);
@@ -488,8 +479,6 @@ public class Form89Controller {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.NO_DISEASE);
 	}
 	
-	
-	
 	@ModelAttribute("gptOptions")
 	public Collection<ConceptAnswer> getPossibleGPT() {
 		return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.GENERAL_PRESCRIBED_TREATMENT);
@@ -504,16 +493,18 @@ public class Form89Controller {
 	public ArrayList<ConceptAnswer> getYesno() {
 		
 		ArrayList<ConceptAnswer> typeArray = new ArrayList<ConceptAnswer>();
-		Collection<ConceptAnswer> ca= Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.REQUIRES_ANCILLARY_DRUGS);
-		for(int i=0; i< 2; i++) {
+		Collection<ConceptAnswer> ca = Context.getService(MdrtbService.class)
+		        .getPossibleConceptAnswers(MdrtbConcepts.REQUIRES_ANCILLARY_DRUGS);
+		for (int i = 0; i < 2; i++) {
 			typeArray.add(null);
 		}
-		for(ConceptAnswer c : ca) {
+		for (ConceptAnswer c : ca) {
 			
-			if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NO).getId().intValue()) {
+			if (c.getAnswerConcept().getId().intValue() == Context.getService(MdrtbService.class)
+			        .getConcept(MdrtbConcepts.NO).getId().intValue()) {
 				typeArray.set(0, c);
-			}
-			else if(c.getAnswerConcept().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.YES).getId().intValue()) {
+			} else if (c.getAnswerConcept().getId().intValue() == Context.getService(MdrtbService.class)
+			        .getConcept(MdrtbConcepts.YES).getId().intValue()) {
 				typeArray.set(1, c);
 			}
 			

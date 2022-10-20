@@ -201,7 +201,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		Xpert xpert = (Xpert) item.getValue();
 		
 		if (xpert != null) {
-			String[] params = { xpert.getResult().getBestShortName(Context.getLocale()).toString(),
+			String[] params = { xpert.getResult().getName(Context.getLocale()).getName(),
 			        xpert.getDateCollected() != null ? df.format(xpert.getDateCollected()) : "(N/A)",
 			        xpert.getLab() != null ? xpert.getLab().getDisplayString() : "(N/A)" };
 			
@@ -228,7 +228,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		HAIN hain = (HAIN) item.getValue();
 		
 		if (hain != null) {
-			String[] params = { hain.getResult().getBestShortName(Context.getLocale()).toString(),
+			String[] params = { hain.getResult().getName(Context.getLocale()).getName(),
 			        hain.getDateCollected() != null ? df.format(hain.getDateCollected()) : "(N/A)",
 			        hain.getLab() != null ? hain.getLab().getDisplayString() : "(N/A)" };
 			if (status.getPatientProgram() != null) {
@@ -255,7 +255,7 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		HAIN2 hain2 = (HAIN2) item.getValue();
 		
 		if (hain2 != null) {
-			String[] params = { hain2.getResult().getBestShortName(Context.getLocale()).toString(),
+			String[] params = { hain2.getResult().getName(Context.getLocale()).getName(),
 			        hain2.getDateCollected() != null ? df.format(hain2.getDateCollected()) : "(N/A)",
 			        hain2.getLab() != null ? hain2.getLab().getDisplayString() : "(N/A)" };
 			if (status.getPatientProgram() != null) {
@@ -314,14 +314,14 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 			if (dstResultsMap.get(drug.getId()) != null) {
 				for (DstResult result : dstResultsMap.get(drug.getId())) {
 					StringBuffer sb = new StringBuffer();
-					sb.append(result.getDrug().getDisplayString());
+					sb.append(result.getDrug().getName(Context.getLocale(), ConceptNameType.SHORT, null));
 					sb.append(": ");
-					ConceptName name = result.getResult().getShortNameInLocale(Context.getLocale());
+					ConceptName name = result.getResult().getName(Context.getLocale(), ConceptNameType.SHORT, null);
 					if (name == null) {
 						name = result.getResult().getName(Context.getLocale());
 					}
 					sb.append(name.getName());
-					sb.append("<br/>");
+					sb.append("; ");
 					results += sb.toString();
 					
 				}

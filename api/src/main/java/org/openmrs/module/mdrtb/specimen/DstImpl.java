@@ -405,8 +405,7 @@ public class DstImpl extends TestImpl implements Dst {
 				
 				for(DstResult result : dstResultsMap.get(drug.getId())) {
 					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG).getId().intValue()) {					
-						results += result.getDrug().getName().getShortName() + ",";
-				
+						results += result.getDrug().getName().getName() + ",";
 					}
 				}
 			}

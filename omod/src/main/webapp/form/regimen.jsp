@@ -227,8 +227,8 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.facility" text="District"/>:</td>
-<td>${regimenForm.location.region}</td>
+<td><spring:message code="mdrtb.facility" text="Facility"/>:</td>
+<td>${regimenForm.location.address4}</td>
 </tr>
 
 <tr>
@@ -487,8 +487,8 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.facility" text="District"/>:</td>
-<td>${regimenForm.location.region}</td>
+<td><spring:message code="mdrtb.facility" text="Facility"/>:</td>
+<td>${regimenForm.location.address4}</td>
 </tr>
 
 <tr>
