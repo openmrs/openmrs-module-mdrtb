@@ -1,16 +1,25 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 
 <%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
 <openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
 
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
-<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" />
+<%-- <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" /> --%>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <script>
+$(document).ready(function(){
+	$('#oblast').val(${oblastSelected});
+	$('#district').val(${districtSelected});
+	$('#year').val(${yearSelected});
+	$('#quarter').val(${quarterSelected});
+	$('#month').val(${monthSelected});
+});
+
 function submitForm(url) {
 	var e = document.getElementById("oblast");
 	var val1 = e.options[e.selectedIndex].value;
@@ -48,8 +57,8 @@ function fun2()
 	var val2 = e.options[e.selectedIndex].value;
 	var year = document.getElementById("year").value;
 	
-	var quarter = "\"" + document.getElementById("quarter").value +  "\"";
-	var month =  "\"" + document.getElementById("month").value +  "\"";
+	var quarter = document.getElementById("quarter").value;
+	var month = document.getElementById("month").value;
 	if(val2!="")
 		window.location.replace("${pageContext.request.contextPath}/module/mdrtb/reporting/patientLists.form?loc="+val2+"&ob="+val1+"&yearSelected="+year+"&quarterSelected="+quarter+"&monthSelected="+month)
 }
@@ -57,32 +66,17 @@ function fun2()
 function fun3() {
   	var e = document.getElementById("oblast");
 	var val1 = e.options[e.selectedIndex].value;
-	var e = document.getElementById("district");
-	var val2 = e.options[e.selectedIndex].value;
 	var e = document.getElementById("facility");
 	var val3 = e.options[e.selectedIndex].value;
-	
-	if(val1==186) {
-		if(val3!="") {
+	if(val1 == 186) {
+		if(document.getElementById("facility").selectedIndex > 0) {
 			document.getElementById("district").selectedIndex = 0;
 		}
 	}
 	return;
-  
 }
 </script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
-<script>
-$(document).ready(function(){
-	$('#oblast').val(${oblastSelected});
-	$('#district').val(${districtSelected});
-	$('#year').val(${yearSelected});
-	$('#quarter').val(${quarterSelected});
-	$('#month').val(${monthSelected});
-});
-</script>
+
 
 <a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form"><spring:message code="mdrtb.back" text="Backu"/></a>
 <br/><br/>

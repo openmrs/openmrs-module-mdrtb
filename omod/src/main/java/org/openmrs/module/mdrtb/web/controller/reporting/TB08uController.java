@@ -113,20 +113,6 @@ public class TB08uController {
 		model.addAttribute("monthSelected", month);
 		model.addAttribute("quarterSelected", quarter);
 		
-		/*
-		 * List<Location> locations =
-		 * Context.getLocationService().getAllLocations(false);//
-		 * Context.getLocationService().getAllLocations();//ms =
-		 * (MdrtbDrugForecastService)
-		 * Context.getService(MdrtbDrugForecastService.class); List<Region>
-		 * oblasts = Context.getService(MdrtbService.class).getOblasts();
-		 * //drugSets = ms.getMdrtbDrugs();
-		 * 
-		 * 
-		 * 
-		 * model.addAttribute("locations", locations);
-		 * model.addAttribute("oblasts", oblasts);
-		 */
 		return new ModelAndView("/module/mdrtb/reporting/tb08u", model);
 		
 	}
@@ -137,26 +123,12 @@ public class TB08uController {
 	        @RequestParam(value = "quarter", required = false) String quarter,
 	        @RequestParam(value = "month", required = false) String month, ModelMap model) throws EvaluationException {
 		System.out.println("---POST-----");
-		//	System.out.println("PARAMS:" + location + " " + oblast + " " + year + " " + quarter + " " + month);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat();
-		sdf.applyPattern("dd.MM.yyyy");
-		SimpleDateFormat rdateSDF = new SimpleDateFormat();
-		rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
+		SimpleDateFormat sdf = Context.getDateFormat();
+    	SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
 		
-		//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-		ArrayList<Location> locList = null;
-		if (oblastId != null) {
-			if (oblastId.intValue() == 186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId,
-				    facilityId);
-			} else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-			}
-			
-		}
-		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter,
-		    month);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
+		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
 		
 		TB08uData table1 = new TB08uData();
 		Concept q = null;

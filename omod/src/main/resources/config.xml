@@ -16,7 +16,6 @@
 	
 	<require_modules>
 		<require_module version="${openmrs.reporting.version}">org.openmrs.module.reporting</require_module>
-		<require_module version="${wsrestVersion}">org.openmrs.module.webservices.rest</require_module>
 <!-- 		<require_module version="2.10">org.openmrs.module.addresshierarchy</require_module> -->
 	</require_modules>
 		

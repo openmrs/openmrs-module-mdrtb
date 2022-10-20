@@ -165,23 +165,9 @@ public class RegimenController {
             @RequestParam(value="month", required=false) String month, HttpServletResponse response,
             ModelMap model) throws EvaluationException, IOException {
     	
-    	
     	System.out.println("---POST-----");
-    	System.out.println("PARAMS:" + oblastId + " " + districtId + " " + facilityId + " " + year + " " + quarter + " " + month);
     	
-    	
-    	//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    	
-    	ArrayList<Location> locList = null;
-    	if(oblastId!=null) {
-    		if(oblastId.intValue()==186) {
-    			locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId,districtId,facilityId);
-    		}
-    		else {
-    			locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    		}
-    	}
-    	
+    	ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
     	ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilledWithTxStartDateDuring(locList, year, quarter, month);
     	
     	Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);

@@ -103,9 +103,6 @@ public class TB03Data implements Comparable <TB03Data>{
     private String dstBdq;
     private String dstDlm;
     
-   
-    
-    
 	public TB03Data() {
 		// TODO Auto-generated constructor stub
 		dstResults = new HashMap<String,String>();
@@ -215,8 +212,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			this.regGroup = 7;
 		else if(regGroup == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.transferIn.conceptId")))
 			this.regGroup = 8;
-		
-		
 	}
 
 	public String getHivTestResult() {
@@ -294,7 +289,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				return "/" + xpertRIFResult;
 		}
-		
 		return xpertRIFResult;
 	}
 
@@ -337,8 +331,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				return hainINHResult;
 		}
-		
-		
 		return hainINHResult;
 	}
 
@@ -358,8 +350,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				return hainRIFResult;
 		}
-		
-		
 		return hainRIFResult;
 	}
 
@@ -514,8 +504,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				this.tb03TreatmentOutcome = 4;
 		}
-			
-		
 		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.ltfu.conceptId")))
 			this.tb03TreatmentOutcome = 5;
 		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.canceled.conceptId")))
@@ -809,18 +797,14 @@ public class TB03Data implements Comparable <TB03Data>{
 
 	public void setDstResults(HashMap<String, String> dstResults) {
 		this.dstResults = dstResults;
-		
 	}
 
 	public int compareTo(TB03Data o) {
 		// TODO Auto-generated method stub
 		if(o.getIdentifier()==null || getIdentifier()==null)
 			return 0;
-		
 		return identifier.compareTo(o.getIdentifier());
-
 	}
-
 
 	public String getGender() {
 		if(patient.getGender().equals("M"))
@@ -854,9 +838,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				return hain2InjResult;
 		}
-		
-		
-		
 		return hain2InjResult;
 	}
 
@@ -875,9 +856,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			else
 				return hain2FqResult;
 		}
-		
-		
-		
 		return hain2FqResult;
 	}
 
@@ -988,10 +966,4 @@ public class TB03Data implements Comparable <TB03Data>{
 	public void setMonth8TestLab(String month8TestLab) {
 		this.month8TestLab = month8TestLab;
 	}
-	
-		
-	
-	
-	
-
 }

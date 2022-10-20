@@ -163,7 +163,8 @@ public class MissingTb03uController {
     	
     	Set<Integer> idSet = patients.getMemberIds();*/
     	//ArrayList<TB03Data> patientSet  = new ArrayList<TB03Data>();
-    	SimpleDateFormat sdf = new SimpleDateFormat();
+		SimpleDateFormat sdf = Context.getDateFormat();
+    	SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
     	
     	/*ArrayList<Person> patientList = new ArrayList<Person>();
     	ArrayList<Concept> conceptQuestionList = new ArrayList<Concept>();
@@ -183,30 +184,14 @@ public class MissingTb03uController {
     	long timeDiff = 0;
     	double diffInWeeks = 0;
     	
-    	 DQItem dqi = null;
+    	DQItem dqi = null;
     	
     	/*Smear diagnosticSmear = null;
 	    Xpert firstXpert = null;
 	    HAIN firstHAIN = null;
 	    Culture diagnosticCulture  = null;*/
 	    
-    	sdf.applyPattern("dd.MM.yyyy");
-    	
-    	SimpleDateFormat rdateSDF = new SimpleDateFormat();
-    	rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
-    	
-    	//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-    	
-    	ArrayList<Location> locList = null;
-    	if(oblastId!=null) {
-    		if(oblastId.intValue()==186) {
-    			locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId,districtId,facilityId);
-    		}
-    		else {
-    			locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    		}
-    	}
-		
+    	ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
     	ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
     	Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);
 		

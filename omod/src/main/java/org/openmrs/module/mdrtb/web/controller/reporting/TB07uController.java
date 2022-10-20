@@ -139,28 +139,14 @@ public class TB07uController {
 	        @RequestParam(value = "quarter", required = false) String quarter,
 	        @RequestParam(value = "month", required = false) String month, ModelMap model) throws EvaluationException {
 		System.out.println("---POST-----");
-		// System.out.println("PARAMS:" + location + " " + oblast + " " + year +
-		// " " + quarter + " " + month);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat();
-		sdf.applyPattern("dd.MM.yyyy");
-		SimpleDateFormat rdateSDF = new SimpleDateFormat();
-		rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
+		SimpleDateFormat sdf = Context.getDateFormat();
+    	SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
 		
-		ArrayList<Location> locList = null;
-		if (oblastId != null) {
-			if (oblastId.intValue() == 186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId,
-				    facilityId);
-			} else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-			}
-		}
-		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter,
-		    month);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
+		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
 		
-		ArrayList<RegimenForm> regList = Context.getService(MdrtbService.class).getRegimenFormsFilled(locList, year, quarter,
-		    month);
+		ArrayList<RegimenForm> regList = Context.getService(MdrtbService.class).getRegimenFormsFilled(locList, year, quarter, month);
 		if (regList != null) {
 			System.out.println("REG LIST: " + regList.size());
 		} else {
@@ -209,7 +195,7 @@ public class TB07uController {
 		Boolean isStandard = null;
 		Boolean isIndLzd = null;
 		Boolean isIndBdq = null;
-		Boolean hiv = null;
+		Boolean hiv = Boolean.FALSE;
 		
 		Concept hivStatus = null;
 		
@@ -253,19 +239,11 @@ public class TB07uController {
 			txStarted = txStartDate != null;
 			
 			ageAtRegistration = tf.getAgeAtMDRRegistration();
-			if (ageAtRegistration != null)
-				age = ageAtRegistration.intValue();
-			
-			else
-				age = 999;
+			age = ageAtRegistration != null ? ageAtRegistration.intValue() : Integer.MAX_VALUE;
 			
 			hivStatus = tf.getHivStatus();
 			if (hivStatus != null && hivStatus.getConceptId().intValue() == positive) {
 				hiv = Boolean.TRUE;
-			}
-			
-			else {
-				hiv = Boolean.FALSE;
 			}
 			
 			q = tf.getRegistrationGroup();
@@ -277,50 +255,34 @@ public class TB07uController {
 			
 			if (groupId == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.new.conceptId"))) {
 				newCase = Boolean.TRUE;
-				System.out.println("NEW");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse1.conceptId"))) {
 				relapse1 = Boolean.TRUE;
-				System.out.println("R1");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse2.conceptId"))) {
 				relapse2 = Boolean.TRUE;
-				System.out.println("R2");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault1.conceptId"))) {
 				default1 = Boolean.TRUE;
-				System.out.println("D1");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault2.conceptId"))) {
 				default2 = Boolean.TRUE;
-				System.out.println("D2");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure1.conceptId"))) {
 				failure1 = Boolean.TRUE;
-				System.out.println("F1");
 			}
-			
 			else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure2.conceptId"))) {
 				failure2 = Boolean.TRUE;
-				System.out.println("F2");
 			}
-			
 			else {
 				other = Boolean.TRUE;
-				System.out.println("O");
 			}
-			
 			q = tf.getResistanceType();
 			
 			if (q == null)

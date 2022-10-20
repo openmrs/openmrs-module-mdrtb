@@ -75,7 +75,6 @@ public class Form8Controller {
 				model.addAttribute("facilities", facilities);
 				model.addAttribute("dushanbe", 186);
 			}
-			
 			else {
 				oblasts = Context.getService(MdrtbService.class).getOblasts();
 				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
@@ -95,15 +94,14 @@ public class Form8Controller {
 				model.addAttribute("facilities", facilities);
 				model.addAttribute("dushanbe", 186);
 			}
-			
 			else {
 				oblasts = Context.getService(MdrtbService.class).getOblasts();
 				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
 				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
-				model.addAttribute("districts", districts);
 				model.addAttribute("districtSelected", district);
+				model.addAttribute("districts", districts);
 				model.addAttribute("facilities", facilities);
 			}
 		}

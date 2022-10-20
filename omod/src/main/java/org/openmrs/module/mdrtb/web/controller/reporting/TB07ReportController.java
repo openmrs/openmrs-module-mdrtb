@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jfree.util.Log;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Patient;
@@ -133,27 +134,16 @@ public class TB07ReportController {
 	        @RequestParam(value = "quarter", required = false) String quarter,
 	        @RequestParam(value = "month", required = false) String month, ModelMap model) throws EvaluationException {
 		
-		System.out.println("---POST-----");
+		System.out.println("Loading TB07");
 		
-		SimpleDateFormat sdf = new SimpleDateFormat();
-		sdf.applyPattern("dd.MM.yyyy");
-		SimpleDateFormat rdateSDF = new SimpleDateFormat();
-		rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
+		SimpleDateFormat sdf = Context.getDateFormat();
+		// sdf.applyPattern("dd.MM.yyyy"); // Not needed if the above is working
 		
-		ArrayList<Location> locList = null;
+		SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
+		// rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss"); // Not needed if the above is working
 		
-		if (oblastId != null) {
-			if (oblastId.intValue() == 186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId,
-				    facilityId);
-			}
-			
-			else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-			}
-		}
-		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter,
-		    month);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
+		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
 		System.out.println("list size:" + tb03List.size());
 		//CohortDefinition baseCohort = null;
 		
@@ -180,12 +170,11 @@ public class TB07ReportController {
 		TB07Table1Data table1 = new TB07Table1Data();
 		
 		for (TB03Form tf : tb03List) {
-			
+			System.out.println("Processing Program ID: " + tf.getPatProgId());
 			ageAtRegistration = -1;
 			pulmonary = null;
 			bacPositive = null;
 			hivPositive = null;
-			System.out.println("PID:" + tf.getPatient().getPatientId());
 			Integer programId = tf.getPatProgId();
 			
 			TbPatientProgram tpp = null;
@@ -310,8 +299,6 @@ public class TB07ReportController {
 					table1.setNewAll(table1.getNewAll() + 1);
 					if (hivPositive)
 						table1.setNewAllHIV(table1.getNewAllHIV() + 1);
-					
-					//System.out.println("NEW MALE");
 					
 					if (patient.getGender().equals("M")) {
 						

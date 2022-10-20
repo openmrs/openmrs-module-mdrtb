@@ -25,7 +25,7 @@ response.setDateHeader ("Expires", -1);
 		function printForm() {
 			var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		    mywindow.document.write('<html><head><title><spring:message code="mdrtb.tb07u.title" text="TB07"/></title>');
+		    mywindow.document.write('<html><head><title><spring:message code="mdrtb.tb07.title" text="TB07"/></title>');
 		    mywindow.document.write('</head><body >');
 		   // mywindow.document.write('<h1><spring:message code="mdrtb.pv.aeForm" text="AE"/></h1>');
 		    mywindow.document.write(document.getElementById("tb07").innerHTML);
@@ -182,7 +182,7 @@ response.setDateHeader ("Expires", -1);
 <table border="0" width="100%">
 	<tbody>
 		<tr>
-			<td align="center" style="font-size:14px; font-weight:bold;border:0px" width="90%"><spring:message code="mdrtb.tb07u.title"/></td>
+			<td align="center" style="font-size:14px; font-weight:bold;border:0px" width="90%"><spring:message code="mdrtb.tb07.title"/></td>
 			<td align="right" style="font-size:14px; font-weight:bold;border:0px" valign="top" width="10%">TB 07</td>
 		</tr>
 	</tbody>
@@ -213,7 +213,7 @@ response.setDateHeader ("Expires", -1);
 			style="width: 980px;">
 			<tbody>
 				<tr>
-					<td colspan="2" rowspan="1"><spring:message code="mdrtb.tb07u.type"/></td>
+					<td colspan="2" rowspan="1"><spring:message code="mdrtb.type"/></td>
 					<td colspan="2" rowspan="1" style="text-align: center;">0-4</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">5-14</td>
 					<td colspan="2" rowspan="1" style="text-align: center;">15-17</td>
@@ -1234,7 +1234,7 @@ response.setDateHeader ("Expires", -1);
 <td style="text-align: center;" colspan="3"><spring:message code="mdrtb.tb07u.total"/></td>
 <td colspan="3">
 <p style="text-align: center;"><spring:message code="mdrtb.tb07u.total"/></p>
-<p style="text-align: center;">()<spring:message code="mdrtb.tb07u.t1t2"/>)</p>
+<p style="text-align: center;">(<spring:message code="mdrtb.tb07u.t1t2"/>)</p>
 </td>
 </tr>
 <tr>

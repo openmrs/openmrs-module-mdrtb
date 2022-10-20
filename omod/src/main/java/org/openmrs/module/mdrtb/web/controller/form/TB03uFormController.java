@@ -16,6 +16,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PatientProgram;
 import org.openmrs.Person;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -67,8 +68,8 @@ public class TB03uFormController {
 	
 	@ModelAttribute("tb03u")
 	public TB03uForm getTB03uForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId/*,
-	                                                                                           @RequestParam(required = false, value = "previousProgramId") Integer previousProgramId*/)
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId
+	        /* @RequestParam(required = false, value = "previousProgramId") Integer previousProgramId*/)
 	        throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException,
 	        InvocationTargetException {
 		
@@ -83,13 +84,12 @@ public class TB03uFormController {
 			form.setLocation(tbProgram.getLocation());
 			form.setPatProgId(patientProgramId);
 			
-			if (tbProgram.getClassificationAccordingToPreviousTreatment() != null)
+			if (tbProgram.getClassificationAccordingToPreviousTreatment() != null) {
 				form.setRegistrationGroup(tbProgram.getClassificationAccordingToPreviousTreatment().getConcept());
-			if (tbProgram.getClassificationAccordingToPreviousDrugUse() != null)
+			}
+			if (tbProgram.getClassificationAccordingToPreviousDrugUse() != null) {
 				form.setRegistrationGroupByDrug(tbProgram.getClassificationAccordingToPreviousDrugUse().getConcept());
-			/*if(previousProgramId!=null)
-				form.setPreviousProgramId(previousProgramId);*/
-			
+			}
 			return form;
 		} else {
 			return new TB03uForm(Context.getEncounterService().getEncounter(encounterId));
@@ -115,62 +115,74 @@ public class TB03uFormController {
 				try {
 					tb03u = getTB03uForm(-1, patientProgramId);
 				}
-				catch (SecurityException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
-				catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
-				catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				catch (InvocationTargetException e) {
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			
 			//TB03Form tb03 = new TB03Form(Context.getEncounterService().getEncounter(encounterId));
 			Location location = tb03u.getLocation();
-			//System.out.println("show:" + location.getDisplayString());
+			String obName = location.getStateProvince();
+			String distName = location.getCountyDistrict();
+			String facName = location.getAddress4();
+			
+			Region ob = null;
+			District dist = null;
+			
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
 			model.addAttribute("oblasts", oblasts);
-			for (Region o : oblasts) {
-				if (o.getName().equals(location.getStateProvince())) {
-					model.addAttribute("oblastSelected", o.getId());
-					districts = Context.getService(MdrtbService.class).getRegDistricts(o.getId());
-					model.addAttribute("districts", districts);
+			if (obName != null) {
+				for (Region o : oblasts) {
+					if (o.getName().equalsIgnoreCase(obName)) {
+						ob = o;
+						break;
+					}
+				}
+			}
+			if (ob != null) {
+				districts = Context.getService(MdrtbService.class).getDistricts(ob.getId());
+				model.addAttribute("districts", districts);
+				if (distName != null) {
 					for (District d : districts) {
-						if (d.getName().equals(location.getCountyDistrict())) {
-							model.addAttribute("districtSelected", d.getId());
-							facilities = Context.getService(MdrtbService.class).getRegFacilities(d.getId());
-							if (facilities != null) {
-								model.addAttribute("facilities", facilities);
-								for (Facility f : facilities) {
-									if (f.getName().equals(location.getRegion())) {
-										model.addAttribute("facilitySelected", f.getId());
-										break;
-									}
-								}
-							}
+						if (d.getName().equalsIgnoreCase(distName)) {
+							dist = d;
 							break;
 						}
 					}
-					break;
+					if (dist != null) {
+						model.addAttribute("districtSelected", dist.getId());
+					}
 				}
 			}
-		} else if (district == null) {
+			if (dist != null) {
+				facilities = Context.getService(MdrtbService.class).getFacilities(dist.getId());
+				if (facilities.size() == 0) { // Maybe it's for Dushanbe
+					facilities = Context.getService(MdrtbService.class).getFacilities(ob.getId());
+				}
+				model.addAttribute("facilities", facilities);
+				if (facName != null) {
+					for (Facility f : facilities) {
+						if (f.getName().equalsIgnoreCase(facName)) {
+							model.addAttribute("facilitySelected", f.getId());
+							break;
+						}
+					}
+				}
+			}
+		}
+		else if (district == null) {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
 			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
+			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			if (facilities.size() == 0) { // Maybe it's for Dushanbe
+				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
@@ -181,7 +193,6 @@ public class TB03uFormController {
 		if (mode != null && mode.length() != 0) {
 			model.addAttribute("mode", mode);
 		}
-		
 		return new ModelAndView("/module/mdrtb/form/tb03u", model);
 	}
 	
@@ -196,17 +207,24 @@ public class TB03uFormController {
 	        HttpServletRequest request, ModelMap map) {
 		
 		// perform validation and check for errors
-		Location location = null;
-		System.out.println("PARAMS:\nob: " + oblastId + "\ndist: " + districtId + "\nfac: " + facilityId);
+		/*if (tb03 != null) {
+			new SimpleFormValidator().validate(tb03, errors);
+		}*/
 		
-		if (facilityId != null && facilityId.length() != 0)
+		/*if (errors.hasErrors()) {
+			map.put("errors", errors);
+			return new ModelAndView("/module/mdrtb/form/intake", map);
+		}*/
+		
+		Location location = null;
+		if (StringUtils.isNotBlank(facilityId)) {
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), Integer.parseInt(facilityId));
-		else
+		} else if (StringUtils.isNotBlank(districtId)) {
 			location = Context.getService(MdrtbService.class).getLocation(Integer.parseInt(oblastId),
 			    Integer.parseInt(districtId), null);
-		
-		if (location == null) { // && locations!=null && (locations.size()==0 || locations.size()>1)) {
+		}
+		if (location == null) {
 			throw new MdrtbAPIException("Invalid Hierarchy Set selected");
 		}
 		
@@ -223,27 +241,28 @@ public class TB03uFormController {
 		Concept groupByDrug = tb03u.getRegistrationGroupByDrug();
 		
 		MdrtbPatientProgram tpp = getMdrtbPatientProgram(patientProgramId);
+		PatientProgram pp = tpp.getPatientProgram();
 		
 		if (outcome != null) {
 			ProgramWorkflow outcomeFlow = Context.getProgramWorkflowService()
-			        .getWorkflow(tpp.getPatientProgram().getProgram(), Context.getService(MdrtbService.class)
-			                .getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME).getName().toString());
+					.getWorkflow(pp.getProgram(), Context.getService(MdrtbService.class)
+						.getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME).getName().toString());
 			ProgramWorkflowState outcomeState = Context.getProgramWorkflowService().getState(outcomeFlow,
-			    outcome.getName().toString());
+				outcome.getName().toString());
 			tpp.setOutcome(outcomeState);
-			tpp.setDateCompleted(tb03u.getTreatmentOutcomeDate());
+			try {
+				tpp.setDateCompleted(tb03u.getTreatmentOutcomeDate());
+			}
+			catch (Exception e) {
+			}
 		}
-		
 		else {
 			tpp.setDateCompleted(null);
-		}
-		
+		}		
 		if (group != null) {
-			ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(tpp.getPatientProgram().getProgram(),
-			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT)
-			            .getName().getName());
-			ProgramWorkflowState groupState = Context.getProgramWorkflowService().getState(groupFlow,
-			    group.getName().getName());
+			Concept cat4Concept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
+			ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(pp.getProgram(), cat4Concept.getName(Context.getLocale()).getName());
+			ProgramWorkflowState groupState = Context.getProgramWorkflowService().getState(groupFlow, group.getName(Context.getLocale()).getName());
 			tpp.setClassificationAccordingToPreviousTreatment(groupState);
 		}
 		
@@ -264,14 +283,19 @@ public class TB03uFormController {
 		if (outcome != null && outcome.getId().intValue() == Integer
 		        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.died.conceptId"))) {
 			Patient patient = tpp.getPatient();
-			if (!patient.getDead())
+			if (!patient.getDead()) {
 				patient.setDead(new Boolean(true));
-			
+				patient.setCauseOfDeath(tb03u.getCauseOfDeath());
+			}
 			Context.getPatientService().savePatient(patient);
-			//	patient.setC
-			
-		} // clears the command object from the session
+		}
+		// clears the command object from the session
 		status.setComplete();
+		
+		/*if(programModified) {
+			System.out.println("saving program");
+			Context.getProgramWorkflowService().savePatientProgram(pp);
+		}*/
 		
 		map.clear();
 		
@@ -335,12 +359,12 @@ public class TB03uFormController {
 		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleRegimens();
 		if (bases != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_STANDARD));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_SHORT));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_INDIVIDUALIZED));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_STANDARD));
+			concepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_SHORT));
+			concepts.add(ms.getConcept(MdrtbConcepts.REGIMEN_2_INDIVIDUALIZED));
 			for (ConceptAnswer pws : bases) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getAnswerConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}
@@ -358,17 +382,17 @@ public class TB03uFormController {
 		        .getPossibleClassificationsAccordingToPreviousTreatment();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.NEW));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.OTHER));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.NEW));
+			concepts.add(ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1));
+			concepts.add(ms.getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2));
+			concepts.add(ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1));
+			concepts.add(ms.getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2));
+			concepts.add(ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1));
+			concepts.add(ms.getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2));
+			concepts.add(ms.getConcept(MdrtbConcepts.OTHER));
 			for (ProgramWorkflowState pws : states) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}
@@ -386,12 +410,12 @@ public class TB03uFormController {
 		        .getPossibleClassificationsAccordingToPreviousDrugUse();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.NEW));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.NEW));
+			concepts.add(ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_FIRST_LINE_DRUGS_ONLY));
+			concepts.add(ms.getConcept(MdrtbConcepts.PREVIOUSLY_TREATED_SECOND_LINE_DRUGS));
 			for (ProgramWorkflowState pws : states) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}
@@ -414,17 +438,17 @@ public class TB03uFormController {
 		        .getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);
 		if (bases != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PDR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.RR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.MDR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.PRE_XDR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.XDR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TDR_TB));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.NO));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.UNKNOWN));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.PDR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.RR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.MDR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.PRE_XDR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.XDR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.TDR_TB));
+			concepts.add(ms.getConcept(MdrtbConcepts.NO));
+			concepts.add(ms.getConcept(MdrtbConcepts.UNKNOWN));
 			for (ConceptAnswer pws : bases) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getAnswerConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}
@@ -440,15 +464,16 @@ public class TB03uFormController {
 		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleTbProgramOutcomes();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CURED));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_FAILED));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CANCELLED));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DIED));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.CURED));
+			concepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED));
+			concepts.add(ms.getConcept(MdrtbConcepts.DIED));
+			concepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_FAILED));
+			concepts.add(ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP));
+			concepts.add(ms.getConcept(MdrtbConcepts.STARTED_SLD_TREATMENT));
+			concepts.add(ms.getConcept(MdrtbConcepts.CANCELLED));
 			for (ProgramWorkflowState pws : states) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}
@@ -477,15 +502,15 @@ public class TB03uFormController {
 		        .getPossibleConceptAnswers(MdrtbConcepts.METHOD_OF_DETECTION);
 		if (bases != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
-			Set<Concept> classificationConcepts = new HashSet<Concept>();
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.GENEXPERT));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HAIN_1_DETECTION));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.HAIN_2_DETECTION));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.DST));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.CONTACT));
-			classificationConcepts.add(ms.getConcept(MdrtbConcepts.TB_CLINICAL_DIAGNOSIS));
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.GENEXPERT));
+			concepts.add(ms.getConcept(MdrtbConcepts.HAIN_1_DETECTION));
+			concepts.add(ms.getConcept(MdrtbConcepts.HAIN_2_DETECTION));
+			concepts.add(ms.getConcept(MdrtbConcepts.DST));
+			concepts.add(ms.getConcept(MdrtbConcepts.CONTACT_INVESTIGATION));
+			concepts.add(ms.getConcept(MdrtbConcepts.TB_CLINICAL_DIAGNOSIS));
 			for (ConceptAnswer pws : bases) {
-				for (Concept classification : classificationConcepts) {
+				for (Concept classification : concepts) {
 					if (pws.getAnswerConcept().getId().equals(classification.getId())) {
 						stateArray.add(pws);
 					}

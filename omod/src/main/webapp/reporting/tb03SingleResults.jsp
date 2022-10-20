@@ -292,8 +292,8 @@ $(document).ready(function(){
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.drugResistance"/></span></div></th>
 			<th class="reggroup" colspan="12" ><spring:message code="mdrtb.tb03.smearMonitoring"/></th>
 			<th class="reggroup" colspan="6" ><spring:message code="mdrtb.tb03.treatmentOutcome"/></th>
-			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.cancelled"/></span></div></th>
-			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedRegimen2"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.canceled"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedSLD"/></span></div></th>
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferOut"/></span></div></th>
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.notes"/></span></div></th>
 		</tr>
@@ -309,8 +309,8 @@ $(document).ready(function(){
 			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.other"/></span></div></th>
 			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.hivTest"/></span></div></th>
 			<th class="subrotate" rowspan="3"><spring:message code="mdrtb.date"/></th>
-			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.artTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
-			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cpTest"/><br/><spring:message code="mdrtb.tb03.startDate"/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.artTest"/><br/></span></div></th>
+			<th class="subrotate" rowspan="3"><div><span><spring:message code="mdrtb.tb03.cpTest"/><br/></span></div></th>
 			
 			<th class="normal" colspan="4"><spring:message code="mdrtb.microscopy"/></th>
 			<th class="normal" colspan="4"><spring:message code="mdrtb.genexpert"/></th>

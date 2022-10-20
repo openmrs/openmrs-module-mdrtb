@@ -206,22 +206,11 @@ public class DOTSDQController {
 		
 		//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		
-		ArrayList<Location> locList = null;
-		if (oblastId != null) {
-			if (oblastId.intValue() == 186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId,
-				    facilityId);
-			} else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-			}
-		}
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		
-		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter,
-		    month);
-		ArrayList<TransferOutForm> tofList = Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year,
-		    quarter, month);
-		ArrayList<TransferInForm> tifList = Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year,
-		    quarter, month);
+		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
+		ArrayList<TransferOutForm> tofList = Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year, quarter, month);
+		ArrayList<TransferInForm> tifList = Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year, quarter, month);
 		ArrayList<TransferOutForm> allTofs = null;// Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year, quarter, month);
 		ArrayList<TransferInForm> allTifs = null;// Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year, quarter, month);
 		HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();

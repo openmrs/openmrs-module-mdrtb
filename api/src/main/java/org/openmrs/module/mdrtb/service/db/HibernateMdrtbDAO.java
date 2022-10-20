@@ -229,7 +229,7 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 		String sql = "select report_status from report_data " + processReportFilters(oblast, district, facility, year, quarter, month, name, reportType);
 		
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
+//		session.beginTransaction();
 		List<String> statusList = (List<String>) session.createSQLQuery(sql).list();
 		List<String> list = new PDFHelper().byteToStrArray(statusList.toString());
 		boolean reportStatus = false;
@@ -239,7 +239,7 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 			}
 			catch (Exception e) {}
 		}
-		session.getTransaction().commit();
+//		session.getTransaction().commit();
 		return reportStatus;
 	}
 

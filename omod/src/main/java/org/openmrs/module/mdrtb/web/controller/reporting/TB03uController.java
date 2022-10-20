@@ -168,17 +168,7 @@ public class TB03uController {
 		System.out.println("---POST-----");
     	System.out.println("PARAMS:" + oblastId + " " + districtId + " " + facilityId + " " + year + " " + quarter + " " + month);
     	
-		//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    	ArrayList<Location> locList = null;
-		if(oblastId!=null) {
-			if(oblastId.intValue()==186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId,districtId,facilityId);
-			}
-			else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-			}
-		}
-    	
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
     	ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
 		
 		

@@ -191,25 +191,8 @@ public class MissingTb03Controller {
     	SimpleDateFormat rdateSDF = new SimpleDateFormat();
     	rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
     	
-    	//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-    	
-    	ArrayList<Location> locList = null;
-    	if(oblastId!=null) {
-    		if(oblastId.intValue()==186) {
-    			locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId,districtId,facilityId);
-    		}
-    		else {
-    			locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    		}
-    	}
-    	
+    	ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
     	ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
-    	
-    
-    	
-    	
-    	
-    	
     	Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);
 		
 		Date startDate = (Date)(dateMap.get("startDate"));

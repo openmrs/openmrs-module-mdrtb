@@ -2025,59 +2025,36 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public ArrayList<Location> getLocationList(Integer oblastId, Integer districtId, Integer facilityId) {
-		
-		ArrayList<Location> locList = new ArrayList<Location>();
-		Location location = null;
 		if (oblastId == null && districtId == null && facilityId == null)
 			return null;
 		
-		if (districtId == null) { // means they stopped at oblast
-			List<District> distList = getDistricts(oblastId);
-			
-			for (District d : distList) {
-				location = getLocation(oblastId, d.getId(), null);
-				if (location == null) {
-					List<Facility> facs = getFacilities(d.getId().intValue());
-					for (Facility f : facs) {
-						location = getLocation(oblastId, d.getId(), f.getId());
-						if (location != null) {
-							locList.add(location);
+		List<Location> allLocations = Context.getLocationService().getAllLocations();
+		ArrayList<Location> locList = new ArrayList<Location>();
+		for (Location location : allLocations) {
+			Region oblast = oblastId == null ? null : getOblast(oblastId);
+			District district = districtId == null ? null : getDistrict(districtId);
+			Facility facility = facilityId == null ? null : getFacility(facilityId);
+			boolean hasRegion = oblast != null;
+			boolean hasDistrict = district != null;
+			boolean hasFacility = facility != null;
+
+			if (hasRegion) {
+				if (!location.getStateProvince().equalsIgnoreCase(oblast.getName())) {
+					continue;
+				}
+				if (hasDistrict) {
+					if (!location.getCountyDistrict().equalsIgnoreCase(district.getName())) {
+						continue;
+					}
+					if (hasFacility) {
+						if (!location.getAddress4().equalsIgnoreCase(facility.getName())) {
+							continue;
 						}
 					}
 				}
-				
-				else {
-					locList.add(location);
-				}
+				locList.add(location);			
 			}
 		}
-		
-		else if (facilityId == null) {// means they stopped at district either a single district or facilities
-			location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, null);
-			
-			if (location == null) { // district that has a set of facilities under it
-				List<Facility> facs = Context.getService(MdrtbService.class).getFacilities(districtId.intValue());
-				for (Facility f : facs) {
-					location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, f.getId());
-					if (location != null) {
-						locList.add(location);
-					}
-				}
-			}
-			
-			else {
-				log.debug("LOC:" + location.getLocationId());
-				locList.add(location);
-			}
-		}
-		
-		else { // single location
-			
-			location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, facilityId);
-			log.debug("SINGLE LOC:" + location.getLocationId());
-			locList.add(location);
-		}
-		
 		log.debug("LOCS:" + locList.size());
 		return locList;
 	}

@@ -87,7 +87,6 @@ public class PatientListContoller {
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
 				model.addAttribute("facilities", facilities);
-				model.addAttribute("dushanbe", 186);
 			}
 			
 			else {
@@ -108,9 +107,9 @@ public class PatientListContoller {
 				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
+				model.addAttribute("districtSelected", district);
 				model.addAttribute("districts", districts);
 				model.addAttribute("facilities", facilities);
-				model.addAttribute("dushanbe", 186);
 			}
 			
 			else {
@@ -163,12 +162,7 @@ public class PatientListContoller {
 		model.addAttribute("month", month);
 		model.addAttribute("quarter", quarter);
 		
-		//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
-		    facilityId);
-		if (oblastId != null && 186 == oblastId) {
-			locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId, facilityId);
-		} else {}
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		
 		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
 		Collections.sort(tb03s);

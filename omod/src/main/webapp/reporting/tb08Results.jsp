@@ -829,7 +829,7 @@ response.setDateHeader ("Expires", -1);
 					<td style="font: bold;">
 						2</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.relapses"/></td>
+						<spring:message code="mdrtb.tb08u.relapses"/></td>
 					<td>
 						&nbsp;</td>
 					<td>
@@ -857,7 +857,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						2.1</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/></td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/></td>
 					<td>
 						${table1.relapsePulmonaryBCDetected }</td>
 					<td>
@@ -976,7 +976,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						2.2</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/> </td>
 					<td>
 						${table1.relapsePulmonaryCDDetected }</td>
 					<td>
@@ -1099,7 +1099,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						2.3</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/> </td>
+						<spring:message code="mdrtb.tb08u.eptb"/> </td>
 					<td>
 						${table1.relapseExtrapulmonaryDetected }</td>
 					<td>
@@ -1346,7 +1346,7 @@ response.setDateHeader ("Expires", -1);
 					<td style="font: bold;">
 						3</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.afterFailure"/></td>
+						<spring:message code="mdrtb.tb08u.afterFailure"/></td>
 					<td>
 						&nbsp;</td>
 					<td>
@@ -1377,7 +1377,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						3.1</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/> </td>
 					<td>
 						${table1.failurePulmonaryBCDetected }</td>
 					<td>
@@ -1410,7 +1410,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						3.2</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/></td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/></td>
 					<td>
 						${table1.failurePulmonaryCDDetected }</td>
 					<td>
@@ -1441,7 +1441,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						3.3</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/></td>
+						<spring:message code="mdrtb.tb08u.eptb"/></td>
 					<td>
 						${table1.failureExtrapulmonaryDetected }</td>
 					<td>
@@ -1472,7 +1472,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td style="font: bold;">
-						<b><spring:message code="mdrtb.tb08.total"/></b></td>
+						<b><spring:message code="mdrtb.tb08u.total"/></b></td>
 					<td>
 						${ table1.failurePulmonaryBCDetected + table1.failurePulmonaryCDDetected + table1.failureExtrapulmonaryDetected }</td>
 					<td>
@@ -1504,7 +1504,7 @@ response.setDateHeader ("Expires", -1);
 					<td style="font: bold;">
 						4</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.afterDefault"/>
+						<spring:message code="mdrtb.tb08u.afterDefault"/>
 					<td>
 						&nbsp;</td>
 					<td>
@@ -1532,7 +1532,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						4.1</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/> </td>
 					<td>
 						${table1.defaultPulmonaryBCDetected }</td>
 					<td>
@@ -1564,7 +1564,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						4.2</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/></td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/></td>
 					<td>
 						${table1.defaultPulmonaryCDDetected }</td>
 					<td>
@@ -1598,7 +1598,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						4.3</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/></td>
+						<spring:message code="mdrtb.tb08u.eptb"/></td>
 					<td>
 						${table1.defaultExtrapulmonaryDetected }</td>
 					<td>
@@ -1631,7 +1631,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td style="font: bold;">
-						<b><spring:message code="mdrtb.tb08.total"/></b></td>
+						<b><spring:message code="mdrtb.tb08u.total"/></b></td>
 					<td>
 						${ table1.defaultPulmonaryBCDetected + table1.defaultPulmonaryCDDetected + table1.defaultExtrapulmonaryDetected }</td>
 					<td>
@@ -1664,7 +1664,7 @@ response.setDateHeader ("Expires", -1);
 					<td style="font: bold;">
 						5</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.other"/></td>
+						<spring:message code="mdrtb.tb08u.other"/></td>
 					<td>
 						&nbsp;</td>
 					<td>
@@ -1693,7 +1693,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						5.1</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/> </td>
 					<td>
 						${table1.otherPulmonaryBCDetected }</td>
 					<td>
@@ -1725,7 +1725,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						5.2</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/></td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/></td>
 					<td>
 						${table1.otherPulmonaryCDDetected }</td>
 					<td>
@@ -1757,7 +1757,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						5.3</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/></td>
+						<spring:message code="mdrtb.tb08u.eptb"/></td>
 					<td>
 						${table1.otherExtrapulmonaryDetected }</td>
 					<td>
@@ -1788,7 +1788,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td style="font: bold;">
-						<b><spring:message code="mdrtb.tb08.total"/></b></td>
+						<b><spring:message code="mdrtb.tb08u.total"/></b></td>
 					<td>
 						${ table1.otherPulmonaryBCDetected + table1.otherPulmonaryCDDetected + table1.otherExtrapulmonaryDetected }</td>
 					<td>
@@ -1822,7 +1822,7 @@ response.setDateHeader ("Expires", -1);
 				     <td>&nbsp;
 						</td>
 					<td style="font: bold;">
-						<spring:message code="mdrtb.tb08.totalRetreatments"/></td>
+						<spring:message code="mdrtb.tb08u.totalRetreatments"/></td>
 					
 					<td>
 						&nbsp;</td>
@@ -1851,7 +1851,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryBC"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryBC"/> </td>
 					<td>
 						${table1.failurePulmonaryBCDetected + table1.defaultPulmonaryBCDetected + table1.otherPulmonaryBCDetected }</td>
 					<td>
@@ -1884,7 +1884,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td>
-						<spring:message code="mdrtb.tb08.pulmonaryCD"/> </td>
+						<spring:message code="mdrtb.tb08u.pulmonaryCD"/> </td>
 					<td>
 						${table1.failurePulmonaryCDDetected + table1.defaultPulmonaryCDDetected + table1.otherPulmonaryCDDetected }</td>
 					<td>
@@ -1916,7 +1916,7 @@ response.setDateHeader ("Expires", -1);
 					<td>
 						&nbsp;</td>
 					<td>
-						<spring:message code="mdrtb.tb08.eptb"/></td>
+						<spring:message code="mdrtb.tb08u.eptb"/></td>
 					<td>
 						${table1.failureExtrapulmonaryDetected + table1.defaultExtrapulmonaryDetected + table1.otherExtrapulmonaryDetected }</td>
 					<td>

@@ -468,7 +468,7 @@ public class MdrtbConcepts {
  	public final static String HYPERTENSION_OR_HEART_DISEASE = "HYPERTENSION OR HEART DISEASE";
  	public final static String ULCER = "ULCER OF STOMACH OR DUODENUM";
  	public final static String MENTAL_DISORDER = "MENTAL DISEASE";
- 	public final static String ICD20 = "ICD В20.9";
+ 	public final static String ICD20 = "ICD B20.9";
  	public final static String CANCER = "CANCER";
  	public final static String COMORBID_HEPATITIS = "COMORBID HEPATITIS";
  	public final static String KIDNEY_DISEASE = "KIDNEY DISEASE";

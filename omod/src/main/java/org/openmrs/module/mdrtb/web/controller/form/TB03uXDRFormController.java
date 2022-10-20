@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -482,34 +483,25 @@ public class TB03uXDRFormController {
 	
 	@ModelAttribute("outcomes")
 	public ArrayList<ProgramWorkflowState> getPossibleTreatmentOutcomes() {
-		/*return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();*/
 		ArrayList<ProgramWorkflowState> stateArray = new ArrayList<ProgramWorkflowState>();
-		for(int i=0; i< 6; i++) {
-			stateArray.add(null);
-		}
 		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleTbProgramOutcomes();
-		MdrtbService ms = Context.getService(MdrtbService.class);
-		for(ProgramWorkflowState pws : states) {
-			if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CURED).getId().intValue()) {
-				stateArray.set(0, pws);
-			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId().intValue()) {
-				stateArray.set(1, pws);
-			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DIED).getId().intValue()) {
-				stateArray.set(2, pws);
-			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TREATMENT_FAILED).getId().intValue()) {
-				stateArray.set(3, pws);
-			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP).getId().intValue()) {
-				stateArray.set(4, pws);
-			}
-			else if(pws.getConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CANCELLED).getId().intValue()) {
-				stateArray.set(5, pws);
+		if (states != null) {
+			MdrtbService ms = Context.getService(MdrtbService.class);
+			Set<Concept> concepts = new HashSet<Concept>();
+			concepts.add(ms.getConcept(MdrtbConcepts.CURED));
+			concepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_COMPLETED));
+			concepts.add(ms.getConcept(MdrtbConcepts.DIED));
+			concepts.add(ms.getConcept(MdrtbConcepts.TREATMENT_FAILED));
+			concepts.add(ms.getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP));
+			concepts.add(ms.getConcept(MdrtbConcepts.CANCELLED));
+			for (ProgramWorkflowState pws : states) {
+				for (Concept classification : concepts) {
+					if (pws.getConcept().getId().equals(classification.getId())) {
+						stateArray.add(pws);
+					}
+				}
 			}
 		}
-		
 		return stateArray;
 	}
 	
@@ -546,7 +538,7 @@ public class TB03uXDRFormController {
 			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.DST).getId().intValue()) {
 				stateArray.set(3, ca);
 			}
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CONTACT).getId().intValue()) {
+			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CONTACT_INVESTIGATION).getId().intValue()) {
 				stateArray.set(4, ca);
 			}
 			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.TB_CLINICAL_DIAGNOSIS).getId().intValue()) {

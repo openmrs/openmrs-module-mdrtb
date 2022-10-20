@@ -160,19 +160,15 @@ public class TB03SingleExportController {
 		
 		ArrayList<Location> locList = null;
 		if (oblastId != null) {
-			if (oblastId.intValue() == 186) {
-				locList = Context.getService(MdrtbService.class).getLocationListForDushanbe(oblastId, districtId,
-				    facilityId);
-			} else {
-				locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-			}
+			locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		}
 		
 		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter,
 		    month);
 		
 		ArrayList<TB03Data> patientSet = new ArrayList<TB03Data>();
-		SimpleDateFormat sdf = new SimpleDateFormat();
+		SimpleDateFormat sdf = Context.getDateFormat();
+		SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
 		
 		Integer regimenConceptId = null;
 		Integer codId = null;
@@ -181,9 +177,6 @@ public class TB03SingleExportController {
 		Concept reg1New = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_1_NEW);
 		Concept reg1Rtx = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_1_RETREATMENT);
 		
-		sdf.applyPattern("dd.MM.yyyy");
-		SimpleDateFormat rdateSDF = new SimpleDateFormat();
-		rdateSDF.applyPattern("dd.MM.yyyy HH:mm:ss");
 		for (TB03Form tf : tb03List) {
 			
 			TB03Data tb03Data = new TB03Data();
@@ -279,25 +272,20 @@ public class TB03SingleExportController {
 			//DIAGNOSTIC SMEAR
 			SmearForm diagnosticSmear = TB03Util.getDiagnosticSmearForm(tf);
 			if (diagnosticSmear != null) {
-				System.out.println("SMEAR ID:" + diagnosticSmear.getId());
 				if (diagnosticSmear.getSmearResult() != null) {
 					tb03Data.setDiagnosticSmearResult(diagnosticSmear.getSmearResult().getName().getShortName());
-					//System.out.println("RESULT:" + diagnosticSmear.getResult());
 				}
 				if (diagnosticSmear.getEncounterDatetime() != null) {
 					tb03Data.setDiagnosticSmearDate(sdf.format(diagnosticSmear.getEncounterDatetime()));
-					//System.out.println("DATE:" + diagnosticSmear.getResultDate());
 				}
 				
 				tb03Data.setDiagnosticSmearTestNumber(diagnosticSmear.getSpecimenId());
-				//System.out.println("SPEC ID:" + diagnosticSmear.getRealSpecimenId());
 				
 				Location loc = diagnosticSmear.getLocation();
 				if (loc != null) {
 					if (loc.getRegion() != null && loc.getRegion().length() != 0) {
 						tb03Data.setDiagnosticSmearLab(loc.getRegion());
 					}
-					
 					else if (loc.getCountyDistrict() != null && loc.getCountyDistrict().length() != 0) {
 						tb03Data.setDiagnosticSmearLab(loc.getCountyDistrict());
 					}
@@ -305,10 +293,6 @@ public class TB03SingleExportController {
 				
 				System.out.println(tb03Data.getDiagnosticSmearResult() + "," + tb03Data.getDiagnosticSmearDate() + ","
 				        + tb03Data.getDiagnosticSmearTestNumber());
-			}
-			
-			else {
-				System.out.println("NULL DIAG SMEAR");
 			}
 			
 			XpertForm firstXpert = TB03Util.getFirstXpertForm(tf);
@@ -332,10 +316,6 @@ public class TB03SingleExportController {
 						tb03Data.setXpertLab(loc.getCountyDistrict());
 					}
 				}
-			}
-			
-			else {
-				System.out.println("NULL DIAG XPERT");
 			}
 			
 			HAINForm firstHAIN = TB03Util.getFirstHAINForm(tf);
@@ -363,10 +343,6 @@ public class TB03SingleExportController {
 				}
 			}
 			
-			else {
-				System.out.println("NULL DIAG HAIN");
-			}
-			
 			HAIN2Form firstHAIN2 = TB03Util.getFirstHAIN2Form(tf);
 			if (firstHAIN2 != null) {
 				if (firstHAIN2.getMtbResult() != null)
@@ -391,10 +367,6 @@ public class TB03SingleExportController {
 				}
 			}
 			
-			else {
-				System.out.println("NULL DIAG HAIN");
-			}
-			
 			CultureForm diagnosticCulture = TB03Util.getDiagnosticCultureForm(tf);
 			if (diagnosticCulture != null) {
 				if (diagnosticCulture.getCultureResult() != null)
@@ -415,10 +387,6 @@ public class TB03SingleExportController {
 				}
 			}
 			
-			else {
-				System.out.println("NULL DIAG CULTURE");
-			}
-			
 			//DST
 			Dst firstDst = TB03Util.getDiagnosticDST(tf);
 			
@@ -435,7 +403,6 @@ public class TB03SingleExportController {
 						drugName = res.getDrug().getShortestName(Context.getLocale(), false).toString();
 						result = res.getResult().getName().getShortName();
 						tb03Data.getDstResults().put(drugName, result);
-						//System.out.println(drugName + "-" + result + " | " + res.getResult());
 						
 					}
 				}

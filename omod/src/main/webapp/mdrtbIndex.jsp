@@ -156,8 +156,8 @@
 					<a href="../mdrtb/reporting/tb03.form"><spring:message code="mdrtb.tb03Export" /></a><br/>
 					<a href="../mdrtb/reporting/tb03Single.form"><spring:message code="mdrtb.tb03ExportSingleLine" /></a><br/>
 					<a href="../mdrtb/reporting/form89Single.form"><spring:message code="mdrtb.f89ExportSingleLine" /></a><br/>
-					<a href="../mdrtb/reporting/dotsdq.form"><spring:message code="mdrtb.dq.title" /></a><br/>
-								
+					<a href="../mdrtb/reporting/dotsdq.form"><spring:message code="mdrtb.dotsdq.title" /></a><br/>
+					<a href="../mdrtb/reporting/missingTb03.form"><spring:message code="mdrtb.dq.missingtb03" /></a><br/>
 				</td></tr>
 				
 				<!-- <c:set var="reportsFound" value="f"/> -->
@@ -174,6 +174,7 @@
 					<a href="../mdrtb/reporting/tb03uSingle.form"><spring:message code="mdrtb.tb03uExportSingleLine" /></a><br/>
 					<a href="../mdrtb/reporting/dq.form"><spring:message code="mdrtb.dq.title" /></a><br/>
 					<a href="../mdrtb/reporting/regimen.form"><spring:message code="mdrtb.sldreport" /><br/>
+					<a href="../mdrtb/reporting/missingTb03u.form"><spring:message code="mdrtb.dq.missingtb03u" /></a><br/>
 					<%-- <openmrs:extensionPoint pointId="org.openmrs.mdrtb.linksList.reportLinks" type="html">
 						<openmrs:hasPrivilege privilege="${extension.requiredPrivilege}">
 							<c:forEach items="${extension.links}" var="link">
