@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>mdrtb</artifactId>
-	<version>3.1.3</version>
+	<version>3.2.0</version>
 	<packaging>pom</packaging>
 	<name>MDR TB</name>
 	<description>Parent project for MDR TB</description>
@@ -134,24 +134,6 @@
             <version>${openmrs.reporting.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>webservices.rest-omod-common</artifactId>
-            <version>${openmrs.wsrest.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>webservices.rest-omod</artifactId>
-            <version>${openmrs.wsrest.version}</version>
-            <scope>provided</scope>
-        </dependency>
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.openmrs.module</groupId> -->
-<!-- 		    <artifactId>addresshierarchy-api</artifactId> -->
-<!-- 		    <version>${openmrs.addresshierarchy-api.version}</version> -->
-<!-- 		    <scope>provided</scope> -->
-<!-- 		</dependency> -->
     </dependencies>
 
 	<build>

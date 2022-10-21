@@ -39,7 +39,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-
 @Controller
 @RequestMapping("/module/mdrtb/form/culture.form")
 public class CultureFormController {
@@ -49,25 +48,26 @@ public class CultureFormController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(Person.class, new PersonEditor());
 		binder.registerCustomEditor(Concept.class, new ConceptEditor());
-		
 	}
 	
 	@ModelAttribute("culture")
 	public CultureForm getCultureForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException,
+	        IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
-		if(pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
-			mdr=true;
+		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
+		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
+			mdr = true;
 			System.out.println("mdr");
 		}
 		
@@ -78,76 +78,52 @@ public class CultureFormController {
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			CultureForm form = null;
-			if(!mdr) {
+			if (!mdr) {
 				TbPatientProgram tbProgram = Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-			
+				
 				form = new CultureForm(tbProgram.getPatient());
-			
+				
 				// prepopulate the intake form with any program information
 				//form.setEncounterDatetime(tbProgram.getDateEnrolled());
 				form.setLocation(tbProgram.getLocation());
 			}
 			
 			else {
-				MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+				MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class)
+				        .getMdrtbPatientProgram(patientProgramId);
 				
 				form = new CultureForm(mdrtbProgram.getPatient());
-			
+				
 				// prepopulate the intake form with any program information
 				//form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
 				form.setLocation(mdrtbProgram.getLocation());
 			}
 			return form;
-		}
-		else {
+		} else {
 			return new CultureForm(Context.getEncounterService().getEncounter(encounterId));
 		}
 	}
-	
-	/*@ModelAttribute("culturemdr")
-	public CultureForm getMdrCultureForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
-		// if no form is specified, create a new one
-		if (encounterId == -1) {
-			MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-			
-			CultureForm form = new CultureForm(mdrtbProgram.getPatient());
-			
-			// prepopulate the intake form with any program information
-			form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
-			form.setLocation(mdrtbProgram.getLocation());
-				
-			return form;
-		}
-		else {
-			return new CultureForm(Context.getEncounterService().getEncounter(encounterId));
-		}
-	}*/
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showCultureForm() {
-				 ModelMap map = new ModelMap();
+		ModelMap map = new ModelMap();
 		
-				
-		
-		
-		        return new ModelAndView("/module/mdrtb/form/culture", map);	
+		return new ModelAndView("/module/mdrtb/form/culture", map);
 	}
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processCultureForm (@ModelAttribute("culture") CultureForm culture, BindingResult errors, 
-	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
-		
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processCultureForm(@ModelAttribute("culture") CultureForm culture, BindingResult errors,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
 		
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
-		if(pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
-			mdr=true;
+		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
+		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
+			mdr = true;
 		}
 		
 		else {
@@ -156,8 +132,8 @@ public class CultureFormController {
 		
 		// perform validation and check for errors
 		/*if (tb03 != null) {
-    		new SimpleFormValidator().validate(tb03, errors);
-    	}*/
+			new SimpleFormValidator().validate(tb03, errors);
+		}*/
 		
 		/*if (errors.hasErrors()) {
 			map.put("errors", errors);
@@ -167,27 +143,27 @@ public class CultureFormController {
 		// save the actual update
 		Context.getEncounterService().saveEncounter(culture.getEncounter());
 		
-		
-		
 		// clears the command object from the session
 		status.setComplete();
-	
+		
 		map.clear();
-
+		
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
-			if(!mdr) {
+			if (!mdr) {
 				returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/tbdashboard.form";
-				returnUrl = MdrtbWebUtil.appendParameters(returnUrl, Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(), patientProgramId);
+				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
+				    Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(),
+				    patientProgramId);
 			}
 			
 			else {
 				returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";
-				returnUrl = MdrtbWebUtil.appendParameters(returnUrl, Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId).getPatient().getId(), patientProgramId);
+				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
+				    Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId).getPatient().getId(),
+				    patientProgramId);
 			}
 		}
-		
-		
 		
 		return new ModelAndView(new RedirectView(returnUrl));
 	}
@@ -196,17 +172,6 @@ public class CultureFormController {
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
-	
-	
-	/*@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-	}
-	
-	@ModelAttribute("mdrtbProgram")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-	}*/
 	
 	@ModelAttribute("returnUrl")
 	public String getReturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {
@@ -219,7 +184,7 @@ public class CultureFormController {
 	}
 	
 	@ModelAttribute("locations")
-	List <Location> getPossibleLocations() {
+	List<Location> getPossibleLocations() {
 		return Context.getService(MdrtbService.class).getCultureLocations();
 	}
 	
@@ -227,46 +192,45 @@ public class CultureFormController {
 	public Collection<ConceptAnswer> getCultureResults() {
 		//return Context.getService(MdrtbService.class).getPossibleCultureResults();
 		ArrayList<ConceptAnswer> resultArray = new ArrayList<ConceptAnswer>();
-		for(int i=0;i<6;i++) {
+		for (int i = 0; i < 6; i++) {
 			resultArray.add(null);
 		}
 		
 		Collection<ConceptAnswer> results = Context.getService(MdrtbService.class).getPossibleCultureResults();
 		MdrtbService ms = Context.getService(MdrtbService.class);
-
-		for(ConceptAnswer ca : results) {
+		
+		for (ConceptAnswer ca : results) {
 			
-			if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOWAFB).getId().intValue()) {
-				resultArray.set(0,ca);
+			if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.LOWAFB).getId().intValue()) {
+				resultArray.set(0, ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.WEAKLY_POSITIVE).getId().intValue()) {
-				resultArray.set(1,ca);
+			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.WEAKLY_POSITIVE).getId()
+			        .intValue()) {
+				resultArray.set(1, ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.MODERATELY_POSITIVE).getId().intValue()) {
-				resultArray.set(2,ca);
+			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.MODERATELY_POSITIVE).getId()
+			        .intValue()) {
+				resultArray.set(2, ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.STRONGLY_POSITIVE).getId().intValue()) {
-				resultArray.set(3,ca);
+			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.STRONGLY_POSITIVE).getId()
+			        .intValue()) {
+				resultArray.set(3, ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEGATIVE).getId().intValue()) {
-				resultArray.set(4,ca);
+			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.NEGATIVE).getId().intValue()) {
+				resultArray.set(4, ca);
 			}
 			
-			else if(ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getId().intValue()) {
-				resultArray.set(5,ca);
+			else if (ca.getAnswerConcept().getId().intValue() == ms.getConcept(MdrtbConcepts.CULTURE_GROWTH).getId()
+			        .intValue()) {
+				resultArray.set(5, ca);
 			}
 		}
-		
-		
 		
 		return resultArray;
 	}
 	
-	
-
-		
 }

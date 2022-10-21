@@ -284,7 +284,7 @@ $(document).ready(function(){
 			<th class="reggroup" colspan="8" ><spring:message code="mdrtb.tb03.registrationGroup"/></th>
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferFrom"/></span></div></th>
 			<th class="reggroup" colspan="4" ><spring:message code="mdrtb.tb03.tbHivActivities"/></th>
-			<th class="reggroup" colspan="24" ><spring:message code="mdrtb.tb03.diagnosticTestResults"/></th>
+			<th class="reggroup" colspan="24" ><spring:message code="mdrtb.tb03.diagnosticMethod"/></th>
 			<th class="normal" rowspan="4" rowspan="2"><spring:message code="mdrtb.tb03.dstSampleCollectionDate"/></th>
 			<th class="normal" rowspan="4"><spring:message code="mdrtb.tb03.dstResultDate"/></th>
 			<th class="reggroup" colspan="17" rowspan="1"><spring:message code="mdrtb.tb03.dst"/></th>

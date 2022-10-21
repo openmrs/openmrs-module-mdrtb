@@ -113,27 +113,6 @@ public class SmearFormController {
 		}
 	}
 	
-	/*@ModelAttribute("smearmdr")
-	public SmearForm getMdrSmearForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-	
-		// if no form is specified, create a new one
-		if (encounterId == -1) {
-			MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-			
-			SmearForm form = new SmearForm(mdrtbProgram.getPatient());
-			
-			// prepopulate the intake form with any program information
-			form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
-			form.setLocation(mdrtbProgram.getLocation());
-				
-			return form;
-		}
-		else {
-			return new SmearForm(Context.getEncounterService().getEncounter(encounterId));
-		}
-	}*/
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showSmearForm(@RequestParam(value = "loc", required = false) String district,
 	        @RequestParam(value = "ob", required = false) String oblast,
@@ -243,16 +222,6 @@ public class SmearFormController {
 			mdr = true;
 		}
 		
-		// perform validation and check for errors
-		/*if (tb03 != null) {
-			new SimpleFormValidator().validate(tb03, errors);
-		}*/
-		
-		/*if (errors.hasErrors()) {
-			map.put("errors", errors);
-			return new ModelAndView("/module/mdrtb/form/intake", map);
-		}*/
-		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(smear.getEncounter());
 		
@@ -284,16 +253,6 @@ public class SmearFormController {
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
-	
-	/*@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-	}
-	
-	@ModelAttribute("mdrtbProgram")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-	}*/
 	
 	@ModelAttribute("returnUrl")
 	public String getReturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {

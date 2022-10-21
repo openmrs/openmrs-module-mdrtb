@@ -76,7 +76,7 @@ $(document).ready(function(){
 </script>
 
 <form method="post">
-	<h2><spring:message code="mdrtb.tb07Parameters" /></h2>
+	<h2><spring:message code="mdrtb.tb07u.parameters" /></h2>
 	
 	<br/>
 	
