@@ -292,8 +292,8 @@ $(document).ready(function(){
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.drugResistance"/></span></div></th>
 			<th class="reggroup" colspan="12" ><spring:message code="mdrtb.tb03.smearMonitoring"/></th>
 			<th class="reggroup" colspan="6" ><spring:message code="mdrtb.tb03.treatmentOutcome"/></th>
-			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.canceled"/></span></div></th>
-			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedSLD"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.canceled"/></span></div></th>
+			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.startedRegimen2"/></span></div></th>
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.transferOut"/></span></div></th>
 			<th class="rotate" rowspan="4"><div><span><spring:message code="mdrtb.tb03.notes"/></span></div></th>
 		</tr>
@@ -388,8 +388,8 @@ $(document).ready(function(){
 			<th rowspan="2"><spring:message code="mdrtb.date"/></th>
 			<th rowspan="2"><spring:message code="mdrtb.tb03.testNumber"/></th>
 			<th rowspan="2"><spring:message code="mdrtb.lab"/></th>
-			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofTb"/></span></div></th>
-			<th class="subrotate" rowspan="2"><div><span><spring:message code="mdrtb.tb03.ofOther"/></span></div></th>
+			<th class="subrotate" rowspan="2"><span><spring:message code="mdrtb.tb03.ofTb"/></span></th>
+			<th class="subrotate" rowspan="2"><span><spring:message code="mdrtb.tb03.ofOther"/></span></th>
 		</tr>
 		<tr>
 			<th class="normal" rowspan="1">I</th>
