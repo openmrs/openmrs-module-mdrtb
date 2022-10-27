@@ -14,12 +14,8 @@
 package org.openmrs.module.mdrtb.reporting.definition;
 
 import org.openmrs.Cohort;
-import org.openmrs.Concept;
 import org.openmrs.annotation.Handler;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
@@ -42,8 +38,10 @@ public class MdrtbTreatmentStartedCohortDefinitionEvaluator implements CohortDef
      */
     public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {	
     	MdrtbTreatmentStartedCohortDefinition cd = (MdrtbTreatmentStartedCohortDefinition) cohortDefinition;
-    	Concept tbDrugSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS);
-    	Cohort c = MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), tbDrugSet);
+    	//TODO: Figure out why getTreatmentStarted() was used instead of getPatientsFirstStartingDrugs()
+//    	Cohort c = MdrtbQueryService.getPatientsFirstStartingDrugs(context, cd.getFromDate(), cd.getToDate(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_DRUGS));
+    	Cohort c = MdrtbQueryService.getTreatmentStarted(context,cd.getFromDate(),cd.getToDate());
     	return new EvaluatedCohort(c, cohortDefinition, context);
+
 	}
 }

@@ -12,11 +12,14 @@
 	
 	
 	<div id="createPatient">
-		<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="mdrtb.enrollNewPatient"/></b>
+		<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;">
+				<spring:message code="mdrtb.enrollNewPatient"/>
+		</b>
 		<div class="box" style="padding: 15px 15px 15px 15px;">
 			<spring:message code="mdrtb.search.instructions"/> <br/><br/>
 			
 			<form method="get" action="${model.postURL}" onSubmit="return validateForm()">
+			<!-- <form method="get" action="${pageContext.request.contextPath}/admin/patients/newPatient.form" onSubmit="return validateForm()">-->
 			<input type="hidden" name="successURL" value="${model.successURL}" />
 				<table>
 					<tr>
@@ -53,6 +56,7 @@
 				</table>
 				<input type="hidden" name="personType" value="${model.personType}"/>
 				<input type="hidden" name="viewType" value="${model.viewType}"/>
+				<input type="hidden" name="add" value="${model.add}"/>
 			</form>
 		</div>
 		

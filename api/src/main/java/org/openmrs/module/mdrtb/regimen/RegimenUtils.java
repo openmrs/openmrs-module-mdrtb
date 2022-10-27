@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
-import org.openmrs.ConceptNameTag;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
 import org.openmrs.Obs;
@@ -69,14 +68,14 @@ public class RegimenUtils {
 			if (drugSet.equals("*")) {
 				for (RegimenType t : RegimenUtils.getRegimenTypes()) {
 					if (!"*".equals(t.getDrugSet())) {
-						Concept c = getMdrtbService().findMatchingConcept(drugSet);
+						Concept c = getMdrtbService().getConcept(drugSet);
 						generics.removeAll(Context.getConceptService().getConceptsByConceptSet(c));
 					}
 				}
 			}
 		}
 		else {
-			Concept c = getMdrtbService().findMatchingConcept(drugSet);
+			Concept c = getMdrtbService().getConcept(drugSet);
 			generics = Context.getConceptService().getConceptsByConceptSet(c);
 		}
 		return generics;
@@ -100,6 +99,7 @@ public class RegimenUtils {
     	if (ObjectUtil.isNull(xml)) {
     		InputStream is = null;
     		try {
+    			//TODO: Move this file to resources
     			is = OpenmrsClassLoader.getInstance().getResourceAsStream("org/openmrs/module/mdrtb/regimen/RegimenTypeConfiguration.xml");
     			log.debug("Returning regimen types from default configuration...");
     			return (List<RegimenType>)xstream.fromXML(is);
@@ -140,7 +140,7 @@ public class RegimenUtils {
     	for (RegimenType type : RegimenUtils.getRegimenTypes()) {
     		List<Concept> concepts = null;
     		if (type.getDrugSet() != null) {
-    			concepts = getMdrtbService().getDrugsInSet(type.getDrugSet());
+    			concepts = getMdrtbService().getDrugsInSet(getMdrtbService().getConcept(type.getDrugSet()));
     		}
     		RegimenHistory history = new RegimenHistory(patient, type);
     		
@@ -172,6 +172,29 @@ public class RegimenUtils {
      */
     public static RegimenHistory getTbRegimenHistory(Patient patient) {   	
     	return getRegimenHistory(patient).get("tb");
+    }
+    
+    /**
+     * @param patient
+     * @return the SLD Regimens for a Patient
+     */
+    public static RegimenHistory getSLDRegimenHistory(Patient patient) {   	
+    	try { //TODO: Rename to Second Line Drug
+    		return getRegimenHistory(patient).get("sld");
+    	}
+    	
+    	catch(Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    
+    /**
+     * @param patient
+     * @return the FLD Regimens for a Patient
+     */
+    public static RegimenHistory getFLDRegimenHistory(Patient patient) {   	
+    	return getRegimenHistory(patient).get("fld");
     }
     
     /**

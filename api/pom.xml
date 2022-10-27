@@ -1,9 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>mdrtb</artifactId>
-		<version>3.0.4</version>
+		<version>3.2.0</version>
 	</parent>
 	<artifactId>mdrtb-api</artifactId>
 	<packaging>jar</packaging>
@@ -36,18 +38,32 @@
 			<artifactId>openmrs-test</artifactId>
 			<type>pom</type>
 		</dependency>
-		
-		<!--  external libraries we need to include -->
-		
-		<!-- jars we need to provide for compile but that will be provided at runtime (scope=provided) -->
-	
+
+		<!-- external libraries we need to include -->
+
+		<!-- jars we need to provide for compile but that will be provided at runtime 
+			(scope=provided) -->
 		<dependency>
-		 	<groupId>org.openmrs.module</groupId>
-		  	<artifactId>logic</artifactId>
-		  	<version>0.5</version>
-		  	<type>jar</type>
-		  	<scope>provided</scope>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>logic</artifactId>
+			<version>${openmrs.logic.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
+		<dependency>
+  			<groupId>org.codehaus.groovy</groupId>
+  			<artifactId>groovy</artifactId>
+  			<version>1.7.6</version>
+  			<type>jar</type>
+  			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting</artifactId>
+            <version>${openmrs.reporting.version}</version>
+  			<type>jar</type>
+			<scope>provided</scope>
+        </dependency>
 		
 	</dependencies>
 

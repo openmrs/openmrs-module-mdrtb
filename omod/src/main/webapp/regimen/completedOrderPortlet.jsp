@@ -13,7 +13,8 @@
 				<c:otherwise>
 					<tr>
 						<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
+						<!-- COMMENTED FOR TAJIKISTAN -->
+						<!-- <th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th> -->
 						<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
 						<th class="headerStyle"><spring:message code="mdrtb.autoExpireDate" text="Scheduled Stop Date"/></th>
@@ -27,7 +28,8 @@
 									${drugOrder.concept.name.name}
 								</a>
 							</td>
-							<td class="cellStyle">${drugOrder.drug.name}</td>
+							<!-- COMMENTED FOR TAJIKISTAN -->
+							<!-- <td class="cellStyle">${drugOrder.drug.name}</td>  -->
 							<td class="cellStyle">
 								<c:if test="${!empty drugOrder.dose}">
 									${drugOrder.dose} ${drugOrder.units}

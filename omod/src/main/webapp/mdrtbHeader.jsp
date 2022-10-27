@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ page import="org.openmrs.web.WebConstants" %>
 
 <%
@@ -22,7 +23,7 @@
 		<openmrs:htmlInclude file="/openmrs.js" />
 		<openmrs:htmlInclude file="/openmrs.css" />
 		<openmrs:htmlInclude file="/style.css" />
-		<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+		<openmrs:htmlInclude file="/mdrtb.css"/>
 		<openmrs:htmlInclude file="/dwr/engine.js" />
 		<openmrs:htmlInclude file="/dwr/util.js" />
 		<openmrs:htmlInclude file="/dwr/interface/DWRAlertService.js" />
@@ -33,6 +34,8 @@
 		<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.custom.min.js" />
 		<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui.custom.css" />
 		<link href="<openmrs:contextPath/>/scripts/jquery-ui/css/<spring:theme code='jqueryui.theme.name' />/jquery-ui.custom.css" type="text/css" rel="stylesheet" />
+		<!-- set the date format to use throughout the module -->
+		<c:set var="_dateFormatDisplay" value="dd.MM.yyyy" scope="request"/>
 		
 		<c:choose>
 			<c:when test="${!empty pageTitle}">

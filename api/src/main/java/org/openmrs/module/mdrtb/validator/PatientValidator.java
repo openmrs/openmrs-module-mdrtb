@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.validator.PatientIdentifierValidator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -23,7 +24,6 @@ public class PatientValidator implements Validator {
 	 * @param c The class to check for support.
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean supports(Class c) {
 		return Patient.class.isAssignableFrom(c);
 	}
@@ -90,6 +90,10 @@ public class PatientValidator implements Validator {
 		if (patient != null && patient.getIdentifiers() != null) {
 			for (PatientIdentifier identifier : patient.getIdentifiers()) {
 				piv.validate(identifier, errors);
+			}
+			
+			for (PatientIdentifier identifier : patient.getIdentifiers()) {
+				MdrtbUtil.validateIdentifier(identifier, errors);
 			}
 		}
 	}

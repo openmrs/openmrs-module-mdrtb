@@ -1,8 +1,11 @@
 package org.openmrs.module.mdrtb.status;
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public interface StatusCalculator {
+
+	static final Log log = LogFactory.getLog(StatusCalculator.class);
 
 	// public Status calculate(Patient patient);
 	

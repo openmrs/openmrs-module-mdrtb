@@ -1,7 +1,12 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/js/ui.multiselect.js" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
+
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
 
 <openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/css/ui.multiselect.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/js/plugins/localisation/jquery.localisation-min.js" />
@@ -55,10 +60,13 @@
 
 <style>
 	.multiselect {
-		width: 60%;
+		width: 800px;
 		height: 400px;
 	}
-
+	.ui-multiselect div.available {
+		position: absolute; 
+		left: 820px; 
+	}
 </style>
 
 <div style="padding-left:5px; padding-right:5px; width:100%;">

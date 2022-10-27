@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.ConceptNameTag;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
@@ -60,7 +59,7 @@ public class GermCellTag extends TagSupport {
     			ret = organismTypeNonCoded;
     		}
     		else {
-    			ret = MdrtbUtil.getConceptName(organismType, Context.getLocale().getLanguage(), ConceptNameType.SHORT).getName();
+    			ret = MdrtbUtil.getConceptName(organismType, Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED).getName();
     		}
     	}
     	

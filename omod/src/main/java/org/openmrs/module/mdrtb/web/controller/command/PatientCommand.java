@@ -2,7 +2,6 @@ package org.openmrs.module.mdrtb.web.controller.command;
 
 import org.openmrs.Patient;
 import org.openmrs.PersonAddress;
-import org.openmrs.PersonName;
 
 /**
  * Command object for adding/editing a patient

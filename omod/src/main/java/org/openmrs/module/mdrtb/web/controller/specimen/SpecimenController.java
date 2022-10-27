@@ -28,6 +28,10 @@ import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.openmrs.module.mdrtb.specimen.TestValidator;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN;
+import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
+import org.openmrs.module.mdrtb.specimen.custom.Xpert;
+import org.openmrs.module.mdrtb.specimen.custom.XpertImpl;
 import org.openmrs.module.mdrtb.specimen.reporting.BacteriologyValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -139,6 +143,61 @@ public class SpecimenController extends AbstractSpecimenController {
 		return dst;
 	}
 	
+	/**
+	 * Returns the smear that should be used to bind a form posting to
+	 * 
+	 * @param smearId
+	 * @param specimenId
+	 * @return
+	 */
+	@ModelAttribute("xpert")
+	public Xpert getXpert(@RequestParam(required = false, value="xpertId") Integer xpertId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		Xpert xpert = null;
+		
+		// only do something here if the smear id has been set
+		if (xpertId != null) {
+			// smearId != -1 is means "this is a new smear"
+			if (xpertId != -1) {
+				xpert = Context.getService(MdrtbService.class).getXpert(xpertId);
+			}
+			
+			// create the new xpert if needed
+			if (xpert == null) {
+				xpert = new XpertImpl();
+			}
+		}
+				
+		// it's okay if we return null here, as this attribute is only used on a post
+		return xpert;
+	}
+	
+	/**
+	 * Returns the smear that should be used to bind a form posting to
+	 * 
+	 * @param smearId
+	 * @param specimenId
+	 * @return
+	 */
+	@ModelAttribute("hain")
+	public HAIN getHAIN(@RequestParam(required = false, value="hainId") Integer hainId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+		HAIN hain = null;
+		
+		// only do something here if the hain id has been set
+		if (hainId != null) {
+			// hainId != -1 is means "this is a new hain"
+			if (hainId != -1) {
+				hain = Context.getService(MdrtbService.class).getHAIN(hainId);
+			}
+			
+			// create the new hain if needed
+			if (hain == null) {
+				hain = new HAINImpl();
+			}
+		}
+				
+		// it's okay if we return null here, as this attribute is only used on a post
+		return hain;
+	}
 	
 	/**
 	 * Returns the specimen that should be used to bind a form posting to
@@ -231,6 +290,9 @@ public class SpecimenController extends AbstractSpecimenController {
 				}
 			}
 		}
+		
+		// save the actual update
+		Context.getService(MdrtbService.class).saveSpecimen(specimen);
 
         // add any new scanned lab report
         if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
@@ -239,10 +301,10 @@ public class SpecimenController extends AbstractSpecimenController {
 
             report.setLab(scannedLabReportLocation);
             report.setFile(scannedLabReport);
-        }
 
-        // save the actual update
-		Context.getService(MdrtbService.class).saveSpecimen(specimen);
+			// need to save this explicitly for the obs handler to pick it up and handle it properly
+			Context.getService(MdrtbService.class).saveScannedLabReport(report);
+        }
 			
 		// clears the command object from the session
 		status.setComplete();
@@ -485,5 +547,105 @@ public class SpecimenController extends AbstractSpecimenController {
 		map.clear();
 		
 		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId() + "&patientProgramId=" + patientProgramId, map);	
+	}
+
+    /**
+     * Handles the submission of a xpert form
+     *
+     * @param xpert
+     * @param xpertErrors
+     * @param status
+     * @param request
+     * @param map
+     * @param specimenId
+     * @param testId
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=xpert")
+	public ModelAndView processSubmit(@ModelAttribute("xpert") Xpert xpert, BindingResult errors, 
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
+	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
+	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {	
+    	
+		// validate
+    	if(xpert != null) {
+    		new TestValidator().validate(xpert, errors);
+    	}
+		
+    	// if validation fails
+		if (errors.hasErrors()) {		
+			map.put("testId", xpert.getId());
+			map.put("testType", xpert.getTestType());
+			map.put("test", xpert);
+			map.put("testErrors", errors);
+
+			// override the testTypes parameter; we only want to create the add box for a smear in this case
+			Collection<String> testTypes = new LinkedList<String>();
+			testTypes.add("xpert");
+			map.put("testTypes", testTypes);			
+			
+			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
+		}
+				
+		// save the actual update
+		Context.getService(MdrtbService.class).saveXpert(xpert);
+			
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + xpert.getId() + "&patientProgramId=" + patientProgramId, map);
+		
+	}
+    
+    /**
+     * Handles the submission of a xpert form
+     *
+     * @param hain
+     * @param hainErrors
+     * @param status
+     * @param request
+     * @param map
+     * @param specimenId
+     * @param testId
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.POST, params = "submissionType=hain")
+	public ModelAndView processSubmit(@ModelAttribute("hain") HAIN hain, BindingResult errors, 
+	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
+	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
+	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {	
+    	
+		// validate
+    	if(hain != null) {
+    		new TestValidator().validate(hain, errors);
+    	}
+		
+    	// if validation fails
+		if (errors.hasErrors()) {		
+			map.put("testId", hain.getId());
+			map.put("testType", hain.getTestType());
+			map.put("test", hain);
+			map.put("testErrors", errors);
+
+			// override the testTypes parameter; we only want to create the add box for a smear in this case
+			Collection<String> testTypes = new LinkedList<String>();
+			testTypes.add("hain");
+			map.put("testTypes", testTypes);			
+			
+			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
+		}
+				
+		// save the actual update
+		Context.getService(MdrtbService.class).saveHAIN(hain);
+			
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + hain.getId() + "&patientProgramId=" + patientProgramId, map);
+		
 	}
 }

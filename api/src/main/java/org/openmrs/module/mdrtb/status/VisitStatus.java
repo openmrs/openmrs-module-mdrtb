@@ -1,11 +1,16 @@
 package org.openmrs.module.mdrtb.status;
 
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.program.TbPatientProgram;
 
 
 public class VisitStatus extends Status {
 
 	public VisitStatus(MdrtbPatientProgram program) {
+	    super(program);
+    }
+
+	public VisitStatus(TbPatientProgram program) {
 	    super(program);
     }
 
@@ -34,4 +39,33 @@ public class VisitStatus extends Status {
 	public StatusItem getNewFollowUpVisit() {
 		return getItem("newFollowUpVisit");
 	}
+	
+	/****** CUSTOM METHODS ******/
+
+	// used to store the link that should be used for the a new follow-up visit
+	public StatusItem getNewTransferOutVisit() {
+			return getItem("newTransferOutVisit");
+	}
+	
+	// used to store the link that should be used for the a new follow-up visit
+	public StatusItem getNewTransferInVisit() {
+			return getItem("newTransferInVisit");
+	}
+	
+	// used to store the link that should be used for the a new follow-up visit
+	public StatusItem getNewDrdtVisit() {
+			return getItem("newDrdtVisit");
+	}
+
+	public StatusItem getTransferOutVisits() {
+		return getItem("transferOutVisits");
+	}
+	
+	public StatusItem getTransferInVisits() {
+		return getItem("transferInVisits");
+	}
+	
+	public StatusItem getDrdtVisits() {
+		return getItem("drdtVisits");
+	}	
 }

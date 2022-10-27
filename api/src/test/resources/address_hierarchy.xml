@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<dataset>
+
+	<!-- CAUTION! This dataset must be initiated AFTER the address_hierarchy tables have been created. Those tables are not handled via Hibernate -->
+
+	<!-- Address hierarchy -->
+    <address_hierarchy_level address_hierarchy_level_id="1" name="Country" address_field="COUNTRY" uuid="763acac2-e9ed-4ea7-b024-4d4260de722c" required="1"/>
+    <address_hierarchy_level address_hierarchy_level_id="2" name="Region" parent_level_id="1" address_field="REGION" uuid="95c667cc-c72a-44ef-85d3-6d76e1692e6a" required="0"/>
+    <address_hierarchy_level address_hierarchy_level_id="3" name="District or County" parent_level_id="2" address_field="COUNTY_DISTRICT" uuid="63934f87-ac03-415c-9b30-36a0d251882e" required="1"/>
+
+    <address_hierarchy_entry address_hierarchy_entry_id="1" name="Tajikistan" level_id="0" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c20"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="2" name="Scotland" level_id="0" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c21"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="3" name="Sughd Region" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c22"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="4" name="Khatlon Region" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c23"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="5" name="Republican Subordination" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c24"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="6" name="Fayzobod District" level_id="3" parent_id="5" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c25"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="7" name="Nurobod District" level_id="3" parent_id="5" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="8" name="Fayzobod (town)" level_id="4" parent_id="6" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+
+</dataset>

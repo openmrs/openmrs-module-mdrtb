@@ -187,7 +187,7 @@ public class MdrtbContactsDWRService {
                 if (popupKnownMDRVal != null){
                     MdrtbService ms = (MdrtbService) Context.getService(MdrtbService.class);
                     ObsService os = Context.getObsService();
-                    Concept cKnown = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE);
+                    Concept cKnown = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT_KNOWN_OR_CURRENT_MDR_CASE);
                     List<Obs> oList = os.getObservationsByPersonAndConcept(contact, cKnown);
                     if (oList != null && oList.size() > 0){
                         Obs oInner = oList.get(oList.size() -1);

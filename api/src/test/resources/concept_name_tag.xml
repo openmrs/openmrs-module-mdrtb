@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <concept_name_tag concept_name_tag_id="1" tag="default" description="name to use when nothing else is available" creator="1" date_created="2007-05-01 00:00:00" voided="0" uuid="d6e1fd4d-05f6-11e1-87b6-00ff18ede40b"/>
+    <concept_name_tag concept_name_tag_id="2" tag="short" description="preferred short name for a concept" creator="1" date_created="2007-05-01 00:00:00" voided="0" uuid="d6e1ffea-05f6-11e1-87b6-00ff18ede40b"/>
+    <concept_name_tag concept_name_tag_id="3" tag="synonym" description="a different word with similar meaning" creator="1" date_created="2007-05-01 00:00:00" voided="0" uuid="d6e2011e-05f6-11e1-87b6-00ff18ede40b"/>
+    <concept_name_tag concept_name_tag_id="4" tag="preferred" description="preferred name in English" creator="1" date_created="2007-05-01 00:00:00" voided="0" uuid="d6e20235-05f6-11e1-87b6-00ff18ede40b"/>
+    <concept_name_tag concept_name_tag_id="5" tag="short_fr" description="" creator="1" date_created="2009-02-05 13:45:25" voided="0" uuid="3253f476-0370-102d-b0e3-001ec94a0cc1"/>
+    <concept_name_tag concept_name_tag_id="6" tag="preferred_fr" description="" creator="1" date_created="2009-06-09 17:44:40" voided="0" uuid="3253c5e6-0370-102d-b0e3-001ec94a0cc1"/>
+    <concept_name_tag concept_name_tag_id="7" tag="preferred_en" description="" creator="1" date_created="2009-06-09 17:44:40" voided="0" uuid="3253c4e2-0370-102d-b0e3-001ec94a0cc1"/>
+    <concept_name_tag concept_name_tag_id="8" tag="short_en" description="" creator="1" date_created="2009-06-09 17:44:40" voided="0" uuid="3253f354-0370-102d-b0e3-001ec94a0cc1"/>
+    <concept_name_tag concept_name_tag_id="9" tag="short_" description="" creator="1" date_created="2009-06-09 17:44:40" voided="0" uuid="3253c6e0-0370-102d-b0e3-001ec94a0cc1"/>
+</dataset>

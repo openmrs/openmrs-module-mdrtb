@@ -23,9 +23,6 @@ public interface Culture extends Bacteriology {
 	public Integer getColonies();
 	public void setColonies(Integer colonies);
 	
-	public Concept getMethod();
-	public void setMethod(Concept method);
-	
 	public Concept getOrganismType();
 	public void setOrganismType(Concept organismType);
 

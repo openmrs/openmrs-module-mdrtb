@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
@@ -47,7 +49,14 @@ public class DstImpl extends TestImpl implements Dst {
 			throw new RuntimeException ("Cannot create culture: encounter can not be null.");
 		}
 		
-		test = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT), encounter.getEncounterDatetime(), null);
+		Concept concept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_CONSTRUCT);
+		
+		Obs obs = MdrtbUtil.getObsFromEncounter(concept, encounter);
+		test = obs;
+		if(obs==null) {
+			test = new Obs (encounter.getPatient(), concept, encounter.getEncounterDatetime(), encounter.getLocation());
+			test.setEncounter(encounter);
+		}
 	}
 	
 	@Override
@@ -151,19 +160,21 @@ public class DstImpl extends TestImpl implements Dst {
     		// string representation of the concentration
     		for(DstResult result : getResults()) {
     			
-    			Integer drug = result.getDrug().getId();
-    			
-    			// if a result for this drug already exists in the map, attach this result to that list
-    			if(resultsMap.containsKey(drug)) {
-    				resultsMap.get(drug).add(result);
-    				// re-sort, so that the concentrations are in order
-    				Collections.sort(resultsMap.get(drug));
-    			}
-    			// otherwise, create a new entry for this drug
-    			else {
-    				List<DstResult> drugResults = new LinkedList<DstResult>();
-    				drugResults.add(result);
-    				resultsMap.put(drug, drugResults);
+    			if(result.getDrug()!=null) {
+	    			Integer drug = result.getDrug().getId();
+	    			
+	    			// if a result for this drug already exists in the map, attach this result to that list
+	    			if(resultsMap.containsKey(drug)) {
+	    				resultsMap.get(drug).add(result);
+	    				// re-sort, so that the concentrations are in order
+	    				Collections.sort(resultsMap.get(drug));
+	    			}
+	    			// otherwise, create a new entry for this drug
+	    			else {
+	    				List<DstResult> drugResults = new LinkedList<DstResult>();
+	    				drugResults.add(result);
+	    				resultsMap.put(drug, drugResults);
+	    			}
     			}
     			
     			// TODO: remove this when we are sure we don't need it
@@ -237,8 +248,8 @@ public class DstImpl extends TestImpl implements Dst {
 			test.addGroupMember(obs);
 		}
 		
-		// now save the value
-        obs.setValueBoolean(direct);
+		// TODO: is this the proper way to cast from Boolean to Double?
+		obs.setValueNumeric(direct ? 1.0 : 0.0);
     }
 
     public void setMethod(Concept method) {
@@ -337,4 +348,82 @@ public class DstImpl extends TestImpl implements Dst {
         }
     }
     
+    public String getResultsString() {
+    	String results = "";
+		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
+		Collection<Concept> drugs = getPossibleDrugTypes();
+		for(Concept drug : drugs) {
+			if(dstResultsMap.get(drug.getId())!=null) {
+				
+				for(DstResult result : dstResultsMap.get(drug.getId())) {
+					results += result.getDrug().getDisplayString() + ": " + result.getResult().getShortNameInLocale(Context.getLocale()) + "<br/>";
+				}
+			}
+		}
+		
+		if(results.length()==0) {
+			results = "N/A";
+		}
+		
+		return results;
+	}
+    
+    public String getResistantDrugs() {
+    	String results = "";
+		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
+		Collection<Concept> drugs = getPossibleDrugTypes();
+		for(Concept drug : drugs) {
+			if(dstResultsMap.get(drug.getId()) != null) {
+				for(DstResult result : dstResultsMap.get(drug.getId())) {
+					if(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANT_TO_TB_DRUG).getId().equals(result.getResult().getId())) {
+						ConceptName name = result.getDrug().getShortNameInLocale(Context.getLocale());
+						if (name == null) {
+							name = result.getDrug().getName(Context.getLocale());
+						}
+						results += name.getName() + ",";
+					}
+				}
+			}
+		}
+		if(results.length()==0) {
+			results = "N/A";
+		}
+		else {
+			results = results.substring(0,results.length()-1);
+		}
+    	return results;
+    }
+    
+    @SuppressWarnings("deprecation")
+	public String getSensitiveDrugs() {
+
+    	String results = "";
+		Map<Integer, List<DstResult>> dstResultsMap = getResultsMap();
+		Collection<Concept> drugs = getPossibleDrugTypes();
+		for(Concept drug : drugs) {
+			if(dstResultsMap.get(drug.getId())!=null) {
+				
+				for(DstResult result : dstResultsMap.get(drug.getId())) {
+					if(result.getResult().getId().intValue()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSCEPTIBLE_TO_TB_DRUG).getId().intValue()) {					
+						results += result.getDrug().getName().getName() + ",";
+					}
+				}
+			}
+		}
+		
+		if(results.length()==0) {
+			results = "N/A";
+		}
+		else {
+			results = results.substring(0,results.length()-1);
+		}
+    	
+    	
+    	return results;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public Collection<Concept> getPossibleDrugTypes() {
+    	return Context.getService(MdrtbService.class).getMdrtbDrugs();
+    }
 }

@@ -1,6 +1,9 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>
 
@@ -41,6 +44,7 @@
 		// check all the individual tests
 		for(i = 1; i <= numberOfTests; i++) {
 			var dateCollected = $j('#dateCollected' + i).val();
+			//var dateTested = $j('#dateTested' + i).val();
 			var identifier = $j('#identifier' + i).val();
 			var type = $j('#type' + i).val();
 			var appearance = $j('#appearance' + i).val();
@@ -51,6 +55,12 @@
 				dateCollected == '') {
 					$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateCollected' text='Please specify the date collected.'/></li>");
 			}
+
+			// date collected is only required parameter (unless an entire row is blank)
+			//if ((identifier != '' | type != '' | appearance !='' | result !='') &&
+			//	dateTested == '') {
+			//		$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateTested' text='Please specify the date tested.'/></li>");
+			//}
 
 			// TODO: add validation of collection date;  we could use the openmrs:datePattern tag, and the
 			// parseSimpleDate library function in openmrs.js, but this will fail with localized patterns, like the French "(jj/mm/aaaa"	
@@ -75,7 +85,9 @@
 
 <table>
 <tr>
-<th><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</th>
+<th>
+<!--<spring:message code="mdrtb.locationCollected" text="Location Collected"/>-->
+</th>
 <td>
 <select id="location" name="location">
 <option value=""></option>
@@ -117,7 +129,24 @@
 <th><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</th>
 <th><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</th>
 <th><spring:message code="mdrtb.appearance" text="Appearance"/>:</th>
+<c:if test="${testType eq 'xpert' || testType eq 'hain' || testType eq 'smear' || testType eq 'culture'}" >
+<th><spring:message code="mdrtb.dateCompleted" text="Date Completed"/>:</th>
 <th><spring:message code="mdrtb.result" text="Result"/>:</th>
+</c:if>
+<c:if test="${testType eq 'xpert' || testType eq 'hain'}" >
+<th><spring:message code="mdrtb.rifResistance" text="RIF Resistance"/>:</th>
+
+<c:if test="${testType eq 'hain'}" >
+<th><spring:message code="mdrtb.inhResistance" text="INH Resistance"/>:</th>
+</c:if>
+<!-- 
+<c:if test="${testType eq 'xpert'}" >
+<th><spring:message code="mdrtb.mtbBurden" text="MTB Burden"/>:</th>
+</c:if>
+
+<th><spring:message code="mdrtb.errorCode" text="Error Code"/>:</th>
+-->
+</c:if>
 </tr>
 
 
@@ -144,14 +173,68 @@
 </select>
 </td>
 
+<c:if test="${testType eq 'xpert' || testType eq 'hain' || testType eq 'smear' || testType eq 'culture'}" >
+<td><openmrs_tag:dateField formFieldName="dateCompleted${i}" startValue=""/></td>
+</c:if>
+
+<c:if test="${testType eq 'smear' || testType eq 'culture'}">
 <td>
 <select id="result${i}" name="result${i}" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${testType eq 'smear' ? smearResults : cultureResults}">
 <option value="${result.answerConcept.id}">${result.answerConcept.displayString}</option>
 </c:forEach>
-</td>
 </select>
+</td>
+</c:if>
+
+<c:if test="${testType eq 'xpert' || testType eq 'hain'}">
+<td>
+<select id="result${i}" name="result${i}" class="result">
+<option value=""></option>
+<c:forEach var="mtbResult" items="${mtbResults}">
+<option value="${mtbResult.answerConcept.id}">${mtbResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+
+<td>
+<select id="rifResult${i}" name="rifResult${i}">
+<option value=""></option>
+<c:forEach var="rifResult" items="${rifResults}">
+<option value="${rifResult.answerConcept.id}">${rifResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+
+<c:if test="${testType eq 'hain'}">
+<td>
+<select id="inhResult${i}" name="inhResult${i}">
+<option value=""></option>
+<c:forEach var="inhResult" items="${inhResults}">
+<option value="${inhResult.answerConcept.id}">${inhResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+</c:if>
+
+<!-- 
+<c:if test="${testType eq 'xpert'}">
+<td>
+<select id="mtbBurden${i}" name="mtbBurden${i}">
+<option value=""></option>
+<c:forEach var="mtbBurden" items="${xpertMtbBurdens}">
+<option value="${mtbBurden.answerConcept.id}">${mtbBurden.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+</c:if>
+
+<td>
+<input id="errorCode${i}" name="errorCode${i}" type="text" size="10"/>
+</td>
+ -->
+</c:if>
 
 </tr>
 </c:forEach>

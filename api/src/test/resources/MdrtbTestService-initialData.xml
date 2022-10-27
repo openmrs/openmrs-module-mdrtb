@@ -1,0 +1,417 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<dataset>
+
+	<!-- Global properties -->
+    <global_property property="addresshierarchy.addressToEntryMapUpdaterLastStartTime" description="" uuid="813b96f2-c1d2-4393-be02-cc49bf7624aa"/>
+    <global_property property="addresshierarchy.allowFreetext" property_value="true" description="" uuid="ca878ac6-16e0-416d-8ed8-5266f40182c3"/>
+    <global_property property="addresshierarchy.database_version" property_value="2.10.0" description="" uuid="3a43758d-b0c4-40e8-ac09-8863a8f2d418"/>
+    <global_property property="addresshierarchy.enableOverrideOfAddressPortlet" property_value="true" description="" uuid="52af2133-e301-4cd1-bb9c-d4906ace151b"/>
+    <global_property property="addresshierarchy.initializeAddressHierarchyCacheOnStartup" property_value="true" description="" uuid="8d755ff0-c7a8-462a-9e9a-54d74c42a58c"/>
+    <global_property property="addresshierarchy.mandatory" property_value="false" description="" uuid="83f7d4b3-fe56-43bf-9598-a77eed7a0762"/>
+    <global_property property="addresshierarchy.soundexProcessor" description="" uuid="51817d1e-75e9-4b3d-86c5-9dde26833546"/>
+    <global_property property="addresshierarchy.started" property_value="true" description="" uuid="a198ff07-d1a6-4ba9-9449-f4c6f0992fb5"/>
+    <global_property property="application.name" property_value="OpenMRS" description="" uuid="a5af71ae-84f9-4fee-92f5-7f08b2a480f2"/>
+    <global_property property="autoCloseVisits.visitType" description="" uuid="1421c404-70ec-4ad1-bc8d-420e9efc025a"/>
+    <global_property property="calculation.mandatory" property_value="false" description="" uuid="2a9c33db-daa1-4d5a-bc99-7a91c13b3796"/>
+    <global_property property="calculation.started" property_value="true" description="" uuid="c25dd58d-fa44-40c0-8b36-91b95c74555e"/>
+    <global_property property="concept.caseSensitiveNamesInConceptNameTable" property_value="true" description="" uuid="9b46c148-3318-4a81-9f82-f00ca6bf6f6e"/>
+    <global_property property="concept.causeOfDeath" property_value="290" description="" uuid="016250c4-7dca-40a9-8a2e-f422a51d5071"/>
+    <global_property property="concept.cd4_count" property_value="103" description="" uuid="09c29636-3765-4592-a8e6-cd6ef44c9ead"/>
+    <global_property property="concept.defaultConceptMapType" property_value="NARROWER-THAN" description="" uuid="298bca8d-5ff5-4acd-b6e6-e0f9245e5eef"/>
+    <global_property property="concept.false" property_value="2" description="" uuid="98745009-b1d0-4252-bef6-0e51b4427f1b"/>
+    <global_property property="concept.height" property_value="248" description="" uuid="70020250-8bf7-42fd-8d72-0429ec274cfe"/>
+    <global_property property="concept.medicalRecordObservations" property_value="1238" description="" uuid="6a867716-3f0e-4783-b46f-aeb36461a089"/>
+    <global_property property="concept.none" property_value="5" description="" uuid="fb96df51-37fd-4c67-a470-2e11517a7b51"/>
+    <global_property property="concept.otherNonCoded" property_value="19" description="" uuid="35644df2-e5bc-4010-9c17-7f95ea71a2d8"/>
+    <global_property property="concept.patientDied" property_value="25" description="" uuid="d975ba9a-a393-4d33-a887-1c1276f66a89"/>
+    <global_property property="concept.problemList" property_value="1284" description="" uuid="bdfe204c-c076-470f-8b62-825c64974995"/>
+    <global_property property="concept.reasonExitedCare" description="" uuid="4e29e570-6fe8-4be4-8e24-70fe76dfde74"/>
+    <global_property property="concept.reasonOrderStopped" property_value="184" description="" uuid="2f3a01e1-6777-4b64-8737-9a8f4f89d6cf"/>
+    <global_property property="concept.true" property_value="1" description="" uuid="c6704384-4a75-4798-817e-b80d75b5c6d9"/>
+    <global_property property="concept.weight" property_value="168" description="" uuid="25ddd7e8-0d67-477e-860d-2e84ce9931d2"/>
+    <global_property property="conceptDrug.dosageForm.conceptClasses" description="" uuid="21385d20-b7c7-4199-b682-6c85c02c10f9"/>
+    <global_property property="conceptDrug.route.conceptClasses" description="" uuid="af49d90b-a8c0-4518-aaa2-9ecebbb35e0f"/>
+    <global_property property="concepts.locked" property_value="false" description="" uuid="1324d1c4-fb52-4668-a9b4-00089538323f"/>
+    <global_property property="concept_map_type_management.enable" property_value="false" description="" uuid="542e22dd-b447-4852-95b7-8a5f1f5ae552"/>
+    <global_property property="dashboard.encounters.maximumNumberToShow" description="" uuid="92972c15-7233-4c16-8997-dac3c974216a"/>
+    <global_property property="dashboard.encounters.providerDisplayRoles" description="" uuid="c80266ee-cd22-4f9b-bbd5-8c8671464bb4"/>
+    <global_property property="dashboard.encounters.showEditLink" property_value="true" description="" uuid="844d2084-0991-4285-9681-1f67924a3172"/>
+    <global_property property="dashboard.encounters.showEmptyFields" property_value="true" description="" uuid="20e54f91-8013-4729-9bd8-6e3109839046"/>
+    <global_property property="dashboard.encounters.showViewLink" property_value="true" description="" uuid="b8baf102-df50-4b33-a615-9ced10477f07"/>
+    <global_property property="dashboard.encounters.usePages" property_value="smart" description="" uuid="c529e725-ee0c-490c-b0c7-d4b240506ea7"/>
+    <global_property property="dashboard.header.programs_to_show" description="" uuid="e7d7da79-fe4a-4dc8-86e7-53f88f81965f"/>
+    <global_property property="dashboard.header.workflows_to_show" description="" uuid="31da566d-0f76-49fe-aaa6-64e9573c3cd9"/>
+    <global_property property="dashboard.overview.showConcepts" description="" uuid="02eceea9-0171-4556-b07f-2d576ec653d8"/>
+    <global_property property="dashboard.regimen.displayDrugSetIds" property_value="ANTIRETROVIRAL DRUGS,TUBERCULOSIS DRUGS" description="" uuid="9366f838-61be-42bf-a3f1-5416c5d19fff"/>
+    <global_property property="dashboard.regimen.displayFrequencies" property_value="7 days/week,6 days/week,5 days/week,4 days/week,3 days/week,2 days/week,1 days/week" description="" uuid="4124ca07-2444-407e-bf72-a0cb829b795b"/>
+    <global_property property="dashboard.regimen.standardRegimens" property_value="NO_VALUE" description="" uuid="2353e1fd-cb4c-4d11-8957-35367897d7ad"/>
+    <global_property property="dashboard.relationships.show_types" description="" uuid="a64485b5-b51a-44a7-87cf-b7c928b40863"/>
+    <global_property property="dashboard.showPatientName" property_value="false" description="" uuid="3bb112d0-ff6e-4992-a403-d0b32e5471fd"/>
+    <global_property property="default_locale" property_value="ru" description="" uuid="e7e67536-6cb5-4613-b973-f3083e4ea1e6"/>
+    <global_property property="default_location" property_value="Unknown Location" description="" uuid="ced4f644-4ea1-45da-a280-1ef549904073"/>
+    <global_property property="default_theme" property_value="green" description="" uuid="e654a833-6a10-47eb-bb5d-52d8e70ae4cb"/>
+    <global_property property="dotsreports.afterDefault1.conceptId" property_value="14" description="" uuid="4f361126-628c-4590-b768-627d8d13d817"/>
+    <global_property property="dotsreports.afterDefault2.conceptId" property_value="431" description="" uuid="05af4471-c052-4d79-b257-3db25b7f7c9a"/>
+    <global_property property="dotsreports.afterFailure1.conceptId" property_value="17" description="" uuid="b8ecd15f-6326-4848-bcb3-e7e80d4586e9"/>
+    <global_property property="dotsreports.afterFailure2.conceptId" property_value="16" description="" uuid="f688acf8-265e-4445-b325-e448a3ae0ccd"/>
+    <global_property property="dotsreports.afterRelapse1.conceptId" property_value="20" description="" uuid="59fc4994-9339-4e73-9b9b-8ca2a1fcf79b"/>
+    <global_property property="dotsreports.afterRelapse2.conceptId" property_value="430" description="" uuid="60fbab03-69c8-481f-9927-b4694d7e16d7"/>
+    <global_property property="dotsreports.database_version" property_value="1.0.0" description="" uuid="4abfa2c9-ed3e-488a-bac7-7415f7f8a9a1"/>
+    <global_property property="dotsreports.defaultDstDrugs" property_value="ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN" description="" uuid="5d0cd67b-e70c-4d4c-8fa6-57e1c9153758"/>
+    <global_property property="dotsreports.formIdToAttachToBacteriologyEntry" description="" uuid="030e1884-e91f-4842-97b0-0bd714421341"/>
+    <global_property property="dotsreports.new.conceptId" property_value="18" description="" uuid="daaecb55-f392-43d2-bd8f-b5d73a141fbc"/>
+    <global_property property="dotsreports.other.conceptId" property_value="19" description="" uuid="721a80a8-1248-4081-9efc-11abcdbed64b"/>
+    <global_property property="dotsreports.outcome.canceled.conceptId" property_value="280" description="" uuid="5d878acd-4f8f-4b98-b001-545f9c567003"/>
+    <global_property property="dotsreports.outcome.cured.conceptId" property_value="26" description="" uuid="422c1a65-915d-4b74-977b-b15899371d6c"/>
+    <global_property property="dotsreports.outcome.died.conceptId" property_value="25" description="" uuid="ecbbc053-51ae-4f13-9fc3-69d26b5f11e0"/>
+    <global_property property="dotsreports.outcome.ltfu.conceptId" property_value="29" description="" uuid="eeab6746-eb81-49d1-9091-8fb05c8276ac"/>
+    <global_property property="dotsreports.outcome.sld2.conceptId" property_value="325" description="" uuid="7ab31447-9198-4e83-b862-64b0d6dc19cc"/>
+    <global_property property="dotsreports.outcome.transferout.conceptId" property_value="23" description="" uuid="ab5c378e-34fb-4719-8b2c-174a9ef10844"/>
+    <global_property property="dotsreports.outcome.txCompleted.conceptId" property_value="28" description="" uuid="804ba38a-531f-48ea-886a-66137151b714"/>
+    <global_property property="dotsreports.outcome.txFailure.conceptId" property_value="27" description="" uuid="3378f0ae-9d2f-45b5-bac3-445f72969dba"/>
+    <global_property property="dotsreports.patient_identifier_type_list" description="" uuid="b8731d9d-c693-468a-b5d5-685a069b6a52"/>
+    <global_property property="dotsreports.primaryPatientIdentifierType" property_value="Регистрационный номер Дотc" description="" uuid="243d7da0-1419-42f2-b160-a40ee1dc952b"/>
+    <global_property property="dotsreports.program_name" property_value="DOTS Program" description="" uuid="6fe9ec06-9b50-4a30-a5ab-96677a506fe4"/>
+    <global_property property="dotsreports.roles_to_redirect_from_openmrs_homepage" description="" uuid="ac135ce4-8aeb-4225-87d0-bd4e1fcb72f1"/>
+    <global_property property="dotsreports.specimenReports.daysSinceCulture" property_value="14" description="" uuid="cb60dff8-0101-43dd-868a-b81ec6aa9ea9"/>
+    <global_property property="dotsreports.specimenReports.daysSinceSmear" property_value="14" description="" uuid="4ec2029a-113c-41f6-a9e3-e69f34d07825"/>
+    <global_property property="dotsreports.specimenReports.defaultLabId" property_value="1" description="" uuid="0100507a-6bfc-48be-81ca-f2dd9637df3a"/>
+    <global_property property="dotsreports.specimen_collection_encounter_type" property_value="Specimen Collection" description="" uuid="187fc012-8516-400c-9aff-01f60d1b4c70"/>
+    <global_property property="dotsreports.tb03_encounter_type" property_value="ADULTINITIAL" description="" uuid="551e57fc-6c37-46ef-83ab-cddff5b7b297"/>
+    <global_property property="dotsreports.transferIn.conceptId" property_value="15" description="" uuid="83358d9c-8934-43f2-9564-e941cee5735d"/>
+    <global_property property="encounterForm.obsSortOrder" property_value="number" description="" uuid="2685fba1-1b67-4118-8531-c7ca938113f5"/>
+    <global_property property="formentry.database_version" property_value="2.7" description="" uuid="81581981-3b38-48ea-894f-31174d3c8d29"/>
+    <global_property property="FormEntry.enableDashboardTab" property_value="true" description="" uuid="e14ebbfa-2dd5-4f2f-8aad-c96a9bef7898"/>
+    <global_property property="FormEntry.enableOnEncounterTab" property_value="false" description="" uuid="be093976-331c-450a-8a66-5cdf03c36bd6"/>
+    <global_property property="formentry.infopath_server_url" description="" uuid="7718ac24-8283-4c48-bbee-74ee716281b6"/>
+    <global_property property="formentry.infopath_taskpane.relationship_sort_order" description="" uuid="14eccd54-b0c6-4c5b-8d4b-d908b8fbffe9"/>
+    <global_property property="formentry.infopath_taskpane.showAllUsersOnLoad" property_value="true" description="" uuid="0d3fc89f-97ea-4785-8b8c-5ba61bd2b986"/>
+    <global_property property="formentry.infopath_taskpane_caption" property_value="Welcome!" description="" uuid="f61ac811-c3e5-4d86-b488-d7b2d8b0afe5"/>
+    <global_property property="formentry.infopath_taskpane_keepalive_min" description="" uuid="b1168159-ca22-44d3-895c-888cc7fc8d59"/>
+    <global_property property="formentry.infopath_taskpane_refresh_sec" description="" uuid="ecfda7cd-60ba-4941-be09-8b731ace6aef"/>
+    <global_property property="formentry.patientForms.goBackOnEntry" property_value="false" description="" uuid="5bcc167a-ffa6-4d73-ad1e-d945de532dae"/>
+    <global_property property="formentry.queue_archive_dir" property_value="formentry/archive/%Y/%M" description="" uuid="3fda3fe2-f132-4d09-bb80-e6bbcf7ca484"/>
+    <global_property property="formentry.queue_dir" property_value="formentry/queue" description="" uuid="888447a8-8b2b-499f-99b3-c0706eb1ff50"/>
+    <global_property property="graph.color.absolute" property_value="rgb(20,20,20)" description="" uuid="d292319c-eb82-4316-aa07-3805f0e93d91"/>
+    <global_property property="graph.color.critical" property_value="rgb(200,0,0)" description="" uuid="6b5f36fc-2fbc-47b3-965e-b37bf3cf3330"/>
+    <global_property property="graph.color.normal" property_value="rgb(255,126,0)" description="" uuid="1c8043bf-074a-4ecd-bf27-f50f4ab94ffb"/>
+    <global_property property="gzip.enabled" property_value="false" description="" uuid="859d3fcd-ccf3-4cb6-9581-e4dbf849b6ed"/>
+    <global_property property="hl7_archive.dir" property_value="hl7_archives" description="" uuid="a48663ae-2778-412b-974c-c6668fe64554"/>
+    <global_property property="hl7_processor.ignore_missing_patient_non_local" property_value="false" description="" uuid="cda834bf-2b39-4aeb-af44-40a8b8dcb255"/>
+    <global_property property="htmlformentry.database_version" property_value="1.2.0" description="" uuid="9e48fe31-6fc6-43b5-932e-c4b3d7ba71af"/>
+    <global_property property="htmlformentry.dateFormat" description="" uuid="152342f5-8698-42f1-b807-b912af8149c7"/>
+    <global_property property="htmlformentry.mandatory" property_value="false" description="" uuid="be2cd7a6-0e1c-4e5b-9807-5123a80f9ccc"/>
+    <global_property property="htmlformentry.showDateFormat" property_value="true" description="" uuid="709c4b91-85ed-4d58-945f-d79b20f952b7"/>
+    <global_property property="htmlformentry.started" property_value="true" description="" uuid="9c676ed8-2d05-4717-899a-31a675144dea"/>
+    <global_property property="htmlformentry19ext.mandatory" property_value="false" description="" uuid="0e3d5b7d-99a2-427b-b3d6-4f8f38ef8f78"/>
+    <global_property property="htmlformentry19ext.started" property_value="true" description="" uuid="f66cb463-71fe-4932-bdaf-cdcb3fb067ce"/>
+    <global_property property="htmlformflowsheet.addAnotherButtonPosition" property_value="top" description="" uuid="f3319b09-9cd2-451a-8c4b-b2a0e3aca708"/>
+    <global_property property="htmlformflowsheet.configuration" description="" uuid="c0b01399-2e84-417e-ae74-751f2a77a692"/>
+    <global_property property="htmlformflowsheet.drugDiscontinueReason" description="" uuid="8cf3cba3-dc2b-44ed-a117-211ae1f345a7"/>
+    <global_property property="htmlformflowsheet.encountersChronology" property_value="desc" description="" uuid="1d34bc35-2a65-41f3-a961-69067db57674"/>
+    <global_property property="htmlformflowsheet.links" description="" uuid="0e961c58-b450-44e5-ae3c-1944c4ce9ae5"/>
+    <global_property property="htmlformflowsheet.mandatory" property_value="false" description="" uuid="55066d37-5c0f-4337-8679-bccdc9ddf41a"/>
+    <global_property property="htmlformflowsheet.patientChartFormIds" description="" uuid="d69fa088-eed3-4fed-ba67-8af0dd383dbf"/>
+    <global_property property="htmlformflowsheet.programConfigurationMap" property_value="{}" description="" uuid="e3667cce-c1ad-4601-b170-0fea43bd1479"/>
+    <global_property property="htmlformflowsheet.showMdrtbCatIVLink" property_value="false" description="" uuid="bb7ce11d-db9f-4503-9ec8-9a697f6f1ab3"/>
+    <global_property property="htmlformflowsheet.started" property_value="true" description="" uuid="c2024006-c827-493c-a00a-7802d8e2d03a"/>
+    <global_property property="htmlwidgets.mandatory" property_value="false" description="" uuid="a3bda5ca-d4dc-4d30-a126-d67290a732f8"/>
+    <global_property property="htmlwidgets.started" property_value="true" description="" uuid="9c703fbf-1638-42d6-b6e1-a7ec69093794"/>
+    <global_property property="implementation_id" property_value="AT101" description="" uuid="28163126-5521-476f-89c9-ede414ecbbf3"/>
+    <global_property property="layout.address.format" property_value="org.openmrs.layout.web.address.AddressTemplate" description="" uuid="d1f0ac3a-26ca-4241-bc32-98e4958973df"/>
+    <global_property property="layout.name.format" property_value="short" description="" uuid="e2a401de-df2c-4c71-9476-60a5f80cbb9d"/>
+    <global_property property="locale.allowed.list" property_value="en, es, fr, it, pt, ru, tj" description="" uuid="439e9395-26a6-4aeb-ab25-dab3f808bea0"/>
+    <global_property property="location.field.style" property_value="tree" description="" uuid="f3f5662e-1c25-4835-a00b-a0e169907fcc"/>
+    <global_property property="log.level" property_value="org.openmrs.api:info" description="" uuid="9c85e7be-a582-4318-909c-f445278ccc08"/>
+    <global_property property="log.level.openmrs" property_value="info" description="" uuid="2134bc5e-86fd-444c-ba0a-a75c1be71be9"/>
+    <global_property property="logic.database_version" property_value="1.4" description="" uuid="36757a27-8f7e-4e2b-a4df-45634b4866c4"/>
+    <global_property property="logic.default.ruleClassDirectory" property_value="logic/class" description="" uuid="2bb9c016-f02e-4be4-b978-7d71303a0e97"/>
+    <global_property property="logic.default.ruleJavaDirectory" property_value="logic/sources" description="" uuid="cf1e8454-961b-4862-bef2-d7376507086c"/>
+    <global_property property="logic.defaultTokens.conceptClasses" description="" uuid="1fd4e94c-b513-4e2f-9677-92554eea2c6d"/>
+    <global_property property="logic.mandatory" property_value="false" description="" uuid="e20aefdf-9fed-4e33-b7e2-e2069221f23f"/>
+    <global_property property="logic.started" property_value="true" description="" uuid="62d1d9aa-5fa4-4fae-937c-2ab30a9e67ef"/>
+    <global_property property="mail.debug" property_value="false" description="" uuid="9add0a50-689a-4417-939a-69f9415c6c7f"/>
+    <global_property property="mail.default_content_type" property_value="text/plain" description="" uuid="5f1cc5d0-fa4d-4ece-9138-44bb5132881e"/>
+    <global_property property="mail.from" property_value="info@openmrs.org" description="" uuid="2df6ac39-6866-477b-9fa4-53db1adcf18f"/>
+    <global_property property="mail.password" property_value="test" description="" uuid="f167910d-b1d7-4654-9a16-6d10cfb28467"/>
+    <global_property property="mail.smtp_auth" property_value="false" description="" uuid="77bb0a20-ecd9-4216-8906-52e8059bb2ba"/>
+    <global_property property="mail.smtp_host" property_value="localhost" description="" uuid="a9aab81f-540a-405f-8c00-1abecf6fec01"/>
+    <global_property property="mail.smtp_port" property_value="25" description="" uuid="01e2c785-1ff8-48b1-8a89-269bcc1507bf"/>
+    <global_property property="mail.transport_protocol" property_value="smtp" description="" uuid="31debf1f-a940-47ab-a5de-366008ae9103"/>
+    <global_property property="mail.user" property_value="test" description="" uuid="a441e211-e47a-4ecd-bb60-7f74173fd90e"/>
+    <global_property property="mdrtb.afterDefault1.conceptId" property_value="14" description="" uuid="7293a44f-e333-4b4d-9eda-42e858634930"/>
+    <global_property property="mdrtb.afterDefault2.conceptId" property_value="431" description="" uuid="9c8b812a-f612-4db9-91df-accb91464114"/>
+    <global_property property="mdrtb.afterFailure1.conceptId" property_value="17" description="" uuid="8694f392-19cc-46cc-9c54-7d8d44c91816"/>
+    <global_property property="mdrtb.afterFailure2.conceptId" property_value="16" description="" uuid="8cbba654-2d69-4771-9dd9-7cff8cc3ff61"/>
+    <global_property property="mdrtb.afterRelapse1.conceptId" property_value="20" description="" uuid="583afef0-352a-4b80-a7f5-d1015a0bd6ae"/>
+    <global_property property="mdrtb.afterRelapse2.conceptId" property_value="430" description="" uuid="4b547206-e0f0-4b63-9f3b-e6939a9c2b9c"/>
+    <global_property property="mdrtb.birt_report_list" description="" uuid="e4a534af-b5ad-4e6a-ad30-397902c7abc2"/>
+    <global_property property="mdrtb.colorMap" property_value="CONTAMINATED:lightgrey|UNSATISFACTORY SAMPLE:lightgrey|MODERATELY POSITIVE:lightcoral|STRONGLY POSITIVE:lightcoral|WEAKLY POSITIVE:lightcoral|WAITING FOR TEST RESULTS:lightgrey|SCANTY:khaki|NEGATIVE:lightgreen|POSITIVE:lightcoral|SUSCEPTIBLE TO TUBERCULOSIS DRUG:lightgreen|INDETERMINATE TO TUBERCULOSIS DRUG:khaki|RESISTANT TO TUBERCULOSIS DRUG:lightcoral|NONE:none" description="" uuid="7246d21b-f3f7-43e6-a154-4ccc4e6faa83"/>
+    <global_property property="mdrtb.culture.formId" property_value="12" description="" uuid="c097d3d9-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.culturelabs" property_value="264|263||202|3|201|200|2|85|199" description="" uuid="f27d36d7-4460-4d19-8515-ffa1c194b4ab"/>
+    <global_property property="mdrtb.database_version" property_value="1.0.0" description="" uuid="d15724c1-0ef4-4171-ba0f-6c8849e67c88"/>
+    <global_property property="mdrtb.defaultDstDrugs" property_value="ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN" description="" uuid="29c042c5-b527-4058-bc7a-1f30695e8b9f"/>
+    <global_property property="mdrtb.dst.formId" property_value="11" description="" uuid="c097dc00-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.findPatientNumResults" property_value="20" description="" uuid="2bb9984c-5d10-4b5f-894b-17dda35fee41"/>
+    <global_property property="mdrtb.fixedIdentifierLocation" description="" uuid="4e7eae01-f3c8-4508-9f6e-cb2c4dc328a4"/>
+    <global_property property="mdrtb.follow_up_encounter_type" property_value="Form 89" description="" uuid="4fab5192-396d-4731-ad7d-2f21aae7eb03"/>
+    <global_property property="mdrtb.formIdToAttachToBacteriologyEntry" description="" uuid="cbe1ff33-d818-4aee-b54a-35588d71a6e4"/>
+    <global_property property="mdrtb.hain.formId" property_value="15" description="" uuid="c097da8b-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.intake_encounter_type" property_value="TB03" description="" uuid="509ccaec-5d71-4759-9ef8-4a3fdaf654bc"/>
+    <global_property property="mdrtb.lab_entry_ids" property_value="355|356|357|358|359|360|361|362|363" description="" uuid="6a2b013c-a380-11e7-b650-782bcb563a1c"/>
+    <global_property property="mdrtb.mandatory" property_value="false" description="" uuid="a55a42bf-d158-4d91-b764-53beafa4c8ba"/>
+    <global_property property="mdrtb.mdrIdentifierType" property_value="Регистрационный номер МЛУ" description="" uuid="57d5e3af-94df-4be4-ae56-65575bacac61"/>
+    <global_property property="mdrtb.mdrtbIntake_encounter_type" property_value="TB03u - MDR" description="" uuid="734a76b8-0254-426f-bbfb-77f3ec580bbc"/>
+    <global_property property="mdrtb.mdrtb_forms_list" description="" uuid="7664ecfc-9aac-4a7f-89a7-ec4ae7e52013"/>
+    <global_property property="mdrtb.new.conceptId" property_value="18" description="" uuid="c8be1060-399a-4d1b-9558-47305c1a230c"/>
+    <global_property property="mdrtb.other.conceptId" property_value="19" description="" uuid="44cf4683-abab-497d-bfbe-062d53165610"/>
+    <global_property property="mdrtb.outcome.cured.conceptId" property_value="26" description="" uuid="650ca788-aaa3-4150-abb7-43b12c023d40"/>
+    <global_property property="mdrtb.outcome.died.conceptId" property_value="25" description="" uuid="9e8dcd70-4e9f-4f49-bcee-7ff0ec9531af"/>
+    <global_property property="mdrtb.outcome.ltfu.conceptId" property_value="29" description="" uuid="27fac2ac-2488-4327-8b92-52f5ed755b2e"/>
+    <global_property property="mdrtb.outcome.transferout.conceptId" property_value="23" description="" uuid="92980594-bec9-43d2-a66b-b2d589803f44"/>
+    <global_property property="mdrtb.outcome.txCompleted.conceptId" property_value="28" description="" uuid="e7297844-396e-4a7c-bdc5-999f60787a9f"/>
+    <global_property property="mdrtb.outcome.txFailure.conceptId" property_value="27" description="" uuid="b4a65f42-4941-4cc3-8563-1cc277776118"/>
+    <global_property property="mdrtb.patient_contact_id_attribute_type" property_value="MDR-TB Patient Contact ID Number" description="" uuid="9eeb0362-9679-4b71-ac69-c8097cafd445"/>
+    <global_property property="mdrtb.patient_identifier_type_list" description="" uuid="ba8be54a-d2c6-4a07-be3d-24959257c740"/>
+    <global_property property="mdrtb.primaryPatientIdentifierType" property_value="Регистрационный номер Дотc" description="" uuid="9defea99-bf6e-42b2-9a6b-4b28da0ff08d"/>
+    <global_property property="mdrtb.program_name" property_value="MDR-TB PROGRAM" description="" uuid="e0e8f641-6a4d-4e22-9e9c-7c1787da22d1"/>
+    <global_property property="mdrtb.roles_to_redirect_from_openmrs_homepage" description="" uuid="ab91c35d-026d-4a8d-ad6c-df3c0f4d35e2"/>
+    <global_property property="mdrtb.smear.formId" property_value="8" description="" uuid="c097d78d-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.specimenReports.daysSinceCulture" property_value="14" description="" uuid="03fa58d5-47b2-46c5-b542-a6f5f087cb28"/>
+    <global_property property="mdrtb.specimenReports.daysSinceSmear" property_value="14" description="" uuid="a3a0f066-caae-4880-86cf-ed3507b7dd4c"/>
+    <global_property property="mdrtb.specimenReports.defaultLabId" property_value="47" description="" uuid="76712eb4-5dbe-46a2-96ba-48ba7ae9d803"/>
+    <global_property property="mdrtb.specimen_collection_encounter_type" property_value="Specimen Collection" description="" uuid="56dae2cf-7d0a-4d9e-8f25-8a1ba8146e4c"/>
+    <global_property property="mdrtb.started" property_value="true" description="" uuid="cea05a1b-a151-4ae9-8bfd-2140b9c5a385"/>
+    <global_property property="mdrtb.test_result_encounter_type_bacteriology" description="" uuid="a5e85d3e-e852-40a2-8666-7ed5d0fb29f5"/>
+    <global_property property="mdrtb.test_result_encounter_type_DST" description="" uuid="e77937d5-de5e-45c2-a415-8e8aec443099"/>
+    <global_property property="mdrtb.transferIn.conceptId" property_value="15" description="" uuid="c39ac124-05f8-4b35-a192-2c87bd619f76"/>
+    <global_property property="mdrtb.transfer_in_encounter_type" property_value="Transfer In" description="" uuid="54e1a70b-3cf1-4f76-acd2-9a360b79cb99"/>
+    <global_property property="mdrtb.transfer_out_encounter_type" property_value="Transfer Out" description="" uuid="777ba867-401b-4564-bad2-db9d27324883"/>
+    <global_property property="mdrtb.treatment_supporter_person_attribute_type" property_value="Treatment Supporter" description="" uuid="a9fe222c-6729-4d09-841d-c8c8296729fd"/>
+    <global_property property="mdrtb.treatment_supporter_relationship_type" property_value="Treatment Supporter/Treatment Supportee" description="" uuid="07a01833-960f-4703-90b6-27c0555b8c15"/>
+    <global_property property="mdrtb.xpert.formId" property_value="14" description="" uuid="c097d922-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtbdrugforecast.database_version" property_value="1.0.0" description="" uuid="56ba3da6-93d4-4d53-8868-0a95f7e2728b"/>
+    <global_property property="mdrtbdrugforecast.fixedIdentifierLocation" description="" uuid="f22fae01-7550-4d08-9ff3-2a7adf59d109"/>
+    <global_property property="mdrtbdrugforecast.follow_up_encounter_type" property_value="MDR-TB Follow Up" description="" uuid="744f54b6-bcf0-46ab-b379-27cae160a275"/>
+    <global_property property="mdrtbdrugforecast.formIdToAttachToBacteriologyEntry" description="" uuid="f15083a9-d1b6-4f94-88a5-ff2fc026e78f"/>
+    <global_property property="mdrtbdrugforecast.intake_encounter_type" property_value="MDR-TB Intake" description="" uuid="0c281f56-60ba-4043-bc66-67c2e7e4bcda"/>
+    <global_property property="mdrtbdrugforecast.mdrtb_forms_list" description="" uuid="0e5fbaac-0633-4cbf-93cb-e23128cf3ed9"/>
+    <global_property property="mdrtbdrugforecast.patient_identifier_type_list" description="" uuid="f898dc3b-e151-4929-acfe-e1f4a9b82639"/>
+    <global_property property="mdrtbdrugforecast.primaryPatientIdentifierType" property_value="Регистрационный номер" description="" uuid="04673bf9-61ae-4133-a209-8468f56bde08"/>
+    <global_property property="mdrtbdrugforecast.program_name" property_value="MDR-TB PROGRAM" description="" uuid="ad131ca4-cc4d-42a6-abf3-c320398c6a9a"/>
+    <global_property property="mdrtbdrugforecast.roles_to_redirect_from_openmrs_homepage" description="" uuid="177948a7-d5f6-4e0e-96a0-e3a7021cf378"/>
+    <global_property property="mdrtbdrugforecast.specimen_collection_encounter_type" property_value="Specimen Collection" description="" uuid="dc38843b-9dac-47ce-a7af-41dfb1ece7b3"/>
+    <global_property property="mdrtbdrugforecast.test_result_encounter_type_bacteriology" description="" uuid="4fd7c903-11d4-4a57-a4cb-d279c818ec2b"/>
+    <global_property property="mdrtbdrugforecast.test_result_encounter_type_DST" description="" uuid="0f6748e3-8423-400e-bc68-bc89e3ea0e6a"/>
+    <global_property property="mdrtbtajikistan.mandatory" property_value="false" description="" uuid="d59997d5-646a-44df-9df2-9e982aa3cc67"/>
+    <global_property property="mdrtbtajikistan.started" property_value="true" description="" uuid="86479609-7b3e-41fe-9a5f-9b09b1cdcc90"/>
+    <global_property property="metadatamapping.addLocalMappings" description="" uuid="658ed56f-640e-46b8-b2b2-5b005ac5cfe3"/>
+    <global_property property="metadatamapping.mandatory" property_value="false" description="" uuid="ee8be1d6-88d3-49de-9bcd-16f56c5b91e6"/>
+    <global_property property="metadatamapping.started" property_value="true" description="" uuid="9ebde538-34d5-4b9b-af22-76c27b1a360c"/>
+    <global_property property="metadatasharing.configured" property_value="true" description="" uuid="6dcfd298-3732-4502-9e5e-7ac9bd394f26"/>
+    <global_property property="metadatasharing.database_version" property_value="1.0" description="" uuid="01efcd83-36a9-4e1b-81e2-1b1497995295"/>
+    <global_property property="metadatasharing.enableOnTheFlyPackages" property_value="false" description="" uuid="4ace8e95-b530-4988-b5e0-61fe94e50112"/>
+    <global_property property="metadatasharing.mandatory" property_value="false" description="" uuid="f362c6fd-a3dd-4668-9084-8e70277a5fa6"/>
+    <global_property property="metadatasharing.notify" property_value="false" description="" uuid="7caa6e0e-f2ab-49c4-a6b6-b1dd5f7dbfdd"/>
+    <global_property property="metadatasharing.persistIdsForClasses" description="" uuid="1b80ee90-036b-4b70-bc93-b180baae9f42"/>
+    <global_property property="metadatasharing.preferredConceptSourceIds" description="" uuid="244c0cbc-6031-4d09-83d7-84f8e600e8a5"/>
+    <global_property property="metadatasharing.started" property_value="true" description="" uuid="a6aed0ed-fb12-4f6c-88c1-d20b3b97a0b0"/>
+    <global_property property="metadatasharing.systemConceptSource" property_value="0c959f37-1c76-41ee-af79-2591577ffd24" description="" uuid="589e1d23-abdd-4cab-834d-7556874f345a"/>
+    <global_property property="metadatasharing.urlPrefix" description="" uuid="92fe7030-50ce-4c51-abf5-a2d4dac3933c"/>
+    <global_property property="metadatasharing.webservicesKey" description="" uuid="af8e3d0e-db13-442f-b761-5b6bea453982"/>
+    <global_property property="minSearchCharacters" property_value="2" description="" uuid="1a3ad91e-73d1-46ff-843a-401049b96bf8"/>
+    <global_property property="module_repository_folder" property_value="modules" description="" uuid="2737e54e-310d-478d-a29e-b8cf59e0c11b"/>
+    <global_property property="newPatientForm.relationships" description="" uuid="0ad522c3-6f5f-48f5-a6b1-f607da57e16e"/>
+    <global_property property="new_patient_form.showRelationships" property_value="false" description="" uuid="65f09f8d-03e2-4762-bf5d-76b00883f8df"/>
+    <global_property property="obs.complex_obs_dir" property_value="complex_obs" description="" uuid="2426a51c-41b1-4af6-ac39-cb5a38e55ebd"/>
+    <global_property property="patient.defaultPatientIdentifierValidator" property_value="org.openmrs.patient.impl.LuhnIdentifierValidator" description="" uuid="a2f08af6-6cf3-4f83-98bd-aee03217e8e8"/>
+    <global_property property="patient.headerAttributeTypes" description="" uuid="d1d2add0-58d9-45a1-9058-c51186962e27"/>
+    <global_property property="patient.identifierPrefix" description="" uuid="4b9eb034-8ca9-457d-b01c-812f7e41a5d6"/>
+    <global_property property="patient.identifierRegex" description="" uuid="085c6947-ccd6-425a-a1b7-e3d9e48dabeb"/>
+    <global_property property="patient.identifierSearchPattern" description="" uuid="487d038e-8103-472e-a26d-b8f4218413bc"/>
+    <global_property property="patient.identifierSuffix" description="" uuid="a711c363-4383-467b-b706-88db23ef87dc"/>
+    <global_property property="patient.listingAttributeTypes" description="" uuid="2805cddf-2534-4359-bddf-6bedbfce7a81"/>
+    <global_property property="patient.nameValidationRegex" property_value="^[a-zA-Z \-]+$" description="" uuid="45a4a4e6-2702-4c3f-bfb4-6de9e20e0164"/>
+    <global_property property="patient.viewingAttributeTypes" description="" uuid="7bfd5c9f-66f2-4d3a-a1ba-7b7c5ba00975"/>
+    <global_property property="patientflags.database_version" property_value="1.2.10" description="" uuid="d43b00b6-292a-4141-ae4d-ff0fbbeb3e86"/>
+    <global_property property="patientflags.mandatory" property_value="false" description="" uuid="1214f219-3732-4b0c-86ca-d96aad33d607"/>
+    <global_property property="patientflags.patientHeaderDisplay" property_value="true" description="" uuid="7eb9f71b-2c5c-4b2f-9786-18ca3b53b1df"/>
+    <global_property property="patientflags.patientOverviewDisplay" property_value="true" description="" uuid="99e887bc-6889-4b23-9e57-b02453731770"/>
+    <global_property property="patientflags.started" property_value="true" description="" uuid="1c6fd70a-5ce9-4217-b1be-27407a445c03"/>
+    <global_property property="patientflags.username" property_value="admin" description="" uuid="340ff47c-fc5b-42fc-8945-599c23f90b36"/>
+    <global_property property="patientSearch.matchMode" property_value="START" description="" uuid="39a5184a-5cac-4e83-beea-ddfdd7982865"/>
+    <global_property property="patient_identifier.importantTypes" description="" uuid="70841753-3120-4171-b270-e636b5d94ffc"/>
+    <global_property property="person.searchMaxResults" property_value="1000" description="" uuid="2f1a72c1-378d-4895-a7f8-e7b5f5c4639d"/>
+    <global_property property="programlocation.database_version" property_value="0.0.1" description="" uuid="41dba2be-11c4-48f2-bc0a-bc57bd0f79ee"/>
+    <global_property property="programlocation.started" property_value="false" description="" uuid="41c24999-c59b-4330-b136-305027f973c8"/>
+    <global_property property="report.deleteReportsAgeInHours" property_value="72" description="" uuid="b9868af7-6180-4eac-b431-73545d090894"/>
+    <global_property property="report.xmlMacros" description="" uuid="3df733fb-73ee-4fd3-a2ca-8796a9c17788"/>
+    <global_property property="reporting.database_version" property_value="0.4.1" description="" uuid="c2499703-dca4-451e-b686-e2217cce9b32"/>
+    <global_property property="reporting.includeDataExportsAsDataSetDefinitions" property_value="false" description="" uuid="5cb0d517-c20d-4659-b5ce-7f941de9ea34"/>
+    <global_property property="reporting.mandatory" property_value="false" description="" uuid="0e90dc7f-9fe2-4964-8bb7-263cf117e1c4"/>
+    <global_property property="reporting.maxCachedReports" property_value="10" description="" uuid="5e77a717-9bfd-485f-ad85-59062b7d27a2"/>
+    <global_property property="reporting.maxReportsToRun" property_value="1" description="" uuid="8614eb3c-d691-4547-9347-e05a401ce42d"/>
+    <global_property property="reporting.preferredIdentifierTypes" description="" uuid="2bb6be19-0c14-4347-82b1-150c0c63368e"/>
+    <global_property property="reporting.runReportCohortFilterMode" property_value="showIfNull" description="" uuid="6aac2913-3838-4bad-9b37-ef49413a7042"/>
+    <global_property property="reporting.started" property_value="true" description="" uuid="0e8168d6-adcd-4f5a-8adc-d96acb83b99b"/>
+    <global_property property="reportingcompatibility.data_export_batch_size" property_value="7500" description="" uuid="1acdf434-f06a-4fc0-8a51-a95d7a8c8aa4"/>
+    <global_property property="reportingcompatibility.mandatory" property_value="false" description="" uuid="aa3e4572-8138-4e3c-8f34-f433def3d815"/>
+    <global_property property="reportingcompatibility.patientLinkUrl" property_value="patientDashboard.form" description="" uuid="e90d3175-e8a5-4f5a-ab6e-64f4af2a5532"/>
+    <global_property property="reportingcompatibility.started" property_value="true" description="" uuid="979460e2-8a06-4f9d-803c-618454b7c09a"/>
+    <global_property property="reportProblem.url" property_value="http://errors.openmrs.org/scrap" description="" uuid="aa8cfbfe-c844-4820-bb5e-963c8fa69d42"/>
+    <global_property property="rolebasedhomepage.database_version" property_value="1.0" description="" uuid="5d4cffe7-30c2-4391-8ba2-0cf0c67ab5c4"/>
+    <global_property property="rolebasedhomepage.defaultHomePage" property_value="module/rolebasedhomepage/defaultHomepage.htm" description="" uuid="df61b60e-1353-4382-b91c-7bdacdf2c787"/>
+    <global_property property="scheduler.password" property_value="Admin1234" description="" uuid="d2164774-6f04-4021-ad4a-666981384f64"/>
+    <global_property property="scheduler.username" property_value="admin" description="" uuid="c19f9c7c-c70b-46da-935c-3f890901cc65"/>
+    <global_property property="searchWidget.batchSize" property_value="200" description="" uuid="7186cf16-3a1b-4786-ad79-2d2d9c94ce14"/>
+    <global_property property="searchWidget.maximumResults" property_value="2000" description="" uuid="627776a2-0c78-4910-9fc3-6fbdd6922c7d"/>
+    <global_property property="searchWidget.runInSerialMode" property_value="false" description="" uuid="dbd8af6a-418f-404f-9b67-2a2ff3ff18a5"/>
+    <global_property property="searchWidget.searchDelayInterval" property_value="400" description="" uuid="c10201b1-6b61-45b5-81ea-dd74d03809b3"/>
+    <global_property property="security.passwordCannotMatchUsername" property_value="true" description="" uuid="c1ecc03e-faf8-4366-aff5-76d0b225db09"/>
+    <global_property property="security.passwordCustomRegex" description="" uuid="6da6e304-d64a-48b6-b577-57e8ad867bc7"/>
+    <global_property property="security.passwordMinimumLength" property_value="8" description="" uuid="fc7eadaa-0c50-475f-ac2a-43b292427292"/>
+    <global_property property="security.passwordRequiresDigit" property_value="true" description="" uuid="d9e266d7-9512-44eb-9111-50c212479eed"/>
+    <global_property property="security.passwordRequiresNonDigit" property_value="true" description="" uuid="11b7cda5-57b8-4d24-8441-9e71494a675b"/>
+    <global_property property="security.passwordRequiresUpperAndLowerCase" property_value="true" description="" uuid="8467c9bc-3272-46e5-b2e0-e5297cfdefc5"/>
+    <global_property property="serialization.xstream.mandatory" property_value="false" description="" uuid="864a4ec6-7742-4691-81e8-a9fc125b6674"/>
+    <global_property property="serialization.xstream.started" property_value="true" description="" uuid="639df1cf-f683-4cce-b45d-bc726ec48e80"/>
+    <global_property property="user.headerAttributeTypes" description="" uuid="9bfca1e6-b9cf-48e2-ab88-0c96d453a013"/>
+    <global_property property="user.listingAttributeTypes" description="" uuid="f1208b81-4390-49b7-b60f-513f3cd25ed7"/>
+    <global_property property="user.viewingAttributeTypes" description="" uuid="5cafacdb-add0-468f-9cdd-96222568636e"/>
+    <global_property property="use_patient_attribute.healthCenter" property_value="false" description="" uuid="7b993531-f6e0-427f-9407-95d8350658f0"/>
+    <global_property property="use_patient_attribute.mothersName" property_value="false" description="" uuid="553320df-0c30-4162-a9df-8e4e1de1d499"/>
+    <global_property property="visits.assignmentHandler" property_value="org.openmrs.api.handler.ExistingVisitAssignmentHandler" description="" uuid="b9a33474-99f7-4a3d-addf-ff1aefa57b00"/>
+    <global_property property="visits.enabled" property_value="true" description="" uuid="c871774b-edeb-48fa-805b-c906cc611b02"/>
+    <global_property property="visits.encounterTypeToVisitTypeMapping" description="" uuid="0b899be1-71d7-4709-a6e0-5465f4072e4c"/>
+    <global_property property="webservices.rest.allowedips" description="" uuid="fcc8f88f-c707-472d-8312-b30d31b26aee"/>
+    <global_property property="webservices.rest.mandatory" property_value="false" description="" uuid="881a5708-29a9-4dcc-aabd-c6b0640ad019"/>
+    <global_property property="webservices.rest.maxResultsAbsolute" property_value="100" description="" uuid="ae24c2c4-3ce6-41b1-a460-601ce11a5314"/>
+    <global_property property="webservices.rest.maxResultsDefault" property_value="50" description="" uuid="387ef44f-92f5-4269-af27-e5b77e0c4197"/>
+    <global_property property="webservices.rest.started" property_value="true" description="" uuid="be770980-4bc4-4997-a1ba-062fd658513b"/>
+    <global_property property="webservices.rest.uriPrefix" description="" uuid="2e123ff4-cde8-4039-8f5e-6bb513f71410"/>
+    <global_property property="xforms.allowBindEdit" property_value="false" description="" uuid="463f55fa-94ea-4dbb-bf49-c6c49c991e97"/>
+    <global_property property="xforms.archive_dir" property_value="xforms/archive/%Y/%M" description="" uuid="5ae8656b-ada7-4e5b-8971-66dc0e121f33"/>
+    <global_property property="xforms.autoGeneratePatientIdentifier" property_value="false" description="" uuid="b784542f-818c-44e3-a040-808faf231d39"/>
+    <global_property property="xforms.cohortSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultCohortSerializer" description="" uuid="8ef50921-d3b1-4b40-a4d6-284183e77daf"/>
+    <global_property property="xforms.complexobs_dir" property_value="xforms/complexobs" description="" uuid="729d22cf-89f3-42cc-9f8d-e4fe66b927b5"/>
+    <global_property property="xforms.database_version" property_value="3.7.9" description="" uuid="69d32320-a6cb-454f-a0d2-e2e1e66f5483"/>
+    <global_property property="xforms.dateDisplayFormat" property_value="dd/MM/yyyy" description="" uuid="0841dcc0-09ed-47be-ae16-99ad931d8df2"/>
+    <global_property property="xforms.dateSubmitFormat" property_value="yyyy-MM-dd" description="" uuid="e95b1cb7-edda-4a6f-a869-b240a58f91d1"/>
+    <global_property property="xforms.dateTimeDisplayFormat" property_value="dd/MM/yyyy hh:mm a" description="" uuid="f5c48bf1-96e2-4974-a3c2-186fab10562e"/>
+    <global_property property="xforms.dateTimeSubmitFormat" property_value="yyyy-MM-dd'T'HH:mm:ssZ" description="" uuid="fbefa24a-91c3-49e4-bc9b-b016c0a67de6"/>
+    <global_property property="xforms.decimalSeparators" property_value="en:.;fr:.;es:,;it:.;pt:." description="" uuid="e95f539a-3b30-43a0-9312-43d70c71b5eb"/>
+    <global_property property="xforms.defaultFontFamily" property_value="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" description="" uuid="a5a60a5a-fad4-4a56-a461-4c473ae4f6e8"/>
+    <global_property property="xforms.defaultFontSize" property_value="16" description="" uuid="c18df432-2ec1-45b7-b340-04df38b7f32d"/>
+    <global_property property="xforms.encounterDateIncludesTime" property_value="false" description="" uuid="dbc3efb8-d49d-4d76-b33e-7136d3c41eff"/>
+    <global_property property="xforms.error_dir" property_value="xforms/error" description="" uuid="3257f9ce-a9ae-47c2-9872-ba9bbf36ab5f"/>
+    <global_property property="xforms.includeUsersInXformsDownload" property_value="true" description="" uuid="7a54bece-fd0f-4577-ad01-1b63e1a36e8e"/>
+    <global_property property="xforms.isRemoteFormEntry" property_value="false" description="" uuid="76fd833e-cca5-49d6-b6d2-8e3fc5ac43a5"/>
+    <global_property property="xforms.localeList" property_value="en:English,fr:French,es:Spanish,it:Italian,pt:Portuguese,ru:Russian,tj:Tajik" description="" uuid="0e950a4c-8dca-4e89-b39e-fd1b3cd5449e"/>
+    <global_property property="xforms.mandatory" property_value="false" description="" uuid="5a1b15ea-aff4-4df7-956e-8d5d60db2057"/>
+    <global_property property="xforms.multiSelectAppearance" property_value="full" description="" uuid="25e0c4fa-d161-44df-848e-4e83ba913464"/>
+    <global_property property="xforms.newPatientFormId" description="" uuid="db2738fc-9fd9-4660-9395-b4de888f075e"/>
+    <global_property property="xforms.new_patient_identifier_type_id" property_value="1" description="" uuid="03d248fd-a17c-417e-ac7b-973ccf1a8009"/>
+    <global_property property="xforms.overwriteValidationsOnRefresh" property_value="false" description="" uuid="99a02ef2-9e1f-46cb-9ad8-128a162127b6"/>
+    <global_property property="xforms.patientDownloadCohort" description="" uuid="efe17c53-4de3-483d-a0b4-761675390aa9"/>
+    <global_property property="xforms.patientRegEncounterFormId" property_value="0" description="" uuid="b7779e98-c292-496d-bb97-8493fe1dd4f4"/>
+    <global_property property="xforms.patientSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultPatientSerializer" description="" uuid="b92fe14d-0721-4458-bb39-78c2f8d0d176"/>
+    <global_property property="xforms.preferredConceptSource" description="" uuid="af648927-29d5-4c02-bc79-29a25fb0c2e6"/>
+    <global_property property="xforms.queue_dir" property_value="xforms/queue" description="" uuid="f573cb11-9eb8-47f9-95ae-146ce903c19b"/>
+    <global_property property="xforms.rejectExistingPatientCreation" property_value="true" description="" uuid="b51ef31c-2ead-42a8-9042-850ebc7e716b"/>
+    <global_property property="xforms.savedSearchSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultSavedSearchSerializer" description="" uuid="d7e57960-6ac3-4bcc-8d33-c8cd7398fcee"/>
+    <global_property property="xforms.saveFormat" property_value="purcforms" description="" uuid="7aac965f-30b6-43a7-8557-e4a77acf84c5"/>
+    <global_property property="xforms.searchNewPatientAfterFormSubmission" property_value="true" description="" uuid="93d3f03c-f1a3-4160-a38f-715131e93b17"/>
+    <global_property property="xforms.setDefaultLocation" property_value="false" description="" uuid="7ae633c4-8407-457d-8a54-b6efc1f27483"/>
+    <global_property property="xforms.setDefaultProvider" property_value="false" description="" uuid="1a1c76a3-8424-44fc-a990-3696c231066c"/>
+    <global_property property="xforms.showDesignSurfaceTab" property_value="true" description="" uuid="29c0d0a4-2ec7-495a-b66e-c3802fd0c89a"/>
+    <global_property property="xforms.showJavaScriptTab" property_value="false" description="" uuid="746ce980-b0ca-4774-af1d-f5f366cc8df0"/>
+    <global_property property="xforms.showLanguageTab" property_value="false" description="" uuid="9d72fac7-9279-489a-87dd-387f49be2fe3"/>
+    <global_property property="xforms.showLayoutXmlTab" property_value="false" description="" uuid="dedd4e90-85a3-413e-90cf-b8d400df84e5"/>
+    <global_property property="xforms.showModelXmlTab" property_value="false" description="" uuid="b60ca187-43a3-48db-9ed0-3ddac80870c8"/>
+    <global_property property="xforms.showOfflineFormDesigner" property_value="false" description="" uuid="a20ff99d-2f22-4a0d-b355-0ac046af235a"/>
+    <global_property property="xforms.showPreviewTab" property_value="true" description="" uuid="4b63fcc6-c7ff-4e3d-a824-082491a76925"/>
+    <global_property property="xforms.showSubmitSuccessMsg" property_value="false" description="" uuid="f40c7577-36c4-4c41-9072-767420db8604"/>
+    <global_property property="xforms.showXformsSourceTab" property_value="false" description="" uuid="79846d49-d269-48fe-80ff-497b9ccb38e9"/>
+    <global_property property="xforms.singleSelectAppearance" property_value="minimal" description="" uuid="7ed12f88-afa7-451d-b225-60cd0ac49cc0"/>
+    <global_property property="xforms.smsFieldSepChar" property_value="=" description="" uuid="1ce2a25d-49b1-42cf-9353-e8a1a519ace7"/>
+    <global_property property="xforms.smsSendFailureReports" property_value="true" description="" uuid="c5aafaa5-6d49-4f7c-9398-91cfad3e7720"/>
+    <global_property property="xforms.smsSendSuccessReports" property_value="true" description="" uuid="019d62da-56b7-4213-8acd-84e63da97994"/>
+    <global_property property="xforms.started" property_value="true" description="" uuid="83e8cb73-7210-4689-b2ec-0e55dbc6f34b"/>
+    <global_property property="xforms.timeDisplayFormat" property_value="hh:mm a" description="" uuid="1a40db4f-043f-4417-a270-6f68690a6ccf"/>
+    <global_property property="xforms.timeSubmitFormat" property_value="HH:mm:ss" description="" uuid="171c5958-29a7-43dd-b537-90a60daad1c1"/>
+    <global_property property="xforms.undoRedoBufferSize" property_value="-1" description="" uuid="dfd70d48-90f5-453a-bf50-6adb73652a68"/>
+    <global_property property="xforms.useConceptIdAsHint" property_value="false" description="" uuid="32eb13a0-022a-4d72-b79a-dc2cf771e90c"/>
+    <global_property property="xforms.useEncounterXform" property_value="true" description="" uuid="81eb8fbc-7fac-4c44-9d1f-e5329bf253c6"/>
+    <global_property property="xforms.usePatientXform" property_value="false" description="" uuid="30509311-1731-4b94-a14c-29a54c246b82"/>
+    <global_property property="xforms.userSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultUserSerializer" description="" uuid="bb1c7ae0-fdd8-4a6b-a569-f28add361821"/>
+    <global_property property="xforms.useStoredXform" property_value="true" description="" uuid="09545871-e4d0-4940-b38f-d5ded57fa2b3"/>
+    <global_property property="xforms.xformDownloadFolder" description="" uuid="dc10ade5-5090-4eba-a6c4-06d83ce79427"/>
+    <global_property property="xforms.xformSerializer" property_value="org.fcitmuk.epihandy.EpihandyXformSerializer" description="" uuid="5bcf5d9d-af9e-4685-8ae2-ce2359aef4dc"/>
+    <global_property property="xforms.xformUploadFolder" description="" uuid="dee6f298-e718-46dc-9986-8372496828c6"/>
+
+	<!-- User-Persons -->
+	<person person_id="500" gender="M" birthdate="1984-05-26" birthdate_estimated="0" dead="0" creator="1" date_created="2016-08-22 13:56:44" voided="false" uuid="660484f6-0d02-4e2a-8e0e-fd2f71906f81" />
+	<person person_id="600" gender="F" birthdate="1993-12-21" birthdate_estimated="0" dead="0" creator="1" date_created="2016-12-28 11:54:56" voided="false" uuid="ae50cf5e-02bf-4380-9b64-f06b2f944457" />
+
+	<!-- User-Person Names -->
+	<person_name person_name_id="500" preferred="1" person_id="500" given_name="Owais" family_name="Hussain" creator="1" date_created="2016-08-22 13:56:44" voided="false" uuid="b210a5bd-9ab1-4b57-8a89-c0bf2580a68d" />
+	<person_name person_name_id="600" preferred="1" person_id="600" given_name="Tahira" family_name="Niazi" creator="1" date_created="2016-12-28 11:54:56" voided="false" uuid="ee11bea3-3aad-4266-a5d7-bc6f3a6aaee5" />
+
+	<!-- Users -->
+	<users user_id="300" system_id="300-3" username="" password="" salt="" secret_question="" creator="1" date_created="2016-08-22 13:56:44" changed_by="1" date_changed="2017-02-02 11:21:25" person_id="500" retired="false" uuid="36b071d8-d5ea-4703-8e56-5b066420b569" />
+	<users user_id="400" system_id="400-3" username="" password="" salt="" secret_question="" creator="1" date_created="2016-12-28 11:54:56" changed_by="1" date_changed="2018-02-22 11:27:15" person_id="600" retired="false" uuid="e4ef4d4d-5cf2-47ff-af6b-bb9abdabdd60" />
+
+	<!-- Providers -->
+	<provider provider_id="300" person_id="500" identifier="OWAIS" creator="1" date_created="2016-08-24 15:36:09" changed_by="1" date_changed="2017-02-07 16:19:01" retired="false" uuid="1a61a0b5-d271-4b00-a803-5cef8b06ba8f" />
+	<provider provider_id="400" person_id="600" identifier="UZAIR" creator="1" date_created="2017-02-27 12:47:30" changed_by="1" date_changed="2017-02-27 12:49:13" retired="false" uuid="449390a0-d338-4ff2-9b3f-61dc1617c2fe" />
+
+	<!-- Locations -->
+	<location location_id="101" name="Hogwartz" description="Hogwarts School of Witchcraft and Wizardry" creator="1" state_province="Highlands of Scotland" country="Scotland" date_created="2022-08-01 00:00:00.0" retired="false" uuid="f08ba64b-ea57-4a41-b33c-9dfc59b0c6ff" />
+	<location location_id="102" name="Diagon Alley" description="A high street located in London for wizard world" state_province="London" country="England" creator="1" date_created="2022-08-20 00:00:00.0" retired="false" uuid="c9ae3a36-7466-4a56-8f06-3bfbc64fcde" />
+	<location location_id="103" name="The Leaky Cauldron" state_province="London" country="England" description="A dark pub and inn for wizards, located on the Diagon Alley, offering food, drinks and rooms" parent_location="102" creator="1" date_created="2022-08-22 00:00:00.0" retired="false" uuid="6f42abbc-caac-40ae-a94e-9e30ca15c125" />
+
+	<!-- Patient-Persons -->
+	<person person_id="1000" gender="M" birthdate="1980-07-31" birthdate_estimated="0" dead="0" creator="1" date_created="2016-08-19 15:58:32" voided="false" uuid="993c46d2-5007-45e8-9512-969300717761" />
+	<person person_id="2000" gender="F" birthdate="1979-09-19" birthdate_estimated="0" dead="0" creator="1" date_created="2016-09-07 11:44:23" voided="false" uuid="1f6959e5-d15a-4025-bb48-340ee9e2c58d" />
+
+	<!-- Patient-Person Names -->
+	<person_name person_name_id="1000" preferred="1" person_id="1000" given_name="Harry" middle_name="James" family_name="Potter" creator="1" date_created="2016-08-19 15:58:32" voided="false" uuid="b1090031-0a93-4999-9185-3d28e4ac9b69" />
+	<person_name person_name_id="2000" preferred="1" person_id="2000" given_name="Hermione" middle_name="Jean" family_name="Granger" creator="1" date_created="2016-09-07 11:44:23" voided="false" uuid="316405e4-bcaa-4f12-ad27-6f2c1a831809" />
+
+	<!-- Programs -->
+	<program program_id="1" concept_id="3" creator="1" date_created="2022-08-16 17:28:08" retired="0" name="MDR-TB PROGRAM" uuid="34198d48-0370-102d-b0e3-001ec94a0cc1" />
+	<program program_id="2" concept_id="274" creator="1" date_created="2022-08-21 16:08:30" retired="0" name="DOTS Program" uuid="e80fec43-f2b5-45b0-aec1-eaf74be26ff9" />
+
+	<!-- Patients -->
+	<patient patient_id="1000" creator="1" date_created="2016-08-19 15:58:32" voided="false" />
+	<patient patient_id="2000" creator="1" date_created="2016-09-07 11:44:23" voided="false" />
+
+	<patient_identifier_type patient_identifier_type_id="5" name="Hogwarts Unique WID" description="Unique Identifier for Wizards and Witches of the Hogwarts School" check_digit="false" creator="1" date_created="2022-08-22 00:00:00.0" required="false" retired="false" uuid="7ad93697-21df-11ed-914d-00ff10882c85" />
+	<patient_identifier patient_identifier_id="1001" patient_id="1000" identifier="987654321" identifier_type="5" preferred="1" location_id="1" creator="1" date_created="2022-08-22 00:00:00.0" voided="false" uuid="b0343d1b-21df-11ed-914d-00ff10882c85" />
+	<patient_identifier patient_identifier_id="1002" patient_id="2000" identifier="9622454545" identifier_type="5" preferred="1" location_id="1" creator="1" date_created="2022-08-22 00:00:00.0" voided="false" uuid="b0343d1b-21df-11ed-914d-65bb10882c85" />
+
+	<patient_program patient_program_id="10001" patient_id="1000" program_id="1" date_enrolled="2022-08-01 00:00:00" location_id="101" creator="1" date_created="2022-08-01 00:00:00" voided="0" uuid="a8f2e764-587d-4eb6-b090-cd015c2aec8d" />
+	<patient_program patient_program_id="10002" patient_id="1000" program_id="2" date_enrolled="2022-08-10 00:00:00" date_completed="2009-06-25 00:00:00" location_id="102" creator="1" date_created="2022-08-01 00:00:00" changed_by="1" date_changed="2022-08-21 00:00:00" voided="0" uuid="1060fb5a-8e0c-4f9d-b098-2b679f17b255" />
+	<patient_program patient_program_id="10003" patient_id="2000" program_id="1" date_enrolled="2022-07-12 00:00:00" location_id="101" creator="1" date_created="2012-12-24 11:19:39" voided="0" uuid="13061d65-8b84-46d2-b908-0ce71ac15e0b" />
+	<patient_program patient_program_id="10004" patient_id="2000" program_id="2" date_enrolled="2022-07-22 00:00:00" date_completed="2007-10-26 00:00:00" location_id="102" creator="1" date_created="2012-12-24 11:23:52" changed_by="102" date_changed="2012-12-24 11:24:47" voided="0" uuid="4515ee1a-503e-4b74-b14c-77043b052470" />
+
+	<!-- Care Settings -->
+
+	<!-- Encounters and Providers -->
+	<encounter_type encounter_type_id="91" name="O.W.L. Examination" description="Ordinary Wizarding Level examination, a mandatory exam for students to be promoted to Advanced Wizarding Level" creator="1" date_created="2022-08-12 05:38:38" retired="0" uuid="e27d997c-3f93-460b-ad84-77db79eace3e" />
+	<encounter_type encounter_type_id="92" name="Transfer Out" description="Whenever a student or wizard is transferred into the healing chambers" creator="1" date_created="2022-08-12 05:38:38" retired="0" uuid="e27d997c-3f93-460b-ad84-77db79e2773e" />
+	<encounter_type encounter_type_id="93" name="Transfer In" description="Whenever a student or wizard is transferred out of the healing chambers" creator="1" date_created="2022-08-22 15:28:28" retired="0" uuid="1eb25540-552c-4641-9913-c7545fe0666f" />
+	<encounter_type encounter_type_id="94" name="Specimen Collection" description="Whenever a student or wizard submits a specimen sample extracted from hiself or some other living creature" creator="1" date_created="2022-08-22 15:28:28" retired="0" uuid="c3e540-552c-4641-9913-c8495fe0123f" />
+
+	<encounter encounter_id="100001" encounter_type="91" patient_id="1000" location_id="101" encounter_datetime="2022-08-01 00:00:00" creator="1" date_created="2022-08-04 20:03:52" voided="0" uuid="deafb58e-e2e2-49ae-96ebf09ad-adbe40" />
+	<encounter encounter_id="100002" encounter_type="92" patient_id="1000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 15:45:55" voided="0" uuid="5743ee15-61fe-4cba-88ebf086d-adbcfa" />
+	<encounter encounter_id="100003" encounter_type="93" patient_id="1000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 15:48:31" voided="0" uuid="774abb8e-d763-4d1d-96ebf0dad-afed74" />
+	<encounter encounter_id="100004" encounter_type="91" patient_id="2000" location_id="101" encounter_datetime="2022-08-08 00:00:00" creator="2" date_created="2022-08-08 18:44:57" voided="0" uuid="aeaa43cd-5168-4f99-bdebf08dd-a7e856" />
+	<encounter encounter_id="100005" encounter_type="92" patient_id="2000" location_id="101" encounter_datetime="2022-08-11 00:00:00" creator="2" date_created="2022-08-08 23:02:48" voided="0" uuid="a7c8ec8a-45e9-4f63-8cebf050d-a6a200" />
+	<encounter encounter_id="100007" encounter_type="91" patient_id="2000" location_id="102" encounter_datetime="2022-08-16 00:00:00" creator="2" date_created="2022-08-08 23:19:20" voided="0" uuid="c2aa76dd-27d0-4c7c-92ebf070d-a4bcfe" />
+	<encounter encounter_id="100008" encounter_type="92" patient_id="2000" location_id="102" encounter_datetime="2022-08-22 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="bd4fd19a-9847-455e-bbebf02ed-a32ace" />
+	<encounter encounter_id="100008" encounter_type="94" patient_id="1000" location_id="102" encounter_datetime="2022-08-31 00:00:00" creator="1" date_created="2022-08-11 15:07:24" voided="0" uuid="5060f963-2396-11ed-881f-00ff10882c85" />
+
+	<!-- Observations -->
+
+</dataset>

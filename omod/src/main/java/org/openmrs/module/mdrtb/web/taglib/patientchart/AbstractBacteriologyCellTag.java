@@ -74,7 +74,7 @@ public abstract class AbstractBacteriologyCellTag extends TagSupport {
 						}
     					
     					// append the appropriate result to the result list
-    					resultString = resultString.concat(MdrtbUtil.getConceptName(bac.getResult(), Context.getLocale().getLanguage(),ConceptNameType.SHORT).getName() + scanty);
+    					resultString = resultString.concat(MdrtbUtil.getConceptName(bac.getResult(), Context.getLocale().getLanguage(),ConceptNameType.FULLY_SPECIFIED).getName() + scanty);
     						
     					// append the appropriate title to the title list
     					titleString = titleString.concat(bac.getResult().getBestName(Context.getLocale()).toString() + " - " 

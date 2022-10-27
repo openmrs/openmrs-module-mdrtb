@@ -623,7 +623,7 @@ public class SpecimenMigrationController {
     	mdrtbProgram.addWorkflow(previousDrug);
     	
     	ProgramWorkflow previousTreatment = new ProgramWorkflow();
-    	previousTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
+    	previousTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT));
     	previousTreatment.setProgram(mdrtbProgram);
     	
     	ProgramWorkflowState newPatientTreatment = new ProgramWorkflowState();
@@ -633,7 +633,7 @@ public class SpecimenMigrationController {
     	previousTreatment.addState(newPatientTreatment);
     	
     	ProgramWorkflowState relapse = new ProgramWorkflowState();
-    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE));
+    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1));
     	relapse.setInitial(true);
     	relapse.setTerminal(false);
     	previousTreatment.addState(relapse);
@@ -645,19 +645,19 @@ public class SpecimenMigrationController {
     	previousTreatment.addState(afterDefault);
     	
      	ProgramWorkflowState afterFailiureCat1 = new ProgramWorkflowState();
-     	afterFailiureCat1.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_TREATMENT));
+     	afterFailiureCat1.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1));
      	afterFailiureCat1.setInitial(true);
      	afterFailiureCat1.setTerminal(false);
     	previousTreatment.addState(afterFailiureCat1);
     	
     	ProgramWorkflowState afterFailiureCat2 = new ProgramWorkflowState();
-     	afterFailiureCat2.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_AFTER_FAILURE_OF_FIRST_RETREATMENT));
+     	afterFailiureCat2.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2));
      	afterFailiureCat2.setInitial(true);
      	afterFailiureCat2.setTerminal(false);
     	previousTreatment.addState(afterFailiureCat2);
     	
     	ProgramWorkflowState transfer = new ProgramWorkflowState();
-    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN));
     	transfer.setInitial(true);
     	transfer.setTerminal(false);
     	previousTreatment.addState(transfer);
@@ -693,7 +693,7 @@ public class SpecimenMigrationController {
     	Concept hospitalizedConcept = Context.getConceptService().getConcept(3389);
     	ConceptMap map = new ConceptMap();
 		map.setSource(Context.getConceptService().getConceptSourceByName("org.openmrs.module.mdrtb"));
-		map.setSourceCode("HOSPITALIZED");
+		map.setSourceCode("PATIENT_HOSPITALIZED");
 		hospitalizedConcept.addConceptMapping(map);
 		Context.getConceptService().saveConcept(hospitalizedConcept);
     	
@@ -705,7 +705,7 @@ public class SpecimenMigrationController {
     	hospitalizationWorkflow.setProgram(mdrtbProgram);
     	
     	ProgramWorkflowState hospitalized = new ProgramWorkflowState();
-    	hospitalized.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+    	hospitalized.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED));
     	hospitalized.setInitial(true);
     	hospitalized.setTerminal(false);
     	hospitalizationWorkflow.addState(hospitalized);
@@ -882,7 +882,7 @@ public class SpecimenMigrationController {
     @RequestMapping("/module/mdrtb/migration/migrateRegistrationGroups.form")
     public ModelAndView migrateRegistrationGroups() {
     	Concept previousDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
-    	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
     	
     	Collection<ProgramWorkflowState> previousDrugUseStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
     	Collection<ProgramWorkflowState> previousTreatmentStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
@@ -996,7 +996,7 @@ public class SpecimenMigrationController {
      	}
      	
      	// now retire the "still on treatment" state
-     	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+     	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
      
     	Program mdrtbProgram = Context.getProgramWorkflowService().getProgramByName("MDR-TB PROGRAM");
    
@@ -1164,7 +1164,7 @@ public class SpecimenMigrationController {
     public ModelAndView closeOpenProgramsWithOutcomes() {
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
-    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     	
     	for (PatientProgram program : Context.getProgramWorkflowService().getPatientPrograms(null, mdrtb, null, null, null, null, false)) {
     		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);
@@ -1190,7 +1190,7 @@ public class SpecimenMigrationController {
     	addConceptMapping("PATIENT DEFAULTED", "DEFAULTED");
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
-    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     	
     	// fetch the outcome workflow
     	ProgramWorkflow outcomeWorkflow = null;
@@ -1209,7 +1209,7 @@ public class SpecimenMigrationController {
     	died.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
     	
     	ProgramWorkflowState failed = outcomeWorkflow.getState(Context.getConceptService().getConcept(1587));
-    	failed.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FAILED));
+    	failed.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_FAILED));
     	
     	ProgramWorkflowState defaulted = outcomeWorkflow.getState(Context.getConceptService().getConcept(1567));
     	defaulted.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULTED));
@@ -1258,9 +1258,9 @@ public class SpecimenMigrationController {
     
     @RequestMapping("/module/mdrtb/migration/migrateRegistrationGroupStates.form")
     public ModelAndView migrateRegistrationGroupStates() {
-    	// create the new concepts for NEW and TRANSFER
+    	// create the new concepts for NEW and PATIENT_TRANSFERRED_IN
     	addConcept("NEW", "Misc", "N/A", "NEW", "org.openmrs.module.mdrtb");
-    	addConcept("TRANSFER", "Misc", "N/A", "TRANSFER", "org.openmrs.module.mdrtb");
+    	addConcept("PATIENT_TRANSFERRED_IN", "Misc", "N/A", "PATIENT_TRANSFERRED_IN", "org.openmrs.module.mdrtb");
     	
     	// add other new concept mapping
     	addConceptMapping("RELAPSE","RELAPSE");
@@ -1268,7 +1268,7 @@ public class SpecimenMigrationController {
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
     	Concept prevDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
-    	Concept prevTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	Concept prevTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
     	
     	// fetch the workflows
     	ProgramWorkflow prevDrugUseWorkflow = null;
@@ -1290,10 +1290,10 @@ public class SpecimenMigrationController {
     	newPatientTreatment.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW));
     	
     	ProgramWorkflowState transfer = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1529));
-    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TRANSFER));
+    	transfer.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN));
     
     	ProgramWorkflowState relapse = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1524));
-    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE));
+    	relapse.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1));
     	
     	ProgramWorkflowState other = prevTreatmentWorkflow.getState(Context.getConceptService().getConcept(1530));
     	other.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER));
@@ -1306,7 +1306,7 @@ public class SpecimenMigrationController {
     	// retire old concepts
     	//  TODO: IMPORTANT: are the concept ids the same on all systems?
     	retireConcept(1523);  // NEW MDR-TB PATIENT
-    	retireConcept(1529);  // TRANSFER IN MDR-TB PATIENT
+    	retireConcept(1529);  // PATIENT_TRANSFERRED_IN IN MDR-TB PATIENT
     	retireConcept(1524);  // RELAPSE MDR-TB PATIENT
     	retireConcept(1530);  // OTHER MDR-TB PATIENT
     	retireConcept(1525);  // TREATMENT AFTER DEFAULT MDR-TB PATIENT

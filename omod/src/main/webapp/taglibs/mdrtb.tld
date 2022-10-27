@@ -253,6 +253,74 @@
 	
 <tag>
 	<description>
+		Renders a xpert cell for display in the patient chart
+	</description>
+	<name>xpertCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.XpertCellTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>xperts</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>parameters</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>style</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>clazz</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a HAIN cell for display in the patient chart
+	</description>
+	<name>hainCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.HAINCellTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>hains</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>parameters</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>style</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>clazz</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+	
+<tag>
+	<description>
 		Renders a DST results cell for display in the patient chart
 	</description>
 	<name>dstResultsCell</name>

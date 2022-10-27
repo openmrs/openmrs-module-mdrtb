@@ -25,9 +25,6 @@ public interface Dst extends Test {
 	 * 
 	 */
 	
-	public Concept getMethod();
-	public void setMethod(Concept method);
-	
 	public Boolean getDirect();
 	public void setDirect(Boolean direct);
 	
@@ -44,5 +41,8 @@ public interface Dst extends Test {
 	public Map<Integer,List<DstResult>> getResultsMap();
 	public DstResult addResult();
 	public void removeResult(DstResult result);
+	public String getResultsString();
+	public String getResistantDrugs();
+	public String getSensitiveDrugs();
 }
 

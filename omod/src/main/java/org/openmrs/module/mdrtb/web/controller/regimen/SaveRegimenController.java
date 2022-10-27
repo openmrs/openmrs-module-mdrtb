@@ -149,11 +149,13 @@ public class SaveRegimenController {
 	   				String perWeek = request.getParameter("perWeek:"+key);
 	   				String separator = "";
 	   				if (ObjectUtil.notNull(perDay)) {
-	   					frequency += perDay + "/day";
-	   					separator = " x ";
+	   					// frequency += perDay + "/day";
+	   					frequency += perDay + Context.getMessageSourceService().getMessage("mdrtb.perday");
+	   					separator = " ";
 	   				}
 	   				if (ObjectUtil.notNull(perWeek)) {
-	   					frequency += separator + perWeek + " days/week";
+	   					//frequency += separator + perWeek + " days/week";
+	   					frequency += separator + perWeek + " " + Context.getMessageSourceService().getMessage("mdrtb.daysperweek");
 	   				}
 	   			}
 	   			String autoExpireDate = request.getParameter("autoExpireDate:"+key);
@@ -213,7 +215,7 @@ public class SaveRegimenController {
 				Obs o = new Obs();
 				o.setPerson(patient);
 				o.setObsDatetime(changeDate);
-				o.setConcept(Context.getService(MdrtbService.class).findMatchingConcept(history.getType().getReasonForStartingQuestion()));
+				o.setConcept(Context.getService(MdrtbService.class).getConcept(history.getType().getReasonForStartingQuestion()));
 				o.setValueCoded(Context.getConceptService().getConcept(reasonForStarting));
 				o.setLocation(Context.getLocationService().getDefaultLocation());
 				Context.getObsService().saveObs(o, "Reason for starting treatment saved on MDR-TB Drug Order Tab");

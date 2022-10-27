@@ -1,5 +1,9 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
+
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>

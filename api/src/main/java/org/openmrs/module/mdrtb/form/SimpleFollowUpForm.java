@@ -9,13 +9,15 @@ public class SimpleFollowUpForm extends AbstractSimpleForm {
 
 	public SimpleFollowUpForm() {
 		super();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));		
+		String property = Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type");
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(property));		
 		
 	}
 	
 	public SimpleFollowUpForm(Patient patient) {
 		super(patient);
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")));		
+		String property = Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type");
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType(property));		
 	}
 	
 	public SimpleFollowUpForm(Encounter encounter) {

@@ -72,7 +72,7 @@ public class FormatTag extends BodyTagSupport {
 
 				// if we haven't found a name yet, just get the best short name
 				if (name == null) {
-					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(), ConceptNameType.SHORT);
+					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED);
 				}
 				
 				return name != null ? name.getName() : "";

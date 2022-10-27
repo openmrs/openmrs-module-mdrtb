@@ -1,7 +1,11 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
-
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
+
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 
 <!-- TODO: clean up above paths so they use dynamic reference -->
 <!-- TODO: add privileges? -->
@@ -84,6 +88,7 @@
 <input type="hidden" name="successURL" value="${successURL}"/>
 <input type="hidden" name="patientId" value="-1"/>
 <input type="hidden" name="skipSimilarCheck" value="1"/>
+<input type="hidden" name="add" value="1" />
 
 <button type="submit"><spring:message code="mdrtb.similarPersonNotOnList"/></button>
 <button type="reset" onclick="history.back()"><spring:message code="mdrtb.back"/></button>

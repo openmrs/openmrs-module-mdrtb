@@ -351,7 +351,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
                                   //newKnownMDRString
                                   if (newKnownMDRString != null && !newKnownMDRString.equals("")){
                                       Integer newKnownMDR = Integer.valueOf(newKnownMDRString);
-                                      Concept cKnown = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE));
+                                      Concept cKnown = (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT_KNOWN_OR_CURRENT_MDR_CASE));
                                       List<Obs> oList = os.getObservationsByPersonAndConcept(contact, cKnown);
                                       if (oList != null && oList.size() > 0){
                                           Obs oInner = oList.get(oList.size() -1);
@@ -459,7 +459,7 @@ public class MdrtbManageContactsController extends SimpleFormController {
                             }
                         }
                         //known mdr
-                        List<Obs> oKnownMDR = Context.getObsService().getObservationsByPersonAndConcept(mcp.getPerson(), (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_CONTACT_IS_KNOWN_PRIOR_OR_CURRENT_MDR_TB_CASE)));
+                        List<Obs> oKnownMDR = Context.getObsService().getObservationsByPersonAndConcept(mcp.getPerson(), (Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CONTACT_KNOWN_OR_CURRENT_MDR_CASE)));
                         for (Obs mdr:oKnownMDR){
                             if (!mdr.getVoided() && (mcp.getKnownMdrtbContact() == null || (mcp.getKnownMdrtbContact().getObsDatetime().getTime() < mdr.getObsDatetime().getTime())))
                             mcp.setKnownMdrtbContact(mdr);

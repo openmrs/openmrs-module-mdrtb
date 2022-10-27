@@ -20,6 +20,7 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.query.service.CohortQueryService;
 import org.openmrs.module.reporting.common.DateUtil;
@@ -256,6 +257,14 @@ public class MdrtbQueryService {
 	}
 	
 	/**
+	 * Utility method to get add a Numeric Clause
+	 */
+	private static void addOptionalNumericClause(StringBuilder sb, String baseClause, Integer i) {
+		if(i!=null)
+			sb.append(baseClause  + i + " ");
+	}
+	
+	/**
 	 * Utility method to evaluate a query into a Cohort
 	 */
 	private static Cohort executeQuery(String query, EvaluationContext context) {
@@ -265,4 +274,136 @@ public class MdrtbQueryService {
 		}
 		return c;
 	}
+	
+	/****** CUSTOM METHODS ******/
+	public static Cohort getPatientsWithAgeAtMDRRegistration(EvaluationContext context, Integer minAge, Integer maxAge, Date startDate, Date endDate) {
+    	
+    	Integer ageAtMdrRegistration = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AGE_AT_MDR_REGISTRATION).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + ageAtMdrRegistration + " ");
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", startDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", endDate);
+    	addOptionalNumericClause(q, "and o.value_numeric >= ", minAge);
+    	addOptionalNumericClause(q, "and o.value_numeric <= ", maxAge);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+	
+	public static Cohort getPatientsByResitantType(EvaluationContext context, Date minResultDate, Date maxResultDate, TbClassification rType) { 
+	    
+    	Integer resistanceType = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE).getConceptId();
+    	
+    	Integer type = null;
+    	
+    	// TODO: Change to switch statement
+    	if(rType==TbClassification.RIF_RESISTANT_TB)
+    			type = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RR_TB).getConceptId();
+    	
+    	else if(rType==TbClassification.MDR_TB)
+			type = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB).getConceptId();
+    	
+    	else if(rType==TbClassification.POLY_RESISTANT_TB)
+			type = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PDR_TB).getConceptId();
+    	
+    	else if(rType==TbClassification.PRE_XDR_TB)
+			type = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRE_XDR_TB).getConceptId();
+    	
+    	else if(rType==TbClassification.XDR_TB)
+			type = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XDR_TB).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + resistanceType + " ");
+    	
+    	if(type!=null)
+    		q.append("and		o.value_coded = " + type + " ");
+    	
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", minResultDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", maxResultDate);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+	
+	public static Cohort getTreatmentStarted(EvaluationContext context, Date minResultDate, Date maxResultDate) { 
+	    
+    	Integer mdrTreatmentStartDate = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + mdrTreatmentStartDate + " ");
+    	
+    	addOptionalDateClause(q, "and o.value_coded >= ", minResultDate);
+    	addOptionalDateClause(q, "and o.value_coded <= ", maxResultDate);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+	
+	public static Cohort getPatientsWithSLDRegimenType(EvaluationContext context, Date startDate, Date endDate, Concept regType) {
+    	
+    	Integer regimenType = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + regimenType + " ");
+    	q.append("and		o.value_coded = " + regType.getConceptId() + " ");
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", startDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", endDate);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+	
+	/**
+     * @return the Cohort of patients with DST rest results
+     */
+    public static Cohort getPatientsWithDSTResults(EvaluationContext context, Date minResultDate, Date maxResultDate) {
+    	
+    	Integer dstResult = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DST_RESULT).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + dstResult + " ");
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", minResultDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", maxResultDate);
+    	
+    	return executeQuery(q.toString(), context);
+    }
+    
+    /**
+     * @return the Cohort of patients who have been referred for tests
+     */
+    public static Cohort getPatientsReferredToTest(EvaluationContext context, Date minReferralDate, Date maxReferralDate, String testType) {
+    	
+    	Integer referral = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TEST_REFERRAL).getConceptId();
+    	
+    	StringBuilder q = new StringBuilder();
+    	q.append("select 	p.patient_id ");
+    	q.append("from 		patient p, obs o ");
+    	q.append("where 	p.patient_id = o.person_id ");
+    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
+    	q.append("and		o.concept_id = " + referral + " ");
+    	addOptionalDateClause(q, "and o.obs_datetime >= ", minReferralDate);
+    	addOptionalDateClause(q, "and o.obs_datetime <= ", maxReferralDate);
+    	
+    	if(testType!=null)
+    		q.append("and o.value_coded = " +  Context.getService(MdrtbService.class).getConcept(testType).getConceptId() + ")");
+    	
+    	return executeQuery(q.toString(), context);
+    }
 }

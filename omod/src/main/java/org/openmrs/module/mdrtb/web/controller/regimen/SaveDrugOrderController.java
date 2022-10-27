@@ -82,11 +82,13 @@ public class SaveDrugOrderController {
 			frequency = "";
 			String separator = "";
 			if (ObjectUtil.notNull(perDay)) {
-				frequency += perDay + "/day";
-				separator = " x ";
+				//frequency += perDay + "/day";
+				frequency += perDay + Context.getMessageSourceService().getMessage("mdrtb.perday");
+				separator = " ";
 			}
 			if (ObjectUtil.notNull(perWeek)) {
-				frequency += separator + perWeek + " days/week";
+				//frequency += separator + perWeek + " days/week";
+				frequency += separator + perWeek + " " + Context.getMessageSourceService().getMessage("mdrtb.daysperweek");
 			}
 		}
 		drugOrder.setFrequency(frequency);

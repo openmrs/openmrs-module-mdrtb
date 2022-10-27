@@ -21,11 +21,11 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
@@ -171,6 +171,8 @@ public abstract class AbstractSpecimenController {
 		testTypes.add("smear");
 		testTypes.add("culture");
 		testTypes.add("dst");
+		testTypes.add("xpert");
+		testTypes.add("hain");
 		return testTypes;
 	}
 	
@@ -216,6 +218,23 @@ public abstract class AbstractSpecimenController {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
 	}	
 	
+	@ModelAttribute("mtbResults")
+	public Collection<ConceptAnswer> getPossibleMtbResults() {
+		return Context.getService(MdrtbService.class).getPossibleMtbResults();
  }
 
+	@ModelAttribute("rifResults")
+	public Collection<ConceptAnswer> getPossibleRifResistanceResults() {
+		return Context.getService(MdrtbService.class).getPossibleRifResistanceResults();
+	}
 
+	@ModelAttribute("inhResults")
+	public Collection<ConceptAnswer> getPossibleInhResistanceResults() {
+		return Context.getService(MdrtbService.class).getPossibleRifResistanceResults();
+	}
+	
+	@ModelAttribute("xpertMtbBurdens")
+	public Collection<ConceptAnswer> getPossibleXpertMtbBurdens() {
+		return Context.getService(MdrtbService.class).getPossibleXpertMtbBurdens();
+	}
+}

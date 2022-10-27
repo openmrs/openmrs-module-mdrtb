@@ -49,10 +49,10 @@ public class MdrtbPatientProgramStateCohortDefinitionEvaluator implements Cohort
     			if (cd.getWorkflowConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE))) {
     				state = program.getClassificationAccordingToPreviousDrugUse();
     			}
-    			else if (cd.getWorkflowConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX))) {
+    			else if (cd.getWorkflowConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT))) {
     				state = program.getClassificationAccordingToPreviousTreatment();
     			}
-    			else if (cd.getWorkflowConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME))) {
+    			else if (cd.getWorkflowConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME))) {
     				state = program.getOutcome();
     			}
     			else {

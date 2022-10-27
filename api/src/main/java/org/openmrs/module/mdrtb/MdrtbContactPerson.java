@@ -21,10 +21,6 @@ public class MdrtbContactPerson {
     private PersonAddress address;
     private Obs phone;
     private PersonAttribute mdrtbContactId;
-    
-    
-    
-
 
     public Person getPerson() {
         return person;
@@ -125,8 +121,4 @@ public class MdrtbContactPerson {
     public void setKnownMdrtbContact(Obs knownMdrtbContact) {
         this.knownMdrtbContact = knownMdrtbContact;
     }
-
-
-    
-    
 }

@@ -8,6 +8,9 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN2;
+import org.openmrs.module.mdrtb.specimen.custom.Xpert;
 
 /**
  * Interface that defines how to interaction with a specimen
@@ -81,11 +84,23 @@ public interface Specimen extends Comparable<Specimen>{
 	public List<Dst> getDsts();
 	public Dst addDst();
 	
+	public List<Xpert> getXperts();
+	public Xpert addXpert();
+	
+	public List<HAIN> getHAINs();
+	public HAIN addHAIN();
+	
+	public List<HAIN2> getHAIN2s();
+	public HAIN2 addHAIN2();
+	
 	public List<Test> getTests();
 	
 	public Map<Integer,List<DstResult>> getDstResultsMap();
 	
 	public ScannedLabReport addScannedLabReport();
 	public void removeScannedLabReport(ScannedLabReport report);
-		
+
+	public Double getMonthOfTreatment();
+	
+	public Integer getPatProgId();
 }

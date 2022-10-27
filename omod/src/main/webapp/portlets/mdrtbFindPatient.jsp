@@ -21,32 +21,31 @@
 	$j(document).ready(function(){
 		$j('#results').css('display','none');
 		$j('#searchBox').val('');
-		$j('#searchBox').keyup(function(event){
-			$j('#results').hide();
-			if (event.keyCode == 13 ) { // User pressed enter key.
-				$j('#mdrtbFindPatientSearchButton').click();
-			}
-		});
-		$j('#mdrtbFindPatientSearchButton').click(function(){
-			if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
-				includeRet = true;
-			}
-			var onlyMdrTb = false;
-			if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
-				onlyMdrTb =true;				
-			}
-			console.log("onlyMdrTb=" + onlyMdrTb);
-			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
-				from = 0; 
-				to = jumps-1; 
-				if (ret.length <= to) {
-					to = ret.length -1;
+		$j('#searchBox').keyup(function(){
+			if ($j('#searchBox').val().length > 2){
+				if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
+					includeRet = true;
 				}
-	   			savedRet = ret; 
-	   			retSize = ret.length;
-	   			drawTable(savedRet);
-	   		});
-   		});	
+				var onlyMdrTb = false;
+				if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
+					onlyMdrTb =true;				
+				}
+				console.log("onlyMdrTb=" + onlyMdrTb);
+				MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
+					from = 0; 
+					to = jumps-1; 
+					if (ret.length <= to) {
+						to = ret.length -1;
+					}
+					savedRet = ret; 
+					retSize = ret.length;
+					drawTable(savedRet);
+				});
+			}
+			else {
+				$j('#results').hide();
+			}
+		});		
  	});
 	
 	function addRowEventsFindPatient(){
@@ -79,7 +78,8 @@
 	   			$j('#searchBox').val('');
 	   		</c:when>
 	   		<c:otherwise>
-	   			window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=' + input;
+	   			window.location='${pageContext.request.contextPath}/module/mdrtb/program/enrollment.form?patientId=' + input;
+	   			// window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=' + input;
 	   		</c:otherwise>
 	   	</c:choose>
 	}
@@ -163,6 +163,10 @@
 									if (patient.patientId != null && patient.patientId != "NaN")
 										return patient.identifier;
 								},
+								/* function(patient) {
+									if (patient.patientId != null && patient.patientId != "NaN")
+										return patient.address.countyDistrict;
+								}, */
 								//first name 
 								function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN"){
@@ -172,10 +176,10 @@
 								 	      }
 							  		},
 							  	//middle name
-								function(patient) { 
+								/* function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN")
 										return  patient.middleName;
-							  		},
+							  		}, */
 							  	//family name
 							  	function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN")
@@ -223,8 +227,10 @@
 								},
 								function(patient) {
 									if (patient.patientId != null && patient.patientId != "NaN"){
-										if (patient.birthdate != "" && patient.birthdate != "Unknown")
-										return getDateString(patient.birthdate);
+										if (patient.birthdate != "" && patient.birthdate != "Unknown") {
+											//return getDateString(patient.birthdate);
+											return patient.dateOfBirth;
+										}
 									} 	
 								}
 								<c:if test ="${!empty useHealthCenter}">
@@ -244,8 +250,9 @@
 							var cellFuncsHeader = [
 							function() {return " "},
 							function() {return "<b><spring:message code='mdrtb.Identifier'/></b>"},
+							/* function() {return "<b><spring:message code='mdrtb.district'/></b>"}, */
 							function() {return "<b><spring:message code='mdrtb.first'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.middle'/></b>"},
+							/* function() {return "<b><spring:message code='mdrtb.middle'/></b>"}, */
 							function() {return "<b><spring:message code='mdrtb.last'/></b>"},
 							function() {return "<b><spring:message code='mdrtb.age'/></b>"},
 							function() {return "<b><spring:message code='mdrtb.gender'/></b>"},
@@ -435,7 +442,7 @@ function useMdrtbLoadingMessage(message) {
 								<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
 							</c:choose>
 							<input type="text" value="" id="searchBox" name="searchBox">
-							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+<%-- 							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/> --%>
 						</td>	
 						<td>
 							<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/>

@@ -259,9 +259,9 @@ public class SpecimenMigrationGenericController {
 	public ModelAndView migrateHospitalizations() {
 
 		Concept typeOfPatientConcept = Context.getConceptService().getConcept("TYPE OF PATIENT");
-		Concept hospitalizedConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED);
+		Concept hospitalizedConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED);
 		Concept ambulatoryConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AMBULATORY);
-		Concept hospitalizedSinceLastVisitConcept = Context.getConceptService().getConceptByName("PATIENT HOSPITALIZED SINCE LAST VISIT");
+		Concept hospitalizedSinceLastVisitConcept = Context.getConceptService().getConceptByName("PATIENT PATIENT_HOSPITALIZED SINCE LAST VISIT");
 		
 		Concept [] conceptParams = {typeOfPatientConcept, hospitalizedSinceLastVisitConcept};
 		
@@ -390,7 +390,7 @@ public class SpecimenMigrationGenericController {
     @RequestMapping("/module/mdrtb/migration/generic/migrateRegistrationGroups.form")
     public ModelAndView migrateRegistrationGroups() {
     	Concept previousDrugUse = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_DRUG_USE);
-    	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+    	Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
     	
     	Collection<ProgramWorkflowState> previousDrugUseStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
     	Collection<ProgramWorkflowState> previousTreatmentStates = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
@@ -490,7 +490,7 @@ public class SpecimenMigrationGenericController {
     public ModelAndView closeOpenProgramsWithOutcomes() {
     	
     	Program mdrtb = Context.getService(MdrtbService.class).getMdrtbProgram();
-    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+    	Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
     	
     	for (PatientProgram program : Context.getProgramWorkflowService().getPatientPrograms(null, mdrtb, null, null, null, null, false)) {
     		MdrtbPatientProgram mdrtbProgram = new MdrtbPatientProgram(program);

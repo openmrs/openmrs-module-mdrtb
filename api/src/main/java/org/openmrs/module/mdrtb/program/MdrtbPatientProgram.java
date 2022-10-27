@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.program;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -9,9 +10,11 @@ import java.util.ListIterator;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientProgram;
 import org.openmrs.PatientState;
 import org.openmrs.Person;
@@ -21,6 +24,8 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.comparator.PatientStateComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
+import org.openmrs.module.mdrtb.form.custom.TB03uForm;
+import org.openmrs.module.mdrtb.form.custom.TB03uXDRForm;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -30,7 +35,9 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 
 	private PatientProgram program;
-	
+
+	private PatientIdentifier patientIdentifier;
+
 	public MdrtbPatientProgram() {
 		this.program = new PatientProgram();
 		this.program.setProgram(Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")));
@@ -77,7 +84,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 			previousDrugState.setStartDate(dateEnrolled);
 		}
 		
-		PatientState previousTreatmentState = getPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX));
+		PatientState previousTreatmentState = getPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT));
 		if (previousTreatmentState != null) {
 			previousTreatmentState.setStartDate(dateEnrolled);
 		}
@@ -91,7 +98,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		this.program.setDateCompleted(dateCompleted);
 		
 		// also update the start date of the outcome state 
-		PatientState outcome = getPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME));
+		PatientState outcome = getPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME));
 		if (outcome != null) {
 			outcome.setStartDate(dateCompleted);
 		}
@@ -106,7 +113,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	}
 	
 	public ProgramWorkflowState getOutcome() {		
-		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
 		return getPatientWorkflowState(outcome);
 	}
 	
@@ -118,7 +125,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		}
 
 		// otherwise, do the update
-		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TX_OUTCOME);
+		Concept outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME);
 		
 		// void any existing states tied to the the outcome workflow
 		voidStates(outcome);
@@ -167,7 +174,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	}
 	
 	public ProgramWorkflowState getClassificationAccordingToPreviousTreatment() {		
-		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
 		return getPatientWorkflowState(previousTreatment);
 	}
 	
@@ -184,7 +191,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		}
 
 		// otherwise, do the update
-		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TX);
+		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
 		
 		// void any existing states tied to the the outcome workflow
 		voidStates(previousTreatment);
@@ -212,7 +219,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 			return false;
 		}
 		else {
-			return currentState.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+			return currentState.getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED));
 		}
 	}
 	
@@ -221,14 +228,15 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		PatientState currentState = getCurrentPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW));
 		
 		// if the current state is hospitalized, we need to close it
-		if (currentState != null && currentState.getState() != null && currentState.getState().getConcept().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED))) {			
+		Concept hospitalized = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED);
+		if (currentState != null && currentState.getState() != null && currentState.getState().getConcept().equals(hospitalized)) {			
 			currentState.setEndDate(dischargeDate);
 		}
 	}
 	
 	public List<PatientState> getAllHospitalizations() {
 		List<PatientState> states = getAllPatientStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZATION_WORKFLOW),
-								   						Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED));
+								   						Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED));
 		
 		Collections.sort(states, Collections.reverseOrder(new PatientStateComparator()));
 		return states;
@@ -236,7 +244,7 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	
 	public void addHospitalization(Date admissionDate, Date dischargeDate) {
 		PatientState hospitalization = new PatientState();
-		hospitalization.setState(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HOSPITALIZED)));
+		hospitalization.setState(MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_HOSPITALIZED)));
 		hospitalization.setStartDate(admissionDate);
 		hospitalization.setEndDate(dischargeDate);
 		this.program.getStates().add(hospitalization);
@@ -279,6 +287,15 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()));
     }
 	
+	public List<Specimen> getSpecimensDuringProgramObs() {
+		
+		if (program.getId() == null) {
+			return null;
+		}
+		
+		return Context.getService(MdrtbService.class).getSpecimens(program.getPatient(), program.getId());
+    }
+	
 	public List<Regimen> getMdrtbRegimensDuringProgram() {
 		
 		if (program.getDateEnrolled() == null) {
@@ -297,6 +314,27 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 		
 		return Context.getEncounterService().getEncounters(program.getPatient(), null, getPreviousProgramDateCompleted(), 
 			(!isMostRecentProgram() ?  program.getDateCompleted(): new Date()), null, MdrtbUtil.getMdrtbEncounterTypes(), null, false);
+	}
+	
+	public List<Encounter> getMdrtbEncountersDuringProgramObs() {
+		
+		if (program.getDateEnrolled() == null) {
+			return null;
+		}
+		
+		List<Encounter> encs =  Context.getEncounterService().getEncounters(program.getPatient(), null, null, 
+			null, null, MdrtbUtil.getMdrtbEncounterTypes(), null, false);
+		
+		ArrayList<Encounter> ret = new ArrayList<Encounter>();
+		
+		Obs temp = null;
+		for(Encounter encounter : encs) {	
+			temp = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+			if(temp!=null && temp.getValueNumeric()!=null && temp.getValueNumeric().intValue()==getId().intValue())
+				ret.add(encounter);
+		}
+		
+		return ret;
 	}
 	
 	public Concept getCurrentAnatomicalSiteDuringProgram() {
@@ -372,6 +410,13 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	 * Implementation of comparable method
 	 */
 	public int compareTo(MdrtbPatientProgram programToCompare) {
+		
+		if(this.getDateEnrolled() == null)
+			return 1;
+		
+		else if(programToCompare.getDateEnrolled() == null)
+			return 0;
+		
 		return this.getDateEnrolled().compareTo(programToCompare.getDateEnrolled());
 	}
 	
@@ -406,7 +451,8 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 	 */
 	private MdrtbPatientProgram getPreviousProgram() {
 		
-		ListIterator<MdrtbPatientProgram> programs = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient()).listIterator();
+		List<MdrtbPatientProgram> mdrtbPatientPrograms = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(this.program.getPatient());
+		ListIterator<MdrtbPatientProgram> programs = mdrtbPatientPrograms.listIterator();
 		
 		while (programs.hasNext()) {
 			if (programs.next().equals(this)) {
@@ -515,5 +561,59 @@ public class MdrtbPatientProgram implements Comparable<MdrtbPatientProgram> {
 				state.setVoidReason("voided by mdr-tb module");
 			}
 		}
+	}
+	
+	/****** CUSTOM METHODS *****/
+	public PatientIdentifier getPatientIdentifier() {
+		return patientIdentifier;
+	}
+
+	public void setPatientIdentifier(PatientIdentifier patientIdentifier) {
+		this.patientIdentifier = patientIdentifier;
+	}
+	
+	public TB03uForm getTb03u() {
+		TB03uForm tb03u = null;
+		List<Encounter> encounters = null;
+		EncounterType intakeType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtbIntake_encounter_type"));
+		
+    	encounters = getMdrtbEncountersDuringProgramObs();
+    
+		
+		if (encounters != null) {
+    		for (Encounter encounter : encounters) {
+    			// create a new status item for this encounter
+    			
+    			// now place the visit in the appropriate "bucket"
+    			if (encounter.getEncounterType().equals(intakeType)) {
+    				tb03u = new TB03uForm(encounter);
+    				break;
+    			}
+    		}
+		}
+		
+		return tb03u;
+	}
+	
+	public TB03uXDRForm getTb03uXDR() {
+		TB03uXDRForm tb03ux = null;
+		List<Encounter> encounters = null;
+		EncounterType intakeType = Context.getEncounterService().getEncounterType("TB03u - XDR");
+		
+    	encounters = getMdrtbEncountersDuringProgramObs();
+		
+		if (encounters != null) {
+    		for (Encounter encounter : encounters) {
+    			// create a new status item for this encounter
+    			
+    			// now place the visit in the appropriate "bucket"
+    			if (encounter.getEncounterType().equals(intakeType)) {
+    				tb03ux = new TB03uXDRForm(encounter);
+    				break;
+    			}
+    		}
+		}
+		
+		return tb03ux;
 	}
 }

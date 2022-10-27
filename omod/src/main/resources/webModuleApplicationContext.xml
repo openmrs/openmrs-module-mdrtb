@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  		    http://www.springframework.org/schema/context
+  		    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+  		    http://www.springframework.org/schema/jee
+  		    http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+  		    http://www.springframework.org/schema/tx
+  		    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+  		    http://www.springframework.org/schema/aop
+  		    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+  		    http://www.springframework.org/schema/util
+  		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  
+
+  	<!-- Annotation based controllers -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	<context:component-scan base-package="org.openmrs.module.mdrtb.web" />
+	
+	<bean id="MdrtbMappings"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="order">
+			<value>10</value>
+		</property>
+		<property name="mappings">
+			<props>
+				<prop key="cohortBuilder.list">mdrtbCohortBuilderController</prop>
+				<prop key="**/patientChart.portlet">patientChartPortletController</prop>
+				<prop key="**/mdrtbPatientHeader.portlet">mdrtbPatientHeaderPortletController</prop>
+				<prop key="**/mdrtbSubheader.portlet">mdrtbSubheaderPortletController</prop>
+				<prop key="**/mdrtbPatientSummary.portlet">patientSummaryPortletController</prop>
+				<prop key="**/mdrtbShortSummary.portlet">shortSummaryPortletController</prop>
+				<prop key="**/mdrtbCustomList.portlet">customSummaryPortletController</prop>
+				<prop key="**/specimenReport.portlet">specimenReportPortletController</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Controllers -->
+	<bean id="mdrtbCohortBuilderController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController">
+		<property name="formView">
+			<value>/module/@MODULE_ID@/reporting/cohortBuilder</value>
+		</property>
+		<property name="successView">
+			<value>cohortBuilder.list</value>
+		</property>
+	</bean>
+	
+	<!-- Portlet controllers -->
+	<bean id="patientChartPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.PatientChartPortletController" />
+	<bean id="mdrtbPatientHeaderPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbPatientHeaderPortletController" />
+	<bean id="mdrtbSubheaderPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.MdrtbSubheaderPortletController" />
+	<bean id="patientSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.PatientSummaryPortletController" />
+	<bean id="shortSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.ShortSummaryPortletController" />
+	<bean id="customSummaryPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.reporting.CustomSummaryPortletController" />
+	<bean id="specimenReportPortletController"
+		class="org.openmrs.module.mdrtb.web.controller.portlet.SpecimenReportPortletController" />
+	
+
+</beans>
