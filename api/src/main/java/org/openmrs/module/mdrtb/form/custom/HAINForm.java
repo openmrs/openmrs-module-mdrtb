@@ -9,12 +9,8 @@ import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
-import org.openmrs.module.mdrtb.specimen.custom.HAIN;
-import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
 
 public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm> {
-	
-	private HAIN hain;
 	
 	public HAINForm() {
 		super();
@@ -29,46 +25,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 	
 	public HAINForm(Encounter encounter) {
 		super(encounter);
-		hain = new HAINImpl(encounter);
 	}
-	
-	/*public Integer getMonthOfTreatment() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
-		
-		if (obs == null) {
-			return null;
-		}
-		else {
-			return obs.getValueNumeric().intValue();
-		}
-	}
-	
-	public void setMonthOfTreatment(Integer month) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter);
-		
-		// if this obs have not been created, and there is no data to add, do nothing
-		if (obs == null && month == null) {
-			return;
-		}
-		
-		// we only need to update this if this is a new obs or if the value has changed.
-		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != month.intValue()) {
-			
-			// void the existing obs if it exists
-			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
-			if (obs != null) {
-				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
-			}
-				
-			// now create the new Obs and add it to the encounter	
-			if(month != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MONTH_OF_TREATMENT), encounter.getEncounterDatetime(), encounter.getLocation());
-				obs.setValueNumeric(new Double(month));
-				encounter.addObs(obs);
-			}
-		} 
-	}*/
 	
 	public String getSpecimenId() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIMEN_ID),
@@ -119,12 +76,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 		if (obsgroup != null)
 			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT),
 			    obsgroup);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setMtbResult(Concept result) {
@@ -136,9 +88,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 		if (obsgroup != null) {
 			obs = MdrtbUtil.getObsFromObsGroup(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_RESULT),
 			    obsgroup);
-			
 		}
-		
 		else {
 			obsgroup = new Obs(encounter.getPatient(),
 			        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT),
@@ -189,12 +139,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 		if (obsgroup != null)
 			obs = MdrtbUtil.getObsFromObsGroup(
 			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setRifResult(Concept result) {
@@ -206,9 +151,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 		if (obsgroup != null) {
 			obs = MdrtbUtil.getObsFromObsGroup(
 			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN_RESISTANCE), obsgroup);
-			
 		}
-		
 		else {
 			obsgroup = new Obs(encounter.getPatient(),
 			        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.HAIN_CONSTRUCT),
@@ -259,12 +202,7 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 		if (obsgroup != null)
 			obs = MdrtbUtil.getObsFromObsGroup(
 			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID_RESISTANCE), obsgroup);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setInhResult(Concept result) {
@@ -402,10 +340,6 @@ public class HAINForm extends AbstractSimpleForm implements Comparable<HAINForm>
 			}
 		}
 	}
-	
-	/*public int compareTo(HAINForm form) {
-		return this.getEncounterDatetime().compareTo(form.getEncounterDatetime());
-	}*/
 	
 	public int compareTo(HAINForm form) {
 		if (this.getMonthOfTreatment() == null)

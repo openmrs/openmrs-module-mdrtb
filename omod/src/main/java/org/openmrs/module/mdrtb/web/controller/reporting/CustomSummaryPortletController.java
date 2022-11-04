@@ -13,6 +13,7 @@ public class CustomSummaryPortletController extends PatientSummaryPortletControl
 	
 	/**
 	 * Return the columns appropriate for this Patient Summary
+	 * 
 	 * @return
 	 */
 	@Override

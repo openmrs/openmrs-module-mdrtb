@@ -33,39 +33,41 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
-    	
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
+		
 	}
-
+	
 	@ModelAttribute("specimen")
 	public Specimen getSpecimen(@RequestParam(required = true, value = "patientId") Integer patientId) {
-		Specimen specimen = Context.getService(MdrtbService.class).createSpecimen(Context.getPatientService().getPatient(patientId));
+		Specimen specimen = Context.getService(MdrtbService.class)
+		        .createSpecimen(Context.getPatientService().getPatient(patientId));
 		
 		// set the default type to "sputum"
 		specimen.setType(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPUTUM));
 		
 		return specimen;
 	}
-		
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET) 
-	public ModelAndView showSpecimenAdd(@RequestParam(required = true, value = "patientId") Integer patientId, ModelMap map) {
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showSpecimenAdd(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        ModelMap map) {
 		map.put("patientId", patientId);
 		return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
 	}
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result, SessionStatus status, ModelMap map,
-	                                  @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult result,
+	        SessionStatus status, ModelMap map,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
 		// validate
 		MdrtbPatientProgram patientProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
 		new SpecimenValidator().validate(specimen, result, patientProgram);
 		
-    	if (result.hasErrors()) {
+		if (result.hasErrors()) {
 			map.put("patientProgramId", patientProgramId);
 			map.put("errors", result);
 			return new ModelAndView("/module/mdrtb/specimen/specimenAdd", map);
@@ -79,7 +81,8 @@ public class SpecimenAddController extends AbstractSpecimenController {
 		map.clear();
 		
 		// redirect to the new detail patient for this specimen
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&patientProgramId=" + patientProgramId, map);
+		return new ModelAndView(
+		        "redirect:specimen.form?specimenId=" + specimen.getId() + "&patientProgramId=" + patientProgramId, map);
 		
 	}
 }

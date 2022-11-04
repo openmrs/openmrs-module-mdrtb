@@ -94,7 +94,9 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
 		
 		// we've changed this so that we link to the select form page instead of determining what form to use here
 		// newIntakeVisit.setLink("/module/mdrtb/form/select.form?formType=intake&patientId=" + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId=" + status.getPatientProgram().getId());
-		newIntakeVisit.setLink("/module/mdrtb/form/tb03u.form?encounterId=-1&formType=intake&patientId=" + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId=" + status.getPatientProgram().getId());
+		newIntakeVisit.setLink("/module/mdrtb/form/tb03u.form?encounterId=-1&formType=intake&patientId="
+		        + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId="
+		        + status.getPatientProgram().getId());
 	}
 	
 	public void renderNewTbIntakeVisit(StatusItem newIntakeVisit, VisitStatus status) {
@@ -110,7 +112,9 @@ public class DashboardVisitStatusRenderer implements VisitStatusRenderer {
 		
 		// we've changed this so that we link to the select form page instead of determining what form to use here
 		//newFollowUpVisit.setLink("/module/mdrtb/form/select.form?formType=followUp&patientId=" + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId=" + status.getPatientProgram().getId());
-		newFollowUpVisit.setLink("/module/mdrtb/form/tb03u-xdr.form?formType=followUp&encounterId=-1&patientId=" + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId=" + status.getPatientProgram().getId());
+		newFollowUpVisit.setLink("/module/mdrtb/form/tb03u-xdr.form?formType=followUp&encounterId=-1&patientId="
+		        + status.getPatientProgram().getPatient().getPatientId() + "&patientProgramId="
+		        + status.getPatientProgram().getId());
 	}
 	
 	public void renderNewTbFollowUpVisit(StatusItem newFollowUpVisit, VisitStatus status) {

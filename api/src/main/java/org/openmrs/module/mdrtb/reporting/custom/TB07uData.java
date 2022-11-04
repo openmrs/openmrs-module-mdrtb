@@ -212,288 +212,108 @@ public class TB07uData  {
 	private Integer newPreXdr0514;
 	private Integer newPreXdr1517;
 	private Integer newPreXdrHiv;
-	/*private Integer newIndLzdPreXdr;
-	private Integer newIndLzdPreXdr04;
-	private Integer newIndLzdPreXdr0514;
-	private Integer newIndLzdPreXdr1517;
-	private Integer newIndLzdPreXdrHiv;
-	private Integer newIndBdqPreXdr;
-	private Integer newIndBdqPreXdr04;
-	private Integer newIndBdqPreXdr0514;
-	private Integer newIndBdqPreXdr1517;
-	private Integer newIndBdqPreXdrHiv;*/
 	
 	private Integer relapse1PreXdr;
 	private Integer relapse1PreXdr04;
 	private Integer relapse1PreXdr0514;
 	private Integer relapse1PreXdr1517;
 	private Integer relapse1PreXdrHiv;
-	/*private Integer relapse1IndLzdPreXdr;
-	private Integer relapse1IndLzdPreXdr04;
-	private Integer relapse1IndLzdPreXdr0514;
-	private Integer relapse1IndLzdPreXdr1517;
-	private Integer relapse1IndLzdPreXdrHiv;
-	private Integer relapse1IndBdqPreXdr;
-	private Integer relapse1IndBdqPreXdr04;
-	private Integer relapse1IndBdqPreXdr0514;
-	private Integer relapse1IndBdqPreXdr1517;
-	private Integer relapse1IndBdqPreXdrHiv;*/
 	
 	private Integer relapse2PreXdr;
 	private Integer relapse2PreXdr04;
 	private Integer relapse2PreXdr0514;
 	private Integer relapse2PreXdr1517;
 	private Integer relapse2PreXdrHiv;
-/*	private Integer relapse2IndLzdPreXdr;
-	private Integer relapse2IndLzdPreXdr04;
-	private Integer relapse2IndLzdPreXdr0514;
-	private Integer relapse2IndLzdPreXdr1517;
-	private Integer relapse2IndLzdPreXdrHiv;
-	private Integer relapse2IndBdqPreXdr;
-	private Integer relapse2IndBdqPreXdr04;
-	private Integer relapse2IndBdqPreXdr0514;
-	private Integer relapse2IndBdqPreXdr1517;
-	private Integer relapse2IndBdqPreXdrHiv;*/
 		
 	private Integer default1PreXdr;
 	private Integer default1PreXdr04;
 	private Integer default1PreXdr0514;
 	private Integer default1PreXdr1517;
 	private Integer default1PreXdrHiv;
-	/*private Integer default1IndLzdPreXdr;
-	private Integer default1IndLzdPreXdr04;
-	private Integer default1IndLzdPreXdr0514;
-	private Integer default1IndLzdPreXdr1517;
-	private Integer default1IndLzdPreXdrHiv;
-	private Integer default1IndBdqPreXdr;
-	private Integer default1IndBdqPreXdr04;
-	private Integer default1IndBdqPreXdr0514;
-	private Integer default1IndBdqPreXdr1517;
-	private Integer default1IndBdqPreXdrHiv;*/
 	
 	private Integer default2PreXdr;
 	private Integer default2PreXdr04;
 	private Integer default2PreXdr0514;
 	private Integer default2PreXdr1517;
 	private Integer default2PreXdrHiv;
-	/*private Integer default2IndLzdPreXdr;
-	private Integer default2IndLzdPreXdr04;
-	private Integer default2IndLzdPreXdr0514;
-	private Integer default2IndLzdPreXdr1517;
-	private Integer default2IndLzdPreXdrHiv;
-	private Integer default2IndBdqPreXdr;
-	private Integer default2IndBdqPreXdr04;
-	private Integer default2IndBdqPreXdr0514;
-	private Integer default2IndBdqPreXdr1517;
-	private Integer default2IndBdqPreXdrHiv;*/
 	
 	private Integer failure1PreXdr;
 	private Integer failure1PreXdr04;
 	private Integer failure1PreXdr0514;
 	private Integer failure1PreXdr1517;
 	private Integer failure1PreXdrHiv;
-	/*private Integer failure1IndLzdPreXdr;
-	private Integer failure1IndLzdPreXdr04;
-	private Integer failure1IndLzdPreXdr0514;
-	private Integer failure1IndLzdPreXdr1517;
-	private Integer failure1IndLzdPreXdrHiv;
-	private Integer failure1IndBdqPreXdr;
-	private Integer failure1IndBdqPreXdr04;
-	private Integer failure1IndBdqPreXdr0514;
-	private Integer failure1IndBdqPreXdr1517;
-	private Integer failure1IndBdqPreXdrHiv;*/
 	
 	private Integer failure2PreXdr;
 	private Integer failure2PreXdr04;
 	private Integer failure2PreXdr0514;
 	private Integer failure2PreXdr1517;
 	private Integer failure2PreXdrHiv;
-	/*private Integer failure2IndLzdPreXdr;
-	private Integer failure2IndLzdPreXdr04;
-	private Integer failure2IndLzdPreXdr0514;
-	private Integer failure2IndLzdPreXdr1517;
-	private Integer failure2IndLzdPreXdrHiv;
-	private Integer failure2IndBdqPreXdr;
-	private Integer failure2IndBdqPreXdr04;
-	private Integer failure2IndBdqPreXdr0514;
-	private Integer failure2IndBdqPreXdr1517;
-	private Integer failure2IndBdqPreXdrHiv;*/
 	
 	private Integer otherPreXdr;
 	private Integer otherPreXdr04;
 	private Integer otherPreXdr0514;
 	private Integer otherPreXdr1517;
 	private Integer otherPreXdrHiv;
-	/*private Integer otherIndLzdPreXdr;
-	private Integer otherIndLzdPreXdr04;
-	private Integer otherIndLzdPreXdr0514;
-	private Integer otherIndLzdPreXdr1517;
-	private Integer otherIndLzdPreXdrHiv;
-	private Integer otherIndBdqPreXdr;
-	private Integer otherIndBdqPreXdr04;
-	private Integer otherIndBdqPreXdr0514;
-	private Integer otherIndBdqPreXdr1517;
-	private Integer otherIndBdqPreXdrHiv;*/
 	
 	private Integer totalPreXdr;
 	private Integer totalPreXdr04;
 	private Integer totalPreXdr0514;
 	private Integer totalPreXdr1517;
 	private Integer totalPreXdrHiv;
-	/*private Integer totalIndLzdPreXdr;
-	private Integer totalIndLzdPreXdr04;
-	private Integer totalIndLzdPreXdr0514;
-	private Integer totalIndLzdPreXdr1517;
-	private Integer totalIndLzdPreXdrHiv;
-	private Integer totalIndBdqPreXdr;
-	private Integer totalIndBdqPreXdr04;
-	private Integer totalIndBdqPreXdr0514;
-	private Integer totalIndBdqPreXdr1517;
-	private Integer totalIndBdqPreXdrHiv;*/
 	
 	private Integer newXdr;
 	private Integer newXdr04;
 	private Integer newXdr0514;
 	private Integer newXdr1517;
 	private Integer newXdrHiv;
-	/*private Integer newIndLzdXdr;
-	private Integer newIndLzdXdr04;
-	private Integer newIndLzdXdr0514;
-	private Integer newIndLzdXdr1517;
-	private Integer newIndLzdXdrHiv;
-	private Integer newIndBdqXdr;
-	private Integer newIndBdqXdr04;
-	private Integer newIndBdqXdr0514;
-	private Integer newIndBdqXdr1517;
-	private Integer newIndBdqXdrHiv;*/
 	
 	private Integer relapse1Xdr;
 	private Integer relapse1Xdr04;
 	private Integer relapse1Xdr0514;
 	private Integer relapse1Xdr1517;
 	private Integer relapse1XdrHiv;
-	/*private Integer relapse1IndLzdXdr;
-	private Integer relapse1IndLzdXdr04;
-	private Integer relapse1IndLzdXdr0514;
-	private Integer relapse1IndLzdXdr1517;
-	private Integer relapse1IndLzdXdrHiv;
-	private Integer relapse1IndBdqXdr;
-	private Integer relapse1IndBdqXdr04;
-	private Integer relapse1IndBdqXdr0514;
-	private Integer relapse1IndBdqXdr1517;
-	private Integer relapse1IndBdqXdrHiv;*/
 	
 	private Integer relapse2Xdr;
 	private Integer relapse2Xdr04;
 	private Integer relapse2Xdr0514;
 	private Integer relapse2Xdr1517;
 	private Integer relapse2XdrHiv;
-	/*private Integer relapse2IndLzdXdr;
-	private Integer relapse2IndLzdXdr04;
-	private Integer relapse2IndLzdXdr0514;
-	private Integer relapse2IndLzdXdr1517;
-	private Integer relapse2IndLzdXdrHiv;
-	private Integer relapse2IndBdqXdr;
-	private Integer relapse2IndBdqXdr04;
-	private Integer relapse2IndBdqXdr0514;
-	private Integer relapse2IndBdqXdr1517;
-	private Integer relapse2IndBdqXdrHiv;*/
 		
 	private Integer default1Xdr;
 	private Integer default1Xdr04;
 	private Integer default1Xdr0514;
 	private Integer default1Xdr1517;
 	private Integer default1XdrHiv;
-	/*private Integer default1IndLzdXdr;
-	private Integer default1IndLzdXdr04;
-	private Integer default1IndLzdXdr0514;
-	private Integer default1IndLzdXdr1517;
-	private Integer default1IndLzdXdrHiv;
-	private Integer default1IndBdqXdr;
-	private Integer default1IndBdqXdr04;
-	private Integer default1IndBdqXdr0514;
-	private Integer default1IndBdqXdr1517;
-	private Integer default1IndBdqXdrHiv;*/
 	
 	private Integer default2Xdr;
 	private Integer default2Xdr04;
 	private Integer default2Xdr0514;
 	private Integer default2Xdr1517;
 	private Integer default2XdrHiv;
-	/*private Integer default2IndLzdXdr;
-	private Integer default2IndLzdXdr04;
-	private Integer default2IndLzdXdr0514;
-	private Integer default2IndLzdXdr1517;
-	private Integer default2IndLzdXdrHiv;
-	private Integer default2IndBdqXdr;
-	private Integer default2IndBdqXdr04;
-	private Integer default2IndBdqXdr0514;
-	private Integer default2IndBdqXdr1517;
-	private Integer default2IndBdqXdrHiv;*/
 	
 	private Integer failure1Xdr;
 	private Integer failure1Xdr04;
 	private Integer failure1Xdr0514;
 	private Integer failure1Xdr1517;
 	private Integer failure1XdrHiv;
-	/*private Integer failure1IndLzdXdr;
-	private Integer failure1IndLzdXdr04;
-	private Integer failure1IndLzdXdr0514;
-	private Integer failure1IndLzdXdr1517;
-	private Integer failure1IndLzdXdrHiv;
-	private Integer failure1IndBdqXdr;
-	private Integer failure1IndBdqXdr04;
-	private Integer failure1IndBdqXdr0514;
-	private Integer failure1IndBdqXdr1517;
-	private Integer failure1IndBdqXdrHiv;*/
 	
 	private Integer failure2Xdr;
 	private Integer failure2Xdr04;
 	private Integer failure2Xdr0514;
 	private Integer failure2Xdr1517;
 	private Integer failure2XdrHiv;
-	/*private Integer failure2IndLzdXdr;
-	private Integer failure2IndLzdXdr04;
-	private Integer failure2IndLzdXdr0514;
-	private Integer failure2IndLzdXdr1517;
-	private Integer failure2IndLzdXdrHiv;
-	private Integer failure2IndBdqXdr;
-	private Integer failure2IndBdqXdr04;
-	private Integer failure2IndBdqXdr0514;
-	private Integer failure2IndBdqXdr1517;
-	private Integer failure2IndBdqXdrHiv;*/
 	
 	private Integer otherXdr;
 	private Integer otherXdr04;
 	private Integer otherXdr0514;
 	private Integer otherXdr1517;
 	private Integer otherXdrHiv;
-	/*private Integer otherIndLzdXdr;
-	private Integer otherIndLzdXdr04;
-	private Integer otherIndLzdXdr0514;
-	private Integer otherIndLzdXdr1517;
-	private Integer otherIndLzdXdrHiv;
-	private Integer otherIndBdqXdr;
-	private Integer otherIndBdqXdr04;
-	private Integer otherIndBdqXdr0514;
-	private Integer otherIndBdqXdr1517;
-	private Integer otherIndBdqXdrHiv;*/
 	
 	private Integer totalXdr;
 	private Integer totalXdr04;
 	private Integer totalXdr0514;
 	private Integer totalXdr1517;
 	private Integer totalXdrHiv;
-	/*private Integer totalIndLzdXdr;
-	private Integer totalIndLzdXdr04;
-	private Integer totalIndLzdXdr0514;
-	private Integer totalIndLzdXdr1517;
-	private Integer totalIndLzdXdrHiv;
-	private Integer totalIndBdqXdr;
-	private Integer totalIndBdqXdr04;
-	private Integer totalIndBdqXdr0514;
-	private Integer totalIndBdqXdr1517;
-	private Integer totalIndBdqXdrHiv;*/
 	
 	private Integer newTotal;
 	private Integer newTotal04;
@@ -4396,6 +4216,4 @@ public class TB07uData  {
 	public void setTotalIndBdqXdrPreXdrHiv(Integer totalIndBdqXdrPreXdrHiv) {
 		this.totalIndBdqXdrPreXdrHiv = totalIndBdqXdrPreXdrHiv;
 	}
-	
-	
 }

@@ -11,7 +11,7 @@
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}&patientId=${drdt.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -33,14 +33,7 @@
 				$j('#viewVisit').show();
 			}
 		});
-		
-		
-		
-		
 	});
-
-	
--->
 
 </script>
 

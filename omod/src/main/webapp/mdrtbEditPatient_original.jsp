@@ -19,7 +19,7 @@
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -73,7 +73,7 @@
 		
 
 	});
--->
+
 </script>
 <!-- END JQUERY -->
 

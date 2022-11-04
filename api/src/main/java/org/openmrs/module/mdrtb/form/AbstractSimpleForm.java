@@ -183,7 +183,7 @@ public abstract class AbstractSimpleForm implements SimpleForm {
 			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
 			if (obs != null) {
 				obs.setVoided(true);
-				obs.setVoidReason("voided by Mdr-tb module");
+				obs.setVoidReason("voided by MDR-TB module");
 			}
 				
 			// now create the new Obs and add it to the encounter
@@ -197,7 +197,6 @@ public abstract class AbstractSimpleForm implements SimpleForm {
 				else {
 					obs.setValueText(value);
 				}
-				
 				encounter.addObs(obs);
 			}
 		}

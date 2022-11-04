@@ -15,22 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class EditDrugOrderController {
-
-    @RequestMapping("/module/mdrtb/regimen/editDrugOrder")
-    public void editDrugOrder(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		@RequestParam(required=true, value="type") String type,
-    		@RequestParam(required=false, value="orderId") Integer orderId,
-    		ModelMap model) {
-    	
-    	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", patientProgramId);
-    	model.addAttribute("type", type);
-    	model.addAttribute("orderId", orderId);
-    	model.addAttribute("patient", Context.getPatientService().getPatient(patientId));
-    	Order drugOrder = (ObjectUtil.isNull(orderId) ? new DrugOrder() : Context.getOrderService().getOrder(orderId));
-    	model.addAttribute("drugOrder", drugOrder);
-    	model.addAttribute("regimenType", RegimenUtils.getRegimenType(type));
-    }
+	
+	@RequestMapping("/module/mdrtb/regimen/editDrugOrder")
+	public void editDrugOrder(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "type") String type,
+	        @RequestParam(required = false, value = "orderId") Integer orderId, ModelMap model) {
+		
+		model.addAttribute("patientId", patientId);
+		model.addAttribute("patientProgramId", patientProgramId);
+		model.addAttribute("type", type);
+		model.addAttribute("orderId", orderId);
+		model.addAttribute("patient", Context.getPatientService().getPatient(patientId));
+		Order drugOrder = (ObjectUtil.isNull(orderId) ? new DrugOrder() : Context.getOrderService().getOrder(orderId));
+		model.addAttribute("drugOrder", drugOrder);
+		model.addAttribute("regimenType", RegimenUtils.getRegimenType(type));
+	}
 }

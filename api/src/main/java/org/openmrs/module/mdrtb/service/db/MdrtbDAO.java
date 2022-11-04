@@ -17,6 +17,7 @@ public interface MdrtbDAO {
      */
     public List<Location> getLocationsWithAnyProgramEnrollments() throws DAOException;
     
+    @Deprecated
     public List<String> getAllRayonsTJK();
     
     public PatientIdentifier getPatientIdentifierById(Integer patientIdentifierId);

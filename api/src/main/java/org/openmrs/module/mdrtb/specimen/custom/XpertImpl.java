@@ -21,12 +21,10 @@ public class XpertImpl extends TestImpl implements Xpert {
 	
 	// set up a xpert object, given an existing obs
 	public XpertImpl(Obs xpert) {
-		
 		if (xpert == null || !(xpert.getConcept()
 		        .equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XPERT_CONSTRUCT)))) {
 			throw new RuntimeException("Cannot initialize xpert: invalid obs used for initialization.");
 		}
-		
 		test = xpert;
 	}
 	

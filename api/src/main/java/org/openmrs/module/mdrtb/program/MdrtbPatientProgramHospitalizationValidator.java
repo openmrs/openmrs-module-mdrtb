@@ -8,8 +8,8 @@ import org.springframework.validation.Validator;
 
 
 public class MdrtbPatientProgramHospitalizationValidator implements Validator {
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+	
+    public boolean supports(Class<?> clazz) {
 		return MdrtbPatientProgram.class.isAssignableFrom(clazz);
     }
 

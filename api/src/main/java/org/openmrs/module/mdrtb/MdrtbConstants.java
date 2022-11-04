@@ -13,8 +13,4 @@ public class MdrtbConstants {
 
     public static enum TreatmentState {NOT_ON_TREATMENT, ON_TREATMENT};
 
-    // TODO: Find the right place for these
-    public static final Integer TB03U_FORM_ID = 18;
-    public static final Integer TB03_FORM_ID = 10;
-    
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +16,7 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.District;
-import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.RegimenForm;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -92,12 +88,6 @@ public class RegimenFormController {
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
 	        @RequestParam(required = true, value = "encounterId") Integer encounterId,
 	        @RequestParam(required = false, value = "mode") String mode, ModelMap model) {
-		List<Region> oblasts;
-		List<Facility> facilities;
-		List<District> districts;
-		
-		/*   if(oblast==null)
-		{*/
 		RegimenForm regimenForm = null;
 		if (encounterId != -1) { //we are editing an existing encounter
 			regimenForm = new RegimenForm(Context.getEncounterService().getEncounter(encounterId));
@@ -105,19 +95,7 @@ public class RegimenFormController {
 			try {
 				regimenForm = getRegimenForm(-1, patientProgramId);
 			}
-			catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-			catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			catch (InvocationTargetException e) {
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -130,7 +108,6 @@ public class RegimenFormController {
 		return new ModelAndView("/module/mdrtb/form/regimen", model);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processRegimenForm(@ModelAttribute("regimenForm") RegimenForm regimenForm, BindingResult errors,
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,

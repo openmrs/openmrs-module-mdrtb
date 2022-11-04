@@ -216,26 +216,6 @@
 		 drug2.innerHTML = optionsHTML.join('\n');
 		 drug3.innerHTML = optionsHTML.join('\n');
 	}
-	
-	/* function fun1()
-	{
-		var e = document.getElementById("oblast");
-		var val = e.options[e.selectedIndex].value;
-		
-		if(val!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/ae.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty aeForm.id ? aeForm.id : -1})
-	}
-
-	function fun2()
-	{
-		var e = document.getElementById("oblast");
-		var val1 = e.options[e.selectedIndex].value;
-		var e = document.getElementById("district");
-		var val2 = e.options[e.selectedIndex].value;
-		
-		if(val2!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/ae.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty aeForm.id ? aeForm.id : -1})
-	} */
 
 	function dateInFuture(dateStr) {
 		try {

@@ -30,29 +30,42 @@ import org.openmrs.module.reporting.common.ObjectUtil;
 public class ModalDialogTag extends BodyTagSupport {
 	
 	public static final long serialVersionUID = 1L;
+	
 	protected static final Log log = LogFactory.getLog(ModalDialogTag.class);
 	
 	//***** PROPERTIES *****
-
-	private String sourceId;						// The id of the element that opens the dialog
-	private String targetId;						// The id of the element to open in the dialog
-	private String event;							// The event to bind to
+	
+	private String sourceId; // The id of the element that opens the dialog
+	
+	private String targetId; // The id of the element to open in the dialog
+	
+	private String event; // The event to bind to
+	
 	private Boolean modal = false;
+	
 	private Boolean autoOpen = false;
+	
 	private Boolean draggable = false;
+	
 	private Boolean resizable = false;
+	
 	private Boolean closeOnEscape = false;
+	
 	private String width = "90%";
+	
 	private String height = null;
+	
 	private String position = "top";
+	
 	private Integer zIndex = 100;
+	
 	private String title = "";
-
+	
 	//***** INSTANCE METHODS *****
 	
-    /**
-     * @see Tag#doStartTag()
-     */
+	/**
+	 * @see Tag#doStartTag()
+	 */
 	public int doStartTag() throws JspException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<script type=\"text/javascript\">");
@@ -87,60 +100,60 @@ public class ModalDialogTag extends BodyTagSupport {
 		return SKIP_BODY;
 	}
 	
-    /**
-     * @see Tag#doEndTag()
-     */
-    public int doEndTag() throws JspException {
-    	modal = false;
-    	autoOpen = false;
-    	draggable = false;
-    	resizable = false;
-    	closeOnEscape = false;
-    	width = "90%";
-    	height = null;
-    	position = "top";
-    	zIndex = 100;
-    	title = "";
-	    return EVAL_PAGE;
-    }
-    
-    //***** PROPERTY ACCESS *****
-
+	/**
+	 * @see Tag#doEndTag()
+	 */
+	public int doEndTag() throws JspException {
+		modal = false;
+		autoOpen = false;
+		draggable = false;
+		resizable = false;
+		closeOnEscape = false;
+		width = "90%";
+		height = null;
+		position = "top";
+		zIndex = 100;
+		title = "";
+		return EVAL_PAGE;
+	}
+	
+	//***** PROPERTY ACCESS *****
+	
 	/**
 	 * @return the sourceId
 	 */
 	public String getSourceId() {
 		return sourceId;
 	}
-
+	
 	/**
 	 * @param sourceId the sourceId to set
 	 */
 	public void setSourceId(String sourceId) {
 		this.sourceId = sourceId;
 	}
-
+	
 	/**
 	 * @return the targetId
 	 */
 	public String getTargetId() {
 		return targetId;
 	}
-
+	
 	/**
 	 * @param targetId the targetId to set
 	 */
 	public void setTargetId(String targetId) {
 		this.targetId = targetId;
 	}
-
+	
 	/**
 	 * @return the event
 	 */
 	public String getEvent() {
 		return event;
 	}
-
+	
 	/**
 	 * @param event the event to set
 	 */
@@ -154,133 +167,133 @@ public class ModalDialogTag extends BodyTagSupport {
 	public Boolean getModal() {
 		return modal;
 	}
-
+	
 	/**
 	 * @param modal the modal to set
 	 */
 	public void setModal(Boolean modal) {
 		this.modal = modal;
 	}
-
+	
 	/**
 	 * @return the autoOpen
 	 */
 	public Boolean getAutoOpen() {
 		return autoOpen;
 	}
-
+	
 	/**
 	 * @param autoOpen the autoOpen to set
 	 */
 	public void setAutoOpen(Boolean autoOpen) {
 		this.autoOpen = autoOpen;
 	}
-
+	
 	/**
 	 * @return the draggable
 	 */
 	public Boolean getDraggable() {
 		return draggable;
 	}
-
+	
 	/**
 	 * @param draggable the draggable to set
 	 */
 	public void setDraggable(Boolean draggable) {
 		this.draggable = draggable;
 	}
-
+	
 	/**
 	 * @return the resizable
 	 */
 	public Boolean getResizable() {
 		return resizable;
 	}
-
+	
 	/**
 	 * @param resizable the resizable to set
 	 */
 	public void setResizable(Boolean resizable) {
 		this.resizable = resizable;
 	}
-
+	
 	/**
 	 * @return the closeOnEscape
 	 */
 	public Boolean getCloseOnEscape() {
 		return closeOnEscape;
 	}
-
+	
 	/**
 	 * @param closeOnEscape the closeOnEscape to set
 	 */
 	public void setCloseOnEscape(Boolean closeOnEscape) {
 		this.closeOnEscape = closeOnEscape;
 	}
-
+	
 	/**
 	 * @return the width
 	 */
 	public String getWidth() {
 		return width;
 	}
-
+	
 	/**
 	 * @param width the width to set
 	 */
 	public void setWidth(String width) {
 		this.width = width;
 	}
-
+	
 	/**
 	 * @return the height
 	 */
 	public String getHeight() {
 		return height;
 	}
-
+	
 	/**
 	 * @param height the height to set
 	 */
 	public void setHeight(String height) {
 		this.height = height;
 	}
-
+	
 	/**
 	 * @return the position
 	 */
 	public String getPosition() {
 		return position;
 	}
-
+	
 	/**
 	 * @param position the position to set
 	 */
 	public void setPosition(String position) {
 		this.position = position;
 	}
-
+	
 	/**
 	 * @return the zIndex
 	 */
 	public Integer getzIndex() {
 		return zIndex;
 	}
-
+	
 	/**
 	 * @param zIndex the zIndex to set
 	 */
 	public void setzIndex(Integer zIndex) {
 		this.zIndex = zIndex;
 	}
-
+	
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
-
+	
 	/**
 	 * @param title the title to set
 	 */

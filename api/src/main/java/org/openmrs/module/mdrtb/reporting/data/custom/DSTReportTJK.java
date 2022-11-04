@@ -76,8 +76,6 @@ public class DSTReportTJK implements ReportSpecification {
 		List<Parameter> l = new ArrayList<Parameter>();
 		l.add(new Parameter("location",  Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
 		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
-		/*l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), Integer.class));
-		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), Integer.class));*/
 		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), String.class));
 		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), String.class));
 		return l;
@@ -103,7 +101,6 @@ public class DSTReportTJK implements ReportSpecification {
 		/*Integer quarter = (Integer) parameters.get("quarter");
 		Integer month = (Integer) parameters.get("month");*/
 		String quarter = (String) parameters.get("quarter");
-		String oblast = (String) parameters.get("oblast");
 		String month = (String) parameters.get("month");
 		context.getParameterValues().putAll(ReportUtil.getPeriodDates(year, Integer.parseInt(quarter), Integer.parseInt(month)));
 		
@@ -120,7 +117,6 @@ public class DSTReportTJK implements ReportSpecification {
 		
 		//OBLAST
 		String oblast = (String) context.getParameterValue("oblast");
-		//\\OBLAST
 		
 		Location location = (Location) context.getParameterValue("location");
 		Date startDate = (Date)context.getParameterValue("startDate");
@@ -129,11 +125,11 @@ public class DSTReportTJK implements ReportSpecification {
 		//OBLAST
 		Region o = null;
 		if(!oblast.equals("") && location == null)
-			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
+			o =  Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
 		
 		List<Location> locList = new ArrayList<Location>();
 		if(o != null && location == null)
-			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
 		else if (location != null)
 			locList.add(location);
 		
@@ -143,30 +139,10 @@ public class DSTReportTJK implements ReportSpecification {
 			context.addParameterValue("location", o.getName()); 
 		else
 			context.addParameterValue("location", "All"); 
-		//\\OBLAST
 		
 		// Base Cohort is patients who started treatment during year, optionally at location
 		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
-		/*baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
-			if (locationFilter != null) {
-				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}
-		}*/
-		//baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		/*if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
-			//CohortDefinition locationFilter = Cohorts.getTreatmentStartAndAddressFilterTJK(location.getCountyDistrict(), startDate, endDate);
-			if (locationFilter != null) {
-				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}	
-		}
-		
-		else {
-			baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		}*/
-		
+
 		//OBLAST
 		if (!locList.isEmpty()){
 			List<CohortDefinition> cohortDefinitions = new ArrayList<CohortDefinition>();
@@ -175,14 +151,8 @@ public class DSTReportTJK implements ReportSpecification {
 				
 			if(!cohortDefinitions.isEmpty()){
 				report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("OR", cohortDefinitions), null);
-				//report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate), report.getBaseCohortDefinition().getParameterizable()));
-				//report.getBaseCohortDefinition().
 			}
 		}
-		
-		//CohortDefinition baseCohort = ReportUtil.getCompositionCohort(baseCohortDefs, "AND");
-		
-		//report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND",baseCohort,) null);
 		
 		CohortCrossTabDataSetDefinition dsd = new CohortCrossTabDataSetDefinition();
 		
@@ -232,7 +202,6 @@ public class DSTReportTJK implements ReportSpecification {
 		CohortDefinition referredXpertOnly = ReportUtil.minus(referredXpert, dstResultExists);
 		CohortDefinition referredHAINOnly = ReportUtil.minus(referredHAIN, dstResultExists);
 		CohortDefinition becameMdrtbAfterTreatmentStart  = Cohorts.getMdrtbAfterTreatmentStart(startDate, null, 0, null);
-	//	Map<String, CohortDefinition> outcomes = ReportUtil.getMdrtbOutcomesFilterSet(startDate, endDate);
 		
 		dsd.addRow("referredXpert", referredXpertOnly, null);
 		dsd.addRow("referredHAIN", referredHAINOnly, null);
@@ -241,24 +210,7 @@ public class DSTReportTJK implements ReportSpecification {
 		dsd.addRow("dstResultExists", dstResultExists, null);
 		dsd.addRow("mdr", confirmedMdrtb,  null);
 		dsd.addRow("mdrafter", becameMdrtbAfterTreatmentStart, null);
-		
-		
-		
-		
-		
-		/*for (String key : rows.keySet()) {
-			dsd.addRow(key, rows.get(key), null);
-		}
-		
-		dsd.addRow("Total", ReportUtil.getCompositionCohort(dsd.getRows(), "OR"), null);*/
-		
-		// create the columns in the chart
-		
-		/*for (String key : columns.keySet()) {
-			dsd.addColumn(key, columns.get(key), null);
-		}
-		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);	
-		*/
+
 		report.addDataSetDefinition("results", dsd, null);
 		
 		ReportData data;

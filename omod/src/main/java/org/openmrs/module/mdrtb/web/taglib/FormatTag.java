@@ -42,13 +42,17 @@ import org.openmrs.util.OpenmrsUtil;
 public class FormatTag extends BodyTagSupport {
 	
 	public static final long serialVersionUID = 1L;
+	
 	protected static final Log log = LogFactory.getLog(FormatTag.class);
 	
 	//***** PROPERTIES *****
 	
 	private Object obj;
+	
 	private String separator;
+	
 	private String defaultVal;
+	
 	private String nameType; // for concepts, specifies the concept name type to use when fetching the concept name; default is short
 	
 	//***** INSTANCE METHODS *****
@@ -59,46 +63,44 @@ public class FormatTag extends BodyTagSupport {
 	public String formatObject(Object o) {
 		if (ObjectUtil.notNull(o)) {
 			if (o instanceof Regimen) {
-				Regimen r = (Regimen)o;
+				Regimen r = (Regimen) o;
 				return RegimenUtils.formatRegimenGenerics(r, separator, ObjectUtil.nvlStr(defaultVal, "mdrtb.none"));
-			}
-			else if (o instanceof Concept) {
+			} else if (o instanceof Concept) {
 				Concept concept = (Concept) o;
 				ConceptName name = null;
-		
-				if(StringUtils.isNotBlank(nameType)) {
-					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(), ConceptNameType.valueOf(nameType.toUpperCase()));
-				}	
-
+				
+				if (StringUtils.isNotBlank(nameType)) {
+					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(),
+					    ConceptNameType.valueOf(nameType.toUpperCase()));
+				}
+				
 				// if we haven't found a name yet, just get the best short name
 				if (name == null) {
-					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED);
+					name = MdrtbUtil.getConceptName(concept, Context.getLocale().getLanguage(),
+					    ConceptNameType.FULLY_SPECIFIED);
 				}
 				
 				return name != null ? name.getName() : "";
-			}
-			else if (o instanceof Obs) {
-				Obs obs = (Obs)o;
+			} else if (o instanceof Obs) {
+				Obs obs = (Obs) o;
 				return obs.getValueAsString(Context.getLocale());
-			}
-			else if (o instanceof String) {
+			} else if (o instanceof String) {
 				// turn line breaks into <br/> for HTML display
 				String str = (String) o;
 				str = str.replace("\r\n", "<br/>");
 				str = str.replace("\n", "<br/>");
 				str = str.replace("\r", "<br/>");
 				return str;
-			}
-			else {
+			} else {
 				return o.toString();
 			}
 		}
 		return MessageUtil.translate(defaultVal);
 	}
 	
-    /**
-     * @see Tag#doStartTag()
-     */
+	/**
+	 * @see Tag#doStartTag()
+	 */
 	@SuppressWarnings("unchecked")
 	public int doStartTag() throws JspException {
 		
@@ -109,12 +111,10 @@ public class FormatTag extends BodyTagSupport {
 				if (!l.isEmpty()) {
 					Object o = l.iterator().next();
 					if (o instanceof Concept) {
-						ret = RegimenUtils.formatConcepts((Collection<Concept>)l, separator, defaultVal);
-					}
-					else if (o instanceof DrugOrder) {
-						ret = RegimenUtils.formatDrugOrders(((Collection<DrugOrder>)l), separator, defaultVal);
-					}
-					else {
+						ret = RegimenUtils.formatConcepts((Collection<Concept>) l, separator, defaultVal);
+					} else if (o instanceof DrugOrder) {
+						ret = RegimenUtils.formatDrugOrders(((Collection<DrugOrder>) l), separator, defaultVal);
+					} else {
 						List<String> s = new ArrayList<String>();
 						for (Object item : l) {
 							s.add(formatObject(item));
@@ -122,8 +122,7 @@ public class FormatTag extends BodyTagSupport {
 						ret = OpenmrsUtil.join(s, separator);
 					}
 				}
-			}
-			else {
+			} else {
 				ret = formatObject(obj);
 			}
 		}
@@ -139,68 +138,66 @@ public class FormatTag extends BodyTagSupport {
 		return SKIP_BODY;
 	}
 	
-    /**
-     * @see Tag#doEndTag()
-     */
-    public int doEndTag() throws JspException {
-	    obj = null;
-	    separator = null;
-	    defaultVal = null;
-	    nameType = null;
-	    return EVAL_PAGE;
-    }
-    
-    //***** PROPERTY ACCESS *****
-
+	/**
+	 * @see Tag#doEndTag()
+	 */
+	public int doEndTag() throws JspException {
+		obj = null;
+		separator = null;
+		defaultVal = null;
+		nameType = null;
+		return EVAL_PAGE;
+	}
+	
+	//***** PROPERTY ACCESS *****
+	
 	/**
 	 * @return the obj
 	 */
 	public Object getObj() {
 		return obj;
 	}
-
+	
 	/**
 	 * @param obj the obj to set
 	 */
 	public void setObj(Object obj) {
 		this.obj = obj;
 	}
-
+	
 	/**
 	 * @return the separator
 	 */
 	public String getSeparator() {
 		return separator;
 	}
-
+	
 	/**
 	 * @param separator the separator to set
 	 */
 	public void setSeparator(String separator) {
 		this.separator = separator;
 	}
-
+	
 	/**
 	 * @return the defaultVal
 	 */
 	public String getDefaultVal() {
 		return defaultVal;
 	}
-
+	
 	/**
 	 * @param defaultVal the defaultVal to set
 	 */
 	public void setDefaultVal(String defaultVal) {
 		this.defaultVal = defaultVal;
 	}
-
 	
-    public String getNameType() {
-    	return nameType;
-    }
-
+	public String getNameType() {
+		return nameType;
+	}
 	
-    public void setNameType(String nameType) {
-    	this.nameType = nameType;
-    }
+	public void setNameType(String nameType) {
+		this.nameType = nameType;
+	}
 }

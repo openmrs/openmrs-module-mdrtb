@@ -11,7 +11,6 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.MdrtbPatientProgramStateCohortDefinition")
 public class MdrtbPatientProgramStateCohortDefinition extends BaseCohortDefinition {
-	private static final long serialVersionUID = 1L;
 
 	@ConfigurationProperty(group="workflow")
 	private List<Concept> stateConcepts = new ArrayList<Concept>();

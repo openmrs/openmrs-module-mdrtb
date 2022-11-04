@@ -123,24 +123,6 @@
 						<td><spring:message code="mdrtb.month"/></td>
 						<td><input type="quarter" name="month" value="${month}"/>
 					</tr>
-					
-					<!-- <tr>
-						<td><input type="radio" name="enrollment" value="ever"<c:if test="${empty enrollment || enrollment == 'ever'}"> checked</c:if>/>&nbsp;</td>
-						<td><spring:message code="mdrtb.enrollment.ever"/></td>
-					</tr>
-					<tr>
-						<td><input type="radio" name="enrollment" value="current"<c:if test="${enrollment == 'current'}"> checked</c:if>/>&nbsp;</td>
-						<td><spring:message code="mdrtb.enrollment.current"/></td>
-					</tr>
-					<tr>
-						<td><input type="radio" name="enrollment" value="previous"<c:if test="${enrollment == 'previous'}"> checked</c:if>/>&nbsp;</td>
-						<td><spring:message code="mdrtb.enrollment.previous"/></td>
-					</tr>
-					<tr>
-						<td><input type="radio" name="enrollment" value="never"<c:if test="${enrollment == 'never'}"> checked</c:if>/>&nbsp;</td>
-						<td><spring:message code="mdrtb.enrollment.never"/></td>
-					</tr> -->
-					
 					<c:forEach items="${openmrs:sort(mdrProgram.workflows, 'concept.name.name', false)}" var="wf">
 						<c:if test="${!wf.retired}">
 							<tr><th colspan="2"><br/><mdrtb:format obj="${wf.concept}"/></th></tr>

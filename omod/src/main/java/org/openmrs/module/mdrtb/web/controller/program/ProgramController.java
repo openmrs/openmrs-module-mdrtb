@@ -82,7 +82,8 @@ public class ProgramController {
 	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
 	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {
 		ArrayList<ProgramWorkflowState> stateArray = new ArrayList<ProgramWorkflowState>();
-		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
+		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class)
+		        .getPossibleClassificationsAccordingToPreviousDrugUse();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
@@ -103,7 +104,8 @@ public class ProgramController {
 	@ModelAttribute("classificationsAccordingToPreviousDrugUseDOTS")
 	public Collection<ProgramWorkflowState> getDOTSClassificationsAccordingToPreviousDrugUse() {
 		ArrayList<ProgramWorkflowState> stateArray = new ArrayList<ProgramWorkflowState>();
-		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleDOTSClassificationsAccordingToPreviousDrugUse();
+		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class)
+		        .getPossibleDOTSClassificationsAccordingToPreviousDrugUse();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
@@ -119,13 +121,14 @@ public class ProgramController {
 			}
 		}
 		return stateArray;
-
+		
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousTreatment")
 	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {
 		ArrayList<ProgramWorkflowState> stateArray = new ArrayList<ProgramWorkflowState>();
-		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
+		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class)
+		        .getPossibleClassificationsAccordingToPreviousTreatment();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
@@ -151,7 +154,8 @@ public class ProgramController {
 	@ModelAttribute("classificationsAccordingToPatientGroups")
 	public ArrayList<ProgramWorkflowState> getClassificationsAccordingToPatientGroups() {
 		ArrayList<ProgramWorkflowState> stateArray = new ArrayList<ProgramWorkflowState>();
-		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPatientGroups();
+		Set<ProgramWorkflowState> states = Context.getService(MdrtbService.class)
+		        .getPossibleClassificationsAccordingToPatientGroups();
 		if (states != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> classificationConcepts = new HashSet<Concept>();
@@ -306,7 +310,8 @@ public class ProgramController {
 		List<MdrtbPatientProgram> mdrtbPrograms = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient);
 		List<TbPatientProgram> tbPrograms = Context.getService(MdrtbService.class).getTbPatientPrograms(patient);
 		map.put("patientId", patientId);
-		map.put("hasPrograms", ((mdrtbPrograms != null && mdrtbPrograms.size() != 0) || (tbPrograms != null && tbPrograms.size() != 0)));
+		map.put("hasPrograms",
+		    ((mdrtbPrograms != null && mdrtbPrograms.size() != 0) || (tbPrograms != null && tbPrograms.size() != 0)));
 		
 		map.put("mdrtbPrograms", mdrtbPrograms);
 		map.put("tbPrograms", tbPrograms);
@@ -318,94 +323,17 @@ public class ProgramController {
 		List<Region> oblasts;
 		List<Facility> facilities;
 		List<District> districts;
-
+		
 		Region locOb = null;
 		District locDist = null;
 		Facility locFac = null;
-
+		
 		if (oblast == null) {
-			/* NOTE! The commented piece (of junk) used to work. 
-			 * The new approach which begins right after the comment looks for the location in patient address instead of parsing from patient identifier 
-			 */
-			//JUNK STARTED
-			/*
-			map.addAttribute("oblasts", Context.getService(MdrtbService.class).getOblasts());
-			String prefix = "";
-			if (idId != null) {
-				PatientIdentifier pi = Context.getService(MdrtbService.class).getPatientIdentifierById(idId);
-				Integer prefixInt = 0;
-				int prefInt = 0;
-				if (pi != null) {
-					prefix = pi.getIdentifier().substring(0, 2);
-					prefixInt = Integer.parseInt(prefix);
-					prefInt = prefixInt.intValue();
-					prefix = "(" + prefix + ")";
-					Location idLoc = null;
-					List<Location> locList = Context.getLocationService().getAllLocations(false);
-					for (Location l : locList) {
-						if (l.getName().trim().endsWith(prefix)) {
-							idLoc = l;
-							break;
-						}
-					}
-					if (idLoc != null) {
-						String obName = idLoc.getStateProvince();
-						List<Region> obList = Context.getService(MdrtbService.class).getOblasts();
-						for (Region o : obList) {
-							if (obName != null && o.getName() != null && o.getName().equals(obName)) {
-								locOb = o;
-								break;
-							}
-						}
-						List<Integer> list = Arrays.asList(1, 11, 12, 14, 15, 34, 52, 60, 85, 92, 93, 95, 96, 97, 98, 99);
-						if (!list.contains(prefixInt)) {
-							if (locOb != null && idLoc.getCountyDistrict() != null) {
-								List<District> distList = Context.getService(MdrtbService.class).getDistricts(locOb.getId());
-								for (District d : distList) {
-									if (idLoc.getCountyDistrict().equals(d.getName())) {
-										locDist = d;
-										break;
-									}
-								}
-							}
-							if (locDist != null && idLoc.getRegion() != null) {
-								List<Facility> facList = Context.getService(MdrtbService.class)
-								        .getFacilities(locDist.getId());
-								for (Facility f : facList) {
-									if (idLoc.getRegion().equals(f.getName())) {
-										locFac = f;
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-				if (locOb != null) {
-					oblasts = new ArrayList<Region>();
-					oblasts.add(locOb);
-					map.addAttribute("oblasts", oblasts);
-					if (locDist != null) {
-						districts = new ArrayList<District>();
-						districts.add(locDist);
-						map.addAttribute("districts", districts);
-						if (locFac != null) {
-							facilities = new ArrayList<Facility>();
-							facilities.add(locFac);
-							map.addAttribute("facilities", facilities);
-						}
-					}
-					else {
-						map.addAttribute("districts", Context.getService(MdrtbService.class).getDistricts(locOb.getId()));
-					}
-				}
-			}
-			*/
-			
+			// NOTE! This method looks for the location in patient address instead of parsing from patient identifier (deprecated way)
 			PersonAddress personAddress = patient.getPersonAddress();
 			String distName = personAddress.getCountyDistrict();
 			String facName = personAddress.getAddress4();
-			List<Region> obList = Context.getService(MdrtbService.class).getOblasts();
+			List<Region> obList = Context.getService(MdrtbService.class).getRegions();
 			// Get Region
 			String obName = personAddress.getStateProvince();
 			if (obName != null) {
@@ -420,7 +348,7 @@ public class ProgramController {
 				// Add this region only
 				map.addAttribute("oblasts", Arrays.asList(locOb));
 				if (distName != null) {
-					List<District> distList = Context.getService(MdrtbService.class).getDistricts(locOb.getId());
+					List<District> distList = Context.getService(MdrtbService.class).getDistrictsByParent(locOb.getId());
 					for (District d : distList) {
 						if (d.getName().equalsIgnoreCase(distName)) {
 							locDist = d;
@@ -431,9 +359,10 @@ public class ProgramController {
 				if (locDist != null) {
 					// Add this district only
 					map.addAttribute("districts", Arrays.asList(locDist));
-					List<Facility> facilityList = Context.getService(MdrtbService.class).getFacilities(locDist.getId());
+					List<Facility> facilityList = Context.getService(MdrtbService.class)
+					        .getFacilitiesByParent(locDist.getId());
 					if (facilityList.size() == 0) { // Maybe it's Dushanbe
-						facilityList = Context.getService(MdrtbService.class).getFacilities(locOb.getId());
+						facilityList = Context.getService(MdrtbService.class).getFacilitiesByParent(locOb.getId());
 					}
 					if (facName != null) {
 						for (Facility f : facilityList) {
@@ -445,36 +374,32 @@ public class ProgramController {
 					}
 					if (locFac != null) {
 						map.addAttribute("facilities", Arrays.asList(locFac));
-					}
-					else {
+					} else {
 						// Otherwise add all facilities
 						map.addAttribute("facilities", facilityList);
 					}
-
-				}
-				else {
+					
+				} else {
 					// Otherwise add all districts
-					map.addAttribute("districts", Context.getService(MdrtbService.class).getDistricts(locOb.getId()));
+					map.addAttribute("districts",
+					    Context.getService(MdrtbService.class).getDistrictsByParent(locOb.getId()));
 				}
-			}
-			else {
+			} else {
 				// Otherwise add all regions
-				map.addAttribute("oblasts", Context.getService(MdrtbService.class).getOblasts());
+				map.addAttribute("oblasts", Context.getService(MdrtbService.class).getRegions());
 			}
-
-
+			
 		}
 		
 		else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
 			map.addAttribute("oblastSelected", oblast);
 			map.addAttribute("oblasts", oblasts);
 			map.addAttribute("districts", districts);
 			
-		}
-		else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+		} else {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
 			facilities = Context.getService(MdrtbService.class).getRegFacilities(Integer.parseInt(district));
 			map.addAttribute("oblastSelected", oblast);
@@ -549,7 +474,7 @@ public class ProgramController {
 		// Set program
 		PatientProgram patientProgram = program.getPatientProgram();
 		patientProgram.setProgram(Context.getService(MdrtbService.class).getTbProgram());
-
+		
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(patientProgram);
 		Context.getService(MdrtbService.class).addIdentifierToProgram(idId,
@@ -600,8 +525,7 @@ public class ProgramController {
 			String[] splits = programStartDate.split("\\.");
 			if (splits == null || splits.length != 3) {
 				parsedDate = null;
-			}
-			else {
+			} else {
 				int year = Integer.parseInt(splits[2]);
 				int month = Integer.parseInt(splits[1]) - 1;
 				int date = Integer.parseInt(splits[0]);
@@ -619,20 +543,19 @@ public class ProgramController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			map.addAttribute("oblasts", oblasts);
-		}
-		else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			map.addAttribute("oblastSelected", oblast);
 			map.addAttribute("oblasts", oblasts);
 			map.addAttribute("districts", districts);
 			
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			map.addAttribute("oblastSelected", oblast);
 			map.addAttribute("oblasts", oblasts);
 			map.addAttribute("districts", districts);
@@ -832,9 +755,9 @@ public class ProgramController {
 		if (program != null)
 			program.setPatient(patient);
 		
-//		PatientValidator validator = new PatientValidator();
-//		validator.validate(patient, errors);
-
+		//		PatientValidator validator = new PatientValidator();
+		//		validator.validate(patient, errors);
+		
 		// perform validation (validation needs to happen after patient is set since patient is used to pull up patient's previous programs)
 		if (program != null) {
 			new TbPatientProgramValidator().validate(program, errors);
@@ -847,15 +770,17 @@ public class ProgramController {
 			map.put("patientId", patientId);
 			map.put("errors", errors);
 			map.put("type", "tb");
-			map.put("oblasts", Context.getService(MdrtbService.class).getOblasts());
+			map.put("oblasts", Context.getService(MdrtbService.class).getRegions());
 			if (oblastId != null) {
 				map.put("oblastSelected", oblastId);
-				map.put("districts", Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblastId)));
+				map.put("districts",
+				    Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblastId)));
 			}
 			
 			if (districtId != null) {
 				map.put("districtSelected", districtId);
-				map.put("facilities", Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(districtId)));
+				map.put("facilities",
+				    Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(districtId)));
 			}
 			map.put("facilitySelected", facilityId);
 			map.put("identifierValue", identifierValue);
@@ -1008,33 +933,11 @@ public class ProgramController {
 		if (type != null && type.equals("tb")) {
 			TbPatientProgram tpp = ms.getTbPatientProgram(programId);
 			map.put("program", tpp);
-		}
-		else if (type != null && type.equals("mdr")) {
+		} else if (type != null && type.equals("mdr")) {
 			MdrtbPatientProgram tpp = ms.getMdrtbPatientProgram(programId);
 			map.put("program", tpp);
 		}
 		map.put("type", type);
-		
-		/*Patient patient = Context.getPatientService().getPatient(patientId);
-		if (patient == null) {
-			throw new RuntimeException ("Show enroll called with invalid patient id " + patientId);
-		}
-		
-		// we need to determine if this patient currently in active in an mdr-tb program to determine what fields to display
-		//MdrtbPatientProgram mostRecentMdrtbProgram = Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient);
-		//TbPatientProgram mostRecentTbProgram = Context.getService(MdrtbService.class).getMostRecentTbPatientProgram(patient);
-		//map.put("hasActiveProgram", ((mostRecentMdrtbProgram != null && mostRecentMdrtbProgram.getActive()) || (mostRecentTbProgram != null && mostRecentTbProgram.getActive())) ? true : false);
-		map.put("patientId", patientId);
-		
-		List<MdrtbPatientProgram> mdrtbPrograms = Context.getService(MdrtbService.class).getMdrtbPatientPrograms(patient);
-		List<TbPatientProgram> tbPrograms = Context.getService(MdrtbService.class).getTbPatientPrograms(patient);
-		
-		map.put("hasPrograms", ((mdrtbPrograms != null && mdrtbPrograms.size()!=0) || (tbPrograms != null && tbPrograms.size() != 0)) ? true : false);
-		System.out.println("Prog:"+ map.get("hasPrograms"));
-		
-		map.put("mdrtbPrograms", mdrtbPrograms);
-		map.put("tbPrograms", tbPrograms);
-		*/
 		return new ModelAndView("/module/mdrtb/program/showEditEnroll", map);
 		
 	}
@@ -1070,14 +973,6 @@ public class ProgramController {
 					Context.getEncounterService().saveEncounter(tf.getEncounter());
 				}
 			}
-			
-			/*TB03uXDRForm tfx = tpp.getTb03uXDR();
-			if(tfx!=null) {
-				if(!tfx.getEncounterDatetime().equals(tpp.getDateEnrolled())) {
-					tfx.setEncounterDatetime(tpp.getDateEnrolled());
-					Context.getEncounterService().saveEncounter(tfx.getEncounter());
-				}
-			}*/
 		}
 		return new ModelAndView("redirect:/module/mdrtb/program/enrollment.form?patientId=" + tpp.getPatient().getId());
 		

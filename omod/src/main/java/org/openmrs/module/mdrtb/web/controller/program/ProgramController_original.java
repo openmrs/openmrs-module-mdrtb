@@ -45,7 +45,6 @@ public class ProgramController_original {
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(ProgramWorkflowState.class, new ProgramWorkflowStateEditor());
-		
 	}
 	
 	@ModelAttribute("locations")
@@ -68,7 +67,6 @@ public class ProgramController_original {
 		return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/program/showEnroll.form")
 	public ModelAndView showEnrollInPrograms(@RequestParam(required = true, value = "patientId") Integer patientId,
 	        ModelMap map) {
@@ -86,7 +84,6 @@ public class ProgramController_original {
 		return new ModelAndView("/module/mdrtb/program/showEnroll", map);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/module/mdrtb/program/programEnroll.form", method = RequestMethod.POST)
 	public ModelAndView processEnroll(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
 	        @RequestParam(required = true, value = "patientId") Integer patientId, SessionStatus status,

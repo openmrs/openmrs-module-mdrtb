@@ -518,7 +518,6 @@ public class TB07Table1Data {
 	private Integer totalFemaleHIV;
 	private Integer totalAllHIV;
 	
-	
 	private Integer womenOfChildBearingAge;
 	private Integer pregnant;
 	private Integer contacts;
@@ -553,7 +552,7 @@ public class TB07Table1Data {
 		newMalePulmonaryBC = 0;
 		newFemalePulmonaryBC = 0;
 		newPulmonaryBC = 0;
-
+		
 		newMalePulmonaryBCHIV04 = 0;
 		newFemalePulmonaryBCHIV04 = 0;
 		newMalePulmonaryBCHIV0514 = 0;
@@ -577,7 +576,7 @@ public class TB07Table1Data {
 		newMalePulmonaryBCHIV = 0;
 		newFemalePulmonaryBCHIV = 0;
 		newPulmonaryBCHIV = 0;
-
+		
 		newMalePulmonaryCD04 = 0;
 		newFemalePulmonaryCD04 = 0;
 		newMalePulmonaryCD0514 = 0;
@@ -601,7 +600,7 @@ public class TB07Table1Data {
 		newMalePulmonaryCD = 0;
 		newFemalePulmonaryCD = 0;
 		newPulmonaryCD = 0;
-
+		
 		newMalePulmonaryCDHIV04 = 0;
 		newFemalePulmonaryCDHIV04 = 0;
 		newMalePulmonaryCDHIV0514 = 0;
@@ -625,7 +624,7 @@ public class TB07Table1Data {
 		newMalePulmonaryCDHIV = 0;
 		newFemalePulmonaryCDHIV = 0;
 		newPulmonaryCDHIV = 0;
-
+		
 		newMaleExtrapulmonary04 = 0;
 		newFemaleExtrapulmonary04 = 0;
 		newMaleExtrapulmonary0514 = 0;
@@ -649,7 +648,7 @@ public class TB07Table1Data {
 		newMaleExtrapulmonary = 0;
 		newFemaleExtrapulmonary = 0;
 		newExtrapulmonary = 0;
-
+		
 		newMaleExtrapulmonaryHIV04 = 0;
 		newFemaleExtrapulmonaryHIV04 = 0;
 		newMaleExtrapulmonaryHIV0514 = 0;
@@ -673,7 +672,7 @@ public class TB07Table1Data {
 		newMaleExtrapulmonaryHIV = 0;
 		newFemaleExtrapulmonaryHIV = 0;
 		newExtrapulmonaryHIV = 0;
-
+		
 		newMale04 = 0;
 		newFemale04 = 0;
 		newMale0514 = 0;
@@ -697,7 +696,7 @@ public class TB07Table1Data {
 		newMale = 0;
 		newFemale = 0;
 		newAll = 0;
-
+		
 		newMaleHIV04 = 0;
 		newFemaleHIV04 = 0;
 		newMaleHIV0514 = 0;
@@ -721,7 +720,7 @@ public class TB07Table1Data {
 		newMaleHIV = 0;
 		newFemaleHIV = 0;
 		newAllHIV = 0;
-
+		
 		// RELAPSES
 		relapseMalePulmonaryBC04 = 0;
 		relapseFemalePulmonaryBC04 = 0;
@@ -746,7 +745,7 @@ public class TB07Table1Data {
 		relapseMalePulmonaryBC = 0;
 		relapseFemalePulmonaryBC = 0;
 		relapsePulmonaryBC = 0;
-
+		
 		relapseMalePulmonaryBCHIV04 = 0;
 		relapseFemalePulmonaryBCHIV04 = 0;
 		relapseMalePulmonaryBCHIV0514 = 0;
@@ -770,7 +769,7 @@ public class TB07Table1Data {
 		relapseMalePulmonaryBCHIV = 0;
 		relapseFemalePulmonaryBCHIV = 0;
 		relapsePulmonaryBCHIV = 0;
-
+		
 		relapseMalePulmonaryCD04 = 0;
 		relapseFemalePulmonaryCD04 = 0;
 		relapseMalePulmonaryCD0514 = 0;
@@ -794,7 +793,7 @@ public class TB07Table1Data {
 		relapseMalePulmonaryCD = 0;
 		relapseFemalePulmonaryCD = 0;
 		relapsePulmonaryCD = 0;
-
+		
 		relapseMalePulmonaryCDHIV04 = 0;
 		relapseFemalePulmonaryCDHIV04 = 0;
 		relapseMalePulmonaryCDHIV0514 = 0;
@@ -818,7 +817,7 @@ public class TB07Table1Data {
 		relapseMalePulmonaryCDHIV = 0;
 		relapseFemalePulmonaryCDHIV = 0;
 		relapsePulmonaryCDHIV = 0;
-
+		
 		relapseMaleExtrapulmonary04 = 0;
 		relapseFemaleExtrapulmonary04 = 0;
 		relapseMaleExtrapulmonary0514 = 0;
@@ -842,7 +841,7 @@ public class TB07Table1Data {
 		relapseMaleExtrapulmonary = 0;
 		relapseFemaleExtrapulmonary = 0;
 		relapseExtrapulmonary = 0;
-
+		
 		relapseMaleExtrapulmonaryHIV04 = 0;
 		relapseFemaleExtrapulmonaryHIV04 = 0;
 		relapseMaleExtrapulmonaryHIV0514 = 0;
@@ -866,7 +865,7 @@ public class TB07Table1Data {
 		relapseMaleExtrapulmonaryHIV = 0;
 		relapseFemaleExtrapulmonaryHIV = 0;
 		relapseExtrapulmonaryHIV = 0;
-
+		
 		relapseMale04 = 0;
 		relapseFemale04 = 0;
 		relapseMale0514 = 0;
@@ -890,7 +889,7 @@ public class TB07Table1Data {
 		relapseMale = 0;
 		relapseFemale = 0;
 		relapseAll = 0;
-
+		
 		relapseMaleHIV04 = 0;
 		relapseFemaleHIV04 = 0;
 		relapseMaleHIV0514 = 0;
@@ -914,13 +913,13 @@ public class TB07Table1Data {
 		relapseMaleHIV = 0;
 		relapseFemaleHIV = 0;
 		relapseAllHIV = 0;
-
+		
 		//HIV
 		hivPositive = 0;
 		hivTested = 0;
 		artStarted = 0;
 		pctStarted = 0;
-
+		
 		//FAILURE
 		failureMalePulmonaryBC = 0;
 		failureFemalePulmonaryBC = 0;
@@ -946,7 +945,7 @@ public class TB07Table1Data {
 		failureMaleHIV = 0;
 		failureFemaleHIV = 0;
 		failureAllHIV = 0;
-
+		
 		//DEFAULT
 		defaultMalePulmonaryBC = 0;
 		defaultFemalePulmonaryBC = 0;
@@ -972,7 +971,7 @@ public class TB07Table1Data {
 		defaultMaleHIV = 0;
 		defaultFemaleHIV = 0;
 		defaultAllHIV = 0;
-
+		
 		//OTHER
 		otherMalePulmonaryBC = 0;
 		otherFemalePulmonaryBC = 0;
@@ -998,7 +997,7 @@ public class TB07Table1Data {
 		otherMaleHIV = 0;
 		otherFemaleHIV = 0;
 		otherAllHIV = 0;
-
+		
 		//ALLRTX
 		retreatmentMalePulmonaryBC = 0;
 		retreatmentFemalePulmonaryBC = 0;
@@ -1024,7 +1023,7 @@ public class TB07Table1Data {
 		retreatmentMaleHIV = 0;
 		retreatmentFemaleHIV = 0;
 		retreatmentAllHIV = 0;
-
+		
 		//GRAND TOTAL
 		totalMalePulmonaryBC = 0;
 		totalFemalePulmonaryBC = 0;
@@ -1060,3305 +1059,3947 @@ public class TB07Table1Data {
 		died = 0;
 		diedChildren = 0;
 		diedWomenOfChildBearingAge = 0;
-
+		
 	}
-
+	
 	public Integer getNewMalePulmonaryBC04() {
 		return newMalePulmonaryBC04;
 	}
+	
 	public void setNewMalePulmonaryBC04(Integer newMalePulmonaryBC04) {
 		this.newMalePulmonaryBC04 = newMalePulmonaryBC04;
 	}
+	
 	public Integer getNewFemalePulmonaryBC04() {
 		return newFemalePulmonaryBC04;
 	}
+	
 	public void setNewFemalePulmonaryBC04(Integer newFemalePulmonaryBC04) {
 		this.newFemalePulmonaryBC04 = newFemalePulmonaryBC04;
 	}
+	
 	public Integer getNewMalePulmonaryBC0514() {
 		return newMalePulmonaryBC0514;
 	}
+	
 	public void setNewMalePulmonaryBC0514(Integer newMalePulmonaryBC0514) {
 		this.newMalePulmonaryBC0514 = newMalePulmonaryBC0514;
 	}
+	
 	public Integer getNewFemalePulmonaryBC0514() {
 		return newFemalePulmonaryBC0514;
 	}
+	
 	public void setNewFemalePulmonaryBC0514(Integer newFemalePulmonaryBC0514) {
 		this.newFemalePulmonaryBC0514 = newFemalePulmonaryBC0514;
 	}
+	
 	public Integer getNewMalePulmonaryBC1517() {
 		return newMalePulmonaryBC1517;
 	}
+	
 	public void setNewMalePulmonaryBC1517(Integer newMalePulmonaryBC1517) {
 		this.newMalePulmonaryBC1517 = newMalePulmonaryBC1517;
 	}
+	
 	public Integer getNewFemalePulmonaryBC1517() {
 		return newFemalePulmonaryBC1517;
 	}
+	
 	public void setNewFemalePulmonaryBC1517(Integer newFemalePulmonaryBC1517) {
 		this.newFemalePulmonaryBC1517 = newFemalePulmonaryBC1517;
 	}
+	
 	public Integer getNewMalePulmonaryBC1819() {
 		return newMalePulmonaryBC1819;
 	}
+	
 	public void setNewMalePulmonaryBC1819(Integer newMalePulmonaryBC1819) {
 		this.newMalePulmonaryBC1819 = newMalePulmonaryBC1819;
 	}
+	
 	public Integer getNewFemalePulmonaryBC1819() {
 		return newFemalePulmonaryBC1819;
 	}
+	
 	public void setNewFemalePulmonaryBC1819(Integer newFemalePulmonaryBC1819) {
 		this.newFemalePulmonaryBC1819 = newFemalePulmonaryBC1819;
 	}
+	
 	public Integer getNewMalePulmonaryBC2024() {
 		return newMalePulmonaryBC2024;
 	}
+	
 	public void setNewMalePulmonaryBC2024(Integer newMalePulmonaryBC2024) {
 		this.newMalePulmonaryBC2024 = newMalePulmonaryBC2024;
 	}
+	
 	public Integer getNewFemalePulmonaryBC2024() {
 		return newFemalePulmonaryBC2024;
 	}
+	
 	public void setNewFemalePulmonaryBC2024(Integer newFemalePulmonaryBC2024) {
 		this.newFemalePulmonaryBC2024 = newFemalePulmonaryBC2024;
 	}
+	
 	public Integer getNewMalePulmonaryBC2534() {
 		return newMalePulmonaryBC2534;
 	}
+	
 	public void setNewMalePulmonaryBC2534(Integer newMalePulmonaryBC2534) {
 		this.newMalePulmonaryBC2534 = newMalePulmonaryBC2534;
 	}
+	
 	public Integer getNewFemalePulmonaryBC2534() {
 		return newFemalePulmonaryBC2534;
 	}
+	
 	public void setNewFemalePulmonaryBC2534(Integer newFemalePulmonaryBC2534) {
 		this.newFemalePulmonaryBC2534 = newFemalePulmonaryBC2534;
 	}
+	
 	public Integer getNewMalePulmonaryBC3544() {
 		return newMalePulmonaryBC3544;
 	}
+	
 	public void setNewMalePulmonaryBC3544(Integer newMalePulmonaryBC3544) {
 		this.newMalePulmonaryBC3544 = newMalePulmonaryBC3544;
 	}
+	
 	public Integer getNewFemalePulmonaryBC3544() {
 		return newFemalePulmonaryBC3544;
 	}
+	
 	public void setNewFemalePulmonaryBC3544(Integer newFemalePulmonaryBC3544) {
 		this.newFemalePulmonaryBC3544 = newFemalePulmonaryBC3544;
 	}
+	
 	public Integer getNewMalePulmonaryBC4554() {
 		return newMalePulmonaryBC4554;
 	}
+	
 	public void setNewMalePulmonaryBC4554(Integer newMalePulmonaryBC4554) {
 		this.newMalePulmonaryBC4554 = newMalePulmonaryBC4554;
 	}
+	
 	public Integer getNewFemalePulmonaryBC4554() {
 		return newFemalePulmonaryBC4554;
 	}
+	
 	public void setNewFemalePulmonaryBC4554(Integer newFemalePulmonaryBC4554) {
 		this.newFemalePulmonaryBC4554 = newFemalePulmonaryBC4554;
 	}
+	
 	public Integer getNewMalePulmonaryBC5564() {
 		return newMalePulmonaryBC5564;
 	}
+	
 	public void setNewMalePulmonaryBC5564(Integer newMalePulmonaryBC5564) {
 		this.newMalePulmonaryBC5564 = newMalePulmonaryBC5564;
 	}
+	
 	public Integer getNewFemalePulmonaryBC5564() {
 		return newFemalePulmonaryBC5564;
 	}
+	
 	public void setNewFemalePulmonaryBC5564(Integer newFemalePulmonaryBC5564) {
 		this.newFemalePulmonaryBC5564 = newFemalePulmonaryBC5564;
 	}
+	
 	public Integer getNewMalePulmonaryBC65() {
 		return newMalePulmonaryBC65;
 	}
+	
 	public void setNewMalePulmonaryBC65(Integer newMalePulmonaryBC65) {
 		this.newMalePulmonaryBC65 = newMalePulmonaryBC65;
 	}
+	
 	public Integer getNewFemalePulmonaryBC65() {
 		return newFemalePulmonaryBC65;
 	}
+	
 	public void setNewFemalePulmonaryBC65(Integer newFemalePulmonaryBC65) {
 		this.newFemalePulmonaryBC65 = newFemalePulmonaryBC65;
 	}
+	
 	public Integer getNewMalePulmonaryBC() {
 		return newMalePulmonaryBC;
 	}
+	
 	public void setNewMalePulmonaryBC(Integer newMalePulmonaryBC) {
 		this.newMalePulmonaryBC = newMalePulmonaryBC;
 	}
+	
 	public Integer getNewFemalePulmonaryBC() {
 		return newFemalePulmonaryBC;
 	}
+	
 	public void setNewFemalePulmonaryBC(Integer newFemalePulmonaryBC) {
 		this.newFemalePulmonaryBC = newFemalePulmonaryBC;
 	}
+	
 	public Integer getNewPulmonaryBC() {
 		return newPulmonaryBC;
 	}
+	
 	public void setNewPulmonaryBC(Integer newPulmonaryBC) {
 		this.newPulmonaryBC = newPulmonaryBC;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV04() {
 		return newMalePulmonaryBCHIV04;
 	}
+	
 	public void setNewMalePulmonaryBCHIV04(Integer newMalePulmonaryBCHIV04) {
 		this.newMalePulmonaryBCHIV04 = newMalePulmonaryBCHIV04;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV04() {
 		return newFemalePulmonaryBCHIV04;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV04(Integer newFemalePulmonaryBCHIV04) {
 		this.newFemalePulmonaryBCHIV04 = newFemalePulmonaryBCHIV04;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV0514() {
 		return newMalePulmonaryBCHIV0514;
 	}
+	
 	public void setNewMalePulmonaryBCHIV0514(Integer newMalePulmonaryBCHIV0514) {
 		this.newMalePulmonaryBCHIV0514 = newMalePulmonaryBCHIV0514;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV0514() {
 		return newFemalePulmonaryBCHIV0514;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV0514(Integer newFemalePulmonaryBCHIV0514) {
 		this.newFemalePulmonaryBCHIV0514 = newFemalePulmonaryBCHIV0514;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV1517() {
 		return newMalePulmonaryBCHIV1517;
 	}
+	
 	public void setNewMalePulmonaryBCHIV1517(Integer newMalePulmonaryBCHIV1517) {
 		this.newMalePulmonaryBCHIV1517 = newMalePulmonaryBCHIV1517;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV1517() {
 		return newFemalePulmonaryBCHIV1517;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV1517(Integer newFemalePulmonaryBCHIV1517) {
 		this.newFemalePulmonaryBCHIV1517 = newFemalePulmonaryBCHIV1517;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV1819() {
 		return newMalePulmonaryBCHIV1819;
 	}
+	
 	public void setNewMalePulmonaryBCHIV1819(Integer newMalePulmonaryBCHIV1819) {
 		this.newMalePulmonaryBCHIV1819 = newMalePulmonaryBCHIV1819;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV1819() {
 		return newFemalePulmonaryBCHIV1819;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV1819(Integer newFemalePulmonaryBCHIV1819) {
 		this.newFemalePulmonaryBCHIV1819 = newFemalePulmonaryBCHIV1819;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV2024() {
 		return newMalePulmonaryBCHIV2024;
 	}
+	
 	public void setNewMalePulmonaryBCHIV2024(Integer newMalePulmonaryBCHIV2024) {
 		this.newMalePulmonaryBCHIV2024 = newMalePulmonaryBCHIV2024;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV2024() {
 		return newFemalePulmonaryBCHIV2024;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV2024(Integer newFemalePulmonaryBCHIV2024) {
 		this.newFemalePulmonaryBCHIV2024 = newFemalePulmonaryBCHIV2024;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV2534() {
 		return newMalePulmonaryBCHIV2534;
 	}
+	
 	public void setNewMalePulmonaryBCHIV2534(Integer newMalePulmonaryBCHIV2534) {
 		this.newMalePulmonaryBCHIV2534 = newMalePulmonaryBCHIV2534;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV2534() {
 		return newFemalePulmonaryBCHIV2534;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV2534(Integer newFemalePulmonaryBCHIV2534) {
 		this.newFemalePulmonaryBCHIV2534 = newFemalePulmonaryBCHIV2534;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV3544() {
 		return newMalePulmonaryBCHIV3544;
 	}
+	
 	public void setNewMalePulmonaryBCHIV3544(Integer newMalePulmonaryBCHIV3544) {
 		this.newMalePulmonaryBCHIV3544 = newMalePulmonaryBCHIV3544;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV3544() {
 		return newFemalePulmonaryBCHIV3544;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV3544(Integer newFemalePulmonaryBCHIV3544) {
 		this.newFemalePulmonaryBCHIV3544 = newFemalePulmonaryBCHIV3544;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV4554() {
 		return newMalePulmonaryBCHIV4554;
 	}
+	
 	public void setNewMalePulmonaryBCHIV4554(Integer newMalePulmonaryBCHIV4554) {
 		this.newMalePulmonaryBCHIV4554 = newMalePulmonaryBCHIV4554;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV4554() {
 		return newFemalePulmonaryBCHIV4554;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV4554(Integer newFemalePulmonaryBCHIV4554) {
 		this.newFemalePulmonaryBCHIV4554 = newFemalePulmonaryBCHIV4554;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV5564() {
 		return newMalePulmonaryBCHIV5564;
 	}
+	
 	public void setNewMalePulmonaryBCHIV5564(Integer newMalePulmonaryBCHIV5564) {
 		this.newMalePulmonaryBCHIV5564 = newMalePulmonaryBCHIV5564;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV5564() {
 		return newFemalePulmonaryBCHIV5564;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV5564(Integer newFemalePulmonaryBCHIV5564) {
 		this.newFemalePulmonaryBCHIV5564 = newFemalePulmonaryBCHIV5564;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV65() {
 		return newMalePulmonaryBCHIV65;
 	}
+	
 	public void setNewMalePulmonaryBCHIV65(Integer newMalePulmonaryBCHIV65) {
 		this.newMalePulmonaryBCHIV65 = newMalePulmonaryBCHIV65;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV65() {
 		return newFemalePulmonaryBCHIV65;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV65(Integer newFemalePulmonaryBCHIV65) {
 		this.newFemalePulmonaryBCHIV65 = newFemalePulmonaryBCHIV65;
 	}
+	
 	public Integer getNewMalePulmonaryBCHIV() {
 		return newMalePulmonaryBCHIV;
 	}
+	
 	public void setNewMalePulmonaryBCHIV(Integer newMalePulmonaryBCHIV) {
 		this.newMalePulmonaryBCHIV = newMalePulmonaryBCHIV;
 	}
+	
 	public Integer getNewFemalePulmonaryBCHIV() {
 		return newFemalePulmonaryBCHIV;
 	}
+	
 	public void setNewFemalePulmonaryBCHIV(Integer newFemalePulmonaryBCHIV) {
 		this.newFemalePulmonaryBCHIV = newFemalePulmonaryBCHIV;
 	}
+	
 	public Integer getNewPulmonaryBCHIV() {
 		return newPulmonaryBCHIV;
 	}
+	
 	public void setNewPulmonaryBCHIV(Integer newPulmonaryBCHIV) {
 		this.newPulmonaryBCHIV = newPulmonaryBCHIV;
 	}
+	
 	public Integer getNewMalePulmonaryCD04() {
 		return newMalePulmonaryCD04;
 	}
+	
 	public void setNewMalePulmonaryCD04(Integer newMalePulmonaryCD04) {
 		this.newMalePulmonaryCD04 = newMalePulmonaryCD04;
 	}
+	
 	public Integer getNewFemalePulmonaryCD04() {
 		return newFemalePulmonaryCD04;
 	}
+	
 	public void setNewFemalePulmonaryCD04(Integer newFemalePulmonaryCD04) {
 		this.newFemalePulmonaryCD04 = newFemalePulmonaryCD04;
 	}
+	
 	public Integer getNewMalePulmonaryCD0514() {
 		return newMalePulmonaryCD0514;
 	}
+	
 	public void setNewMalePulmonaryCD0514(Integer newMalePulmonaryCD0514) {
 		this.newMalePulmonaryCD0514 = newMalePulmonaryCD0514;
 	}
+	
 	public Integer getNewFemalePulmonaryCD0514() {
 		return newFemalePulmonaryCD0514;
 	}
+	
 	public void setNewFemalePulmonaryCD0514(Integer newFemalePulmonaryCD0514) {
 		this.newFemalePulmonaryCD0514 = newFemalePulmonaryCD0514;
 	}
+	
 	public Integer getNewMalePulmonaryCD1517() {
 		return newMalePulmonaryCD1517;
 	}
+	
 	public void setNewMalePulmonaryCD1517(Integer newMalePulmonaryCD1517) {
 		this.newMalePulmonaryCD1517 = newMalePulmonaryCD1517;
 	}
+	
 	public Integer getNewFemalePulmonaryCD1517() {
 		return newFemalePulmonaryCD1517;
 	}
+	
 	public void setNewFemalePulmonaryCD1517(Integer newFemalePulmonaryCD1517) {
 		this.newFemalePulmonaryCD1517 = newFemalePulmonaryCD1517;
 	}
+	
 	public Integer getNewMalePulmonaryCD1819() {
 		return newMalePulmonaryCD1819;
 	}
+	
 	public void setNewMalePulmonaryCD1819(Integer newMalePulmonaryCD1819) {
 		this.newMalePulmonaryCD1819 = newMalePulmonaryCD1819;
 	}
+	
 	public Integer getNewFemalePulmonaryCD1819() {
 		return newFemalePulmonaryCD1819;
 	}
+	
 	public void setNewFemalePulmonaryCD1819(Integer newFemalePulmonaryCD1819) {
 		this.newFemalePulmonaryCD1819 = newFemalePulmonaryCD1819;
 	}
+	
 	public Integer getNewMalePulmonaryCD2024() {
 		return newMalePulmonaryCD2024;
 	}
+	
 	public void setNewMalePulmonaryCD2024(Integer newMalePulmonaryCD2024) {
 		this.newMalePulmonaryCD2024 = newMalePulmonaryCD2024;
 	}
+	
 	public Integer getNewFemalePulmonaryCD2024() {
 		return newFemalePulmonaryCD2024;
 	}
+	
 	public void setNewFemalePulmonaryCD2024(Integer newFemalePulmonaryCD2024) {
 		this.newFemalePulmonaryCD2024 = newFemalePulmonaryCD2024;
 	}
+	
 	public Integer getNewMalePulmonaryCD2534() {
 		return newMalePulmonaryCD2534;
 	}
+	
 	public void setNewMalePulmonaryCD2534(Integer newMalePulmonaryCD2534) {
 		this.newMalePulmonaryCD2534 = newMalePulmonaryCD2534;
 	}
+	
 	public Integer getNewFemalePulmonaryCD2534() {
 		return newFemalePulmonaryCD2534;
 	}
+	
 	public void setNewFemalePulmonaryCD2534(Integer newFemalePulmonaryCD2534) {
 		this.newFemalePulmonaryCD2534 = newFemalePulmonaryCD2534;
 	}
+	
 	public Integer getNewMalePulmonaryCD3544() {
 		return newMalePulmonaryCD3544;
 	}
+	
 	public void setNewMalePulmonaryCD3544(Integer newMalePulmonaryCD3544) {
 		this.newMalePulmonaryCD3544 = newMalePulmonaryCD3544;
 	}
+	
 	public Integer getNewFemalePulmonaryCD3544() {
 		return newFemalePulmonaryCD3544;
 	}
+	
 	public void setNewFemalePulmonaryCD3544(Integer newFemalePulmonaryCD3544) {
 		this.newFemalePulmonaryCD3544 = newFemalePulmonaryCD3544;
 	}
+	
 	public Integer getNewMalePulmonaryCD4554() {
 		return newMalePulmonaryCD4554;
 	}
+	
 	public void setNewMalePulmonaryCD4554(Integer newMalePulmonaryCD4554) {
 		this.newMalePulmonaryCD4554 = newMalePulmonaryCD4554;
 	}
+	
 	public Integer getNewFemalePulmonaryCD4554() {
 		return newFemalePulmonaryCD4554;
 	}
+	
 	public void setNewFemalePulmonaryCD4554(Integer newFemalePulmonaryCD4554) {
 		this.newFemalePulmonaryCD4554 = newFemalePulmonaryCD4554;
 	}
+	
 	public Integer getNewMalePulmonaryCD5564() {
 		return newMalePulmonaryCD5564;
 	}
+	
 	public void setNewMalePulmonaryCD5564(Integer newMalePulmonaryCD5564) {
 		this.newMalePulmonaryCD5564 = newMalePulmonaryCD5564;
 	}
+	
 	public Integer getNewFemalePulmonaryCD5564() {
 		return newFemalePulmonaryCD5564;
 	}
+	
 	public void setNewFemalePulmonaryCD5564(Integer newFemalePulmonaryCD5564) {
 		this.newFemalePulmonaryCD5564 = newFemalePulmonaryCD5564;
 	}
+	
 	public Integer getNewMalePulmonaryCD65() {
 		return newMalePulmonaryCD65;
 	}
+	
 	public void setNewMalePulmonaryCD65(Integer newMalePulmonaryCD65) {
 		this.newMalePulmonaryCD65 = newMalePulmonaryCD65;
 	}
+	
 	public Integer getNewFemalePulmonaryCD65() {
 		return newFemalePulmonaryCD65;
 	}
+	
 	public void setNewFemalePulmonaryCD65(Integer newFemalePulmonaryCD65) {
 		this.newFemalePulmonaryCD65 = newFemalePulmonaryCD65;
 	}
+	
 	public Integer getNewMalePulmonaryCD() {
 		return newMalePulmonaryCD;
 	}
+	
 	public void setNewMalePulmonaryCD(Integer newMalePulmonaryCD) {
 		this.newMalePulmonaryCD = newMalePulmonaryCD;
 	}
+	
 	public Integer getNewFemalePulmonaryCD() {
 		return newFemalePulmonaryCD;
 	}
+	
 	public void setNewFemalePulmonaryCD(Integer newFemalePulmonaryCD) {
 		this.newFemalePulmonaryCD = newFemalePulmonaryCD;
 	}
+	
 	public Integer getNewPulmonaryCD() {
 		return newPulmonaryCD;
 	}
+	
 	public void setNewPulmonaryCD(Integer newPulmonaryCD) {
 		this.newPulmonaryCD = newPulmonaryCD;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV04() {
 		return newMalePulmonaryCDHIV04;
 	}
+	
 	public void setNewMalePulmonaryCDHIV04(Integer newMalePulmonaryCDHIV04) {
 		this.newMalePulmonaryCDHIV04 = newMalePulmonaryCDHIV04;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV04() {
 		return newFemalePulmonaryCDHIV04;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV04(Integer newFemalePulmonaryCDHIV04) {
 		this.newFemalePulmonaryCDHIV04 = newFemalePulmonaryCDHIV04;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV0514() {
 		return newMalePulmonaryCDHIV0514;
 	}
+	
 	public void setNewMalePulmonaryCDHIV0514(Integer newMalePulmonaryCDHIV0514) {
 		this.newMalePulmonaryCDHIV0514 = newMalePulmonaryCDHIV0514;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV0514() {
 		return newFemalePulmonaryCDHIV0514;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV0514(Integer newFemalePulmonaryCDHIV0514) {
 		this.newFemalePulmonaryCDHIV0514 = newFemalePulmonaryCDHIV0514;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV1517() {
 		return newMalePulmonaryCDHIV1517;
 	}
+	
 	public void setNewMalePulmonaryCDHIV1517(Integer newMalePulmonaryCDHIV1517) {
 		this.newMalePulmonaryCDHIV1517 = newMalePulmonaryCDHIV1517;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV1517() {
 		return newFemalePulmonaryCDHIV1517;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV1517(Integer newFemalePulmonaryCDHIV1517) {
 		this.newFemalePulmonaryCDHIV1517 = newFemalePulmonaryCDHIV1517;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV1819() {
 		return newMalePulmonaryCDHIV1819;
 	}
+	
 	public void setNewMalePulmonaryCDHIV1819(Integer newMalePulmonaryCDHIV1819) {
 		this.newMalePulmonaryCDHIV1819 = newMalePulmonaryCDHIV1819;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV1819() {
 		return newFemalePulmonaryCDHIV1819;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV1819(Integer newFemalePulmonaryCDHIV1819) {
 		this.newFemalePulmonaryCDHIV1819 = newFemalePulmonaryCDHIV1819;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV2024() {
 		return newMalePulmonaryCDHIV2024;
 	}
+	
 	public void setNewMalePulmonaryCDHIV2024(Integer newMalePulmonaryCDHIV2024) {
 		this.newMalePulmonaryCDHIV2024 = newMalePulmonaryCDHIV2024;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV2024() {
 		return newFemalePulmonaryCDHIV2024;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV2024(Integer newFemalePulmonaryCDHIV2024) {
 		this.newFemalePulmonaryCDHIV2024 = newFemalePulmonaryCDHIV2024;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV2534() {
 		return newMalePulmonaryCDHIV2534;
 	}
+	
 	public void setNewMalePulmonaryCDHIV2534(Integer newMalePulmonaryCDHIV2534) {
 		this.newMalePulmonaryCDHIV2534 = newMalePulmonaryCDHIV2534;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV2534() {
 		return newFemalePulmonaryCDHIV2534;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV2534(Integer newFemalePulmonaryCDHIV2534) {
 		this.newFemalePulmonaryCDHIV2534 = newFemalePulmonaryCDHIV2534;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV3544() {
 		return newMalePulmonaryCDHIV3544;
 	}
+	
 	public void setNewMalePulmonaryCDHIV3544(Integer newMalePulmonaryCDHIV3544) {
 		this.newMalePulmonaryCDHIV3544 = newMalePulmonaryCDHIV3544;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV3544() {
 		return newFemalePulmonaryCDHIV3544;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV3544(Integer newFemalePulmonaryCDHIV3544) {
 		this.newFemalePulmonaryCDHIV3544 = newFemalePulmonaryCDHIV3544;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV4554() {
 		return newMalePulmonaryCDHIV4554;
 	}
+	
 	public void setNewMalePulmonaryCDHIV4554(Integer newMalePulmonaryCDHIV4554) {
 		this.newMalePulmonaryCDHIV4554 = newMalePulmonaryCDHIV4554;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV4554() {
 		return newFemalePulmonaryCDHIV4554;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV4554(Integer newFemalePulmonaryCDHIV4554) {
 		this.newFemalePulmonaryCDHIV4554 = newFemalePulmonaryCDHIV4554;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV5564() {
 		return newMalePulmonaryCDHIV5564;
 	}
+	
 	public void setNewMalePulmonaryCDHIV5564(Integer newMalePulmonaryCDHIV5564) {
 		this.newMalePulmonaryCDHIV5564 = newMalePulmonaryCDHIV5564;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV5564() {
 		return newFemalePulmonaryCDHIV5564;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV5564(Integer newFemalePulmonaryCDHIV5564) {
 		this.newFemalePulmonaryCDHIV5564 = newFemalePulmonaryCDHIV5564;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV65() {
 		return newMalePulmonaryCDHIV65;
 	}
+	
 	public void setNewMalePulmonaryCDHIV65(Integer newMalePulmonaryCDHIV65) {
 		this.newMalePulmonaryCDHIV65 = newMalePulmonaryCDHIV65;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV65() {
 		return newFemalePulmonaryCDHIV65;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV65(Integer newFemalePulmonaryCDHIV65) {
 		this.newFemalePulmonaryCDHIV65 = newFemalePulmonaryCDHIV65;
 	}
+	
 	public Integer getNewMalePulmonaryCDHIV() {
 		return newMalePulmonaryCDHIV;
 	}
+	
 	public void setNewMalePulmonaryCDHIV(Integer newMalePulmonaryCDHIV) {
 		this.newMalePulmonaryCDHIV = newMalePulmonaryCDHIV;
 	}
+	
 	public Integer getNewFemalePulmonaryCDHIV() {
 		return newFemalePulmonaryCDHIV;
 	}
+	
 	public void setNewFemalePulmonaryCDHIV(Integer newFemalePulmonaryCDHIV) {
 		this.newFemalePulmonaryCDHIV = newFemalePulmonaryCDHIV;
 	}
+	
 	public Integer getNewPulmonaryCDHIV() {
 		return newPulmonaryCDHIV;
 	}
+	
 	public void setNewPulmonaryCDHIV(Integer newPulmonaryCDHIV) {
 		this.newPulmonaryCDHIV = newPulmonaryCDHIV;
 	}
+	
 	public Integer getNewMaleExtrapulmonary04() {
 		return newMaleExtrapulmonary04;
 	}
+	
 	public void setNewMaleExtrapulmonary04(Integer newMaleExtrapulmonary04) {
 		this.newMaleExtrapulmonary04 = newMaleExtrapulmonary04;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary04() {
 		return newFemaleExtrapulmonary04;
 	}
+	
 	public void setNewFemaleExtrapulmonary04(Integer newFemaleExtrapulmonary04) {
 		this.newFemaleExtrapulmonary04 = newFemaleExtrapulmonary04;
 	}
+	
 	public Integer getNewMaleExtrapulmonary0514() {
 		return newMaleExtrapulmonary0514;
 	}
+	
 	public void setNewMaleExtrapulmonary0514(Integer newMaleExtrapulmonary0514) {
 		this.newMaleExtrapulmonary0514 = newMaleExtrapulmonary0514;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary0514() {
 		return newFemaleExtrapulmonary0514;
 	}
+	
 	public void setNewFemaleExtrapulmonary0514(Integer newFemaleExtrapulmonary0514) {
 		this.newFemaleExtrapulmonary0514 = newFemaleExtrapulmonary0514;
 	}
+	
 	public Integer getNewMaleExtrapulmonary1517() {
 		return newMaleExtrapulmonary1517;
 	}
+	
 	public void setNewMaleExtrapulmonary1517(Integer newMaleExtrapulmonary1517) {
 		this.newMaleExtrapulmonary1517 = newMaleExtrapulmonary1517;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary1517() {
 		return newFemaleExtrapulmonary1517;
 	}
+	
 	public void setNewFemaleExtrapulmonary1517(Integer newFemaleExtrapulmonary1517) {
 		this.newFemaleExtrapulmonary1517 = newFemaleExtrapulmonary1517;
 	}
+	
 	public Integer getNewMaleExtrapulmonary1819() {
 		return newMaleExtrapulmonary1819;
 	}
+	
 	public void setNewMaleExtrapulmonary1819(Integer newMaleExtrapulmonary1819) {
 		this.newMaleExtrapulmonary1819 = newMaleExtrapulmonary1819;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary1819() {
 		return newFemaleExtrapulmonary1819;
 	}
+	
 	public void setNewFemaleExtrapulmonary1819(Integer newFemaleExtrapulmonary1819) {
 		this.newFemaleExtrapulmonary1819 = newFemaleExtrapulmonary1819;
 	}
+	
 	public Integer getNewMaleExtrapulmonary2024() {
 		return newMaleExtrapulmonary2024;
 	}
+	
 	public void setNewMaleExtrapulmonary2024(Integer newMaleExtrapulmonary2024) {
 		this.newMaleExtrapulmonary2024 = newMaleExtrapulmonary2024;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary2024() {
 		return newFemaleExtrapulmonary2024;
 	}
+	
 	public void setNewFemaleExtrapulmonary2024(Integer newFemaleExtrapulmonary2024) {
 		this.newFemaleExtrapulmonary2024 = newFemaleExtrapulmonary2024;
 	}
+	
 	public Integer getNewMaleExtrapulmonary2534() {
 		return newMaleExtrapulmonary2534;
 	}
+	
 	public void setNewMaleExtrapulmonary2534(Integer newMaleExtrapulmonary2534) {
 		this.newMaleExtrapulmonary2534 = newMaleExtrapulmonary2534;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary2534() {
 		return newFemaleExtrapulmonary2534;
 	}
+	
 	public void setNewFemaleExtrapulmonary2534(Integer newFemaleExtrapulmonary2534) {
 		this.newFemaleExtrapulmonary2534 = newFemaleExtrapulmonary2534;
 	}
+	
 	public Integer getNewMaleExtrapulmonary3544() {
 		return newMaleExtrapulmonary3544;
 	}
+	
 	public void setNewMaleExtrapulmonary3544(Integer newMaleExtrapulmonary3544) {
 		this.newMaleExtrapulmonary3544 = newMaleExtrapulmonary3544;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary3544() {
 		return newFemaleExtrapulmonary3544;
 	}
+	
 	public void setNewFemaleExtrapulmonary3544(Integer newFemaleExtrapulmonary3544) {
 		this.newFemaleExtrapulmonary3544 = newFemaleExtrapulmonary3544;
 	}
+	
 	public Integer getNewMaleExtrapulmonary4554() {
 		return newMaleExtrapulmonary4554;
 	}
+	
 	public void setNewMaleExtrapulmonary4554(Integer newMaleExtrapulmonary4554) {
 		this.newMaleExtrapulmonary4554 = newMaleExtrapulmonary4554;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary4554() {
 		return newFemaleExtrapulmonary4554;
 	}
+	
 	public void setNewFemaleExtrapulmonary4554(Integer newFemaleExtrapulmonary4554) {
 		this.newFemaleExtrapulmonary4554 = newFemaleExtrapulmonary4554;
 	}
+	
 	public Integer getNewMaleExtrapulmonary5564() {
 		return newMaleExtrapulmonary5564;
 	}
+	
 	public void setNewMaleExtrapulmonary5564(Integer newMaleExtrapulmonary5564) {
 		this.newMaleExtrapulmonary5564 = newMaleExtrapulmonary5564;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary5564() {
 		return newFemaleExtrapulmonary5564;
 	}
+	
 	public void setNewFemaleExtrapulmonary5564(Integer newFemaleExtrapulmonary5564) {
 		this.newFemaleExtrapulmonary5564 = newFemaleExtrapulmonary5564;
 	}
+	
 	public Integer getNewMaleExtrapulmonary65() {
 		return newMaleExtrapulmonary65;
 	}
+	
 	public void setNewMaleExtrapulmonary65(Integer newMaleExtrapulmonary65) {
 		this.newMaleExtrapulmonary65 = newMaleExtrapulmonary65;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary65() {
 		return newFemaleExtrapulmonary65;
 	}
+	
 	public void setNewFemaleExtrapulmonary65(Integer newFemaleExtrapulmonary65) {
 		this.newFemaleExtrapulmonary65 = newFemaleExtrapulmonary65;
 	}
+	
 	public Integer getNewMaleExtrapulmonary() {
 		return newMaleExtrapulmonary;
 	}
+	
 	public void setNewMaleExtrapulmonary(Integer newMaleExtrapulmonary) {
 		this.newMaleExtrapulmonary = newMaleExtrapulmonary;
 	}
+	
 	public Integer getNewFemaleExtrapulmonary() {
 		return newFemaleExtrapulmonary;
 	}
+	
 	public void setNewFemaleExtrapulmonary(Integer newFemaleExtrapulmonary) {
 		this.newFemaleExtrapulmonary = newFemaleExtrapulmonary;
 	}
+	
 	public Integer getNewExtrapulmonary() {
 		return newExtrapulmonary;
 	}
+	
 	public void setNewExtrapulmonary(Integer newExtrapulmonary) {
 		this.newExtrapulmonary = newExtrapulmonary;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV04() {
 		return newMaleExtrapulmonaryHIV04;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV04(Integer newMaleExtrapulmonaryHIV04) {
 		this.newMaleExtrapulmonaryHIV04 = newMaleExtrapulmonaryHIV04;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV04() {
 		return newFemaleExtrapulmonaryHIV04;
 	}
+	
 	public void setNewFemaleExtrapulmonaryHIV04(Integer newFemaleExtrapulmonaryHIV04) {
 		this.newFemaleExtrapulmonaryHIV04 = newFemaleExtrapulmonaryHIV04;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV0514() {
 		return newMaleExtrapulmonaryHIV0514;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV0514(Integer newMaleExtrapulmonaryHIV0514) {
 		this.newMaleExtrapulmonaryHIV0514 = newMaleExtrapulmonaryHIV0514;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV0514() {
 		return newFemaleExtrapulmonaryHIV0514;
 	}
-	public void setNewFemaleExtrapulmonaryHIV0514(
-			Integer newFemaleExtrapulmonaryHIV0514) {
+	
+	public void setNewFemaleExtrapulmonaryHIV0514(Integer newFemaleExtrapulmonaryHIV0514) {
 		this.newFemaleExtrapulmonaryHIV0514 = newFemaleExtrapulmonaryHIV0514;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV1517() {
 		return newMaleExtrapulmonaryHIV1517;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV1517(Integer newMaleExtrapulmonaryHIV1517) {
 		this.newMaleExtrapulmonaryHIV1517 = newMaleExtrapulmonaryHIV1517;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV1517() {
 		return newFemaleExtrapulmonaryHIV1517;
 	}
-	public void setNewFemaleExtrapulmonaryHIV1517(
-			Integer newFemaleExtrapulmonaryHIV1517) {
+	
+	public void setNewFemaleExtrapulmonaryHIV1517(Integer newFemaleExtrapulmonaryHIV1517) {
 		this.newFemaleExtrapulmonaryHIV1517 = newFemaleExtrapulmonaryHIV1517;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV1819() {
 		return newMaleExtrapulmonaryHIV1819;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV1819(Integer newMaleExtrapulmonaryHIV1819) {
 		this.newMaleExtrapulmonaryHIV1819 = newMaleExtrapulmonaryHIV1819;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV1819() {
 		return newFemaleExtrapulmonaryHIV1819;
 	}
-	public void setNewFemaleExtrapulmonaryHIV1819(
-			Integer newFemaleExtrapulmonaryHIV1819) {
+	
+	public void setNewFemaleExtrapulmonaryHIV1819(Integer newFemaleExtrapulmonaryHIV1819) {
 		this.newFemaleExtrapulmonaryHIV1819 = newFemaleExtrapulmonaryHIV1819;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV2024() {
 		return newMaleExtrapulmonaryHIV2024;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV2024(Integer newMaleExtrapulmonaryHIV2024) {
 		this.newMaleExtrapulmonaryHIV2024 = newMaleExtrapulmonaryHIV2024;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV2024() {
 		return newFemaleExtrapulmonaryHIV2024;
 	}
-	public void setNewFemaleExtrapulmonaryHIV2024(
-			Integer newFemaleExtrapulmonaryHIV2024) {
+	
+	public void setNewFemaleExtrapulmonaryHIV2024(Integer newFemaleExtrapulmonaryHIV2024) {
 		this.newFemaleExtrapulmonaryHIV2024 = newFemaleExtrapulmonaryHIV2024;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV2534() {
 		return newMaleExtrapulmonaryHIV2534;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV2534(Integer newMaleExtrapulmonaryHIV2534) {
 		this.newMaleExtrapulmonaryHIV2534 = newMaleExtrapulmonaryHIV2534;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV2534() {
 		return newFemaleExtrapulmonaryHIV2534;
 	}
-	public void setNewFemaleExtrapulmonaryHIV2534(
-			Integer newFemaleExtrapulmonaryHIV2534) {
+	
+	public void setNewFemaleExtrapulmonaryHIV2534(Integer newFemaleExtrapulmonaryHIV2534) {
 		this.newFemaleExtrapulmonaryHIV2534 = newFemaleExtrapulmonaryHIV2534;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV3544() {
 		return newMaleExtrapulmonaryHIV3544;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV3544(Integer newMaleExtrapulmonaryHIV3544) {
 		this.newMaleExtrapulmonaryHIV3544 = newMaleExtrapulmonaryHIV3544;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV3544() {
 		return newFemaleExtrapulmonaryHIV3544;
 	}
-	public void setNewFemaleExtrapulmonaryHIV3544(
-			Integer newFemaleExtrapulmonaryHIV3544) {
+	
+	public void setNewFemaleExtrapulmonaryHIV3544(Integer newFemaleExtrapulmonaryHIV3544) {
 		this.newFemaleExtrapulmonaryHIV3544 = newFemaleExtrapulmonaryHIV3544;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV4554() {
 		return newMaleExtrapulmonaryHIV4554;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV4554(Integer newMaleExtrapulmonaryHIV4554) {
 		this.newMaleExtrapulmonaryHIV4554 = newMaleExtrapulmonaryHIV4554;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV4554() {
 		return newFemaleExtrapulmonaryHIV4554;
 	}
-	public void setNewFemaleExtrapulmonaryHIV4554(
-			Integer newFemaleExtrapulmonaryHIV4554) {
+	
+	public void setNewFemaleExtrapulmonaryHIV4554(Integer newFemaleExtrapulmonaryHIV4554) {
 		this.newFemaleExtrapulmonaryHIV4554 = newFemaleExtrapulmonaryHIV4554;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV5564() {
 		return newMaleExtrapulmonaryHIV5564;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV5564(Integer newMaleExtrapulmonaryHIV5564) {
 		this.newMaleExtrapulmonaryHIV5564 = newMaleExtrapulmonaryHIV5564;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV5564() {
 		return newFemaleExtrapulmonaryHIV5564;
 	}
-	public void setNewFemaleExtrapulmonaryHIV5564(
-			Integer newFemaleExtrapulmonaryHIV5564) {
+	
+	public void setNewFemaleExtrapulmonaryHIV5564(Integer newFemaleExtrapulmonaryHIV5564) {
 		this.newFemaleExtrapulmonaryHIV5564 = newFemaleExtrapulmonaryHIV5564;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV65() {
 		return newMaleExtrapulmonaryHIV65;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV65(Integer newMaleExtrapulmonaryHIV65) {
 		this.newMaleExtrapulmonaryHIV65 = newMaleExtrapulmonaryHIV65;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV65() {
 		return newFemaleExtrapulmonaryHIV65;
 	}
+	
 	public void setNewFemaleExtrapulmonaryHIV65(Integer newFemaleExtrapulmonaryHIV65) {
 		this.newFemaleExtrapulmonaryHIV65 = newFemaleExtrapulmonaryHIV65;
 	}
+	
 	public Integer getNewMaleExtrapulmonaryHIV() {
 		return newMaleExtrapulmonaryHIV;
 	}
+	
 	public void setNewMaleExtrapulmonaryHIV(Integer newMaleExtrapulmonaryHIV) {
 		this.newMaleExtrapulmonaryHIV = newMaleExtrapulmonaryHIV;
 	}
+	
 	public Integer getNewFemaleExtrapulmonaryHIV() {
 		return newFemaleExtrapulmonaryHIV;
 	}
+	
 	public void setNewFemaleExtrapulmonaryHIV(Integer newFemaleExtrapulmonaryHIV) {
 		this.newFemaleExtrapulmonaryHIV = newFemaleExtrapulmonaryHIV;
 	}
+	
 	public Integer getNewExtrapulmonaryHIV() {
 		return newExtrapulmonaryHIV;
 	}
+	
 	public void setNewExtrapulmonaryHIV(Integer newExtrapulmonaryHIV) {
 		this.newExtrapulmonaryHIV = newExtrapulmonaryHIV;
 	}
+	
 	public Integer getNewMale04() {
 		return newMale04;
 	}
+	
 	public void setNewMale04(Integer newMale04) {
 		this.newMale04 = newMale04;
 	}
+	
 	public Integer getNewFemale04() {
 		return newFemale04;
 	}
+	
 	public void setNewFemale04(Integer newFemale04) {
 		this.newFemale04 = newFemale04;
 	}
+	
 	public Integer getNewMale0514() {
 		return newMale0514;
 	}
+	
 	public void setNewMale0514(Integer newMale0514) {
 		this.newMale0514 = newMale0514;
 	}
+	
 	public Integer getNewFemale0514() {
 		return newFemale0514;
 	}
+	
 	public void setNewFemale0514(Integer newFemale0514) {
 		this.newFemale0514 = newFemale0514;
 	}
+	
 	public Integer getNewMale1517() {
 		return newMale1517;
 	}
+	
 	public void setNewMale1517(Integer newMale1517) {
 		this.newMale1517 = newMale1517;
 	}
+	
 	public Integer getNewFemale1517() {
 		return newFemale1517;
 	}
+	
 	public void setNewFemale1517(Integer newFemale1517) {
 		this.newFemale1517 = newFemale1517;
 	}
+	
 	public Integer getNewMale1819() {
 		return newMale1819;
 	}
+	
 	public void setNewMale1819(Integer newMale1819) {
 		this.newMale1819 = newMale1819;
 	}
+	
 	public Integer getNewFemale1819() {
 		return newFemale1819;
 	}
+	
 	public void setNewFemale1819(Integer newFemale1819) {
 		this.newFemale1819 = newFemale1819;
 	}
+	
 	public Integer getNewMale2024() {
 		return newMale2024;
 	}
+	
 	public void setNewMale2024(Integer newMale2024) {
 		this.newMale2024 = newMale2024;
 	}
+	
 	public Integer getNewFemale2024() {
 		return newFemale2024;
 	}
+	
 	public void setNewFemale2024(Integer newFemale2024) {
 		this.newFemale2024 = newFemale2024;
 	}
+	
 	public Integer getNewMale2534() {
 		return newMale2534;
 	}
+	
 	public void setNewMale2534(Integer newMale2534) {
 		this.newMale2534 = newMale2534;
 	}
+	
 	public Integer getNewFemale2534() {
 		return newFemale2534;
 	}
+	
 	public void setNewFemale2534(Integer newFemale2534) {
 		this.newFemale2534 = newFemale2534;
 	}
+	
 	public Integer getNewMale3544() {
 		return newMale3544;
 	}
+	
 	public void setNewMale3544(Integer newMale3544) {
 		this.newMale3544 = newMale3544;
 	}
+	
 	public Integer getNewFemale3544() {
 		return newFemale3544;
 	}
+	
 	public void setNewFemale3544(Integer newFemale3544) {
 		this.newFemale3544 = newFemale3544;
 	}
+	
 	public Integer getNewMale4554() {
 		return newMale4554;
 	}
+	
 	public void setNewMale4554(Integer newMale4554) {
 		this.newMale4554 = newMale4554;
 	}
+	
 	public Integer getNewFemale4554() {
 		return newFemale4554;
 	}
+	
 	public void setNewFemale4554(Integer newFemale4554) {
 		this.newFemale4554 = newFemale4554;
 	}
+	
 	public Integer getNewMale5564() {
 		return newMale5564;
 	}
+	
 	public void setNewMale5564(Integer newMale5564) {
 		this.newMale5564 = newMale5564;
 	}
+	
 	public Integer getNewFemale5564() {
 		return newFemale5564;
 	}
+	
 	public void setNewFemale5564(Integer newFemale5564) {
 		this.newFemale5564 = newFemale5564;
 	}
+	
 	public Integer getNewMale65() {
 		return newMale65;
 	}
+	
 	public void setNewMale65(Integer newMale65) {
 		this.newMale65 = newMale65;
 	}
+	
 	public Integer getNewFemale65() {
 		return newFemale65;
 	}
+	
 	public void setNewFemale65(Integer newFemale65) {
 		this.newFemale65 = newFemale65;
 	}
+	
 	public Integer getNewMale() {
 		return newMale;
 	}
+	
 	public void setNewMale(Integer newMale) {
 		this.newMale = newMale;
 	}
+	
 	public Integer getNewFemale() {
 		return newFemale;
 	}
+	
 	public void setNewFemale(Integer newFemale) {
 		this.newFemale = newFemale;
 	}
+	
 	public Integer getNewAll() {
 		return newAll;
 	}
+	
 	public void setNewAll(Integer newAll) {
 		this.newAll = newAll;
 	}
+	
 	public Integer getNewMaleHIV04() {
 		return newMaleHIV04;
 	}
+	
 	public void setNewMaleHIV04(Integer newMaleHIV04) {
 		this.newMaleHIV04 = newMaleHIV04;
 	}
+	
 	public Integer getNewFemaleHIV04() {
 		return newFemaleHIV04;
 	}
+	
 	public void setNewFemaleHIV04(Integer newFemaleHIV04) {
 		this.newFemaleHIV04 = newFemaleHIV04;
 	}
+	
 	public Integer getNewMaleHIV0514() {
 		return newMaleHIV0514;
 	}
+	
 	public void setNewMaleHIV0514(Integer newMaleHIV0514) {
 		this.newMaleHIV0514 = newMaleHIV0514;
 	}
+	
 	public Integer getNewFemaleHIV0514() {
 		return newFemaleHIV0514;
 	}
+	
 	public void setNewFemaleHIV0514(Integer newFemaleHIV0514) {
 		this.newFemaleHIV0514 = newFemaleHIV0514;
 	}
+	
 	public Integer getNewMaleHIV1517() {
 		return newMaleHIV1517;
 	}
+	
 	public void setNewMaleHIV1517(Integer newMaleHIV1517) {
 		this.newMaleHIV1517 = newMaleHIV1517;
 	}
+	
 	public Integer getNewFemaleHIV1517() {
 		return newFemaleHIV1517;
 	}
+	
 	public void setNewFemaleHIV1517(Integer newFemaleHIV1517) {
 		this.newFemaleHIV1517 = newFemaleHIV1517;
 	}
+	
 	public Integer getNewMaleHIV1819() {
 		return newMaleHIV1819;
 	}
+	
 	public void setNewMaleHIV1819(Integer newMaleHIV1819) {
 		this.newMaleHIV1819 = newMaleHIV1819;
 	}
+	
 	public Integer getNewFemaleHIV1819() {
 		return newFemaleHIV1819;
 	}
+	
 	public void setNewFemaleHIV1819(Integer newFemaleHIV1819) {
 		this.newFemaleHIV1819 = newFemaleHIV1819;
 	}
+	
 	public Integer getNewMaleHIV2024() {
 		return newMaleHIV2024;
 	}
+	
 	public void setNewMaleHIV2024(Integer newMaleHIV2024) {
 		this.newMaleHIV2024 = newMaleHIV2024;
 	}
+	
 	public Integer getNewFemaleHIV2024() {
 		return newFemaleHIV2024;
 	}
+	
 	public void setNewFemaleHIV2024(Integer newFemaleHIV2024) {
 		this.newFemaleHIV2024 = newFemaleHIV2024;
 	}
+	
 	public Integer getNewMaleHIV2534() {
 		return newMaleHIV2534;
 	}
+	
 	public void setNewMaleHIV2534(Integer newMaleHIV2534) {
 		this.newMaleHIV2534 = newMaleHIV2534;
 	}
+	
 	public Integer getNewFemaleHIV2534() {
 		return newFemaleHIV2534;
 	}
+	
 	public void setNewFemaleHIV2534(Integer newFemaleHIV2534) {
 		this.newFemaleHIV2534 = newFemaleHIV2534;
 	}
+	
 	public Integer getNewMaleHIV3544() {
 		return newMaleHIV3544;
 	}
+	
 	public void setNewMaleHIV3544(Integer newMaleHIV3544) {
 		this.newMaleHIV3544 = newMaleHIV3544;
 	}
+	
 	public Integer getNewFemaleHIV3544() {
 		return newFemaleHIV3544;
 	}
+	
 	public void setNewFemaleHIV3544(Integer newFemaleHIV3544) {
 		this.newFemaleHIV3544 = newFemaleHIV3544;
 	}
+	
 	public Integer getNewMaleHIV4554() {
 		return newMaleHIV4554;
 	}
+	
 	public void setNewMaleHIV4554(Integer newMaleHIV4554) {
 		this.newMaleHIV4554 = newMaleHIV4554;
 	}
+	
 	public Integer getNewFemaleHIV4554() {
 		return newFemaleHIV4554;
 	}
+	
 	public void setNewFemaleHIV4554(Integer newFemaleHIV4554) {
 		this.newFemaleHIV4554 = newFemaleHIV4554;
 	}
+	
 	public Integer getNewMaleHIV5564() {
 		return newMaleHIV5564;
 	}
+	
 	public void setNewMaleHIV5564(Integer newMaleHIV5564) {
 		this.newMaleHIV5564 = newMaleHIV5564;
 	}
+	
 	public Integer getNewFemaleHIV5564() {
 		return newFemaleHIV5564;
 	}
+	
 	public void setNewFemaleHIV5564(Integer newFemaleHIV5564) {
 		this.newFemaleHIV5564 = newFemaleHIV5564;
 	}
+	
 	public Integer getNewMaleHIV65() {
 		return newMaleHIV65;
 	}
+	
 	public void setNewMaleHIV65(Integer newMaleHIV65) {
 		this.newMaleHIV65 = newMaleHIV65;
 	}
+	
 	public Integer getNewFemaleHIV65() {
 		return newFemaleHIV65;
 	}
+	
 	public void setNewFemaleHIV65(Integer newFemaleHIV65) {
 		this.newFemaleHIV65 = newFemaleHIV65;
 	}
+	
 	public Integer getNewMaleHIV() {
 		return newMaleHIV;
 	}
+	
 	public void setNewMaleHIV(Integer newMaleHIV) {
 		this.newMaleHIV = newMaleHIV;
 	}
+	
 	public Integer getNewFemaleHIV() {
 		return newFemaleHIV;
 	}
+	
 	public void setNewFemaleHIV(Integer newFemaleHIV) {
 		this.newFemaleHIV = newFemaleHIV;
 	}
+	
 	public Integer getNewAllHIV() {
 		return newAllHIV;
 	}
+	
 	public void setNewAllHIV(Integer newAllHIV) {
 		this.newAllHIV = newAllHIV;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC04() {
 		return relapseMalePulmonaryBC04;
 	}
+	
 	public void setRelapseMalePulmonaryBC04(Integer relapseMalePulmonaryBC04) {
 		this.relapseMalePulmonaryBC04 = relapseMalePulmonaryBC04;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC04() {
 		return relapseFemalePulmonaryBC04;
 	}
+	
 	public void setRelapseFemalePulmonaryBC04(Integer relapseFemalePulmonaryBC04) {
 		this.relapseFemalePulmonaryBC04 = relapseFemalePulmonaryBC04;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC0514() {
 		return relapseMalePulmonaryBC0514;
 	}
+	
 	public void setRelapseMalePulmonaryBC0514(Integer relapseMalePulmonaryBC0514) {
 		this.relapseMalePulmonaryBC0514 = relapseMalePulmonaryBC0514;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC0514() {
 		return relapseFemalePulmonaryBC0514;
 	}
+	
 	public void setRelapseFemalePulmonaryBC0514(Integer relapseFemalePulmonaryBC0514) {
 		this.relapseFemalePulmonaryBC0514 = relapseFemalePulmonaryBC0514;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC1517() {
 		return relapseMalePulmonaryBC1517;
 	}
+	
 	public void setRelapseMalePulmonaryBC1517(Integer relapseMalePulmonaryBC1517) {
 		this.relapseMalePulmonaryBC1517 = relapseMalePulmonaryBC1517;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC1517() {
 		return relapseFemalePulmonaryBC1517;
 	}
+	
 	public void setRelapseFemalePulmonaryBC1517(Integer relapseFemalePulmonaryBC1517) {
 		this.relapseFemalePulmonaryBC1517 = relapseFemalePulmonaryBC1517;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC1819() {
 		return relapseMalePulmonaryBC1819;
 	}
+	
 	public void setRelapseMalePulmonaryBC1819(Integer relapseMalePulmonaryBC1819) {
 		this.relapseMalePulmonaryBC1819 = relapseMalePulmonaryBC1819;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC1819() {
 		return relapseFemalePulmonaryBC1819;
 	}
+	
 	public void setRelapseFemalePulmonaryBC1819(Integer relapseFemalePulmonaryBC1819) {
 		this.relapseFemalePulmonaryBC1819 = relapseFemalePulmonaryBC1819;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC2024() {
 		return relapseMalePulmonaryBC2024;
 	}
+	
 	public void setRelapseMalePulmonaryBC2024(Integer relapseMalePulmonaryBC2024) {
 		this.relapseMalePulmonaryBC2024 = relapseMalePulmonaryBC2024;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC2024() {
 		return relapseFemalePulmonaryBC2024;
 	}
+	
 	public void setRelapseFemalePulmonaryBC2024(Integer relapseFemalePulmonaryBC2024) {
 		this.relapseFemalePulmonaryBC2024 = relapseFemalePulmonaryBC2024;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC2534() {
 		return relapseMalePulmonaryBC2534;
 	}
+	
 	public void setRelapseMalePulmonaryBC2534(Integer relapseMalePulmonaryBC2534) {
 		this.relapseMalePulmonaryBC2534 = relapseMalePulmonaryBC2534;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC2534() {
 		return relapseFemalePulmonaryBC2534;
 	}
+	
 	public void setRelapseFemalePulmonaryBC2534(Integer relapseFemalePulmonaryBC2534) {
 		this.relapseFemalePulmonaryBC2534 = relapseFemalePulmonaryBC2534;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC3544() {
 		return relapseMalePulmonaryBC3544;
 	}
+	
 	public void setRelapseMalePulmonaryBC3544(Integer relapseMalePulmonaryBC3544) {
 		this.relapseMalePulmonaryBC3544 = relapseMalePulmonaryBC3544;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC3544() {
 		return relapseFemalePulmonaryBC3544;
 	}
+	
 	public void setRelapseFemalePulmonaryBC3544(Integer relapseFemalePulmonaryBC3544) {
 		this.relapseFemalePulmonaryBC3544 = relapseFemalePulmonaryBC3544;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC4554() {
 		return relapseMalePulmonaryBC4554;
 	}
+	
 	public void setRelapseMalePulmonaryBC4554(Integer relapseMalePulmonaryBC4554) {
 		this.relapseMalePulmonaryBC4554 = relapseMalePulmonaryBC4554;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC4554() {
 		return relapseFemalePulmonaryBC4554;
 	}
+	
 	public void setRelapseFemalePulmonaryBC4554(Integer relapseFemalePulmonaryBC4554) {
 		this.relapseFemalePulmonaryBC4554 = relapseFemalePulmonaryBC4554;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC5564() {
 		return relapseMalePulmonaryBC5564;
 	}
+	
 	public void setRelapseMalePulmonaryBC5564(Integer relapseMalePulmonaryBC5564) {
 		this.relapseMalePulmonaryBC5564 = relapseMalePulmonaryBC5564;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC5564() {
 		return relapseFemalePulmonaryBC5564;
 	}
+	
 	public void setRelapseFemalePulmonaryBC5564(Integer relapseFemalePulmonaryBC5564) {
 		this.relapseFemalePulmonaryBC5564 = relapseFemalePulmonaryBC5564;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC65() {
 		return relapseMalePulmonaryBC65;
 	}
+	
 	public void setRelapseMalePulmonaryBC65(Integer relapseMalePulmonaryBC65) {
 		this.relapseMalePulmonaryBC65 = relapseMalePulmonaryBC65;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC65() {
 		return relapseFemalePulmonaryBC65;
 	}
+	
 	public void setRelapseFemalePulmonaryBC65(Integer relapseFemalePulmonaryBC65) {
 		this.relapseFemalePulmonaryBC65 = relapseFemalePulmonaryBC65;
 	}
+	
 	public Integer getRelapseMalePulmonaryBC() {
 		return relapseMalePulmonaryBC;
 	}
+	
 	public void setRelapseMalePulmonaryBC(Integer relapseMalePulmonaryBC) {
 		this.relapseMalePulmonaryBC = relapseMalePulmonaryBC;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBC() {
 		return relapseFemalePulmonaryBC;
 	}
+	
 	public void setRelapseFemalePulmonaryBC(Integer relapseFemalePulmonaryBC) {
 		this.relapseFemalePulmonaryBC = relapseFemalePulmonaryBC;
 	}
+	
 	public Integer getRelapsePulmonaryBC() {
 		return relapsePulmonaryBC;
 	}
+	
 	public void setRelapsePulmonaryBC(Integer relapsePulmonaryBC) {
 		this.relapsePulmonaryBC = relapsePulmonaryBC;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV04() {
 		return relapseMalePulmonaryBCHIV04;
 	}
+	
 	public void setRelapseMalePulmonaryBCHIV04(Integer relapseMalePulmonaryBCHIV04) {
 		this.relapseMalePulmonaryBCHIV04 = relapseMalePulmonaryBCHIV04;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV04() {
 		return relapseFemalePulmonaryBCHIV04;
 	}
-	public void setRelapseFemalePulmonaryBCHIV04(
-			Integer relapseFemalePulmonaryBCHIV04) {
+	
+	public void setRelapseFemalePulmonaryBCHIV04(Integer relapseFemalePulmonaryBCHIV04) {
 		this.relapseFemalePulmonaryBCHIV04 = relapseFemalePulmonaryBCHIV04;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV0514() {
 		return relapseMalePulmonaryBCHIV0514;
 	}
-	public void setRelapseMalePulmonaryBCHIV0514(
-			Integer relapseMalePulmonaryBCHIV0514) {
+	
+	public void setRelapseMalePulmonaryBCHIV0514(Integer relapseMalePulmonaryBCHIV0514) {
 		this.relapseMalePulmonaryBCHIV0514 = relapseMalePulmonaryBCHIV0514;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV0514() {
 		return relapseFemalePulmonaryBCHIV0514;
 	}
-	public void setRelapseFemalePulmonaryBCHIV0514(
-			Integer relapseFemalePulmonaryBCHIV0514) {
+	
+	public void setRelapseFemalePulmonaryBCHIV0514(Integer relapseFemalePulmonaryBCHIV0514) {
 		this.relapseFemalePulmonaryBCHIV0514 = relapseFemalePulmonaryBCHIV0514;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV1517() {
 		return relapseMalePulmonaryBCHIV1517;
 	}
-	public void setRelapseMalePulmonaryBCHIV1517(
-			Integer relapseMalePulmonaryBCHIV1517) {
+	
+	public void setRelapseMalePulmonaryBCHIV1517(Integer relapseMalePulmonaryBCHIV1517) {
 		this.relapseMalePulmonaryBCHIV1517 = relapseMalePulmonaryBCHIV1517;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV1517() {
 		return relapseFemalePulmonaryBCHIV1517;
 	}
-	public void setRelapseFemalePulmonaryBCHIV1517(
-			Integer relapseFemalePulmonaryBCHIV1517) {
+	
+	public void setRelapseFemalePulmonaryBCHIV1517(Integer relapseFemalePulmonaryBCHIV1517) {
 		this.relapseFemalePulmonaryBCHIV1517 = relapseFemalePulmonaryBCHIV1517;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV1819() {
 		return relapseMalePulmonaryBCHIV1819;
 	}
-	public void setRelapseMalePulmonaryBCHIV1819(
-			Integer relapseMalePulmonaryBCHIV1819) {
+	
+	public void setRelapseMalePulmonaryBCHIV1819(Integer relapseMalePulmonaryBCHIV1819) {
 		this.relapseMalePulmonaryBCHIV1819 = relapseMalePulmonaryBCHIV1819;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV1819() {
 		return relapseFemalePulmonaryBCHIV1819;
 	}
-	public void setRelapseFemalePulmonaryBCHIV1819(
-			Integer relapseFemalePulmonaryBCHIV1819) {
+	
+	public void setRelapseFemalePulmonaryBCHIV1819(Integer relapseFemalePulmonaryBCHIV1819) {
 		this.relapseFemalePulmonaryBCHIV1819 = relapseFemalePulmonaryBCHIV1819;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV2024() {
 		return relapseMalePulmonaryBCHIV2024;
 	}
-	public void setRelapseMalePulmonaryBCHIV2024(
-			Integer relapseMalePulmonaryBCHIV2024) {
+	
+	public void setRelapseMalePulmonaryBCHIV2024(Integer relapseMalePulmonaryBCHIV2024) {
 		this.relapseMalePulmonaryBCHIV2024 = relapseMalePulmonaryBCHIV2024;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV2024() {
 		return relapseFemalePulmonaryBCHIV2024;
 	}
-	public void setRelapseFemalePulmonaryBCHIV2024(
-			Integer relapseFemalePulmonaryBCHIV2024) {
+	
+	public void setRelapseFemalePulmonaryBCHIV2024(Integer relapseFemalePulmonaryBCHIV2024) {
 		this.relapseFemalePulmonaryBCHIV2024 = relapseFemalePulmonaryBCHIV2024;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV2534() {
 		return relapseMalePulmonaryBCHIV2534;
 	}
-	public void setRelapseMalePulmonaryBCHIV2534(
-			Integer relapseMalePulmonaryBCHIV2534) {
+	
+	public void setRelapseMalePulmonaryBCHIV2534(Integer relapseMalePulmonaryBCHIV2534) {
 		this.relapseMalePulmonaryBCHIV2534 = relapseMalePulmonaryBCHIV2534;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV2534() {
 		return relapseFemalePulmonaryBCHIV2534;
 	}
-	public void setRelapseFemalePulmonaryBCHIV2534(
-			Integer relapseFemalePulmonaryBCHIV2534) {
+	
+	public void setRelapseFemalePulmonaryBCHIV2534(Integer relapseFemalePulmonaryBCHIV2534) {
 		this.relapseFemalePulmonaryBCHIV2534 = relapseFemalePulmonaryBCHIV2534;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV3544() {
 		return relapseMalePulmonaryBCHIV3544;
 	}
-	public void setRelapseMalePulmonaryBCHIV3544(
-			Integer relapseMalePulmonaryBCHIV3544) {
+	
+	public void setRelapseMalePulmonaryBCHIV3544(Integer relapseMalePulmonaryBCHIV3544) {
 		this.relapseMalePulmonaryBCHIV3544 = relapseMalePulmonaryBCHIV3544;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV3544() {
 		return relapseFemalePulmonaryBCHIV3544;
 	}
-	public void setRelapseFemalePulmonaryBCHIV3544(
-			Integer relapseFemalePulmonaryBCHIV3544) {
+	
+	public void setRelapseFemalePulmonaryBCHIV3544(Integer relapseFemalePulmonaryBCHIV3544) {
 		this.relapseFemalePulmonaryBCHIV3544 = relapseFemalePulmonaryBCHIV3544;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV4554() {
 		return relapseMalePulmonaryBCHIV4554;
 	}
-	public void setRelapseMalePulmonaryBCHIV4554(
-			Integer relapseMalePulmonaryBCHIV4554) {
+	
+	public void setRelapseMalePulmonaryBCHIV4554(Integer relapseMalePulmonaryBCHIV4554) {
 		this.relapseMalePulmonaryBCHIV4554 = relapseMalePulmonaryBCHIV4554;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV4554() {
 		return relapseFemalePulmonaryBCHIV4554;
 	}
-	public void setRelapseFemalePulmonaryBCHIV4554(
-			Integer relapseFemalePulmonaryBCHIV4554) {
+	
+	public void setRelapseFemalePulmonaryBCHIV4554(Integer relapseFemalePulmonaryBCHIV4554) {
 		this.relapseFemalePulmonaryBCHIV4554 = relapseFemalePulmonaryBCHIV4554;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV5564() {
 		return relapseMalePulmonaryBCHIV5564;
 	}
-	public void setRelapseMalePulmonaryBCHIV5564(
-			Integer relapseMalePulmonaryBCHIV5564) {
+	
+	public void setRelapseMalePulmonaryBCHIV5564(Integer relapseMalePulmonaryBCHIV5564) {
 		this.relapseMalePulmonaryBCHIV5564 = relapseMalePulmonaryBCHIV5564;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV5564() {
 		return relapseFemalePulmonaryBCHIV5564;
 	}
-	public void setRelapseFemalePulmonaryBCHIV5564(
-			Integer relapseFemalePulmonaryBCHIV5564) {
+	
+	public void setRelapseFemalePulmonaryBCHIV5564(Integer relapseFemalePulmonaryBCHIV5564) {
 		this.relapseFemalePulmonaryBCHIV5564 = relapseFemalePulmonaryBCHIV5564;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV65() {
 		return relapseMalePulmonaryBCHIV65;
 	}
+	
 	public void setRelapseMalePulmonaryBCHIV65(Integer relapseMalePulmonaryBCHIV65) {
 		this.relapseMalePulmonaryBCHIV65 = relapseMalePulmonaryBCHIV65;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV65() {
 		return relapseFemalePulmonaryBCHIV65;
 	}
-	public void setRelapseFemalePulmonaryBCHIV65(
-			Integer relapseFemalePulmonaryBCHIV65) {
+	
+	public void setRelapseFemalePulmonaryBCHIV65(Integer relapseFemalePulmonaryBCHIV65) {
 		this.relapseFemalePulmonaryBCHIV65 = relapseFemalePulmonaryBCHIV65;
 	}
+	
 	public Integer getRelapseMalePulmonaryBCHIV() {
 		return relapseMalePulmonaryBCHIV;
 	}
+	
 	public void setRelapseMalePulmonaryBCHIV(Integer relapseMalePulmonaryBCHIV) {
 		this.relapseMalePulmonaryBCHIV = relapseMalePulmonaryBCHIV;
 	}
+	
 	public Integer getRelapseFemalePulmonaryBCHIV() {
 		return relapseFemalePulmonaryBCHIV;
 	}
+	
 	public void setRelapseFemalePulmonaryBCHIV(Integer relapseFemalePulmonaryBCHIV) {
 		this.relapseFemalePulmonaryBCHIV = relapseFemalePulmonaryBCHIV;
 	}
+	
 	public Integer getRelapsePulmonaryBCHIV() {
 		return relapsePulmonaryBCHIV;
 	}
+	
 	public void setRelapsePulmonaryBCHIV(Integer relapsePulmonaryBCHIV) {
 		this.relapsePulmonaryBCHIV = relapsePulmonaryBCHIV;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD04() {
 		return relapseMalePulmonaryCD04;
 	}
+	
 	public void setRelapseMalePulmonaryCD04(Integer relapseMalePulmonaryCD04) {
 		this.relapseMalePulmonaryCD04 = relapseMalePulmonaryCD04;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD04() {
 		return relapseFemalePulmonaryCD04;
 	}
+	
 	public void setRelapseFemalePulmonaryCD04(Integer relapseFemalePulmonaryCD04) {
 		this.relapseFemalePulmonaryCD04 = relapseFemalePulmonaryCD04;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD0514() {
 		return relapseMalePulmonaryCD0514;
 	}
+	
 	public void setRelapseMalePulmonaryCD0514(Integer relapseMalePulmonaryCD0514) {
 		this.relapseMalePulmonaryCD0514 = relapseMalePulmonaryCD0514;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD0514() {
 		return relapseFemalePulmonaryCD0514;
 	}
+	
 	public void setRelapseFemalePulmonaryCD0514(Integer relapseFemalePulmonaryCD0514) {
 		this.relapseFemalePulmonaryCD0514 = relapseFemalePulmonaryCD0514;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD1517() {
 		return relapseMalePulmonaryCD1517;
 	}
+	
 	public void setRelapseMalePulmonaryCD1517(Integer relapseMalePulmonaryCD1517) {
 		this.relapseMalePulmonaryCD1517 = relapseMalePulmonaryCD1517;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD1517() {
 		return relapseFemalePulmonaryCD1517;
 	}
+	
 	public void setRelapseFemalePulmonaryCD1517(Integer relapseFemalePulmonaryCD1517) {
 		this.relapseFemalePulmonaryCD1517 = relapseFemalePulmonaryCD1517;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD1819() {
 		return relapseMalePulmonaryCD1819;
 	}
+	
 	public void setRelapseMalePulmonaryCD1819(Integer relapseMalePulmonaryCD1819) {
 		this.relapseMalePulmonaryCD1819 = relapseMalePulmonaryCD1819;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD1819() {
 		return relapseFemalePulmonaryCD1819;
 	}
+	
 	public void setRelapseFemalePulmonaryCD1819(Integer relapseFemalePulmonaryCD1819) {
 		this.relapseFemalePulmonaryCD1819 = relapseFemalePulmonaryCD1819;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD2024() {
 		return relapseMalePulmonaryCD2024;
 	}
+	
 	public void setRelapseMalePulmonaryCD2024(Integer relapseMalePulmonaryCD2024) {
 		this.relapseMalePulmonaryCD2024 = relapseMalePulmonaryCD2024;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD2024() {
 		return relapseFemalePulmonaryCD2024;
 	}
+	
 	public void setRelapseFemalePulmonaryCD2024(Integer relapseFemalePulmonaryCD2024) {
 		this.relapseFemalePulmonaryCD2024 = relapseFemalePulmonaryCD2024;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD2534() {
 		return relapseMalePulmonaryCD2534;
 	}
+	
 	public void setRelapseMalePulmonaryCD2534(Integer relapseMalePulmonaryCD2534) {
 		this.relapseMalePulmonaryCD2534 = relapseMalePulmonaryCD2534;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD2534() {
 		return relapseFemalePulmonaryCD2534;
 	}
+	
 	public void setRelapseFemalePulmonaryCD2534(Integer relapseFemalePulmonaryCD2534) {
 		this.relapseFemalePulmonaryCD2534 = relapseFemalePulmonaryCD2534;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD3544() {
 		return relapseMalePulmonaryCD3544;
 	}
+	
 	public void setRelapseMalePulmonaryCD3544(Integer relapseMalePulmonaryCD3544) {
 		this.relapseMalePulmonaryCD3544 = relapseMalePulmonaryCD3544;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD3544() {
 		return relapseFemalePulmonaryCD3544;
 	}
+	
 	public void setRelapseFemalePulmonaryCD3544(Integer relapseFemalePulmonaryCD3544) {
 		this.relapseFemalePulmonaryCD3544 = relapseFemalePulmonaryCD3544;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD4554() {
 		return relapseMalePulmonaryCD4554;
 	}
+	
 	public void setRelapseMalePulmonaryCD4554(Integer relapseMalePulmonaryCD4554) {
 		this.relapseMalePulmonaryCD4554 = relapseMalePulmonaryCD4554;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD4554() {
 		return relapseFemalePulmonaryCD4554;
 	}
+	
 	public void setRelapseFemalePulmonaryCD4554(Integer relapseFemalePulmonaryCD4554) {
 		this.relapseFemalePulmonaryCD4554 = relapseFemalePulmonaryCD4554;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD5564() {
 		return relapseMalePulmonaryCD5564;
 	}
+	
 	public void setRelapseMalePulmonaryCD5564(Integer relapseMalePulmonaryCD5564) {
 		this.relapseMalePulmonaryCD5564 = relapseMalePulmonaryCD5564;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD5564() {
 		return relapseFemalePulmonaryCD5564;
 	}
+	
 	public void setRelapseFemalePulmonaryCD5564(Integer relapseFemalePulmonaryCD5564) {
 		this.relapseFemalePulmonaryCD5564 = relapseFemalePulmonaryCD5564;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD65() {
 		return relapseMalePulmonaryCD65;
 	}
+	
 	public void setRelapseMalePulmonaryCD65(Integer relapseMalePulmonaryCD65) {
 		this.relapseMalePulmonaryCD65 = relapseMalePulmonaryCD65;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD65() {
 		return relapseFemalePulmonaryCD65;
 	}
+	
 	public void setRelapseFemalePulmonaryCD65(Integer relapseFemalePulmonaryCD65) {
 		this.relapseFemalePulmonaryCD65 = relapseFemalePulmonaryCD65;
 	}
+	
 	public Integer getRelapseMalePulmonaryCD() {
 		return relapseMalePulmonaryCD;
 	}
+	
 	public void setRelapseMalePulmonaryCD(Integer relapseMalePulmonaryCD) {
 		this.relapseMalePulmonaryCD = relapseMalePulmonaryCD;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCD() {
 		return relapseFemalePulmonaryCD;
 	}
+	
 	public void setRelapseFemalePulmonaryCD(Integer relapseFemalePulmonaryCD) {
 		this.relapseFemalePulmonaryCD = relapseFemalePulmonaryCD;
 	}
+	
 	public Integer getRelapsePulmonaryCD() {
 		return relapsePulmonaryCD;
 	}
+	
 	public void setRelapsePulmonaryCD(Integer relapsePulmonaryCD) {
 		this.relapsePulmonaryCD = relapsePulmonaryCD;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV04() {
 		return relapseMalePulmonaryCDHIV04;
 	}
+	
 	public void setRelapseMalePulmonaryCDHIV04(Integer relapseMalePulmonaryCDHIV04) {
 		this.relapseMalePulmonaryCDHIV04 = relapseMalePulmonaryCDHIV04;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV04() {
 		return relapseFemalePulmonaryCDHIV04;
 	}
-	public void setRelapseFemalePulmonaryCDHIV04(
-			Integer relapseFemalePulmonaryCDHIV04) {
+	
+	public void setRelapseFemalePulmonaryCDHIV04(Integer relapseFemalePulmonaryCDHIV04) {
 		this.relapseFemalePulmonaryCDHIV04 = relapseFemalePulmonaryCDHIV04;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV0514() {
 		return relapseMalePulmonaryCDHIV0514;
 	}
-	public void setRelapseMalePulmonaryCDHIV0514(
-			Integer relapseMalePulmonaryCDHIV0514) {
+	
+	public void setRelapseMalePulmonaryCDHIV0514(Integer relapseMalePulmonaryCDHIV0514) {
 		this.relapseMalePulmonaryCDHIV0514 = relapseMalePulmonaryCDHIV0514;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV0514() {
 		return relapseFemalePulmonaryCDHIV0514;
 	}
-	public void setRelapseFemalePulmonaryCDHIV0514(
-			Integer relapseFemalePulmonaryCDHIV0514) {
+	
+	public void setRelapseFemalePulmonaryCDHIV0514(Integer relapseFemalePulmonaryCDHIV0514) {
 		this.relapseFemalePulmonaryCDHIV0514 = relapseFemalePulmonaryCDHIV0514;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV1517() {
 		return relapseMalePulmonaryCDHIV1517;
 	}
-	public void setRelapseMalePulmonaryCDHIV1517(
-			Integer relapseMalePulmonaryCDHIV1517) {
+	
+	public void setRelapseMalePulmonaryCDHIV1517(Integer relapseMalePulmonaryCDHIV1517) {
 		this.relapseMalePulmonaryCDHIV1517 = relapseMalePulmonaryCDHIV1517;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV1517() {
 		return relapseFemalePulmonaryCDHIV1517;
 	}
-	public void setRelapseFemalePulmonaryCDHIV1517(
-			Integer relapseFemalePulmonaryCDHIV1517) {
+	
+	public void setRelapseFemalePulmonaryCDHIV1517(Integer relapseFemalePulmonaryCDHIV1517) {
 		this.relapseFemalePulmonaryCDHIV1517 = relapseFemalePulmonaryCDHIV1517;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV1819() {
 		return relapseMalePulmonaryCDHIV1819;
 	}
-	public void setRelapseMalePulmonaryCDHIV1819(
-			Integer relapseMalePulmonaryCDHIV1819) {
+	
+	public void setRelapseMalePulmonaryCDHIV1819(Integer relapseMalePulmonaryCDHIV1819) {
 		this.relapseMalePulmonaryCDHIV1819 = relapseMalePulmonaryCDHIV1819;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV1819() {
 		return relapseFemalePulmonaryCDHIV1819;
 	}
-	public void setRelapseFemalePulmonaryCDHIV1819(
-			Integer relapseFemalePulmonaryCDHIV1819) {
+	
+	public void setRelapseFemalePulmonaryCDHIV1819(Integer relapseFemalePulmonaryCDHIV1819) {
 		this.relapseFemalePulmonaryCDHIV1819 = relapseFemalePulmonaryCDHIV1819;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV2024() {
 		return relapseMalePulmonaryCDHIV2024;
 	}
-	public void setRelapseMalePulmonaryCDHIV2024(
-			Integer relapseMalePulmonaryCDHIV2024) {
+	
+	public void setRelapseMalePulmonaryCDHIV2024(Integer relapseMalePulmonaryCDHIV2024) {
 		this.relapseMalePulmonaryCDHIV2024 = relapseMalePulmonaryCDHIV2024;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV2024() {
 		return relapseFemalePulmonaryCDHIV2024;
 	}
-	public void setRelapseFemalePulmonaryCDHIV2024(
-			Integer relapseFemalePulmonaryCDHIV2024) {
+	
+	public void setRelapseFemalePulmonaryCDHIV2024(Integer relapseFemalePulmonaryCDHIV2024) {
 		this.relapseFemalePulmonaryCDHIV2024 = relapseFemalePulmonaryCDHIV2024;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV2534() {
 		return relapseMalePulmonaryCDHIV2534;
 	}
-	public void setRelapseMalePulmonaryCDHIV2534(
-			Integer relapseMalePulmonaryCDHIV2534) {
+	
+	public void setRelapseMalePulmonaryCDHIV2534(Integer relapseMalePulmonaryCDHIV2534) {
 		this.relapseMalePulmonaryCDHIV2534 = relapseMalePulmonaryCDHIV2534;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV2534() {
 		return relapseFemalePulmonaryCDHIV2534;
 	}
-	public void setRelapseFemalePulmonaryCDHIV2534(
-			Integer relapseFemalePulmonaryCDHIV2534) {
+	
+	public void setRelapseFemalePulmonaryCDHIV2534(Integer relapseFemalePulmonaryCDHIV2534) {
 		this.relapseFemalePulmonaryCDHIV2534 = relapseFemalePulmonaryCDHIV2534;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV3544() {
 		return relapseMalePulmonaryCDHIV3544;
 	}
-	public void setRelapseMalePulmonaryCDHIV3544(
-			Integer relapseMalePulmonaryCDHIV3544) {
+	
+	public void setRelapseMalePulmonaryCDHIV3544(Integer relapseMalePulmonaryCDHIV3544) {
 		this.relapseMalePulmonaryCDHIV3544 = relapseMalePulmonaryCDHIV3544;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV3544() {
 		return relapseFemalePulmonaryCDHIV3544;
 	}
-	public void setRelapseFemalePulmonaryCDHIV3544(
-			Integer relapseFemalePulmonaryCDHIV3544) {
+	
+	public void setRelapseFemalePulmonaryCDHIV3544(Integer relapseFemalePulmonaryCDHIV3544) {
 		this.relapseFemalePulmonaryCDHIV3544 = relapseFemalePulmonaryCDHIV3544;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV4554() {
 		return relapseMalePulmonaryCDHIV4554;
 	}
-	public void setRelapseMalePulmonaryCDHIV4554(
-			Integer relapseMalePulmonaryCDHIV4554) {
+	
+	public void setRelapseMalePulmonaryCDHIV4554(Integer relapseMalePulmonaryCDHIV4554) {
 		this.relapseMalePulmonaryCDHIV4554 = relapseMalePulmonaryCDHIV4554;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV4554() {
 		return relapseFemalePulmonaryCDHIV4554;
 	}
-	public void setRelapseFemalePulmonaryCDHIV4554(
-			Integer relapseFemalePulmonaryCDHIV4554) {
+	
+	public void setRelapseFemalePulmonaryCDHIV4554(Integer relapseFemalePulmonaryCDHIV4554) {
 		this.relapseFemalePulmonaryCDHIV4554 = relapseFemalePulmonaryCDHIV4554;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV5564() {
 		return relapseMalePulmonaryCDHIV5564;
 	}
-	public void setRelapseMalePulmonaryCDHIV5564(
-			Integer relapseMalePulmonaryCDHIV5564) {
+	
+	public void setRelapseMalePulmonaryCDHIV5564(Integer relapseMalePulmonaryCDHIV5564) {
 		this.relapseMalePulmonaryCDHIV5564 = relapseMalePulmonaryCDHIV5564;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV5564() {
 		return relapseFemalePulmonaryCDHIV5564;
 	}
-	public void setRelapseFemalePulmonaryCDHIV5564(
-			Integer relapseFemalePulmonaryCDHIV5564) {
+	
+	public void setRelapseFemalePulmonaryCDHIV5564(Integer relapseFemalePulmonaryCDHIV5564) {
 		this.relapseFemalePulmonaryCDHIV5564 = relapseFemalePulmonaryCDHIV5564;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV65() {
 		return relapseMalePulmonaryCDHIV65;
 	}
+	
 	public void setRelapseMalePulmonaryCDHIV65(Integer relapseMalePulmonaryCDHIV65) {
 		this.relapseMalePulmonaryCDHIV65 = relapseMalePulmonaryCDHIV65;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV65() {
 		return relapseFemalePulmonaryCDHIV65;
 	}
-	public void setRelapseFemalePulmonaryCDHIV65(
-			Integer relapseFemalePulmonaryCDHIV65) {
+	
+	public void setRelapseFemalePulmonaryCDHIV65(Integer relapseFemalePulmonaryCDHIV65) {
 		this.relapseFemalePulmonaryCDHIV65 = relapseFemalePulmonaryCDHIV65;
 	}
+	
 	public Integer getRelapseMalePulmonaryCDHIV() {
 		return relapseMalePulmonaryCDHIV;
 	}
+	
 	public void setRelapseMalePulmonaryCDHIV(Integer relapseMalePulmonaryCDHIV) {
 		this.relapseMalePulmonaryCDHIV = relapseMalePulmonaryCDHIV;
 	}
+	
 	public Integer getRelapseFemalePulmonaryCDHIV() {
 		return relapseFemalePulmonaryCDHIV;
 	}
+	
 	public void setRelapseFemalePulmonaryCDHIV(Integer relapseFemalePulmonaryCDHIV) {
 		this.relapseFemalePulmonaryCDHIV = relapseFemalePulmonaryCDHIV;
 	}
+	
 	public Integer getRelapsePulmonaryCDHIV() {
 		return relapsePulmonaryCDHIV;
 	}
+	
 	public void setRelapsePulmonaryCDHIV(Integer relapsePulmonaryCDHIV) {
 		this.relapsePulmonaryCDHIV = relapsePulmonaryCDHIV;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary04() {
 		return relapseMaleExtrapulmonary04;
 	}
+	
 	public void setRelapseMaleExtrapulmonary04(Integer relapseMaleExtrapulmonary04) {
 		this.relapseMaleExtrapulmonary04 = relapseMaleExtrapulmonary04;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary04() {
 		return relapseFemaleExtrapulmonary04;
 	}
-	public void setRelapseFemaleExtrapulmonary04(
-			Integer relapseFemaleExtrapulmonary04) {
+	
+	public void setRelapseFemaleExtrapulmonary04(Integer relapseFemaleExtrapulmonary04) {
 		this.relapseFemaleExtrapulmonary04 = relapseFemaleExtrapulmonary04;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary0514() {
 		return relapseMaleExtrapulmonary0514;
 	}
-	public void setRelapseMaleExtrapulmonary0514(
-			Integer relapseMaleExtrapulmonary0514) {
+	
+	public void setRelapseMaleExtrapulmonary0514(Integer relapseMaleExtrapulmonary0514) {
 		this.relapseMaleExtrapulmonary0514 = relapseMaleExtrapulmonary0514;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary0514() {
 		return relapseFemaleExtrapulmonary0514;
 	}
-	public void setRelapseFemaleExtrapulmonary0514(
-			Integer relapseFemaleExtrapulmonary0514) {
+	
+	public void setRelapseFemaleExtrapulmonary0514(Integer relapseFemaleExtrapulmonary0514) {
 		this.relapseFemaleExtrapulmonary0514 = relapseFemaleExtrapulmonary0514;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary1517() {
 		return relapseMaleExtrapulmonary1517;
 	}
-	public void setRelapseMaleExtrapulmonary1517(
-			Integer relapseMaleExtrapulmonary1517) {
+	
+	public void setRelapseMaleExtrapulmonary1517(Integer relapseMaleExtrapulmonary1517) {
 		this.relapseMaleExtrapulmonary1517 = relapseMaleExtrapulmonary1517;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary1517() {
 		return relapseFemaleExtrapulmonary1517;
 	}
-	public void setRelapseFemaleExtrapulmonary1517(
-			Integer relapseFemaleExtrapulmonary1517) {
+	
+	public void setRelapseFemaleExtrapulmonary1517(Integer relapseFemaleExtrapulmonary1517) {
 		this.relapseFemaleExtrapulmonary1517 = relapseFemaleExtrapulmonary1517;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary1819() {
 		return relapseMaleExtrapulmonary1819;
 	}
-	public void setRelapseMaleExtrapulmonary1819(
-			Integer relapseMaleExtrapulmonary1819) {
+	
+	public void setRelapseMaleExtrapulmonary1819(Integer relapseMaleExtrapulmonary1819) {
 		this.relapseMaleExtrapulmonary1819 = relapseMaleExtrapulmonary1819;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary1819() {
 		return relapseFemaleExtrapulmonary1819;
 	}
-	public void setRelapseFemaleExtrapulmonary1819(
-			Integer relapseFemaleExtrapulmonary1819) {
+	
+	public void setRelapseFemaleExtrapulmonary1819(Integer relapseFemaleExtrapulmonary1819) {
 		this.relapseFemaleExtrapulmonary1819 = relapseFemaleExtrapulmonary1819;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary2024() {
 		return relapseMaleExtrapulmonary2024;
 	}
-	public void setRelapseMaleExtrapulmonary2024(
-			Integer relapseMaleExtrapulmonary2024) {
+	
+	public void setRelapseMaleExtrapulmonary2024(Integer relapseMaleExtrapulmonary2024) {
 		this.relapseMaleExtrapulmonary2024 = relapseMaleExtrapulmonary2024;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary2024() {
 		return relapseFemaleExtrapulmonary2024;
 	}
-	public void setRelapseFemaleExtrapulmonary2024(
-			Integer relapseFemaleExtrapulmonary2024) {
+	
+	public void setRelapseFemaleExtrapulmonary2024(Integer relapseFemaleExtrapulmonary2024) {
 		this.relapseFemaleExtrapulmonary2024 = relapseFemaleExtrapulmonary2024;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary2534() {
 		return relapseMaleExtrapulmonary2534;
 	}
-	public void setRelapseMaleExtrapulmonary2534(
-			Integer relapseMaleExtrapulmonary2534) {
+	
+	public void setRelapseMaleExtrapulmonary2534(Integer relapseMaleExtrapulmonary2534) {
 		this.relapseMaleExtrapulmonary2534 = relapseMaleExtrapulmonary2534;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary2534() {
 		return relapseFemaleExtrapulmonary2534;
 	}
-	public void setRelapseFemaleExtrapulmonary2534(
-			Integer relapseFemaleExtrapulmonary2534) {
+	
+	public void setRelapseFemaleExtrapulmonary2534(Integer relapseFemaleExtrapulmonary2534) {
 		this.relapseFemaleExtrapulmonary2534 = relapseFemaleExtrapulmonary2534;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary3544() {
 		return relapseMaleExtrapulmonary3544;
 	}
-	public void setRelapseMaleExtrapulmonary3544(
-			Integer relapseMaleExtrapulmonary3544) {
+	
+	public void setRelapseMaleExtrapulmonary3544(Integer relapseMaleExtrapulmonary3544) {
 		this.relapseMaleExtrapulmonary3544 = relapseMaleExtrapulmonary3544;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary3544() {
 		return relapseFemaleExtrapulmonary3544;
 	}
-	public void setRelapseFemaleExtrapulmonary3544(
-			Integer relapseFemaleExtrapulmonary3544) {
+	
+	public void setRelapseFemaleExtrapulmonary3544(Integer relapseFemaleExtrapulmonary3544) {
 		this.relapseFemaleExtrapulmonary3544 = relapseFemaleExtrapulmonary3544;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary4554() {
 		return relapseMaleExtrapulmonary4554;
 	}
-	public void setRelapseMaleExtrapulmonary4554(
-			Integer relapseMaleExtrapulmonary4554) {
+	
+	public void setRelapseMaleExtrapulmonary4554(Integer relapseMaleExtrapulmonary4554) {
 		this.relapseMaleExtrapulmonary4554 = relapseMaleExtrapulmonary4554;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary4554() {
 		return relapseFemaleExtrapulmonary4554;
 	}
-	public void setRelapseFemaleExtrapulmonary4554(
-			Integer relapseFemaleExtrapulmonary4554) {
+	
+	public void setRelapseFemaleExtrapulmonary4554(Integer relapseFemaleExtrapulmonary4554) {
 		this.relapseFemaleExtrapulmonary4554 = relapseFemaleExtrapulmonary4554;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary5564() {
 		return relapseMaleExtrapulmonary5564;
 	}
-	public void setRelapseMaleExtrapulmonary5564(
-			Integer relapseMaleExtrapulmonary5564) {
+	
+	public void setRelapseMaleExtrapulmonary5564(Integer relapseMaleExtrapulmonary5564) {
 		this.relapseMaleExtrapulmonary5564 = relapseMaleExtrapulmonary5564;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary5564() {
 		return relapseFemaleExtrapulmonary5564;
 	}
-	public void setRelapseFemaleExtrapulmonary5564(
-			Integer relapseFemaleExtrapulmonary5564) {
+	
+	public void setRelapseFemaleExtrapulmonary5564(Integer relapseFemaleExtrapulmonary5564) {
 		this.relapseFemaleExtrapulmonary5564 = relapseFemaleExtrapulmonary5564;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary65() {
 		return relapseMaleExtrapulmonary65;
 	}
+	
 	public void setRelapseMaleExtrapulmonary65(Integer relapseMaleExtrapulmonary65) {
 		this.relapseMaleExtrapulmonary65 = relapseMaleExtrapulmonary65;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary65() {
 		return relapseFemaleExtrapulmonary65;
 	}
-	public void setRelapseFemaleExtrapulmonary65(
-			Integer relapseFemaleExtrapulmonary65) {
+	
+	public void setRelapseFemaleExtrapulmonary65(Integer relapseFemaleExtrapulmonary65) {
 		this.relapseFemaleExtrapulmonary65 = relapseFemaleExtrapulmonary65;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonary() {
 		return relapseMaleExtrapulmonary;
 	}
+	
 	public void setRelapseMaleExtrapulmonary(Integer relapseMaleExtrapulmonary) {
 		this.relapseMaleExtrapulmonary = relapseMaleExtrapulmonary;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonary() {
 		return relapseFemaleExtrapulmonary;
 	}
+	
 	public void setRelapseFemaleExtrapulmonary(Integer relapseFemaleExtrapulmonary) {
 		this.relapseFemaleExtrapulmonary = relapseFemaleExtrapulmonary;
 	}
+	
 	public Integer getRelapseExtrapulmonary() {
 		return relapseExtrapulmonary;
 	}
+	
 	public void setRelapseExtrapulmonary(Integer relapseExtrapulmonary) {
 		this.relapseExtrapulmonary = relapseExtrapulmonary;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV04() {
 		return relapseMaleExtrapulmonaryHIV04;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV04(
-			Integer relapseMaleExtrapulmonaryHIV04) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV04(Integer relapseMaleExtrapulmonaryHIV04) {
 		this.relapseMaleExtrapulmonaryHIV04 = relapseMaleExtrapulmonaryHIV04;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV04() {
 		return relapseFemaleExtrapulmonaryHIV04;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV04(
-			Integer relapseFemaleExtrapulmonaryHIV04) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV04(Integer relapseFemaleExtrapulmonaryHIV04) {
 		this.relapseFemaleExtrapulmonaryHIV04 = relapseFemaleExtrapulmonaryHIV04;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV0514() {
 		return relapseMaleExtrapulmonaryHIV0514;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV0514(
-			Integer relapseMaleExtrapulmonaryHIV0514) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV0514(Integer relapseMaleExtrapulmonaryHIV0514) {
 		this.relapseMaleExtrapulmonaryHIV0514 = relapseMaleExtrapulmonaryHIV0514;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV0514() {
 		return relapseFemaleExtrapulmonaryHIV0514;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV0514(
-			Integer relapseFemaleExtrapulmonaryHIV0514) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV0514(Integer relapseFemaleExtrapulmonaryHIV0514) {
 		this.relapseFemaleExtrapulmonaryHIV0514 = relapseFemaleExtrapulmonaryHIV0514;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV1517() {
 		return relapseMaleExtrapulmonaryHIV1517;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV1517(
-			Integer relapseMaleExtrapulmonaryHIV1517) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV1517(Integer relapseMaleExtrapulmonaryHIV1517) {
 		this.relapseMaleExtrapulmonaryHIV1517 = relapseMaleExtrapulmonaryHIV1517;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV1517() {
 		return relapseFemaleExtrapulmonaryHIV1517;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV1517(
-			Integer relapseFemaleExtrapulmonaryHIV1517) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV1517(Integer relapseFemaleExtrapulmonaryHIV1517) {
 		this.relapseFemaleExtrapulmonaryHIV1517 = relapseFemaleExtrapulmonaryHIV1517;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV1819() {
 		return relapseMaleExtrapulmonaryHIV1819;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV1819(
-			Integer relapseMaleExtrapulmonaryHIV1819) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV1819(Integer relapseMaleExtrapulmonaryHIV1819) {
 		this.relapseMaleExtrapulmonaryHIV1819 = relapseMaleExtrapulmonaryHIV1819;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV1819() {
 		return relapseFemaleExtrapulmonaryHIV1819;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV1819(
-			Integer relapseFemaleExtrapulmonaryHIV1819) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV1819(Integer relapseFemaleExtrapulmonaryHIV1819) {
 		this.relapseFemaleExtrapulmonaryHIV1819 = relapseFemaleExtrapulmonaryHIV1819;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV2024() {
 		return relapseMaleExtrapulmonaryHIV2024;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV2024(
-			Integer relapseMaleExtrapulmonaryHIV2024) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV2024(Integer relapseMaleExtrapulmonaryHIV2024) {
 		this.relapseMaleExtrapulmonaryHIV2024 = relapseMaleExtrapulmonaryHIV2024;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV2024() {
 		return relapseFemaleExtrapulmonaryHIV2024;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV2024(
-			Integer relapseFemaleExtrapulmonaryHIV2024) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV2024(Integer relapseFemaleExtrapulmonaryHIV2024) {
 		this.relapseFemaleExtrapulmonaryHIV2024 = relapseFemaleExtrapulmonaryHIV2024;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV2534() {
 		return relapseMaleExtrapulmonaryHIV2534;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV2534(
-			Integer relapseMaleExtrapulmonaryHIV2534) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV2534(Integer relapseMaleExtrapulmonaryHIV2534) {
 		this.relapseMaleExtrapulmonaryHIV2534 = relapseMaleExtrapulmonaryHIV2534;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV2534() {
 		return relapseFemaleExtrapulmonaryHIV2534;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV2534(
-			Integer relapseFemaleExtrapulmonaryHIV2534) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV2534(Integer relapseFemaleExtrapulmonaryHIV2534) {
 		this.relapseFemaleExtrapulmonaryHIV2534 = relapseFemaleExtrapulmonaryHIV2534;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV3544() {
 		return relapseMaleExtrapulmonaryHIV3544;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV3544(
-			Integer relapseMaleExtrapulmonaryHIV3544) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV3544(Integer relapseMaleExtrapulmonaryHIV3544) {
 		this.relapseMaleExtrapulmonaryHIV3544 = relapseMaleExtrapulmonaryHIV3544;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV3544() {
 		return relapseFemaleExtrapulmonaryHIV3544;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV3544(
-			Integer relapseFemaleExtrapulmonaryHIV3544) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV3544(Integer relapseFemaleExtrapulmonaryHIV3544) {
 		this.relapseFemaleExtrapulmonaryHIV3544 = relapseFemaleExtrapulmonaryHIV3544;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV4554() {
 		return relapseMaleExtrapulmonaryHIV4554;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV4554(
-			Integer relapseMaleExtrapulmonaryHIV4554) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV4554(Integer relapseMaleExtrapulmonaryHIV4554) {
 		this.relapseMaleExtrapulmonaryHIV4554 = relapseMaleExtrapulmonaryHIV4554;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV4554() {
 		return relapseFemaleExtrapulmonaryHIV4554;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV4554(
-			Integer relapseFemaleExtrapulmonaryHIV4554) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV4554(Integer relapseFemaleExtrapulmonaryHIV4554) {
 		this.relapseFemaleExtrapulmonaryHIV4554 = relapseFemaleExtrapulmonaryHIV4554;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV5564() {
 		return relapseMaleExtrapulmonaryHIV5564;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV5564(
-			Integer relapseMaleExtrapulmonaryHIV5564) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV5564(Integer relapseMaleExtrapulmonaryHIV5564) {
 		this.relapseMaleExtrapulmonaryHIV5564 = relapseMaleExtrapulmonaryHIV5564;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV5564() {
 		return relapseFemaleExtrapulmonaryHIV5564;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV5564(
-			Integer relapseFemaleExtrapulmonaryHIV5564) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV5564(Integer relapseFemaleExtrapulmonaryHIV5564) {
 		this.relapseFemaleExtrapulmonaryHIV5564 = relapseFemaleExtrapulmonaryHIV5564;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV65() {
 		return relapseMaleExtrapulmonaryHIV65;
 	}
-	public void setRelapseMaleExtrapulmonaryHIV65(
-			Integer relapseMaleExtrapulmonaryHIV65) {
+	
+	public void setRelapseMaleExtrapulmonaryHIV65(Integer relapseMaleExtrapulmonaryHIV65) {
 		this.relapseMaleExtrapulmonaryHIV65 = relapseMaleExtrapulmonaryHIV65;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV65() {
 		return relapseFemaleExtrapulmonaryHIV65;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV65(
-			Integer relapseFemaleExtrapulmonaryHIV65) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV65(Integer relapseFemaleExtrapulmonaryHIV65) {
 		this.relapseFemaleExtrapulmonaryHIV65 = relapseFemaleExtrapulmonaryHIV65;
 	}
+	
 	public Integer getRelapseMaleExtrapulmonaryHIV() {
 		return relapseMaleExtrapulmonaryHIV;
 	}
+	
 	public void setRelapseMaleExtrapulmonaryHIV(Integer relapseMaleExtrapulmonaryHIV) {
 		this.relapseMaleExtrapulmonaryHIV = relapseMaleExtrapulmonaryHIV;
 	}
+	
 	public Integer getRelapseFemaleExtrapulmonaryHIV() {
 		return relapseFemaleExtrapulmonaryHIV;
 	}
-	public void setRelapseFemaleExtrapulmonaryHIV(
-			Integer relapseFemaleExtrapulmonaryHIV) {
+	
+	public void setRelapseFemaleExtrapulmonaryHIV(Integer relapseFemaleExtrapulmonaryHIV) {
 		this.relapseFemaleExtrapulmonaryHIV = relapseFemaleExtrapulmonaryHIV;
 	}
+	
 	public Integer getRelapseExtrapulmonaryHIV() {
 		return relapseExtrapulmonaryHIV;
 	}
+	
 	public void setRelapseExtrapulmonaryHIV(Integer relapseExtrapulmonaryHIV) {
 		this.relapseExtrapulmonaryHIV = relapseExtrapulmonaryHIV;
 	}
+	
 	public Integer getRelapseMale04() {
 		return relapseMale04;
 	}
+	
 	public void setRelapseMale04(Integer relapseMale04) {
 		this.relapseMale04 = relapseMale04;
 	}
+	
 	public Integer getRelapseFemale04() {
 		return relapseFemale04;
 	}
+	
 	public void setRelapseFemale04(Integer relapseFemale04) {
 		this.relapseFemale04 = relapseFemale04;
 	}
+	
 	public Integer getRelapseMale0514() {
 		return relapseMale0514;
 	}
+	
 	public void setRelapseMale0514(Integer relapseMale0514) {
 		this.relapseMale0514 = relapseMale0514;
 	}
+	
 	public Integer getRelapseFemale0514() {
 		return relapseFemale0514;
 	}
+	
 	public void setRelapseFemale0514(Integer relapseFemale0514) {
 		this.relapseFemale0514 = relapseFemale0514;
 	}
+	
 	public Integer getRelapseMale1517() {
 		return relapseMale1517;
 	}
+	
 	public void setRelapseMale1517(Integer relapseMale1517) {
 		this.relapseMale1517 = relapseMale1517;
 	}
+	
 	public Integer getRelapseFemale1517() {
 		return relapseFemale1517;
 	}
+	
 	public void setRelapseFemale1517(Integer relapseFemale1517) {
 		this.relapseFemale1517 = relapseFemale1517;
 	}
+	
 	public Integer getRelapseMale1819() {
 		return relapseMale1819;
 	}
+	
 	public void setRelapseMale1819(Integer relapseMale1819) {
 		this.relapseMale1819 = relapseMale1819;
 	}
+	
 	public Integer getRelapseFemale1819() {
 		return relapseFemale1819;
 	}
+	
 	public void setRelapseFemale1819(Integer relapseFemale1819) {
 		this.relapseFemale1819 = relapseFemale1819;
 	}
+	
 	public Integer getRelapseMale2024() {
 		return relapseMale2024;
 	}
+	
 	public void setRelapseMale2024(Integer relapseMale2024) {
 		this.relapseMale2024 = relapseMale2024;
 	}
+	
 	public Integer getRelapseFemale2024() {
 		return relapseFemale2024;
 	}
+	
 	public void setRelapseFemale2024(Integer relapseFemale2024) {
 		this.relapseFemale2024 = relapseFemale2024;
 	}
+	
 	public Integer getRelapseMale2534() {
 		return relapseMale2534;
 	}
+	
 	public void setRelapseMale2534(Integer relapseMale2534) {
 		this.relapseMale2534 = relapseMale2534;
 	}
+	
 	public Integer getRelapseFemale2534() {
 		return relapseFemale2534;
 	}
+	
 	public void setRelapseFemale2534(Integer relapseFemale2534) {
 		this.relapseFemale2534 = relapseFemale2534;
 	}
+	
 	public Integer getRelapseMale3544() {
 		return relapseMale3544;
 	}
+	
 	public void setRelapseMale3544(Integer relapseMale3544) {
 		this.relapseMale3544 = relapseMale3544;
 	}
+	
 	public Integer getRelapseFemale3544() {
 		return relapseFemale3544;
 	}
+	
 	public void setRelapseFemale3544(Integer relapseFemale3544) {
 		this.relapseFemale3544 = relapseFemale3544;
 	}
+	
 	public Integer getRelapseMale4554() {
 		return relapseMale4554;
 	}
+	
 	public void setRelapseMale4554(Integer relapseMale4554) {
 		this.relapseMale4554 = relapseMale4554;
 	}
+	
 	public Integer getRelapseFemale4554() {
 		return relapseFemale4554;
 	}
+	
 	public void setRelapseFemale4554(Integer relapseFemale4554) {
 		this.relapseFemale4554 = relapseFemale4554;
 	}
+	
 	public Integer getRelapseMale5564() {
 		return relapseMale5564;
 	}
+	
 	public void setRelapseMale5564(Integer relapseMale5564) {
 		this.relapseMale5564 = relapseMale5564;
 	}
+	
 	public Integer getRelapseFemale5564() {
 		return relapseFemale5564;
 	}
+	
 	public void setRelapseFemale5564(Integer relapseFemale5564) {
 		this.relapseFemale5564 = relapseFemale5564;
 	}
+	
 	public Integer getRelapseMale65() {
 		return relapseMale65;
 	}
+	
 	public void setRelapseMale65(Integer relapseMale65) {
 		this.relapseMale65 = relapseMale65;
 	}
+	
 	public Integer getRelapseFemale65() {
 		return relapseFemale65;
 	}
+	
 	public void setRelapseFemale65(Integer relapseFemale65) {
 		this.relapseFemale65 = relapseFemale65;
 	}
+	
 	public Integer getRelapseMale() {
 		return relapseMale;
 	}
+	
 	public void setRelapseMale(Integer relapseMale) {
 		this.relapseMale = relapseMale;
 	}
+	
 	public Integer getRelapseFemale() {
 		return relapseFemale;
 	}
+	
 	public void setRelapseFemale(Integer relapseFemale) {
 		this.relapseFemale = relapseFemale;
 	}
+	
 	public Integer getRelapseAll() {
 		return relapseAll;
 	}
+	
 	public void setRelapseAll(Integer relapseAll) {
 		this.relapseAll = relapseAll;
 	}
+	
 	public Integer getRelapseMaleHIV04() {
 		return relapseMaleHIV04;
 	}
+	
 	public void setRelapseMaleHIV04(Integer relapseMaleHIV04) {
 		this.relapseMaleHIV04 = relapseMaleHIV04;
 	}
+	
 	public Integer getRelapseFemaleHIV04() {
 		return relapseFemaleHIV04;
 	}
+	
 	public void setRelapseFemaleHIV04(Integer relapseFemaleHIV04) {
 		this.relapseFemaleHIV04 = relapseFemaleHIV04;
 	}
+	
 	public Integer getRelapseMaleHIV0514() {
 		return relapseMaleHIV0514;
 	}
+	
 	public void setRelapseMaleHIV0514(Integer relapseMaleHIV0514) {
 		this.relapseMaleHIV0514 = relapseMaleHIV0514;
 	}
+	
 	public Integer getRelapseFemaleHIV0514() {
 		return relapseFemaleHIV0514;
 	}
+	
 	public void setRelapseFemaleHIV0514(Integer relapseFemaleHIV0514) {
 		this.relapseFemaleHIV0514 = relapseFemaleHIV0514;
 	}
+	
 	public Integer getRelapseMaleHIV1517() {
 		return relapseMaleHIV1517;
 	}
+	
 	public void setRelapseMaleHIV1517(Integer relapseMaleHIV1517) {
 		this.relapseMaleHIV1517 = relapseMaleHIV1517;
 	}
+	
 	public Integer getRelapseFemaleHIV1517() {
 		return relapseFemaleHIV1517;
 	}
+	
 	public void setRelapseFemaleHIV1517(Integer relapseFemaleHIV1517) {
 		this.relapseFemaleHIV1517 = relapseFemaleHIV1517;
 	}
+	
 	public Integer getRelapseMaleHIV1819() {
 		return relapseMaleHIV1819;
 	}
+	
 	public void setRelapseMaleHIV1819(Integer relapseMaleHIV1819) {
 		this.relapseMaleHIV1819 = relapseMaleHIV1819;
 	}
+	
 	public Integer getRelapseFemaleHIV1819() {
 		return relapseFemaleHIV1819;
 	}
+	
 	public void setRelapseFemaleHIV1819(Integer relapseFemaleHIV1819) {
 		this.relapseFemaleHIV1819 = relapseFemaleHIV1819;
 	}
+	
 	public Integer getRelapseMaleHIV2024() {
 		return relapseMaleHIV2024;
 	}
+	
 	public void setRelapseMaleHIV2024(Integer relapseMaleHIV2024) {
 		this.relapseMaleHIV2024 = relapseMaleHIV2024;
 	}
+	
 	public Integer getRelapseFemaleHIV2024() {
 		return relapseFemaleHIV2024;
 	}
+	
 	public void setRelapseFemaleHIV2024(Integer relapseFemaleHIV2024) {
 		this.relapseFemaleHIV2024 = relapseFemaleHIV2024;
 	}
+	
 	public Integer getRelapseMaleHIV2534() {
 		return relapseMaleHIV2534;
 	}
+	
 	public void setRelapseMaleHIV2534(Integer relapseMaleHIV2534) {
 		this.relapseMaleHIV2534 = relapseMaleHIV2534;
 	}
+	
 	public Integer getRelapseFemaleHIV2534() {
 		return relapseFemaleHIV2534;
 	}
+	
 	public void setRelapseFemaleHIV2534(Integer relapseFemaleHIV2534) {
 		this.relapseFemaleHIV2534 = relapseFemaleHIV2534;
 	}
+	
 	public Integer getRelapseMaleHIV3544() {
 		return relapseMaleHIV3544;
 	}
+	
 	public void setRelapseMaleHIV3544(Integer relapseMaleHIV3544) {
 		this.relapseMaleHIV3544 = relapseMaleHIV3544;
 	}
+	
 	public Integer getRelapseFemaleHIV3544() {
 		return relapseFemaleHIV3544;
 	}
+	
 	public void setRelapseFemaleHIV3544(Integer relapseFemaleHIV3544) {
 		this.relapseFemaleHIV3544 = relapseFemaleHIV3544;
 	}
+	
 	public Integer getRelapseMaleHIV4554() {
 		return relapseMaleHIV4554;
 	}
+	
 	public void setRelapseMaleHIV4554(Integer relapseMaleHIV4554) {
 		this.relapseMaleHIV4554 = relapseMaleHIV4554;
 	}
+	
 	public Integer getRelapseFemaleHIV4554() {
 		return relapseFemaleHIV4554;
 	}
+	
 	public void setRelapseFemaleHIV4554(Integer relapseFemaleHIV4554) {
 		this.relapseFemaleHIV4554 = relapseFemaleHIV4554;
 	}
+	
 	public Integer getRelapseMaleHIV5564() {
 		return relapseMaleHIV5564;
 	}
+	
 	public void setRelapseMaleHIV5564(Integer relapseMaleHIV5564) {
 		this.relapseMaleHIV5564 = relapseMaleHIV5564;
 	}
+	
 	public Integer getRelapseFemaleHIV5564() {
 		return relapseFemaleHIV5564;
 	}
+	
 	public void setRelapseFemaleHIV5564(Integer relapseFemaleHIV5564) {
 		this.relapseFemaleHIV5564 = relapseFemaleHIV5564;
 	}
+	
 	public Integer getRelapseMaleHIV65() {
 		return relapseMaleHIV65;
 	}
+	
 	public void setRelapseMaleHIV65(Integer relapseMaleHIV65) {
 		this.relapseMaleHIV65 = relapseMaleHIV65;
 	}
+	
 	public Integer getRelapseFemaleHIV65() {
 		return relapseFemaleHIV65;
 	}
+	
 	public void setRelapseFemaleHIV65(Integer relapseFemaleHIV65) {
 		this.relapseFemaleHIV65 = relapseFemaleHIV65;
 	}
+	
 	public Integer getRelapseMaleHIV() {
 		return relapseMaleHIV;
 	}
+	
 	public void setRelapseMaleHIV(Integer relapseMaleHIV) {
 		this.relapseMaleHIV = relapseMaleHIV;
 	}
+	
 	public Integer getRelapseFemaleHIV() {
 		return relapseFemaleHIV;
 	}
+	
 	public void setRelapseFemaleHIV(Integer relapseFemaleHIV) {
 		this.relapseFemaleHIV = relapseFemaleHIV;
 	}
+	
 	public Integer getRelapseAllHIV() {
 		return relapseAllHIV;
 	}
+	
 	public void setRelapseAllHIV(Integer relapseAllHIV) {
 		this.relapseAllHIV = relapseAllHIV;
 	}
-
+	
 	public Integer getHivPositive() {
 		return hivPositive;
 	}
-
+	
 	public void setHivPositive(Integer hivPositive) {
 		this.hivPositive = hivPositive;
 	}
-
+	
 	public Integer getHivTested() {
 		return hivTested;
 	}
-
+	
 	public void setHivTested(Integer hivTested) {
 		this.hivTested = hivTested;
 	}
-
+	
 	public Integer getArtStarted() {
 		return artStarted;
 	}
-
+	
 	public void setArtStarted(Integer artStarted) {
 		this.artStarted = artStarted;
 	}
-
+	
 	public Integer getPctStarted() {
 		return pctStarted;
 	}
-
+	
 	public void setPctStarted(Integer pctStarted) {
 		this.pctStarted = pctStarted;
 	}
-
+	
 	public Integer getFailureMalePulmonaryBC() {
 		return failureMalePulmonaryBC;
 	}
-
+	
 	public void setFailureMalePulmonaryBC(Integer failureMalePulmonaryBC) {
 		this.failureMalePulmonaryBC = failureMalePulmonaryBC;
 	}
-
+	
 	public Integer getFailureFemalePulmonaryBC() {
 		return failureFemalePulmonaryBC;
 	}
-
+	
 	public void setFailureFemalePulmonaryBC(Integer failureFemalePulmonaryBC) {
 		this.failureFemalePulmonaryBC = failureFemalePulmonaryBC;
 	}
-
+	
 	public Integer getFailurePulmonaryBC() {
 		return failurePulmonaryBC;
 	}
-
+	
 	public void setFailurePulmonaryBC(Integer failurePulmonaryBC) {
 		this.failurePulmonaryBC = failurePulmonaryBC;
 	}
-
+	
 	public Integer getFailureMalePulmonaryBCHIV() {
 		return failureMalePulmonaryBCHIV;
 	}
-
+	
 	public void setFailureMalePulmonaryBCHIV(Integer failureMalePulmonaryBCHIV) {
 		this.failureMalePulmonaryBCHIV = failureMalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getFailureFemalePulmonaryBCHIV() {
 		return failureFemalePulmonaryBCHIV;
 	}
-
+	
 	public void setFailureFemalePulmonaryBCHIV(Integer failureFemalePulmonaryBCHIV) {
 		this.failureFemalePulmonaryBCHIV = failureFemalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getFailurePulmonaryBCHIV() {
 		return failurePulmonaryBCHIV;
 	}
-
+	
 	public void setFailurePulmonaryBCHIV(Integer failurePulmonaryBCHIV) {
 		this.failurePulmonaryBCHIV = failurePulmonaryBCHIV;
 	}
-
+	
 	public Integer getFailureMalePulmonaryCD() {
 		return failureMalePulmonaryCD;
 	}
-
+	
 	public void setFailureMalePulmonaryCD(Integer failureMalePulmonaryCD) {
 		this.failureMalePulmonaryCD = failureMalePulmonaryCD;
 	}
-
+	
 	public Integer getFailureFemalePulmonaryCD() {
 		return failureFemalePulmonaryCD;
 	}
-
+	
 	public void setFailureFemalePulmonaryCD(Integer failureFemalePulmonaryCD) {
 		this.failureFemalePulmonaryCD = failureFemalePulmonaryCD;
 	}
-
+	
 	public Integer getFailurePulmonaryCD() {
 		return failurePulmonaryCD;
 	}
-
+	
 	public void setFailurePulmonaryCD(Integer failurePulmonaryCD) {
 		this.failurePulmonaryCD = failurePulmonaryCD;
 	}
-
+	
 	public Integer getFailureMalePulmonaryCDHIV() {
 		return failureMalePulmonaryCDHIV;
 	}
-
+	
 	public void setFailureMalePulmonaryCDHIV(Integer failureMalePulmonaryCDHIV) {
 		this.failureMalePulmonaryCDHIV = failureMalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getFailureFemalePulmonaryCDHIV() {
 		return failureFemalePulmonaryCDHIV;
 	}
-
+	
 	public void setFailureFemalePulmonaryCDHIV(Integer failureFemalePulmonaryCDHIV) {
 		this.failureFemalePulmonaryCDHIV = failureFemalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getFailurePulmonaryCDHIV() {
 		return failurePulmonaryCDHIV;
 	}
-
+	
 	public void setFailurePulmonaryCDHIV(Integer failurePulmonaryCDHIV) {
 		this.failurePulmonaryCDHIV = failurePulmonaryCDHIV;
 	}
-
+	
 	public Integer getFailureMaleExtrapulmonary() {
 		return failureMaleExtrapulmonary;
 	}
-
+	
 	public void setFailureMaleExtrapulmonary(Integer failureMaleExtrapulmonary) {
 		this.failureMaleExtrapulmonary = failureMaleExtrapulmonary;
 	}
-
+	
 	public Integer getFailureFemaleExtrapulmonary() {
 		return failureFemaleExtrapulmonary;
 	}
-
+	
 	public void setFailureFemaleExtrapulmonary(Integer failureFemaleExtrapulmonary) {
 		this.failureFemaleExtrapulmonary = failureFemaleExtrapulmonary;
 	}
-
+	
 	public Integer getFailureExtrapulmonary() {
 		return failureExtrapulmonary;
 	}
-
+	
 	public void setFailureExtrapulmonary(Integer failureExtrapulmonary) {
 		this.failureExtrapulmonary = failureExtrapulmonary;
 	}
-
+	
 	public Integer getFailureMaleExtrapulmonaryHIV() {
 		return failureMaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setFailureMaleExtrapulmonaryHIV(Integer failureMaleExtrapulmonaryHIV) {
 		this.failureMaleExtrapulmonaryHIV = failureMaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getFailureFemaleExtrapulmonaryHIV() {
 		return failureFemaleExtrapulmonaryHIV;
 	}
-
-	public void setFailureFemaleExtrapulmonaryHIV(
-			Integer failureFemaleExtrapulmonaryHIV) {
+	
+	public void setFailureFemaleExtrapulmonaryHIV(Integer failureFemaleExtrapulmonaryHIV) {
 		this.failureFemaleExtrapulmonaryHIV = failureFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getFailureExtrapulmonaryHIV() {
 		return failureExtrapulmonaryHIV;
 	}
-
+	
 	public void setFailureExtrapulmonaryHIV(Integer failureExtrapulmonaryHIV) {
 		this.failureExtrapulmonaryHIV = failureExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getFailureMale() {
 		return failureMale;
 	}
-
+	
 	public void setFailureMale(Integer failureMale) {
 		this.failureMale = failureMale;
 	}
-
+	
 	public Integer getFailureFemale() {
 		return failureFemale;
 	}
-
+	
 	public void setFailureFemale(Integer failureFemale) {
 		this.failureFemale = failureFemale;
 	}
-
+	
 	public Integer getFailureAll() {
 		return failureAll;
 	}
-
+	
 	public void setFailureAll(Integer failureAll) {
 		this.failureAll = failureAll;
 	}
-
+	
 	public Integer getFailureMaleHIV() {
 		return failureMaleHIV;
 	}
-
+	
 	public void setFailureMaleHIV(Integer failureMaleHIV) {
 		this.failureMaleHIV = failureMaleHIV;
 	}
-
+	
 	public Integer getFailureFemaleHIV() {
 		return failureFemaleHIV;
 	}
-
+	
 	public void setFailureFemaleHIV(Integer failureFemaleHIV) {
 		this.failureFemaleHIV = failureFemaleHIV;
 	}
-
+	
 	public Integer getFailureAllHIV() {
 		return failureAllHIV;
 	}
-
+	
 	public void setFailureAllHIV(Integer failureAllHIV) {
 		this.failureAllHIV = failureAllHIV;
 	}
-
+	
 	public Integer getDefaultMalePulmonaryBC() {
 		return defaultMalePulmonaryBC;
 	}
-
+	
 	public void setDefaultMalePulmonaryBC(Integer defaultMalePulmonaryBC) {
 		this.defaultMalePulmonaryBC = defaultMalePulmonaryBC;
 	}
-
+	
 	public Integer getDefaultFemalePulmonaryBC() {
 		return defaultFemalePulmonaryBC;
 	}
-
+	
 	public void setDefaultFemalePulmonaryBC(Integer defaultFemalePulmonaryBC) {
 		this.defaultFemalePulmonaryBC = defaultFemalePulmonaryBC;
 	}
-
+	
 	public Integer getDefaultPulmonaryBC() {
 		return defaultPulmonaryBC;
 	}
-
+	
 	public void setDefaultPulmonaryBC(Integer defaultPulmonaryBC) {
 		this.defaultPulmonaryBC = defaultPulmonaryBC;
 	}
-
+	
 	public Integer getDefaultMalePulmonaryBCHIV() {
 		return defaultMalePulmonaryBCHIV;
 	}
-
+	
 	public void setDefaultMalePulmonaryBCHIV(Integer defaultMalePulmonaryBCHIV) {
 		this.defaultMalePulmonaryBCHIV = defaultMalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getDefaultFemalePulmonaryBCHIV() {
 		return defaultFemalePulmonaryBCHIV;
 	}
-
+	
 	public void setDefaultFemalePulmonaryBCHIV(Integer defaultFemalePulmonaryBCHIV) {
 		this.defaultFemalePulmonaryBCHIV = defaultFemalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getDefaultPulmonaryBCHIV() {
 		return defaultPulmonaryBCHIV;
 	}
-
+	
 	public void setDefaultPulmonaryBCHIV(Integer defaultPulmonaryBCHIV) {
 		this.defaultPulmonaryBCHIV = defaultPulmonaryBCHIV;
 	}
-
+	
 	public Integer getDefaultMalePulmonaryCD() {
 		return defaultMalePulmonaryCD;
 	}
-
+	
 	public void setDefaultMalePulmonaryCD(Integer defaultMalePulmonaryCD) {
 		this.defaultMalePulmonaryCD = defaultMalePulmonaryCD;
 	}
-
+	
 	public Integer getDefaultFemalePulmonaryCD() {
 		return defaultFemalePulmonaryCD;
 	}
-
+	
 	public void setDefaultFemalePulmonaryCD(Integer defaultFemalePulmonaryCD) {
 		this.defaultFemalePulmonaryCD = defaultFemalePulmonaryCD;
 	}
-
+	
 	public Integer getDefaultPulmonaryCD() {
 		return defaultPulmonaryCD;
 	}
-
+	
 	public void setDefaultPulmonaryCD(Integer defaultPulmonaryCD) {
 		this.defaultPulmonaryCD = defaultPulmonaryCD;
 	}
-
+	
 	public Integer getDefaultMalePulmonaryCDHIV() {
 		return defaultMalePulmonaryCDHIV;
 	}
-
+	
 	public void setDefaultMalePulmonaryCDHIV(Integer defaultMalePulmonaryCDHIV) {
 		this.defaultMalePulmonaryCDHIV = defaultMalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getDefaultFemalePulmonaryCDHIV() {
 		return defaultFemalePulmonaryCDHIV;
 	}
-
+	
 	public void setDefaultFemalePulmonaryCDHIV(Integer defaultFemalePulmonaryCDHIV) {
 		this.defaultFemalePulmonaryCDHIV = defaultFemalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getDefaultPulmonaryCDHIV() {
 		return defaultPulmonaryCDHIV;
 	}
-
+	
 	public void setDefaultPulmonaryCDHIV(Integer defaultPulmonaryCDHIV) {
 		this.defaultPulmonaryCDHIV = defaultPulmonaryCDHIV;
 	}
-
+	
 	public Integer getDefaultMaleExtrapulmonary() {
 		return defaultMaleExtrapulmonary;
 	}
-
+	
 	public void setDefaultMaleExtrapulmonary(Integer defaultMaleExtrapulmonary) {
 		this.defaultMaleExtrapulmonary = defaultMaleExtrapulmonary;
 	}
-
+	
 	public Integer getDefaultFemaleExtrapulmonary() {
 		return defaultFemaleExtrapulmonary;
 	}
-
+	
 	public void setDefaultFemaleExtrapulmonary(Integer defaultFemaleExtrapulmonary) {
 		this.defaultFemaleExtrapulmonary = defaultFemaleExtrapulmonary;
 	}
-
+	
 	public Integer getDefaultExtrapulmonary() {
 		return defaultExtrapulmonary;
 	}
-
+	
 	public void setDefaultExtrapulmonary(Integer defaultExtrapulmonary) {
 		this.defaultExtrapulmonary = defaultExtrapulmonary;
 	}
-
+	
 	public Integer getDefaultMaleExtrapulmonaryHIV() {
 		return defaultMaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setDefaultMaleExtrapulmonaryHIV(Integer defaultMaleExtrapulmonaryHIV) {
 		this.defaultMaleExtrapulmonaryHIV = defaultMaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getDefaultFemaleExtrapulmonaryHIV() {
 		return defaultFemaleExtrapulmonaryHIV;
 	}
-
-	public void setDefaultFemaleExtrapulmonaryHIV(
-			Integer defaultFemaleExtrapulmonaryHIV) {
+	
+	public void setDefaultFemaleExtrapulmonaryHIV(Integer defaultFemaleExtrapulmonaryHIV) {
 		this.defaultFemaleExtrapulmonaryHIV = defaultFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getDefaultExtrapulmonaryHIV() {
 		return defaultExtrapulmonaryHIV;
 	}
-
+	
 	public void setDefaultExtrapulmonaryHIV(Integer defaultExtrapulmonaryHIV) {
 		this.defaultExtrapulmonaryHIV = defaultExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getDefaultMale() {
 		return defaultMale;
 	}
-
+	
 	public void setDefaultMale(Integer defaultMale) {
 		this.defaultMale = defaultMale;
 	}
-
+	
 	public Integer getDefaultFemale() {
 		return defaultFemale;
 	}
-
+	
 	public void setDefaultFemale(Integer defaultFemale) {
 		this.defaultFemale = defaultFemale;
 	}
-
+	
 	public Integer getDefaultAll() {
 		return defaultAll;
 	}
-
+	
 	public void setDefaultAll(Integer defaultAll) {
 		this.defaultAll = defaultAll;
 	}
-
+	
 	public Integer getDefaultMaleHIV() {
 		return defaultMaleHIV;
 	}
-
+	
 	public void setDefaultMaleHIV(Integer defaultMaleHIV) {
 		this.defaultMaleHIV = defaultMaleHIV;
 	}
-
+	
 	public Integer getDefaultFemaleHIV() {
 		return defaultFemaleHIV;
 	}
-
+	
 	public void setDefaultFemaleHIV(Integer defaultFemaleHIV) {
 		this.defaultFemaleHIV = defaultFemaleHIV;
 	}
-
+	
 	public Integer getDefaultAllHIV() {
 		return defaultAllHIV;
 	}
-
+	
 	public void setDefaultAllHIV(Integer defaultAllHIV) {
 		this.defaultAllHIV = defaultAllHIV;
 	}
-
+	
 	public Integer getOtherMalePulmonaryBC() {
 		return otherMalePulmonaryBC;
 	}
-
+	
 	public void setOtherMalePulmonaryBC(Integer otherMalePulmonaryBC) {
 		this.otherMalePulmonaryBC = otherMalePulmonaryBC;
 	}
-
+	
 	public Integer getOtherFemalePulmonaryBC() {
 		return otherFemalePulmonaryBC;
 	}
-
+	
 	public void setOtherFemalePulmonaryBC(Integer otherFemalePulmonaryBC) {
 		this.otherFemalePulmonaryBC = otherFemalePulmonaryBC;
 	}
-
+	
 	public Integer getOtherPulmonaryBC() {
 		return otherPulmonaryBC;
 	}
-
+	
 	public void setOtherPulmonaryBC(Integer otherPulmonaryBC) {
 		this.otherPulmonaryBC = otherPulmonaryBC;
 	}
-
+	
 	public Integer getOtherMalePulmonaryBCHIV() {
 		return otherMalePulmonaryBCHIV;
 	}
-
+	
 	public void setOtherMalePulmonaryBCHIV(Integer otherMalePulmonaryBCHIV) {
 		this.otherMalePulmonaryBCHIV = otherMalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getOtherFemalePulmonaryBCHIV() {
 		return otherFemalePulmonaryBCHIV;
 	}
-
+	
 	public void setOtherFemalePulmonaryBCHIV(Integer otherFemalePulmonaryBCHIV) {
 		this.otherFemalePulmonaryBCHIV = otherFemalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getOtherPulmonaryBCHIV() {
 		return otherPulmonaryBCHIV;
 	}
-
+	
 	public void setOtherPulmonaryBCHIV(Integer otherPulmonaryBCHIV) {
 		this.otherPulmonaryBCHIV = otherPulmonaryBCHIV;
 	}
-
+	
 	public Integer getOtherMalePulmonaryCD() {
 		return otherMalePulmonaryCD;
 	}
-
+	
 	public void setOtherMalePulmonaryCD(Integer otherMalePulmonaryCD) {
 		this.otherMalePulmonaryCD = otherMalePulmonaryCD;
 	}
-
+	
 	public Integer getOtherFemalePulmonaryCD() {
 		return otherFemalePulmonaryCD;
 	}
-
+	
 	public void setOtherFemalePulmonaryCD(Integer otherFemalePulmonaryCD) {
 		this.otherFemalePulmonaryCD = otherFemalePulmonaryCD;
 	}
-
+	
 	public Integer getOtherPulmonaryCD() {
 		return otherPulmonaryCD;
 	}
-
+	
 	public void setOtherPulmonaryCD(Integer otherPulmonaryCD) {
 		this.otherPulmonaryCD = otherPulmonaryCD;
 	}
-
+	
 	public Integer getOtherMalePulmonaryCDHIV() {
 		return otherMalePulmonaryCDHIV;
 	}
-
+	
 	public void setOtherMalePulmonaryCDHIV(Integer otherMalePulmonaryCDHIV) {
 		this.otherMalePulmonaryCDHIV = otherMalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getOtherFemalePulmonaryCDHIV() {
 		return otherFemalePulmonaryCDHIV;
 	}
-
+	
 	public void setOtherFemalePulmonaryCDHIV(Integer otherFemalePulmonaryCDHIV) {
 		this.otherFemalePulmonaryCDHIV = otherFemalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getOtherPulmonaryCDHIV() {
 		return otherPulmonaryCDHIV;
 	}
-
+	
 	public void setOtherPulmonaryCDHIV(Integer otherPulmonaryCDHIV) {
 		this.otherPulmonaryCDHIV = otherPulmonaryCDHIV;
 	}
-
+	
 	public Integer getOtherMaleExtrapulmonary() {
 		return otherMaleExtrapulmonary;
 	}
-
+	
 	public void setOtherMaleExtrapulmonary(Integer otherMaleExtrapulmonary) {
 		this.otherMaleExtrapulmonary = otherMaleExtrapulmonary;
 	}
-
+	
 	public Integer getOtherFemaleExtrapulmonary() {
 		return otherFemaleExtrapulmonary;
 	}
-
+	
 	public void setOtherFemaleExtrapulmonary(Integer otherFemaleExtrapulmonary) {
 		this.otherFemaleExtrapulmonary = otherFemaleExtrapulmonary;
 	}
-
+	
 	public Integer getOtherExtrapulmonary() {
 		return otherExtrapulmonary;
 	}
-
+	
 	public void setOtherExtrapulmonary(Integer otherExtrapulmonary) {
 		this.otherExtrapulmonary = otherExtrapulmonary;
 	}
-
+	
 	public Integer getOtherMaleExtrapulmonaryHIV() {
 		return otherMaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setOtherMaleExtrapulmonaryHIV(Integer otherMaleExtrapulmonaryHIV) {
 		this.otherMaleExtrapulmonaryHIV = otherMaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getOtherFemaleExtrapulmonaryHIV() {
 		return otherFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setOtherFemaleExtrapulmonaryHIV(Integer otherFemaleExtrapulmonaryHIV) {
 		this.otherFemaleExtrapulmonaryHIV = otherFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getOtherExtrapulmonaryHIV() {
 		return otherExtrapulmonaryHIV;
 	}
-
+	
 	public void setOtherExtrapulmonaryHIV(Integer otherExtrapulmonaryHIV) {
 		this.otherExtrapulmonaryHIV = otherExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getOtherMale() {
 		return otherMale;
 	}
-
+	
 	public void setOtherMale(Integer otherMale) {
 		this.otherMale = otherMale;
 	}
-
+	
 	public Integer getOtherFemale() {
 		return otherFemale;
 	}
-
+	
 	public void setOtherFemale(Integer otherFemale) {
 		this.otherFemale = otherFemale;
 	}
-
+	
 	public Integer getOtherAll() {
 		return otherAll;
 	}
-
+	
 	public void setOtherAll(Integer otherAll) {
 		this.otherAll = otherAll;
 	}
-
+	
 	public Integer getOtherMaleHIV() {
 		return otherMaleHIV;
 	}
-
+	
 	public void setOtherMaleHIV(Integer otherMaleHIV) {
 		this.otherMaleHIV = otherMaleHIV;
 	}
-
+	
 	public Integer getOtherFemaleHIV() {
 		return otherFemaleHIV;
 	}
-
+	
 	public void setOtherFemaleHIV(Integer otherFemaleHIV) {
 		this.otherFemaleHIV = otherFemaleHIV;
 	}
-
+	
 	public Integer getOtherAllHIV() {
 		return otherAllHIV;
 	}
-
+	
 	public void setOtherAllHIV(Integer otherAllHIV) {
 		this.otherAllHIV = otherAllHIV;
 	}
-
+	
 	public Integer getRetreatmentMalePulmonaryBC() {
 		return retreatmentMalePulmonaryBC;
 	}
-
+	
 	public void setRetreatmentMalePulmonaryBC(Integer retreatmentMalePulmonaryBC) {
 		this.retreatmentMalePulmonaryBC = retreatmentMalePulmonaryBC;
 	}
-
+	
 	public Integer getRetreatmentFemalePulmonaryBC() {
 		return retreatmentFemalePulmonaryBC;
 	}
-
+	
 	public void setRetreatmentFemalePulmonaryBC(Integer retreatmentFemalePulmonaryBC) {
 		this.retreatmentFemalePulmonaryBC = retreatmentFemalePulmonaryBC;
 	}
-
+	
 	public Integer getRetreatmentPulmonaryBC() {
 		return retreatmentPulmonaryBC;
 	}
-
+	
 	public void setRetreatmentPulmonaryBC(Integer retreatmentPulmonaryBC) {
 		this.retreatmentPulmonaryBC = retreatmentPulmonaryBC;
 	}
-
+	
 	public Integer getRetreatmentMalePulmonaryBCHIV() {
 		return retreatmentMalePulmonaryBCHIV;
 	}
-
-	public void setRetreatmentMalePulmonaryBCHIV(
-			Integer retreatmentMalePulmonaryBCHIV) {
+	
+	public void setRetreatmentMalePulmonaryBCHIV(Integer retreatmentMalePulmonaryBCHIV) {
 		this.retreatmentMalePulmonaryBCHIV = retreatmentMalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getRetreatmentFemalePulmonaryBCHIV() {
 		return retreatmentFemalePulmonaryBCHIV;
 	}
-
-	public void setRetreatmentFemalePulmonaryBCHIV(
-			Integer retreatmentFemalePulmonaryBCHIV) {
+	
+	public void setRetreatmentFemalePulmonaryBCHIV(Integer retreatmentFemalePulmonaryBCHIV) {
 		this.retreatmentFemalePulmonaryBCHIV = retreatmentFemalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getRetreatmentPulmonaryBCHIV() {
 		return retreatmentPulmonaryBCHIV;
 	}
-
+	
 	public void setRetreatmentPulmonaryBCHIV(Integer retreatmentPulmonaryBCHIV) {
 		this.retreatmentPulmonaryBCHIV = retreatmentPulmonaryBCHIV;
 	}
-
+	
 	public Integer getRetreatmentMalePulmonaryCD() {
 		return retreatmentMalePulmonaryCD;
 	}
-
+	
 	public void setRetreatmentMalePulmonaryCD(Integer retreatmentMalePulmonaryCD) {
 		this.retreatmentMalePulmonaryCD = retreatmentMalePulmonaryCD;
 	}
-
+	
 	public Integer getRetreatmentFemalePulmonaryCD() {
 		return retreatmentFemalePulmonaryCD;
 	}
-
+	
 	public void setRetreatmentFemalePulmonaryCD(Integer retreatmentFemalePulmonaryCD) {
 		this.retreatmentFemalePulmonaryCD = retreatmentFemalePulmonaryCD;
 	}
-
+	
 	public Integer getRetreatmentPulmonaryCD() {
 		return retreatmentPulmonaryCD;
 	}
-
+	
 	public void setRetreatmentPulmonaryCD(Integer retreatmentPulmonaryCD) {
 		this.retreatmentPulmonaryCD = retreatmentPulmonaryCD;
 	}
-
+	
 	public Integer getRetreatmentMalePulmonaryCDHIV() {
 		return retreatmentMalePulmonaryCDHIV;
 	}
-
-	public void setRetreatmentMalePulmonaryCDHIV(
-			Integer retreatmentMalePulmonaryCDHIV) {
+	
+	public void setRetreatmentMalePulmonaryCDHIV(Integer retreatmentMalePulmonaryCDHIV) {
 		this.retreatmentMalePulmonaryCDHIV = retreatmentMalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getRetreatmentFemalePulmonaryCDHIV() {
 		return retreatmentFemalePulmonaryCDHIV;
 	}
-
-	public void setRetreatmentFemalePulmonaryCDHIV(
-			Integer retreatmentFemalePulmonaryCDHIV) {
+	
+	public void setRetreatmentFemalePulmonaryCDHIV(Integer retreatmentFemalePulmonaryCDHIV) {
 		this.retreatmentFemalePulmonaryCDHIV = retreatmentFemalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getRetreatmentPulmonaryCDHIV() {
 		return retreatmentPulmonaryCDHIV;
 	}
-
+	
 	public void setRetreatmentPulmonaryCDHIV(Integer retreatmentPulmonaryCDHIV) {
 		this.retreatmentPulmonaryCDHIV = retreatmentPulmonaryCDHIV;
 	}
-
+	
 	public Integer getRetreatmentMaleExtrapulmonary() {
 		return retreatmentMaleExtrapulmonary;
 	}
-
-	public void setRetreatmentMaleExtrapulmonary(
-			Integer retreatmentMaleExtrapulmonary) {
+	
+	public void setRetreatmentMaleExtrapulmonary(Integer retreatmentMaleExtrapulmonary) {
 		this.retreatmentMaleExtrapulmonary = retreatmentMaleExtrapulmonary;
 	}
-
+	
 	public Integer getRetreatmentFemaleExtrapulmonary() {
 		return retreatmentFemaleExtrapulmonary;
 	}
-
-	public void setRetreatmentFemaleExtrapulmonary(
-			Integer retreatmentFemaleExtrapulmonary) {
+	
+	public void setRetreatmentFemaleExtrapulmonary(Integer retreatmentFemaleExtrapulmonary) {
 		this.retreatmentFemaleExtrapulmonary = retreatmentFemaleExtrapulmonary;
 	}
-
+	
 	public Integer getRetreatmentExtrapulmonary() {
 		return retreatmentExtrapulmonary;
 	}
-
+	
 	public void setRetreatmentExtrapulmonary(Integer retreatmentExtrapulmonary) {
 		this.retreatmentExtrapulmonary = retreatmentExtrapulmonary;
 	}
-
+	
 	public Integer getRetreatmentMaleExtrapulmonaryHIV() {
 		return retreatmentMaleExtrapulmonaryHIV;
 	}
-
-	public void setRetreatmentMaleExtrapulmonaryHIV(
-			Integer retreatmentMaleExtrapulmonaryHIV) {
+	
+	public void setRetreatmentMaleExtrapulmonaryHIV(Integer retreatmentMaleExtrapulmonaryHIV) {
 		this.retreatmentMaleExtrapulmonaryHIV = retreatmentMaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getRetreatmentFemaleExtrapulmonaryHIV() {
 		return retreatmentFemaleExtrapulmonaryHIV;
 	}
-
-	public void setRetreatmentFemaleExtrapulmonaryHIV(
-			Integer retreatmentFemaleExtrapulmonaryHIV) {
+	
+	public void setRetreatmentFemaleExtrapulmonaryHIV(Integer retreatmentFemaleExtrapulmonaryHIV) {
 		this.retreatmentFemaleExtrapulmonaryHIV = retreatmentFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getRetreatmentExtrapulmonaryHIV() {
 		return retreatmentExtrapulmonaryHIV;
 	}
-
+	
 	public void setRetreatmentExtrapulmonaryHIV(Integer retreatmentExtrapulmonaryHIV) {
 		this.retreatmentExtrapulmonaryHIV = retreatmentExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getRetreatmentMale() {
 		return retreatmentMale;
 	}
-
+	
 	public void setRetreatmentMale(Integer retreatmentMale) {
 		this.retreatmentMale = retreatmentMale;
 	}
-
+	
 	public Integer getRetreatmentFemale() {
 		return retreatmentFemale;
 	}
-
+	
 	public void setRetreatmentFemale(Integer retreatmentFemale) {
 		this.retreatmentFemale = retreatmentFemale;
 	}
-
+	
 	public Integer getRetreatmentAll() {
 		return retreatmentAll;
 	}
-
+	
 	public void setRetreatmentAll(Integer retreatmentAll) {
 		this.retreatmentAll = retreatmentAll;
 	}
-
+	
 	public Integer getRetreatmentMaleHIV() {
 		return retreatmentMaleHIV;
 	}
-
+	
 	public void setRetreatmentMaleHIV(Integer retreatmentMaleHIV) {
 		this.retreatmentMaleHIV = retreatmentMaleHIV;
 	}
-
+	
 	public Integer getRetreatmentFemaleHIV() {
 		return retreatmentFemaleHIV;
 	}
-
+	
 	public void setRetreatmentFemaleHIV(Integer retreatmentFemaleHIV) {
 		this.retreatmentFemaleHIV = retreatmentFemaleHIV;
 	}
-
+	
 	public Integer getRetreatmentAllHIV() {
 		return retreatmentAllHIV;
 	}
-
+	
 	public void setRetreatmentAllHIV(Integer retreatmentAllHIV) {
 		this.retreatmentAllHIV = retreatmentAllHIV;
 	}
-
+	
 	public Integer getTotalMalePulmonaryBC() {
 		return totalMalePulmonaryBC;
 	}
-
+	
 	public void setTotalMalePulmonaryBC(Integer totalMalePulmonaryBC) {
 		this.totalMalePulmonaryBC = totalMalePulmonaryBC;
 	}
-
+	
 	public Integer getTotalFemalePulmonaryBC() {
 		return totalFemalePulmonaryBC;
 	}
-
+	
 	public void setTotalFemalePulmonaryBC(Integer totalFemalePulmonaryBC) {
 		this.totalFemalePulmonaryBC = totalFemalePulmonaryBC;
 	}
-
+	
 	public Integer getTotalPulmonaryBC() {
 		return totalPulmonaryBC;
 	}
-
+	
 	public void setTotalPulmonaryBC(Integer totalPulmonaryBC) {
 		this.totalPulmonaryBC = totalPulmonaryBC;
 	}
-
+	
 	public Integer getTotalMalePulmonaryBCHIV() {
 		return totalMalePulmonaryBCHIV;
 	}
-
+	
 	public void setTotalMalePulmonaryBCHIV(Integer totalMalePulmonaryBCHIV) {
 		this.totalMalePulmonaryBCHIV = totalMalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getTotalFemalePulmonaryBCHIV() {
 		return totalFemalePulmonaryBCHIV;
 	}
-
+	
 	public void setTotalFemalePulmonaryBCHIV(Integer totalFemalePulmonaryBCHIV) {
 		this.totalFemalePulmonaryBCHIV = totalFemalePulmonaryBCHIV;
 	}
-
+	
 	public Integer getTotalPulmonaryBCHIV() {
 		return totalPulmonaryBCHIV;
 	}
-
+	
 	public void setTotalPulmonaryBCHIV(Integer totalPulmonaryBCHIV) {
 		this.totalPulmonaryBCHIV = totalPulmonaryBCHIV;
 	}
-
+	
 	public Integer getTotalMalePulmonaryCD() {
 		return totalMalePulmonaryCD;
 	}
-
+	
 	public void setTotalMalePulmonaryCD(Integer totalMalePulmonaryCD) {
 		this.totalMalePulmonaryCD = totalMalePulmonaryCD;
 	}
-
+	
 	public Integer getTotalFemalePulmonaryCD() {
 		return totalFemalePulmonaryCD;
 	}
-
+	
 	public void setTotalFemalePulmonaryCD(Integer totalFemalePulmonaryCD) {
 		this.totalFemalePulmonaryCD = totalFemalePulmonaryCD;
 	}
-
+	
 	public Integer getTotalPulmonaryCD() {
 		return totalPulmonaryCD;
 	}
-
+	
 	public void setTotalPulmonaryCD(Integer totalPulmonaryCD) {
 		this.totalPulmonaryCD = totalPulmonaryCD;
 	}
-
+	
 	public Integer getTotalMalePulmonaryCDHIV() {
 		return totalMalePulmonaryCDHIV;
 	}
-
+	
 	public void setTotalMalePulmonaryCDHIV(Integer totalMalePulmonaryCDHIV) {
 		this.totalMalePulmonaryCDHIV = totalMalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getTotalFemalePulmonaryCDHIV() {
 		return totalFemalePulmonaryCDHIV;
 	}
-
+	
 	public void setTotalFemalePulmonaryCDHIV(Integer totalFemalePulmonaryCDHIV) {
 		this.totalFemalePulmonaryCDHIV = totalFemalePulmonaryCDHIV;
 	}
-
+	
 	public Integer getTotalPulmonaryCDHIV() {
 		return totalPulmonaryCDHIV;
 	}
-
+	
 	public void setTotalPulmonaryCDHIV(Integer totalPulmonaryCDHIV) {
 		this.totalPulmonaryCDHIV = totalPulmonaryCDHIV;
 	}
-
+	
 	public Integer getTotalMaleExtrapulmonary() {
 		return totalMaleExtrapulmonary;
 	}
-
+	
 	public void setTotalMaleExtrapulmonary(Integer totalMaleExtrapulmonary) {
 		this.totalMaleExtrapulmonary = totalMaleExtrapulmonary;
 	}
-
+	
 	public Integer getTotalFemaleExtrapulmonary() {
 		return totalFemaleExtrapulmonary;
 	}
-
+	
 	public void setTotalFemaleExtrapulmonary(Integer totalFemaleExtrapulmonary) {
 		this.totalFemaleExtrapulmonary = totalFemaleExtrapulmonary;
 	}
-
+	
 	public Integer getTotalExtrapulmonary() {
 		return totalExtrapulmonary;
 	}
-
+	
 	public void setTotalExtrapulmonary(Integer totalExtrapulmonary) {
 		this.totalExtrapulmonary = totalExtrapulmonary;
 	}
-
+	
 	public Integer getTotalMaleExtrapulmonaryHIV() {
 		return totalMaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setTotalMaleExtrapulmonaryHIV(Integer totalMaleExtrapulmonaryHIV) {
 		this.totalMaleExtrapulmonaryHIV = totalMaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getTotalFemaleExtrapulmonaryHIV() {
 		return totalFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public void setTotalFemaleExtrapulmonaryHIV(Integer totalFemaleExtrapulmonaryHIV) {
 		this.totalFemaleExtrapulmonaryHIV = totalFemaleExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getTotalExtrapulmonaryHIV() {
 		return totalExtrapulmonaryHIV;
 	}
-
+	
 	public void setTotalExtrapulmonaryHIV(Integer totalExtrapulmonaryHIV) {
 		this.totalExtrapulmonaryHIV = totalExtrapulmonaryHIV;
 	}
-
+	
 	public Integer getTotalMale() {
 		return totalMale;
 	}
-
+	
 	public void setTotalMale(Integer totalMale) {
 		this.totalMale = totalMale;
 	}
-
+	
 	public Integer getTotalFemale() {
 		return totalFemale;
 	}
-
+	
 	public void setTotalFemale(Integer totalFemale) {
 		this.totalFemale = totalFemale;
 	}
-
+	
 	public Integer getTotalAll() {
 		return totalAll;
 	}
-
+	
 	public void setTotalAll(Integer totalAll) {
 		this.totalAll = totalAll;
 	}
-
+	
 	public Integer getTotalMaleHIV() {
 		return totalMaleHIV;
 	}
-
+	
 	public void setTotalMaleHIV(Integer totalMaleHIV) {
 		this.totalMaleHIV = totalMaleHIV;
 	}
-
+	
 	public Integer getTotalFemaleHIV() {
 		return totalFemaleHIV;
 	}
-
+	
 	public void setTotalFemaleHIV(Integer totalFemaleHIV) {
 		this.totalFemaleHIV = totalFemaleHIV;
 	}
-
+	
 	public Integer getTotalAllHIV() {
 		return totalAllHIV;
 	}
-
+	
 	public void setTotalAllHIV(Integer totalAllHIV) {
 		this.totalAllHIV = totalAllHIV;
 	}
 	
 	public void add(TB07Table1Data table) {
-		if(table==null) {
+		if (table == null) {
 			return;
 		}
 		
@@ -4478,25 +5119,43 @@ public class TB07Table1Data {
 		this.setNewFemaleExtrapulmonary(this.getNewFemaleExtrapulmonary() + table.getNewFemaleExtrapulmonary());
 		this.setNewExtrapulmonary(this.getNewExtrapulmonary() + table.getNewExtrapulmonary());
 		this.setNewMaleExtrapulmonaryHIV04(this.getNewMaleExtrapulmonaryHIV04() + table.getNewMaleExtrapulmonaryHIV04());
-		this.setNewFemaleExtrapulmonaryHIV04(this.getNewFemaleExtrapulmonaryHIV04() + table.getNewFemaleExtrapulmonaryHIV04());
-		this.setNewMaleExtrapulmonaryHIV0514(this.getNewMaleExtrapulmonaryHIV0514() + table.getNewMaleExtrapulmonaryHIV0514());
-		this.setNewFemaleExtrapulmonaryHIV0514(this.getNewFemaleExtrapulmonaryHIV0514() + table.getNewFemaleExtrapulmonaryHIV0514());
-		this.setNewMaleExtrapulmonaryHIV1517(this.getNewMaleExtrapulmonaryHIV1517() + table.getNewMaleExtrapulmonaryHIV1517());
-		this.setNewFemaleExtrapulmonaryHIV1517(this.getNewFemaleExtrapulmonaryHIV1517() + table.getNewFemaleExtrapulmonaryHIV1517());
-		this.setNewMaleExtrapulmonaryHIV1819(this.getNewMaleExtrapulmonaryHIV1819() + table.getNewMaleExtrapulmonaryHIV1819());
-		this.setNewFemaleExtrapulmonaryHIV1819(this.getNewFemaleExtrapulmonaryHIV1819() + table.getNewFemaleExtrapulmonaryHIV1819());
-		this.setNewMaleExtrapulmonaryHIV2024(this.getNewMaleExtrapulmonaryHIV2024() + table.getNewMaleExtrapulmonaryHIV2024());
-		this.setNewFemaleExtrapulmonaryHIV2024(this.getNewFemaleExtrapulmonaryHIV2024() + table.getNewFemaleExtrapulmonaryHIV2024());
-		this.setNewMaleExtrapulmonaryHIV2534(this.getNewMaleExtrapulmonaryHIV2534() + table.getNewMaleExtrapulmonaryHIV2534());
-		this.setNewFemaleExtrapulmonaryHIV2534(this.getNewFemaleExtrapulmonaryHIV2534() + table.getNewFemaleExtrapulmonaryHIV2534());
-		this.setNewMaleExtrapulmonaryHIV3544(this.getNewMaleExtrapulmonaryHIV3544() + table.getNewMaleExtrapulmonaryHIV3544());
-		this.setNewFemaleExtrapulmonaryHIV3544(this.getNewFemaleExtrapulmonaryHIV3544() + table.getNewFemaleExtrapulmonaryHIV3544());
-		this.setNewMaleExtrapulmonaryHIV4554(this.getNewMaleExtrapulmonaryHIV4554() + table.getNewMaleExtrapulmonaryHIV4554());
-		this.setNewFemaleExtrapulmonaryHIV4554(this.getNewFemaleExtrapulmonaryHIV4554() + table.getNewFemaleExtrapulmonaryHIV4554());
-		this.setNewMaleExtrapulmonaryHIV5564(this.getNewMaleExtrapulmonaryHIV5564() + table.getNewMaleExtrapulmonaryHIV5564());
-		this.setNewFemaleExtrapulmonaryHIV5564(this.getNewFemaleExtrapulmonaryHIV5564() + table.getNewFemaleExtrapulmonaryHIV5564());
+		this.setNewFemaleExtrapulmonaryHIV04(
+		    this.getNewFemaleExtrapulmonaryHIV04() + table.getNewFemaleExtrapulmonaryHIV04());
+		this.setNewMaleExtrapulmonaryHIV0514(
+		    this.getNewMaleExtrapulmonaryHIV0514() + table.getNewMaleExtrapulmonaryHIV0514());
+		this.setNewFemaleExtrapulmonaryHIV0514(
+		    this.getNewFemaleExtrapulmonaryHIV0514() + table.getNewFemaleExtrapulmonaryHIV0514());
+		this.setNewMaleExtrapulmonaryHIV1517(
+		    this.getNewMaleExtrapulmonaryHIV1517() + table.getNewMaleExtrapulmonaryHIV1517());
+		this.setNewFemaleExtrapulmonaryHIV1517(
+		    this.getNewFemaleExtrapulmonaryHIV1517() + table.getNewFemaleExtrapulmonaryHIV1517());
+		this.setNewMaleExtrapulmonaryHIV1819(
+		    this.getNewMaleExtrapulmonaryHIV1819() + table.getNewMaleExtrapulmonaryHIV1819());
+		this.setNewFemaleExtrapulmonaryHIV1819(
+		    this.getNewFemaleExtrapulmonaryHIV1819() + table.getNewFemaleExtrapulmonaryHIV1819());
+		this.setNewMaleExtrapulmonaryHIV2024(
+		    this.getNewMaleExtrapulmonaryHIV2024() + table.getNewMaleExtrapulmonaryHIV2024());
+		this.setNewFemaleExtrapulmonaryHIV2024(
+		    this.getNewFemaleExtrapulmonaryHIV2024() + table.getNewFemaleExtrapulmonaryHIV2024());
+		this.setNewMaleExtrapulmonaryHIV2534(
+		    this.getNewMaleExtrapulmonaryHIV2534() + table.getNewMaleExtrapulmonaryHIV2534());
+		this.setNewFemaleExtrapulmonaryHIV2534(
+		    this.getNewFemaleExtrapulmonaryHIV2534() + table.getNewFemaleExtrapulmonaryHIV2534());
+		this.setNewMaleExtrapulmonaryHIV3544(
+		    this.getNewMaleExtrapulmonaryHIV3544() + table.getNewMaleExtrapulmonaryHIV3544());
+		this.setNewFemaleExtrapulmonaryHIV3544(
+		    this.getNewFemaleExtrapulmonaryHIV3544() + table.getNewFemaleExtrapulmonaryHIV3544());
+		this.setNewMaleExtrapulmonaryHIV4554(
+		    this.getNewMaleExtrapulmonaryHIV4554() + table.getNewMaleExtrapulmonaryHIV4554());
+		this.setNewFemaleExtrapulmonaryHIV4554(
+		    this.getNewFemaleExtrapulmonaryHIV4554() + table.getNewFemaleExtrapulmonaryHIV4554());
+		this.setNewMaleExtrapulmonaryHIV5564(
+		    this.getNewMaleExtrapulmonaryHIV5564() + table.getNewMaleExtrapulmonaryHIV5564());
+		this.setNewFemaleExtrapulmonaryHIV5564(
+		    this.getNewFemaleExtrapulmonaryHIV5564() + table.getNewFemaleExtrapulmonaryHIV5564());
 		this.setNewMaleExtrapulmonaryHIV65(this.getNewMaleExtrapulmonaryHIV65() + table.getNewMaleExtrapulmonaryHIV65());
-		this.setNewFemaleExtrapulmonaryHIV65(this.getNewFemaleExtrapulmonaryHIV65() + table.getNewFemaleExtrapulmonaryHIV65());
+		this.setNewFemaleExtrapulmonaryHIV65(
+		    this.getNewFemaleExtrapulmonaryHIV65() + table.getNewFemaleExtrapulmonaryHIV65());
 		this.setNewMaleExtrapulmonaryHIV(this.getNewMaleExtrapulmonaryHIV() + table.getNewMaleExtrapulmonaryHIV());
 		this.setNewFemaleExtrapulmonaryHIV(this.getNewFemaleExtrapulmonaryHIV() + table.getNewFemaleExtrapulmonaryHIV());
 		this.setNewExtrapulmonaryHIV(this.getNewExtrapulmonaryHIV() + table.getNewExtrapulmonaryHIV());
@@ -4549,140 +5208,232 @@ public class TB07Table1Data {
 		this.setRelapseMalePulmonaryBC04(this.getRelapseMalePulmonaryBC04() + table.getRelapseMalePulmonaryBC04());
 		this.setRelapseFemalePulmonaryBC04(this.getRelapseFemalePulmonaryBC04() + table.getRelapseFemalePulmonaryBC04());
 		this.setRelapseMalePulmonaryBC0514(this.getRelapseMalePulmonaryBC0514() + table.getRelapseMalePulmonaryBC0514());
-		this.setRelapseFemalePulmonaryBC0514(this.getRelapseFemalePulmonaryBC0514() + table.getRelapseFemalePulmonaryBC0514());
+		this.setRelapseFemalePulmonaryBC0514(
+		    this.getRelapseFemalePulmonaryBC0514() + table.getRelapseFemalePulmonaryBC0514());
 		this.setRelapseMalePulmonaryBC1517(this.getRelapseMalePulmonaryBC1517() + table.getRelapseMalePulmonaryBC1517());
-		this.setRelapseFemalePulmonaryBC1517(this.getRelapseFemalePulmonaryBC1517() + table.getRelapseFemalePulmonaryBC1517());
+		this.setRelapseFemalePulmonaryBC1517(
+		    this.getRelapseFemalePulmonaryBC1517() + table.getRelapseFemalePulmonaryBC1517());
 		this.setRelapseMalePulmonaryBC1819(this.getRelapseMalePulmonaryBC1819() + table.getRelapseMalePulmonaryBC1819());
-		this.setRelapseFemalePulmonaryBC1819(this.getRelapseFemalePulmonaryBC1819() + table.getRelapseFemalePulmonaryBC1819());
+		this.setRelapseFemalePulmonaryBC1819(
+		    this.getRelapseFemalePulmonaryBC1819() + table.getRelapseFemalePulmonaryBC1819());
 		this.setRelapseMalePulmonaryBC2024(this.getRelapseMalePulmonaryBC2024() + table.getRelapseMalePulmonaryBC2024());
-		this.setRelapseFemalePulmonaryBC2024(this.getRelapseFemalePulmonaryBC2024() + table.getRelapseFemalePulmonaryBC2024());
+		this.setRelapseFemalePulmonaryBC2024(
+		    this.getRelapseFemalePulmonaryBC2024() + table.getRelapseFemalePulmonaryBC2024());
 		this.setRelapseMalePulmonaryBC2534(this.getRelapseMalePulmonaryBC2534() + table.getRelapseMalePulmonaryBC2534());
-		this.setRelapseFemalePulmonaryBC2534(this.getRelapseFemalePulmonaryBC2534() + table.getRelapseFemalePulmonaryBC2534());
+		this.setRelapseFemalePulmonaryBC2534(
+		    this.getRelapseFemalePulmonaryBC2534() + table.getRelapseFemalePulmonaryBC2534());
 		this.setRelapseMalePulmonaryBC3544(this.getRelapseMalePulmonaryBC3544() + table.getRelapseMalePulmonaryBC3544());
-		this.setRelapseFemalePulmonaryBC3544(this.getRelapseFemalePulmonaryBC3544() + table.getRelapseFemalePulmonaryBC3544());
+		this.setRelapseFemalePulmonaryBC3544(
+		    this.getRelapseFemalePulmonaryBC3544() + table.getRelapseFemalePulmonaryBC3544());
 		this.setRelapseMalePulmonaryBC4554(this.getRelapseMalePulmonaryBC4554() + table.getRelapseMalePulmonaryBC4554());
-		this.setRelapseFemalePulmonaryBC4554(this.getRelapseFemalePulmonaryBC4554() + table.getRelapseFemalePulmonaryBC4554());
+		this.setRelapseFemalePulmonaryBC4554(
+		    this.getRelapseFemalePulmonaryBC4554() + table.getRelapseFemalePulmonaryBC4554());
 		this.setRelapseMalePulmonaryBC5564(this.getRelapseMalePulmonaryBC5564() + table.getRelapseMalePulmonaryBC5564());
-		this.setRelapseFemalePulmonaryBC5564(this.getRelapseFemalePulmonaryBC5564() + table.getRelapseFemalePulmonaryBC5564());
+		this.setRelapseFemalePulmonaryBC5564(
+		    this.getRelapseFemalePulmonaryBC5564() + table.getRelapseFemalePulmonaryBC5564());
 		this.setRelapseMalePulmonaryBC65(this.getRelapseMalePulmonaryBC65() + table.getRelapseMalePulmonaryBC65());
 		this.setRelapseFemalePulmonaryBC65(this.getRelapseFemalePulmonaryBC65() + table.getRelapseFemalePulmonaryBC65());
 		this.setRelapseMalePulmonaryBC(this.getRelapseMalePulmonaryBC() + table.getRelapseMalePulmonaryBC());
 		this.setRelapseFemalePulmonaryBC(this.getRelapseFemalePulmonaryBC() + table.getRelapseFemalePulmonaryBC());
 		this.setRelapsePulmonaryBC(this.getRelapsePulmonaryBC() + table.getRelapsePulmonaryBC());
 		this.setRelapseMalePulmonaryBCHIV04(this.getRelapseMalePulmonaryBCHIV04() + table.getRelapseMalePulmonaryBCHIV04());
-		this.setRelapseFemalePulmonaryBCHIV04(this.getRelapseFemalePulmonaryBCHIV04() + table.getRelapseFemalePulmonaryBCHIV04());
-		this.setRelapseMalePulmonaryBCHIV0514(this.getRelapseMalePulmonaryBCHIV0514() + table.getRelapseMalePulmonaryBCHIV0514());
-		this.setRelapseFemalePulmonaryBCHIV0514(this.getRelapseFemalePulmonaryBCHIV0514() + table.getRelapseFemalePulmonaryBCHIV0514());
-		this.setRelapseMalePulmonaryBCHIV1517(this.getRelapseMalePulmonaryBCHIV1517() + table.getRelapseMalePulmonaryBCHIV1517());
-		this.setRelapseFemalePulmonaryBCHIV1517(this.getRelapseFemalePulmonaryBCHIV1517() + table.getRelapseFemalePulmonaryBCHIV1517());
-		this.setRelapseMalePulmonaryBCHIV1819(this.getRelapseMalePulmonaryBCHIV1819() + table.getRelapseMalePulmonaryBCHIV1819());
-		this.setRelapseFemalePulmonaryBCHIV1819(this.getRelapseFemalePulmonaryBCHIV1819() + table.getRelapseFemalePulmonaryBCHIV1819());
-		this.setRelapseMalePulmonaryBCHIV2024(this.getRelapseMalePulmonaryBCHIV2024() + table.getRelapseMalePulmonaryBCHIV2024());
-		this.setRelapseFemalePulmonaryBCHIV2024(this.getRelapseFemalePulmonaryBCHIV2024() + table.getRelapseFemalePulmonaryBCHIV2024());
-		this.setRelapseMalePulmonaryBCHIV2534(this.getRelapseMalePulmonaryBCHIV2534() + table.getRelapseMalePulmonaryBCHIV2534());
-		this.setRelapseFemalePulmonaryBCHIV2534(this.getRelapseFemalePulmonaryBCHIV2534() + table.getRelapseFemalePulmonaryBCHIV2534());
-		this.setRelapseMalePulmonaryBCHIV3544(this.getRelapseMalePulmonaryBCHIV3544() + table.getRelapseMalePulmonaryBCHIV3544());
-		this.setRelapseFemalePulmonaryBCHIV3544(this.getRelapseFemalePulmonaryBCHIV3544() + table.getRelapseFemalePulmonaryBCHIV3544());
-		this.setRelapseMalePulmonaryBCHIV4554(this.getRelapseMalePulmonaryBCHIV4554() + table.getRelapseMalePulmonaryBCHIV4554());
-		this.setRelapseFemalePulmonaryBCHIV4554(this.getRelapseFemalePulmonaryBCHIV4554() + table.getRelapseFemalePulmonaryBCHIV4554());
-		this.setRelapseMalePulmonaryBCHIV5564(this.getRelapseMalePulmonaryBCHIV5564() + table.getRelapseMalePulmonaryBCHIV5564());
-		this.setRelapseFemalePulmonaryBCHIV5564(this.getRelapseFemalePulmonaryBCHIV5564() + table.getRelapseFemalePulmonaryBCHIV5564());
+		this.setRelapseFemalePulmonaryBCHIV04(
+		    this.getRelapseFemalePulmonaryBCHIV04() + table.getRelapseFemalePulmonaryBCHIV04());
+		this.setRelapseMalePulmonaryBCHIV0514(
+		    this.getRelapseMalePulmonaryBCHIV0514() + table.getRelapseMalePulmonaryBCHIV0514());
+		this.setRelapseFemalePulmonaryBCHIV0514(
+		    this.getRelapseFemalePulmonaryBCHIV0514() + table.getRelapseFemalePulmonaryBCHIV0514());
+		this.setRelapseMalePulmonaryBCHIV1517(
+		    this.getRelapseMalePulmonaryBCHIV1517() + table.getRelapseMalePulmonaryBCHIV1517());
+		this.setRelapseFemalePulmonaryBCHIV1517(
+		    this.getRelapseFemalePulmonaryBCHIV1517() + table.getRelapseFemalePulmonaryBCHIV1517());
+		this.setRelapseMalePulmonaryBCHIV1819(
+		    this.getRelapseMalePulmonaryBCHIV1819() + table.getRelapseMalePulmonaryBCHIV1819());
+		this.setRelapseFemalePulmonaryBCHIV1819(
+		    this.getRelapseFemalePulmonaryBCHIV1819() + table.getRelapseFemalePulmonaryBCHIV1819());
+		this.setRelapseMalePulmonaryBCHIV2024(
+		    this.getRelapseMalePulmonaryBCHIV2024() + table.getRelapseMalePulmonaryBCHIV2024());
+		this.setRelapseFemalePulmonaryBCHIV2024(
+		    this.getRelapseFemalePulmonaryBCHIV2024() + table.getRelapseFemalePulmonaryBCHIV2024());
+		this.setRelapseMalePulmonaryBCHIV2534(
+		    this.getRelapseMalePulmonaryBCHIV2534() + table.getRelapseMalePulmonaryBCHIV2534());
+		this.setRelapseFemalePulmonaryBCHIV2534(
+		    this.getRelapseFemalePulmonaryBCHIV2534() + table.getRelapseFemalePulmonaryBCHIV2534());
+		this.setRelapseMalePulmonaryBCHIV3544(
+		    this.getRelapseMalePulmonaryBCHIV3544() + table.getRelapseMalePulmonaryBCHIV3544());
+		this.setRelapseFemalePulmonaryBCHIV3544(
+		    this.getRelapseFemalePulmonaryBCHIV3544() + table.getRelapseFemalePulmonaryBCHIV3544());
+		this.setRelapseMalePulmonaryBCHIV4554(
+		    this.getRelapseMalePulmonaryBCHIV4554() + table.getRelapseMalePulmonaryBCHIV4554());
+		this.setRelapseFemalePulmonaryBCHIV4554(
+		    this.getRelapseFemalePulmonaryBCHIV4554() + table.getRelapseFemalePulmonaryBCHIV4554());
+		this.setRelapseMalePulmonaryBCHIV5564(
+		    this.getRelapseMalePulmonaryBCHIV5564() + table.getRelapseMalePulmonaryBCHIV5564());
+		this.setRelapseFemalePulmonaryBCHIV5564(
+		    this.getRelapseFemalePulmonaryBCHIV5564() + table.getRelapseFemalePulmonaryBCHIV5564());
 		this.setRelapseMalePulmonaryBCHIV65(this.getRelapseMalePulmonaryBCHIV65() + table.getRelapseMalePulmonaryBCHIV65());
-		this.setRelapseFemalePulmonaryBCHIV65(this.getRelapseFemalePulmonaryBCHIV65() + table.getRelapseFemalePulmonaryBCHIV65());
+		this.setRelapseFemalePulmonaryBCHIV65(
+		    this.getRelapseFemalePulmonaryBCHIV65() + table.getRelapseFemalePulmonaryBCHIV65());
 		this.setRelapseMalePulmonaryBCHIV(this.getRelapseMalePulmonaryBCHIV() + table.getRelapseMalePulmonaryBCHIV());
 		this.setRelapseFemalePulmonaryBCHIV(this.getRelapseFemalePulmonaryBCHIV() + table.getRelapseFemalePulmonaryBCHIV());
 		this.setRelapsePulmonaryBCHIV(this.getRelapsePulmonaryBCHIV() + table.getRelapsePulmonaryBCHIV());
 		this.setRelapseMalePulmonaryCD04(this.getRelapseMalePulmonaryCD04() + table.getRelapseMalePulmonaryCD04());
 		this.setRelapseFemalePulmonaryCD04(this.getRelapseFemalePulmonaryCD04() + table.getRelapseFemalePulmonaryCD04());
 		this.setRelapseMalePulmonaryCD0514(this.getRelapseMalePulmonaryCD0514() + table.getRelapseMalePulmonaryCD0514());
-		this.setRelapseFemalePulmonaryCD0514(this.getRelapseFemalePulmonaryCD0514() + table.getRelapseFemalePulmonaryCD0514());
+		this.setRelapseFemalePulmonaryCD0514(
+		    this.getRelapseFemalePulmonaryCD0514() + table.getRelapseFemalePulmonaryCD0514());
 		this.setRelapseMalePulmonaryCD1517(this.getRelapseMalePulmonaryCD1517() + table.getRelapseMalePulmonaryCD1517());
-		this.setRelapseFemalePulmonaryCD1517(this.getRelapseFemalePulmonaryCD1517() + table.getRelapseFemalePulmonaryCD1517());
+		this.setRelapseFemalePulmonaryCD1517(
+		    this.getRelapseFemalePulmonaryCD1517() + table.getRelapseFemalePulmonaryCD1517());
 		this.setRelapseMalePulmonaryCD1819(this.getRelapseMalePulmonaryCD1819() + table.getRelapseMalePulmonaryCD1819());
-		this.setRelapseFemalePulmonaryCD1819(this.getRelapseFemalePulmonaryCD1819() + table.getRelapseFemalePulmonaryCD1819());
+		this.setRelapseFemalePulmonaryCD1819(
+		    this.getRelapseFemalePulmonaryCD1819() + table.getRelapseFemalePulmonaryCD1819());
 		this.setRelapseMalePulmonaryCD2024(this.getRelapseMalePulmonaryCD2024() + table.getRelapseMalePulmonaryCD2024());
-		this.setRelapseFemalePulmonaryCD2024(this.getRelapseFemalePulmonaryCD2024() + table.getRelapseFemalePulmonaryCD2024());
+		this.setRelapseFemalePulmonaryCD2024(
+		    this.getRelapseFemalePulmonaryCD2024() + table.getRelapseFemalePulmonaryCD2024());
 		this.setRelapseMalePulmonaryCD2534(this.getRelapseMalePulmonaryCD2534() + table.getRelapseMalePulmonaryCD2534());
-		this.setRelapseFemalePulmonaryCD2534(this.getRelapseFemalePulmonaryCD2534() + table.getRelapseFemalePulmonaryCD2534());
+		this.setRelapseFemalePulmonaryCD2534(
+		    this.getRelapseFemalePulmonaryCD2534() + table.getRelapseFemalePulmonaryCD2534());
 		this.setRelapseMalePulmonaryCD3544(this.getRelapseMalePulmonaryCD3544() + table.getRelapseMalePulmonaryCD3544());
-		this.setRelapseFemalePulmonaryCD3544(this.getRelapseFemalePulmonaryCD3544() + table.getRelapseFemalePulmonaryCD3544());
+		this.setRelapseFemalePulmonaryCD3544(
+		    this.getRelapseFemalePulmonaryCD3544() + table.getRelapseFemalePulmonaryCD3544());
 		this.setRelapseMalePulmonaryCD4554(this.getRelapseMalePulmonaryCD4554() + table.getRelapseMalePulmonaryCD4554());
-		this.setRelapseFemalePulmonaryCD4554(this.getRelapseFemalePulmonaryCD4554() + table.getRelapseFemalePulmonaryCD4554());
+		this.setRelapseFemalePulmonaryCD4554(
+		    this.getRelapseFemalePulmonaryCD4554() + table.getRelapseFemalePulmonaryCD4554());
 		this.setRelapseMalePulmonaryCD5564(this.getRelapseMalePulmonaryCD5564() + table.getRelapseMalePulmonaryCD5564());
-		this.setRelapseFemalePulmonaryCD5564(this.getRelapseFemalePulmonaryCD5564() + table.getRelapseFemalePulmonaryCD5564());
+		this.setRelapseFemalePulmonaryCD5564(
+		    this.getRelapseFemalePulmonaryCD5564() + table.getRelapseFemalePulmonaryCD5564());
 		this.setRelapseMalePulmonaryCD65(this.getRelapseMalePulmonaryCD65() + table.getRelapseMalePulmonaryCD65());
 		this.setRelapseFemalePulmonaryCD65(this.getRelapseFemalePulmonaryCD65() + table.getRelapseFemalePulmonaryCD65());
 		this.setRelapseMalePulmonaryCD(this.getRelapseMalePulmonaryCD() + table.getRelapseMalePulmonaryCD());
 		this.setRelapseFemalePulmonaryCD(this.getRelapseFemalePulmonaryCD() + table.getRelapseFemalePulmonaryCD());
 		this.setRelapsePulmonaryCD(this.getRelapsePulmonaryCD() + table.getRelapsePulmonaryCD());
 		this.setRelapseMalePulmonaryCDHIV04(this.getRelapseMalePulmonaryCDHIV04() + table.getRelapseMalePulmonaryCDHIV04());
-		this.setRelapseFemalePulmonaryCDHIV04(this.getRelapseFemalePulmonaryCDHIV04() + table.getRelapseFemalePulmonaryCDHIV04());
-		this.setRelapseMalePulmonaryCDHIV0514(this.getRelapseMalePulmonaryCDHIV0514() + table.getRelapseMalePulmonaryCDHIV0514());
-		this.setRelapseFemalePulmonaryCDHIV0514(this.getRelapseFemalePulmonaryCDHIV0514() + table.getRelapseFemalePulmonaryCDHIV0514());
-		this.setRelapseMalePulmonaryCDHIV1517(this.getRelapseMalePulmonaryCDHIV1517() + table.getRelapseMalePulmonaryCDHIV1517());
-		this.setRelapseFemalePulmonaryCDHIV1517(this.getRelapseFemalePulmonaryCDHIV1517() + table.getRelapseFemalePulmonaryCDHIV1517());
-		this.setRelapseMalePulmonaryCDHIV1819(this.getRelapseMalePulmonaryCDHIV1819() + table.getRelapseMalePulmonaryCDHIV1819());
-		this.setRelapseFemalePulmonaryCDHIV1819(this.getRelapseFemalePulmonaryCDHIV1819() + table.getRelapseFemalePulmonaryCDHIV1819());
-		this.setRelapseMalePulmonaryCDHIV2024(this.getRelapseMalePulmonaryCDHIV2024() + table.getRelapseMalePulmonaryCDHIV2024());
-		this.setRelapseFemalePulmonaryCDHIV2024(this.getRelapseFemalePulmonaryCDHIV2024() + table.getRelapseFemalePulmonaryCDHIV2024());
-		this.setRelapseMalePulmonaryCDHIV2534(this.getRelapseMalePulmonaryCDHIV2534() + table.getRelapseMalePulmonaryCDHIV2534());
-		this.setRelapseFemalePulmonaryCDHIV2534(this.getRelapseFemalePulmonaryCDHIV2534() + table.getRelapseFemalePulmonaryCDHIV2534());
-		this.setRelapseMalePulmonaryCDHIV3544(this.getRelapseMalePulmonaryCDHIV3544() + table.getRelapseMalePulmonaryCDHIV3544());
-		this.setRelapseFemalePulmonaryCDHIV3544(this.getRelapseFemalePulmonaryCDHIV3544() + table.getRelapseFemalePulmonaryCDHIV3544());
-		this.setRelapseMalePulmonaryCDHIV4554(this.getRelapseMalePulmonaryCDHIV4554() + table.getRelapseMalePulmonaryCDHIV4554());
-		this.setRelapseFemalePulmonaryCDHIV4554(this.getRelapseFemalePulmonaryCDHIV4554() + table.getRelapseFemalePulmonaryCDHIV4554());
-		this.setRelapseMalePulmonaryCDHIV5564(this.getRelapseMalePulmonaryCDHIV5564() + table.getRelapseMalePulmonaryCDHIV5564());
-		this.setRelapseFemalePulmonaryCDHIV5564(this.getRelapseFemalePulmonaryCDHIV5564() + table.getRelapseFemalePulmonaryCDHIV5564());
+		this.setRelapseFemalePulmonaryCDHIV04(
+		    this.getRelapseFemalePulmonaryCDHIV04() + table.getRelapseFemalePulmonaryCDHIV04());
+		this.setRelapseMalePulmonaryCDHIV0514(
+		    this.getRelapseMalePulmonaryCDHIV0514() + table.getRelapseMalePulmonaryCDHIV0514());
+		this.setRelapseFemalePulmonaryCDHIV0514(
+		    this.getRelapseFemalePulmonaryCDHIV0514() + table.getRelapseFemalePulmonaryCDHIV0514());
+		this.setRelapseMalePulmonaryCDHIV1517(
+		    this.getRelapseMalePulmonaryCDHIV1517() + table.getRelapseMalePulmonaryCDHIV1517());
+		this.setRelapseFemalePulmonaryCDHIV1517(
+		    this.getRelapseFemalePulmonaryCDHIV1517() + table.getRelapseFemalePulmonaryCDHIV1517());
+		this.setRelapseMalePulmonaryCDHIV1819(
+		    this.getRelapseMalePulmonaryCDHIV1819() + table.getRelapseMalePulmonaryCDHIV1819());
+		this.setRelapseFemalePulmonaryCDHIV1819(
+		    this.getRelapseFemalePulmonaryCDHIV1819() + table.getRelapseFemalePulmonaryCDHIV1819());
+		this.setRelapseMalePulmonaryCDHIV2024(
+		    this.getRelapseMalePulmonaryCDHIV2024() + table.getRelapseMalePulmonaryCDHIV2024());
+		this.setRelapseFemalePulmonaryCDHIV2024(
+		    this.getRelapseFemalePulmonaryCDHIV2024() + table.getRelapseFemalePulmonaryCDHIV2024());
+		this.setRelapseMalePulmonaryCDHIV2534(
+		    this.getRelapseMalePulmonaryCDHIV2534() + table.getRelapseMalePulmonaryCDHIV2534());
+		this.setRelapseFemalePulmonaryCDHIV2534(
+		    this.getRelapseFemalePulmonaryCDHIV2534() + table.getRelapseFemalePulmonaryCDHIV2534());
+		this.setRelapseMalePulmonaryCDHIV3544(
+		    this.getRelapseMalePulmonaryCDHIV3544() + table.getRelapseMalePulmonaryCDHIV3544());
+		this.setRelapseFemalePulmonaryCDHIV3544(
+		    this.getRelapseFemalePulmonaryCDHIV3544() + table.getRelapseFemalePulmonaryCDHIV3544());
+		this.setRelapseMalePulmonaryCDHIV4554(
+		    this.getRelapseMalePulmonaryCDHIV4554() + table.getRelapseMalePulmonaryCDHIV4554());
+		this.setRelapseFemalePulmonaryCDHIV4554(
+		    this.getRelapseFemalePulmonaryCDHIV4554() + table.getRelapseFemalePulmonaryCDHIV4554());
+		this.setRelapseMalePulmonaryCDHIV5564(
+		    this.getRelapseMalePulmonaryCDHIV5564() + table.getRelapseMalePulmonaryCDHIV5564());
+		this.setRelapseFemalePulmonaryCDHIV5564(
+		    this.getRelapseFemalePulmonaryCDHIV5564() + table.getRelapseFemalePulmonaryCDHIV5564());
 		this.setRelapseMalePulmonaryCDHIV65(this.getRelapseMalePulmonaryCDHIV65() + table.getRelapseMalePulmonaryCDHIV65());
-		this.setRelapseFemalePulmonaryCDHIV65(this.getRelapseFemalePulmonaryCDHIV65() + table.getRelapseFemalePulmonaryCDHIV65());
+		this.setRelapseFemalePulmonaryCDHIV65(
+		    this.getRelapseFemalePulmonaryCDHIV65() + table.getRelapseFemalePulmonaryCDHIV65());
 		this.setRelapseMalePulmonaryCDHIV(this.getRelapseMalePulmonaryCDHIV() + table.getRelapseMalePulmonaryCDHIV());
 		this.setRelapseFemalePulmonaryCDHIV(this.getRelapseFemalePulmonaryCDHIV() + table.getRelapseFemalePulmonaryCDHIV());
 		this.setRelapsePulmonaryCDHIV(this.getRelapsePulmonaryCDHIV() + table.getRelapsePulmonaryCDHIV());
 		this.setRelapseMaleExtrapulmonary04(this.getRelapseMaleExtrapulmonary04() + table.getRelapseMaleExtrapulmonary04());
-		this.setRelapseFemaleExtrapulmonary04(this.getRelapseFemaleExtrapulmonary04() + table.getRelapseFemaleExtrapulmonary04());
-		this.setRelapseMaleExtrapulmonary0514(this.getRelapseMaleExtrapulmonary0514() + table.getRelapseMaleExtrapulmonary0514());
-		this.setRelapseFemaleExtrapulmonary0514(this.getRelapseFemaleExtrapulmonary0514() + table.getRelapseFemaleExtrapulmonary0514());
-		this.setRelapseMaleExtrapulmonary1517(this.getRelapseMaleExtrapulmonary1517() + table.getRelapseMaleExtrapulmonary1517());
-		this.setRelapseFemaleExtrapulmonary1517(this.getRelapseFemaleExtrapulmonary1517() + table.getRelapseFemaleExtrapulmonary1517());
-		this.setRelapseMaleExtrapulmonary1819(this.getRelapseMaleExtrapulmonary1819() + table.getRelapseMaleExtrapulmonary1819());
-		this.setRelapseFemaleExtrapulmonary1819(this.getRelapseFemaleExtrapulmonary1819() + table.getRelapseFemaleExtrapulmonary1819());
-		this.setRelapseMaleExtrapulmonary2024(this.getRelapseMaleExtrapulmonary2024() + table.getRelapseMaleExtrapulmonary2024());
-		this.setRelapseFemaleExtrapulmonary2024(this.getRelapseFemaleExtrapulmonary2024() + table.getRelapseFemaleExtrapulmonary2024());
-		this.setRelapseMaleExtrapulmonary2534(this.getRelapseMaleExtrapulmonary2534() + table.getRelapseMaleExtrapulmonary2534());
-		this.setRelapseFemaleExtrapulmonary2534(this.getRelapseFemaleExtrapulmonary2534() + table.getRelapseFemaleExtrapulmonary2534());
-		this.setRelapseMaleExtrapulmonary3544(this.getRelapseMaleExtrapulmonary3544() + table.getRelapseMaleExtrapulmonary3544());
-		this.setRelapseFemaleExtrapulmonary3544(this.getRelapseFemaleExtrapulmonary3544() + table.getRelapseFemaleExtrapulmonary3544());
-		this.setRelapseMaleExtrapulmonary4554(this.getRelapseMaleExtrapulmonary4554() + table.getRelapseMaleExtrapulmonary4554());
-		this.setRelapseFemaleExtrapulmonary4554(this.getRelapseFemaleExtrapulmonary4554() + table.getRelapseFemaleExtrapulmonary4554());
-		this.setRelapseMaleExtrapulmonary5564(this.getRelapseMaleExtrapulmonary5564() + table.getRelapseMaleExtrapulmonary5564());
-		this.setRelapseFemaleExtrapulmonary5564(this.getRelapseFemaleExtrapulmonary5564() + table.getRelapseFemaleExtrapulmonary5564());
+		this.setRelapseFemaleExtrapulmonary04(
+		    this.getRelapseFemaleExtrapulmonary04() + table.getRelapseFemaleExtrapulmonary04());
+		this.setRelapseMaleExtrapulmonary0514(
+		    this.getRelapseMaleExtrapulmonary0514() + table.getRelapseMaleExtrapulmonary0514());
+		this.setRelapseFemaleExtrapulmonary0514(
+		    this.getRelapseFemaleExtrapulmonary0514() + table.getRelapseFemaleExtrapulmonary0514());
+		this.setRelapseMaleExtrapulmonary1517(
+		    this.getRelapseMaleExtrapulmonary1517() + table.getRelapseMaleExtrapulmonary1517());
+		this.setRelapseFemaleExtrapulmonary1517(
+		    this.getRelapseFemaleExtrapulmonary1517() + table.getRelapseFemaleExtrapulmonary1517());
+		this.setRelapseMaleExtrapulmonary1819(
+		    this.getRelapseMaleExtrapulmonary1819() + table.getRelapseMaleExtrapulmonary1819());
+		this.setRelapseFemaleExtrapulmonary1819(
+		    this.getRelapseFemaleExtrapulmonary1819() + table.getRelapseFemaleExtrapulmonary1819());
+		this.setRelapseMaleExtrapulmonary2024(
+		    this.getRelapseMaleExtrapulmonary2024() + table.getRelapseMaleExtrapulmonary2024());
+		this.setRelapseFemaleExtrapulmonary2024(
+		    this.getRelapseFemaleExtrapulmonary2024() + table.getRelapseFemaleExtrapulmonary2024());
+		this.setRelapseMaleExtrapulmonary2534(
+		    this.getRelapseMaleExtrapulmonary2534() + table.getRelapseMaleExtrapulmonary2534());
+		this.setRelapseFemaleExtrapulmonary2534(
+		    this.getRelapseFemaleExtrapulmonary2534() + table.getRelapseFemaleExtrapulmonary2534());
+		this.setRelapseMaleExtrapulmonary3544(
+		    this.getRelapseMaleExtrapulmonary3544() + table.getRelapseMaleExtrapulmonary3544());
+		this.setRelapseFemaleExtrapulmonary3544(
+		    this.getRelapseFemaleExtrapulmonary3544() + table.getRelapseFemaleExtrapulmonary3544());
+		this.setRelapseMaleExtrapulmonary4554(
+		    this.getRelapseMaleExtrapulmonary4554() + table.getRelapseMaleExtrapulmonary4554());
+		this.setRelapseFemaleExtrapulmonary4554(
+		    this.getRelapseFemaleExtrapulmonary4554() + table.getRelapseFemaleExtrapulmonary4554());
+		this.setRelapseMaleExtrapulmonary5564(
+		    this.getRelapseMaleExtrapulmonary5564() + table.getRelapseMaleExtrapulmonary5564());
+		this.setRelapseFemaleExtrapulmonary5564(
+		    this.getRelapseFemaleExtrapulmonary5564() + table.getRelapseFemaleExtrapulmonary5564());
 		this.setRelapseMaleExtrapulmonary65(this.getRelapseMaleExtrapulmonary65() + table.getRelapseMaleExtrapulmonary65());
-		this.setRelapseFemaleExtrapulmonary65(this.getRelapseFemaleExtrapulmonary65() + table.getRelapseFemaleExtrapulmonary65());
+		this.setRelapseFemaleExtrapulmonary65(
+		    this.getRelapseFemaleExtrapulmonary65() + table.getRelapseFemaleExtrapulmonary65());
 		this.setRelapseMaleExtrapulmonary(this.getRelapseMaleExtrapulmonary() + table.getRelapseMaleExtrapulmonary());
 		this.setRelapseFemaleExtrapulmonary(this.getRelapseFemaleExtrapulmonary() + table.getRelapseFemaleExtrapulmonary());
 		this.setRelapseExtrapulmonary(this.getRelapseExtrapulmonary() + table.getRelapseExtrapulmonary());
-		this.setRelapseMaleExtrapulmonaryHIV04(this.getRelapseMaleExtrapulmonaryHIV04() + table.getRelapseMaleExtrapulmonaryHIV04());
-		this.setRelapseFemaleExtrapulmonaryHIV04(this.getRelapseFemaleExtrapulmonaryHIV04() + table.getRelapseFemaleExtrapulmonaryHIV04());
-		this.setRelapseMaleExtrapulmonaryHIV0514(this.getRelapseMaleExtrapulmonaryHIV0514() + table.getRelapseMaleExtrapulmonaryHIV0514());
-		this.setRelapseFemaleExtrapulmonaryHIV0514(this.getRelapseFemaleExtrapulmonaryHIV0514() + table.getRelapseFemaleExtrapulmonaryHIV0514());
-		this.setRelapseMaleExtrapulmonaryHIV1517(this.getRelapseMaleExtrapulmonaryHIV1517() + table.getRelapseMaleExtrapulmonaryHIV1517());
-		this.setRelapseFemaleExtrapulmonaryHIV1517(this.getRelapseFemaleExtrapulmonaryHIV1517() + table.getRelapseFemaleExtrapulmonaryHIV1517());
-		this.setRelapseMaleExtrapulmonaryHIV1819(this.getRelapseMaleExtrapulmonaryHIV1819() + table.getRelapseMaleExtrapulmonaryHIV1819());
-		this.setRelapseFemaleExtrapulmonaryHIV1819(this.getRelapseFemaleExtrapulmonaryHIV1819() + table.getRelapseFemaleExtrapulmonaryHIV1819());
-		this.setRelapseMaleExtrapulmonaryHIV2024(this.getRelapseMaleExtrapulmonaryHIV2024() + table.getRelapseMaleExtrapulmonaryHIV2024());
-		this.setRelapseFemaleExtrapulmonaryHIV2024(this.getRelapseFemaleExtrapulmonaryHIV2024() + table.getRelapseFemaleExtrapulmonaryHIV2024());
-		this.setRelapseMaleExtrapulmonaryHIV2534(this.getRelapseMaleExtrapulmonaryHIV2534() + table.getRelapseMaleExtrapulmonaryHIV2534());
-		this.setRelapseFemaleExtrapulmonaryHIV2534(this.getRelapseFemaleExtrapulmonaryHIV2534() + table.getRelapseFemaleExtrapulmonaryHIV2534());
-		this.setRelapseMaleExtrapulmonaryHIV3544(this.getRelapseMaleExtrapulmonaryHIV3544() + table.getRelapseMaleExtrapulmonaryHIV3544());
-		this.setRelapseFemaleExtrapulmonaryHIV3544(this.getRelapseFemaleExtrapulmonaryHIV3544() + table.getRelapseFemaleExtrapulmonaryHIV3544());
-		this.setRelapseMaleExtrapulmonaryHIV4554(this.getRelapseMaleExtrapulmonaryHIV4554() + table.getRelapseMaleExtrapulmonaryHIV4554());
-		this.setRelapseFemaleExtrapulmonaryHIV4554(this.getRelapseFemaleExtrapulmonaryHIV4554() + table.getRelapseFemaleExtrapulmonaryHIV4554());
-		this.setRelapseMaleExtrapulmonaryHIV5564(this.getRelapseMaleExtrapulmonaryHIV5564() + table.getRelapseMaleExtrapulmonaryHIV5564());
-		this.setRelapseFemaleExtrapulmonaryHIV5564(this.getRelapseFemaleExtrapulmonaryHIV5564() + table.getRelapseFemaleExtrapulmonaryHIV5564());
-		this.setRelapseMaleExtrapulmonaryHIV65(this.getRelapseMaleExtrapulmonaryHIV65() + table.getRelapseMaleExtrapulmonaryHIV65());
-		this.setRelapseFemaleExtrapulmonaryHIV65(this.getRelapseFemaleExtrapulmonaryHIV65() + table.getRelapseFemaleExtrapulmonaryHIV65());
-		this.setRelapseMaleExtrapulmonaryHIV(this.getRelapseMaleExtrapulmonaryHIV() + table.getRelapseMaleExtrapulmonaryHIV());
-		this.setRelapseFemaleExtrapulmonaryHIV(this.getRelapseFemaleExtrapulmonaryHIV() + table.getRelapseFemaleExtrapulmonaryHIV());
+		this.setRelapseMaleExtrapulmonaryHIV04(
+		    this.getRelapseMaleExtrapulmonaryHIV04() + table.getRelapseMaleExtrapulmonaryHIV04());
+		this.setRelapseFemaleExtrapulmonaryHIV04(
+		    this.getRelapseFemaleExtrapulmonaryHIV04() + table.getRelapseFemaleExtrapulmonaryHIV04());
+		this.setRelapseMaleExtrapulmonaryHIV0514(
+		    this.getRelapseMaleExtrapulmonaryHIV0514() + table.getRelapseMaleExtrapulmonaryHIV0514());
+		this.setRelapseFemaleExtrapulmonaryHIV0514(
+		    this.getRelapseFemaleExtrapulmonaryHIV0514() + table.getRelapseFemaleExtrapulmonaryHIV0514());
+		this.setRelapseMaleExtrapulmonaryHIV1517(
+		    this.getRelapseMaleExtrapulmonaryHIV1517() + table.getRelapseMaleExtrapulmonaryHIV1517());
+		this.setRelapseFemaleExtrapulmonaryHIV1517(
+		    this.getRelapseFemaleExtrapulmonaryHIV1517() + table.getRelapseFemaleExtrapulmonaryHIV1517());
+		this.setRelapseMaleExtrapulmonaryHIV1819(
+		    this.getRelapseMaleExtrapulmonaryHIV1819() + table.getRelapseMaleExtrapulmonaryHIV1819());
+		this.setRelapseFemaleExtrapulmonaryHIV1819(
+		    this.getRelapseFemaleExtrapulmonaryHIV1819() + table.getRelapseFemaleExtrapulmonaryHIV1819());
+		this.setRelapseMaleExtrapulmonaryHIV2024(
+		    this.getRelapseMaleExtrapulmonaryHIV2024() + table.getRelapseMaleExtrapulmonaryHIV2024());
+		this.setRelapseFemaleExtrapulmonaryHIV2024(
+		    this.getRelapseFemaleExtrapulmonaryHIV2024() + table.getRelapseFemaleExtrapulmonaryHIV2024());
+		this.setRelapseMaleExtrapulmonaryHIV2534(
+		    this.getRelapseMaleExtrapulmonaryHIV2534() + table.getRelapseMaleExtrapulmonaryHIV2534());
+		this.setRelapseFemaleExtrapulmonaryHIV2534(
+		    this.getRelapseFemaleExtrapulmonaryHIV2534() + table.getRelapseFemaleExtrapulmonaryHIV2534());
+		this.setRelapseMaleExtrapulmonaryHIV3544(
+		    this.getRelapseMaleExtrapulmonaryHIV3544() + table.getRelapseMaleExtrapulmonaryHIV3544());
+		this.setRelapseFemaleExtrapulmonaryHIV3544(
+		    this.getRelapseFemaleExtrapulmonaryHIV3544() + table.getRelapseFemaleExtrapulmonaryHIV3544());
+		this.setRelapseMaleExtrapulmonaryHIV4554(
+		    this.getRelapseMaleExtrapulmonaryHIV4554() + table.getRelapseMaleExtrapulmonaryHIV4554());
+		this.setRelapseFemaleExtrapulmonaryHIV4554(
+		    this.getRelapseFemaleExtrapulmonaryHIV4554() + table.getRelapseFemaleExtrapulmonaryHIV4554());
+		this.setRelapseMaleExtrapulmonaryHIV5564(
+		    this.getRelapseMaleExtrapulmonaryHIV5564() + table.getRelapseMaleExtrapulmonaryHIV5564());
+		this.setRelapseFemaleExtrapulmonaryHIV5564(
+		    this.getRelapseFemaleExtrapulmonaryHIV5564() + table.getRelapseFemaleExtrapulmonaryHIV5564());
+		this.setRelapseMaleExtrapulmonaryHIV65(
+		    this.getRelapseMaleExtrapulmonaryHIV65() + table.getRelapseMaleExtrapulmonaryHIV65());
+		this.setRelapseFemaleExtrapulmonaryHIV65(
+		    this.getRelapseFemaleExtrapulmonaryHIV65() + table.getRelapseFemaleExtrapulmonaryHIV65());
+		this.setRelapseMaleExtrapulmonaryHIV(
+		    this.getRelapseMaleExtrapulmonaryHIV() + table.getRelapseMaleExtrapulmonaryHIV());
+		this.setRelapseFemaleExtrapulmonaryHIV(
+		    this.getRelapseFemaleExtrapulmonaryHIV() + table.getRelapseFemaleExtrapulmonaryHIV());
 		this.setRelapseExtrapulmonaryHIV(this.getRelapseExtrapulmonaryHIV() + table.getRelapseExtrapulmonaryHIV());
 		this.setRelapseMale04(this.getRelapseMale04() + table.getRelapseMale04());
 		this.setRelapseFemale04(this.getRelapseFemale04() + table.getRelapseFemale04());
@@ -4749,8 +5500,10 @@ public class TB07Table1Data {
 		this.setFailureMaleExtrapulmonary(this.getFailureMaleExtrapulmonary() + table.getFailureMaleExtrapulmonary());
 		this.setFailureFemaleExtrapulmonary(this.getFailureFemaleExtrapulmonary() + table.getFailureFemaleExtrapulmonary());
 		this.setFailureExtrapulmonary(this.getFailureExtrapulmonary() + table.getFailureExtrapulmonary());
-		this.setFailureMaleExtrapulmonaryHIV(this.getFailureMaleExtrapulmonaryHIV() + table.getFailureMaleExtrapulmonaryHIV());
-		this.setFailureFemaleExtrapulmonaryHIV(this.getFailureFemaleExtrapulmonaryHIV() + table.getFailureFemaleExtrapulmonaryHIV());
+		this.setFailureMaleExtrapulmonaryHIV(
+		    this.getFailureMaleExtrapulmonaryHIV() + table.getFailureMaleExtrapulmonaryHIV());
+		this.setFailureFemaleExtrapulmonaryHIV(
+		    this.getFailureFemaleExtrapulmonaryHIV() + table.getFailureFemaleExtrapulmonaryHIV());
 		this.setFailureExtrapulmonaryHIV(this.getFailureExtrapulmonaryHIV() + table.getFailureExtrapulmonaryHIV());
 		this.setFailureMale(this.getFailureMale() + table.getFailureMale());
 		this.setFailureFemale(this.getFailureFemale() + table.getFailureFemale());
@@ -4773,8 +5526,10 @@ public class TB07Table1Data {
 		this.setDefaultMaleExtrapulmonary(this.getDefaultMaleExtrapulmonary() + table.getDefaultMaleExtrapulmonary());
 		this.setDefaultFemaleExtrapulmonary(this.getDefaultFemaleExtrapulmonary() + table.getDefaultFemaleExtrapulmonary());
 		this.setDefaultExtrapulmonary(this.getDefaultExtrapulmonary() + table.getDefaultExtrapulmonary());
-		this.setDefaultMaleExtrapulmonaryHIV(this.getDefaultMaleExtrapulmonaryHIV() + table.getDefaultMaleExtrapulmonaryHIV());
-		this.setDefaultFemaleExtrapulmonaryHIV(this.getDefaultFemaleExtrapulmonaryHIV() + table.getDefaultFemaleExtrapulmonaryHIV());
+		this.setDefaultMaleExtrapulmonaryHIV(
+		    this.getDefaultMaleExtrapulmonaryHIV() + table.getDefaultMaleExtrapulmonaryHIV());
+		this.setDefaultFemaleExtrapulmonaryHIV(
+		    this.getDefaultFemaleExtrapulmonaryHIV() + table.getDefaultFemaleExtrapulmonaryHIV());
 		this.setDefaultExtrapulmonaryHIV(this.getDefaultExtrapulmonaryHIV() + table.getDefaultExtrapulmonaryHIV());
 		this.setDefaultMale(this.getDefaultMale() + table.getDefaultMale());
 		this.setDefaultFemale(this.getDefaultFemale() + table.getDefaultFemale());
@@ -4798,7 +5553,8 @@ public class TB07Table1Data {
 		this.setOtherFemaleExtrapulmonary(this.getOtherFemaleExtrapulmonary() + table.getOtherFemaleExtrapulmonary());
 		this.setOtherExtrapulmonary(this.getOtherExtrapulmonary() + table.getOtherExtrapulmonary());
 		this.setOtherMaleExtrapulmonaryHIV(this.getOtherMaleExtrapulmonaryHIV() + table.getOtherMaleExtrapulmonaryHIV());
-		this.setOtherFemaleExtrapulmonaryHIV(this.getOtherFemaleExtrapulmonaryHIV() + table.getOtherFemaleExtrapulmonaryHIV());
+		this.setOtherFemaleExtrapulmonaryHIV(
+		    this.getOtherFemaleExtrapulmonaryHIV() + table.getOtherFemaleExtrapulmonaryHIV());
 		this.setOtherExtrapulmonaryHIV(this.getOtherExtrapulmonaryHIV() + table.getOtherExtrapulmonaryHIV());
 		this.setOtherMale(this.getOtherMale() + table.getOtherMale());
 		this.setOtherFemale(this.getOtherFemale() + table.getOtherFemale());
@@ -4807,23 +5563,34 @@ public class TB07Table1Data {
 		this.setOtherFemaleHIV(this.getOtherFemaleHIV() + table.getOtherFemaleHIV());
 		this.setOtherAllHIV(this.getOtherAllHIV() + table.getOtherAllHIV());
 		this.setRetreatmentMalePulmonaryBC(this.getRetreatmentMalePulmonaryBC() + table.getRetreatmentMalePulmonaryBC());
-		this.setRetreatmentFemalePulmonaryBC(this.getRetreatmentFemalePulmonaryBC() + table.getRetreatmentFemalePulmonaryBC());
+		this.setRetreatmentFemalePulmonaryBC(
+		    this.getRetreatmentFemalePulmonaryBC() + table.getRetreatmentFemalePulmonaryBC());
 		this.setRetreatmentPulmonaryBC(this.getRetreatmentPulmonaryBC() + table.getRetreatmentPulmonaryBC());
-		this.setRetreatmentMalePulmonaryBCHIV(this.getRetreatmentMalePulmonaryBCHIV() + table.getRetreatmentMalePulmonaryBCHIV());
-		this.setRetreatmentFemalePulmonaryBCHIV(this.getRetreatmentFemalePulmonaryBCHIV() + table.getRetreatmentFemalePulmonaryBCHIV());
+		this.setRetreatmentMalePulmonaryBCHIV(
+		    this.getRetreatmentMalePulmonaryBCHIV() + table.getRetreatmentMalePulmonaryBCHIV());
+		this.setRetreatmentFemalePulmonaryBCHIV(
+		    this.getRetreatmentFemalePulmonaryBCHIV() + table.getRetreatmentFemalePulmonaryBCHIV());
 		this.setRetreatmentPulmonaryBCHIV(this.getRetreatmentPulmonaryBCHIV() + table.getRetreatmentPulmonaryBCHIV());
 		this.setRetreatmentMalePulmonaryCD(this.getRetreatmentMalePulmonaryCD() + table.getRetreatmentMalePulmonaryCD());
-		this.setRetreatmentFemalePulmonaryCD(this.getRetreatmentFemalePulmonaryCD() + table.getRetreatmentFemalePulmonaryCD());
+		this.setRetreatmentFemalePulmonaryCD(
+		    this.getRetreatmentFemalePulmonaryCD() + table.getRetreatmentFemalePulmonaryCD());
 		this.setRetreatmentPulmonaryCD(this.getRetreatmentPulmonaryCD() + table.getRetreatmentPulmonaryCD());
-		this.setRetreatmentMalePulmonaryCDHIV(this.getRetreatmentMalePulmonaryCDHIV() + table.getRetreatmentMalePulmonaryCDHIV());
-		this.setRetreatmentFemalePulmonaryCDHIV(this.getRetreatmentFemalePulmonaryCDHIV() + table.getRetreatmentFemalePulmonaryCDHIV());
+		this.setRetreatmentMalePulmonaryCDHIV(
+		    this.getRetreatmentMalePulmonaryCDHIV() + table.getRetreatmentMalePulmonaryCDHIV());
+		this.setRetreatmentFemalePulmonaryCDHIV(
+		    this.getRetreatmentFemalePulmonaryCDHIV() + table.getRetreatmentFemalePulmonaryCDHIV());
 		this.setRetreatmentPulmonaryCDHIV(this.getRetreatmentPulmonaryCDHIV() + table.getRetreatmentPulmonaryCDHIV());
-		this.setRetreatmentMaleExtrapulmonary(this.getRetreatmentMaleExtrapulmonary() + table.getRetreatmentMaleExtrapulmonary());
-		this.setRetreatmentFemaleExtrapulmonary(this.getRetreatmentFemaleExtrapulmonary() + table.getRetreatmentFemaleExtrapulmonary());
+		this.setRetreatmentMaleExtrapulmonary(
+		    this.getRetreatmentMaleExtrapulmonary() + table.getRetreatmentMaleExtrapulmonary());
+		this.setRetreatmentFemaleExtrapulmonary(
+		    this.getRetreatmentFemaleExtrapulmonary() + table.getRetreatmentFemaleExtrapulmonary());
 		this.setRetreatmentExtrapulmonary(this.getRetreatmentExtrapulmonary() + table.getRetreatmentExtrapulmonary());
-		this.setRetreatmentMaleExtrapulmonaryHIV(this.getRetreatmentMaleExtrapulmonaryHIV() + table.getRetreatmentMaleExtrapulmonaryHIV());
-		this.setRetreatmentFemaleExtrapulmonaryHIV(this.getRetreatmentFemaleExtrapulmonaryHIV() + table.getRetreatmentFemaleExtrapulmonaryHIV());
-		this.setRetreatmentExtrapulmonaryHIV(this.getRetreatmentExtrapulmonaryHIV() + table.getRetreatmentExtrapulmonaryHIV());
+		this.setRetreatmentMaleExtrapulmonaryHIV(
+		    this.getRetreatmentMaleExtrapulmonaryHIV() + table.getRetreatmentMaleExtrapulmonaryHIV());
+		this.setRetreatmentFemaleExtrapulmonaryHIV(
+		    this.getRetreatmentFemaleExtrapulmonaryHIV() + table.getRetreatmentFemaleExtrapulmonaryHIV());
+		this.setRetreatmentExtrapulmonaryHIV(
+		    this.getRetreatmentExtrapulmonaryHIV() + table.getRetreatmentExtrapulmonaryHIV());
 		this.setRetreatmentMale(this.getRetreatmentMale() + table.getRetreatmentMale());
 		this.setRetreatmentFemale(this.getRetreatmentFemale() + table.getRetreatmentFemale());
 		this.setRetreatmentAll(this.getRetreatmentAll() + table.getRetreatmentAll());
@@ -4846,7 +5613,8 @@ public class TB07Table1Data {
 		this.setTotalFemaleExtrapulmonary(this.getTotalFemaleExtrapulmonary() + table.getTotalFemaleExtrapulmonary());
 		this.setTotalExtrapulmonary(this.getTotalExtrapulmonary() + table.getTotalExtrapulmonary());
 		this.setTotalMaleExtrapulmonaryHIV(this.getTotalMaleExtrapulmonaryHIV() + table.getTotalMaleExtrapulmonaryHIV());
-		this.setTotalFemaleExtrapulmonaryHIV(this.getTotalFemaleExtrapulmonaryHIV() + table.getTotalFemaleExtrapulmonaryHIV());
+		this.setTotalFemaleExtrapulmonaryHIV(
+		    this.getTotalFemaleExtrapulmonaryHIV() + table.getTotalFemaleExtrapulmonaryHIV());
 		this.setTotalExtrapulmonaryHIV(this.getTotalExtrapulmonaryHIV() + table.getTotalExtrapulmonaryHIV());
 		this.setTotalMale(this.getTotalMale() + table.getTotalMale());
 		this.setTotalFemale(this.getTotalFemale() + table.getTotalFemale());
@@ -4854,78 +5622,77 @@ public class TB07Table1Data {
 		this.setTotalMaleHIV(this.getTotalMaleHIV() + table.getTotalMaleHIV());
 		this.setTotalFemaleHIV(this.getTotalFemaleHIV() + table.getTotalFemaleHIV());
 		this.setTotalAllHIV(this.getTotalAllHIV() + table.getTotalAllHIV());
-
 		
 	}
-
+	
 	public Integer getWomenOfChildBearingAge() {
 		return womenOfChildBearingAge;
 	}
-
+	
 	public void setWomenOfChildBearingAge(Integer womenOfChildBearingAge) {
 		this.womenOfChildBearingAge = womenOfChildBearingAge;
 	}
-
+	
 	public Integer getPregnant() {
 		return pregnant;
 	}
-
+	
 	public void setPregnant(Integer pregnant) {
 		this.pregnant = pregnant;
 	}
-
+	
 	public Integer getContacts() {
 		return contacts;
 	}
-
+	
 	public void setContacts(Integer contacts) {
 		this.contacts = contacts;
 	}
-
+	
 	public Integer getMigrants() {
 		return migrants;
 	}
-
+	
 	public void setMigrants(Integer migrants) {
 		this.migrants = migrants;
 	}
-
+	
 	public Integer getPhcWorkers() {
 		return phcWorkers;
 	}
-
+	
 	public void setPhcWorkers(Integer phcWorkers) {
 		this.phcWorkers = phcWorkers;
 	}
-
+	
 	public Integer getTbServicesWorkers() {
 		return tbServicesWorkers;
 	}
-
+	
 	public void setTbServicesWorkers(Integer tbServicesWorkers) {
 		this.tbServicesWorkers = tbServicesWorkers;
 	}
-
+	
 	public Integer getDied() {
 		return died;
 	}
-
+	
 	public void setDied(Integer died) {
 		this.died = died;
 	}
-
+	
 	public Integer getDiedChildren() {
 		return diedChildren;
 	}
-
+	
 	public void setDiedChildren(Integer diedChildren) {
 		this.diedChildren = diedChildren;
 	}
-
+	
 	public Integer getDiedWomenOfChildBearingAge() {
 		return diedWomenOfChildBearingAge;
 	}
-
+	
 	public void setDiedWomenOfChildBearingAge(Integer diedWomenOfChildBearingAge) {
 		this.diedWomenOfChildBearingAge = diedWomenOfChildBearingAge;
 	}

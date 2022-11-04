@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,6 +49,7 @@ public class HibernateMdrtbDAO implements MdrtbDAO {
 	/**
 	 * @see MdrtbDAO#getAllRayonsTJK()
 	 */
+	@Deprecated
 	public List<String> getAllRayonsTJK() throws DAOException {
 		List<BaseLocation> list = getAddressHierarchyLocationsByHierarchyLevel(District.HIERARCHY_LEVEL);
 		List<String> names = new ArrayList<String>();

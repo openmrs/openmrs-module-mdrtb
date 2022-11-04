@@ -22,13 +22,10 @@ import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.thoughtworks.xstream.core.util.Base64Encoder;
 
-@SuppressWarnings({ "deprecation", "unused" })
+@SuppressWarnings({ "deprecation" })
 public class PDFHelper {
 	
 	public String c(String str) throws Exception {
-		/*System.out.println("\n\n");
-    	System.out.println(str);
-    	System.out.println("\n\n");*/
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();//1<<10
 	    OutputStreamWriter osw = null;
         osw = new OutputStreamWriter(baos, "UTF-8");
@@ -38,9 +35,6 @@ public class PDFHelper {
 	}
 	
 	public ByteArrayOutputStream createAndDownloadPdf(String html) throws IOException, DocumentException {
-		/*System.out.println("\n\n");
-    	System.out.println(html);
-    	System.out.println("\n\n");*/
 		Document document = new Document(PageSize.A4_LANDSCAPE);
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(document, baos);

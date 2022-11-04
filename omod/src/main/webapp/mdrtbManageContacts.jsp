@@ -227,9 +227,6 @@
     	$j(target).val(val);
     }
     
-    //////person lookup:
-    
-    
      //simple popup cont... The following is for patient lookups:
 	var savedRet;
     function loadPatients(input){

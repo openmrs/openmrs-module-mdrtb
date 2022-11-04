@@ -27,54 +27,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class ReportingController {  
-    
+public class ReportingController {
+	
 	/**
 	 * Render a Report
 	 */
-    @RequestMapping("/module/mdrtb/reporting/reports")
-	public void report(
-        @RequestParam(required=false, value="type") Class<? extends ReportSpecification> type,
-        HttpServletRequest request, ModelMap model) throws Exception {
-
-    	List<ReportSpecification> availableReports = new ArrayList<ReportSpecification>();
-    	availableReports.add(new TB07TJK());
-    	
-    	availableReports.add(new TB08TJK());
-    	availableReports.add(new DSTReportTJK());
-    	
-    	
-    	model.addAttribute("availableReports", availableReports);
-    	
+	@RequestMapping("/module/mdrtb/reporting/reports")
+	public void report(@RequestParam(required = false, value = "type") Class<? extends ReportSpecification> type,
+	        HttpServletRequest request, ModelMap model) throws Exception {
+		
+		List<ReportSpecification> availableReports = new ArrayList<ReportSpecification>();
+		availableReports.add(new TB07TJK());
+		
+		availableReports.add(new TB08TJK());
+		availableReports.add(new DSTReportTJK());
+		
+		model.addAttribute("availableReports", availableReports);
+		
 		model.addAttribute("type", type);
 		if (type != null) {
 			model.addAttribute("report", type.newInstance());
 		}
 		
-		List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
+		List<Region> oblasts = Context.getService(MdrtbService.class).getRegions();
 		model.addAttribute("oblasts", oblasts);
-    }
-    
+	}
+	
 	/**
 	 * Render a Report
 	 */
-    @RequestMapping("/module/mdrtb/reporting/render")
-	public void render(
-        @RequestParam(required=true, value="type") Class<? extends ReportSpecification> type,
-        @RequestParam(required=false, value="format") String format,
-        @RequestParam(required=false, value="oblast") String oblast,
-        HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
-
-    	response.setContentType("text/html");
+	@RequestMapping("/module/mdrtb/reporting/render")
+	public void render(@RequestParam(required = true, value = "type") Class<? extends ReportSpecification> type,
+	        @RequestParam(required = false, value = "format") String format,
+	        @RequestParam(required = false, value = "oblast") String oblast, HttpServletRequest request,
+	        HttpServletResponse response, ModelMap model) throws Exception {
+		
+		response.setContentType("text/html");
 		try {
 			ReportSpecification report = type.newInstance();
 			
 			Map<String, Object> parameters = new LinkedHashMap<String, Object>();
 			for (Parameter p : report.getParameters()) {
-				Object val = WidgetUtil.getFromRequest(request, "p."+p.getName(), p.getType(), p.getCollectionType());
+				Object val = WidgetUtil.getFromRequest(request, "p." + p.getName(), p.getType(), p.getCollectionType());
 				parameters.put(p.getName(), val);
 			}
-			parameters.put("oblast",oblast);
+			parameters.put("oblast", oblast);
 			EvaluationContext context = report.validateAndCreateContext(parameters);
 			ReportData data = report.evaluateReport(context);
 			RenderingMode mode = new RenderingMode(new PreviewReportRenderer(), "Preview", null, null);
@@ -88,13 +85,15 @@ public class ReportingController {
 			mode.getRenderer().render(data, mode.getArgument(), response.getOutputStream());
 		}
 		catch (Exception e) {
-			response.getOutputStream().print("<html><body><span class=\"error\">Error: " + e.getMessage() + "</span><br/><br/>");
-			response.getOutputStream().print("<a href=\"#\" onclick=\"document.getElementById('errorDetailDiv').style.display = '';\">Error Details</a><br/><br/>");
+			response.getOutputStream()
+			        .print("<html><body><span class=\"error\">Error: " + e.getMessage() + "</span><br/><br/>");
+			response.getOutputStream().print(
+			    "<a href=\"#\" onclick=\"document.getElementById('errorDetailDiv').style.display = '';\">Error Details</a><br/><br/>");
 			response.getOutputStream().print("<span id=\"errorDetailDiv\" style=\"display:none;\">");
 			for (StackTraceElement ste : e.getStackTrace()) {
 				response.getOutputStream().print(ste.toString());
 			}
 			response.getOutputStream().print("<span></body></html>");
 		}
-    }
+	}
 }

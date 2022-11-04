@@ -4,11 +4,8 @@ import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDef
 import org.openmrs.module.reporting.common.Localized;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
 
-
 @Localized("dotsreports.reporting.AgetAtDotsProgramEnrollmentTJKCohortDefinition")
 public class AgetAtMdrtbProgramEnrollmentTJKCohortDefinition extends ProgramEnrollmentCohortDefinition {
-
-	private static final long serialVersionUID = 1L;
 	
 	// note that, by convention, the first month of treatment is referred to as "treatment month 0"
 	// so, for instance, if you want to test Bac results during the first 5 months of treatment,
@@ -20,9 +17,9 @@ public class AgetAtMdrtbProgramEnrollmentTJKCohortDefinition extends ProgramEnro
 	
 	@ConfigurationProperty
 	private Integer maxAge;
-
+	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -38,27 +35,22 @@ public class AgetAtMdrtbProgramEnrollmentTJKCohortDefinition extends ProgramEnro
 	public String toString() {
 		return super.toString();
 	}
-
 	
 	//***** PROPERTY ACCESS *****
 	public Integer getMinAge() {
 		return minAge;
 	}
-
+	
 	public void setMinAge(Integer minAge) {
 		this.minAge = minAge;
 	}
-
+	
 	public Integer getMaxAge() {
 		return maxAge;
 	}
-
+	
 	public void setMaxAge(Integer maxAge) {
 		this.maxAge = maxAge;
 	}
-
-	
-	
-	
 	
 }

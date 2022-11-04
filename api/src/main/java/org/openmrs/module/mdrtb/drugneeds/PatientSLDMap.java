@@ -23,8 +23,6 @@ public class PatientSLDMap {
 	private Boolean onOther3;
 	private Boolean onOther4;
 	private Boolean onOther5;
-
-	
 	
 	public PatientSLDMap(Patient patient, Date treatmentStartDate,
 			Boolean onCapreomycin, Boolean onAmikacin, Boolean onMoxifloxacin,
@@ -50,8 +48,6 @@ public class PatientSLDMap {
 		this.onOther4 = onOther4;
 		this.onOther5 = onOther5;
 	}
-
-	
 	
 	public PatientSLDMap() {
 		patient = null;
@@ -218,7 +214,5 @@ public class PatientSLDMap {
 	public Boolean get(String key) {
 		return map.get(key);
 	}*/
-	
-
 
 }

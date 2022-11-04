@@ -25,7 +25,6 @@ Table 3 - A
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +44,6 @@ import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
-import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
@@ -78,11 +76,8 @@ public class TB08TJK implements ReportSpecification {
 		List<Parameter> l = new ArrayList<Parameter>();
 		l.add(new Parameter("location",  Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
 		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
-		/*l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), Integer.class));
-		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), Integer.class));*/
 		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), String.class));
 		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), String.class));
-		
 		return l;
 	}
 	
@@ -107,8 +102,6 @@ public class TB08TJK implements ReportSpecification {
 		Integer month = (Integer) parameters.get("month");*/
 		String quarter = (String) parameters.get("quarter");
 		String month = (String) parameters.get("month");
-		String oblast = (String) parameters.get("oblast");
-		
 		if (quarter == null && month==null) {
 			throw new IllegalArgumentException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAQuarterOrMonth"));
 		}
@@ -120,16 +113,11 @@ public class TB08TJK implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-	@SuppressWarnings("unchecked")
 	public ReportData evaluateReport(EvaluationContext context) {
 		
 		ReportDefinition report = new ReportDefinition();
 		
-		//OBLAST
 		String oblast = (String) context.getParameterValue("oblast");
-		//\\OBLAST
-
-		
 		Location location = (Location) context.getParameterValue("location");
 		Date startDate = (Date)context.getParameterValue("startDate");
 		Date endDate = (Date)context.getParameterValue("endDate");
@@ -137,11 +125,11 @@ public class TB08TJK implements ReportSpecification {
 		//OBLAST
 		Region o = null;
 		if(!oblast.equals("") && location == null)
-			o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
+			o =  Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
 		
 		List<Location> locList = new ArrayList<Location>();
 		if(o != null && location == null)
-			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
 		else if (location != null)
 			locList.add(location);
 		
@@ -151,29 +139,9 @@ public class TB08TJK implements ReportSpecification {
 			context.addParameterValue("location", o.getName()); 
 		else
 			context.addParameterValue("location", "All"); 
-		//\\OBLAST
 		
 		// Base Cohort is patients who started treatment during year, optionally at location
-		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
-		/*baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
-			if (locationFilter != null) {
-				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}
-		}*/
-		//baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		/*if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
-			//CohortDefinition locationFilter = Cohorts.getTreatmentStartAndAddressFilterTJK(location.getCountyDistrict(), startDate, endDate);
-			if (locationFilter != null) {
-				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}	
-		}
-		
-		else {
-			baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
-		}*/
+		//Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
 		
 		//OBLAST
 		if (!locList.isEmpty()){
@@ -183,21 +151,9 @@ public class TB08TJK implements ReportSpecification {
 				
 			if(!cohortDefinitions.isEmpty()){
 				report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("OR", cohortDefinitions), null);
-				//report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate), report.getBaseCohortDefinition().getParameterizable()));
-				//report.getBaseCohortDefinition().
 			}
 		}
-		
-		/*CohortDefinition mdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
-		CohortDefinition pdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
-		CohortDefinition pdrOnly = ReportUtil.minus(pdr, mdr);*/
-		/*CohortDefinition baseCohort = ReportUtil.getCompositionCohort(baseCohortDefs, "AND");
-		report.setBaseCohortDefinition(baseCohort, null);*/
-		
 		CohortDefinition drtb = Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate);
-		
-		
-		
 		CohortCrossTabDataSetDefinition dsd = new CohortCrossTabDataSetDefinition();
 		
 		// create the rows in the chart
@@ -226,29 +182,6 @@ public class TB08TJK implements ReportSpecification {
 		
 		//CohortDefinition previousSecondLine = ReportUtil.getMdrtbPreviousDrugUseFilterSet(startDate, endDate).get("PreviousSecondLine");
 		
-	/*	CohortDefinition curedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.CURED[0]);
-		CohortDefinition txCompletedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_COMPLETED[0]);
-		CohortDefinition defaultMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.LOST_TO_FOLLOWUP[0]);
-		CohortDefinition failureMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_FAILED[0]);
-		CohortDefinition relapseMDR = ReportUtil.getCompositionCohort("OR", curedMDR,txCompletedMDR);*/
-		
-		
-		
-		
-		/*CohortDefinition newOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("New"),previousSecondLine));
-		CohortDefinition relapseOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("Relapse"),previousSecondLine));
-		CohortDefinition defaultOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("AfterDefault"),previousSecondLine));
-		CohortDefinition failureCatIOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("AfterFailureCategoryI"),previousSecondLine));
-		CohortDefinition failureCatIIOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("AfterFailureCategoryII"),previousSecondLine));
-		CohortDefinition unknownOnly = ReportUtil.getCompositionCohort("AND", ReportUtil.getCompositionCohort("OR",mdr,pdrOnly),ReportUtil.minus(groups.get("Other"),previousSecondLine));*/
-		
-		/*CohortDefinition newOnly = groups.get("New");
-		CohortDefinition relapseOnly = groups.get("Relapse");
-		CohortDefinition defaultOnly = groups.get("AfterDefault");
-		CohortDefinition failureCatIOnly = groups.get("AfterFailureCategoryI");
-		CohortDefinition failureCatIIOnly = groups.get("AfterFailureCategoryII");
-		CohortDefinition unknownOnly = groups.get("Other");*/
-		
 		dsd.addRow("New", groups.get("New"),null);
 		dsd.addRow("Relapse1", groups.get("Relapse1"), null);
 		dsd.addRow("Relapse2", groups.get("Relapse2"), null);
@@ -259,47 +192,17 @@ public class TB08TJK implements ReportSpecification {
 		dsd.addRow("Other", ReportUtil.getCompositionCohort("OR",groups.get("Other"),groups.get("TransferredIn")), null);
 		dsd.addRow("Total", drtb,null);
 		
-		/*dsd.addRow("RelapseMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, relapseMDR), null);
-		dsd.addRow("DefaultMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, defaultMDR), null);
-		dsd.addRow("FailureMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, failureMDR), null);
-		dsd.addRow("PrevTotal", ReportUtil.getCompositionCohort("OR",relapseMDR,defaultMDR,failureMDR), null);
-		dsd.addRow("Total",ReportUtil.getCompositionCohort("OR",newOnly,relapseOnly,defaultOnly,failureCatIOnly,failureCatIIOnly,unknownOnly,relapseMDR,defaultMDR,failureMDR),null);
-*/		
-		
-		
 		dsd.addColumn("Registered", drtb, null);
-		
 		dsd.addColumn("Cured", cured, null);
-		
 		dsd.addColumn("TreatmentCompleted", treatmentCompleted, null);
-		
 		dsd.addColumn("SuccessfulTreatment", successfulTreatment, null);
-		
 		dsd.addColumn("Failed", failed, null);
-		
 		dsd.addColumn("Defaulted", ltfu, null);
-		
 		dsd.addColumn("DiedTB", tbDied, null);
-		
 		dsd.addColumn("DiedNonTB", nonTbDeath, null);
-		
 		dsd.addColumn("StillEnrolled", stillEnrolled, null);
-		
 		dsd.addColumn("ColTotal",drtb, null);
 		
-		/*for (String key : rows.keySet()) {
-			dsd.addRow(key, rows.get(key), null);
-		}
-		
-		dsd.addRow("Total", ReportUtil.getCompositionCohort(dsd.getRows(), "OR"), null);*/
-		
-		// create the columns in the chart
-		
-		/*for (String key : columns.keySet()) {
-			dsd.addColumn(key, columns.get(key), null);
-		}
-		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);	
-		*/
 		report.addDataSetDefinition("results", dsd, null);
 		
 		ReportData data;

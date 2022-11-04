@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+//TODO: Extend all controllers and keep all the common getters here
 public class AbstractFormController {
 	
 	@InitBinder
@@ -31,8 +31,8 @@ public class AbstractFormController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -47,12 +47,14 @@ public class AbstractFormController {
 	}
 	
 	@ModelAttribute("program")
-	public MdrtbPatientProgram getPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+	public MdrtbPatientProgram getPatientProgram(
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
 	}
 	
 	@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+	public TbPatientProgram getTbPatientProgram(
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
 	}
 	
@@ -75,5 +77,5 @@ public class AbstractFormController {
 	public Collection<ConceptAnswer> getAnatomicalSites() {
 		return Context.getService(MdrtbService.class).getPossibleAnatomicalSites();
 	}
-
+	
 }

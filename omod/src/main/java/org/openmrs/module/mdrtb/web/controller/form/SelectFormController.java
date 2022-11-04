@@ -19,24 +19,23 @@ import org.springframework.web.servlet.ModelAndView;
 public class SelectFormController {
 	
 	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showForm(@RequestParam(required = true, value = "formType") String formType, 
-	                             @RequestParam(required = true, value = "patientId") Integer patientId,
-	                             @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                             @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                             ModelMap map) {
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showForm(@RequestParam(required = true, value = "formType") String formType,
+	        @RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, ModelMap map) {
 		
 		List<Form> forms;
 		
 		if (formType.equals("intake")) {
-			EncounterType [] intake = {Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type"))};
+			EncounterType[] intake = { Context.getEncounterService()
+			        .getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.intake_encounter_type")) };
 			forms = Context.getFormService().getForms(null, true, Arrays.asList(intake), false, null, null, null);
-		}
-		else if (formType.equals("followUp")) {
-			EncounterType [] followUp = {Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type"))};
-	        forms = Context.getFormService().getForms(null, true, Arrays.asList(followUp), false, null, null, null);
-		}
-		else {
+		} else if (formType.equals("followUp")) {
+			EncounterType[] followUp = { Context.getEncounterService().getEncounterType(
+			    Context.getAdministrationService().getGlobalProperty("mdrtb.follow_up_encounter_type")) };
+			forms = Context.getFormService().getForms(null, true, Arrays.asList(followUp), false, null, null, null);
+		} else {
 			throw new MdrtbAPIException("Invalid formType. Must be intake or follow-up.");
 		}
 		
@@ -44,21 +43,14 @@ public class SelectFormController {
 		if (forms.size() == 0) {
 			if (formType.equals("intake")) {
 				return new ModelAndView("redirect:/module/mdrtb/form/intake.form?patientId=" + patientId
-    			+ "&patientProgramId=" + patientProgramId  
-    			+ "&returnUrl=" + returnUrl
-    			+ "&encounterId=-1");
-			}
-			else if (formType.equals("followUp")) {
+				        + "&patientProgramId=" + patientProgramId + "&returnUrl=" + returnUrl + "&encounterId=-1");
+			} else if (formType.equals("followUp")) {
 				return new ModelAndView("redirect:/module/mdrtb/form/followup.form?patientId=" + patientId
-	    			+ "&patientProgramId=" + patientProgramId  
-	    			+ "&returnUrl=" + returnUrl
-	    			+ "&encounterId=-1");
-			}
-			else {
+				        + "&patientProgramId=" + patientProgramId + "&returnUrl=" + returnUrl + "&encounterId=-1");
+			} else {
 				throw new MdrtbAPIException("Invalid formType. Must be intake or follow-up.");
 			}
-		}
-		else {
+		} else {
 			// show the list of available forms for this encounter type
 			map.put("patientId", patientId);
 			map.put("patientProgramId", patientProgramId);

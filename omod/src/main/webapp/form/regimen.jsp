@@ -5,9 +5,6 @@
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
@@ -97,28 +94,7 @@
 
 	    return true;
 	}
-	
-	/* function fun1()
-	{
-		var e = document.getElementById("oblast");
-		var val = e.options[e.selectedIndex].value;
 		
-		if(val!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/regimen.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty regimenForm.id ? regimenForm.id : -1})
-	}
-
-	function fun2()
-	{
-		var e = document.getElementById("oblast");
-		var val1 = e.options[e.selectedIndex].value;
-		var e = document.getElementById("district");
-		var val2 = e.options[e.selectedIndex].value;
-		
-		if(val2!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/regimen.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty regimenForm.id ? regimenForm.id : -1})
-	} */
-
-	
 	function validate() 
 	{
 		var encDate = document.getElementById("encounterDatetime").value;
@@ -205,16 +181,6 @@
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
 <td><openmrs:formatDate date="${regimenForm.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${tb03.provider.personName}</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${tb03.location.displayString}</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>
@@ -416,64 +382,8 @@
 <td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${regimenForm.encounterDatetime}"/></td>
 </tr>
 
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>
-<select name="provider">
-<option value=""></option>
-<c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${tb03.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>
-<select name="location">
-<option value=""></option>
-<c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${tb03.location == location}">selected</c:if>>${location.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
 </table>
 
-<%-- <table>
-<tr id="oblastDiv">
-			<td align="right"><spring:message code="mdrtb.oblast" /></td>
-			<td><select name="oblast" id="oblast" onchange="fun1()" >
-					<option value=""></option>
-					<c:forEach var="o" items="${oblasts}">
-						<option value="${o.id}">${o.name}</option>
-					</c:forEach>
-			</select></td>
-		</tr>
-		
-		<tr id="districtDiv">
-			<td align="right"><spring:message code="mdrtb.district" /></td>
-			<td><select name="district" id="district" onchange="fun2()" >
-					<option value=""></option>
-					<c:forEach var="dist" items="${districts}">
-						<option value="${dist.id}">${dist.name}</option>
-					</c:forEach>
-			</select></td>
-		</tr>
-		
-		<tr id="facilityDiv">
-			<td align="right"><spring:message code="mdrtb.facility" /></td>
-			<td><select name="facility" id="facility" >
-					<option value=""></option>
-					<c:forEach var="f" items="${facilities}">
-						<option value="${f.id}">${f.name}</option>
-					</c:forEach>
-			</select>
-			</td>
-		</tr>
-	</table>
-	 --%>
 <table>
 
 <tr>

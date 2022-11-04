@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.OpenmrsMetadata;
 import org.openmrs.api.PatientSetService.TimeModifier;
@@ -308,7 +307,6 @@ public class ReportUtil {
 		return map;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Map<String, CohortDefinition> getMdrtbPreviousDrugUseFilterSet(Date startDate, Date endDate) {
 		Map<String, CohortDefinition> map = new HashMap<String, CohortDefinition>();
 
@@ -337,7 +335,6 @@ public class ReportUtil {
 		return map;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Map<String, CohortDefinition> getMdrtbPreviousTreatmentFilterSet(Date startDate, Date endDate) {
 		Map<String, CohortDefinition> map = new HashMap<String, CohortDefinition>();
 

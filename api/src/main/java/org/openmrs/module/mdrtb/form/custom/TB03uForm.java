@@ -25,12 +25,9 @@ import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uForm> {
 	
-	private Integer tb03Id;
-	
 	public TB03uForm() {
 		super();
 		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("TB03u - MDR"));
-		
 	}
 	
 	public TB03uForm(Patient patient) {
@@ -44,7 +41,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public String getPatientName() {
 		PersonName p = getPatient().getPersonName();
-		
 		return p.getFamilyName() + "," + p.getGivenName();
 	}
 	
@@ -59,21 +55,16 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 				if (pi != null)
 					return pi.getIdentifier();
 			}
-			
 		}
-		
 		return ret;
-		
 	}
 	
 	public Integer getTb03RegistrationYear() {
-		String ret = null;
 		TB03Form tb03 = getTb03();
 		if (tb03 != null) {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(tb03.getEncounterDatetime());
 			return gc.get(GregorianCalendar.YEAR);
-			
 		}
 		return null;
 	}
@@ -85,12 +76,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public String getSldRegisterNumber() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_REG_NUMBER), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setSldRegisterNumber(String number) {
@@ -128,7 +114,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.male");
 		if (getPatient().getGender().equals("F"))
 			return Context.getMessageSourceService().getMessage("mdrtb.tb03.gender.female");
-		
 		return "";
 	}
 	
@@ -137,31 +122,22 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	}
 	
 	public String getAddress() {
-		
 		PersonAddress pa = getPatient().getPersonAddress();
-		
 		if (pa == null)
 			return null;
-		
 		String address = pa.getCountry() + "," + pa.getStateProvince() + "," + pa.getCountyDistrict();
 		if (pa.getAddress1() != null && pa.getAddress1().length() != 0) {
 			address += "," + pa.getAddress1();
 			if (pa.getAddress2() != null && pa.getAddress2().length() != 0)
 				address += "," + pa.getAddress2();
 		}
-		
 		return address;
 	}
 	
 	public Concept getAnatomicalSite() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAnatomicalSite(Concept site) {
@@ -203,13 +179,8 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousTreatment();
 			if (pws != null)
 				return pws.getConcept();
-			else
-				return null;
 		}
-		
-		else {
-			return null;
-		}
+		return null;
 	}
 	
 	public void setRegistrationGroup(Concept group) {
@@ -250,13 +221,8 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 			ProgramWorkflowState pws = tp.getClassificationAccordingToPreviousDrugUse();
 			if (pws != null)
 				return pws.getConcept();
-			else
-				return null;
 		}
-		
-		else {
-			return null;
-		}
+		return null;
 	}
 	
 	public void setRegistrationGroupByDrug(Concept group) {
@@ -294,12 +260,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getMdrStatus() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_STATUS),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setMdrStatus(Concept status) {
@@ -335,12 +296,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getConfirmationDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_MDR_CONFIRMATION), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setConfirmationDate(Date date) {
@@ -376,12 +332,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getPatientCategory() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TUBERCULOSIS_PATIENT_CATEGORY), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setPatientCategory(Concept cat) {
@@ -417,12 +368,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getMdrTreatmentStartDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TREATMENT_START_DATE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setMdrTreatmentStartDate(Date date) {
@@ -458,12 +404,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getTxLocation() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_LOCATION), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setTxLocation(Concept cat) {
@@ -499,12 +440,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public String getNameOfTxLocation() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NAME_OF_TREATMENT_LOCATION), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setNameOfTxLocation(String name) {
@@ -540,12 +476,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getResistanceType() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESISTANCE_TYPE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setResistanceType(Concept type) {
@@ -581,12 +512,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getBasisForDiagnosis() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.METHOD_OF_DETECTION), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setBasisForDiagnosis(Concept basis) {
@@ -622,12 +548,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getHivTestDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_HIV_TEST), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setHivTestDate(Date date) {
@@ -663,12 +584,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getHivStatus() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RESULT_OF_HIV_TEST), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setHivStatus(Concept status) {
@@ -704,12 +620,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getArtStartDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_ART_TREATMENT_START), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setArtStartDate(Date date) {
@@ -745,12 +656,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getPctStartDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DATE_OF_PCT_TREATMENT_START), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setPctStartDate(Date date) {
@@ -786,12 +692,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getTreatmentOutcome() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setTreatmentOutcome(Concept outcome) {
@@ -827,12 +728,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Date getTreatmentOutcomeDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_OUTCOME_DATE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setTreatmentOutcomeDate(Date date) {
@@ -924,12 +820,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Concept getRelapsed() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSED),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setRelapsed(Concept rel) {
@@ -965,12 +856,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Integer getRelapseMonth() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_MONTH), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueNumeric().intValue();
-		}
+		return obs == null ? null : obs.getValueNumeric().intValue();
 	}
 	
 	public void setRelapseMonth(Integer month) {
@@ -1006,12 +892,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public String getCliniciansNotes() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICIAN_NOTES), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setCliniciansNotes(String notes) {
@@ -1047,12 +928,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public Integer getPatProgId() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueNumeric().intValue();
-		}
+		return obs == null ? null : obs.getValueNumeric().intValue();
 	}
 	
 	public void setPatProgId(Integer id) {
@@ -1087,7 +963,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<SmearForm> getSmears() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<SmearForm>();
 		}
 		return Context.getService(MdrtbService.class).getSmearForms(getPatProgId());
@@ -1096,7 +971,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<XpertForm> getXperts() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<XpertForm>();
 		}
 		return Context.getService(MdrtbService.class).getXpertForms(getPatProgId());
@@ -1105,7 +979,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<HAINForm> getHains() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<HAINForm>();
 		}
 		return Context.getService(MdrtbService.class).getHAINForms(getPatProgId());
@@ -1114,7 +987,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<HAIN2Form> getHain2s() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<HAIN2Form>();
 		}
 		return Context.getService(MdrtbService.class).getHAIN2Forms(getPatProgId());
@@ -1123,7 +995,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<DrugResistanceDuringTreatmentForm> getDrdts() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<DrugResistanceDuringTreatmentForm>();
 		}
 		return Context.getService(MdrtbService.class).getDrdtForms(getPatProgId());
@@ -1132,7 +1003,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<CultureForm> getCultures() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<CultureForm>();
 		}
 		return Context.getService(MdrtbService.class).getCultureForms(getPatProgId());
@@ -1141,7 +1011,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	
 	public List<DSTForm> getDsts() {
 		if (getPatProgId() == null) {
-			//System.out.println("GM: null program");
 			return new ArrayList<DSTForm>();
 		}
 		return Context.getService(MdrtbService.class).getDstForms(getPatProgId());
@@ -1156,27 +1025,18 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 		TB03Form ret = null;
 		Location location = getLocation();
 		Date encounterDate = getEncounterDatetime();
-		
 		ret = Context.getService(MdrtbService.class).getClosestTB03Form(location, encounterDate, getPatient());
-		
 		return ret;
 	}
 	
 	public String getTB03Identifier() {
-		String ret = null;
-		
-		return ret;
+		return null;
 	}
 	
 	public Concept getCauseOfDeath() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSE_OF_DEATH), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCauseOfDeath(Concept type) {
@@ -1212,13 +1072,7 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 	public String getOtherCauseOfDeath() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_CAUSE_OF_DEATH), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
-		
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setOtherCauseOfDeath(String name) {
@@ -1256,7 +1110,6 @@ public class TB03uForm extends AbstractSimpleForm implements Comparable<TB03uFor
 			return 1;
 		if (TB03Util.getRegistrationNumber(form) == null)
 			return -1;
-		
 		return TB03Util.getRegistrationNumber(this).compareTo(TB03Util.getRegistrationNumber(form));
-	}	
+	}
 }

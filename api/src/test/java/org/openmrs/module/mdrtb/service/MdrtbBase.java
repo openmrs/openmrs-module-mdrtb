@@ -27,10 +27,8 @@ import org.openmrs.Program;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO;
-import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author owais.hussain@esquaredsystems.com

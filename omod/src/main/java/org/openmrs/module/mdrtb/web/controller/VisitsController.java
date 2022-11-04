@@ -21,48 +21,38 @@ public class VisitsController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/visits/visits.form")
-	public ModelAndView showVisits(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId,
-	                               @RequestParam(required = false, value="patientId") Integer patientId, ModelMap map) {
-		
+	public ModelAndView showVisits(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "patientId") Integer patientId, ModelMap map) {
 		if (patientProgramId != null && patientProgramId != -1) {
 			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
 			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(program));
 			map.put("patientId", program.getPatient().getId());
 			map.put("patientProgramId", patientProgramId);
-		}
-		else if (patientId != null) {			
+		} else if (patientId != null) {
 			Patient patient = Context.getPatientService().getPatient(patientId);
 			map.put("patientId", patientId);
 			map.put("patientProgramId", -1);
 			map.put("visits", new VisitStatusCalculator(new DashboardVisitStatusRenderer()).calculate(patient));
-
-		}
-		else {
+		} else {
 			throw new MdrtbAPIException("Patient program Id or patient Id must be specified.");
 		}
-		
 		return new ModelAndView("/module/mdrtb/visits/visits", map);
 	}
 	
 	@RequestMapping("/module/mdrtb/visits/delete.form")
-	public ModelAndView deleteVisit(@RequestParam(required = false, value="patientProgramId") Integer patientProgramId,
-	                                @RequestParam(required = false, value="patientId") Integer patientId, 
-									@RequestParam(required = true, value="visitId") Integer visitId, ModelMap map) {
+	public ModelAndView deleteVisit(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "visitId") Integer visitId, ModelMap map) {
 		
 		// handle the deletion
 		Encounter encounter = Context.getEncounterService().getEncounter(visitId);
 		if (encounter == null) {
 			throw new MdrtbAPIException("Invalid encounter Id " + visitId + " - Cannot void visit.");
-		}
-		else {
+		} else {
 			Context.getEncounterService().voidEncounter(encounter, "user deleted visit via MDR-TB module UI");
 		}
-		
 		// forward on to the main showVisits method to display the visits page
-		return showVisits(patientProgramId, patientId, map); 
+		return showVisits(patientProgramId, patientId, map);
 	}
-										
-								
 }

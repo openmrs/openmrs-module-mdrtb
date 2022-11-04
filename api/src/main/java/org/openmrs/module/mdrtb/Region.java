@@ -11,8 +11,8 @@ public class Region extends BaseLocation {
 		super(baseLocation.getId(), baseLocation.getName(), baseLocation.getLevelId());		
 	}
 
-	public Region(String name, Integer id, Integer levelId) {
-		super(id, name, levelId);
+	public Region(String name, Integer id) {
+		super(id, name, HIERARCHY_LEVEL);
 	}
 	
 	/**
@@ -28,5 +28,4 @@ public class Region extends BaseLocation {
 	public void setParent(BaseLocation parent) {
 		this.parent = parent;
 	}
-
 }

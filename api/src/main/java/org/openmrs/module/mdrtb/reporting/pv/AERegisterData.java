@@ -12,33 +12,33 @@ import org.openmrs.module.mdrtb.form.custom.AEForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
 //TODO: Rename AE to Adverse Events wherever found
-public class AERegisterData implements Comparable <AERegisterData>{
+public class AERegisterData implements Comparable<AERegisterData> {
 	
 	//private Patient patient;
 	private AEForm aeForm;
 	//private String identifier;
-    
+	
 	public AERegisterData(AEForm aeForm) {
 		// TODO Auto-generated constructor stub
 		this.aeForm = aeForm;
 	}
-
+	
 	public Patient getPatient() {
 		return aeForm.getPatient();
 	}
-
+	
 	public String getIdentifier() {
 		
 		String id = "";
 		Integer patProgId = aeForm.getPatProgId();
-		if(patProgId==null)
+		if (patProgId == null)
 			return id;
 		
 		org.openmrs.PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patProgId);
-	
-		if(pp!=null) {
+		
+		if (pp != null) {
 			PatientIdentifier pi = Context.getService(MdrtbService.class).getGenPatientProgramIdentifier(pp);
-			if(pi==null) {
+			if (pi == null) {
 				id = null;
 			}
 			
@@ -53,8 +53,6 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		return id;
 	}
-
-	
 	
 	public AEForm getAEForm() {
 		return aeForm;
@@ -64,34 +62,33 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		this.aeForm = aeForm;
 		
 	}
-
+	
 	public int compareTo(AERegisterData aerd) {
 		
-		if(aerd.getAEForm()==null || getAEForm()==null)
+		if (aerd.getAEForm() == null || getAEForm() == null)
 			return 0;
 		
-		
-		if(aerd.getAEForm().getEncounterDatetime() ==null || this.getAEForm().getEncounterDatetime()==null)
+		if (aerd.getAEForm().getEncounterDatetime() == null || this.getAEForm().getEncounterDatetime() == null)
 			return 0;
 		
 		return this.getAEForm().getEncounterDatetime().compareTo(aerd.getAEForm().getEncounterDatetime());
-
+		
 	}
 	
 	public String getPatientName() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Patient p = aeForm.getPatient();
 		
 		String lastName = p.getFamilyName();
 		String firstName = p.getGivenName();
-				
+		
 		return lastName + ", " + firstName;
 	}
 	
 	public String getBirthDate() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Patient p = aeForm.getPatient();
@@ -103,52 +100,51 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		return sdf.format(dob);
 		
-		
 	}
 	
 	public String getOnsetDate() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
-
+		
 		Date od = aeForm.getEncounterDatetime();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern("yyyy.MM.dd");
 		
 		return sdf.format(od);
-
+		
 	}
 	
 	public String getAEDescription() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getAdverseEvent();
 		
-		if(q==null)
+		if (q == null)
 			return null;
 		
 		return q.getName().getName();
 	}
 	
 	public String getDiagnosticInvestigation() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		return aeForm.getDiagnosticSummary();
-	
+		
 	}
 	
 	public String getSerious() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getTypeOfEvent();
 		
-		if(q==null)
+		if (q == null)
 			return null;
 		
-		if(q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SERIOUS).getId()) {
+		if (q.getId() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SERIOUS).getId()) {
 			return Context.getMessageSourceService().getMessage("mdrtb.yes");
 		}
 		
@@ -158,15 +154,15 @@ public class AERegisterData implements Comparable <AERegisterData>{
 	}
 	
 	public String getOfSpecialInterest() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getTypeOfEvent();
 		
-		if(q==null)
+		if (q == null)
 			return null;
 		
-		if(q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_SPECIAL_INTEREST).getId()) {
+		if (q.getId() == Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_SPECIAL_INTEREST).getId()) {
 			return Context.getMessageSourceService().getMessage("mdrtb.yes");
 		}
 		
@@ -176,56 +172,24 @@ public class AERegisterData implements Comparable <AERegisterData>{
 	}
 	
 	public String getAncillaryDrugs() {
-		/*if(aeForm==null)
-			return null;
-		
-		Concept q = aeForm.getActionTaken();
-		
-		if(q==null)
-			return null;
-		
-		if(q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANCILLARY_DRUG_GIVEN).getId()) {
-			return Context.getMessageSourceService().getMessage("mdrtb.yes");
-		}
-		
-		else {
-			return Context.getMessageSourceService().getMessage("mdrtb.no");
-		}*/
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getRequiresAncillaryDrugs();
 		
-		if(q==null)
+		if (q == null)
 			return null;
 		
 		return q.getName().getName();
 	}
 	
 	public String getDoseChanged() {
-		/*if(aeForm==null)
-			return null;
-		
-		Concept q = aeForm.getActionTaken();
-		
-		if(q==null)
-			return null;
-		
-		if(q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_INTERRUPTED).getId() ||
-				q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DOSE_REDUCED).getId() || 
-				q.getId()==Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_WITHDRAWN).getId()) {
-			return Context.getMessageSourceService().getMessage("mdrtb.yes");
-		}
-		
-		else {
-			return Context.getMessageSourceService().getMessage("mdrtb.no");
-		}*/
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getRequiresDoseChange();
 		
-		if(q==null)
+		if (q == null)
 			return null;
 		
 		return q.getName().getName();
@@ -235,11 +199,11 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		String ret = "";
 		
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getCausalityDrug1();
-		if(q==null) {
+		if (q == null) {
 			return null;
 		}
 		
@@ -247,27 +211,27 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		q = aeForm.getCausalityDrug2();
 		
-		if(q!=null) {
+		if (q != null) {
 			ret += "/" + q.getName().getName();
-		
+			
 			q = aeForm.getCausalityDrug3();
-		
-			if(q!=null) {
+			
+			if (q != null) {
 				ret += "/" + q.getName().getName();
 			}
 		}
 		return ret;
 	}
-
+	
 	public String getSuspectedDrugStartDate() {
 		
 		String ret = "";
 		
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getCausalityDrug1();
-		if(q==null) {
+		if (q == null) {
 			return null;
 		}
 		
@@ -275,12 +239,12 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		q = aeForm.getCausalityDrug2();
 		
-		if(q!=null) {
+		if (q != null) {
 			ret += "/" + q.getName().getName();
-		
+			
 			q = aeForm.getCausalityDrug3();
-		
-			if(q!=null) {
+			
+			if (q != null) {
 				ret += "/" + q.getName().getName();
 			}
 		}
@@ -288,73 +252,69 @@ public class AERegisterData implements Comparable <AERegisterData>{
 	}
 	
 	public String getActionOutcome() {
-
-		if(aeForm==null)
+		
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getActionOutcome();
-		if(q==null) {
+		if (q == null) {
 			return null;
 		}
-		
 		
 		return q.getName().getName();
 	}
 	
 	public String getActionTaken() {
-
+		
 		String at = "";
 		
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getActionTaken();
-		if(q!=null) {
-			at =  q.getName().getName();
+		if (q != null) {
+			at = q.getName().getName();
 		}
-	
+		
 		q = aeForm.getActionTaken2();
-		if(q!=null) {
+		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
 		
 		q = aeForm.getActionTaken3();
-		if(q!=null) {
+		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
 		
 		q = aeForm.getActionTaken4();
-		if(q!=null) {
+		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
 		
-		
 		return at;
-		
 		
 	}
 	
 	public String getTxRegimen() {
-
-		if(aeForm==null)
+		
+		if (aeForm == null)
 			return null;
 		
 		String q = aeForm.getTreatmentRegimenAtOnset();
 		
 		return q;
-	
+		
 	}
 	
 	public String getDrugRechallenge() {
-
-		if(aeForm==null)
+		
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getDrugRechallenge();
-		if(q==null) {
+		if (q == null) {
 			return null;
 		}
-		
 		
 		return q.getName().getName();
 	}
@@ -363,11 +323,11 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		String ret = "";
 		
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
 		
 		Concept q = aeForm.getCausalityAssessmentResult1();
-		if(q==null) {
+		if (q == null) {
 			return null;
 		}
 		
@@ -375,12 +335,12 @@ public class AERegisterData implements Comparable <AERegisterData>{
 		
 		q = aeForm.getCausalityAssessmentResult2();
 		
-		if(q!=null) {
+		if (q != null) {
 			ret += "/" + q.getName().getName();
-		
+			
 			q = aeForm.getCausalityAssessmentResult3();
-		
-			if(q!=null) {
+			
+			if (q != null) {
 				ret += "/" + q.getName().getName();
 			}
 		}
@@ -388,27 +348,27 @@ public class AERegisterData implements Comparable <AERegisterData>{
 	}
 	
 	public String getYellowCardDate() {
-		if(aeForm==null)
+		if (aeForm == null)
 			return null;
-
+		
 		Date ycd = aeForm.getYellowCardDate();
-		if(ycd==null)
+		if (ycd == null)
 			return null;
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		sdf.applyPattern("yyyy.MM.dd");
 		
 		return sdf.format(ycd);
-
+		
 	}
 	
 	public String getComments() {
-
-		if(aeForm==null)
+		
+		if (aeForm == null)
 			return null;
 		
 		String q = aeForm.getComments();
 		
 		return q;
-	
+		
 	}
 }

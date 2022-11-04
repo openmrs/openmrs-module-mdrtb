@@ -349,6 +349,9 @@
     <global_property property="xforms.xformSerializer" property_value="org.fcitmuk.epihandy.EpihandyXformSerializer" description="" uuid="5bcf5d9d-af9e-4685-8ae2-ce2359aef4dc"/>
     <global_property property="xforms.xformUploadFolder" description="" uuid="dee6f298-e718-46dc-9986-8372496828c6"/>
 
+	<!-- Roles and Privileges -->
+	<role role="Provider" description="This is an old equivalent to Providers" uuid="94d62f4b-dd14-4597-be10-402def65892c"/>
+
 	<!-- User-Persons -->
 	<person person_id="500" gender="M" birthdate="1984-05-26" birthdate_estimated="0" dead="0" creator="1" date_created="2016-08-22 13:56:44" voided="false" uuid="660484f6-0d02-4e2a-8e0e-fd2f71906f81" />
 	<person person_id="600" gender="F" birthdate="1993-12-21" birthdate_estimated="0" dead="0" creator="1" date_created="2016-12-28 11:54:56" voided="false" uuid="ae50cf5e-02bf-4380-9b64-f06b2f944457" />
@@ -360,6 +363,8 @@
 	<!-- Users -->
 	<users user_id="300" system_id="300-3" username="" password="" salt="" secret_question="" creator="1" date_created="2016-08-22 13:56:44" changed_by="1" date_changed="2017-02-02 11:21:25" person_id="500" retired="false" uuid="36b071d8-d5ea-4703-8e56-5b066420b569" />
 	<users user_id="400" system_id="400-3" username="" password="" salt="" secret_question="" creator="1" date_created="2016-12-28 11:54:56" changed_by="1" date_changed="2018-02-22 11:27:15" person_id="600" retired="false" uuid="e4ef4d4d-5cf2-47ff-af6b-bb9abdabdd60" />
+	<user_role user_id="300" role="Provider" />
+	<user_role user_id="400" role="Provider" />
 
 	<!-- Providers -->
 	<provider provider_id="300" person_id="500" identifier="OWAIS" creator="1" date_created="2016-08-24 15:36:09" changed_by="1" date_changed="2017-02-07 16:19:01" retired="false" uuid="1a61a0b5-d271-4b00-a803-5cef8b06ba8f" />
@@ -369,6 +374,8 @@
 	<location location_id="101" name="Hogwartz" description="Hogwarts School of Witchcraft and Wizardry" creator="1" state_province="Highlands of Scotland" country="Scotland" date_created="2022-08-01 00:00:00.0" retired="false" uuid="f08ba64b-ea57-4a41-b33c-9dfc59b0c6ff" />
 	<location location_id="102" name="Diagon Alley" description="A high street located in London for wizard world" state_province="London" country="England" creator="1" date_created="2022-08-20 00:00:00.0" retired="false" uuid="c9ae3a36-7466-4a56-8f06-3bfbc64fcde" />
 	<location location_id="103" name="The Leaky Cauldron" state_province="London" country="England" description="A dark pub and inn for wizards, located on the Diagon Alley, offering food, drinks and rooms" parent_location="102" creator="1" date_created="2022-08-22 00:00:00.0" retired="false" uuid="6f42abbc-caac-40ae-a94e-9e30ca15c125" />
+    <location location_id="200" name="Fayzobod Central Testing Lab" country="Tajikistan" state_province="Republican Subordination" county_district="Fayzobod District" address4="Fayzobod Central Testing Lab" creator="1" date_created="2022-10-25 00:00:00" retired="0" uuid="f5fa1b29-5649-11ed-b027-00ff10882c85"/>
+    <location location_id="201" name="Dushanbe General Hospital" country="Tajikistan" state_province="Dushanbe" county_district="Ferdowsi District" address4="Dushanbe General Hospital" creator="1" date_created="2022-10-25 00:00:00" retired="false" uuid="ef6596b3-5649-11ed-b027-00ff10882c85"/>
 
 	<!-- Patient-Persons -->
 	<person person_id="1000" gender="M" birthdate="1980-07-31" birthdate_estimated="0" dead="0" creator="1" date_created="2016-08-19 15:58:32" voided="false" uuid="993c46d2-5007-45e8-9512-969300717761" />

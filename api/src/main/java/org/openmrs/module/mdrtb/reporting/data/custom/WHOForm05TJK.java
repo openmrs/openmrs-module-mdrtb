@@ -154,9 +154,6 @@ public class WHOForm05TJK implements ReportSpecification {
 		
 		//Map<String, CohortDefinition> columns = ReportUtil.getMdrtbPreviousDrugUseFilterSet(startDate, endDate);
 		Map<String, CohortDefinition> columns = ReportUtil.getMdrtbPreviousTreatmentFilterSet(startDate, endDate);
-		/*for (String key : columns.keySet()) {
-			treatmentDsd.addColumn(key, columns.get(key), null);
-		}*/
 		
 		treatmentDsd.addColumn("New", ReportUtil.getCompositionCohort("AND", columns.get("New"), pulmonary), null);
 		treatmentDsd.addColumn("Relapse", ReportUtil.getCompositionCohort("AND", columns.get("Relapse"), pulmonary), null);

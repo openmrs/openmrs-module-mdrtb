@@ -10,8 +10,8 @@ public class District extends BaseLocation {
 		super(baseLocation.getId(), baseLocation.getName(), baseLocation.getLevelId());		
 	}
 
-	public District(String name, Integer id, Integer levelId) {
-		super(id, name, levelId);
+	public District(String name, Integer id) {
+		super(id, name, HIERARCHY_LEVEL);
 	}
 
 	/**

@@ -38,8 +38,7 @@ public class MdrtbSubheaderPortletController extends PortletController {
 		User mdrUser = Context.getAuthenticatedUser();
 		if (!mdrUser.isSuperUser() && mdrUser.hasRole("Lab Tech")) {
 			model.put("labtech", true);
-		}
-		else {
+		} else {
 			model.put("labtech", false);
 		}
 	}

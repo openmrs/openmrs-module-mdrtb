@@ -25,7 +25,4 @@ public class Form8Table3Data {
 	public void setRelapse(Integer relapse) {
 		this.relapse = relapse;
 	}
-	
-	
-
 }

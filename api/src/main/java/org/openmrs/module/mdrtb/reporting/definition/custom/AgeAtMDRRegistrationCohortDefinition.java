@@ -21,9 +21,9 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.AgeAtMDRRegistrationCohortDefinition")
 public class AgeAtMDRRegistrationCohortDefinition extends BaseCohortDefinition {
-
-    public static final long serialVersionUID = 1L;
-    
+	
+	public static final long serialVersionUID = 1L;
+	
 	@ConfigurationProperty
 	private Integer minAge;
 	
@@ -36,10 +36,8 @@ public class AgeAtMDRRegistrationCohortDefinition extends BaseCohortDefinition {
 	@ConfigurationProperty
 	private Date endDate;
 	
-	
-	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -57,52 +55,49 @@ public class AgeAtMDRRegistrationCohortDefinition extends BaseCohortDefinition {
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	/**
 	 * @return the minResultDate
 	 */
 	public Integer getMinAge() {
 		return minAge;
 	}
-
+	
 	/**
 	 * @param minResultDate the minResultDate to set
 	 */
 	public void setMinAge(Integer minAge) {
 		this.minAge = minAge;
 	}
-
+	
 	/**
 	 * @return the maxResultDate
 	 */
 	public Integer getMaxAge() {
 		return maxAge;
 	}
-
+	
 	/**
 	 * @param maxResultDate the maxResultDate to set
 	 */
 	public void setMaxAge(Integer maxAge) {
 		this.maxAge = maxAge;
 	}
-
+	
 	public Date getStartDate() {
 		return startDate;
 	}
-
+	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
+	
 	public Date getEndDate() {
 		return endDate;
 	}
-
+	
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-
-
 	
 }

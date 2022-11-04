@@ -29,18 +29,19 @@ public class PatientSummaryPortletController extends PortletController {
 	
 	/**
 	 * Return the columns appropriate for this Patient Summary
+	 * 
 	 * @return
 	 */
 	protected String[] getSummaryColumns(HttpServletRequest request) {
 		return null; // Default to all columns
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
 		
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
-		Integer patientId = (Integer)model.get("patientId");
-		String lId = (String)model.get("locationId");
+		Integer patientId = (Integer) model.get("patientId");
+		String lId = (String) model.get("locationId");
 		String patientIds = (String) model.get("patientIds");
 		Date runDate = new Date();
 		model.put("availableColumns", PatientSummaryUtil.getAvailableKeys());
@@ -52,12 +53,10 @@ public class PatientSummaryPortletController extends PortletController {
 		
 		if (patientId != null) {
 			c = PatientSummaryUtil.getCohort(patientId);
-		}
-		else if (StringUtils.isNotEmpty(lId)) {
+		} else if (StringUtils.isNotEmpty(lId)) {
 			Location l = Context.getLocationService().getLocation(Integer.valueOf(lId));
 			c = PatientSummaryUtil.getCohort(l);
-		}
-		else if (StringUtils.isNotEmpty(patientIds)) {
+		} else if (StringUtils.isNotEmpty(patientIds)) {
 			c = new Cohort(patientIds);
 		}
 		
@@ -65,29 +64,33 @@ public class PatientSummaryPortletController extends PortletController {
 		List<String> colList = (cols == null ? null : Arrays.asList(cols));
 		model.put("columns", cols);
 		data.addAll(PatientSummaryUtil.getPatientSummaryData(c, colList, runDate).values());
-
+		
 		if (data.size() == 1) {
 			model.put("patient", data.get(0));
 		}
 		
 		Collections.sort(data, new Comparator<Map<String, Object>>() {
-		    public int compare(Map<String, Object> left, Map<String, Object> right) {
-		    	Object l = left.get(sort);
-		    	Object r = right.get(sort);
-		    	if (l == null) {
-		    		if (r == null) { return 0; }
-		    		return 1;
-		    	}
-		    	else {
-		    		if (r == null) { return -1; }
-		    		if (l instanceof Comparable && r instanceof Comparable) {
-		    			return ((Comparable)l).compareTo((Comparable)r);
-		    		}
-		    		return l.toString().compareTo(r.toString());
-		    	}
-		    }
-		});    
-        model.put("data", data);
-        model.put("runDate", runDate);
+			
+			public int compare(Map<String, Object> left, Map<String, Object> right) {
+				Object l = left.get(sort);
+				Object r = right.get(sort);
+				if (l == null) {
+					if (r == null) {
+						return 0;
+					}
+					return 1;
+				} else {
+					if (r == null) {
+						return -1;
+					}
+					if (l instanceof Comparable && r instanceof Comparable) {
+						return ((Comparable<Comparable<?>>) l).compareTo((Comparable<?>) r);
+					}
+					return l.toString().compareTo(r.toString());
+				}
+			}
+		});
+		model.put("data", data);
+		model.put("runDate", runDate);
 	}
 }

@@ -155,7 +155,7 @@ function fun3() {
 		    <td><button onClick="submitForm('mdrXdrPatients');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr> -->
 		    
-		      <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.drTbPatients" /></td>
 		    <td><button onClick="submitForm('drTbPatients');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
@@ -165,7 +165,7 @@ function fun3() {
 		    <td><button onClick="submitForm('mdrSuccessfulTreatmentOutcome');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr> -->
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.drTbPatientsSuccessfulTreatment" /></td>
 		    <td><button onClick="submitForm('drTbPatientsSuccessfulTreatment');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
@@ -175,12 +175,12 @@ function fun3() {
 		    <td><button onClick="submitForm('mdrXdrPatientsNoTreatment');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr> -->
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.drTbPatientsNoTreatment" /></td>
 		    <td><button onClick="submitForm('drTbPatientsNoTreatment');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.womenOfChildbearingAge" /></td>
 		    <td><button onClick="submitForm('womenOfChildbearingAge');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
@@ -210,42 +210,42 @@ function fun3() {
 		    <td><button onClick="submitForm('withCancer');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withUlcer" /></td>
 		    <td><button onClick="submitForm('withUlcer');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withHypertension" /></td>
 		    <td><button onClick="submitForm('withHypertension');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withCOPD" /></td>
 		    <td><button onClick="submitForm('withCOPD');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withMentalDisorder" /></td>
 		    <td><button onClick="submitForm('withMentalDisorder');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withHIV" /></td>
 		    <td><button onClick="submitForm('withHIV');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		      <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withHepatitis" /></td>
 		    <td><button onClick="submitForm('withHepatitis');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		       <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withKidneyDisease" /></td>
 		    <td><button onClick="submitForm('withKidneyDisease');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr>
 		    
-		     <tr>
+		    <tr>
 		    <td><spring:message code="mdrtb.withOtherDisease" /></td>
 		    <td><button onClick="submitForm('withOtherDisease');"><spring:message code="mdrtb.generate"/></button></td>
 		    </tr> -->

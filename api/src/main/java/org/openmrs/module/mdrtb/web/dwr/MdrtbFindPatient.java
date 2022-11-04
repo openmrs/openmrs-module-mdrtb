@@ -20,7 +20,7 @@ import org.openmrs.web.dwr.PatientListItem;
 public class MdrtbFindPatient {
     protected final Log log = LogFactory.getLog(getClass());
     
-    public Collection findPatients(String searchValue, boolean includeVoided, boolean onlyMdrTbPatients) {
+    public Collection<Object> findPatients(String searchValue, boolean includeVoided, boolean onlyMdrTbPatients) {
         
         Collection<Object> patientList = new Vector<Object>();
 
@@ -59,7 +59,7 @@ public class MdrtbFindPatient {
         return patientList;
     }
     
-    public Collection findPeople(String searchValue, String dateString, boolean includeVoided) {
+    public Collection<Object> findPeople(String searchValue, String dateString, boolean includeVoided) {
         
         Collection<Object> patientList = new Vector<Object>();
 
@@ -80,7 +80,7 @@ public class MdrtbFindPatient {
         return patientList;
     }
     
- public Collection findAllPeople(String searchValue, String dateString, boolean includeVoided) {
+ public Collection<Object> findAllPeople(String searchValue, String dateString, boolean includeVoided) {
         
         Collection<Object> patientList = new Vector<Object>();
 

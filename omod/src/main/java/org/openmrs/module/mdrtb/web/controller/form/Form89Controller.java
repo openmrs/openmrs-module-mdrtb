@@ -121,7 +121,7 @@ public class Form89Controller {
 			Region ob = null;
 			District dist = null;
 			
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			if (obName != null) {
 				for (Region o : oblasts) {
@@ -133,7 +133,7 @@ public class Form89Controller {
 			}
 			if (ob != null) {
 				model.addAttribute("oblastSelected", ob);
-				districts = Context.getService(MdrtbService.class).getDistricts(ob.getId());
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(ob.getId());
 				model.addAttribute("districts", districts);
 				if (distName != null) {
 					for (District d : districts) {
@@ -148,9 +148,9 @@ public class Form89Controller {
 				}
 			}
 			if (dist != null) {
-				facilities = Context.getService(MdrtbService.class).getFacilities(dist.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(dist.getId());
 				if (facilities.size() == 0) { // Maybe it's for Dushanbe
-					facilities = Context.getService(MdrtbService.class).getFacilities(ob.getId());
+					facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(ob.getId());
 				}
 				model.addAttribute("facilities", facilities);
 				if (facName != null) {
@@ -163,17 +163,17 @@ public class Form89Controller {
 				}
 			}
 		} else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			districts = Context.getService(MdrtbService.class).getRegDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			if (facilities.size() == 0) { // Maybe it's for Dushanbe
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(oblast));
 			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
@@ -188,7 +188,6 @@ public class Form89Controller {
 		return new ModelAndView("/module/mdrtb/form/form89", model);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processForm89(@ModelAttribute("form89") Form89 form89, BindingResult errors,
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
@@ -197,16 +196,6 @@ public class Form89Controller {
 	        @RequestParam(required = false, value = "facility") String facilityId,
 	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
 	        HttpServletRequest request, ModelMap map) {
-		
-		// perform validation and check for errors
-		/*if (form89 != null) {
-			new SimpleFormValidator().validate(form89, errors);
-		}*/
-		
-		/*if (errors.hasErrors()) {
-			map.put("errors", errors);
-			return new ModelAndView("/module/mdrtb/form/intake", map);
-		}*/
 		
 		Location location = null;
 		
@@ -253,63 +242,6 @@ public class Form89Controller {
 		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(form89.getEncounter());
-		
-		boolean programModified = false;
-		//handle changes in workflows
-		/*Concept outcome = form89.getTreatmentOutcome();
-		Concept group = form89.getRegistrationGroup();
-		
-		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-		
-		ProgramWorkflow outcomeFlow = new ProgramWorkflow();
-		outcomeFlow.setConcept(outcome);
-		PatientState outcomePatientState = pp.getCurrentState(outcomeFlow);
-		//ProgramWorkflowState pwfs = null;
-		Concept currentOutcomeConcept = null;
-		//outcome entered previously but now removed
-		if(outcomePatientState != null && outcome == null) {
-			System.out.println("outcome removed");
-			HashSet<PatientState> states = new HashSet<PatientState>();
-			outcomePatientState = null;
-			states.add(outcomePatientState);
-		
-			pp.setStates(states);	
-			programModified = true;
-		}
-		
-		//outcome has been added	
-		else if(outcomePatientState == null && outcome != null) {
-			System.out.println("outcome added");
-			HashSet<PatientState> states = new HashSet<PatientState>();
-			PatientState newState = new PatientState();
-			ProgramWorkflowState pwfs = new ProgramWorkflowState();
-			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
-			newState.setState(pwfs);
-			states.add(newState);
-			pp.setStates(states);	
-			programModified = true;
-		}
-		
-		//outcome entered previously and may have been modified now
-		else if(outcomePatientState!=null && outcome !=null) {
-			
-		
-		}
-		
-		
-		
-		
-		//TX OUTCOME
-		//PATIENT GROUP
-		//PATIENT DEATH AND CAUSE OF DEATH
-		*/
-		// clears the command object from the session
-		status.setComplete();
-		
-		/*if(programModified) {
-			System.out.println("saving program");
-			Context.getProgramWorkflowService().savePatientProgram(pp);
-		}*/
 		
 		map.clear();
 		

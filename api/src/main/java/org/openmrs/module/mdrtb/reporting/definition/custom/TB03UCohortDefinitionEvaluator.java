@@ -14,6 +14,7 @@
 package org.openmrs.module.mdrtb.reporting.definition.custom;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TB03UCohortDefinitionEvaluator implements CohortDefinitionEvaluator
 		Date tcdEnd  = tcd.getOnOrBefore();
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTimeInMillis(tcdEnd.getTime());
-		gc.add(gc.DATE, 1);
+		gc.add(Calendar.DATE, 1);
 		Date endDate = gc.getTime();
     	List<Encounter> tb03EncList = Context.getEncounterService().getEncounters(null, tcd.getLocation(), startDate, endDate, null, typeList, null, false);
     	System.out.println("Finding patients for Location:  " +  tcd.getLocation());

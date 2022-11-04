@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
-import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
@@ -65,7 +64,7 @@ public class MdrtbAfterTreatmentStartedCohortDefinitionEvaluator extends MdrtbTr
     			// by convention, operate on the most recent program during the time period (there really should only ever be one program in a single period)
     			MdrtbPatientProgram program = programs.get(programs.size() - 1);
     			
-    			Patient patient = Context.getPatientService().getPatient(id); 
+    			Context.getPatientService().getPatient(id); 
     			
     			// create the range we want to search for specimens for
     			Calendar treatmentStartDate = Calendar.getInstance();

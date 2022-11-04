@@ -62,8 +62,8 @@ public class MdrtbDashboardController {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders for location and program workflow state
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -78,17 +78,17 @@ public class MdrtbDashboardController {
 	}
 	
 	@ModelAttribute("outcomes")
-	public Collection<ProgramWorkflowState> getOutcomes() {		
+	public Collection<ProgramWorkflowState> getOutcomes() {
 		return Context.getService(MdrtbService.class).getPossibleMdrtbProgramOutcomes();
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousDrugUse")
-	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {		
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousDrugUse() {
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousDrugUse();
 	}
 	
 	@ModelAttribute("classificationsAccordingToPreviousTreatment")
-	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {		
+	public Collection<ProgramWorkflowState> getClassificationsAccordingToPreviousTreatment() {
 		return Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment();
 	}
 	
@@ -98,77 +98,73 @@ public class MdrtbDashboardController {
 	}
 	
 	@ModelAttribute("hospitalizationState")
-	public PatientState getHospitalizationState(@RequestParam(required = false, value = "hospitalizationStateId") Integer hospitalizationStateId) {
+	public PatientState getHospitalizationState(
+	        @RequestParam(required = false, value = "hospitalizationStateId") Integer hospitalizationStateId) {
 		if (hospitalizationStateId == null) {
 			return null;
-		}
-		else {
+		} else {
 			return Context.getProgramWorkflowService().getPatientState(hospitalizationStateId);
 		}
 	}
 	
 	@ModelAttribute("program")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
-	                                                  @RequestParam(required = false, value = "patientId") Integer patientId) {
+	public MdrtbPatientProgram getMdrtbPatientProgram(
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "patientId") Integer patientId) {
 		//TODO: Ideally, the request shouldn't have been made with null Patient ID
-    	if(patientId == null || patientId == -1) {
-    		return null;
-    	}
+		if (patientId == null || patientId == -1) {
+			return null;
+		}
 		// if there is no patient program selected, we want to show the most recent program
-    	if (patientProgramId == null || patientProgramId == -1) {
+		if (patientProgramId == null || patientProgramId == -1) {
 			Patient patient = Context.getPatientService().getPatient(patientId);
 			
 			if (patient == null) {
 				throw new MdrtbAPIException("Invalid patient id passed to dashboard controller");
-			}
-			else {
+			} else {
 				return Context.getService(MdrtbService.class).getMostRecentMdrtbPatientProgram(patient);
 			}
 			
-    	}
-    	// fetch the program that is being requested
-    	else {
-    		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-    	}
+		}
+		// fetch the program that is being requested
+		else {
+			return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+		}
 	}
 	
 	@ModelAttribute("labtech")
 	public Boolean getLabTech() {
 		User mdrUser = Context.getAuthenticatedUser();
 		
-		
-		if(! mdrUser.isSuperUser()&& mdrUser.hasRole("Lab Tech")) {
+		if (!mdrUser.isSuperUser() && mdrUser.hasRole("Lab Tech")) {
 			return new Boolean(true);
 			
 		}
 		
-		else
-		{
+		else {
 			return new Boolean(false);
 			
 		}
 	}
 	
-    @SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/dashboard/dashboard.form")
+	@RequestMapping("/module/mdrtb/dashboard/dashboard.form")
 	public ModelAndView showStatus(@ModelAttribute("program") MdrtbPatientProgram program,
-	                               @RequestParam(required = false, value = "patientId") Integer patientId,
-	                               ModelMap map) {
-    	if (program == null) {
-    		// if the patient has no program, redirect to the enroll-in-program
-    		map.clear();
-    		return new ModelAndView("redirect:/module/mdrtb/program/showEnroll.form?patientId=" + patientId); 
-    	}
-
-    	// add the patient program ID
-    	map.put("patientProgramId", program.getId());
-    	
-    	// add the patientId
-    	map.put("patientId", program.getPatient().getId());
-    	
-    	// now add the status items
-		Map<String,Status> statusMap = new HashMap<String,Status>();
-	
+	        @RequestParam(required = false, value = "patientId") Integer patientId, ModelMap map) {
+		if (program == null) {
+			// if the patient has no program, redirect to the enroll-in-program
+			map.clear();
+			return new ModelAndView("redirect:/module/mdrtb/program/showEnroll.form?patientId=" + patientId);
+		}
+		
+		// add the patient program ID
+		map.put("patientProgramId", program.getId());
+		
+		// add the patientId
+		map.put("patientId", program.getPatient().getId());
+		
+		// now add the status items
+		Map<String, Status> statusMap = new HashMap<String, Status>();
+		
 		// lab reports status
 		Status labReportsStatus = new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program);
 		statusMap.put("labResultsStatus", labReportsStatus);
@@ -186,65 +182,70 @@ public class MdrtbDashboardController {
 		statusMap.put("hivStatus", hivStatus);
 		
 		map.put("status", statusMap);
-    	
-    	// add any flags
+		
+		// add any flags
 		addFlags(statusMap, map);
 		
-		EncounterType tb03uType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtbIntake_encounter_type"));
-		List<Encounter> tb03uList = Context.getService(MdrtbService.class).getEncountersWithNoProgramId(tb03uType, program.getPatient());
+		EncounterType tb03uType = Context.getEncounterService()
+		        .getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.mdrtbIntake_encounter_type"));
+		List<Encounter> tb03uList = Context.getService(MdrtbService.class).getEncountersWithNoProgramId(tb03uType,
+		    program.getPatient());
 		map.put("unlinkedtb03us", tb03uList);
 		
-		EncounterType labType = Context.getEncounterService().getEncounterType(Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
-		List<Encounter> labList = Context.getService(MdrtbService.class).getEncountersWithNoProgramId(labType, program.getPatient());
+		EncounterType labType = Context.getEncounterService().getEncounterType(
+		    Context.getAdministrationService().getGlobalProperty("mdrtb.specimen_collection_encounter_type"));
+		List<Encounter> labList = Context.getService(MdrtbService.class).getEncountersWithNoProgramId(labType,
+		    program.getPatient());
 		map.put("unlinkedlabs", labList);
 		
-		Integer xpertFormId = -1; 
-		if(Context.getAdministrationService().getGlobalProperty("mdrtb.xpert.formId")!=null) {
+		Integer xpertFormId = -1;
+		if (Context.getAdministrationService().getGlobalProperty("mdrtb.xpert.formId") != null) {
 			xpertFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.xpert.formId"));
 		}
 		
-		Integer smearFormId = -1; 
-		if(Context.getAdministrationService().getGlobalProperty("mdrtb.smear.formId")!=null) {
+		Integer smearFormId = -1;
+		if (Context.getAdministrationService().getGlobalProperty("mdrtb.smear.formId") != null) {
 			smearFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.smear.formId"));
 		}
 		
 		Integer cultureFormId = -1;
-		if(Context.getAdministrationService().getGlobalProperty("mdrtb.culture.formId")!=null) {
+		if (Context.getAdministrationService().getGlobalProperty("mdrtb.culture.formId") != null) {
 			cultureFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.culture.formId"));
 		}
 		
 		Integer hainFormId = -1;
-		if(Context.getAdministrationService().getGlobalProperty("mdrtb.hain.formId")!=null){
-			hainFormId =Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.hain.formId"));
+		if (Context.getAdministrationService().getGlobalProperty("mdrtb.hain.formId") != null) {
+			hainFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.hain.formId"));
 		}
 		
-		Integer dstFormId = -1; 
-		if(Context.getAdministrationService().getGlobalProperty("mdrtb.dst.formId")!=null){
+		Integer dstFormId = -1;
+		if (Context.getAdministrationService().getGlobalProperty("mdrtb.dst.formId") != null) {
 			dstFormId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.dst.formId"));
 		}
 		
-		map.put("xpertFormId",xpertFormId);
-		map.put("smearFormId",smearFormId);
-		map.put("cultureFormId",cultureFormId);
-		map.put("hainFormId",hainFormId);
-		map.put("dstFormId",dstFormId);
+		map.put("xpertFormId", xpertFormId);
+		map.put("smearFormId", smearFormId);
+		map.put("cultureFormId", cultureFormId);
+		map.put("hainFormId", hainFormId);
+		map.put("dstFormId", dstFormId);
 		
-		Integer showTb03uXDR  = 0;
-
-		if(program.getTb03uXDR()==null)
-		{
+		Integer showTb03uXDR = 0;
+		
+		if (program.getTb03uXDR() == null) {
 			int preXdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRE_XDR_TB).getId().intValue();
 			int xdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XDR_TB).getId().intValue();
 			int tdrId = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TDR_TB).getId().intValue();
-			Concept resDuringTx = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT);
-			List<DrugResistanceDuringTreatmentForm> drdts = Context.getService(MdrtbService.class).getDrdtForms(program.getId());
-			if(drdts!=null && drdts.size()!=0) {
-				for(DrugResistanceDuringTreatmentForm drdt : drdts) {
+			Concept resDuringTx = Context.getService(MdrtbService.class)
+			        .getConcept(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT);
+			List<DrugResistanceDuringTreatmentForm> drdts = Context.getService(MdrtbService.class)
+			        .getDrdtForms(program.getId());
+			if (drdts != null && drdts.size() != 0) {
+				for (DrugResistanceDuringTreatmentForm drdt : drdts) {
 					Obs temp = MdrtbUtil.getObsFromEncounter(resDuringTx, drdt.getEncounter());
-					if(temp!=null) {
+					if (temp != null) {
 						int cid = temp.getValueCoded().getId().intValue();
 						
-						if(cid==preXdrId || cid==xdrId || cid==tdrId) {
+						if (cid == preXdrId || cid == xdrId || cid == tdrId) {
 							showTb03uXDR = 1;
 							break;
 						}
@@ -252,93 +253,96 @@ public class MdrtbDashboardController {
 				}
 			}
 			
-			else showTb03uXDR = 0;
+			else
+				showTb03uXDR = 0;
 		}
 		
 		else {
-			showTb03uXDR=1;
+			showTb03uXDR = 1;
 		}
-
+		
 		map.addAttribute("showtb03uxdr", showTb03uXDR);
 		return new ModelAndView("/module/mdrtb/dashboard/dashboard", map);
-
+		
 	}
-    
-    
-    @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/module/mdrtb/program/programEdit.form", method = RequestMethod.POST)
-	public ModelAndView processEditPopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors, 
-	                                     @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath,
-	                                     SessionStatus status, HttpServletRequest request, ModelMap map) {
+	
+	@RequestMapping(value = "/module/mdrtb/program/programEdit.form", method = RequestMethod.POST)
+	public ModelAndView processEditPopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
+	        @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
 		// perform validation 
 		if (program != null) {
-    		new MdrtbPatientProgramValidator().validate(program, errors);
-    	}
+			new MdrtbPatientProgramValidator().validate(program, errors);
+		}
 		
-		if (errors.hasErrors()) {	
+		if (errors.hasErrors()) {
 			map.put("programEditErrors", errors);
 			// call the show status method to redisplay the page with errors
 			return showStatus(program, null, map);
 		}
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-
+		
 		// mark the patient as died if required
-		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+		ProgramWorkflowState patientDied = MdrtbUtil
+		        .getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
 		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
-			Context.getPatientService().processDeath(program.getPatient(), program.getDateCompleted(), 
-				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)), null);
+			Context.getPatientService().processDeath(program.getPatient(), program.getDateCompleted(),
+			    (causeOfDeath != null ? causeOfDeath
+			            : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)),
+			    null);
 		}
 		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
-			
+		
 		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
-			
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-    @RequestMapping(value = "/module/mdrtb/program/programClose.form", method = RequestMethod.POST)
+	@RequestMapping(value = "/module/mdrtb/program/programClose.form", method = RequestMethod.POST)
 	public ModelAndView processClosePopup(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
-	                                      @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath,
-	                                      SessionStatus status, HttpServletRequest request, ModelMap map) {
-		  
+	        @RequestParam(required = false, value = "causeOfDeath") Concept causeOfDeath, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
+		
 		// perform validation 
 		if (program != null) {
-    		new MdrtbPatientProgramValidator().validate(program, errors);
-    	}
+			new MdrtbPatientProgramValidator().validate(program, errors);
+		}
 		
-		if (errors.hasErrors()) {	
+		if (errors.hasErrors()) {
 			map.put("programCloseErrors", errors);
 			// call the show status method to redisplay the page with errors
 			return showStatus(program, null, map);
 		}
-		   
+		
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
 		
 		// mark the patient as died if required
-		ProgramWorkflowState patientDied = MdrtbUtil.getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
+		ProgramWorkflowState patientDied = MdrtbUtil
+		        .getProgramWorkflowState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED));
 		if (program.getOutcome() != null && program.getOutcome().equals(patientDied) && !program.getPatient().getDead()) {
-			Context.getService(MdrtbService.class).processDeath(program.getPatient(), program.getDateCompleted(), 
-				(causeOfDeath != null ? causeOfDeath : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)));
+			Context.getService(MdrtbService.class).processDeath(program.getPatient(), program.getDateCompleted(),
+			    (causeOfDeath != null ? causeOfDeath
+			            : Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.UNKNOWN)));
 		}
 		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
-			
+		
 		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientProgramId=" + program.getId());
-			
+		
 	}
 	
-    @RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)
+	@RequestMapping(value = "/module/mdrtb/program/hospitalizationsEdit.form", method = RequestMethod.POST)
 	public ModelAndView editHospitalization(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
-	                                        @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,
-	                                        @RequestParam(required = false, value = "startDate") Date admissionDate,
-	                                        @RequestParam(required = false, value = "endDate") Date dischargeDate,
-	                                        SessionStatus status, HttpServletRequest request, ModelMap map) {
+	        @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,
+	        @RequestParam(required = false, value = "startDate") Date admissionDate,
+	        @RequestParam(required = false, value = "endDate") Date dischargeDate, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
 		
 		// add the hospitalization if necessary
 		if (hospitalizationState == null) {
@@ -348,12 +352,12 @@ public class MdrtbDashboardController {
 		// perform validation 
 		if (program != null) {
 			MdrtbPatientProgramHospitalizationValidator validator = new MdrtbPatientProgramHospitalizationValidator();
-    		validator.validate(program, errors);
-    		
-    		// also validate that the new date is accurate
-    	}
-	
-		if (errors.hasErrors()) {	
+			validator.validate(program, errors);
+			
+			// also validate that the new date is accurate
+		}
+		
+		if (errors.hasErrors()) {
 			// add the errors to the map
 			map.put("hospitalizationErrors", errors);
 			// add the current values to the map
@@ -362,11 +366,11 @@ public class MdrtbDashboardController {
 			map.put("hospitalizationStateId", (hospitalizationState != null ? hospitalizationState.getId() : ""));
 			// call the show status method to redisplay the page with errors
 			return showStatus(program, null, map);
-		}  
-
+		}
+		
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-				
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
@@ -376,16 +380,16 @@ public class MdrtbDashboardController {
 	}
 	
 	@RequestMapping(value = "/module/mdrtb/program/hospitalizationsDelete.form", method = RequestMethod.GET)
-	public ModelAndView deleteHospitalization(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult programErrors,
-		                                      @ModelAttribute("hospitalizationState") PatientState hospitalizationState, BindingResult patientStateErrors,
-	                                          SessionStatus status, HttpServletRequest request, ModelMap map) {
+	public ModelAndView deleteHospitalization(@ModelAttribute("program") MdrtbPatientProgram program,
+	        BindingResult programErrors, @ModelAttribute("hospitalizationState") PatientState hospitalizationState,
+	        BindingResult patientStateErrors, SessionStatus status, HttpServletRequest request, ModelMap map) {
 		
 		// remove the hospitalizations
 		program.removeHospitalization(hospitalizationState);
 		
 		// save the actual update
 		Context.getProgramWorkflowService().savePatientProgram(program.getPatientProgram());
-				
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
@@ -394,14 +398,12 @@ public class MdrtbDashboardController {
 		
 	}
 	
-    
-	@SuppressWarnings("unchecked")
-    private void addFlags(Map<String,Status> statusMap, ModelMap map) {
+	private void addFlags(Map<String, Status> statusMap, ModelMap map) {
 		
 		// calculate flags
 		List<StatusFlag> flags = new LinkedList<StatusFlag>();
 		
-		for (Status status: statusMap.values()) {
+		for (Status status : statusMap.values()) {
 			if (status.getFlags() != null && !status.getFlags().isEmpty()) {
 				flags.addAll(status.getFlags());
 			}
@@ -411,16 +413,17 @@ public class MdrtbDashboardController {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
-    @RequestMapping(value = "/module/mdrtb/program/addEncounterMdrtb.form", method = RequestMethod.GET)
+	@RequestMapping(value = "/module/mdrtb/program/addEncounterMdrtb.form", method = RequestMethod.GET)
 	public ModelAndView processAddEncounter(@ModelAttribute("program") MdrtbPatientProgram program, BindingResult errors,
-											@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-											@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                                      SessionStatus status, HttpServletRequest request, ModelMap map) {
-		  
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "encounterId") Integer encounterId, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
+		
 		Context.getService(MdrtbService.class).addProgramIdToEncounter(encounterId, patientProgramId);
-			
-		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId=" + Context.getProgramWorkflowService().getPatientProgram(patientProgramId).getPatient().getId() + "&patientProgramId=" + patientProgramId);
-			
+		
+		return new ModelAndView("redirect:/module/mdrtb/dashboard/dashboard.form?patientId="
+		        + Context.getProgramWorkflowService().getPatientProgram(patientProgramId).getPatient().getId()
+		        + "&patientProgramId=" + patientProgramId);
+		
 	}
 }

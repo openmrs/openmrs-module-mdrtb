@@ -24,7 +24,7 @@ public class PatientValidator implements Validator {
 	 * @param c The class to check for support.
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
-	public boolean supports(Class c) {
+	public boolean supports(Class<?> c) {
 		return Patient.class.isAssignableFrom(c);
 	}
 	

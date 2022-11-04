@@ -9,8 +9,7 @@ import org.springframework.validation.Validator;
 
 public class TestValidator implements Validator {
 
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
 		return Test.class.isAssignableFrom(clazz);
     }
 

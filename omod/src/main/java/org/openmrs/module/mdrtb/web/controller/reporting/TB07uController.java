@@ -54,17 +54,17 @@ public class TB07uController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
 		else if (district == null) {
 			// DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -74,8 +74,8 @@ public class TB07uController {
 			
 			else {
 				
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -88,10 +88,10 @@ public class TB07uController {
 			 * if oblast is dushanbe, return both districts and facilities
 			 */
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -100,9 +100,9 @@ public class TB07uController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -141,12 +141,15 @@ public class TB07uController {
 		System.out.println("---POST-----");
 		
 		SimpleDateFormat sdf = Context.getDateFormat();
-    	SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
+		SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
 		
-		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
+		    facilityId);
+		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter,
+		    month);
 		
-		ArrayList<RegimenForm> regList = Context.getService(MdrtbService.class).getRegimenFormsFilled(locList, year, quarter, month);
+		ArrayList<RegimenForm> regList = Context.getService(MdrtbService.class).getRegimenFormsFilled(locList, year, quarter,
+		    month);
 		if (regList != null) {
 			System.out.println("REG LIST: " + regList.size());
 		} else {
@@ -189,7 +192,6 @@ public class TB07uController {
 		int preXdr = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PRE_XDR_TB).getConceptId().intValue();
 		int xdr = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.XDR_TB).getConceptId().intValue();
 		int age = 0;
-		
 		
 		Boolean isShort = null;
 		Boolean isStandard = null;
@@ -255,32 +257,25 @@ public class TB07uController {
 			
 			if (groupId == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.new.conceptId"))) {
 				newCase = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse1.conceptId"))) {
 				relapse1 = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterRelapse2.conceptId"))) {
 				relapse2 = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault1.conceptId"))) {
 				default1 = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterDefault2.conceptId"))) {
 				default2 = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure1.conceptId"))) {
 				failure1 = Boolean.TRUE;
-			}
-			else if (groupId == Integer
+			} else if (groupId == Integer
 			        .parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.afterFailure2.conceptId"))) {
 				failure2 = Boolean.TRUE;
-			}
-			else {
+			} else {
 				other = Boolean.TRUE;
 			}
 			q = tf.getResistanceType();
@@ -3161,7 +3156,7 @@ public class TB07uController {
 		String fName = null;
 		
 		if (oblastId != null) {
-			Region o = Context.getService(MdrtbService.class).getOblast(oblastId);
+			Region o = Context.getService(MdrtbService.class).getRegion(oblastId);
 			if (o != null) {
 				oName = o.getName();
 			}

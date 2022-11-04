@@ -7,8 +7,6 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 @Localized("mdrtb.reporting.MdrtbProgramClosedAfterTreatmentStartedCohortDefintion")
 public class MdrtbProgramClosedAfterTreatmentStartedCohortDefintion extends MdrtbTreatmentStartedCohortDefinition {
 
-	private static final long serialVersionUID = 1L;
-	
 	// if defined, the program must have closed within x months from treatment start
 	@ConfigurationProperty
 	private Integer monthsFromTreatmentStart;

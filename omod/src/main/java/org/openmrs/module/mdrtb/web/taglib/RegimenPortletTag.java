@@ -30,17 +30,23 @@ import org.openmrs.util.OpenmrsUtil;
 public class RegimenPortletTag extends ImportSupport {
 	
 	public static final long serialVersionUID = 21L;
+	
 	protected final static Log log = LogFactory.getLog(RegimenPortletTag.class);
-
+	
 	//***** PROPERTIES *****
 	
 	private String id;
+	
 	private Integer patientId;
+	
 	private String type;
+	
 	private RegimenHistory history;
+	
 	private Date changeDate;
+	
 	private String parameters;
-
+	
 	//***** INSTANCE METHODS *****
 	
 	/**
@@ -108,98 +114,98 @@ public class RegimenPortletTag extends ImportSupport {
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
 	}
-
+	
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
 	/**
 	 * @return the patientId
 	 */
 	public Integer getPatientId() {
 		return patientId;
 	}
-
+	
 	/**
 	 * @param patientId the patientId to set
 	 */
 	public void setPatientId(Integer patientId) {
 		this.patientId = patientId;
 	}
-
+	
 	/**
 	 * @return the type
 	 */
 	public String getType() {
 		return type;
 	}
-
+	
 	/**
 	 * @param type the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
 	/**
 	 * @return the history
 	 */
 	public RegimenHistory getHistory() {
 		return history;
 	}
-
+	
 	/**
 	 * @param history the history to set
 	 */
 	public void setHistory(RegimenHistory history) {
 		this.history = history;
 	}
-
+	
 	/**
 	 * @return the changeDate
 	 */
 	public Date getChangeDate() {
 		return changeDate;
 	}
-
+	
 	/**
 	 * @param changeDate the changeDate to set
 	 */
 	public void setChangeDate(Date changeDate) {
 		this.changeDate = changeDate;
 	}
-
+	
 	/**
 	 * @return the url
 	 */
 	public String getUrl() {
 		return url;
 	}
-
+	
 	/**
 	 * @param url the url to set
 	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
+	
 	/**
 	 * @return the parameters
 	 */
 	public String getParameters() {
 		return parameters;
 	}
-
+	
 	/**
 	 * @param parameters the parameters to set
 	 */

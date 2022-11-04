@@ -88,11 +88,6 @@ public class TbPatientProgram implements Comparable<TbPatientProgram> {
 		if (previousDrugState != null) {
 			previousDrugState.setStartDate(dateEnrolled);
 		}
-		
-		/*PatientState previousTreatmentState = getPatientState(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT));
-		if (previousTreatmentState != null) {
-			previousTreatmentState.setStartDate(dateEnrolled);
-		}*/
 	}
 	
 	public Date getDateCompleted() {
@@ -220,39 +215,6 @@ public class TbPatientProgram implements Comparable<TbPatientProgram> {
 			this.program.getStates().add(previousDrugState);
 		}
 	}
-	
-	/*public ProgramWorkflowState getClassificationAccordingToPreviousTreatment() {		
-		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
-		return getPatientWorkflowState(previousTreatment);
-	}
-	
-	public void setClassificationAccordingToPreviousTreatment (ProgramWorkflowState classification) {
-		// first make sure that the program workflow state is valid
-		if (classification != null && !Context.getService(MdrtbService.class).getPossibleClassificationsAccordingToPreviousTreatment().contains(classification)) {
-			throw new MdrtbAPIException(classification.toString() + " is not a valid state for Classification According To Previous Treatment workflow");
-		}
-		
-		// if the state hasn't changed, we don't need to bother doing the update
-		ProgramWorkflowState currentClassification = getClassificationAccordingToPreviousTreatment();
-		if ( (currentClassification == null && classification == null) || (currentClassification != null && currentClassification.equals(classification)) ){
-			return;
-		}
-	
-		// otherwise, do the update
-		Concept previousTreatment = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
-		
-		// void any existing states tied to the the outcome workflow
-		voidStates(previousTreatment);
-		
-		// now add the new state, if one has been specified
-		if (classification != null) {
-			PatientState previousTreatmentState = new PatientState();
-			previousTreatmentState.setState(classification);
-			// the start date for the state should be the program enrollment date
-			previousTreatmentState.setStartDate(program.getDateEnrolled()); 
-			this.program.getStates().add(previousTreatmentState);	
-		}
-	}*/
 	
 	public ProgramWorkflowState getCurrentHospitalizationState() {
 		Concept hospitalizationWorkflow = Context.getService(MdrtbService.class)

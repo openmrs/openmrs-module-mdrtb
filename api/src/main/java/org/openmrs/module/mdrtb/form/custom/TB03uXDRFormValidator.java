@@ -7,8 +7,7 @@ import org.springframework.validation.Validator;
 
 public class TB03uXDRFormValidator implements Validator {
 	
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+	public boolean supports(Class<?> clazz) {
 		return (TB03uXDRForm.class.isAssignableFrom(clazz) || TB03Form.class.isAssignableFrom(clazz));
     }
 

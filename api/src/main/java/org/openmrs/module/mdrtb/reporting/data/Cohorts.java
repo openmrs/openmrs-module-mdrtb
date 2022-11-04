@@ -62,25 +62,8 @@ import org.openmrs.module.reporting.common.SetComparator;
 public class Cohorts {
 	
 	/**
-	public static Map<String, Integer> getDrugIds() {
-		Map<String, Integer> drugIds = new HashMap<String, Integer>();
-		drugIds.put("H", 656);
-		drugIds.put("R", 767);
-		drugIds.put("E", 745);
-		drugIds.put("Z", 5829);
-		drugIds.put("S", 438);
-		drugIds.put("KANA", 1417);
-		drugIds.put("ETHIO", 1414);
-		drugIds.put("PAS", 1419);
-		drugIds.put("CIPROX", 740);
-		return drugIds;
-	}
-	*/
-	
-	/**
 	 * @return the CohortDefinition for the Location
 	 */
-
 	public static CohortDefinition getLocationFilter(Location location, Date startDate, Date endDate) {
 		if (location != null) {
 			MdrtbProgramLocationCohortDefinition cd = new MdrtbProgramLocationCohortDefinition();
@@ -351,41 +334,6 @@ public class Cohorts {
 	}
 	
 	/**
-	public static CohortDefinition getAnyPreviousTreatmentFilter() {
-		CodedObsCohortDefinition newCase = new CodedObsCohortDefinition();
-		newCase.setTimeModifier(TimeModifier.ANY);
-		newCase.setQuestion(Context.getConceptService().getConcept(6371)); // TODO: Refactor this
-		return newCase;
-	}
-	
-	public static CohortDefinition getPrevRelapseFilter() {
-		CohortDefinition prevTx = getAnyPreviousTreatmentFilter();
-		CodedObsCohortDefinition relapse = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 1568, null, null, SetComparator.IN, 6349, 1746);
-		return ReportUtil.getCompositionCohort("AND", prevTx, relapse);
-	}
-	
-	public static CohortDefinition getPrevDefaultFilter() {
-		CohortDefinition prevTx = getAnyPreviousTreatmentFilter();
-		CodedObsCohortDefinition def = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 1568, null, null, SetComparator.IN, 1743);
-		return ReportUtil.getCompositionCohort("AND", prevTx, def);
-	}
-	
-	public static CohortDefinition getPrevFailureCatIFilter() {	
-		CodedObsCohortDefinition cat1 = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 6371, null, null, SetComparator.NOT_IN, 2126);
-		CodedObsCohortDefinition failure = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 1568, null, null, SetComparator.IN, 843);
-		return ReportUtil.getCompositionCohort("AND", cat1, failure);
-	}
-	
-	public static CohortDefinition getPrevFailureCatIIFilter() {
-		CodedObsCohortDefinition cat2 = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 6371, null, null, SetComparator.IN, 2126);
-		CodedObsCohortDefinition failure = ReportUtil.getCodedObsCohort(TimeModifier.LAST, 1568, null, null, SetComparator.IN, 843);
-		return ReportUtil.getCompositionCohort("AND", cat2, failure);
-	}
-	
-	*/
-	
-	
-	/**
 	 * Utility methods
 	 */
 	private static String convertIntegerSetToString(Integer [] set) {
@@ -447,7 +395,6 @@ public class Cohorts {
 		q.append("select 	o.person_id ");
 		q.append("from		obs o ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getId() + " ");
-		
 		q.append("and		o.value_coded = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB).getId() + " ");
 		return new SqlCohortDefinition(q.toString());
 	}
@@ -457,7 +404,6 @@ public class Cohorts {
 		q.append("select 	o.person_id ");
 		q.append("from		obs o ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getId() + " ");
-		
 		q.append("and		o.value_coded = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB).getId() + " ");
 		return new SqlCohortDefinition(q.toString());
 	}
@@ -492,7 +438,6 @@ public class Cohorts {
 	/**
 	 * @return the CohortDefinition for the Address and date 
 	 */
-
 	public static CohortDefinition getTreatmentStartAndAddressFilterTJK(String rayon, Date fromDate, Date toDate) {
 		if (rayon != null) {
 			MdrtbTJKPatientDistrictCohortDefinition cd = new MdrtbTJKPatientDistrictCohortDefinition();
@@ -511,7 +456,6 @@ public class Cohorts {
 		q.append("select 	person_id ");
 		q.append("from		person_address ");
 		q.append("where		county_district = '" + l.getCountyDistrict() + "'");
-		
 		return new SqlCohortDefinition(q.toString());
 	}
 	
@@ -539,7 +483,6 @@ public class Cohorts {
 		cd.setMaleIncluded(false);
 		cd.setFemaleIncluded(true);
 		cd.setUnknownGenderIncluded(false);
-		
 		return cd;
 	}
 	
@@ -549,7 +492,6 @@ public class Cohorts {
 		cd.setEndDate(endDate);		
 		cd.setMinAge(minAge);
 		cd.setMaxAge(maxAge);
-		//cd.setPrograms(Arrays.asList(Context.getProgramWorkflowService().getProgramByName(Context.getAdministrationService().getGlobalProperty("dotsreports.program_name"))));
 		return cd;
 	}
 	
@@ -558,9 +500,7 @@ public class Cohorts {
 		q.append("select 	o.person_id ");
 		q.append("from		obs o ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getId() + " ");
-		
 		q.append("and		o.value_coded = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PULMONARY_TB).getId() + " ");
-		
 		if (startDate != null) {
 			q.append("and	o.obs_datetime >= '" + DateUtil.formatDate(startDate, "yyyy-MM-dd") + "' ");
 		}
@@ -575,9 +515,7 @@ public class Cohorts {
 		q.append("select 	o.person_id ");
 		q.append("from		obs o ");
 		q.append("where		o.concept_id = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ANATOMICAL_SITE_OF_TB).getId() + " ");
-		
 		q.append("and		o.value_coded = " + Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.EXTRA_PULMONARY_TB).getId() + " ");
-		
 		if (startDate != null) {
 			q.append("and	o.obs_datetime >= '" + DateUtil.formatDate(startDate, "yyyy-MM-dd") + "' ");
 		}
@@ -592,7 +530,6 @@ public class Cohorts {
 		cd.setStartDate(startDate);
 		cd.setEndDate(endDate);		
 		cd.setRegType(regType);
-		
 		return cd;
 	}
 	

@@ -21,12 +21,10 @@ import org.openmrs.Person;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.TB03Form;
@@ -131,7 +129,7 @@ public class TB03FormController {
 			Region ob = null;
 			District dist = null;
 			
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			if (obName != null) {
 				for (Region o : oblasts) {
@@ -143,7 +141,7 @@ public class TB03FormController {
 			}
 			if (ob != null) {
 				model.addAttribute("oblastSelected", ob);
-				districts = Context.getService(MdrtbService.class).getDistricts(ob.getId());
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(ob.getId());
 				model.addAttribute("districts", districts);
 				if (distName != null) {
 					for (District d : districts) {
@@ -158,9 +156,9 @@ public class TB03FormController {
 				}
 			}
 			if (dist != null) {
-				facilities = Context.getService(MdrtbService.class).getFacilities(dist.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(dist.getId());
 				if (facilities.size() == 0) { // Maybe it's for Dushanbe
-					facilities = Context.getService(MdrtbService.class).getFacilities(ob.getId());
+					facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(ob.getId());
 				}
 				model.addAttribute("facilities", facilities);
 				if (facName != null) {
@@ -172,19 +170,18 @@ public class TB03FormController {
 					}
 				}
 			}
-		}
-		else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			if (facilities.size() == 0) { // Maybe it's for Dushanbe
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(oblast));
 			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
@@ -252,8 +249,10 @@ public class TB03FormController {
 		Program program = tpp.getPatientProgram().getProgram();
 		
 		try {
-			ProgramWorkflow outcomeFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME).getId());
-			ProgramWorkflowState outcomeState = Context.getService(MdrtbService.class).getProgramWorkflowState(outcomeFlow, outcome.getId());
+			ProgramWorkflow outcomeFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program,
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME).getId());
+			ProgramWorkflowState outcomeState = Context.getService(MdrtbService.class).getProgramWorkflowState(outcomeFlow,
+			    outcome.getId());
 			tpp.setOutcome(outcomeState);
 			tpp.setDateCompleted(tb03.getTreatmentOutcomeDate());
 		}
@@ -262,20 +261,26 @@ public class TB03FormController {
 		}
 		
 		try {
-			ProgramWorkflow groupFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP).getId());
-			ProgramWorkflowState groupState = Context.getService(MdrtbService.class).getProgramWorkflowState(groupFlow, group.getId());
+			ProgramWorkflow groupFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program,
+			    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP).getId());
+			ProgramWorkflowState groupState = Context.getService(MdrtbService.class).getProgramWorkflowState(groupFlow,
+			    group.getId());
 			tpp.setClassificationAccordingToPatientGroups(groupState);
 		}
 		catch (Exception e) {}
 		
 		try {
-			ProgramWorkflow groupByDrugFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE).getId());
-			ProgramWorkflowState groupByDrugState = Context.getService(MdrtbService.class).getProgramWorkflowState(groupByDrugFlow, groupByDrug.getId());
+			ProgramWorkflow groupByDrugFlow = Context.getService(MdrtbService.class).getProgramWorkflow(program,
+			    Context.getService(MdrtbService.class)
+			            .getConcept(MdrtbConcepts.DOTS_CLASSIFICATION_ACCORDING_TO_PREVIOUS_DRUG_USE).getId());
+			ProgramWorkflowState groupByDrugState = Context.getService(MdrtbService.class)
+			        .getProgramWorkflowState(groupByDrugFlow, groupByDrug.getId());
 			tpp.setClassificationAccordingToPreviousDrugUse(groupByDrugState);
 		}
 		catch (Exception e) {}
 		
-		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(tpp.getPatientProgram().getPatientProgramId());
+		PatientProgram pp = Context.getProgramWorkflowService()
+		        .getPatientProgram(tpp.getPatientProgram().getPatientProgramId());
 		Context.getProgramWorkflowService().savePatientProgram(pp);
 		
 		//TX OUTCOME
@@ -434,7 +439,8 @@ public class TB03FormController {
 	public ArrayList<ConceptAnswer> getPossibleResistanceTypes() {
 		//return Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);
 		ArrayList<ConceptAnswer> answerArray = new ArrayList<ConceptAnswer>();
-		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class).getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);
+		Collection<ConceptAnswer> bases = Context.getService(MdrtbService.class)
+		        .getPossibleConceptAnswers(MdrtbConcepts.RESISTANCE_TYPE);
 		if (bases != null) {
 			MdrtbService ms = Context.getService(MdrtbService.class);
 			Set<Concept> concepts = new HashSet<Concept>();

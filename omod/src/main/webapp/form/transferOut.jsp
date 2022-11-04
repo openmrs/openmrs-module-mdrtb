@@ -1,17 +1,15 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<%-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --%>
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
-
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/tbdashboard.form?patientProgramId=${patientProgramId}&patientId=${transferOut.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -39,11 +37,18 @@
 			$j('#editVisit').show();
 		}
 		
-		$('#oblast').val(${oblastSelected});
-		$('#district').val(${districtSelected});
-		$('#facility').val(${facilitySelected});
-		
-		
+		// $('#oblast').val(${oblastSelected});
+		<c:if test="${! empty oblastSelected}">
+			document.getElementById('oblast').value = ${oblastSelected};
+		</c:if>
+		// $('#district').val(${districtSelected});
+		<c:if test="${! empty districtSelected}">
+			document.getElementById('district').value = ${districtSelected};
+		</c:if>
+		// $('#facility').val(${facilitySelected});
+		<c:if test="${! empty facilitySelected}">
+			document.getElementById('facility').value = ${facilitySelected};
+		</c:if>
 	});
 
 	function fun1()
@@ -65,13 +70,8 @@
 		if(val2!="")
 			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/transferOut.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty transferOut.id ? transferOut.id : -1})
 	}
--->
 
 </script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</script>
-
 
 <br/>
 
@@ -97,16 +97,6 @@
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
 <td><openmrs:formatDate date="${transferOut.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${smear.provider.personName}</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${smear.location.displayString}</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>
@@ -159,30 +149,6 @@
 </tr>
 
 </table>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>
-<select name="provider">
-<option value=""></option>
-<c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${smear.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>
-<select name="location">
-<option value=""></option>
-<c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${smear.location == location}">selected</c:if>>${location.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
 
 <table>
 <tr id="oblastDiv">

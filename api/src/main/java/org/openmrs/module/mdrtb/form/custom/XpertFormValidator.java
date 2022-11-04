@@ -7,8 +7,7 @@ import org.springframework.validation.Validator;
 
 public class XpertFormValidator implements Validator {
 	
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
 		return (TB03Form.class.isAssignableFrom(clazz) || TB03Form.class.isAssignableFrom(clazz));
     }
 

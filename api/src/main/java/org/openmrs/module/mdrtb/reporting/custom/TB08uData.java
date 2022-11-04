@@ -2762,11 +2762,4 @@ public class TB08uData  {
 	public void setTotalTotalStandard(Integer totalTotalStandard) {
 		this.totalTotalStandard = totalTotalStandard;
 	}
-	
-	
-	
-	
-	
-	
-	
 }

@@ -57,11 +57,7 @@
 		var day = parts[0];
 		var month = parts[1]-1;
 		var year = parts[2];
-		
-		
-		
 		var dateCollected = new Date(year,month,day);
-
 		var now = new Date();
 		
 		if(dateCollected.getTime() > now.getTime()) {
@@ -69,14 +65,8 @@
 			alert(errorText);
 			return false;
 		}
-		
-		
-		
 		return true;
 	}
-	
-	
--->
 
 </script>
 

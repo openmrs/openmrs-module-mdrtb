@@ -26,11 +26,6 @@ import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.mdrtb.reporting.ReportSpecification;
-import org.openmrs.module.mdrtb.reporting.data.MOHReport;
-import org.openmrs.module.mdrtb.reporting.data.OutcomeReport;
-import org.openmrs.module.mdrtb.reporting.data.WHOForm05;
-import org.openmrs.module.mdrtb.reporting.data.WHOForm06;
-import org.openmrs.module.mdrtb.reporting.data.WHOForm07;
 import org.openmrs.module.mdrtb.reporting.data.custom.DSTReportTJK;
 import org.openmrs.module.mdrtb.reporting.data.custom.TB07TJK;
 import org.openmrs.module.mdrtb.service.MdrtbService;
@@ -47,7 +42,6 @@ public class MdrtbHomePageController {
 	
 	protected final static Log log = LogFactory.getLog(MdrtbHomePageController.class);
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/module/mdrtb/mdrtbIndex")
 	public void viewHomePage(ModelMap model) {
 		
@@ -61,16 +55,16 @@ public class MdrtbHomePageController {
 				if (StringUtils.isNotEmpty(str)) {
 					String birtPrefix = "module/birt/generateReport.form?reportId=";
 					try {
-						Class birtServiceClass = OpenmrsClassLoader.getInstance()
+						Class<?> birtServiceClass = OpenmrsClassLoader.getInstance()
 						        .loadClass("org.openmrs.module.birt.BirtReportService");
 						Object reportService = Context.getService(birtServiceClass);
 						Method getReportsMethod = birtServiceClass.getDeclaredMethod("getReports");
-						Class birtReportClass = OpenmrsClassLoader.getInstance()
+						Class<?> birtReportClass = OpenmrsClassLoader.getInstance()
 						        .loadClass("org.openmrs.module.birt.BirtReport");
 						Method getNameMethod = birtReportClass.getDeclaredMethod("getName");
 						Method getIdMethod = birtReportClass.getDeclaredMethod("getReportId");
 						
-						List allReports = (List) getReportsMethod.invoke(reportService);
+						List<?> allReports = (List<?>) getReportsMethod.invoke(reportService);
 						for (StringTokenizer st = new StringTokenizer(str, "|"); st.hasMoreTokens();) {
 							String s = st.nextToken().trim();
 							for (Object br : allReports) {
@@ -89,29 +83,17 @@ public class MdrtbHomePageController {
 			}
 			
 			// Load default reporting framework reports
-			ReportSpecification[] oldRpts = { new WHOForm05(), new WHOForm06(), new WHOForm07(), new OutcomeReport(), new MOHReport() };
-			ReportSpecification[] rpts = { new TB07TJK(), new DSTReportTJK() };
+			ReportSpecification[] rpts = { new TB07TJK(), new DSTReportTJK() /*, new WHOForm05(), new WHOForm06(), new WHOForm07(), new OutcomeReport(),
+			        new MOHReport()*/ };
 			for (ReportSpecification spec : rpts) {
 				reports.put("module/mdrtb/reporting/reports.form?type=" + spec.getClass().getName(), spec.getName());
 			}
 			
 			model.addAttribute("reports", reports);
 			
-			// add the specimen and resistance profiles
-			//reports.put("module/mdrtb/specimen/specimenReportsOverview.form", Context.getMessageSourceService().getMessage("mdrtb.specimenReports"));
-			//reports.put("module/mdrtb/specimen/labResultsReports.form", Context.getMessageSourceService().getMessage("mdrtb.resistanceProfiles"));
-			
 			// Load patient lists
 			List<Location> patientLocations = Context.getService(MdrtbService.class).getLocationsWithAnyProgramEnrollments();
 			model.addAttribute("patientLocations", patientLocations);
-			
-			/* Map<String, String> patientLists = new LinkedHashMap<String, String>();
-			patientLists.put("mdrtb.activePatients", "module/mdrtb/mdrtbListPatients.form?displayMode=mdrtbShortSummary&enrollment=current");
-			model.addAttribute("patientLists", patientLists);
-			
-			// Link to Cohort Builder, if reporting compatibility is installed
-			boolean rcStarted = ModuleFactory.getStartedModulesMap().containsKey("reportingcompatibility");
-			model.addAttribute("showCohortBuilder", rcStarted);*/
 		}
 	}
 }
