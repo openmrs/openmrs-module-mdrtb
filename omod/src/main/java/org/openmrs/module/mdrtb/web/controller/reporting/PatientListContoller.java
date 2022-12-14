@@ -72,17 +72,17 @@ public class PatientListContoller {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
 		else if (district == null) {
 			//DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -90,8 +90,8 @@ public class PatientListContoller {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -101,10 +101,10 @@ public class PatientListContoller {
 			* if oblast is dushanbe, return both districts and facilities
 			*/
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districtSelected", district);
@@ -113,9 +113,9 @@ public class PatientListContoller {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -143,7 +143,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		String dName = "";
 		if (districtId != null) {
@@ -162,7 +162,8 @@ public class PatientListContoller {
 		model.addAttribute("month", month);
 		model.addAttribute("quarter", quarter);
 		
-		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
+		    facilityId);
 		
 		ArrayList<TB03Form> tb03s = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
 		Collections.sort(tb03s);
@@ -551,7 +552,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -876,7 +877,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -1023,7 +1024,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -1498,7 +1499,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -1961,7 +1962,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -2104,7 +2105,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -2203,7 +2204,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -2341,7 +2342,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -2460,7 +2461,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -2567,7 +2568,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3109,7 +3110,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3211,7 +3212,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3314,7 +3315,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3415,7 +3416,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3514,7 +3515,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3612,7 +3613,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3707,7 +3708,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3804,7 +3805,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3901,7 +3902,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -3996,7 +3997,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -4095,7 +4096,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -4838,7 +4839,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -5302,7 +5303,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -5516,7 +5517,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -5836,7 +5837,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -6190,7 +6191,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -6243,7 +6244,8 @@ public class PatientListContoller {
 		Concept method = null;
 		
 		//METHOD
-		Concept fluorographyConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
+		Concept fluorographyConcept = Context.getService(MdrtbService.class)
+		        .getConcept(MdrtbConcepts.FLURORESCENT_MICROSCOPY);
 		int fluorographyId = fluorographyConcept.getConceptId().intValue();
 		Concept genexpertConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENEXPERT);
 		int genexpertId = genexpertConcept.getConceptId().intValue();
@@ -6727,7 +6729,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -7311,7 +7313,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -7369,8 +7371,7 @@ public class PatientListContoller {
 		int osteoId = osteoConcept.getConceptId().intValue();
 		Concept uroConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.GENITOURINARY);
 		int uroId = uroConcept.getConceptId().intValue();
-		Concept periLymphConcept = Context.getService(MdrtbService.class)
-		        .getConcept(MdrtbConcepts.OF_LYMPH_NODES);
+		Concept periLymphConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OF_LYMPH_NODES);
 		int periLymphId = periLymphConcept.getConceptId().intValue();
 		Concept abdConcept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ABDOMINAL);
 		int abdId = abdConcept.getConceptId().intValue();
@@ -7896,7 +7897,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -8304,7 +8305,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";
@@ -8713,7 +8714,7 @@ public class PatientListContoller {
 		
 		String oName = "";
 		if (oblastId != null) {
-			oName = ms.getOblast(oblastId).getName();
+			oName = ms.getRegion(oblastId).getName();
 		}
 		
 		String dName = "";

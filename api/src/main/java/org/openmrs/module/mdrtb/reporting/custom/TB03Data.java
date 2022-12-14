@@ -8,7 +8,6 @@ import org.openmrs.api.context.Context;
 public class TB03Data implements Comparable <TB03Data>{
 	
 	private Patient patient;
-	private String gender;
 	private String identifier;
 	private String tb03RegistrationDate;
 	private Integer ageAtTB03Registration;
@@ -85,25 +84,7 @@ public class TB03Data implements Comparable <TB03Data>{
     private HashMap<String, String> dstResults;
     private String dstCollectionDate;
     private String dstResultDate;
-    private String dstR;
-    private String dstH;
-    private String dstZ;
-    private String dstE;
-    private String dstS;
-    private String dstKm;
-    private String dstAm;
-    private String dstCm;
-    private String dstOfx;
-    private String dstMfx;
-    private String dstPto;
-    private String dstCs;
-    private String dstPAS;
-    private String dstLzd;
-    private String dstCfz;
-    private String dstBdq;
-    private String dstDlm;
-    
-	public TB03Data() {
+    public TB03Data() {
 		// TODO Auto-generated constructor stub
 		dstResults = new HashMap<String,String>();
 	}
@@ -512,8 +493,6 @@ public class TB03Data implements Comparable <TB03Data>{
 			this.tb03TreatmentOutcome = 7;
 		else if(tb03TreatmentOutcome == Integer.parseInt(Context.getAdministrationService().getGlobalProperty("mdrtb.outcome.transferout.conceptId")))
 			this.tb03TreatmentOutcome = 8;
-		
-		//System.out.println("---->" + this.tb03TreatmentOutcome);
 	}
 
 	public String getTb03TreatmentOutcomeDate() {
@@ -620,7 +599,7 @@ public class TB03Data implements Comparable <TB03Data>{
 		this.month5TestNumber = month5TestNumber;
 	}
 
-	public HashMap getDstResults() {
+	public HashMap<String, String> getDstResults() {
 		return dstResults;
 	}
 
@@ -646,7 +625,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstR(String dstR) {
-		this.dstR = dstR;
 	}
 
 	public String getDstH() {
@@ -654,7 +632,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstH(String dstH) {
-		this.dstH = dstH;
 	}
 
 	public String getDstZ() {
@@ -662,7 +639,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstZ(String dstZ) {
-		this.dstZ = dstZ;
 	}
 
 	public String getDstE() {
@@ -670,7 +646,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstE(String dstE) {
-		this.dstE = dstE;
 	}
 
 	public String getDstS() {
@@ -678,7 +653,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstS(String dstS) {
-		this.dstS = dstS;
 	}
 
 	public String getDstKm() {
@@ -686,7 +660,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstKm(String dstKm) {
-		this.dstKm = dstKm;
 	}
 
 	public String getDstAm() {
@@ -694,7 +667,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstAm(String dstAm) {
-		this.dstAm = dstAm;
 	}
 
 	public String getDstCm() {
@@ -702,12 +674,7 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstCm(String dstCm) {
-		this.dstCm = dstCm;
 	}
-
-	/*public String getDstOfx() {
-		return dstResults.get("OFX");
-	}*/
 	
 	public String getDstOfx() {
 		String ofx = null;
@@ -728,7 +695,6 @@ public class TB03Data implements Comparable <TB03Data>{
 
 
 	public void setDstOfx(String dstOfx) {
-		this.dstOfx = dstOfx;
 	}
 
 	public String getDstMfx() {
@@ -736,7 +702,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstMfx(String dstMfx) {
-		this.dstMfx = dstMfx;
 	}
 
 	public String getDstPto() {
@@ -744,7 +709,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstPto(String dstPto) {
-		this.dstPto = dstPto;
 	}
 
 	public String getDstCs() {
@@ -752,7 +716,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstCs(String dstCs) {
-		this.dstCs = dstCs;
 	}
 
 	public String getDstPAS() {
@@ -760,7 +723,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstPAS(String dstPAS) {
-		this.dstPAS = dstPAS;
 	}
 
 	public String getDstLzd() {
@@ -768,7 +730,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstLzd(String lzd) {
-		this.dstLzd = lzd;
 	}
 
 	public String getDstCfz() {
@@ -776,7 +737,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstCfz(String cfz) {
-		this.dstCfz = cfz;
 	}
 
 	public String getDstBdq() {
@@ -784,7 +744,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstBdq(String bdq) {
-		this.dstBdq = bdq;
 	}
 
 	public String getDstDlm() {
@@ -792,7 +751,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setDstDlm(String dlm) {
-		dstDlm = dlm;
 	}
 
 	public void setDstResults(HashMap<String, String> dstResults) {
@@ -816,7 +774,6 @@ public class TB03Data implements Comparable <TB03Data>{
 	}
 
 	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public String getHain2MTBResult() {

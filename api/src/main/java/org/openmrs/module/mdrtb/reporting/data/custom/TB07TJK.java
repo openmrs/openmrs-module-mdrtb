@@ -63,7 +63,6 @@ public class TB07TJK implements ReportSpecification {
 		List<Parameter> l = new ArrayList<Parameter>();
 		l.add(new Parameter("location", Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
 		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.year"), Integer.class));
-		//l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarter"), Integer.class));
 		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), String.class));
 		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), String.class));
 		
@@ -90,7 +89,6 @@ public class TB07TJK implements ReportSpecification {
 		Integer year = (Integer)parameters.get("year");
 		/*Integer quarter = (Integer)parameters.get("quarter");*/
 		String quarter = (String) parameters.get("quarter");
-		String oblast = (String) parameters.get("oblast");
 		String month = (String) parameters.get("month");
 		if (quarter == null && month==null) {
 			throw new IllegalArgumentException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAQuarterOrMonth"));
@@ -106,32 +104,28 @@ public class TB07TJK implements ReportSpecification {
 		
 		ReportDefinition report = new ReportDefinition();
 		
-		//OBLAST
-				String oblast = (String) context.getParameterValue("oblast");
-				//\\OBLAST
+		String oblast = (String) context.getParameterValue("oblast");
 		
 		Location location = (Location) context.getParameterValue("location");
 		Date startDate = (Date)context.getParameterValue("startDate");
 		Date endDate = (Date)context.getParameterValue("endDate");
 		
-		//OBLAST
-				Region o = null;
-				if(!oblast.equals("") && location == null)
-					o =  Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
-				
-				List<Location> locList = new ArrayList<Location>();
-				if(o != null && location == null)
-					locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
-				else if (location != null)
-					locList.add(location);
-				
-				if(location != null)
-					context.addParameterValue("location", location.getName()); 
-				else if(o != null)
-					context.addParameterValue("location", o.getName()); 
-				else
-					context.addParameterValue("location", "All"); 
-				//\\OBLAST
+		Region o = null;
+		if(!oblast.equals("") && location == null)
+			o =  Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
+		
+		List<Location> locList = new ArrayList<Location>();
+		if(o != null && location == null)
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
+		else if (location != null)
+			locList.add(location);
+		
+		if(location != null)
+			context.addParameterValue("location", location.getName()); 
+		else if(o != null)
+			context.addParameterValue("location", o.getName()); 
+		else
+			context.addParameterValue("location", "All"); 
 		
 		// Set base cohort to patients assigned to passed location, if applicable
 		//CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
@@ -143,32 +137,12 @@ public class TB07TJK implements ReportSpecification {
 						
 					if(!cohortDefinitions.isEmpty()){
 						report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("OR", cohortDefinitions), null);
-						//report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate), report.getBaseCohortDefinition().getParameterizable()));
-						//report.getBaseCohortDefinition().
 					}
 				}
-				
-//		CohortDefinition locationFilter;
-//		
-//		if(location!=null)
-//			//locationFilter = Cohorts.getTreatmentStartAndAddressFilterTJK(location.getCountyDistrict(), startDate, endDate);
-//			locationFilter = ReportUtil.getCompositionCohort("AND", Cohorts.getLocationFilter(location, startDate, endDate),Cohorts.getStartedTreatmentFilter(startDate, endDate));
-//		
-//		else
-//			locationFilter= Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate);
-//		
-//		if (locationFilter != null) {
-//			
-//			report.setBaseCohortDefinition(locationFilter, null);
-//		}
-//		
 		CohortDefinition drtb = Cohorts.getEnrolledInMDRProgramDuring(startDate, endDate);
 
 		// Add the data set definitions
 		CohortCrossTabDataSetDefinition labResultDsd = new CohortCrossTabDataSetDefinition();
-		//CohortDefinition polydr = Cohorts.getPolydrDetectionFilter(startDate, endDate);
-		/*CohortDefinition mdr = Cohorts.getMdrDetectionFilter(startDate, endDate);
-		CohortDefinition xdr = Cohorts.getXdrDetectionFilter(startDate, endDate);*/
 		CohortDefinition totalDetected = drtb;
 		CohortDefinition mdrOnly = Cohorts.getResistanceTypeFilter(startDate, endDate,TbClassification.MDR_TB);
 		CohortDefinition xdr = Cohorts.getResistanceTypeFilter(startDate, endDate,TbClassification.XDR_TB);
@@ -202,8 +176,6 @@ public class TB07TJK implements ReportSpecification {
 		
 		Map<String, CohortDefinition> groups = ReportUtil.getMdrtbPreviousTreatmentFilterSet(startDate, endDate);
 		
-		
-		
 		CohortDefinition newPatients = groups.get("New");
 		CohortDefinition relapse1 = groups.get("Relapse1");
 		CohortDefinition relapse2 = groups.get("Relapse2");
@@ -218,19 +190,6 @@ public class TB07TJK implements ReportSpecification {
 		CohortDefinition pat0514 = Cohorts.getAgeAtRegistration(startDate, endDate, 5, 14);
 		CohortDefinition pat1517 = Cohorts.getAgeAtRegistration(startDate, endDate, 5, 17);
 		CohortDefinition tbhiv = Cohorts.getHivPositiveDuring(startDate, endDate);
-		/*
-		 * 
-		 * map.put("Relapse1", relapse1);
-			map.put("Relapse2", relapse2);
-			map.put("AfterDefault1", afterDefault1);
-			map.put("AfterDefault2", afterDefault2);
-			//map.put("AfterFailure", treatmentAfterFailure);
-			map.put("AfterFailure1", treatmentAfterFailure1);
-			map.put("AfterFailure2", treatmentAfterFailure2);
-			//map.put("AfterFailureCategoryII", failureCatII);
-			map.put("TransferredIn", transferred);
-			map.put("Other", other);
-		 */
 		
 		CohortDefinition shortRegimen = Cohorts.getSLDRegimenFilter(startDate, endDate, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_SHORT));
 		CohortDefinition standardRegimen = Cohorts.getSLDRegimenFilter(startDate, endDate, Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REGIMEN_2_STANDARD));
@@ -245,13 +204,9 @@ public class TB07TJK implements ReportSpecification {
 		CohortDefinition standardMdr = ReportUtil.getCompositionCohort("AND", mdr, standardRegimen);
 		//CohortDefinition indivMdr = ReportUtil.getCompositionCohort("AND", mdr, individualizedRegimen);
 		
-		
-		
 		CohortDefinition xdrprexdr = ReportUtil.getCompositionCohort("OR", prexdr,xdr);
 		CohortDefinition standardXdrprexdr = ReportUtil.getCompositionCohort("AND", xdrprexdr, standardRegimen);
 		CohortDefinition indivXdrprexdr = ReportUtil.getCompositionCohort("AND", xdrprexdr, individualizedRegimen);
-		
-		
 		
 		//ROWS
 		treatmentDsd.addRow("mdr", mdr, null);
@@ -332,69 +287,6 @@ public class TB07TJK implements ReportSpecification {
 		treatmentDsd.addColumn("AfterFailureCategoryII", failure2, null);
 		treatmentDsd.addColumn("Other", other, null);
 		treatmentDsd.addColumn("newTotal", startedTreatment, null);
-		
-		//check
-		/*treatmentDsd.addRow("mdr", Cohorts.getConfirmedMdrOnlyInProgramAndStartedTreatmentFilter(startDate, endDate), null);
-		treatmentDsd.addRow("xdr", Cohorts.getConfirmedXdrInProgramAndStartedTreatmentFilter(startDate, endDate), null);
-		treatmentDsd.addRow("tbhiv", Cohorts.getHivPositiveDuring(startDate, endDate), null);
-		treatmentDsd.addRow("children", Cohorts.getAgeAtEnrollmentInMdrtbProgram(startDate, endDate, 0, 14), null);*/
-		
-		
-		//treatmentDsd.addRow("suspected", Cohorts.getSuspectedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null);
-		
-		//CohortCrossTabDataSetDefinition siteDsd = new CohortCrossTabDataSetDefinition();
-		//treatmentDsd.addRow("pulmonary", Cohorts.getAllPulmonaryEver(),null);
-		//treatmentDsd.addRow("extrapulmonary", Cohorts.getAllPulmonaryEver(),null);
-		//report.addDataSetDefinition("site", siteDsd,null);
-		/*
-		CohortDefinition pulmonary = Cohorts.getAllPulmonaryEver();
-		CohortDefinition extrapulmonary = Cohorts.getAllExtraPulmonaryEver();*/
-		
-		//Map<String, CohortDefinition> columns = ReportUtil.getMdrtbPreviousDrugUseFilterSet(startDate, endDate);
-		
-		/*for (String key : columns.keySet()) {
-			treatmentDsd.addColumn(key, columns.get(key), null);
-		}*/
-		
-		/*CohortDefinition previousSecondLine = ReportUtil.getMdrtbPreviousDrugUseFilterSet(startDate, endDate).get("PreviousSecondLine");
-		
-		CohortDefinition curedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.CURED[0]);
-		CohortDefinition txCompletedMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_COMPLETED[0]);
-		CohortDefinition defaultMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.LOST_TO_FOLLOWUP[0]);
-		CohortDefinition failureMDR = Cohorts.getPreviousMdrtbProgramOutcome(startDate, endDate, MdrtbConcepts.TREATMENT_FAILED[0]);
-		CohortDefinition relapseMDR = ReportUtil.getCompositionCohort("OR", curedMDR,txCompletedMDR);
-		
-		GregorianCalendar gc = new GregorianCalendar();
-    	gc.set(1900,0, 1, 0, 0,1);
-    	
-    	GregorianCalendar gc2 = new GregorianCalendar();
-    	gc2.setTime(startDate);
-    	gc.add(gc.DATE, -1);*/
-		
-		/*CohortDefinition prevXDR = Cohorts.getXdrDetectionFilter(gc.getTime(), gc2.getTime());
-		CohortDefinition newOnly = ReportUtil.minus(ReportUtil.getCompositionCohort("AND", groups.get("New"), pulmonary),previousSecondLine);
-		CohortDefinition relapseOnly = ReportUtil.minus(ReportUtil.getCompositionCohort("AND", groups.get("Relapse"), pulmonary),previousSecondLine);
-		CohortDefinition defaultOnly = ReportUtil.minus(ReportUtil.getCompositionCohort("AND", groups.get("AfterDefault"), pulmonary),previousSecondLine);
-		CohortDefinition failureCatIOnly = ReportUtil.minus(ReportUtil.getCompositionCohort("AND", groups.get("AfterFailureCategoryI"), pulmonary),previousSecondLine);
-		CohortDefinition failureCatIIOnly = ReportUtil.minus(ReportUtil.getCompositionCohort("AND", groups.get("AfterFailureCategoryII"),pulmonary),previousSecondLine);
-		CohortDefinition unknownOnly = ReportUtil.minus(groups.get("Other"),previousSecondLine);
-		CohortDefinition newTotal = ReportUtil.getCompositionCohort("OR", newOnly,relapseOnly,defaultOnly,failureCatIOnly,failureCatIIOnly,unknownOnly );
-		CohortDefinition prevTotal =  ReportUtil.getCompositionCohort("OR",ReportUtil.getCompositionCohort("AND", previousSecondLine, relapseMDR),ReportUtil.getCompositionCohort("AND", previousSecondLine, defaultMDR),ReportUtil.getCompositionCohort("AND", previousSecondLine, failureMDR),ReportUtil.getCompositionCohort("AND", previousSecondLine, prevXDR));*/
-		
-		/*treatmentDsd.addColumn("New", newOnly, null);
-		treatmentDsd.addColumn("Relapse", relapseOnly, null);
-		treatmentDsd.addColumn("AfterDefault",defaultOnly, null);
-		treatmentDsd.addColumn("AfterFailureCategoryI", failureCatIOnly, null);
-		treatmentDsd.addColumn("AfterFailureCategoryII", failureCatIIOnly, null);
-		treatmentDsd.addColumn("Other", unknownOnly, null);
-		treatmentDsd.addColumn("newTotal", newTotal, null);*/
-		
-		/*treatmentDsd.addColumn("relapseMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, relapseMDR), null);
-		treatmentDsd.addColumn("defaultMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, defaultMDR), null);
-		treatmentDsd.addColumn("failureMDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, failureMDR), null);
-		treatmentDsd.addColumn("prevXDR", ReportUtil.getCompositionCohort("AND", previousSecondLine, prevXDR),null);
-		treatmentDsd.addColumn("prevTotal",prevTotal,null);
-		treatmentDsd.addColumn("finalTotal", ReportUtil.getCompositionCohort("OR", prevTotal,newTotal),null);*/
 		
 		report.addDataSetDefinition("startedTreatment", treatmentDsd, null);
 		

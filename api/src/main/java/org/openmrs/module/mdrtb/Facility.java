@@ -10,8 +10,8 @@ public class Facility extends BaseLocation {
 		super(baseLocation.getId(), baseLocation.getName(), baseLocation.getLevelId());		
 	}
 
-	public Facility(String name, Integer id, Integer levelId) {
-		super(id, name, levelId);
+	public Facility(String name, Integer id) {
+		super(id, name, HIERARCHY_LEVEL);
 	}
 
 	/**

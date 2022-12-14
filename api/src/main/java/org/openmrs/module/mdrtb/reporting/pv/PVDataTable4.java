@@ -27,8 +27,6 @@ public class PVDataTable4 {
 	private Integer renalFailure;
 	private Integer qtProlongation;
 	
-	
-	
 	public PVDataTable4() {
 		nausea = 0;
 		diarrhoea = 0;
@@ -200,7 +198,4 @@ public class PVDataTable4 {
 	public void setQtProlongation(Integer qtProlongation) {
 		this.qtProlongation = qtProlongation;
 	}
-
-	
-
 }

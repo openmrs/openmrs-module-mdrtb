@@ -152,7 +152,7 @@ public class MdrtbEditPatientController {
 		} else {
 			// access the idgen module via reflection
 			try {
-				Class identifierSourceServiceClass = Context
+				Class<?> identifierSourceServiceClass = Context
 				        .loadClass("org.openmrs.module.idgen.service.IdentifierSourceService");
 				Object idgen = Context.getService(identifierSourceServiceClass);
 				Method getPatientIdentifierTypesByAutoGenerationOption = identifierSourceServiceClass
@@ -220,7 +220,7 @@ public class MdrtbEditPatientController {
 			}
 		}
 		
- 		PatientCommand patientCommand = new PatientCommand();
+		PatientCommand patientCommand = new PatientCommand();
 		patientCommand.setPatient(patient);
 		
 		// if there is no default address for this patient, create one
@@ -234,7 +234,6 @@ public class MdrtbEditPatientController {
 		return patientCommand;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showForm(@RequestParam(required = false, value = "patientId") Integer patientId,
 	        @RequestParam(required = false, value = "addName") String addName,
@@ -304,9 +303,9 @@ public class MdrtbEditPatientController {
 	        @RequestParam("identifierValue") String[] identifierValue, @RequestParam("identifierId") String[] identifierId,
 	        @RequestParam(required = false, value = "identifierLocation") Location[] identifierLocation,
 	        @RequestParam(required = false, value = "identifierType") PatientIdentifierType[] identifierType,
-	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, 
-	        @RequestParam(required = false, value = "add") String add, 
-	        @RequestParam("successURL") String successUrl, SessionStatus status, ModelMap map) {
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "add") String add, @RequestParam("successURL") String successUrl,
+	        SessionStatus status, ModelMap map) {
 		
 		// fetch the patient off the command object
 		Patient patient = patientCommand.getPatient();
@@ -389,7 +388,7 @@ public class MdrtbEditPatientController {
 		// TODO: is this correct... do we ever want to void a patient but keep the person (for instance, if the person is also a treatment supporter?)
 		patient.setPersonVoided(patient.getVoided());
 		if (patient.getVoided()) {
-			patient.setPersonVoidReason(patient.getVoidReason());			
+			patient.setPersonVoidReason(patient.getVoidReason());
 		}
 		
 		// if this is a new address (ie, not yet linked to patient), link it to the patient
@@ -399,9 +398,9 @@ public class MdrtbEditPatientController {
 		}
 		
 		// remove the address if it is blank
-//		if (MdrtbUtil.isBlank(patient.getPersonAddress())) {
-//			patient.removeAddress(patient.getPersonAddress());
-//		}
+		//		if (MdrtbUtil.isBlank(patient.getPersonAddress())) {
+		//			patient.removeAddress(patient.getPersonAddress());
+		//		}
 		// remove any attributes that are blank
 		for (PersonAttributeType attr : Context.getPersonService().getPersonAttributeTypes(PERSON_TYPE.PATIENT,
 		    ATTR_VIEW_TYPE.VIEWING)) {
@@ -420,8 +419,8 @@ public class MdrtbEditPatientController {
 		
 		Integer idId = null;
 		if ("1".equals(add)) {
-			idId = Context.getPatientService().getPatientIdentifiers(
-				identifierValue[0], null, null, Arrays.asList(patient), null).get(0).getId();
+			idId = Context.getPatientService()
+			        .getPatientIdentifiers(identifierValue[0], null, null, Arrays.asList(patient), null).get(0).getId();
 		}
 		
 		// clears the command object from the session
@@ -434,8 +433,8 @@ public class MdrtbEditPatientController {
 			returnUrl = "redirect:/module/mdrtb/program/enrollment.form?patientId=" + patient.getId();
 		}
 		returnUrl = "redirect:" + successUrl + (successUrl.contains("?") ? "&" : "?") + "patientId=" + patient.getId()
-			        + (patientProgramId != null ? "&patientProgramId=" + patientProgramId : "")
-			        + (idId != null ? "&idId=" + idId : "");
+		        + (patientProgramId != null ? "&patientProgramId=" + patientProgramId : "")
+		        + (idId != null ? "&idId=" + idId : "");
 		return new ModelAndView(returnUrl);
 	}
 	

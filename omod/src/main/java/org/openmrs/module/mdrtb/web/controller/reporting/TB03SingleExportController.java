@@ -76,7 +76,7 @@ public class TB03SingleExportController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
@@ -84,10 +84,10 @@ public class TB03SingleExportController {
 			
 			//DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -96,8 +96,8 @@ public class TB03SingleExportController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -108,10 +108,10 @@ public class TB03SingleExportController {
 			* if oblast is dushanbe, return both districts and facilities
 			*/
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -120,9 +120,9 @@ public class TB03SingleExportController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -260,7 +260,8 @@ public class TB03SingleExportController {
 			//REGISTRATION GROUP
 			q = tf.getRegistrationGroup();
 			if (q == null) {
-				Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP), tf.getEncounter());
+				Obs obs = MdrtbUtil.getObsFromEncounter(
+				    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP), tf.getEncounter());
 				q = obs.getValueCoded();
 			}
 			if (q != null) {
@@ -285,8 +286,7 @@ public class TB03SingleExportController {
 				if (loc != null) {
 					if (loc.getRegion() != null && loc.getRegion().length() != 0) {
 						tb03Data.setDiagnosticSmearLab(loc.getRegion());
-					}
-					else if (loc.getCountyDistrict() != null && loc.getCountyDistrict().length() != 0) {
+					} else if (loc.getCountyDistrict() != null && loc.getCountyDistrict().length() != 0) {
 						tb03Data.setDiagnosticSmearLab(loc.getCountyDistrict());
 					}
 				}

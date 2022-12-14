@@ -108,27 +108,6 @@ public class HAIN2FormController {
 		}
 	}
 	
-	/*@ModelAttribute("hainmdr")
-	public HAINForm getMdrHAINForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                            @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-	
-		// if no form is specified, create a new one
-		if (encounterId == -1) {
-			MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-			
-			HAINForm form = new HAINForm(mdrtbProgram.getPatient());
-			
-			// prepopulate the intake form with any program information
-			form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
-			form.setLocation(mdrtbProgram.getLocation());
-				
-			return form;
-		}
-		else {
-			return new HAINForm(Context.getEncounterService().getEncounter(encounterId));
-		}
-	}*/
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showHAIN2Form(@RequestParam(value = "loc", required = false) String district,
 	        @RequestParam(value = "ob", required = false) String oblast,
@@ -153,23 +132,23 @@ public class HAIN2FormController {
 				}
 			}
 			
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			Location location = hain2.getLocation();
 			if (location != null) {
 				for (Region o : oblasts) {
 					if (o.getName().equals(location.getStateProvince())) {
 						model.addAttribute("oblastSelected", o.getId());
-						districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
+						districts = Context.getService(MdrtbService.class).getDistrictsByParent(o.getId());
 						model.addAttribute("districts", districts);
 						for (District d : districts) {
 							if (d.getName().equals(location.getCountyDistrict())) {
 								model.addAttribute("districtSelected", d.getId());
-								facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+								facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 								if (facilities != null) {
 									model.addAttribute("facilities", facilities);
 									for (Facility f : facilities) {
-										if (f.getName().equals(location.getRegion())) {
+										if (f.getName().equals(location.getAddress4())) {
 											model.addAttribute("facilitySelected", f.getId());
 											break;
 										}
@@ -183,15 +162,15 @@ public class HAIN2FormController {
 				}
 			}
 		} else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
@@ -206,7 +185,6 @@ public class HAIN2FormController {
 		return new ModelAndView("/module/mdrtb/form/hain2", model);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processHAIN2Form(@ModelAttribute("hain2") HAIN2Form hain2, BindingResult errors,
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
@@ -239,17 +217,8 @@ public class HAIN2FormController {
 			mdr = true;
 		}
 		
-		// perform validation and check for errors
-		/*if (tb03 != null) {
-			new SimpleFormValidator().validate(tb03, errors);
-		}*/
-		
-		/*if (errors.hasErrors()) {
-			map.put("errors", errors);
-			return new ModelAndView("/module/mdrtb/form/intake", map);
-		}*/
-		
-		if (!Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_POSITIVE).getId().equals(hain2.getMtbResult().getId())) {
+		if (!Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MTB_POSITIVE).getId()
+		        .equals(hain2.getMtbResult().getId())) {
 			hain2.setFqResult(null);
 			hain2.setInjResult(null);
 		}
@@ -257,61 +226,8 @@ public class HAIN2FormController {
 		// save the actual update
 		Context.getEncounterService().saveEncounter(hain2.getEncounter());
 		
-		//handle changes in workflows
-		/*Concept outcome = tb03.getTreatmentOutcome();
-		Concept group = tb03.getRegistrationGroup();
-		
-		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
-		
-		ProgramWorkflow outcomeFlow = new ProgramWorkflow();
-		outcomeFlow.setConcept(outcome);
-		PatientState outcomePatientState = pp.getCurrentState(outcomeFlow);
-		//ProgramWorkflowState pwfs = null;
-		Concept currentOutcomeConcept = null;
-		//outcome entered previously but now removed
-		if(outcomePatientState != null && outcome == null) {
-			System.out.println("outcome removed");
-			HashSet<PatientState> states = new HashSet<PatientState>();
-			outcomePatientState = null;
-			states.add(outcomePatientState);
-		
-			pp.setStates(states);	
-			programModified = true;
-		}
-		
-		//outcome has been added	
-		else if(outcomePatientState == null && outcome != null) {
-			System.out.println("outcome added");
-			HashSet<PatientState> states = new HashSet<PatientState>();
-			PatientState newState = new PatientState();
-			ProgramWorkflowState pwfs = new ProgramWorkflowState();
-			pwfs.setConcept(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TB_TREATMENT_OUTCOME));
-			newState.setState(pwfs);
-			states.add(newState);
-			pp.setStates(states);	
-			programModified = true;
-		}
-		
-		//outcome entered previously and may have been modified now
-		else if(outcomePatientState!=null && outcome !=null) {
-			
-		
-		}
-		
-		
-		
-		
-		//TX OUTCOME
-		//PATIENT GROUP
-		//PATIENT DEATH AND CAUSE OF DEATH
-		*/
 		// clears the command object from the session
 		status.setComplete();
-		
-		/*if(programModified) {
-			System.out.println("saving program");
-			Context.getProgramWorkflowService().savePatientProgram(pp);
-		}*/
 		
 		map.clear();
 		
@@ -339,16 +255,6 @@ public class HAIN2FormController {
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
-	
-	/*@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-	}
-	
-	@ModelAttribute("mdrtbProgram")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-	}*/
 	
 	@ModelAttribute("returnUrl")
 	public String getReturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {

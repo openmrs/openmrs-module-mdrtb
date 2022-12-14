@@ -62,17 +62,17 @@ public class TB03uSingleController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
 		else if (district == null) {
 			//DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -81,8 +81,8 @@ public class TB03uSingleController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -94,10 +94,10 @@ public class TB03uSingleController {
 			* if oblast is dushanbe, return both districts and facilities
 			*/
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districtSelected", district);
@@ -107,9 +107,9 @@ public class TB03uSingleController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);

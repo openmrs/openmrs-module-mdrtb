@@ -11,9 +11,6 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
@@ -300,16 +297,6 @@
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
 <td><openmrs:formatDate date="${tb03u.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${tb03u.provider.personName}</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${tb03u.location.displayString}</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>
@@ -696,30 +683,6 @@
 
 </table>
 
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>
-<select name="provider">
-<option value=""></option>
-<c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${tb03u.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>
-<select name="location">
-<option value=""></option>
-<c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${tb03u.location == location}">selected</c:if>>${location.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
-
 </table>
 
 <table>
@@ -814,35 +777,6 @@
 </select>
 </td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.tb03.siteOfDisease" text="Anatomical Type"/>:</td>
-<td>${tb03u.anatomicalSite.displayString}</td>
-</tr> --%>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.tb03.registrationGroup" text="Registration Group"/>:</td>
-<td>
-<select name="registrationGroup">
-<option value=""></option>
-<c:forEach var="group" items="${groups}">
-	<option value="${group.concept.id}" <c:if test="${tb03u.registrationGroup == group.concept}">selected</c:if> >${group.concept.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr>
-
-<tr>
-<td><spring:message code="mdrtb.previousDrugClassification" text="Registration Group By Drug"/>:</td>
-<td>
-<select name="registrationGroupByDrug">
-<option value=""></option>
-<c:forEach var="group" items="${bydrug}">
-	<option value="${group.concept.id}" <c:if test="${tb03u.registrationGroupByDrug == group.concept}">selected</c:if> >${group.concept.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.tb03.registrationGroup" text="Registration Group"/>:</td>

@@ -2,7 +2,6 @@ package org.openmrs.module.mdrtb.reporting.custom;
 
 public class TB07Util {
 
-	
 	/*public static Boolean isBacPositive(Patient patient) {
 		Smear diagSmear = TB03Util.getDiagnosticSmear(patient);
 		Xpert diagXpert = TB03Util.getFirstXpert(patient);

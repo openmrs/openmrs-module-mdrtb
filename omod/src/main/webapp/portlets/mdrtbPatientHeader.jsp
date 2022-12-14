@@ -60,35 +60,6 @@
 				</td>
 				<td style="width: 100%;">&nbsp;</td>
 				
-				
-				<!--  TODO: delete this once we are sure we don't need it 
-				<td id="patientHeaderOtherIdentifiers">
-					
-					<c:if test="${fn:length(model.patient.activeIdentifiers) > 1}">
-						<c:forEach var="identifier" items="${model.patient.activeIdentifiers}" begin="1" end="1">
-							<c:if test="${mdrtbId != identifier}">
-								<span class="patientHeaderPatientIdentifier">${identifier.identifierType.name}<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterPatientHeaderPatientIdentifierType" type="html" parameters="identifierLocation=${identifier.location.name}"/>: ${identifier.identifier}</span>
-							</c:if>
-						</c:forEach>
-					</c:if>
-					<c:if test="${fn:length(model.patient.activeIdentifiers) > 2}">
-						<div id="patientHeaderMoreIdentifiers">
-							<c:forEach var="identifier" items="${model.patient.activeIdentifiers}" begin="2">
-								<c:if test="${mdrtbId != identifier}">
-									<span class="patientHeaderPatientIdentifier">${identifier.identifierType.name}<openmrs:extensionPoint pointId="org.openmrs.patientDashboard.afterPatientHeaderPatientIdentifierType" type="html" parameters="identifierLocation=${identifier.location.name}"/>: ${identifier.identifier}</span>
-								</c:if>
-							</c:forEach>
-						</div>
-					</c:if>
-				</td>
-				
-				<c:if test="${fn:length(model.patient.activeIdentifiers) > 2}">
-					<td width="32">
-						<small><a id="patientHeaderShowMoreIdentifiers" onclick="return showMoreIdentifiers()" title='<spring:message code="patientDashboard.showMoreIdentifers"/>'><spring:message code="general.nMore" arguments="${fn:length(model.patient.activeIdentifiers) - 2}"/></a></small>
-					</td>
-				</c:if>
-				-->
-				
 			</tr>
 		</table>
 	</div>

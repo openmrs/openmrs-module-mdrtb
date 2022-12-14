@@ -21,19 +21,17 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.DstResultExistsSCohortDefinition")
 public class DstResultExistsCohortDefinition extends BaseCohortDefinition {
-
-    public static final long serialVersionUID = 1L;
-    
-	@ConfigurationProperty(group="resultDateGroup")
+	
+	public static final long serialVersionUID = 1L;
+	
+	@ConfigurationProperty(group = "resultDateGroup")
 	private Date minResultDate;
 	
-	@ConfigurationProperty(group="resultDateGroup")
+	@ConfigurationProperty(group = "resultDateGroup")
 	private Date maxResultDate;
 	
-	
-	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -51,34 +49,33 @@ public class DstResultExistsCohortDefinition extends BaseCohortDefinition {
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	/**
 	 * @return the minResultDate
 	 */
 	public Date getMinResultDate() {
 		return minResultDate;
 	}
-
+	
 	/**
 	 * @param minResultDate the minResultDate to set
 	 */
 	public void setMinResultDate(Date minResultDate) {
 		this.minResultDate = minResultDate;
 	}
-
+	
 	/**
 	 * @return the maxResultDate
 	 */
 	public Date getMaxResultDate() {
 		return maxResultDate;
 	}
-
+	
 	/**
 	 * @param maxResultDate the maxResultDate to set
 	 */
 	public void setMaxResultDate(Date maxResultDate) {
 		this.maxResultDate = maxResultDate;
 	}
-
 	
 }

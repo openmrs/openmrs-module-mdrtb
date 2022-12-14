@@ -28,26 +28,24 @@ public class EditRegimenController {
 	@InitBinder
 	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		DateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
-    	binder.registerCustomEditor(Concept.class, new ConceptEditor());
-    	binder.registerCustomEditor(Drug.class, new DrugEditor());
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
+		binder.registerCustomEditor(Drug.class, new DrugEditor());
 	}
 	
-    @RequestMapping("/module/mdrtb/regimen/editRegimen")
-    public void editRegimen(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		@RequestParam(required=true, value="type") String type,
-    		@RequestParam(required=true, value="changeDate") Date changeDate,
-    		ModelMap model) {
-    	
-    	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", (patientProgramId != null ? patientProgramId : -1) );
-    	model.addAttribute("type", type);
-    	model.addAttribute("changeDate", changeDate);
-    	
-    	Patient p = Context.getPatientService().getPatient(patientId);
-    	model.addAttribute("patient", p);
-    }
+	@RequestMapping("/module/mdrtb/regimen/editRegimen")
+	public void editRegimen(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = true, value = "type") String type,
+	        @RequestParam(required = true, value = "changeDate") Date changeDate, ModelMap model) {
+		
+		model.addAttribute("patientId", patientId);
+		model.addAttribute("patientProgramId", (patientProgramId != null ? patientProgramId : -1));
+		model.addAttribute("type", type);
+		model.addAttribute("changeDate", changeDate);
+		
+		Patient p = Context.getPatientService().getPatient(patientId);
+		model.addAttribute("patient", p);
+	}
 }

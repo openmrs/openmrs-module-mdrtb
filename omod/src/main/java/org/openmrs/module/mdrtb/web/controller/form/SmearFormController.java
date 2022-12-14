@@ -137,19 +137,19 @@ public class SmearFormController {
 					e.printStackTrace();
 				}
 			}
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			Location location = smear.getLocation();
 			if (location != null) {
 				for (Region o : oblasts) {
 					if (o.getName().equals(location.getStateProvince())) {
 						model.addAttribute("oblastSelected", o.getId());
-						districts = Context.getService(MdrtbService.class).getDistricts(o.getId());
+						districts = Context.getService(MdrtbService.class).getDistrictsByParent(o.getId());
 						model.addAttribute("districts", districts);
 						for (District d : districts) {
 							if (d.getName().equals(location.getCountyDistrict())) {
 								model.addAttribute("districtSelected", d.getId());
-								facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+								facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 								if (facilities != null) {
 									model.addAttribute("facilities", facilities);
 									for (Facility f : facilities) {
@@ -167,15 +167,15 @@ public class SmearFormController {
 				}
 			}
 		} else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);

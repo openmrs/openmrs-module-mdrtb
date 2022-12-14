@@ -136,8 +136,7 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 					if (StringUtils.isNotBlank(dateCompleted)) {
 						bac.setResultDate(dateFormat.parse(dateCompleted));
 					}
-				}
-				else if (xpert != null) {
+				} else if (xpert != null) {
 					xpert.setLab(lab);
 					if (StringUtils.isNotBlank(dateCompleted)) {
 						xpert.setResultDate(dateFormat.parse(dateCompleted));
@@ -148,8 +147,7 @@ public class SpecimenQuickEntryController extends AbstractSpecimenController {
 					if (StringUtils.isNotBlank(rifResult)) {
 						xpert.setRifResistance(Context.getConceptService().getConcept(Integer.valueOf(rifResult)));
 					}
-				}
-				else if (hain != null) {
+				} else if (hain != null) {
 					hain.setLab(lab);
 					if (StringUtils.isNotBlank(dateCompleted)) {
 						hain.setResultDate(dateFormat.parse(dateCompleted));

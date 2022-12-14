@@ -80,7 +80,7 @@ public class Functions {
 	/**
 	 * @return a List of Objects, ordered in their natural order
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T extends Comparable> List<T> sort(Collection<T> collection) {
 		List<T> l = new ArrayList<T>(collection);
 		Collections.sort(l);
@@ -104,7 +104,7 @@ public class Functions {
 	/**
 	 * @return the comparison result between the two passed objects
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T extends Comparable>int compare(T c1, T c2) {
 		return c1.compareTo(c2);
 	}

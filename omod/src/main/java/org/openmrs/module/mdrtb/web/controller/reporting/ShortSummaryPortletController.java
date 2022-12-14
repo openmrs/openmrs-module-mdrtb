@@ -17,6 +17,7 @@ public class ShortSummaryPortletController extends PatientSummaryPortletControll
 	
 	/**
 	 * Return the columns appropriate for this Patient Summary
+	 * 
 	 * @return
 	 */
 	@Override

@@ -52,17 +52,17 @@ public class TB08uController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
 		else if (district == null) {
 			// DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -72,8 +72,8 @@ public class TB08uController {
 			
 			else {
 				
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -86,10 +86,10 @@ public class TB08uController {
 			 * if oblast is dushanbe, return both districts and facilities
 			 */
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -98,9 +98,9 @@ public class TB08uController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -125,10 +125,12 @@ public class TB08uController {
 		System.out.println("---POST-----");
 		
 		SimpleDateFormat sdf = Context.getDateFormat();
-    	SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
+		SimpleDateFormat rdateSDF = Context.getDateTimeFormat();
 		
-		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
-		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter, month);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
+		    facilityId);
+		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilled(locList, year, quarter,
+		    month);
 		
 		TB08uData table1 = new TB08uData();
 		Concept q = null;
@@ -159,19 +161,28 @@ public class TB08uController {
 		        .intValue();
 		int outcome = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CURED).getId().intValue();
 		int neww = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW).getId().intValue();
-		int txComplete = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId().intValue();
+		int txComplete = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_COMPLETED).getId()
+		        .intValue();
 		int txFailure = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.TREATMENT_FAILED).getId().intValue();
 		int died = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DIED).getId().intValue();
 		int lostFup = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.LOST_TO_FOLLOWUP).getId().intValue();
-		int transferredOut = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_OUT).getId().intValue();
-		int transferredIn = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN).getId().intValue();
-		int relapse1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1).getId().intValue();
-		int relapse2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2).getId().intValue();
-		int failure1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1).getId().intValue();
-		int failure2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2).getId().intValue();
-		int default1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1).getId().intValue();
-		int default2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2).getId().intValue();
-
+		int transferredOut = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_OUT).getId()
+		        .intValue();
+		int transferredIn = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_TRANSFERRED_IN).getId()
+		        .intValue();
+		int relapse1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_1).getId()
+		        .intValue();
+		int relapse2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RELAPSE_AFTER_REGIMEN_2).getId()
+		        .intValue();
+		int failure1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_1).getId()
+		        .intValue();
+		int failure2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AFTER_FAILURE_REGIMEN_2).getId()
+		        .intValue();
+		int default1 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_1).getId()
+		        .intValue();
+		int default2 = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DEFAULT_AFTER_REGIMEN_2).getId()
+		        .intValue();
+		
 		for (TB03uForm tf : tb03uList) {
 			
 			cured = null;
@@ -205,14 +216,11 @@ public class TB08uController {
 			if (q != null) {
 				if (q.getConceptId().intValue() == outcome) {
 					cured = Boolean.TRUE;
-				}
-				else if (q.getConceptId().intValue() == txComplete) {
+				} else if (q.getConceptId().intValue() == txComplete) {
 					txCompleted = Boolean.TRUE;
-				}
-				else if (q.getConceptId().intValue() == txFailure) {
+				} else if (q.getConceptId().intValue() == txFailure) {
 					failed = Boolean.TRUE;
-				}
-				else if (q.getConceptId().intValue() == died) {
+				} else if (q.getConceptId().intValue() == died) {
 					q = tf.getCauseOfDeath();
 					if (q != null) {
 						if (q.getConceptId().intValue() == Context.getService(MdrtbService.class)
@@ -221,11 +229,9 @@ public class TB08uController {
 						else
 							diedNotTB = Boolean.TRUE;
 					}
-				}
-				else if (q.getConceptId().intValue() == lostFup) {
+				} else if (q.getConceptId().intValue() == lostFup) {
 					defaulted = Boolean.TRUE;
-				}
-				else if (q.getConceptId().intValue() == transferredOut || txStarted) {
+				} else if (q.getConceptId().intValue() == transferredOut || txStarted) {
 					transferOut = Boolean.TRUE;
 				}
 			}
@@ -245,28 +251,21 @@ public class TB08uController {
 						if (cured != null && cured) {
 							table1.setTotalCuredShort(table1.getTotalCuredShort() + 1);
 							table1.setTotalTxSuccessShort(table1.getTotalTxSuccessShort() + 1);
-						}
-						else if (txCompleted != null && txCompleted) {
+						} else if (txCompleted != null && txCompleted) {
 							table1.setTotalCompletedShort(table1.getTotalCompletedShort() + 1);
 							table1.setTotalTxSuccessShort(table1.getTotalTxSuccessShort() + 1);
-						}
-						else if (diedTB != null && diedTB) {
+						} else if (diedTB != null && diedTB) {
 							table1.setTotalDiedTBShort(table1.getTotalDiedTBShort() + 1);
-						}
-						else if (diedNotTB != null && diedNotTB) {
+						} else if (diedNotTB != null && diedNotTB) {
 							table1.setTotalDiedNotTBShort(table1.getTotalDiedNotTBShort() + 1);
-						}
-						else if (failed != null && failed) {
+						} else if (failed != null && failed) {
 							table1.setTotalFailedShort(table1.getTotalFailedShort() + 1);
-						}
-						else if (defaulted != null && defaulted) {
+						} else if (defaulted != null && defaulted) {
 							table1.setTotalDefaultedShort(table1.getTotalDefaultedShort() + 1);
 							
-						}
-						else if (transferOut != null && transferOut) {
+						} else if (transferOut != null && transferOut) {
 							table1.setTotalNotAssessedShort(table1.getTotalNotAssessedShort() + 1);
-						}
-						else {
+						} else {
 							table1.setTotalNotAssessedShort(table1.getTotalNotAssessedShort() + 1);
 						}
 					}
@@ -1456,7 +1455,7 @@ public class TB08uController {
 		String fName = null;
 		
 		if (oblastId != null) {
-			Region o = Context.getService(MdrtbService.class).getOblast(oblastId);
+			Region o = Context.getService(MdrtbService.class).getRegion(oblastId);
 			if (o != null) {
 				oName = o.getName();
 			}

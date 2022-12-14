@@ -40,23 +40,23 @@ import org.springframework.web.servlet.ModelAndView;
 public class MdrtbRegimenPortletController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
-
+	
 	@RequestMapping("/module/mdrtb/regimen/*.portlet")
 	@SuppressWarnings("unchecked")
 	public ModelAndView showPortlet(HttpServletRequest request, ModelMap map) throws Exception {
 		
 		Thread.currentThread().setContextClassLoader(OpenmrsClassLoader.getInstance());
-
+		
 		String portletPath = ObjectUtil.nvlStr(request.getAttribute("javax.servlet.include.servlet_path"), "");
 		
 		if (ObjectUtil.notNull(portletPath)) {
-
+			
 			// Allowable extensions are '' (no extension) and '.portlet'
 			if (portletPath.endsWith("portlet")) {
 				portletPath = portletPath.replace(".portlet", "");
-			}
-			else if (portletPath.endsWith("jsp")) {
-				throw new ServletException("Illegal extension used for portlet: '.jsp'. Allowable extensions are '' (no extension) and '.portlet'");
+			} else if (portletPath.endsWith("jsp")) {
+				throw new ServletException(
+				        "Illegal extension used for portlet: '.jsp'. Allowable extensions are '' (no extension) and '.portlet'");
 			}
 			log.debug("Loading portlet: " + portletPath);
 			
@@ -65,11 +65,12 @@ public class MdrtbRegimenPortletController {
 			map.addAttribute("portletUUID", UUID.randomUUID().toString().replace("-", ""));
 			map.addAttribute("id", request.getAttribute("org.openmrs.portlet.id"));
 			
-			Integer patientId = (Integer)request.getAttribute("org.openmrs.portlet.patientId");
-			String type = (String)request.getAttribute("org.openmrs.module.mdrtb.portlet.regimenType");
-			RegimenHistory history = (RegimenHistory)request.getAttribute("org.openmrs.module.mdrtb.portlet.regimenHistory");
-			Date changeDate = (Date)request.getAttribute("org.openmrs.module.mdrtb.portlet.changeDate");
-			Map<String, String> parameters = (Map<String, String>)request.getAttribute("org.openmrs.portlet.parameters");
+			Integer patientId = (Integer) request.getAttribute("org.openmrs.portlet.patientId");
+			String type = (String) request.getAttribute("org.openmrs.module.mdrtb.portlet.regimenType");
+			RegimenHistory history = (RegimenHistory) request
+			        .getAttribute("org.openmrs.module.mdrtb.portlet.regimenHistory");
+			Date changeDate = (Date) request.getAttribute("org.openmrs.module.mdrtb.portlet.changeDate");
+			Map<String, String> parameters = (Map<String, String>) request.getAttribute("org.openmrs.portlet.parameters");
 			
 			Patient patient = null;
 			Map<String, RegimenHistory> historyGroups = new LinkedHashMap<String, RegimenHistory>();
@@ -80,8 +81,7 @@ public class MdrtbRegimenPortletController {
 				if (ObjectUtil.notNull(type)) {
 					history = historyGroups.get(type);
 				}
-			}
-			else {
+			} else {
 				type = history.getType().getName();
 				historyGroups.put(type, history);
 				patient = history.getPatient();
@@ -98,7 +98,7 @@ public class MdrtbRegimenPortletController {
 				map.addAttribute("regimenAtStart", history.getRegimenOnDate(changeDate, false));
 				map.addAttribute("regimenAtEnd", history.getRegimenOnDate(changeDate, true));
 			}
-
+			
 			map.addAllAttributes(parameters);
 			
 			// Alerts
@@ -120,22 +120,24 @@ public class MdrtbRegimenPortletController {
 					}
 				}
 				
-                // Resistance Probability: Experimental for Hamish
+				// Resistance Probability: Experimental for Hamish
 				if (dstResults.isEmpty()) { // Only show this warning if no DSTs have been done
-	                if ("true".equals(Context.getAdministrationService().getGlobalProperty("mdrtb.enableResistanceProbabilityWarning"))) {
-	                    Map<PredictionModel.RiskFactor, Boolean> riskFactors = PredictionModel.getRiskFactors(patient);
-	                    map.addAttribute("resistanceRiskFactors", riskFactors);
-	                    double probability = PredictionModel.calculateRiskProbability(riskFactors, 1);
-	                    map.addAttribute("resistanceProbability", probability);
-	                    
-	                    Concept inh = getMdrtbService().getConcept(MdrtbConcepts.ISONIAZID);
-	                    Concept rif = getMdrtbService().getConcept(MdrtbConcepts.RIFAMPICIN);
-	                    for (DrugOrder order : activeTbRegimen.getDrugOrders()) {
-	                    	if (order.getConcept().equals(inh) || order.getConcept().equals(rif)) {
-	                    		drugAlerts.put(order, MessageUtil.translate("mdrtb.probabilityOfResistance") + ": " + probability + "%");
-	                    	}
-	                    }
-	                }
+					if ("true".equals(
+					    Context.getAdministrationService().getGlobalProperty("mdrtb.enableResistanceProbabilityWarning"))) {
+						Map<PredictionModel.RiskFactor, Boolean> riskFactors = PredictionModel.getRiskFactors(patient);
+						map.addAttribute("resistanceRiskFactors", riskFactors);
+						double probability = PredictionModel.calculateRiskProbability(riskFactors, 1);
+						map.addAttribute("resistanceProbability", probability);
+						
+						Concept inh = getMdrtbService().getConcept(MdrtbConcepts.ISONIAZID);
+						Concept rif = getMdrtbService().getConcept(MdrtbConcepts.RIFAMPICIN);
+						for (DrugOrder order : activeTbRegimen.getDrugOrders()) {
+							if (order.getConcept().equals(inh) || order.getConcept().equals(rif)) {
+								drugAlerts.put(order,
+								    MessageUtil.translate("mdrtb.probabilityOfResistance") + ": " + probability + "%");
+							}
+						}
+					}
 				}
 			}
 			map.addAttribute("drugAlerts", drugAlerts);

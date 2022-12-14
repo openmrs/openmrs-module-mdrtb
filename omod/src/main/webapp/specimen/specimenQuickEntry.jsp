@@ -55,15 +55,6 @@
 				dateCollected == '') {
 					$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateCollected' text='Please specify the date collected.'/></li>");
 			}
-
-			// date collected is only required parameter (unless an entire row is blank)
-			//if ((identifier != '' | type != '' | appearance !='' | result !='') &&
-			//	dateTested == '') {
-			//		$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateTested' text='Please specify the date tested.'/></li>");
-			//}
-
-			// TODO: add validation of collection date;  we could use the openmrs:datePattern tag, and the
-			// parseSimpleDate library function in openmrs.js, but this will fail with localized patterns, like the French "(jj/mm/aaaa"	
 		}
 		
 		if ($j('#errorDisplay').html() == '') {

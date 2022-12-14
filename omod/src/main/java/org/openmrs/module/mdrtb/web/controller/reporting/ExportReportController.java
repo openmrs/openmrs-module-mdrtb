@@ -28,50 +28,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ExportReportController {
-
-	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true, 10));
-        binder.registerCustomEditor(Concept.class, new ConceptEditor());
-        binder.registerCustomEditor(Location.class, new LocationEditor());
-    }
 	
-	@RequestMapping(method=RequestMethod.GET, value="/module/mdrtb/reporting/exportReport")
-    public void exportReportGet(ModelMap model) {
-        System.out.println("-----Export Report GET-----");
-        List<Location> locations = Context.getLocationService().getAllLocations(false);
-        List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
-        model.addAttribute("locations", locations);
-        model.addAttribute("oblasts", oblasts);
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true, 10));
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
+		binder.registerCustomEditor(Location.class, new LocationEditor());
 	}
-
-	@RequestMapping(method=RequestMethod.POST)//, value="/module/mdrtb/reporting/exportReport"
-    public String exportReportPost(
-    		HttpServletRequest request, HttpServletResponse response,
-    		@RequestParam("oblast") Integer oblastId, 
-    		@RequestParam("district") Integer districtId, 
-    		@RequestParam("facility") Integer facilityId,
-    		@RequestParam("year") Integer year, 
-    		@RequestParam("quarter") String quarter, 
-    		@RequestParam("month") String month, 
-    		@RequestParam("reportDate") String reportDate, 
-    		@RequestParam("table") String table, 
-    		@RequestParam("reportName") String reportName, 
-    		@RequestParam("formPath") String formPath, 
-    		ModelMap model) throws Exception {
-        System.out.println("-----Export Report POST-----");
-        
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/module/mdrtb/reporting/exportReport")
+	public void exportReportGet(ModelMap model) {
+		System.out.println("-----Export Report GET-----");
+		List<Location> locations = Context.getLocationService().getAllLocations(false);
+		List<Region> oblasts = Context.getService(MdrtbService.class).getRegions();
+		model.addAttribute("locations", locations);
+		model.addAttribute("oblasts", oblasts);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST) //, value="/module/mdrtb/reporting/exportReport"
+	public String exportReportPost(HttpServletRequest request, HttpServletResponse response,
+	        @RequestParam("oblast") Integer oblastId, @RequestParam("district") Integer districtId,
+	        @RequestParam("facility") Integer facilityId, @RequestParam("year") Integer year,
+	        @RequestParam("quarter") String quarter, @RequestParam("month") String month,
+	        @RequestParam("reportDate") String reportDate, @RequestParam("table") String table,
+	        @RequestParam("reportName") String reportName, @RequestParam("formPath") String formPath, ModelMap model)
+	        throws Exception {
+		System.out.println("-----Export Report POST-----");
+		
 		Integer oblast = null;
 		Integer location = null;
 		ByteArrayOutputStream baos = null;
 		
 		Location tb08u_location = null;
-//    	String tb08u_oblast = oblastId;
-    	String date = reportDate;
-//        Integer tb08u_year = year;
-//        String tb08u_quarter = "";
-//        String tb08u_month = "";
-        
+		//    	String tb08u_oblast = oblastId;
+		String date = reportDate;
+		//        Integer tb08u_year = year;
+		//        String tb08u_quarter = "";
+		//        String tb08u_month = "";
+		
 		try {
 			/*if(new PDFHelper().isString(quarter)) { 
 				tb08u_quarter = Integer.toString(quarter); 
@@ -86,22 +80,23 @@ public class ExportReportController {
 			if(new PDFHelper().isInt(oblastId)) { 
 				oblast = (Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblastId))).getId(); 
 			}*/
-			if(!(reportDate.equals(""))) {
-				date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new SimpleDateFormat("dd.MM.yyyy").parse(reportDate)); 
+			if (!(reportDate.equals(""))) {
+				date = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
+				        .format(new SimpleDateFormat("dd.MM.yyyy").parse(reportDate));
 			}
-			if(!(table.equals(""))) {
+			if (!(table.equals(""))) {
 				table = table.replaceAll("<br>", " ");
-		    	table = table.replaceAll("<br/>", " ");
-		    	table = table.replaceAll("\"", "'");
-		    	
-		    	String html = "<html><body>" + table + "</body></html>"; 
-	    		//System.out.println(html);
-		    	baos = new PDFHelper().createAndDownloadPdf(html);
-		    	response.setHeader("Expires", "0");
+				table = table.replaceAll("<br/>", " ");
+				table = table.replaceAll("\"", "'");
+				
+				String html = "<html><body>" + table + "</body></html>";
+				//System.out.println(html);
+				baos = new PDFHelper().createAndDownloadPdf(html);
+				response.setHeader("Expires", "0");
 				response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
 				response.setHeader("Pragma", "public");
 				response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition", "attachment; filename=download.pdf" );
+				response.setHeader("Content-Disposition", "attachment; filename=download.pdf");
 				OutputStream os = response.getOutputStream();
 				baos.writeTo(os);
 				os.flush();
@@ -109,21 +104,22 @@ public class ExportReportController {
 			}
 			
 			System.out.println("---POST EXPORT-----");
-	    	System.out.println("oblast: " + oblast);
-	    	System.out.println("location: " + location);
+			System.out.println("oblast: " + oblast);
+			System.out.println("location: " + location);
 			System.out.println("year: " + year);
 			System.out.println("quarter: " + quarter);
 			System.out.println("month: " + month);
-	    	System.out.println("reportDate: " + date);
-	    	System.out.println("formPath: " + formPath);
-	    	System.out.println("reportName: " + reportName);
+			System.out.println("reportDate: " + date);
+			System.out.println("formPath: " + formPath);
+			System.out.println("reportName: " + reportName);
 			System.out.println("\n\n\n");
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("ex", e); 
 		}
-        return TB08uController.doTB08(oblastId, districtId, facilityId, year, quarter, month, model);
-    }
+		catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("ex", e);
+		}
+		return TB08uController.doTB08(oblastId, districtId, facilityId, year, quarter, month, model);
+	}
 	
 }

@@ -24,10 +24,6 @@ public class RegimenReportRow {
 	private Boolean bdq;
 	private Boolean hr;
 	
-	
-	
-	
-	
 	public Patient getPatient() {
 		return patient;
 	}

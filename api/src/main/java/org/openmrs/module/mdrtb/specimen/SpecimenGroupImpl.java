@@ -48,8 +48,6 @@ public class SpecimenGroupImpl implements Specimen {
 	/**
 	 * Getters/setters specific to SpecimenGroupImpl
 	 */
-	
-	
     public List<Specimen> getSpecimens() {
     	return specimens;
     }
@@ -275,6 +273,7 @@ public class SpecimenGroupImpl implements Specimen {
     	return this.specimens.get(0).getPatProgId();
     }
 
+    //TODO: Replace these error messages with an API Exception with constant message
     public void removeScannedLabReport(ScannedLabReport report) {
     	throw new RuntimeException("Illegal attempt to access removeScannedLabReport method of SpecimenGroupImpl. SpecimenGroupImpl should be used for get access only.");
     }

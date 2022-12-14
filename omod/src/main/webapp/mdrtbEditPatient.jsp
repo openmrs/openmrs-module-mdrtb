@@ -214,63 +214,6 @@
 <openmrs:portlet url="addressLayout" id="addressPortlet" size="full" parameters="layoutMode=edit|layoutShowTable=true|layoutShowExtended=false" />
 </spring:nestedPath>
 
-<%-- <table>
-        <tr id="countryDiv">
-			<td align="left"><spring:message code="mdrtb.country" /></td>
-			<td><select name="country" id="country" onchange="fun0()">
-					<option value=""></option>
-					<c:forEach var="c" items="${countries}">
-						<option value="${c.id}" >${c.name}</option>
-					</c:forEach>
-			</select></td>
-			<!-- <td><input type="text" name="otherCountry" id="otherCountry"></td> -->
-		</tr>
-
-		<tr id="oblastDiv">
-			<td align="left"><spring:message code="mdrtb.oblast" /></td>
-			<td><select name="oblast" id="oblast" onchange="fun1()">
-					<option value=""></option>
-					<c:forEach var="o" items="${oblasts}">
-						<option value="${o.id}" >${o.name}</option>
-					</c:forEach>
-			</select></td>
-			<!-- <td><input type="text" name="otherOblast" id="otherOblast"></td> -->
-		</tr>
-		
-		<tr id="districtDiv">
-			<td align="left"><spring:message code="mdrtb.district" /></td>
-			<td><select name="district" id="district" onchange="fun2()">
-					<option value=""></option>
-					<c:forEach var="dist" items="${districts}">
-						<option value="${dist.id}" >${dist.name}</option>
-					</c:forEach>
-			</select></td>
-			<!-- <td><input type="text" name="otherDistrict" id="otherDistrict"></td> -->
-		</tr>
-		
-		<tr id="facilityDiv">
-			<td align="left"><spring:message code="mdrtb.facility" /></td>
-			<td><select name="facility" id="facility">
-					<option value=""></option>
-					<c:forEach var="f" items="${facilities}">
-						<option value="${f.id}" >${f.name}</option>
-					</c:forEach>
-			</select>
-			</td>
-			<!-- <td><input type="text" name="otherFacility" id="otherFacility"></td> -->
-		</tr>
-		<tr>
-			<td align="left"><spring:message code="mdrtb.address1" /></td>
-			<td><input type="text" name="address1" id="address1"></td>	
-		</tr>
-		<tr>
-			<td align="left"><spring:message code="mdrtb.address2" /></td>
-			<td><input type="text" name="address1" id="address2"></td>	
-		</tr>
-	</table>
---%>
-
-
 </td>
 </tr>
 

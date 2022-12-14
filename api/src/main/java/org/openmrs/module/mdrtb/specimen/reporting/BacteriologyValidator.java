@@ -7,7 +7,7 @@ import org.springframework.validation.Validator;
 
 public class BacteriologyValidator implements Validator {
 
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return Bacteriology.class.isAssignableFrom(clazz);
     }
 

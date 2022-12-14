@@ -21,22 +21,18 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.MdrtbTJKPatientDistrictCohortDefinition")
 public class MdrtbTJKPatientDistrictCohortDefinition extends BaseCohortDefinition {
-
-    private static final long serialVersionUID = 1L;
 	
-	@ConfigurationProperty(group="startDateGroup")
+	@ConfigurationProperty(group = "startDateGroup")
 	private Date fromDate;
 	
-	@ConfigurationProperty(group="startDateGroup")
+	@ConfigurationProperty(group = "startDateGroup")
 	private Date toDate;
 	
-	@ConfigurationProperty(group="district")
+	@ConfigurationProperty(group = "district")
 	private String district;
 	
 	//***** CONSTRUCTORS *****
-
 	
-
 	/**
 	 * Default Constructor
 	 */
@@ -54,28 +50,28 @@ public class MdrtbTJKPatientDistrictCohortDefinition extends BaseCohortDefinitio
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	/**
 	 * @return the fromDate
 	 */
 	public Date getFromDate() {
 		return fromDate;
 	}
-
+	
 	/**
 	 * @param fromDate the fromDate to set
 	 */
 	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
 	}
-
+	
 	/**
 	 * @return the toDate
 	 */
 	public Date getToDate() {
 		return toDate;
 	}
-
+	
 	/**
 	 * @param toDate the toDate to set
 	 */
@@ -90,7 +86,7 @@ public class MdrtbTJKPatientDistrictCohortDefinition extends BaseCohortDefinitio
 	public String getDistrict() {
 		return district;
 	}
-
+	
 	/**
 	 * @param district the district to set
 	 */

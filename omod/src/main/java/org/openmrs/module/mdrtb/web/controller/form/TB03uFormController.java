@@ -69,9 +69,8 @@ public class TB03uFormController {
 	@ModelAttribute("tb03u")
 	public TB03uForm getTB03uForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId
-	        /* @RequestParam(required = false, value = "previousProgramId") Integer previousProgramId*/)
-	        throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException,
-	        InvocationTargetException {
+	/* @RequestParam(required = false, value = "previousProgramId") Integer previousProgramId*/) throws SecurityException,
+	        IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
@@ -129,7 +128,7 @@ public class TB03uFormController {
 			Region ob = null;
 			District dist = null;
 			
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			if (obName != null) {
 				for (Region o : oblasts) {
@@ -140,7 +139,7 @@ public class TB03uFormController {
 				}
 			}
 			if (ob != null) {
-				districts = Context.getService(MdrtbService.class).getDistricts(ob.getId());
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(ob.getId());
 				model.addAttribute("districts", districts);
 				if (distName != null) {
 					for (District d : districts) {
@@ -155,9 +154,9 @@ public class TB03uFormController {
 				}
 			}
 			if (dist != null) {
-				facilities = Context.getService(MdrtbService.class).getFacilities(dist.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(dist.getId());
 				if (facilities.size() == 0) { // Maybe it's for Dushanbe
-					facilities = Context.getService(MdrtbService.class).getFacilities(ob.getId());
+					facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(ob.getId());
 				}
 				model.addAttribute("facilities", facilities);
 				if (facName != null) {
@@ -169,19 +168,18 @@ public class TB03uFormController {
 					}
 				}
 			}
-		}
-		else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
 		} else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			if (facilities.size() == 0) { // Maybe it's for Dushanbe
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(oblast));
 			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
@@ -244,25 +242,25 @@ public class TB03uFormController {
 		PatientProgram pp = tpp.getPatientProgram();
 		
 		if (outcome != null) {
-			ProgramWorkflow outcomeFlow = Context.getProgramWorkflowService()
-					.getWorkflow(pp.getProgram(), Context.getService(MdrtbService.class)
-						.getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME).getName().toString());
+			ProgramWorkflow outcomeFlow = Context.getProgramWorkflowService().getWorkflow(pp.getProgram(), Context
+			        .getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_TREATMENT_OUTCOME).getName().toString());
 			ProgramWorkflowState outcomeState = Context.getProgramWorkflowService().getState(outcomeFlow,
-				outcome.getName().toString());
+			    outcome.getName().toString());
 			tpp.setOutcome(outcomeState);
 			try {
 				tpp.setDateCompleted(tb03u.getTreatmentOutcomeDate());
 			}
-			catch (Exception e) {
-			}
-		}
-		else {
+			catch (Exception e) {}
+		} else {
 			tpp.setDateCompleted(null);
-		}		
+		}
 		if (group != null) {
-			Concept cat4Concept = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
-			ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(pp.getProgram(), cat4Concept.getName(Context.getLocale()).getName());
-			ProgramWorkflowState groupState = Context.getProgramWorkflowService().getState(groupFlow, group.getName(Context.getLocale()).getName());
+			Concept cat4Concept = Context.getService(MdrtbService.class)
+			        .getConcept(MdrtbConcepts.CAT_4_CLASSIFICATION_PREVIOUS_TREATMENT);
+			ProgramWorkflow groupFlow = Context.getProgramWorkflowService().getWorkflow(pp.getProgram(),
+			    cat4Concept.getName(Context.getLocale()).getName());
+			ProgramWorkflowState groupState = Context.getProgramWorkflowService().getState(groupFlow,
+			    group.getName(Context.getLocale()).getName());
 			tpp.setClassificationAccordingToPreviousTreatment(groupState);
 		}
 		

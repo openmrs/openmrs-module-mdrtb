@@ -6,8 +6,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/module/mdrtb/mdrtbSimilarPatientCheck.form")
 public class SimilarPatientCheckController {
-
-	
-	
 	
 }

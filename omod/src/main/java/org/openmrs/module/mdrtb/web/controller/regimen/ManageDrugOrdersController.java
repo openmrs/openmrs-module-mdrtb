@@ -16,20 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class ManageDrugOrdersController {
-
-    @RequestMapping("/module/mdrtb/regimen/manageDrugOrders")
-    public void manageRegimens(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		ModelMap model) {
-    	
-    	model.addAttribute("patientId", patientId);
-    	model.addAttribute("patientProgramId", patientProgramId);
-    	
-    	Patient p = Context.getPatientService().getPatient(patientId);
-    	model.addAttribute("patient", p);
-
-    	Map<String, RegimenHistory> m = RegimenUtils.getRegimenHistory(p);
-    	model.addAttribute("regimenHistoryGroups", m);
-    }
+	
+	@RequestMapping("/module/mdrtb/regimen/manageDrugOrders")
+	public void manageRegimens(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId, ModelMap model) {
+		
+		model.addAttribute("patientId", patientId);
+		model.addAttribute("patientProgramId", patientProgramId);
+		
+		Patient p = Context.getPatientService().getPatient(patientId);
+		model.addAttribute("patient", p);
+		
+		Map<String, RegimenHistory> m = RegimenUtils.getRegimenHistory(p);
+		model.addAttribute("regimenHistoryGroups", m);
+	}
 }

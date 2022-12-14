@@ -1,5 +1,6 @@
 package org.openmrs.module.mdrtb.reporting.definition.custom;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class MdrtbPreviousProgramOutcomeCohortDefinitionEvaluator implements Coh
 
 		GregorianCalendar gc2 = new GregorianCalendar();
 		gc2.setTime(cd.getFromDate());
-		gc.add(gc.DATE, -1);
+		gc.add(Calendar.DATE, -1);
 
 		// get all the program during the specified period
 		Map<Integer, List<MdrtbPatientProgram>> mdrtbPatientProgramsMap = ReportUtil

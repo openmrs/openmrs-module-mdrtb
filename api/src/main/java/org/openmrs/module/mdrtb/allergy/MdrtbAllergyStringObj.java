@@ -34,7 +34,4 @@ public class MdrtbAllergyStringObj {
     public void setDate(Date date) {
         this.date = date;
     }
-    
-    
-    
 }

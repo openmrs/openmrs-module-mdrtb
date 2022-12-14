@@ -80,7 +80,7 @@ public class WHOForm06 implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public ReportData evaluateReport(EvaluationContext context) {
 
     	ReportDefinition report = new ReportDefinition();

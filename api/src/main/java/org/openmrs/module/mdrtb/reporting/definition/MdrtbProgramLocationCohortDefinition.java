@@ -9,7 +9,6 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.ProgramLocationCohortDefinition")
 public class MdrtbProgramLocationCohortDefinition extends BaseCohortDefinition {
-	private static final long serialVersionUID = 1L;
 	
 	@ConfigurationProperty(group="location")
 	private Location location;

@@ -6,11 +6,8 @@ import org.openmrs.module.mdrtb.reporting.definition.MdrtbTreatmentStartedCohort
 import org.openmrs.module.reporting.common.Localized;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
 
-
 @Localized("mdrtb.reporting.MdrtbPreviousProgramOutcomeCohortDefinition")
-public class MdrtbPreviousProgramOutcomeCohortDefinition  extends MdrtbTreatmentStartedCohortDefinition {
-
-	private static final long serialVersionUID = 1L;
+public class MdrtbPreviousProgramOutcomeCohortDefinition extends MdrtbTreatmentStartedCohortDefinition {
 	
 	// note that, by convention, the first month of treatment is referred to as "treatment month 0"
 	// so, for instance, if you want to test Bac results during the first 5 months of treatment,
@@ -26,9 +23,8 @@ public class MdrtbPreviousProgramOutcomeCohortDefinition  extends MdrtbTreatment
 	@ConfigurationProperty
 	private String outcome;
 	
-	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -44,37 +40,31 @@ public class MdrtbPreviousProgramOutcomeCohortDefinition  extends MdrtbTreatment
 	public String toString() {
 		return super.toString();
 	}
-
+	
 	//***** PROPERTY ACCESS *****
 	
 	public Date getFromDate() {
 		return fromDate;
 	}
-
+	
 	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
 	}
-
+	
 	public Date getToDate() {
 		return toDate;
 	}
-
+	
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
-
+	
 	public String getOutcome() {
 		return outcome;
 	}
-
+	
 	public void setOutcome(String outcome) {
 		this.outcome = outcome;
 	}
-
-	
-	
-	
-	
-
 	
 }

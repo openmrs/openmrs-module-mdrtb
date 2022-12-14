@@ -101,19 +101,7 @@ public class AEFormController {
 			try {
 				aeForm = getAEForm(-1, patientProgramId);
 			}
-			catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			}
-			catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			}
-			catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			catch (InvocationTargetException e) {
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

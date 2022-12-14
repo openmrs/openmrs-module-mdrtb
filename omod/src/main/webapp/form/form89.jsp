@@ -11,9 +11,6 @@
 <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
@@ -314,16 +311,6 @@
 <td><spring:message code="mdrtb.form89.registrationDate" text="Date"/>:</td>
 <td><openmrs:formatDate date="${form89.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${form89.provider.personName}</td>
-</tr>
-  --%>
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${form89.location.displayString}</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>
@@ -712,29 +699,6 @@
 <td><openmrs_tag:dateField formFieldName="encounterDatetime" startValue="${form89.encounterDatetime}"/></td>
 </tr>
 
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>
-<select name="provider">
-<option value=""></option>
-<c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${form89.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>
-<select name="location">
-<option value=""></option>
-<c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${form89.location == location}">selected</c:if>>${location.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
 </table>
 
 <table>
@@ -743,7 +707,6 @@
 			<td><select name="oblast" id="oblast" onchange="fun1()" >
 					<option value=""></option>
 					<c:forEach var="o" items="${oblasts}">
-						<%-- <option value="${o.id}">${o.name}</option> --%>
 						<option value="${o.id}" <c:if test="${o.name == form89.location.stateProvince}">selected</c:if> >${o.name}</option>
 					</c:forEach>
 			</select></td>
@@ -754,7 +717,6 @@
 			<td><select name="district" id="district" onchange="fun2()" >
 					<option value=""></option>
 					<c:forEach var="dist" items="${districts}">
-						<%-- <option value="${dist.id}">${dist.name}</option> --%>
 						<option value="${dist.id}" <c:if test="${dist.name == form89.location.countyDistrict}">selected</c:if> >${dist.name}</option>
 					</c:forEach>
 			</select></td>
@@ -765,7 +727,6 @@
 			<td><select name="facility" id="facility">
 					<option value=""></option>
 					<c:forEach var="f" items="${facilities}">
-						<%-- <option value="${f.id}">${f.name}</option> --%>
 						<option value="${f.id}" <c:if test="${f.name == form89.location.address4}">selected</c:if> >${f.name}</option>
 					</c:forEach>
 			</select>

@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -48,7 +47,6 @@ public class DrugForecastUtil {
 				addToSet(temp, o.getDrug(), o.getPatient().getPatientId());
 			}
 		}
-		final Locale loc = Context.getLocale();
 		Map<Drug, Integer> ret = new TreeMap<Drug, Integer>(new Comparator<Drug>() {
 			public int compare(Drug left, Drug right) {
 				return left.getName().compareTo(right.getName());
@@ -67,10 +65,9 @@ public class DrugForecastUtil {
 				addToSet(temp, o.getConcept(), o.getPatient().getPatientId());
 			}
 		}
-		final Locale loc = Context.getLocale();
 		Map<Concept, Integer> ret = new TreeMap<Concept, Integer>(new Comparator<Concept>() {
 			public int compare(Concept left, Concept right) {
-				return left.getBestName(loc).getName().compareTo(right.getBestName(loc).getName());
+				return left.getName(Context.getLocale()).getName().compareTo(right.getName(Context.getLocale()).getName());
 			}
 		});
 		for (Map.Entry<Concept, Set<Integer>> e : temp.entrySet()) {
@@ -214,7 +211,8 @@ public class DrugForecastUtil {
 					temp = new PatientSLDMap();
 					temp.setPatient(tempPat);
 
-					for (DrugOrder f : Context.getOrderService().getDrugOrdersByPatient(tempPat)) {
+					List<DrugOrder> drugOrdersByPatient = Context.getOrderService().getDrugOrdersByPatient(tempPat);
+					for (DrugOrder f : drugOrdersByPatient) {
 
 						if (f.getConcept() != null) {
 							if (f.getConcept().equals(

@@ -4396,6 +4396,4 @@ public class TB07uData  {
 	public void setTotalIndBdqXdrPreXdrHiv(Integer totalIndBdqXdrPreXdrHiv) {
 		this.totalIndBdqXdrPreXdrHiv = totalIndBdqXdrPreXdrHiv;
 	}
-	
-	
 }

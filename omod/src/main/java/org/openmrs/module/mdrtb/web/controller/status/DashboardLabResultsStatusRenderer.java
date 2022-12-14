@@ -69,8 +69,8 @@ public class DashboardLabResultsStatusRenderer implements LabResultsStatusRender
 		
 		if (culture != null) {
 			String[] params = {
-			        MdrtbUtil.getConceptName(culture.getResult(), Context.getLocale().getLanguage(), ConceptNameType.FULLY_SPECIFIED)
-			                .getName(),
+			        MdrtbUtil.getConceptName(culture.getResult(), Context.getLocale().getLanguage(),
+			            ConceptNameType.FULLY_SPECIFIED).getName(),
 			        culture.getDateCollected() != null ? df.format(culture.getDateCollected()) : "(N/A)",
 			        culture.getLab() != null ? culture.getLab().getDisplayString() : "(N/A)" };
 			if (status.getPatientProgram() != null) {

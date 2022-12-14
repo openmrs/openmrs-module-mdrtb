@@ -73,29 +73,20 @@ public class TransferInController {
 		if (pp.getProgram().getConcept().getId().intValue() == Context.getService(MdrtbService.class)
 		        .getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId().intValue()) {
 			mdr = true;
-			System.out.println("mdr");
 		}
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			TransferInForm form = null;
 			if (!mdr) {
 				TbPatientProgram tbProgram = Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-				
 				form = new TransferInForm(tbProgram.getPatient());
-				
-				// prepopulate the intake form with any program information
-				//form.setEncounterDatetime(tbProgram.getDateEnrolled());
 				form.setLocation(tbProgram.getLocation());
 			}
 			
 			else {
 				MdrtbPatientProgram mdrtbProgram = Context.getService(MdrtbService.class)
 				        .getMdrtbPatientProgram(patientProgramId);
-				
 				form = new TransferInForm(mdrtbProgram.getPatient());
-				
-				// prepopulate the intake form with any program information
-				//form.setEncounterDatetime(mdrtbProgram.getDateEnrolled());
 				form.setLocation(mdrtbProgram.getLocation());
 			}
 			return form;
@@ -129,7 +120,7 @@ public class TransferInController {
 				}
 			}
 			
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 			Location location = form.getLocation();
 			if (location != null) {
@@ -145,7 +136,7 @@ public class TransferInController {
 								if (facilities != null) {
 									model.addAttribute("facilities", facilities);
 									for (Facility f : facilities) {
-										if (f.getName().equals(location.getRegion())) {
+										if (f.getName().equals(location.getAddress4())) {
 											model.addAttribute("facilitySelected", f.getId());
 											break;
 										}
@@ -158,20 +149,18 @@ public class TransferInController {
 					}
 				}
 			}
-		}
-		else if (district == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+		} else if (district == null) {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
 			model.addAttribute("districts", districts);
-		}
-		else {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
-			districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+		} else {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+			facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 			if (facilities.size() == 0) { // Maybe it's for Dushanbe
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(oblast));
 			}
 			model.addAttribute("oblastSelected", oblast);
 			model.addAttribute("oblasts", oblasts);
@@ -186,7 +175,6 @@ public class TransferInController {
 		return new ModelAndView("/module/mdrtb/form/transferIn", model);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processTransferInForm(@ModelAttribute("transferIn") TransferInForm tif, BindingResult errors,
 	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
@@ -239,8 +227,7 @@ public class TransferInController {
 				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
 				    Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId).getPatient().getId(),
 				    patientProgramId);
-			}
-			else {
+			} else {
 				returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";
 				returnUrl = MdrtbWebUtil.appendParameters(returnUrl,
 				    Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId).getPatient().getId(),

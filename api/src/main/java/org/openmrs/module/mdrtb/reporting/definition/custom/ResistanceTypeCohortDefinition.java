@@ -22,9 +22,9 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.ResistanceTypeCohortDefinition")
 public class ResistanceTypeCohortDefinition extends BaseCohortDefinition {
-
-    public static final long serialVersionUID = 1L;
-    
+	
+	public static final long serialVersionUID = 1L;
+	
 	@ConfigurationProperty
 	private TbClassification resistanceType;
 	
@@ -34,10 +34,8 @@ public class ResistanceTypeCohortDefinition extends BaseCohortDefinition {
 	@ConfigurationProperty
 	private Date endDate;
 	
-	
-	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -55,32 +53,29 @@ public class ResistanceTypeCohortDefinition extends BaseCohortDefinition {
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	public Date getStartDate() {
 		return startDate;
 	}
-
+	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
+	
 	public Date getEndDate() {
 		return endDate;
 	}
-
+	
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
+	
 	public TbClassification getResistanceType() {
 		return resistanceType;
 	}
-
+	
 	public void setResistanceType(TbClassification resistanceType) {
 		this.resistanceType = resistanceType;
 	}
-
-
-
 	
 }

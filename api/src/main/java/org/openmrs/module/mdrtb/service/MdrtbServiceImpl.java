@@ -585,19 +585,14 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Collection<Person> getProviders() {
-		// TODO: this should be customizable, so that other installs can define there
-		// own provider lists?
 		// TODO: Use the Provider service instead
 		Role provider = Context.getUserService().getRole("Provider");
 		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
-		
 		// add all the persons to a sorted set sorted by name
 		SortedSet<Person> persons = new TreeSet<Person>(new PersonByNameComparator());
-		
 		for (User user : providers) {
 			persons.add(user.getPerson());
 		}
-		
 		return persons;
 	}
 	
@@ -826,10 +821,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	public Set<ProgramWorkflowState> getPossibleClassificationsAccordingToPatientGroups() {
 		return getPossibleTbWorkflowStates(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_GROUP));
 	}
-	
+
+	@Deprecated
 	public List<String> getAllRayonsTJK() {
-		List<String> rayonList = null;
-		
 		return dao.getAllRayonsTJK();
 	}
 	
@@ -881,6 +875,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return specimen.addXpert();
 	}
 	
+	@Deprecated
 	public Xpert getXpert(Obs obs) {
 		// don't need to do much error checking here because the constructor will handle
 		// it
@@ -888,7 +883,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 	}
 	
 	public Xpert getXpert(Integer obsId) {
-		return getXpert(Context.getObsService().getObs(obsId));
+		return new XpertImpl(Context.getObsService().getObs(obsId));
 	}
 	
 	public void saveHAIN(HAIN hain) {
@@ -993,10 +988,10 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return this.getConcept(MdrtbConcepts.XPERT_MTB_BURDEN).getAnswers();
 	}
 	
-	public Location getLocation(Integer oblastId, Integer districtId, Integer facilityId) {
-		if (oblastId == null || districtId == null)
+	public Location getLocation(Integer regionId, Integer districtId, Integer facilityId) {
+		if (regionId == null || districtId == null)
 			return null;
-		Region o = getOblast(oblastId);
+		Region o = getRegion(regionId);
 		District d = getDistrict(districtId);
 		Facility f = null;
 		if (facilityId != null) {
@@ -1020,7 +1015,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return null;
 	}
 	
-	public List<Region> getOblasts() {
+	public List<Region> getRegions() {
 		List<Region> oblasts = new ArrayList<Region>();
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Region.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
@@ -1029,9 +1024,9 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return oblasts;
 	}
 	
-	public List<Region> getOblasts(int parentId) {
+	public List<Region> getOblasts(Integer parentId) {
 		List<Region> oblasts = new ArrayList<Region>();
-		BaseLocation parent = new District("", parentId, District.HIERARCHY_LEVEL);
+		BaseLocation parent = new District("", parentId);
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
 		for (BaseLocation baseLocation : list) {
 			oblasts.add(new Region(baseLocation));
@@ -1039,22 +1034,22 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return oblasts;
 	}
 	
-	public Region getOblast(Integer oblastId) {
+	public Region getRegion(Integer regionId) {
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByHierarchyLevel(Region.HIERARCHY_LEVEL);
 		for (BaseLocation baseLocation : list) {
-			if (baseLocation.getId().equals(oblastId)) {
+			if (baseLocation.getId().equals(regionId)) {
 				return new Region(baseLocation);
 			}
 		}
 		return null;
 	}
 	
-	public List<Location> getLocationsFromOblastName(Region oblast) {
+	public List<Location> getLocationsFromRegion(Region region) {
 		List<Location> locationList = new ArrayList<Location>();
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
 		for (Location loc : locations) {
 			if (loc.getStateProvince() != null) {
-				if (loc.getStateProvince().equals(oblast.getName()))
+				if (loc.getStateProvince().equals(region.getName()))
 					locationList.add(loc);
 			}
 		}
@@ -1091,7 +1086,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return facilityList;
 	}
 	
-	public List<Facility> getFacilities(int parentId) {
+	public List<Facility> getFacilitiesByParent(Integer parentId) {
 		List<Facility> facilities = new ArrayList<Facility>();
 		BaseLocation parent = dao.getAddressHierarchyLocation(parentId);
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
@@ -1103,8 +1098,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return facilities;
 	}
 	
-	public List<Facility> getRegFacilities(int parentId) {
-		List<Facility> facilities = getFacilities(parentId);
+	public List<Facility> getRegFacilities(Integer parentId) {
+		List<Facility> facilities = getFacilitiesByParent(parentId);
 		Set<Facility> filtered = new HashSet<Facility>();
 		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
 		String labIds[] = labIdsProperty.split("\\|");
@@ -1131,7 +1126,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return null;
 	}
 	
-	public List<Location> getLocationsFromFacilityName(Facility facility) {
+	public List<Location> getLocationsFromFacility(Facility facility) {
 		List<Location> locationList = new ArrayList<Location>();
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
 		for (Location loc : locations) {
@@ -1143,7 +1138,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return locationList;
 	}
 	
-	public List<District> getDistricts(int parentId) {
+	public List<District> getDistrictsByParent(Integer parentId) {
 		List<District> districts = new ArrayList<District>();
 		BaseLocation parent = dao.getAddressHierarchyLocation(parentId);
 		List<BaseLocation> list = dao.getAddressHierarchyLocationsByParent(parent);
@@ -1156,8 +1151,8 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 	}
 	
-	public List<District> getRegDistricts(int parentId) {
-		List<District> districts = getDistricts(parentId);
+	public List<District> getRegDistricts(Integer parentId) {
+		List<District> districts = getDistrictsByParent(parentId);
 		Set<District> filtered = new HashSet<District>();
 		String labIdsProperty = Context.getAdministrationService().getGlobalProperty("mdrtb.lab_entry_ids");
 		String labIds[] = labIdsProperty.split("\\|");
@@ -1215,7 +1210,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return new ArrayList<District>(filtered);
 	}
 	
-	public List<Location> getLocationsFromDistrictName(District district) {
+	public List<Location> getLocationsFromDistrict(District district) {
 		List<Location> locationList = new ArrayList<Location>();
 		List<Location> locations = Context.getLocationService().getAllLocations(false);
 		for (Location loc : locations) {
@@ -1597,11 +1592,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		Region o = null;
 		if (!oblast.equals("") && location == null)
-			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
+			o = Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
 		
 		List<Location> locList = new ArrayList<Location>();
 		if (o != null && location == null)
-			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
 		else if (location != null)
 			locList.add(location);
 		List<Encounter> temp = null;
@@ -1678,11 +1673,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		Region o = null;
 		if (!oblast.equals("") && location == null)
-			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
+			o = Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
 		
 		List<Location> locList = new ArrayList<Location>();
 		if (o != null && location == null)
-			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
 		else if (location != null)
 			locList.add(location);
 		List<Encounter> temp = null;
@@ -1753,11 +1748,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		
 		Region o = null;
 		if (!oblast.equals("") && location == null)
-			o = Context.getService(MdrtbService.class).getOblast(Integer.parseInt(oblast));
+			o = Context.getService(MdrtbService.class).getRegion(Integer.parseInt(oblast));
 		
 		List<Location> locList = new ArrayList<Location>();
 		if (o != null && location == null)
-			locList = Context.getService(MdrtbService.class).getLocationsFromOblastName(o);
+			locList = Context.getService(MdrtbService.class).getLocationsFromRegion(o);
 		else if (location != null)
 			locList.add(location);
 		List<Encounter> temp = null;
@@ -2031,7 +2026,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		List<Location> allLocations = Context.getLocationService().getAllLocations();
 		ArrayList<Location> locList = new ArrayList<Location>();
 		for (Location location : allLocations) {
-			Region oblast = oblastId == null ? null : getOblast(oblastId);
+			Region oblast = oblastId == null ? null : getRegion(oblastId);
 			District district = districtId == null ? null : getDistrict(districtId);
 			Facility facility = facilityId == null ? null : getFacility(facilityId);
 			boolean hasRegion = oblast != null;
@@ -2443,11 +2438,11 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 			return null;
 		
 		if (districtId == null && facilityId == null) { // means they stopped at oblast??
-			List<District> distList = getDistricts(oblastId);
+			List<District> distList = getDistrictsByParent(oblastId);
 			for (District d : distList) {
 				location = getLocation(oblastId, d.getId(), null);
 				if (location == null) {
-					List<Facility> facs = getFacilities(d.getId().intValue());
+					List<Facility> facs = getFacilitiesByParent(d.getId().intValue());
 					for (Facility f : facs) {
 						location = getLocation(oblastId, d.getId(), f.getId());
 						if (location != null) {
@@ -2461,7 +2456,7 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		} else if (facilityId == null) {// means they stopped at district - so fetch all facility data
 			location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, null);
 			if (location == null) { // district that has a set of facilities under it
-				List<Facility> facs = Context.getService(MdrtbService.class).getFacilities(districtId.intValue());
+				List<Facility> facs = Context.getService(MdrtbService.class).getFacilitiesByParent(districtId.intValue());
 				for (Facility f : facs) {
 					location = Context.getService(MdrtbService.class).getLocation(oblastId, districtId, f.getId());
 					if (location != null) {

@@ -3,7 +3,6 @@
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
-
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 

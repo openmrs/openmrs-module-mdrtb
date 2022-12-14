@@ -10,36 +10,37 @@ import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 
 public class TransferInForm extends AbstractSimpleForm {
-
+	
 	public TransferInForm() {
 		super();
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Transfer In"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Transfer In"));
 		
 	}
 	
 	public TransferInForm(Patient patient) {
 		super(patient);
-		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Transfer In"));		
+		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Transfer In"));
 	}
 	
 	public TransferInForm(Encounter encounter) {
 		super(encounter);
 		
 	}
-
+	
 	public Integer getPatProgId() {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		if (obs == null) {
 			return null;
-		}
-		else {
+		} else {
 			return obs.getValueNumeric().intValue();
 		}
 	}
 	
 	public void setPatProgId(Integer id) {
-		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
 		
 		// if this obs have not been created, and there is no data to add, do nothing
 		if (obs == null && id == null) {
@@ -55,20 +56,20 @@ public class TransferInForm extends AbstractSimpleForm {
 				obs.setVoided(true);
 				obs.setVoidReason("voided by Mdr-tb module specimen tracking UI");
 			}
-				
+			
 			// now create the new Obs and add it to the encounter	
-			if(id != null) {
-				obs = new Obs (encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+			if (id != null) {
+				obs = new Obs(encounter.getPatient(),
+				        Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID),
+				        encounter.getEncounterDatetime(), encounter.getLocation());
 				obs.setValueNumeric(new Double(id));
 				encounter.addObs(obs);
 			}
-		} 
+		}
 	}
-	
-	
 	
 	public String getLink() {
-		return "/module/mdrtb/form/transferIn.form?patientProgramId=" + getPatProgId() + "&encounterId=" + getEncounter().getId();
+		return "/module/mdrtb/form/transferIn.form?patientProgramId=" + getPatProgId() + "&encounterId="
+		        + getEncounter().getId();
 	}
-	
 }

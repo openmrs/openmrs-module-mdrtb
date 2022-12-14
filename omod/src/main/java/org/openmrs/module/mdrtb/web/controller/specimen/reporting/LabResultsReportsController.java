@@ -16,22 +16,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LabResultsReportsController {
-
+	
 	@SuppressWarnings("unchecked")
-    @RequestMapping("/module/mdrtb/specimen/labResultsReports.form")
-	public ModelAndView showReports(ModelMap map) {		
-				
+	@RequestMapping("/module/mdrtb/specimen/labResultsReports.form")
+	public ModelAndView showReports(ModelMap map) {
+		
 		List<Status> status = new ArrayList<Status>();
 		
 		for (MdrtbPatientProgram program : Context.getService(MdrtbService.class).getAllMdrtbPatientPrograms()) {
 			if (!program.getPatient().isVoided()) {
-				status.add(new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program)); 
+				status.add(new LabResultsStatusCalculator(new DashboardLabResultsStatusRenderer()).calculate(program));
 			}
 		}
 		
 		map.put("labResultsStatus", status);
 		
-		return new ModelAndView("/module/mdrtb/specimen/labResultsReports", map);		
+		return new ModelAndView("/module/mdrtb/specimen/labResultsReports", map);
 	}
 	
 }

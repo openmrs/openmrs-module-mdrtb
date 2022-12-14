@@ -44,20 +44,10 @@ public class MdrtbAllergyUtils {
                    MdrtbAllergyStringObj maso = new MdrtbAllergyStringObj();
                    for (Obs o : oParent.getGroupMembers()){
                        if (o.getConcept().getConceptId().equals(effect.getConceptId()) && o.getValueCoded() != null){
-                           maso.setEffect(o.getValueCoded().getBestShortName(Context.getLocale()).getName());
+                           maso.setEffect(o.getValueCoded().getShortNameInLocale(Context.getLocale()).getName());
                        } 
-						/* TODO: These concepts are marked for removal for being legacy concepts
-						//	Concept effectNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_NON_CODED);
-						//	Concept medicationNC = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EFFECT_MEDICATION_NON_CODED);
-						   else if (o.getConcept().getConceptId().equals(effectNC.getConceptId())){
-						       maso.setEffect(o.getValueText());
-						   } 
-						   else if (o.getConcept().getConceptId().equals(medicationNC.getConceptId())){
-						       maso.setMedication(o.getValueText());
-						   } 
-						*/
                        else if (o.getConcept().getConceptId().equals(medication.getConceptId()) && o.getValueCoded() != null){
-                           maso.setMedication(o.getValueCoded().getBestShortName(Context.getLocale()).getName());
+                           maso.setMedication(o.getValueCoded().getShortNameInLocale(Context.getLocale()).getName());
                        } 
                        else if (o.getConcept().getConceptId().equals(actionTaken.getConceptId())){
                            maso.setSupportingTreatment(o.getValueText());

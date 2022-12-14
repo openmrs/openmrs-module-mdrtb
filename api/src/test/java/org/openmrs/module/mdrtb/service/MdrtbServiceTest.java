@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -17,8 +18,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.Country;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenImpl;
@@ -38,6 +39,7 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Before
 	public void runBeforeEachTest() throws Exception {
 		super.initTestData();
+		service = Context.getService(MdrtbService.class);
 	}
 	
 	/**
@@ -201,9 +203,9 @@ public class MdrtbServiceTest extends MdrtbBase {
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getProviders()}.
 	 */
 	@Test
-	@Ignore
 	public final void testGetProviders() {
-		fail("Not yet implemented"); // TODO
+		Collection<Person> providers = service.getProviders();
+		assertTrue(providers.contains(owais.getPerson()));
 	}
 
 	/**
@@ -219,22 +221,79 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getAllRayonsTJK()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetAllRayonsTJK() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getAllMdrtbPatientProgramsEnrolledInDateRange(java.util.Date, java.util.Date)}.
 	 */
 	@Test
 	@Ignore
 	public final void testGetAllMdrtbPatientProgramsEnrolledInDateRange() {
 		fail("Not yet implemented"); // TODO
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getXpert(org.openmrs.Obs)}.
+	 */
+	@Test
+	public final void testGetGetXpert() {
+		Integer obsId = -1; //TODO: Save an obs with Xpert concept ID
+		service.getXpert(obsId);
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getXpert(org.openmrs.Obs)}.
+	 */
+	@Test(expected = RuntimeException.class)
+	public final void testThrowExceptionGetXpert() {
+		Integer obsId = -1;
+		// Throw exception when obs doesn't exist
+		service.getXpert(obsId);
+		// Throw exception when obs concept is incorrect
+		//TODO: 
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(org.openmrs.Obs)}.
+	 */
+	@Test
+	public final void testGetHAIN() {
+		Integer obsId = -1; //TODO: Save an obs with HAIN concept ID
+		service.getHAIN(obsId);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(org.openmrs.Obs)}.
+	 */
+	@Test(expected = RuntimeException.class)
+	public final void testThrowExceptionGetHAIN() {
+		Integer obsId = -1;
+		// Throw exception when obs doesn't exist
+		service.getHAIN(obsId);
+		// Throw exception when obs concept is incorrect
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(org.openmrs.Obs)}.
+	 */
+	@Test
+	public final void testGetHAIN2() {
+		Integer obsId = -1; //TODO: Save an obs with HAIN2 concept ID
+		service.getHAIN(obsId);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(2org.openmrs.Obs)}.
+	 */
+	@Test(expected = RuntimeException.class)
+	public final void testThrowExceptionGetHAIN2() {
+		Integer obsId = -1;
+		// Throw exception when obs doesn't exist
+		service.getHAIN2(obsId);
+		// Throw exception when obs concept is incorrect
 	}
 
 	/**
@@ -254,26 +313,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testCreateXpert() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getXpert(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetXpertObs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getXpert(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetXpertInteger() {
 		fail("Not yet implemented"); // TODO
 	}
 
@@ -299,36 +338,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetHAINObs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetHAINInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN2(org.openmrs.Obs)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetHAIN2Obs() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#createHAIN2(org.openmrs.module.mdrtb.specimen.Specimen)}.
 	 */
 	@Test
@@ -344,246 +353,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testSaveHAIN2() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getHAIN2(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetHAIN2Integer() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleMtbResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleMtbResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleRifResistanceResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleRifResistanceResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleInhResistanceResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleInhResistanceResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleFqResistanceResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleFqResistanceResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleInjResistanceResults()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleInjResistanceResults() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getPossibleXpertMtbBurdens()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetPossibleXpertMtbBurdens() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getOblasts()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetOblasts() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getOblast(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetOblast() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationsFromOblastName(org.openmrs.module.mdrtb.Region)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetLocationsFromOblastName() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getFacilities()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetFacilities() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getRegFacilities()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetRegFacilities() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocation(java.lang.Integer, java.lang.Integer, java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetLocation() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getFacilities(int)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetFacilitiesInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getRegFacilities(int)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetRegFacilitiesInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getFacility(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetFacility() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationsFromFacilityName(org.openmrs.module.mdrtb.Facility)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetLocationsFromFacilityName() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDistricts(int)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDistrictsInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getRegDistricts(int)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetRegDistrictsInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDistrict(java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDistrictInteger() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDistrict(java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDistrictString() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getDistricts()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetDistricts() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getRegDistricts()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetRegDistricts() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationsFromDistrictName(org.openmrs.module.mdrtb.District)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetLocationsFromDistrictName() {
 		fail("Not yet implemented"); // TODO
 	}
 
@@ -1059,28 +828,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 
 	/**
 	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getCountries()}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetCountries() {
-		List<Country> list = service.getCountries();
-		Country england = new Country("England", 1);
-		assertTrue(list.contains(england));
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getOblasts(int)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetOblastsInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getTB03FormsForProgram(org.openmrs.Patient, java.lang.Integer)}.
 	 */
 	@Test
@@ -1186,16 +933,6 @@ public class MdrtbServiceTest extends MdrtbBase {
 	@Test
 	@Ignore
 	public final void testGetAEFormsForProgram() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.MdrtbServiceImpl#getLocationListForDushanbe(java.lang.Integer, java.lang.Integer, java.lang.Integer)}.
-	 */
-	@Test
-	@Ignore
-	public final void testGetLocationListForDushanbe() {
 		fail("Not yet implemented"); // TODO
 	}
 
@@ -1308,5 +1045,4 @@ public class MdrtbServiceTest extends MdrtbBase {
 	public final void testGetTbPatientProgram() {
 		fail("Not yet implemented"); // TODO
 	}
-
 }

@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.mdrtb.reporting.definition.custom;
 
-import java.util.Date;
-
 import org.openmrs.Cohort;
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
@@ -44,10 +42,6 @@ public class DstResultExistsCohortDefinitionEvaluator implements CohortDefinitio
 
 		DstResultExistsCohortDefinition cd = (DstResultExistsCohortDefinition) cohortDefinition;
 		// Cohort c = null;
-
-		Date sd = cd.getMinResultDate();
-		Date ed = cd.getMaxResultDate();
-
 		Cohort c = MdrtbQueryService.getPatientsWithDSTResults(context, cd.getMinResultDate(), cd.getMaxResultDate());
 
     	return new EvaluatedCohort(c, cohortDefinition, context);

@@ -20,7 +20,6 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public AEForm() {
 		super();
 		this.encounter.setEncounterType(Context.getEncounterService().getEncounterType("Adverse Event"));
-		
 	}
 	
 	public AEForm(Patient patient) {
@@ -35,12 +34,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAdverseEvent() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAdverseEvent(Concept event) {
@@ -76,12 +70,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getDiagnosticInvestigation() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.LAB_TEST_CONFIRMING_AE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setDiagnosticInvestigation(Concept test) {
@@ -118,12 +107,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public String getSuspectedDrug() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SUSPECTED_DRUG), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setSuspectedDrug(String drug) {
@@ -159,11 +143,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public String getTreatmentRegimenAtOnset() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_REGIMEN), encounter);
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setTreatmentRegimenAtOnset(String regimen) {
@@ -199,12 +179,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getTypeOfEvent() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_TYPE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setTypeOfEvent(Concept type) {
@@ -238,16 +213,10 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	}
 	
 	////////////////////
-	
 	public Concept getTypeOfSAE() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SAE_TYPE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setTypeOfSAE(Concept type) {
@@ -283,12 +252,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getTypeOfSpecialEvent() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SPECIAL_INTEREST_EVENT_TYPE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setTypeOfSpecialEvent(Concept type) {
@@ -324,12 +288,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Date getYellowCardDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.YELLOW_CARD_DATE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setYellowCardDate(Date date) {
@@ -366,12 +325,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityAssessmentResult1() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_ASSESSMENT_RESULT_1), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityAssessmentResult1(Concept result) {
@@ -407,12 +361,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityAssessmentResult2() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_ASSESSMENT_RESULT_2), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityAssessmentResult2(Concept result) {
@@ -448,12 +397,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityAssessmentResult3() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_ASSESSMENT_RESULT_3), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityAssessmentResult3(Concept result) {
@@ -489,12 +433,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityDrug1() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_DRUG_1), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityDrug1(Concept result) {
@@ -530,12 +469,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityDrug2() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_DRUG_2), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityDrug2(Concept result) {
@@ -571,12 +505,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCausalityDrug3() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAUSALITY_DRUG_3), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCausalityDrug3(Concept result) {
@@ -612,12 +541,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionTaken() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionTaken(Concept type) {
@@ -653,12 +577,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionTaken2() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION_2), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionTaken2(Concept type) {
@@ -694,12 +613,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionTaken3() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION_3), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionTaken3(Concept type) {
@@ -735,12 +649,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionTaken4() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION_4), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionTaken4(Concept type) {
@@ -776,12 +685,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionTaken5() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_ACTION_5), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionTaken5(Concept type) {
@@ -817,12 +721,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getActionOutcome() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_OUTCOME), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setActionOutcome(Concept type) {
@@ -858,12 +757,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Date getOutcomeDate() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ADVERSE_EVENT_OUTCOME_DATE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueDatetime();
-		}
+		return obs == null ? null : obs.getValueDatetime();
 	}
 	
 	public void setOutcomeDate(Date date) {
@@ -900,12 +794,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getMeddraCode() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MEDDRA_CODE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setMeddraCode(Concept type) {
@@ -941,12 +830,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getDrugRechallenge() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_RECHALLENGE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setDrugRechallenge(Concept type) {
@@ -982,12 +866,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public String getComments() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICIAN_NOTES), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueText();
-		}
+		return obs == null ? null : obs.getValueText();
 	}
 	
 	public void setComments(String comment) {
@@ -1034,12 +913,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Integer getPatProgId() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueNumeric().intValue();
-		}
+		return obs == null ? null : obs.getValueNumeric().intValue();
 	}
 	
 	public void setPatProgId(Integer id) {
@@ -1083,7 +957,6 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 		if (loc.getRegion() != null && loc.getRegion().length() > 0) {
 			ret += "/" + loc.getRegion();
 		}
-		
 		return ret;
 	}
 	
@@ -1130,12 +1003,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getRequiresAncillaryDrugs() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REQUIRES_ANCILLARY_DRUGS), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setRequiresAncillaryDrugs(Concept event) {
@@ -1171,12 +1039,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getRequiresDoseChange() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.REQUIRES_DOSE_CHANGE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setRequiresDoseChange(Concept event) {
@@ -1212,12 +1075,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getClinicalScreenDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CLINICAL_SCREEN_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setClinicalScreenDone(Concept event) {
@@ -1253,12 +1111,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getVisualAcuityDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.VISUAL_ACUITY_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setVisualAcuityDone(Concept event) {
@@ -1294,12 +1147,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getSimpleHearingTestDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SIMPLE_HEARING_TEST_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setSimpleHearingTestDone(Concept event) {
@@ -1335,12 +1183,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAudiogramDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AUDIOGRAM_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAudiogramDone(Concept event) {
@@ -1376,12 +1219,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getNeuroInvestigationDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEURO_INVESTIGATION_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setNeuroInvestigationDone(Concept event) {
@@ -1417,12 +1255,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getSerumCreatnineDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CREATNINE_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setSerumCreatnineDone(Concept event) {
@@ -1458,12 +1291,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAstDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AST_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAstDone(Concept event) {
@@ -1499,12 +1327,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAltDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ALT_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAltDone(Concept event) {
@@ -1540,12 +1363,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getBilirubinDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BILIRUBIN_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setBilirubinDone(Concept event) {
@@ -1581,12 +1399,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAlkalinePhosphataseDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ALKALINE_PHOSPHATASE_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAlkalinePhosphataseDone(Concept event) {
@@ -1622,12 +1435,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getYgtDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.YGT_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setYgtDone(Concept event) {
@@ -1663,12 +1471,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getEcgDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ECG_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setEcgDone(Concept event) {
@@ -1704,12 +1507,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getLipaseDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.LIPASE_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setLipaseDone(Concept event) {
@@ -1745,12 +1543,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAmylaseDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AMYLASE_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAmylaseDone(Concept event) {
@@ -1786,12 +1579,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getPotassiumDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.POTASSIUM_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setPotassiumDone(Concept event) {
@@ -1827,12 +1615,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getMagnesiumDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MAGNESIUM_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setMagnesiumDone(Concept event) {
@@ -1868,12 +1651,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCalciumDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CALCIUM_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCalciumDone(Concept event) {
@@ -1909,12 +1687,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getAlbuminDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ALBUMIN_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setAlbuminDone(Concept event) {
@@ -1950,12 +1723,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getCbcDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CBC_DONE),
 		    encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setCbcDone(Concept event) {
@@ -1991,12 +1759,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getBloodGlucoseDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.BLOOD_GLUCOSE_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setBloodGlucoseDone(Concept event) {
@@ -2032,12 +1795,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getThyroidTestDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.THYROID_TEST_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setThyroidTestDone(Concept event) {
@@ -2073,12 +1831,7 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	public Concept getOtherTestDone() {
 		Obs obs = MdrtbUtil.getObsFromEncounter(
 		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_TEST_DONE), encounter);
-		
-		if (obs == null) {
-			return null;
-		} else {
-			return obs.getValueCoded();
-		}
+		return obs == null ? null : obs.getValueCoded();
 	}
 	
 	public void setOtherTestDone(Concept event) {
@@ -2112,34 +1865,27 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 	}
 	
 	public String getActionTakenSummary() {
-		
 		String at = "";
-		
 		Concept q = getActionTaken();
 		if (q != null) {
 			at = q.getName().getName();
 		}
-		
 		q = getActionTaken2();
 		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
-		
 		q = getActionTaken3();
 		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
-		
 		q = getActionTaken4();
 		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
-		
 		q = getActionTaken5();
 		if (q != null) {
 			at += ", " + q.getName().getName();
 		}
-		
 		return at;
 		
 	}
@@ -2155,111 +1901,88 @@ public class AEForm extends AbstractSimpleForm implements Comparable<AEForm> {
 		if (q != null && q.getId().intValue() == yesId) {
 			at = mss.getMessage("mdrtb.pv.clinicalScreen") + ", ";
 		}
-		
 		q = getVisualAcuityDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.visualAcuity") + ", ";
 		}
-		
 		q = getSimpleHearingTestDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.hearingTest") + ", ";
 		}
-		
 		q = getAudiogramDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.audiogram") + ", ";
 		}
-		
 		q = getNeuroInvestigationDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.neuroInvestigations") + ", ";
 		}
-		
 		q = getSerumCreatnineDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.serumCreatnine") + ", ";
 		}
-		
 		q = getAltDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.alt") + ", ";
 		}
-		
 		q = getAstDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.ast") + ", ";
 		}
-		
 		q = getBilirubinDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.bilirubin") + ", ";
 		}
-		
 		q = getAlkalinePhosphataseDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.alkalinePhosphatase") + ", ";
 		}
-		
 		q = getYgtDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.ygt") + ", ";
 		}
-		
 		q = getLipaseDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.lipase") + ", ";
 		}
-		
 		q = getAmylaseDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.amylase") + ", ";
 		}
-		
 		q = getPotassiumDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.potassium") + ", ";
 		}
-		
 		q = getMagnesiumDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.magnesium") + ", ";
 		}
-		
 		q = getCalciumDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.calcium") + ", ";
 		}
-		
 		q = getAlbuminDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.albumin") + ", ";
 		}
-		
 		q = getCbcDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.cbc") + ", ";
 		}
-		
 		q = getBloodGlucoseDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.bloodGlucose") + ", ";
 		}
-		
 		q = getThyroidTestDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.thyroidTest") + ", ";
 		}
-		
 		q = getOtherTestDone();
 		if (q != null && q.getId().intValue() == yesId) {
 			at += mss.getMessage("mdrtb.pv.other") + ", ";
 		}
-		
 		if (at != null && at.length() > 0)
 			at = at.substring(0, at.length() - 2);
-		
 		return at;
-		
 	}
 }

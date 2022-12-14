@@ -25,6 +25,4 @@ public class MdrtbPatientDashboardTabExt extends PatientDashboardTabExt {
     public String getTabName() {
         return "mdrtb.title";
     }
-   
-    
 }

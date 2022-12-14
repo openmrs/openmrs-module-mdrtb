@@ -7,8 +7,7 @@ import org.springframework.validation.Validator;
 
 public class SimpleFormValidator implements Validator {
 	
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
 		return (SimpleIntakeForm.class.isAssignableFrom(clazz) || SimpleFollowUpForm.class.isAssignableFrom(clazz));
     }
 

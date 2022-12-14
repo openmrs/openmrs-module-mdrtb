@@ -464,6 +464,7 @@ public interface MdrtbService extends OpenmrsService {
 	/**
 	 * Fetches list of rayons. Assumes existence of AddressHierarchyModule
 	 */
+	@Deprecated
 	public List<String> getAllRayonsTJK();
 
 	@Transactional(readOnly = true)
@@ -486,6 +487,7 @@ public interface MdrtbService extends OpenmrsService {
 	 * @param obs
 	 * @return
 	 */
+	@Deprecated
 	public Xpert getXpert(Obs obs);
 
 	/**
@@ -550,11 +552,11 @@ public interface MdrtbService extends OpenmrsService {
 	@Transactional(readOnly = true)
 	public Collection<ConceptAnswer> getPossibleXpertMtbBurdens();
 
-	public List<Region> getOblasts();
+	public List<Region> getRegions();
 
-	public Region getOblast(Integer oblastId);
+	public Region getRegion(Integer regionId);
 
-	public List<Location> getLocationsFromOblastName(Region oblast);
+	public List<Location> getLocationsFromRegion(Region region);
 
 	public List<Facility> getFacilities();
 
@@ -563,24 +565,24 @@ public interface MdrtbService extends OpenmrsService {
 	/**
 	 * Find the {@link Location} object mapped with given parameters
 	 * 
-	 * @param oblast
-	 * @param district
-	 * @param facility
+	 * @param regionId
+	 * @param districtId
+	 * @param facilityId
 	 * @return
 	 */
-	public Location getLocation(Integer oblast, Integer district, Integer facility);
+	public Location getLocation(Integer regionId, Integer districtId, Integer facilityId);
 
-	public List<Facility> getFacilities(int parentId);
+	public List<Facility> getFacilitiesByParent(Integer parentId);
 
-	public List<Facility> getRegFacilities(int parentId);
+	public List<Facility> getRegFacilities(Integer parentId);
 
 	public Facility getFacility(Integer facilityId);
 
-	public List<Location> getLocationsFromFacilityName(Facility facility);
+	public List<Location> getLocationsFromFacility(Facility facility);
 
-	public List<District> getDistricts(int parentId);
+	public List<District> getDistrictsByParent(Integer parentId);
 
-	public List<District> getRegDistricts(int parentId);
+	public List<District> getRegDistricts(Integer parentId);
 
 	public District getDistrict(Integer districtId);
 
@@ -590,7 +592,7 @@ public interface MdrtbService extends OpenmrsService {
 
 	public List<District> getRegDistricts();
 
-	public List<Location> getLocationsFromDistrictName(District district);
+	public List<Location> getLocationsFromDistrict(District district);
 
 	public List<Location> getEnrollmentLocations();
 
@@ -727,7 +729,7 @@ public interface MdrtbService extends OpenmrsService {
 
 	public List<Country> getCountries();
 
-	public List<Region> getOblasts(int parentId);
+	public List<Region> getOblasts(Integer parentId);
 
 	public ArrayList<TB03Form> getTB03FormsForProgram(Patient p, Integer patientProgId);
 

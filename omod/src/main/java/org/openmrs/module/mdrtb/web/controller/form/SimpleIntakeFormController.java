@@ -28,8 +28,9 @@ public class SimpleIntakeFormController extends AbstractFormController {
 	
 	@ModelAttribute("intake")
 	public SimpleIntakeForm getIntakeForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                                      @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException,
+	        IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
@@ -39,10 +40,9 @@ public class SimpleIntakeFormController extends AbstractFormController {
 			// prepopulate the intake form with any program information
 			form.setEncounterDatetime(program.getDateEnrolled());
 			form.setLocation(program.getLocation());
-				
+			
 			return form;
-		}
-		else {
+		} else {
 			return new SimpleIntakeForm(Context.getEncounterService().getEncounter(encounterId));
 		}
 	}
@@ -50,20 +50,19 @@ public class SimpleIntakeFormController extends AbstractFormController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showIntakeForm() {
 		ModelMap map = new ModelMap();
-		return new ModelAndView("/module/mdrtb/form/intake", map);	
+		return new ModelAndView("/module/mdrtb/form/intake", map);
 	}
 	
-	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processIntakeForm (@ModelAttribute("intake") SimpleIntakeForm intake, BindingResult errors, 
-	                                       @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                       @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                                       SessionStatus status, HttpServletRequest request, ModelMap map) {
-
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processIntakeForm(@ModelAttribute("intake") SimpleIntakeForm intake, BindingResult errors,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
+		
 		// perform validation and check for errors
 		if (intake != null) {
-    		new SimpleFormValidator().validate(intake, errors);
-    	}
+			new SimpleFormValidator().validate(intake, errors);
+		}
 		
 		if (errors.hasErrors()) {
 			map.put("errors", errors);
@@ -72,11 +71,11 @@ public class SimpleIntakeFormController extends AbstractFormController {
 		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(intake.getEncounter());
-
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
-
+		
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
 			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";

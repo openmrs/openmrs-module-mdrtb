@@ -69,16 +69,16 @@ public class Form89SingleExportController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		} else if (district == null) {
 			
 			//DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -87,8 +87,8 @@ public class Form89SingleExportController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -99,10 +99,10 @@ public class Form89SingleExportController {
 			* if oblast is dushanbe, return both districts and facilities
 			*/
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -111,9 +111,9 @@ public class Form89SingleExportController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -196,7 +196,8 @@ public class Form89SingleExportController {
 			locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		}
 		
-		ArrayList<Form89> f89List = Context.getService(MdrtbService.class).getForm89FormsFilled(locList, year, quarter, month);
+		ArrayList<Form89> f89List = Context.getService(MdrtbService.class).getForm89FormsFilled(locList, year, quarter,
+		    month);
 		
 		ArrayList<Form89Data> patientSet = new ArrayList<Form89Data>();
 		SimpleDateFormat sdf = Context.getDateFormat();

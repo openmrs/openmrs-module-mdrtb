@@ -130,16 +130,6 @@ public class CultureFormController {
 			mdr = false;
 		}
 		
-		// perform validation and check for errors
-		/*if (tb03 != null) {
-			new SimpleFormValidator().validate(tb03, errors);
-		}*/
-		
-		/*if (errors.hasErrors()) {
-			map.put("errors", errors);
-			return new ModelAndView("/module/mdrtb/form/intake", map);
-		}*/
-		
 		// save the actual update
 		Context.getEncounterService().saveEncounter(culture.getEncounter());
 		

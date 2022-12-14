@@ -10,8 +10,7 @@ import org.springframework.validation.Validator;
 
 public class SpecimenValidator implements Validator {
 
-    @SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
 		return Specimen.class.isAssignableFrom(clazz);
     }
 

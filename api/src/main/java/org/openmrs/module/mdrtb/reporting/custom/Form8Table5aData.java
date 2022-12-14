@@ -12,10 +12,8 @@ public class Form8Table5aData {
 		
 		respBacNew = 0;
 		respBacOther = 0;
-		
 		respBacNewVillager = 0;
 		respBacOtherVillager = 0;
-		
 	}
 	
 	public Integer getRespBacNew() {

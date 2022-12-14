@@ -70,7 +70,8 @@ public class DSTFormController {
 		boolean mdr = false;
 		PatientProgram pp = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
 		//if(pp.getProgram().getConcept().getId().intValue() == Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty("mdrtb.program_name")).getId().intValue()) {
-		if (pp.getProgram().getConcept().getId().equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId())) {
+		if (pp.getProgram().getConcept().getId()
+		        .equals(Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.MDR_TB_PROGRAM).getId())) {
 			mdr = true;
 		}
 		System.out.println(mdr ? "MDR" : "DOTS");
@@ -110,7 +111,6 @@ public class DSTFormController {
 		return new ModelAndView("/module/mdrtb/form/dst", map);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView processSubmit(@ModelAttribute("dst") DSTForm dst, BindingResult errors,
 	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
@@ -207,16 +207,6 @@ public class DSTFormController {
 	public Integer getPatientProgramId(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return patientProgramId;
 	}
-	
-	/*@ModelAttribute("tbProgram")
-	public TbPatientProgram getTbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
-	}
-	
-	@ModelAttribute("mdrtbProgram")
-	public MdrtbPatientProgram getMdrtbPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
-		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
-	}*/
 	
 	@ModelAttribute("returnUrl")
 	public String getReturnUrl(@RequestParam(required = false, value = "returnUrl") String returnUrl) {

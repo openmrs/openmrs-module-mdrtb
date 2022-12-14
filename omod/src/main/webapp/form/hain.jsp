@@ -5,9 +5,6 @@
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
@@ -148,16 +145,6 @@
 <td>${hain.monthOfTreatment}</td>
 </tr>
 
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${hain.provider.personName}</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${hain.location.displayString}</td>
-</tr> --%>
-
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>
 <td>${hain.location.stateProvince}</td>
@@ -231,30 +218,6 @@
 <td valign="top"><spring:message code="mdrtb.monthOfTreatment" text="TxMonth"/>:</td>
 <td><input name="monthOfTreatment" size="2" value="${hain.monthOfTreatment}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>
-<select name="provider">
-<option value=""></option>
-<c:forEach var="provider" items="${providers}">
-	<option value="${provider.id}" <c:if test="${hain.provider == provider}">selected</c:if>>${provider.personName}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>
-<select name="location">
-<option value=""></option>
-<c:forEach var="location" items="${locations}">
-	<option value="${location.id}" <c:if test="${hain.location == location}">selected</c:if>>${location.displayString}</option>
-</c:forEach>
-</select>
-</td>
-</tr> --%>
 
 </table>
 

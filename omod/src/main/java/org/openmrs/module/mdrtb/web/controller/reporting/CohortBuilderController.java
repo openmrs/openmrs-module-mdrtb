@@ -53,7 +53,7 @@ public class CohortBuilderController implements Controller {
 	private String formView;
 	
 	private String successView;
-		
+	
 	public CohortBuilderController() {
 	}
 	
@@ -82,7 +82,7 @@ public class CohortBuilderController implements Controller {
 		}
 		return ret;
 	}
-		
+	
 	private void setMySearchHistory(HttpServletRequest request, CohortSearchHistory history) {
 		Context.setVolatileUserData("CohortBuilderSearchHistory", history);
 	}
@@ -98,8 +98,8 @@ public class CohortBuilderController implements Controller {
 		return null;
 	}
 	
-	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                           IOException {
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		if (Context.isAuthenticated()) {
 			CohortSearchHistory history = getMySearchHistory(request);
@@ -321,16 +321,16 @@ public class CohortBuilderController implements Controller {
 		}
 	}
 	
-	public ModelAndView clearHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                          IOException {
+	public ModelAndView clearHistory(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 		if (Context.isAuthenticated()) {
 			setMySearchHistory(request, null);
 		}
 		return new ModelAndView(new RedirectView(getSuccessView()));
 	}
 	
-	public ModelAndView addFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                       IOException {
+	public ModelAndView addFilter(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 		if (Context.isAuthenticated()) {
 			ReportObjectService rs = (ReportObjectService) Context.getService(ReportObjectService.class);
 			CohortSearchHistory history = getMySearchHistory(request);
@@ -373,8 +373,8 @@ public class CohortBuilderController implements Controller {
 		return new ModelAndView(new RedirectView(getSuccessView()));
 	}
 	
-	public ModelAndView removeFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                          IOException {
+	public ModelAndView removeFilter(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 		if (Context.isAuthenticated()) {
 			CohortSearchHistory history = getMySearchHistory(request);
 			String temp = request.getParameter("index");
@@ -428,8 +428,8 @@ public class CohortBuilderController implements Controller {
 		}
 		
 		public boolean hasValue() {
-			return argValue != null
-			        && ((argValue instanceof String && ((String) argValue).length() > 0) || (argValue instanceof String[] && ((String[]) argValue).length > 0));
+			return argValue != null && ((argValue instanceof String && ((String) argValue).length() > 0)
+			        || (argValue instanceof String[] && ((String[]) argValue).length > 0));
 		}
 		
 		public String toString() {
@@ -442,9 +442,8 @@ public class CohortBuilderController implements Controller {
 		        || ((checkFirst.equals(Object.class) || checkFirst.equals(List.class)) && checkFor.equals(checkNext));
 	}
 	
-	public ModelAndView addDynamicFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                              IOException,
-	                                                                                              ClassNotFoundException {
+	public ModelAndView addDynamicFilter(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException, ClassNotFoundException {
 		if (Context.isAuthenticated()) {
 			String filterClassName = request.getParameter("filterClass");
 			String temp = request.getParameter("vars");
@@ -510,8 +509,8 @@ public class CohortBuilderController implements Controller {
 		return new ModelAndView(new RedirectView(getSuccessView()));
 	}
 	
-	public ModelAndView saveHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-	                                                                                         IOException {
+	public ModelAndView saveHistory(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 		// TODO: fix this!
 		if (Context.isAuthenticated()) {
 			String name = request.getParameter("name");

@@ -15,37 +15,37 @@ import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.reporting.SpecimenReportingTools;
 import org.openmrs.web.controller.PortletController;
 
-
 public class SpecimenReportPortletController extends PortletController {
+	
 	protected void populateModel(HttpServletRequest request, Map<String, Object> model) {
 		
-		Map<Patient,List<Specimen>> results = null;
+		Map<Patient, List<Specimen>> results = null;
 		
-		Integer [] labs = new Integer[1];
+		Integer[] labs = new Integer[1];
 		
 		if (StringUtils.isNotBlank((String) model.get("lab"))) {
 			labs[0] = (Context.getLocationService().getLocation(Integer.valueOf((String) model.get("lab")))).getId();
 		}
-	
+		
 		Date startDateCollected = null;
 		Date endDateCollected = null;
 		
 		if (StringUtils.isNotBlank((String) model.get("startDateCollected"))) {
 			try {
-	            startDateCollected = Context.getDateFormat().parse((String) model.get("startDateCollected"));
-            }
-            catch (ParseException e) {
-	            log.error("Unable to parse start date collected", e);
-            }
+				startDateCollected = Context.getDateFormat().parse((String) model.get("startDateCollected"));
+			}
+			catch (ParseException e) {
+				log.error("Unable to parse start date collected", e);
+			}
 		}
 		
 		if (StringUtils.isNotBlank((String) model.get("endDateCollected"))) {
 			try {
-	            endDateCollected = Context.getDateFormat().parse((String) model.get("endDateCollected"));
-            }
-            catch (ParseException e) {
-	            log.error("Unable to parse end date collected", e);
-            }
+				endDateCollected = Context.getDateFormat().parse((String) model.get("endDateCollected"));
+			}
+			catch (ParseException e) {
+				log.error("Unable to parse end date collected", e);
+			}
 		}
 		
 		Integer daysSinceSmear = 0;
@@ -67,24 +67,23 @@ public class SpecimenReportPortletController extends PortletController {
 			if (report.equals("specimensWithNoResults")) {
 				results = SpecimenReportingTools.getSpecimensWithNoResults(startDateCollected, endDateCollected);
 				model.put("name", "mdrtb.specimensWithNoResults");
-			}
-			else if (report.equals("specimensWithPositiveCultureButNoDstResults")) {
-				results = SpecimenReportingTools.getSpecimensWithPositiveCultureButNoDstResults(startDateCollected, endDateCollected, daysSinceCulture, (labs.length !=0 ? labs : null));
+			} else if (report.equals("specimensWithPositiveCultureButNoDstResults")) {
+				results = SpecimenReportingTools.getSpecimensWithPositiveCultureButNoDstResults(startDateCollected,
+				    endDateCollected, daysSinceCulture, (labs.length != 0 ? labs : null));
 				model.put("name", "mdrtb.specimensWithPositiveCultureButNoDstResults");
-			}
-			else if (report.equals("specimensWithPositiveSmearButNoCultureResults")) {
-				results = SpecimenReportingTools.getSpecimensWithPositiveSmearButNoCultureResults(startDateCollected, endDateCollected, daysSinceSmear, (labs.length !=0 ? labs : null));
+			} else if (report.equals("specimensWithPositiveSmearButNoCultureResults")) {
+				results = SpecimenReportingTools.getSpecimensWithPositiveSmearButNoCultureResults(startDateCollected,
+				    endDateCollected, daysSinceSmear, (labs.length != 0 ? labs : null));
 				model.put("name", "mdrtb.specimensWithPositiveSmearButNoCultureResults");
-			}
-			else if (report.equals("specimensWithContaminatedTest")) {
-				results = SpecimenReportingTools.getSpecimensWithContaminatedTests(startDateCollected, endDateCollected, (labs.length !=0 ? labs : null));
+			} else if (report.equals("specimensWithContaminatedTest")) {
+				results = SpecimenReportingTools.getSpecimensWithContaminatedTests(startDateCollected, endDateCollected,
+				    (labs.length != 0 ? labs : null));
 				model.put("name", "mdrtb.specimensWithContaminatedTests");
 			}
 			
 			model.put("results", results);
-		}
-		else {
+		} else {
 			throw new MdrtbAPIException("Specimen report portlet requires a report parameter.");
 		}
-	}	
+	}
 }

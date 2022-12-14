@@ -52,9 +52,6 @@ public class MdrtbContactPerson {
     public void setIsPatient(boolean val) {
         this.isPatient = val;
     }
-//    public boolean isPatient(){
-//        return this.isPatient();
-//    }
     
     public boolean getIsTBPatient() {
         return isTBPatient;
@@ -62,9 +59,6 @@ public class MdrtbContactPerson {
     public void setIsTBPatient(boolean isTBPatient) {
         this.isTBPatient = isTBPatient;
     }
-//    public boolean isTBPatient(){
-//        return isTBPatient();
-//    }  
    
     public PersonAddress getAddress() {
         return address;

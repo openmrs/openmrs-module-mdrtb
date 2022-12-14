@@ -4,72 +4,69 @@
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/tbdashboard.form?patientProgramId=${patientProgramId}&patientId=${dst.patient.id}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 	
-function contains(set, item) {
-	for (var i in set) {
-		if (set[i] == item) {
-			return true;
+	function contains(set, item) {
+		for (var i in set) {
+			if (set[i] == item) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// hides all add and edit details boxes
+	function hideDisplayBoxes(){
+		$j('.addBox').hide();
+		$j('.editBox').hide();
+		$j('.detailBox').hide();
+		$j('#details_-1').hide();
+	}
+
+	// hides all edit, add, and delete link elements (used to stop used from navigating away from an edit)
+	function hideLinks() {
+		$j('.edit').fadeOut();  // hide all the edit tests links
+		$j('.delete').fadeOut(); // hide all the delete links 
+		$j('#editSpecimen').fadeOut(); // hide the edit specimen link
+		$j('#add').fadeOut(); // hide the "add a test" selector
+	}
+
+	// shows all edit, add, and delete elements (called when an edit is complete)
+	function showLinks() {
+		$j('.edit').fadeIn();  // show all the edit tests links
+		$j('.delete').fadeIn(); // show all the delete links 
+		$j('#editSpecimen').fadeIn(); // show the edit specimen link
+		$j('#add').fadeIn(); // show the "add a test" selector
+	}
+
+	// resets the default dst results boxes in the "add dst" section
+	function resetAddDstResults() {		
+		$j('.addDstResult').hide().find('input,.dstResult').attr('value',''); // reset all the dst result values except drug type
+		$j('.dstColonies').hide()	  // hide the colony input boxes
+		
+		// now reshow the boxes that contain the default drugs
+		for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
+			$j('#addDstResult_' + i).show();	
+		}
+		addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1; // reset the add dst result counter
+	}
+
+	function showAddDstResultsWithData() {
+		for (var i = 1; i < 31; i++) {
+			if ($j('#addDstResult${testId}_' + i).find('.dstResult').val() != ''
+				|| $j('#addDstResult${testId}_' + i).find('select').val() != '') {
+
+				$j('#addDstResult${testId}_' + i).show();
+				addDstResultCounter = i + 1;
+			}
 		}
 	}
-	return false;
-}
-
-// hides all add and edit details boxes
-function hideDisplayBoxes(){
-	$j('.addBox').hide();
-	$j('.editBox').hide();
-	$j('.detailBox').hide();
-	$j('#details_-1').hide();
-}
-
-// hides all edit, add, and delete link elements (used to stop used from navigating away from an edit)
-function hideLinks() {
-	$j('.edit').fadeOut();  // hide all the edit tests links
-	$j('.delete').fadeOut(); // hide all the delete links 
-	$j('#editSpecimen').fadeOut(); // hide the edit specimen link
-	$j('#add').fadeOut(); // hide the "add a test" selector
-}
-
-// shows all edit, add, and delete elements (called when an edit is complete)
-function showLinks() {
-	$j('.edit').fadeIn();  // show all the edit tests links
-	$j('.delete').fadeIn(); // show all the delete links 
-	$j('#editSpecimen').fadeIn(); // show the edit specimen link
-	$j('#add').fadeIn(); // show the "add a test" selector
-}
-
-// resets the default dst results boxes in the "add dst" section
-function resetAddDstResults() {		
-	$j('.addDstResult').hide().find('input,.dstResult').attr('value',''); // reset all the dst result values except drug type
-	$j('.dstColonies').hide()	  // hide the colony input boxes
-	
-	// now reshow the boxes that contain the default drugs
-	for (var i = 1; i <= ${fn:length(defaultDstDrugs)}; i++) {
-		$j('#addDstResult_' + i).show();	
-	}
-	addDstResultCounter = ${fn:length(defaultDstDrugs)} + 1; // reset the add dst result counter
-}
-
-function showAddDstResultsWithData() {
-	for (var i = 1; i < 31; i++) {
-		if ($j('#addDstResult${testId}_' + i).find('.dstResult').val() != ''
-			|| $j('#addDstResult${testId}_' + i).find('select').val() != '') {
-
-			$j('#addDstResult${testId}_' + i).show();
-			addDstResultCounter = i + 1;
-		}
-	}
-}
 
 	$j(document).ready(function(){
 
@@ -164,19 +161,11 @@ function showAddDstResultsWithData() {
 			alert(errorText);
 			return false;
 		}
-		
-		
-		
 		encDate = encDate.replace(/\//g,".");
-		
-		
 		var parts = encDate.split(".");
 		var day = parts[0];
 		var month = parts[1]-1;
 		var year = parts[2];
-		
-		
-		
 		var dateCollected = new Date(year,month,day);
 
 		var now = new Date();
@@ -186,14 +175,8 @@ function showAddDstResultsWithData() {
 			alert(errorText);
 			return false;
 		}
-		
-		
-		
 		return true;
 	}
-
-
--->
 
 </script>
 

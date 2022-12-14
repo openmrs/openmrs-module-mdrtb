@@ -97,7 +97,7 @@ public class WHOForm07TJK implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ReportData evaluateReport(EvaluationContext context) {
 		
 		ReportDefinition report = new ReportDefinition();
@@ -109,13 +109,6 @@ public class WHOForm07TJK implements ReportSpecification {
 		// Base Cohort is confirmed mdr patients, in program, who started treatment during year, optionally at location
 		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
 		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
-		/*if (location != null) {
-			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
-			if (locationFilter != null) {
-				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}	
-		}*/
-		//baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
 			//CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			CohortDefinition locationFilter = Cohorts.getTreatmentStartAndAddressFilterTJK(location.getCountyDistrict(), startDate, endDate);

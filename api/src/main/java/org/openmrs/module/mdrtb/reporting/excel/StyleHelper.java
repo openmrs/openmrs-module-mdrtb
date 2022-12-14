@@ -19,13 +19,13 @@ import org.openmrs.util.OpenmrsUtil;
 
 public class StyleHelper {
 	HSSFWorkbook wb;
-	Map fonts = new HashMap();
-	Map styles = new HashMap();
-	Collection fontAttributeNames = new HashSet();
-	Collection fontAttributeStarting = new ArrayList();
+	Map<String, HSSFFont> fonts = new HashMap<String, HSSFFont>();
+	Map<String, HSSFCellStyle> styles = new HashMap<String, HSSFCellStyle>();
+	Collection<String> fontAttributeNames = new HashSet<String>();
+	Collection<String> fontAttributeStarting = new ArrayList<String>();
 	short dateDataFormat;
 	
-	static Map backgroundColors = new HashMap();
+	static Map<String, Short> backgroundColors = new HashMap<String, Short>();
 	static {
 		backgroundColors.put("grey", new Short(HSSFColor.GREY_40_PERCENT.index));
 	}
@@ -41,7 +41,7 @@ public class StyleHelper {
 	}
 
 	public HSSFFont getFont(String s) {
-		SortedSet att = new TreeSet();
+		SortedSet<String> att = new TreeSet<String>();
 		for (StringTokenizer st = new StringTokenizer(s, ","); st.hasMoreTokens(); ) {
 			String str = st.nextToken().trim().toLowerCase();
 			if (str.equals("")) {
@@ -54,7 +54,7 @@ public class StyleHelper {
 			return (HSSFFont) fonts.get(descriptor);
 		} else {
 			HSSFFont font = wb.createFont();
-			for (Iterator i = att.iterator(); i.hasNext(); ) {
+			for (Iterator<String> i = att.iterator(); i.hasNext(); ) {
 				String str = (String) i.next();
 				if (str.equals("bold")) {
 					font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -83,6 +83,7 @@ public class StyleHelper {
 	//    date
 	//    bgcolor=grey
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public HSSFCellStyle getStyle(String s) {
 		SortedSet att = new TreeSet();
 		SortedSet fontAtts = new TreeSet();
@@ -116,7 +117,7 @@ public class StyleHelper {
 				HSSFFont font = getFont(OpenmrsUtil.join(fontAtts, ","));
 				style.setFont(font);
 			}
-			for (Iterator i = att.iterator(); i.hasNext(); ) {
+			for (Iterator<?> i = att.iterator(); i.hasNext(); ) {
 				helper(style, (String) i.next());
 			}
 			styles.put(descriptor, style);
@@ -126,7 +127,7 @@ public class StyleHelper {
 
 	public HSSFCellStyle getAugmented(HSSFCellStyle style,  String s) {
 		String desc = null;
-		for (Iterator i = styles.entrySet().iterator(); i.hasNext(); ) {
+		for (Iterator<?> i = styles.entrySet().iterator(); i.hasNext(); ) {
 			Map.Entry e = (Map.Entry) i.next();
 			if (e.getValue().equals(style)) {
 				desc = (String) e.getKey();

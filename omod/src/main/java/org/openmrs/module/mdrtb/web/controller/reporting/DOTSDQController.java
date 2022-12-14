@@ -12,11 +12,11 @@ import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Patient;
-import org.openmrs.PatientProgram;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.District;
 import org.openmrs.module.mdrtb.Facility;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.mdrtb.Region;
 import org.openmrs.module.mdrtb.form.custom.CultureForm;
 import org.openmrs.module.mdrtb.form.custom.Form89;
@@ -29,7 +29,6 @@ import org.openmrs.module.mdrtb.form.custom.XpertForm;
 import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.module.mdrtb.reporting.ReportUtil;
 import org.openmrs.module.mdrtb.reporting.custom.DQItem;
-import org.openmrs.module.mdrtb.reporting.custom.DQUtil;
 import org.openmrs.module.mdrtb.reporting.custom.TB03Util;
 import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -81,17 +80,17 @@ public class DOTSDQController {
 		List<District> districts;
 		
 		if (oblast == null) {
-			oblasts = Context.getService(MdrtbService.class).getOblasts();
+			oblasts = Context.getService(MdrtbService.class).getRegions();
 			model.addAttribute("oblasts", oblasts);
 		}
 		
 		else if (district == null) {
 			//DUSHANBE
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -100,8 +99,8 @@ public class DOTSDQController {
 			}
 			
 			else {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -113,10 +112,10 @@ public class DOTSDQController {
 			* if oblast is dushanbe, return both districts and facilities
 			*/
 			if (Integer.parseInt(oblast) == 186) {
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
 				District d = districts.get(0);
-				facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -126,9 +125,9 @@ public class DOTSDQController {
 			
 			else {
 				
-				oblasts = Context.getService(MdrtbService.class).getOblasts();
-				districts = Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-				facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
 				model.addAttribute("oblastSelected", oblast);
 				model.addAttribute("oblasts", oblasts);
 				model.addAttribute("districts", districts);
@@ -206,18 +205,22 @@ public class DOTSDQController {
 		
 		//ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
 		
-		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId, facilityId);
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
+		    facilityId);
 		
-		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter, month);
-		ArrayList<TransferOutForm> tofList = Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year, quarter, month);
-		ArrayList<TransferInForm> tifList = Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year, quarter, month);
+		ArrayList<TB03Form> tb03List = Context.getService(MdrtbService.class).getTB03FormsFilled(locList, year, quarter,
+		    month);
+		ArrayList<TransferOutForm> tofList = Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year,
+		    quarter, month);
+		ArrayList<TransferInForm> tifList = Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year,
+		    quarter, month);
 		ArrayList<TransferOutForm> allTofs = null;// Context.getService(MdrtbService.class).getTransferOutFormsFilled(locList, year, quarter, month);
 		ArrayList<TransferInForm> allTifs = null;// Context.getService(MdrtbService.class).getTransferInFormsFilled(locList, year, quarter, month);
 		HashMap<Integer, Integer> dupMap = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> f89DupMap = new HashMap<Integer, Integer>();
 		
 		int neww = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.NEW).getId().intValue();
-
+		
 		Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);
 		
 		Date startDate = (Date) (dateMap.get("startDate"));
@@ -248,10 +251,6 @@ public class DOTSDQController {
 				continue;
 			}
 			
-			//TODO: Is this line doing anything?
-			if (patient.getGender().equals("F") && Context.getLocale().equals("ru")) {
-				patient.setGender(Context.getMessageSourceService().getMessage("mdrtb.gender.F"));
-			}
 			// patientList.add(patient);
 			dqi.setPatient(patient);
 			dqi.setDateOfBirth(sdf.format(patient.getBirthdate()));
@@ -364,7 +363,7 @@ public class DOTSDQController {
 				tCal.setTime(treatmentStartDate);
 				nowCal = new GregorianCalendar();
 				timeDiff = nowCal.getTimeInMillis() - tCal.getTimeInMillis();
-				diffInWeeks = DQUtil.timeDiffInWeeks(timeDiff);
+				diffInWeeks = MdrtbUtil.timeDiffInWeeks(timeDiff);
 				if (diffInWeeks > 32) {
 					
 					if (tf.getTreatmentOutcome() == null) {
@@ -378,8 +377,7 @@ public class DOTSDQController {
 			if (tf.getAnatomicalSite() == null) {
 				noSite.add(dqi);
 				errorFlag = Boolean.TRUE;
-			}
-			else {
+			} else {
 				if (tf.getAnatomicalSite().getConceptId().intValue() == eptbConcept.intValue()) {
 					eptb = Boolean.TRUE;
 				}
@@ -412,7 +410,8 @@ public class DOTSDQController {
 			if (tf.getPatProgId() != null) {
 				
 				TbPatientProgram program = Context.getService(MdrtbService.class).getTbPatientProgram(tf.getPatProgId());
-				if (program == null || Context.getService(MdrtbService.class).getGenPatientProgramIdentifier(program.getPatientProgram()) == null) {
+				if (program == null || Context.getService(MdrtbService.class)
+				        .getGenPatientProgramIdentifier(program.getPatientProgram()) == null) {
 					noDOTSId.add(dqi);
 					errorFlag = Boolean.TRUE;
 				}
@@ -520,7 +519,7 @@ public class DOTSDQController {
 			errorPercentage = (errorCount * 100) / num;
 		
 		String oName = null;
-		Region obl = Context.getService(MdrtbService.class).getOblast(oblastId);
+		Region obl = Context.getService(MdrtbService.class).getRegion(oblastId);
 		if (obl != null)
 			oName = obl.getName();
 		

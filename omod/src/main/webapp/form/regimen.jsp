@@ -5,9 +5,6 @@
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
@@ -97,28 +94,7 @@
 
 	    return true;
 	}
-	
-	/* function fun1()
-	{
-		var e = document.getElementById("oblast");
-		var val = e.options[e.selectedIndex].value;
 		
-		if(val!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/regimen.form?mode=edit&ob="+val+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty regimenForm.id ? regimenForm.id : -1})
-	}
-
-	function fun2()
-	{
-		var e = document.getElementById("oblast");
-		var val1 = e.options[e.selectedIndex].value;
-		var e = document.getElementById("district");
-		var val2 = e.options[e.selectedIndex].value;
-		
-		if(val2!="")
-			window.location.replace("${pageContext.request.contextPath}/module/mdrtb/form/regimen.form?mode=edit&loc="+val2+"&ob="+val1+"&patientProgramId="+${patientProgramId}+"&encounterId=" + ${!empty regimenForm.id ? regimenForm.id : -1})
-	} */
-
-	
 	function validate() 
 	{
 		var encDate = document.getElementById("encounterDatetime").value;
@@ -205,16 +181,6 @@
 <td><spring:message code="mdrtb.date" text="Date"/>:</td>
 <td><openmrs:formatDate date="${regimenForm.encounterDatetime}" format="${_dateFormatDisplay}"/></td>
 </tr>
-
-<%-- <tr>
-<td><spring:message code="mdrtb.provider" text="Provider"/>:</td>
-<td>${tb03.provider.personName}</td>
-</tr> --%>
- 
-<%-- <tr>
-<td><spring:message code="mdrtb.location" text="Location"/>:</td>
-<td>${tb03.location.displayString}</td>
-</tr> --%>
 
 <tr>
 <td><spring:message code="mdrtb.oblast" text="Oblast"/>:</td>

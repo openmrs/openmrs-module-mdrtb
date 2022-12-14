@@ -16,7 +16,6 @@ public class PredictionModel {
 	public static final double intercept = -4.56350;
 	
 	public enum RiskFactor {
-
 		Male("Male", 0.06011),
 		HivPositive("HIV Positive", -0.27236),
 		PreviousTreatment("Previous Treatment", 1.39232),

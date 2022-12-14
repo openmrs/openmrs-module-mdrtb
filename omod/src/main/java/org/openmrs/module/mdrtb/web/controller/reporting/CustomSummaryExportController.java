@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CustomSummaryExportController {
 	
-    @RequestMapping("/module/mdrtb/reporting/customSummaryExport")
-    public void showPatientList(HttpServletRequest request, HttpServletResponse response, ModelMap model, 
-            		@RequestParam("patientIds") String patientIds,
-            		@RequestParam(value="columns") String[] columns) throws Exception {
-
-    	Cohort c = new Cohort(patientIds);
-    	List<String> columnList = (c == null ? null : Arrays.asList(columns));
-    	PatientSummaryUtil.outputToExcel(response, c, columnList);
+	@RequestMapping("/module/mdrtb/reporting/customSummaryExport")
+	public void showPatientList(HttpServletRequest request, HttpServletResponse response, ModelMap model,
+	        @RequestParam("patientIds") String patientIds, @RequestParam(value = "columns") String[] columns)
+	        throws Exception {
+		
+		Cohort c = new Cohort(patientIds);
+		List<String> columnList = (c == null ? null : Arrays.asList(columns));
+		PatientSummaryUtil.outputToExcel(response, c, columnList);
 	}
 }

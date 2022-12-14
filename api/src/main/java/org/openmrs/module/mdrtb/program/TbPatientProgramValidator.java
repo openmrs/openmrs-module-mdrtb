@@ -11,8 +11,7 @@ import org.springframework.validation.Validator;
 
 public class TbPatientProgramValidator implements Validator {
 	
-	@SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
 		return TbPatientProgram.class.isAssignableFrom(clazz);
     }
 
@@ -57,14 +56,6 @@ public class TbPatientProgramValidator implements Validator {
 	    			break;
 	    		}	
 	    	}
-	    	/*
-	    	for (MdrtbPatientProgram existingProgram : Context.getService(MdrtbService.class).getMdrtbPatientProgramsInDateRange(program.getPatient(), program.getDateEnrolled(), program.getDateCompleted())) {
-	    		// the only program allowed during the current period is this new program
-	    		//if (!program.equals(existingProgram)) {
-	    			errors.reject("mdrtb.program.errors.programOverlap", "This program overlaps with an existing MDR-TB program enrollment for this patient.");
-	    			break;
-	    		//}	
-	    	}*/
 	    }
     }
 }

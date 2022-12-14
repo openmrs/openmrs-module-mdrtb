@@ -65,312 +65,206 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 
 public class RegimenController {
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true, 10));
-        binder.registerCustomEditor(Concept.class, new ConceptEditor());
-        binder.registerCustomEditor(Location.class, new LocationEditor());
-    }
-        
-    
-    @RequestMapping(method=RequestMethod.GET, value="/module/mdrtb/reporting/regimen")
-    public ModelAndView showRegimenOptions(@RequestParam(value="loc", required=false) String district,
-			@RequestParam(value="ob", required=false) String oblast,
-			@RequestParam(value="yearSelected", required=false) Integer year,
-			@RequestParam(value="quarterSelected", required=false) String quarter,
-			@RequestParam(value="monthSelected", required=false) String month,
-			ModelMap model) {
-    	
-    	List<Region> oblasts;
-        List<Facility> facilities;
-        List<District> districts;
-    	
-    	if(oblast==null) {
-    		oblasts = Context.getService(MdrtbService.class).getOblasts();
-    		model.addAttribute("oblasts", oblasts);
-    	}
-    	 
-    	
-    	else if(district==null)
-         { 
-    		//DUSHANBE
-    		if(Integer.parseInt(oblast)==186) {
-    			oblasts = Context.getService(MdrtbService.class).getOblasts();
-    			districts= Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-    			District d = districts.get(0);
-    			facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
-    			model.addAttribute("oblastSelected", oblast);
-    			model.addAttribute("oblasts", oblasts);
-           	 	model.addAttribute("districts", districts);
-           	 	model.addAttribute("facilities", facilities);
-           	 	model.addAttribute("dushanbe", 186);
-    		}
-    		
-    		else {
-    			oblasts = Context.getService(MdrtbService.class).getOblasts();
-    			districts= Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-         		model.addAttribute("oblastSelected", oblast);
-         		model.addAttribute("oblasts", oblasts);
-         		model.addAttribute("districts", districts);
-    		}
-         }
-         else
-         {
-        	 /*
-      		 * if oblast is dushanbe, return both districts and facilities
-      		 */
-     		if(Integer.parseInt(oblast)==186) {
-     			oblasts = Context.getService(MdrtbService.class).getOblasts();
-     			districts= Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-     			District d = districts.get(0);
-     			facilities = Context.getService(MdrtbService.class).getFacilities(d.getId());
-     			model.addAttribute("oblastSelected", oblast);
-     			model.addAttribute("oblasts", oblasts);
-            	 	model.addAttribute("districts", districts);
-            	 	model.addAttribute("facilities", facilities);
-            	 	model.addAttribute("dushanbe", 186);
-     		}
-     		else {
-     			oblasts = Context.getService(MdrtbService.class).getOblasts();
-     			districts= Context.getService(MdrtbService.class).getDistricts(Integer.parseInt(oblast));
-     			facilities = Context.getService(MdrtbService.class).getFacilities(Integer.parseInt(district));
-     			model.addAttribute("oblastSelected", oblast);
-     			model.addAttribute("oblasts", oblasts);
-     			model.addAttribute("districts", districts);
-     			model.addAttribute("districtSelected", district);
-     			model.addAttribute("facilities", facilities);
-     		}
-         }
-    	
-    	 model.addAttribute("yearSelected", year);
-    	 model.addAttribute("monthSelected", month);
-    	 model.addAttribute("quarterSelected", quarter);
-       
-  
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(Context.getDateFormat(), true, 10));
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
+		binder.registerCustomEditor(Location.class, new LocationEditor());
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/module/mdrtb/reporting/regimen")
+	public ModelAndView showRegimenOptions(@RequestParam(value = "loc", required = false) String district,
+	        @RequestParam(value = "ob", required = false) String oblast,
+	        @RequestParam(value = "yearSelected", required = false) Integer year,
+	        @RequestParam(value = "quarterSelected", required = false) String quarter,
+	        @RequestParam(value = "monthSelected", required = false) String month, ModelMap model) {
+		
+		List<Region> oblasts;
+		List<Facility> facilities;
+		List<District> districts;
+		
+		if (oblast == null) {
+			oblasts = Context.getService(MdrtbService.class).getRegions();
+			model.addAttribute("oblasts", oblasts);
+		}
+		
+		else if (district == null) {
+			//DUSHANBE
+			if (Integer.parseInt(oblast) == 186) {
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				District d = districts.get(0);
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
+				model.addAttribute("oblastSelected", oblast);
+				model.addAttribute("oblasts", oblasts);
+				model.addAttribute("districts", districts);
+				model.addAttribute("facilities", facilities);
+				model.addAttribute("dushanbe", 186);
+			}
+			
+			else {
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				model.addAttribute("oblastSelected", oblast);
+				model.addAttribute("oblasts", oblasts);
+				model.addAttribute("districts", districts);
+			}
+		} else {
+			/*
+			* if oblast is dushanbe, return both districts and facilities
+			*/
+			if (Integer.parseInt(oblast) == 186) {
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				District d = districts.get(0);
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(d.getId());
+				model.addAttribute("oblastSelected", oblast);
+				model.addAttribute("oblasts", oblasts);
+				model.addAttribute("districts", districts);
+				model.addAttribute("facilities", facilities);
+				model.addAttribute("dushanbe", 186);
+			} else {
+				oblasts = Context.getService(MdrtbService.class).getRegions();
+				districts = Context.getService(MdrtbService.class).getDistrictsByParent(Integer.parseInt(oblast));
+				facilities = Context.getService(MdrtbService.class).getFacilitiesByParent(Integer.parseInt(district));
+				model.addAttribute("oblastSelected", oblast);
+				model.addAttribute("oblasts", oblasts);
+				model.addAttribute("districts", districts);
+				model.addAttribute("districtSelected", district);
+				model.addAttribute("facilities", facilities);
+			}
+		}
+		
+		model.addAttribute("yearSelected", year);
+		model.addAttribute("monthSelected", month);
+		model.addAttribute("quarterSelected", quarter);
+		
 		// create a new workbook
-		    	
-    	         
-    	 return new ModelAndView("/module/mdrtb/reporting/regimen", model);	
-    	
-    }
-    
-	@RequestMapping(method=RequestMethod.POST, value="/module/mdrtb/reporting/regimen")
-    public static void doRegimen(
-    		@RequestParam("district") Integer districtId,
-    		@RequestParam("oblast") Integer oblastId,
-    		@RequestParam("facility") Integer facilityId,
-            @RequestParam(value="year", required=true) Integer year,
-            @RequestParam(value="quarter", required=false) String quarter,
-            @RequestParam(value="month", required=false) String month, HttpServletResponse response,
-            ModelMap model) throws EvaluationException, IOException {
-    	
-    	System.out.println("---POST-----");
-    	
-    	ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId,districtId,facilityId);
-    	ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class).getTB03uFormsFilledWithTxStartDateDuring(locList, year, quarter, month);
-    	
-    	Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);
-    	
-    	Date startDate = (Date)(dateMap.get("startDate"));
-    	Date endDate = (Date)(dateMap.get("endDate"));
-    	
-    	MdrtbService ms = Context.getService(MdrtbService.class);
-    	ArrayList<RegimenReportRow> rows = new ArrayList<RegimenReportRow>();
-    	Integer programId = null;
-    	Patient p = null;
-    	Date treatmentStartDate = null;
-    	RegimenReportRow rrr = null;
-    	for(TB03uForm tf : tb03uList) {
-    		
-    		p = tf.getPatient();
-    		programId = tf.getPatProgId();
-    		
-    		if(programId==null || p==null) {
-    			continue;
-    		}
-    		
-    		treatmentStartDate  = tf.getMdrTreatmentStartDate();
-    		
-    		if(treatmentStartDate==null) {
-    			continue;
-    		}
-    		
-    		
-    		//check this
-    		RegimenHistory rh = RegimenUtils.getTbRegimenHistory(p);
-    		rrr = new RegimenReportRow();
+		
+		return new ModelAndView("/module/mdrtb/reporting/regimen", model);
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/module/mdrtb/reporting/regimen")
+	public static void doRegimen(@RequestParam("district") Integer districtId, @RequestParam("oblast") Integer oblastId,
+	        @RequestParam("facility") Integer facilityId, @RequestParam(value = "year", required = true) Integer year,
+	        @RequestParam(value = "quarter", required = false) String quarter,
+	        @RequestParam(value = "month", required = false) String month, HttpServletResponse response, ModelMap model)
+	        throws EvaluationException, IOException {
+		
+		System.out.println("---POST-----");
+		
+		ArrayList<Location> locList = Context.getService(MdrtbService.class).getLocationList(oblastId, districtId,
+		    facilityId);
+		ArrayList<TB03uForm> tb03uList = Context.getService(MdrtbService.class)
+		        .getTB03uFormsFilledWithTxStartDateDuring(locList, year, quarter, month);
+		
+		Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month);
+		
+		Date startDate = (Date) (dateMap.get("startDate"));
+		Date endDate = (Date) (dateMap.get("endDate"));
+		
+		MdrtbService ms = Context.getService(MdrtbService.class);
+		ArrayList<RegimenReportRow> rows = new ArrayList<RegimenReportRow>();
+		Integer programId = null;
+		Patient p = null;
+		Date treatmentStartDate = null;
+		RegimenReportRow rrr = null;
+		for (TB03uForm tf : tb03uList) {
+			
+			p = tf.getPatient();
+			programId = tf.getPatProgId();
+			
+			if (programId == null || p == null) {
+				continue;
+			}
+			
+			treatmentStartDate = tf.getMdrTreatmentStartDate();
+			
+			if (treatmentStartDate == null) {
+				continue;
+			}
+			
+			//check this
+			RegimenHistory rh = RegimenUtils.getTbRegimenHistory(p);
+			rrr = new RegimenReportRow();
 			rrr.setP(p);
 			rrr.setTreatmentStartDate(treatmentStartDate);
-    		if(rh!=null) {
-    			Regimen regimen = rh.getRegimenOnDate(endDate);
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CAPREOMYCIN))) {
-    				rrr.setCm(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setCm(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.AMIKACIN))) {
-    				rrr.setAm(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setAm(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.MOXIFLOXACIN))) {
-    				rrr.setMfx(Boolean.TRUE);
-    				
-    			}
-    			
-    			else {
-    				rrr.setMfx(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LEVOFLOXACIN))) {
-    				rrr.setLfx(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setLfx(Boolean.FALSE);
-    			}
-    		
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PROTHIONAMIDE))) {
-    				rrr.setPto(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setPto(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CYCLOSERINE))) {
-    				rrr.setCs(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setCs(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.P_AMINOSALICYLIC_ACID))) {
-    				rrr.setPas(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setPas(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PYRAZINAMIDE))) {
-    				rrr.setZ(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setZ(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID)) && regimen.containsGeneric(ms.getConcept(MdrtbConcepts.RIFAMPICIN))) {
-    				rrr.setHr(Boolean.TRUE);
-    				rrr.setH(Boolean.FALSE);
-    			}
-    			
-    			else {
-    				rrr.setHr(Boolean.FALSE);
-    				if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID))) {
-    					rrr.setH(Boolean.TRUE);
-    				}
-    				else {
-    					rrr.setH(Boolean.FALSE);
-    				}
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ETHAMBUTOL))) {
-    				rrr.setE(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setE(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LINEZOLID))) {
-    				rrr.setLzd(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setLzd(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CLOFAZIMINE))) {
-    				rrr.setCfz(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setCfz(Boolean.FALSE);
-    			}
-    			
-    			if(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.BEDAQUILINE))) {
-    				rrr.setBdq(Boolean.TRUE);
-    			}
-    			
-    			else {
-    				rrr.setBdq(Boolean.FALSE);
-    			}
-    			
-    		}
-    		
-    		rows.add(rrr);
-    		
-    		programId = null;
-    		p = null;
-    		treatmentStartDate = null;
-    		rrr = null;
-    	}
-    	
-    	String oName = null;
-    	String dName = null;
-    	String fName = null;
-    	
-    	if(facilityId!=null) {
-    		Facility f = ms.getFacility(facilityId);
-    		if(f!=null)
-    			fName = f.getName();
-    	}
-    	
-       if(districtId!=null) {
-    	   District d = ms.getDistrict(districtId);
-    	   if(d!=null) {
-    		   dName = d.getName();
-    	   }
-       }
-       
-       if(oblastId!=null) {
-    	   Region o = ms.getOblast(oblastId);
-    	   if(o!=null) {
-    		   oName = o.getName();
-    	   }
-       }
-    	
-    	 FileOutputStream out = null;
- 		try {
- 			out = new FileOutputStream(System.getProperty("user.home") + File.separator + "regimenReport.xls");
- 		} catch (FileNotFoundException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}
-    	
-    	HSSFWorkbook wb = new HSSFWorkbook();
+			if (rh != null) {
+				Regimen regimen = rh.getRegimenOnDate(endDate);
+				rrr.setCm(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CAPREOMYCIN)));
+				rrr.setAm(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.AMIKACIN)));
+				rrr.setMfx(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.MOXIFLOXACIN)));
+				rrr.setLfx(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LEVOFLOXACIN)));
+				rrr.setPto(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PROTHIONAMIDE)));
+				rrr.setCs(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CYCLOSERINE)));
+				rrr.setPas(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.P_AMINOSALICYLIC_ACID)));
+				rrr.setZ(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.PYRAZINAMIDE)));
+				
+				if (regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID))
+				        && regimen.containsGeneric(ms.getConcept(MdrtbConcepts.RIFAMPICIN))) {
+					rrr.setHr(Boolean.TRUE);
+					rrr.setH(Boolean.FALSE);
+				} else {
+					rrr.setHr(Boolean.FALSE);
+					rrr.setH(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ISONIAZID)));
+				}
+				rrr.setE(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.ETHAMBUTOL)));
+				rrr.setLzd(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.LINEZOLID)));
+				rrr.setCfz(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.CLOFAZIMINE)));
+				rrr.setBdq(regimen.containsGeneric(ms.getConcept(MdrtbConcepts.BEDAQUILINE)));
+			}
+			rows.add(rrr);
+			programId = null;
+			p = null;
+			treatmentStartDate = null;
+			rrr = null;
+		}
+		
+		String oName = null;
+		String dName = null;
+		String fName = null;
+		
+		if (facilityId != null) {
+			Facility f = ms.getFacility(facilityId);
+			if (f != null)
+				fName = f.getName();
+		}
+		
+		if (districtId != null) {
+			District d = ms.getDistrict(districtId);
+			if (d != null) {
+				dName = d.getName();
+			}
+		}
+		
+		if (oblastId != null) {
+			Region o = ms.getRegion(oblastId);
+			if (o != null) {
+				oName = o.getName();
+			}
+		}
+		
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(System.getProperty("user.home") + File.separator + "regimenReport.xls");
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		HSSFWorkbook wb = new HSSFWorkbook();
 		// create a new sheet
 		HSSFSheet s = wb.createSheet();
 		
-		if(fName!=null)
+		if (fName != null)
 			wb.setSheetName(0, fName);
 		
-		else if(dName!=null) {
+		else if (dName != null) {
 			wb.setSheetName(0, dName);
-		}
-		else if(oName!=null) {
+		} else if (oName != null) {
 			wb.setSheetName(0, oName);
 		}
 		
@@ -435,315 +329,285 @@ public class RegimenController {
 		nameHeaderCell.setCellValue(Context.getMessageSourceService().getMessage("mdrtb.tb03.name"));
 		
 		//TxStartDate
-		HSSFCell txStartHeaderCell =  headerRow.createCell((short) 2);
+		HSSFCell txStartHeaderCell = headerRow.createCell((short) 2);
 		txStartHeaderCell.setCellStyle(headerStyle);
 		txStartHeaderCell.setCellValue(Context.getMessageSourceService().getMessage("mdrtb.sldreport.treatmentStartDate"));
 		
 		//Cm
-		HSSFCell cmHeaderCell =  headerRow.createCell((short) 3);
+		HSSFCell cmHeaderCell = headerRow.createCell((short) 3);
 		cmHeaderCell.setCellStyle(headerStyle);
 		//cmHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		cmHeaderCell.setCellValue("Cm 1 g");
 		
 		//Am
-		HSSFCell amHeaderCell =  headerRow.createCell((short) 4);
+		HSSFCell amHeaderCell = headerRow.createCell((short) 4);
 		amHeaderCell.setCellStyle(headerStyle);
 		//amHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		amHeaderCell.setCellValue("Am 0.5 g");
 		
 		//Mfx
-		HSSFCell mfxHeaderCell =  headerRow.createCell((short) 5);
+		HSSFCell mfxHeaderCell = headerRow.createCell((short) 5);
 		mfxHeaderCell.setCellStyle(headerStyle);
 		//mfxHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		mfxHeaderCell.setCellValue("Mxf 400 mg");
 		
 		//Lfx
-		HSSFCell lfxHeaderCell =  headerRow.createCell((short) 6);
+		HSSFCell lfxHeaderCell = headerRow.createCell((short) 6);
 		lfxHeaderCell.setCellStyle(headerStyle);
 		//LfxHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		lfxHeaderCell.setCellValue("Lfx 250 mg");
 		
 		//Pto
-		HSSFCell ptoHeaderCell =  headerRow.createCell((short) 7);
+		HSSFCell ptoHeaderCell = headerRow.createCell((short) 7);
 		ptoHeaderCell.setCellStyle(headerStyle);
 		//ptoHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		ptoHeaderCell.setCellValue("Pto 250 mg");
 		
 		//Cs
-		HSSFCell csHeaderCell =  headerRow.createCell((short) 8);
+		HSSFCell csHeaderCell = headerRow.createCell((short) 8);
 		csHeaderCell.setCellStyle(headerStyle);
 		//csHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		csHeaderCell.setCellValue("Cs 250 mg");
 		
 		//Pas
-		HSSFCell pasHeaderCell =  headerRow.createCell((short) 9);
+		HSSFCell pasHeaderCell = headerRow.createCell((short) 9);
 		pasHeaderCell.setCellStyle(headerStyle);
 		//pasHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		pasHeaderCell.setCellValue("PAS 4g");
 		
 		//Z
-		HSSFCell zHeaderCell =  headerRow.createCell((short) 10);
+		HSSFCell zHeaderCell = headerRow.createCell((short) 10);
 		zHeaderCell.setCellStyle(headerStyle);
 		//zHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		zHeaderCell.setCellValue("Z 400 mg");
 		
 		//E
-		HSSFCell eHeaderCell =  headerRow.createCell((short) 11);
+		HSSFCell eHeaderCell = headerRow.createCell((short) 11);
 		eHeaderCell.setCellStyle(headerStyle);
 		//eHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		eHeaderCell.setCellValue("E 400 mg");
 		
 		//H
-		HSSFCell hHeaderCell =  headerRow.createCell((short) 12);
+		HSSFCell hHeaderCell = headerRow.createCell((short) 12);
 		hHeaderCell.setCellStyle(headerStyle);
 		//hHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		hHeaderCell.setCellValue("H 300 mg");
 		
 		//Lzd
-		HSSFCell lzdHeaderCell =  headerRow.createCell((short) 13);
+		HSSFCell lzdHeaderCell = headerRow.createCell((short) 13);
 		lzdHeaderCell.setCellStyle(headerStyle);
 		//lzdHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		lzdHeaderCell.setCellValue("600 mg");
 		
 		//Cfz
-		HSSFCell cfzHeaderCell =  headerRow.createCell((short) 14);
+		HSSFCell cfzHeaderCell = headerRow.createCell((short) 14);
 		cfzHeaderCell.setCellStyle(headerStyle);
 		//cfzHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		cfzHeaderCell.setCellValue("Cfz 100 mg");
 		
 		//Bdq
-		HSSFCell bdqHeaderCell =  headerRow.createCell((short) 15);
+		HSSFCell bdqHeaderCell = headerRow.createCell((short) 15);
 		bdqHeaderCell.setCellStyle(headerStyle);
 		//bdqHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		bdqHeaderCell.setCellValue("Bdq 100 mg");
 		
 		//HR
-		HSSFCell hrHeaderCell =  headerRow.createCell((short) 16);
+		HSSFCell hrHeaderCell = headerRow.createCell((short) 16);
 		hrHeaderCell.setCellStyle(headerStyle);
 		//hrHeaderCell.setEncoding(HSSFHeaderCell.ENCODING_UTF_16);
 		hrHeaderCell.setCellValue("HR 75/150");
-			
+		
 		//}
 		
 		//do header row stuff here
 		RegimenReportRow row = null;
 		HSSFCellStyle cs = null;
 		
-    	for(int i=0; i<rows.size(); i++) {
-    		
-    		row = rows.get(i);
-    		Patient pt = row.getPatient();
-    		if(i%2==0)
-    			cs = evenStyle;
-    		else
-    			cs = oddStyle;
-    		
-    		HSSFRow regRow = s.createRow(i+1);
-    		
-    		//serial number
-    		HSSFCell serialCell = regRow.createCell((short) 0);
-    		serialCell.setCellStyle(cs);
-    		serialCell.setCellValue("" + (i+1));
-    		
-    		//Name
-    		HSSFCell nameCell = regRow.createCell((short) 1);
-    		nameCell.setCellStyle(cs);
-    		//nameCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		nameCell.setCellValue(pt.getFamilyName() + "," + pt.getGivenName());
-    		
-    		//TxStartDate
-    		HSSFCell txStartCell = regRow.createCell((short) 2);
-    		txStartCell.setCellStyle(cs);
-    		txStartCell.setCellValue(row.getFormattedTreatmentStartDate());
-    		
-    		
-    		//Cm
-    		HSSFCell cmCell = regRow.createCell((short) 3);
-    		cmCell.setCellStyle(cs);
-    		//cmCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getCm())
-    			cmCell.setCellValue("√");
-    		
-    		//Am
-    		HSSFCell amCell = regRow.createCell((short) 4);
-    		amCell.setCellStyle(cs);
-    		//amCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getAm())
-    			amCell.setCellValue("√");
-    		
-    		//Mfx
-    		HSSFCell mfxCell = regRow.createCell((short) 5);
-    		mfxCell.setCellStyle(cs);
-    		//mfxCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getMfx())
-    			mfxCell.setCellValue("√");
-    		
-    		//Lfx
-    		HSSFCell lfxCell = regRow.createCell((short) 6);
-    		lfxCell.setCellStyle(cs);
-    		//LfxCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getLfx())
-    			lfxCell.setCellValue("√");
-    		
-    		//Pto
-    		HSSFCell ptoCell = regRow.createCell((short) 7);
-    		ptoCell.setCellStyle(cs);
-    		//ptoCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getPto())
-    			ptoCell.setCellValue("√");
-    		
-    		//Cs
-    		HSSFCell csCell = regRow.createCell((short) 8);
-    		csCell.setCellStyle(cs);
-    		//csCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getCs())
-    			csCell.setCellValue("√");
-    		
-    		//Pas
-    		HSSFCell pasCell = regRow.createCell((short) 9);
-    		pasCell.setCellStyle(cs);
-    		//pasCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getPas())
-    			pasCell.setCellValue("√");
-    		
-    		//Z
-    		HSSFCell zCell = regRow.createCell((short) 10);
-    		zCell.setCellStyle(cs);
-    		//zCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getZ())
-    			zCell.setCellValue("√");
-    		
-    		//E
-    		HSSFCell eCell = regRow.createCell((short) 11);
-    		eCell.setCellStyle(cs);
-    		//eCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getE())
-    			eCell.setCellValue("√");
-    		
-    		//H
-    		HSSFCell hCell = regRow.createCell((short) 12);
-    		hCell.setCellStyle(cs);
-    		//hCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getH())
-    			hCell.setCellValue("√");
-    		
-    		//Lzd
-    		HSSFCell lzdCell = regRow.createCell((short) 13);
-    		lzdCell.setCellStyle(cs);
-    		//lzdCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getLzd())
-    			lzdCell.setCellValue("√");
-    		
-    		//Cfz
-    		HSSFCell cfzCell = regRow.createCell((short) 14);
-    		cfzCell.setCellStyle(cs);
-    		//cfzCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getCfz())
-    			cfzCell.setCellValue("√");
-    		
-    		//Bdq
-    		HSSFCell bdqCell = regRow.createCell((short) 15);
-    		bdqCell.setCellStyle(cs);
-    		//bdqCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getBdq())
-    			bdqCell.setCellValue("√");
-    		
-    		//HR
-    		HSSFCell hrCell = regRow.createCell((short) 16);
-    		hrCell.setCellStyle(cs);
-    		//hrCell.setEncoding(HSSFCell.ENCODING_UTF_16);
-    		if(row.getHr())
-    			hrCell.setCellValue("√");
-    		
-    	}
-    	HSSFPalette palette  = wb.getCustomPalette();
-    	palette.setColorAtIndex(HSSFColor.BLUE.index, (byte) 79, (byte) 129, (byte) 189);
-    	palette.setColorAtIndex(HSSFColor.PALE_BLUE.index, (byte) 220, (byte) 230, (byte) 241);
-    	palette.setColorAtIndex(HSSFColor.BLUE_GREY.index, (byte) 184, (byte) 204, (byte) 228);
-    	
-    	
-        
-        
-
-   	 // write the workbook to the output stream
-   	 // close our file (don't blow out our file handles
-   	 try {
+		for (int i = 0; i < rows.size(); i++) {
+			
+			row = rows.get(i);
+			Patient pt = row.getPatient();
+			if (i % 2 == 0)
+				cs = evenStyle;
+			else
+				cs = oddStyle;
+			
+			HSSFRow regRow = s.createRow(i + 1);
+			
+			//serial number
+			HSSFCell serialCell = regRow.createCell((short) 0);
+			serialCell.setCellStyle(cs);
+			serialCell.setCellValue("" + (i + 1));
+			
+			//Name
+			HSSFCell nameCell = regRow.createCell((short) 1);
+			nameCell.setCellStyle(cs);
+			//nameCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			nameCell.setCellValue(pt.getFamilyName() + "," + pt.getGivenName());
+			
+			//TxStartDate
+			HSSFCell txStartCell = regRow.createCell((short) 2);
+			txStartCell.setCellStyle(cs);
+			txStartCell.setCellValue(row.getFormattedTreatmentStartDate());
+			
+			//Cm
+			HSSFCell cmCell = regRow.createCell((short) 3);
+			cmCell.setCellStyle(cs);
+			//cmCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getCm())
+				cmCell.setCellValue("√");
+			
+			//Am
+			HSSFCell amCell = regRow.createCell((short) 4);
+			amCell.setCellStyle(cs);
+			//amCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getAm())
+				amCell.setCellValue("√");
+			
+			//Mfx
+			HSSFCell mfxCell = regRow.createCell((short) 5);
+			mfxCell.setCellStyle(cs);
+			//mfxCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getMfx())
+				mfxCell.setCellValue("√");
+			
+			//Lfx
+			HSSFCell lfxCell = regRow.createCell((short) 6);
+			lfxCell.setCellStyle(cs);
+			//LfxCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getLfx())
+				lfxCell.setCellValue("√");
+			
+			//Pto
+			HSSFCell ptoCell = regRow.createCell((short) 7);
+			ptoCell.setCellStyle(cs);
+			//ptoCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getPto())
+				ptoCell.setCellValue("√");
+			
+			//Cs
+			HSSFCell csCell = regRow.createCell((short) 8);
+			csCell.setCellStyle(cs);
+			//csCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getCs())
+				csCell.setCellValue("√");
+			
+			//Pas
+			HSSFCell pasCell = regRow.createCell((short) 9);
+			pasCell.setCellStyle(cs);
+			//pasCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getPas())
+				pasCell.setCellValue("√");
+			
+			//Z
+			HSSFCell zCell = regRow.createCell((short) 10);
+			zCell.setCellStyle(cs);
+			//zCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getZ())
+				zCell.setCellValue("√");
+			
+			//E
+			HSSFCell eCell = regRow.createCell((short) 11);
+			eCell.setCellStyle(cs);
+			//eCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getE())
+				eCell.setCellValue("√");
+			
+			//H
+			HSSFCell hCell = regRow.createCell((short) 12);
+			hCell.setCellStyle(cs);
+			//hCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getH())
+				hCell.setCellValue("√");
+			
+			//Lzd
+			HSSFCell lzdCell = regRow.createCell((short) 13);
+			lzdCell.setCellStyle(cs);
+			//lzdCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getLzd())
+				lzdCell.setCellValue("√");
+			
+			//Cfz
+			HSSFCell cfzCell = regRow.createCell((short) 14);
+			cfzCell.setCellStyle(cs);
+			//cfzCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getCfz())
+				cfzCell.setCellValue("√");
+			
+			//Bdq
+			HSSFCell bdqCell = regRow.createCell((short) 15);
+			bdqCell.setCellStyle(cs);
+			//bdqCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getBdq())
+				bdqCell.setCellValue("√");
+			
+			//HR
+			HSSFCell hrCell = regRow.createCell((short) 16);
+			hrCell.setCellStyle(cs);
+			//hrCell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			if (row.getHr())
+				hrCell.setCellValue("√");
+			
+		}
+		HSSFPalette palette = wb.getCustomPalette();
+		palette.setColorAtIndex(HSSFColor.BLUE.index, (byte) 79, (byte) 129, (byte) 189);
+		palette.setColorAtIndex(HSSFColor.PALE_BLUE.index, (byte) 220, (byte) 230, (byte) 241);
+		palette.setColorAtIndex(HSSFColor.BLUE_GREY.index, (byte) 184, (byte) 204, (byte) 228);
+		
+		// write the workbook to the output stream
+		// close our file (don't blow out our file handles
+		try {
 			wb.write(out);
 			out.close();
-		} catch (IOException e1) {
+		}
+		catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-   	 
-   	File file = new File(System.getProperty("user.home") + File.separator + "regimenReport.xls") ;
-   	response.setContentType("application/vnd.ms-excel");
+		
+		File file = new File(System.getProperty("user.home") + File.separator + "regimenReport.xls");
+		response.setContentType("application/vnd.ms-excel");
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format("attachment; filename=\"%s\"", "regimenReport.xls");
+		response.setHeader(headerKey, headerValue);
+		response.setContentLength((int) file.length());
+		
+		FileInputStream inputStream = new FileInputStream(file);
+		
+		OutputStream outStream = response.getOutputStream();
+		byte[] buffer = new byte[4096];
+		int bytesRead = -1;
+		
+		// write bytes read from the input stream into the output stream
+		while ((bytesRead = inputStream.read(buffer)) != -1) {
+			outStream.write(buffer, 0, bytesRead);
+		}
+		
+		inputStream.close();
+		outStream.close();
+		file.delete();
+	}
 	
-	String headerKey = "Content-Disposition";
-    String headerValue = String.format("attachment; filename=\"%s\"",
-            "regimenReport.xls");
-    response.setHeader(headerKey, headerValue);
-    response.setContentLength((int)file.length());
-    
-    FileInputStream inputStream = new FileInputStream(file);
-    
-	OutputStream outStream = response.getOutputStream();
-	byte[] buffer = new byte[4096];
-    int bytesRead = -1;
-
-    // write bytes read from the input stream into the output stream
-    while ((bytesRead = inputStream.read(buffer)) != -1) {
-        outStream.write(buffer, 0, bytesRead);
-    }
-
-    inputStream.close();
-    outStream.close();
-	file.delete();
-    
+	public static Short getColorIndex(String colorStr, HSSFWorkbook wb) {
+		//in this method string containing RGB component is passed
+		//and corresponding color index is obtained and returned. 
+		short index = 0;
+		String[] rgb = colorStr.split(",");
+		System.out.println(colorStr + "--------------");
 		
-    	/*boolean reportStatus;
-    	
-    	    	
-    	reportStatus = Context.getService(MdrtbService.class).readReportStatus(oblastId, districtId, facilityId, year, quarter, month, "TB-03", "DOTSTB");
+		Integer red = Integer.parseInt(rgb[0]);
+		Integer green = Integer.parseInt(rgb[1]);
+		Integer blue = Integer.parseInt(rgb[2]);
 		
-    	System.out.println(reportStatus);
-    	model.addAttribute("oblast", oblastId);
-    	model.addAttribute("district", districtId);
-    	model.addAttribute("facility", facilityId);
-    	model.addAttribute("year", year);
-    	if(month!=null && month.length()!=0)
-			model.addAttribute("month", month.replace("\"", ""));
-		else
-			model.addAttribute("month", "");
+		HSSFPalette palette = wb.getCustomPalette();
+		HSSFColor color = palette.findColor(red.byteValue(), green.byteValue(), blue.byteValue());
 		
-		if(quarter!=null && quarter.length()!=0)
-			model.addAttribute("quarter", quarter.replace("\"", "'"));
-		else
-			model.addAttribute("quarter", "");
-    	//model.addAttribute("reportDate", sdf.format(new Date()));
-    	model.addAttribute("reportStatus", reportStatus);
-    	return "/module/mdrtb/reporting/regimen";*/
-    }
-    
-    private static Short getColorIndex(String colorStr, HSSFWorkbook wb) {
-        //in this method string containing RGB component is passed
-        //and corresponding color index is obtained and returned. 
-        short index = 0;
-        String[] rgb = colorStr.split(",");
-        System.out.println(colorStr+"--------------");
-
-        Integer red = Integer.parseInt(rgb[0]);
-        Integer green = Integer.parseInt(rgb[1]);
-        Integer blue = Integer.parseInt(rgb[2]);
-
-        HSSFPalette palette = wb.getCustomPalette();
-        HSSFColor color = palette.findColor(red.byteValue(), green.byteValue(), blue.byteValue());
-        
-        if(color != null){
-             index = color.getIndex();
-        }
-        else{
-            index = HSSFColor.WHITE.index;
-        }
-        return index;
-     }
+		if (color != null) {
+			index = color.getIndex();
+		} else {
+			index = HSSFColor.WHITE.index;
+		}
+		return index;
+	}
 }

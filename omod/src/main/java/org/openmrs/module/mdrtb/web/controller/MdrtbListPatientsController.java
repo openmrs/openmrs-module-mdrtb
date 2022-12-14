@@ -24,65 +24,59 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MdrtbListPatientsController {
-
-    /** Logger for this class and subclasses */
-    protected final Log log = LogFactory.getLog(getClass());
-    
-    @InitBinder
-    public void initBinder(WebDataBinder binder) { 
-     	binder.registerCustomEditor(Location.class, new LocationEditor());
-     	binder.registerCustomEditor(ProgramWorkflowState.class, new ProgramWorkflowStateEditor());
-    }  
-    
-    @RequestMapping("/module/mdrtb/mdrtbListPatients")
-    public void listPatients(ModelMap model,
-    				@RequestParam(required=false, value="displayMode") 		String displayMode,
-	    			@RequestParam(required=false, value="identifier") 		String identifier,
-	    			@RequestParam(required=false, value="name") 			String name,
-	    			//@RequestParam(required=false, value="enrollment")		String enrollment,
-	    			@RequestParam(required=false, value="location") 		Location location,
-	    			@RequestParam(required=false, value="oblast") 			String oblast,
-	    			@RequestParam(required=false, value="states") 			List<ProgramWorkflowState> states,
-	    			@RequestParam(required=false, value="minage")			Integer minage,
-	    			@RequestParam(required=false, value="maxage")			Integer maxage,
-	    			@RequestParam(required=false, value="gender")			String gender,
-	    			@RequestParam(required=false, value="year")				Integer year,
-	    			@RequestParam(required=false, value="quarter")			String quarter,
-	    			@RequestParam(required=false, value="month")			String month
-	    			
-	            ) {
-    	
-    	model.addAttribute("displayMode", displayMode);
-    	model.addAttribute("identifier", identifier);
-    	model.addAttribute("name", name);
-    	//model.addAttribute("enrollment", enrollment);
-    	model.addAttribute("location", location);
-    	model.addAttribute("oblast", oblast);
-    	model.addAttribute("states", states);
-    	model.addAttribute("minage", minage);
-    	model.addAttribute("maxage", maxage);
-    	model.addAttribute("gender", gender);
-    	model.addAttribute("year", year);
-    	model.addAttribute("quarter", quarter);
-    	model.addAttribute("month", month);
-    	
-    	if (StringUtils.hasText(displayMode)) {
-    		Cohort cohort = MdrtbUtil.getMdrPatientsTJK(identifier, name, /*enrollment,*/ location, oblast, states, minage, maxage, gender,year, quarter, month);
-        	model.addAttribute("patientIds", cohort.getCommaSeparatedPatientIds());
-        	model.addAttribute("patients", Context.getPatientSetService().getPatients(cohort.getMemberIds()));
-    	}
-    	
-    	MdrtbService svc = Context.getService(MdrtbService.class);
-    	
-    	Program mdrtbProgram = svc.getMdrtbProgram();
-    	model.addAttribute("mdrProgram", mdrtbProgram);
-    	
-    	/*List<Location> patientLocations = svc.getLocationsWithAnyProgramEnrollments();
-    	model.addAttribute("patientLocations", patientLocations);*/
-    	List<Location> patientLocations = Context.getLocationService().getAllLocations(false);
-    	model.addAttribute("patientLocations", patientLocations);
-    	
-    	List<Region> oblasts = Context.getService(MdrtbService.class).getOblasts();
+	
+	/** Logger for this class and subclasses */
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(Location.class, new LocationEditor());
+		binder.registerCustomEditor(ProgramWorkflowState.class, new ProgramWorkflowStateEditor());
+	}
+	
+	@RequestMapping("/module/mdrtb/mdrtbListPatients")
+	public void listPatients(ModelMap model, @RequestParam(required = false, value = "displayMode") String displayMode,
+	        @RequestParam(required = false, value = "identifier") String identifier,
+	        @RequestParam(required = false, value = "name") String name,
+	        //@RequestParam(required=false, value="enrollment")		String enrollment,
+	        @RequestParam(required = false, value = "location") Location location,
+	        @RequestParam(required = false, value = "oblast") String oblast,
+	        @RequestParam(required = false, value = "states") List<ProgramWorkflowState> states,
+	        @RequestParam(required = false, value = "minage") Integer minage,
+	        @RequestParam(required = false, value = "maxage") Integer maxage,
+	        @RequestParam(required = false, value = "gender") String gender,
+	        @RequestParam(required = false, value = "year") Integer year,
+	        @RequestParam(required = false, value = "quarter") String quarter,
+	        @RequestParam(required = false, value = "month") String month) {
+		
+		model.addAttribute("displayMode", displayMode);
+		model.addAttribute("identifier", identifier);
+		model.addAttribute("name", name);
+		//model.addAttribute("enrollment", enrollment);
+		model.addAttribute("location", location);
+		model.addAttribute("oblast", oblast);
+		model.addAttribute("states", states);
+		model.addAttribute("minage", minage);
+		model.addAttribute("maxage", maxage);
+		model.addAttribute("gender", gender);
+		model.addAttribute("year", year);
+		model.addAttribute("quarter", quarter);
+		model.addAttribute("month", month);
+		
+		if (StringUtils.hasText(displayMode)) {
+			Cohort cohort = MdrtbUtil.getMdrPatientsTJK(identifier, name, /*enrollment,*/ location, oblast, states, minage,
+			    maxage, gender, year, quarter, month);
+			model.addAttribute("patientIds", cohort.getCommaSeparatedPatientIds());
+			model.addAttribute("patients", Context.getPatientSetService().getPatients(cohort.getMemberIds()));
+		}
+		
+		Program mdrtbProgram = Context.getService(MdrtbService.class).getMdrtbProgram();
+		model.addAttribute("mdrProgram", mdrtbProgram);
+		
+		List<Location> patientLocations = Context.getLocationService().getAllLocations(false);
+		model.addAttribute("patientLocations", patientLocations);
+		
+		List<Region> oblasts = Context.getService(MdrtbService.class).getRegions();
 		model.addAttribute("oblasts", oblasts);
-    }
+	}
 }

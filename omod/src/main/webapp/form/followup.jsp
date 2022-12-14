@@ -6,14 +6,11 @@
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
-
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 
 <!-- CUSTOM JQUERY  -->
 <c:set var="defaultReturnUrl" value="${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientProgramId=${patientProgramId}"/>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -63,8 +60,6 @@
 			jQuery("#followupForm").submit();
 		}
 	}
-
--->
 
 </script>
 

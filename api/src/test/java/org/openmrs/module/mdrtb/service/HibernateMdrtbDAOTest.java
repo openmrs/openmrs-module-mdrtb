@@ -5,7 +5,6 @@ package org.openmrs.module.mdrtb.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,84 +62,6 @@ public class HibernateMdrtbDAOTest extends MdrtbBase {
 		Context.clearSession();
 		PatientIdentifier identifier = dao.getPatientIdentifierById(1001);
 		assertEquals(identifier.getPatient(), harry);
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#doPDF(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testDoPDF() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#countPDFRows()}.
-	 */
-	@Test
-	@Ignore
-	public final void testCountPDFRows() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#countPDFColumns()}.
-	 */
-	@Test
-	@Ignore
-	public final void testCountPDFColumns() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getPDFColumns()}.
-	 */
-	@Test
-	@Ignore
-	public final void testPDFColumns() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#getPDFData(java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testPDFRows() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#readTableData(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testReadTableData() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#unlockReport(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testUnlockReport() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	/**
-	 * Test method for
-	 * {@link org.openmrs.module.mdrtb.service.db.HibernateMdrtbDAO#readReportStatus(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	@Ignore
-	public final void testReadReportStatus() {
-		fail("Not yet implemented"); // TODO
 	}
 	
 	/**

@@ -22,9 +22,8 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.SLDRegimenTypeCohortDefinition")
 public class SLDRegimenTypeCohortDefinition extends BaseCohortDefinition {
-
-    public static final long serialVersionUID = 1L;
-    
+	
+	public static final long serialVersionUID = 1L;
 	
 	@ConfigurationProperty
 	private Date startDate;
@@ -35,56 +34,37 @@ public class SLDRegimenTypeCohortDefinition extends BaseCohortDefinition {
 	@ConfigurationProperty
 	private Concept regType;
 	
-	
-	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
 	public SLDRegimenTypeCohortDefinition() {
 		super();
 	}
-
-
-
+	
 	public Date getStartDate() {
 		return startDate;
 	}
-
-
-
+	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
-
-
+	
 	public Date getEndDate() {
 		return endDate;
 	}
-
-
-
+	
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-
-
+	
 	public Concept getRegType() {
 		return regType;
 	}
-
-
-
+	
 	public void setRegType(Concept regType) {
 		this.regType = regType;
 	}
-	
-	
-
-
-
 	
 }
