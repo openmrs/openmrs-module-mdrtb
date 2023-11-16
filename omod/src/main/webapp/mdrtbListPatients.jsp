@@ -60,11 +60,11 @@
 						<table>
 							<tr>
 								<th><spring:message code="general.name"/>&nbsp;</th>
-								<td><input type="text" name="name" value="${name}"/></td>
+								<td><input type="text" name="name" value="<c:out value='${name}'/>"/></td>
 							</tr>
 							<tr>
 								<th><spring:message code="general.id"/>&nbsp;</th>
-								<td><input type="text" name="identifier" value="${identifier}"/></td>
+								<td><input type="text" name="identifier" value="<c:out value='${identifier}'/>"/></td>
 							</tr>
 						</table>
 						<br/>
@@ -188,10 +188,10 @@
 													</a>
 												</openmrs:extensionPoint>
 											</td>
-											<td class="patientTable" style="white-space:nowrap;">${p.patientIdentifier.identifier}</td>
-											<td class="patientTable" >${p.familyName}, ${p.givenName} ${p.middleName}</td>
-											<td class="patientTable" style="white-space:nowrap;">${p.age}</td>
-											<td class="patientTable" style="white-space:nowrap;">${p.gender}</td>
+											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.patientIdentifier.identifier}"/></td>
+											<td class="patientTable" ><c:out value="${p.familyName}"/>, <c:out value="${p.givenName}"/> <c:out value="${p.middleName}"/> </td>
+											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.age}"/></td>
+											<td class="patientTable" style="white-space:nowrap;"><c:out value="${p.gender}"/></td>
 										</tr>
 									</c:forEach>
 								</tbody>
