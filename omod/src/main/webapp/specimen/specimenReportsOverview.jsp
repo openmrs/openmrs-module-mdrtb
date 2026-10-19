@@ -6,22 +6,22 @@
 	#content td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenReports"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.specimenReports"/></b>
 <div class="box" style="margin:0px;">
 
 <form action="specimenReportsOverview.form" method="POST">
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td><spring:message code="mdrtb.specimenReports.dateRange1"/> <openmrs_tag:dateField formFieldName="startDateCollected" startValue="${query.startDateCollected}"/> <spring:message code="mdrtb.specimenReports.dateRange2"/> <openmrs_tag:dateField formFieldName="endDateCollected" startValue="${query.endDateCollected}"/></td>
+<td><mdrtb:message code="mdrtb.specimenReports.dateRange1"/> <openmrs_tag:dateField formFieldName="startDateCollected" startValue="${query.startDateCollected}"/> <mdrtb:message code="mdrtb.sldreport.and"/> <openmrs_tag:dateField formFieldName="endDateCollected" startValue="${query.endDateCollected}"/></td>
 </tr>
 <tr>
-<td><spring:message code="mdrtb.specimenReports.daysSinceSmear1"/> <input type="text" size="5" name="daysSinceSmear" value="${query.daysSinceSmear}"/> <spring:message code="mdrtb.specimenReports.daysSinceSmear2"/></td>
+<td><mdrtb:message code="mdrtb.specimenReports.daysSinceSmear1"/> <input type="text" size="5" name="daysSinceSmear" value="${query.daysSinceSmear}"/> <mdrtb:message code="mdrtb.specimenReports.daysSinceSmear2"/></td>
 </tr>
 <tr>
-<td><spring:message code="mdrtb.specimenReports.daysSinceCulture1"/> <input type="text" size="5" name="daysSinceCulture" value="${query.daysSinceCulture}"/> <spring:message code="mdrtb.specimenReports.daysSinceCulture2"/></td>
+<td><mdrtb:message code="mdrtb.specimenReports.daysSinceCulture1"/> <input type="text" size="5" name="daysSinceCulture" value="${query.daysSinceCulture}"/> <mdrtb:message code="mdrtb.specimenReports.daysSinceCulture2"/></td>
 </tr>
 <tr>
-<td><spring:message code="mdrtb.specimenReports.showSpecimensTestedAt"/>:
+<td><mdrtb:message code="mdrtb.specimenReports.showSpecimensTestedAt"/>:
 <select name="lab">
 <c:forEach var="location" items="${locations}">
 <option value="${location.locationId}" <c:if test="${location == query.lab}">selected</c:if> >${location.displayString}</option>
@@ -30,7 +30,7 @@
 </td>
 </tr>
 <tr>
-<td><button type="submit"><spring:message code="mdrtb.submitQuery"/></button></td>
+<td><button type="submit"><mdrtb:message code="mdrtb.submitQuery"/></button></td>
 <td>&nbsp;</td>
 </tr>
 </table>

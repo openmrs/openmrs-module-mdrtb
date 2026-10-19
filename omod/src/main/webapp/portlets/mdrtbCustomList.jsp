@@ -1,7 +1,12 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/js/ui.multiselect.js" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/css/dataTables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/dataTables/js/jquery.dataTables.min.js" />
+
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
 
 <openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/css/ui.multiselect.css" />
 <openmrs:htmlInclude file="/moduleResources/mdrtb/multiselect/js/plugins/localisation/jquery.localisation-min.js" />
@@ -55,10 +60,13 @@
 
 <style>
 	.multiselect {
-		width: 60%;
+		width: 800px;
 		height: 400px;
 	}
-
+	.ui-multiselect div.available {
+		position: absolute; 
+		left: 820px; 
+	}
 </style>
 
 <div style="padding-left:5px; padding-right:5px; width:100%;">
@@ -77,7 +85,7 @@
 				</c:if>
 			</c:forEach>
 		</select>
-		<b><spring:message code="mdrtb.optionally"/>, <spring:message code="mdrtb.sortBy"/></b><br/>
+		<b><mdrtb:message code="mdrtb.optionally"/>, <mdrtb:message code="mdrtb.sortBy"/></b><br/>
 		<select name="sort">
 			<option value=""></option>
 			<c:forEach items="${model.availableColumns}" var="entry">
@@ -87,17 +95,17 @@
 			</c:forEach>
 		</select>
 		&nbsp;&nbsp;|&nbsp;&nbsp;
-		<button><spring:message code="mdrtb.outputToList"/></button>
+		<button><mdrtb:message code="mdrtb.outputToList"/></button>
 		&nbsp;&nbsp;
-		<input type="button" value="<spring:message code="mdrtb.cancel"/>" id="cancelButton"/>
+		<input type="button" value="<mdrtb:message code="mdrtb.cancel"/>" id="cancelButton"/>
 	</div>
 </div>
 
 <div id="patientResultTable">
 	<c:if test="${!empty model.columns}">
 		<div style="padding:5px;">
-			<input type="button" id="configureButton" value="<spring:message code="mdrtb.configureColumns" text="Configure Columns"/>"/>
-			<button onclick="outputToExcel(); return false;"><spring:message code="mdrtb.exportToExcel"/></button>
+			<input type="button" id="configureButton" value="<mdrtb:message code="mdrtb.configureColumns" text="Configure Columns"/>"/>
+			<button onclick="outputToExcel(); return false;"><mdrtb:message code="mdrtb.exportToExcel"/></button>
 		</div>
 		<hr/>
 		<c:choose>
@@ -120,7 +128,7 @@
 							<tr class="patientRow patientRow${p.patientId}">
 								<td class="patientTable" style="white-space:nowrap; width:20px;">
 									<a href="dashboard/dashboard.form?patientId=${p.patientId}">
-										<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<spring:message code="general.view"/>" border="0" align="top" />
+										<img src="${pageContext.request.contextPath}/images/lookup.gif" title="<mdrtb:message code="general.view"/>" border="0" align="top" />
 									</a>
 								</td>
 								<c:forEach items="${model.columns}" var="c">

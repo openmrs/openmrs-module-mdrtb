@@ -22,23 +22,23 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 @Localized("mdrtb.reporting.DstResultCohortDefinition")
 public class DstResultCohortDefinition extends BaseCohortDefinition {
-
-    public static final long serialVersionUID = 1L;
-    
-	@ConfigurationProperty(group="resultDateGroup")
+	
+	public static final long serialVersionUID = 1L;
+	
+	@ConfigurationProperty(group = "resultDateGroup")
 	private Date minResultDate;
 	
-	@ConfigurationProperty(group="resultDateGroup")
+	@ConfigurationProperty(group = "resultDateGroup")
 	private Date maxResultDate;
 	
-	@ConfigurationProperty(group="resistanceGroup")
+	@ConfigurationProperty(group = "resistanceGroup")
 	private TbClassification tbClassification;
 	
-	@ConfigurationProperty(group="resistanceGroup")
+	@ConfigurationProperty(group = "resistanceGroup")
 	private String specificProfile;
 	
 	//***** CONSTRUCTORS *****
-
+	
 	/**
 	 * Default Constructor
 	 */
@@ -49,63 +49,61 @@ public class DstResultCohortDefinition extends BaseCohortDefinition {
 	//***** INSTANCE METHODS *****
 	
 	/**
-	 * @see java.lang.Object#toString()
+	 * @see Object#toString()
 	 */
 	public String toString() {
 		return super.toString();
 	}
 	
 	//***** PROPERTY ACCESS *****
-
+	
 	/**
 	 * @return the minResultDate
 	 */
 	public Date getMinResultDate() {
 		return minResultDate;
 	}
-
+	
 	/**
 	 * @param minResultDate the minResultDate to set
 	 */
 	public void setMinResultDate(Date minResultDate) {
 		this.minResultDate = minResultDate;
 	}
-
+	
 	/**
 	 * @return the maxResultDate
 	 */
 	public Date getMaxResultDate() {
 		return maxResultDate;
 	}
-
+	
 	/**
 	 * @param maxResultDate the maxResultDate to set
 	 */
 	public void setMaxResultDate(Date maxResultDate) {
 		this.maxResultDate = maxResultDate;
 	}
-
+	
 	/**
-	 * @param tbClassification
-	 */
+     */
 	public void setTbClassification(TbClassification tbClassification) {
-	    this.tbClassification = tbClassification;
-    }
-
+		this.tbClassification = tbClassification;
+	}
+	
 	/**
-	 * @return
-	 */
+     */
 	public TbClassification getTbClassification() {
-	    return tbClassification;
-    }
-
+		return tbClassification;
+	}
+	
 	/**
 	 * @return the specificProfile
 	 */
 	public String getSpecificProfile() {
 		return specificProfile;
 	}
-
+	
 	/**
 	 * @param specificProfile the specificProfile to set
 	 */

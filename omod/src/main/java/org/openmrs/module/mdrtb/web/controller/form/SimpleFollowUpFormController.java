@@ -1,15 +1,13 @@
 package org.openmrs.module.mdrtb.web.controller.form;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.form.SimpleFollowUpForm;
 import org.openmrs.module.mdrtb.form.SimpleFormValidator;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.web.util.MdrtbWebUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,8 +26,9 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 	
 	@ModelAttribute("followup")
 	public SimpleFollowUpForm getIntakeForm(@RequestParam(required = true, value = "encounterId") Integer encounterId,
-	                                      @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) throws SecurityException,
+	        IllegalArgumentException {
+		
 		// if no form is specified, create a new one
 		if (encounterId == -1) {
 			MdrtbPatientProgram program = Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
@@ -38,31 +37,29 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 			
 			// prepopulate the intake form with any program information
 			form.setLocation(program.getLocation());
-				
+			
 			return form;
-		}
-		else {
+		} else {
 			return new SimpleFollowUpForm(Context.getEncounterService().getEncounter(encounterId));
 		}
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showFollowupForm() {	
+	public ModelAndView showFollowupForm() {
 		ModelMap map = new ModelMap();
-		return new ModelAndView("/module/mdrtb/form/followup", map);	
+		return new ModelAndView("/module/mdrtb/form/followup", map);
 	}
 	
-	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processFollowupForm (@ModelAttribute("followup") SimpleFollowUpForm followup, BindingResult errors, 
-	                                         @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
-	                                         @RequestParam(required = false, value = "returnUrl") String returnUrl,
-	                                         SessionStatus status, HttpServletRequest request, ModelMap map) {
-
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView processFollowupForm(@ModelAttribute("followup") SimpleFollowUpForm followup, BindingResult errors,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "returnUrl") String returnUrl, SessionStatus status,
+	        HttpServletRequest request, ModelMap map) {
+		
 		// perform validation and check for errors
 		if (followup != null) {
-    		new SimpleFormValidator().validate(followup, errors);
-    	}
+			new SimpleFormValidator().validate(followup, errors);
+		}
 		
 		if (errors.hasErrors()) {
 			map.put("errors", errors);
@@ -70,12 +67,14 @@ public class SimpleFollowUpFormController extends AbstractFormController {
 		}
 		
 		// save the actual update
-		Context.getEncounterService().saveEncounter(followup.getEncounter());
-
+		if (followup != null) {
+			Context.getEncounterService().saveEncounter(followup.getEncounter());
+		}
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
-
+		
 		// if there is no return URL, default to the patient dashboard
 		if (returnUrl == null || StringUtils.isEmpty(returnUrl)) {
 			returnUrl = request.getContextPath() + "/module/mdrtb/dashboard/dashboard.form";

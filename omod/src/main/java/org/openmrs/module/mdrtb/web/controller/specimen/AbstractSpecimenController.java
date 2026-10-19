@@ -21,8 +21,8 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.comparator.PersonByNameComparator;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
@@ -36,27 +36,27 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 public abstract class AbstractSpecimenController {
 	
 	@InitBinder
-	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders for concepts, locations, and persons
-		binder.registerCustomEditor(Concept.class, new ConceptEditor()); 
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(Person.class, new PersonEditor());
 	}
 	
 	@ModelAttribute("specimens")
-	public Collection<Specimen> getSpecimens(@RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
-											 @RequestParam(required = false, value = "patientId") Integer patientId,
-											 @RequestParam(required = false, value = "specimenId") Integer specimenId) {
+	public Collection<Specimen> getSpecimens(
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "patientId") Integer patientId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		
 		// if we haven't been given a patient program id try to fetch all the specimens for this patient
 		if (patientProgramId == null || patientProgramId == -1) {
@@ -65,14 +65,12 @@ public abstract class AbstractSpecimenController {
 			
 			if (patientId != null) {
 				patient = Context.getPatientService().getPatient(patientId);
-			}
-			else if (specimenId != null) {
+			} else if (specimenId != null) {
 				patient = Context.getService(MdrtbService.class).getSpecimen(specimenId).getPatient();
-			}
-			else {
+			} else {
 				throw new MdrtbAPIException("No pateint program Id, patient id, or specimen Id specified");
 			}
-		
+			
 			return Context.getService(MdrtbService.class).getSpecimens(patient);
 		}
 		
@@ -144,11 +142,11 @@ public abstract class AbstractSpecimenController {
 		// TODO: this should be customizable, so that other installs can define there own provider lists?
 		Role provider = Context.getUserService().getRole("Provider");
 		Collection<User> providers = Context.getUserService().getUsersByRole(provider);
-			
-		// add all the persons to a sorted set sorted by name
-		SortedSet<Person> persons = new TreeSet<Person>(new PersonByNameComparator()); 
 		
-		for(User user : providers) {
+		// add all the persons to a sorted set sorted by name
+		SortedSet<Person> persons = new TreeSet<>(new PersonByNameComparator());
+		
+		for (User user : providers) {
 			persons.add(user.getPerson());
 		}
 		
@@ -167,10 +165,12 @@ public abstract class AbstractSpecimenController {
 	
 	@ModelAttribute("testTypes")
 	public Collection<String> getPossibleTestTypes() {
-		Collection<String> testTypes = new LinkedList<String>();
+		Collection<String> testTypes = new LinkedList<>();
 		testTypes.add("smear");
 		testTypes.add("culture");
 		testTypes.add("dst");
+		testTypes.add("xpert");
+		testTypes.add("hain");
 		return testTypes;
 	}
 	
@@ -187,7 +187,7 @@ public abstract class AbstractSpecimenController {
 	// used in the jquery in specimen.jsp to trigger hide/show of days of positivity field
 	@ModelAttribute("positiveResultsIds")
 	public Collection<String> getPositiveResultsIds() {
-		Set<String> positiveResultsIds = new HashSet<String>();
+		Set<String> positiveResultsIds = new HashSet<>();
 		
 		for (Concept positiveResult : MdrtbUtil.getPositiveResultConcepts()) {
 			positiveResultsIds.add(positiveResult.getConceptId().toString());
@@ -197,7 +197,7 @@ public abstract class AbstractSpecimenController {
 	}
 	
 	@ModelAttribute("scanty")
-	public Concept getConceptScanty() {		
+	public Concept getConceptScanty() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.SCANTY);
 	}
 	
@@ -214,8 +214,25 @@ public abstract class AbstractSpecimenController {
 	@ModelAttribute("otherMycobacteriaNonCoded")
 	public Concept getOtherMycobacteriaNonCoded() {
 		return Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.OTHER_MYCOBACTERIA_NON_CODED);
-	}	
+	}
 	
- }
-
-
+	@ModelAttribute("mtbResults")
+	public Collection<ConceptAnswer> getPossibleMtbResults() {
+		return Context.getService(MdrtbService.class).getPossibleMtbResults();
+	}
+	
+	@ModelAttribute("rifResults")
+	public Collection<ConceptAnswer> getPossibleRifResistanceResults() {
+		return Context.getService(MdrtbService.class).getPossibleRifResistanceResults();
+	}
+	
+	@ModelAttribute("inhResults")
+	public Collection<ConceptAnswer> getPossibleInhResistanceResults() {
+		return Context.getService(MdrtbService.class).getPossibleRifResistanceResults();
+	}
+	
+	@ModelAttribute("xpertMtbBurdens")
+	public Collection<ConceptAnswer> getPossibleXpertMtbBurdens() {
+		return Context.getService(MdrtbService.class).getPossibleXpertMtbBurdens();
+	}
+}

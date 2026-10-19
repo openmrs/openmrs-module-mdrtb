@@ -15,21 +15,30 @@ import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.openmrs.util.OpenmrsUtil;
 
 public class StyleHelper {
+	
 	HSSFWorkbook wb;
-	Map fonts = new HashMap();
-	Map styles = new HashMap();
-	Collection fontAttributeNames = new HashSet();
-	Collection fontAttributeStarting = new ArrayList();
+	
+	Map<String, HSSFFont> fonts = new HashMap<>();
+	
+	Map<String, HSSFCellStyle> styles = new HashMap<>();
+	
+	Collection<String> fontAttributeNames = new HashSet<>();
+	
+	Collection<String> fontAttributeStarting = new ArrayList<>();
+	
 	short dateDataFormat;
 	
-	static Map backgroundColors = new HashMap();
+	static Map<String, Short> backgroundColors = new HashMap<>();
 	static {
-		backgroundColors.put("grey", new Short(HSSFColor.GREY_40_PERCENT.index));
+		backgroundColors.put("grey", new Short(HSSFColor.HSSFColorPredefined.GREY_40_PERCENT.getIndex()));
 	}
-
+	
 	public StyleHelper(HSSFWorkbook wb) {
 		this.wb = wb;
 		fontAttributeNames.add("bold");
@@ -39,10 +48,10 @@ public class StyleHelper {
 		HSSFDataFormat df = wb.createDataFormat();
 		dateDataFormat = df.getFormat("d-mmm-yy");
 	}
-
+	
 	public HSSFFont getFont(String s) {
-		SortedSet att = new TreeSet();
-		for (StringTokenizer st = new StringTokenizer(s, ","); st.hasMoreTokens(); ) {
+		SortedSet<String> att = new TreeSet<>();
+		for (StringTokenizer st = new StringTokenizer(s, ","); st.hasMoreTokens();) {
 			String str = st.nextToken().trim().toLowerCase();
 			if (str.equals("")) {
 				continue;
@@ -54,10 +63,10 @@ public class StyleHelper {
 			return (HSSFFont) fonts.get(descriptor);
 		} else {
 			HSSFFont font = wb.createFont();
-			for (Iterator i = att.iterator(); i.hasNext(); ) {
+			for (Iterator<String> i = att.iterator(); i.hasNext();) {
 				String str = (String) i.next();
 				if (str.equals("bold")) {
-					font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+					font.setBold(true);
 				} else if (str.equals("italic")) {
 					font.setItalic(true);
 				} else if (str.equals("underline")) {
@@ -71,7 +80,7 @@ public class StyleHelper {
 			return font;
 		}
 	}
-
+	
 	// pass a comma-separated string containing attributes:
 	//    bold
 	//    italic
@@ -82,11 +91,12 @@ public class StyleHelper {
 	//    align=center | left | right | fill
 	//    date
 	//    bgcolor=grey
-
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public HSSFCellStyle getStyle(String s) {
 		SortedSet att = new TreeSet();
 		SortedSet fontAtts = new TreeSet();
-		for (StringTokenizer st = new StringTokenizer(s, ","); st.hasMoreTokens(); ) {
+		for (StringTokenizer st = new StringTokenizer(s, ","); st.hasMoreTokens();) {
 			String str = st.nextToken().trim().toLowerCase();
 			if (str.equals("")) {
 				continue;
@@ -95,7 +105,7 @@ public class StyleHelper {
 			if (fontAttributeNames.contains(str)) {
 				isFont = true;
 			} else {
-				for (Iterator i = fontAttributeStarting.iterator(); i.hasNext(); ) {
+				for (Iterator i = fontAttributeStarting.iterator(); i.hasNext();) {
 					if (str.startsWith((String) i.next())) {
 						isFont = true;
 						break;
@@ -116,24 +126,25 @@ public class StyleHelper {
 				HSSFFont font = getFont(OpenmrsUtil.join(fontAtts, ","));
 				style.setFont(font);
 			}
-			for (Iterator i = att.iterator(); i.hasNext(); ) {
+			for (Iterator<?> i = att.iterator(); i.hasNext();) {
 				helper(style, (String) i.next());
 			}
 			styles.put(descriptor, style);
 			return style;
 		}
 	}
-
-	public HSSFCellStyle getAugmented(HSSFCellStyle style,  String s) {
+	
+	public HSSFCellStyle getAugmented(HSSFCellStyle style, String s) {
 		String desc = null;
-		for (Iterator i = styles.entrySet().iterator(); i.hasNext(); ) {
+		for (Iterator<?> i = styles.entrySet().iterator(); i.hasNext();) {
 			Map.Entry e = (Map.Entry) i.next();
 			if (e.getValue().equals(style)) {
 				desc = (String) e.getKey();
 			}
 		}
 		if (desc == null) {
-			throw new IllegalArgumentException("StyleHelper.getAugmented() can only take a style registered with this StyleHelper");
+			throw new IllegalArgumentException(
+			        "StyleHelper.getAugmented() can only take a style registered with this StyleHelper");
 		}
 		if (desc.equals("")) {
 			desc = s;
@@ -142,29 +153,28 @@ public class StyleHelper {
 		}
 		return getStyle(desc);
 	}
-
+	
 	private void helper(HSSFCellStyle style, String s) {
 		if (s.equals("wraptext")) {
 			style.setWrapText(true);
 		} else if (s.startsWith("align=")) {
 			s = s.substring(6);
 			if (s.equals("left")) {
-				style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+				style.setAlignment(HorizontalAlignment.LEFT);
 			} else if (s.equals("center")) {
-				style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				style.setAlignment(HorizontalAlignment.CENTER);
 			} else if (s.equals("right")) {
-				style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+				style.setAlignment(HorizontalAlignment.RIGHT);
 			} else if (s.equals("fill")) {
-				style.setAlignment(HSSFCellStyle.ALIGN_FILL);
+				style.setAlignment(HorizontalAlignment.FILL);
 			}
 		} else if (s.startsWith("border=")) {
 			s = s.substring(7);
-			short borderWeight = HSSFCellStyle.BORDER_THIN;
+			BorderStyle borderWeight = BorderStyle.THIN;
 			if (s.indexOf("thick") != -1) {
-				borderWeight = HSSFCellStyle.BORDER_THICK;
-			}
-			else if (s.indexOf("medium") != -1) {
-				borderWeight = HSSFCellStyle.BORDER_MEDIUM;
+				borderWeight = BorderStyle.THICK;
+			} else if (s.indexOf("medium") != -1) {
+				borderWeight = BorderStyle.MEDIUM;
 			}
 			if (s.indexOf("all") != -1) {
 				style.setBorderTop(borderWeight);
@@ -187,12 +197,11 @@ public class StyleHelper {
 			HSSFDataFormat df = wb.createDataFormat();
 			dateDataFormat = df.getFormat(s);
 			style.setDataFormat(dateDataFormat);
-		}
-		else if (s.startsWith("bgcolor=")) {
-			s=s.substring(8);
+		} else if (s.startsWith("bgcolor=")) {
+			s = s.substring(8);
 			if (backgroundColors.containsKey(s)) {
-				style.setFillForegroundColor(((Short)backgroundColors.get(s)).shortValue());
-				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style.setFillForegroundColor((Short) backgroundColors.get(s));
+				style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 			}
 		}
 	}

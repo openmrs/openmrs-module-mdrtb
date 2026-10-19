@@ -3,24 +3,21 @@ package org.openmrs.module.mdrtb.specimen;
 import org.openmrs.Concept;
 
 /**
- * Interface that defines how to interaction with a smear
- * 
- * An implementation of this interface will help us encapsulate the 
- * the messiness of storing the smear data in obsgroups
+ * Interface that defines how to interaction with a smear An implementation of this interface will
+ * help us encapsulate the the messiness of storing the smear data in obsgroups
  */
-public interface Smear extends Bacteriology {
+public interface Smear extends Test {
 	
 	/**
-	 * Data points this interface provides access to:
-	 * 
-	 * bacilli: the bacilli count
-	 * method: the Concept that represents the method used when performing the test
-	 * 
+	 * Data points this interface provides access to: bacilli: the bacilli count method: the Concept
+	 * that represents the method used when performing the test
 	 */
 	
 	public Integer getBacilli();
+	
 	public void setBacilli(Integer bacilli);
 	
 	public Concept getMethod();
+	
 	public void setMethod(Concept method);
 }

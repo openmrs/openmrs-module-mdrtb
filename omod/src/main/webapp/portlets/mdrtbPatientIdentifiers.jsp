@@ -61,12 +61,12 @@ highlightMissing=true/false (defaults to true)
 	function getMessage(msg) {
 		var ret = "";
 	
-		if ( msg == "PatientIdentifier.error.formatInvalid" ) ret = "<spring:message code="PatientIdentifier.error.formatInvalid" />";
-		if ( msg == "PatientIdentifier.error.checkDigit" ) ret = "<spring:message code="PatientIdentifier.error.checkDigit" />";
-		if ( msg == "PatientIdentifier.error.notUnique" ) ret = "<spring:message code="PatientIdentifier.error.notUnique" />";
-		if ( msg == "PatientIdentifier.error.duplicate" ) ret = "<spring:message code="PatientIdentifier.error.duplicate" />";
-		if ( msg == "PatientIdentifier.error.insufficientIdentifiers" ) ret = "<spring:message code="PatientIdentifier.error.insufficientIdentifiers" />";
-		if ( msg == "PatientIdentifier.error.general" ) ret = "<spring:message code="PatientIdentifier.error.general" />";
+		if ( msg == "PatientIdentifier.error.formatInvalid" ) ret = "<mdrtb:message code="PatientIdentifier.error.formatInvalid" />";
+		if ( msg == "PatientIdentifier.error.checkDigit" ) ret = "<mdrtb:message code="PatientIdentifier.error.checkDigit" />";
+		if ( msg == "PatientIdentifier.error.notUnique" ) ret = "<mdrtb:message code="PatientIdentifier.error.notUnique" />";
+		if ( msg == "PatientIdentifier.error.duplicate" ) ret = "<mdrtb:message code="PatientIdentifier.error.duplicate" />";
+		if ( msg == "PatientIdentifier.error.insufficientIdentifiers" ) ret = "<mdrtb:message code="PatientIdentifier.error.insufficientIdentifiers" />";
+		if ( msg == "PatientIdentifier.error.general" ) ret = "<mdrtb:message code="PatientIdentifier.error.general" />";
 		
 		return ret;
 	}
@@ -128,14 +128,14 @@ highlightMissing=true/false (defaults to true)
 							val=""
 						/>
 					</c:if>
-					<input id="idSaveButton_${iter.index}" type="button" value="<spring:message code="general.save" />" disabled="true" onClick="handleSaveIdentifier(${iter.index})"/>
+					<input id="idSaveButton_${iter.index}" type="button" value="<mdrtb:message code="general.save" />" disabled="true" onClick="handleSaveIdentifier(${iter.index})"/>
 				</td>
 				<td>
 					<c:if test="${id_err == null}">
 						<span id="msg_${iter.index}" style="display:none;" class="error"></span>
 					</c:if>
 					<c:if test="${id_err != null}">
-						<span id="msg_${iter.index}" class="error"><spring:message code="${id_err}" /></span>
+						<span id="msg_${iter.index}" class="error"><mdrtb:message code="${id_err}" /></span>
 					</c:if>
 				</td>
 			</tr>

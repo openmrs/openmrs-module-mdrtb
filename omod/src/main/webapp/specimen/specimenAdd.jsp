@@ -1,5 +1,9 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
+<%@ taglib prefix="form" uri="/WEB-INF/view/module/mdrtb/resources/spring-form.tld"%>
+
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>
@@ -16,12 +20,12 @@
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(errors.allErrors) > 0}">
 	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<span class="error"><mdrtb:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 	<br/>
 </c:if>
 
-<b class="boxHeader"><spring:message code="mdrtb.addASpecimen" text="Add a Specimen"/></b>
+<b class="boxHeader"><mdrtb:message code="mdrtb.addASpecimen" text="Add a Specimen"/></b>
 <div class="box">
 
 <form name="specimen" action="add.form?patientId=${patientId}&patientProgramId=${patientProgramId}" method="post">
@@ -29,12 +33,12 @@
 <table>
 
 <tr>
-<td><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</td>
+<td><mdrtb:message code="mdrtb.sampleid" text="Sample ID"/>:</td>
 <td><input type="text" size="10" name="identifier" value="${specimen.identifier}"/></td>
 </tr>
  
 <tr>
-<td><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</td>
+<td><mdrtb:message code="mdrtb.sampleType" text="Sample Type"/>:</td>
 <td>
 <select name="type">
 <option value=""></option>
@@ -46,14 +50,14 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</td>
+<td><mdrtb:message code="mdrtb.dateCollected" text="Date Collected"/>:</td>
 <td><openmrs_tag:dateField formFieldName="dateCollected" startValue="${specimen.dateCollected}"/></td>
 </tr>
 
 <!--  TODO: need to figure out how to map provider names properly: can we use the custom tags? -->
 
 <tr>
-<td><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</td>
+<td><mdrtb:message code="mdrtb.collectedBy" text="Collected By"/>:</td>
 <td>
 <select name="provider">
 <option value=""/>
@@ -65,7 +69,7 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</td>
+<td><mdrtb:message code="mdrtb.locationCollected" text="Location Collected"/>:</td>
 <td>
 <select name="location">
 <c:forEach var="location" items="${locations}">
@@ -76,7 +80,7 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.appearance" text="Appearance"/>:</td>
+<td><mdrtb:message code="mdrtb.appearance" text="Appearance"/>:</td>
 <td>
 <select name="appearance">
 <option value=""></option>
@@ -88,13 +92,13 @@
 </tr>
 
 <tr>
-<td><spring:message code="mdrtb.comments" text="Comments"/>:</td>
+<td><mdrtb:message code="mdrtb.comments" text="Comments"/>:</td>
 <td><textarea name="comments" cols="100" rows="2">${specimen.comments}</textarea></td>
 </tr>
 
 </table>
 
-<button type="submit"><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
+<button type="submit"><mdrtb:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><mdrtb:message code="mdrtb.cancel" text="Cancel"/></button></a>
 
 </form>
 </div>

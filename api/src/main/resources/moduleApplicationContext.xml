@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Beans to add to the current Application context definition -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  		    http://www.springframework.org/schema/context
+  		    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="org.openmrs.module.mdrtb">
+        <context:exclude-filter type="annotation" expression="org.openmrs.annotation.Handler"/>
+    </context:component-scan>
+
+    <!-- Wraps MdrtbService methods in DB transactions and OpenMRS interceptors,
+    which set audit info like dateCreated, changedBy, etc.-->
+    <bean id="mdrtb.MdrtbService"
+            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager" />
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.mdrtb.api.MdrtbServiceImpl">
+				<property name="dao" ref="mdrtb.MdrtbDao" />
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors" />
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource" />
+        </property>
+    </bean>
+
+    <!-- Adds MdrtbService to OpenMRS context so it can be accessed
+    calling Context.getService(MdrtbService.class) -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.mdrtb.api.MdrtbService</value>
+                <ref bean="mdrtb.MdrtbService" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Wraps MessagePropertyService methods in DB transactions and OpenMRS interceptors -->
+    <bean id="mdrtb.MessagePropertyService"
+            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager" />
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.mdrtb.api.MessagePropertyServiceImpl">
+				<property name="messagePropertyDao" ref="mdrtb.MessagePropertyDao" />
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors" />
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource" />
+        </property>
+    </bean>
+
+    <!-- Adds MessagePropertyService to OpenMRS context so it can be accessed
+    calling Context.getService(MessagePropertyService.class) -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.mdrtb.api.MessagePropertyService</value>
+                <ref bean="mdrtb.MessagePropertyService" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Wraps LabTestService in a CGLIB proxy so Context.getService(LabTestService.class) works -->
+    <bean id="mdrtb.LabTestService"
+            class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager" />
+        </property>
+        <property name="target">
+            <ref bean="labtest.LabTestService" />
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors" />
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource" />
+        </property>
+    </bean>
+
+    <!-- Adds LabTestService to OpenMRS context so it can be accessed
+    calling Context.getService(LabTestService.class) -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.mdrtb.api.LabTestService</value>
+                <ref bean="mdrtb.LabTestService" />
+            </list>
+        </property>
+    </bean>
+</beans>

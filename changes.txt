@@ -1,0 +1,96 @@
+## Changes for OpenMRS 2.8 Upgrade
+
+### 2026-06-19
+
+#### Fix: Add reportingcompatibility as required module dependency
+
+**File:** `omod/src/main/resources/config.xml`
+
+**Problem:**
+The module was failing to start on OpenMRS 2.8 with the following error:
+  BeanCreationException: Error creating bean with name 'mdrtbCohortBuilderController':
+  Lookup method resolution failed; Failed to introspect Class
+  [org.openmrs.module.mdrtb.web.controller.reporting.CohortBuilderController]
+
+Root cause: `CohortBuilderController` and `CohortSearchHistory` import classes from
+`org.openmrs.reporting.*` package (PatientFilter, PatientSearch, ReportObjectService, etc.)
+which belong to the `reportingcompatibility` module. In OpenMRS module classloading,
+a module can only access another module's classes if it declares that module as a
+`require_module` or `aware_of_module`. The `reportingcompatibility` module was installed
+but not declared, so its classloader was not accessible to mdrtb at runtime.
+
+**Fix:**
+Added `org.openmrs.module.reportingcompatibility` version `2.10.0` to the
+`<require_modules>` section in `omod/src/main/resources/config.xml`.
+
+This ensures the mdrtb module classloader has visibility into `reportingcompatibility`
+classes at runtime, allowing `CohortBuilderController` to be introspected by Spring
+and the web module application context to initialize successfully.
+
+**Expected outcome:**
+The Spring web context initializes properly, enabling all REST API resources under
+`/rest/v1/mdrtb/*` to be accessible.
+
+---
+
+#### Fix: Resolve unresolved Maven placeholders in MdrtbController
+
+**File:** `omod/src/main/java/org/openmrs/module/mdrtb/web/controller/MdrtbController.java`
+
+**Problem:**
+`MdrtbController` was a leftover template/scaffold from the OpenMRS Maven archetype
+with unresolved Maven filter placeholders (`${rootArtifactid}`, `${rootrootArtifactid}`)
+in its `@Controller` and `@RequestMapping` annotations. Spring 5.3.x (used in OpenMRS
+2.8) is stricter than previous versions and throws:
+  IllegalArgumentException: Could not resolve placeholder 'rootArtifactid' in value
+  "module/${rootArtifactid}/${rootArtifactid}.form"
+
+This caused the `RequestMappingHandlerMapping` to fail during web context initialization.
+
+**Fix:**
+Replaced all occurrences of `${rootArtifactid}` and `${rootrootArtifactid}` with
+the literal module ID `mdrtb` in the class annotations and VIEW constant.
+
+---
+
+#### Fix: Add explicit URL values to ambiguous POST @RequestMapping handlers
+
+**Files:**
+- `omod/.../web/controller/reporting/CloseReportController.java`
+- `omod/.../web/controller/reporting/CloseReportChangesController.java`
+- `omod/.../web/controller/reporting/ExportReportController.java`
+- `omod/.../web/controller/reporting/ViewClosedReportsController.java`
+
+**Problem:**
+Spring 5.3 (used in OpenMRS 2.8) is stricter about ambiguous `@RequestMapping`
+registrations. Four `@Controller` classes had `@RequestMapping(method = POST)` on
+their POST handler methods WITHOUT specifying a URL value AND without a class-level
+`@RequestMapping`. This mapped them all to HTTP POST on the root path, creating
+ambiguous mappings that caused an `IllegalStateException` at startup.
+
+In two of these files, the URL value was present but **commented out**:
+- CloseReportController: `//value="/module/mdrtb/reporting/closeReport"`
+- ViewClosedReportsController: `//, value="/module/mdrtb/reporting/viewClosedReports"`
+
+**Fix:**
+Added or uncommented the explicit `value` URL path on each POST method's
+`@RequestMapping` annotation, matching the corresponding GET handler's URL.
+
+---
+
+#### Fix: Add OpenMRS 2.8 to supportedOpenmrsVersions in all @Resource annotations
+
+**Files:** All 29 REST resource controller files under
+`omod/src/main/java/org/openmrs/module/mdrtb/web/resource/`
+
+**Problem:**
+All `@Resource` annotations in the REST resource controllers declared
+`supportedOpenmrsVersions = { "2.2.*,2.3.*,2.4.*" }` (mdrtb resources) or
+`{ "2.0.*, 2.1.*, 2.2.*, 2.3.*" }` (commonlab resources). OpenMRS 2.8 was not
+listed, so the webservices.rest module refused to register or expose these resources
+at runtime, returning HTTP 404 for all mdrtb REST endpoints.
+
+**Fix:**
+Added `2.8.*` to the `supportedOpenmrsVersions` array in all 29 resource controller
+files. The mdrtb resources now declare `"2.2.*,2.3.*,2.4.*,2.8.*"` and the
+commonlab resources now declare `"2.0.*, 2.1.*, 2.2.*, 2.3.*, 2.8.*"`.

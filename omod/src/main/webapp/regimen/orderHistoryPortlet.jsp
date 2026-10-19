@@ -5,15 +5,15 @@
 		<c:if test="${empty type || type == group.key}">
 			<c:set var="history" value="${group.value}"/>
 			<tr>
-				<td class="groupStyle" colspan="4" style="margin-top:5px;"><spring:message code="mdrtb.treatment.${group.key}"/></td>
+				<td class="groupStyle" colspan="4" style="margin-top:5px;"><mdrtb:message code="mdrtb.treatment.${group.key}"/></td>
 			</tr>
 			<c:choose>
-				<c:when test="${empty history.allRegimens}"><tr><th colspan="4"><spring:message code="mdrtb.none"/></th></tr></c:when>
+				<c:when test="${empty history.allRegimens}"><tr><th colspan="4"><mdrtb:message code="mdrtb.none"/></th></tr></c:when>
 				<c:otherwise>
 					<tr>
-						<th class="headerStyle"><spring:message code="mdrtb.regimen" text="Regimen"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.regimen" text="Regimen"/></th>
 						<c:if test="${!empty history.type.reasonForStartingQuestion}">
-							<th class="headerStyle" width="100%"><spring:message code="mdrtb.treatmentType" text="Type"/></th>
+							<th class="headerStyle" width="100%"><mdrtb:message code="mdrtb.treatmentType" text="Type"/></th>
 						</c:if>
 					</tr>
 					<c:forEach items="${mdrtb:reverse(history.allRegimens)}" var="regimen">

@@ -9,7 +9,7 @@
 
 <c:choose>
 <c:when test="${empty model.chart.records}">
-	<spring:message code="mdrtb.noChart" text="No test results or regimen information available for this patient program."/>
+	<mdrtb:message code="mdrtb.noChart" text="No test results or regimen information available for this patient program."/>
 </c:when>
 
 <c:otherwise>
@@ -21,19 +21,28 @@
 <tr>
 <td class="chartCell" colspan="3">&nbsp;</td>
 <td class="spacerCell"></td>
-<td class="chartCell" colspan="3" align="center" style="font-weight:bold"><spring:message code="mdrtb.bacteriologies" text="Bacteriologies"/></td3>
+<!--  colspan changed to 2 to hide Bacteria column for Tajikistan. Change to 3 to bring back -->
+<td class="chartCell" colspan="2" align="center" style="font-weight:bold"><mdrtb:message code="mdrtb.bacteriologies" text="Bacteriologies"/></td>
 <td class="spacerCell"></td>
-<td class="chartCell" colspan="${fn:length(model.chart.drugTypes)}" align="center" style="font-weight:bold"><spring:message code="mdrtb.dsts" text="DSTs"/></td>
+<td class="chartCell" colspan="2" align="center" style="font-weight:bold"><mdrtb:message code="mdrtb.pcr" text="PCR"/></td>
+<td class="spacerCell"></td>
+<td class="chartCell" colspan="${fn:length(model.chart.drugTypes)}" align="center" style="font-weight:bold"><mdrtb:message code="mdrtb.dsts" text="DSTs"/></td>
 </tr>
 
 <tr>
-<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.month" text="Month"/></td>
-<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.dateCollected" text="Date collected"/></td>
-<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.lab" text="Lab"/></td>
+<td class="chartCell" style="font-weight:bold"><mdrtb:message code="mdrtb.month" text="Month"/></td>
+<td class="chartCell" style="font-weight:bold"><mdrtb:message code="mdrtb.dateCollected" text="Date collected"/></td>
+<td class="chartCell" style="font-weight:bold"><mdrtb:message code="mdrtb.lab" text="Lab"/></td>
 <td class="spacerCell"></td>
-<td class="chartCell" style="width:60px;font-weight:bold"><spring:message code="mdrtb.smears" text="Smears"/></td>
-<td class="chartCell" style="width:60px;font-weight:bold"><spring:message code="mdrtb.cultures" text="Cultures"/></td>
-<td class="chartCell" style="font-weight:bold"><spring:message code="mdrtb.bacteria" text="Bacteria"/></td>
+<td class="chartCell" style="width:60px;font-weight:bold"><mdrtb:message code="mdrtb.smears" text="Smears"/></td>
+<td class="chartCell" style="width:60px;font-weight:bold"><mdrtb:message code="mdrtb.cultures" text="Cultures"/></td>
+<!--  COMMENTED OUT FOR TAJIKISTAN -->
+<!--  <td class="chartCell" style="font-weight:bold"><mdrtb:message code="mdrtb.bacteria" text="Bacteria"/></td> -->
+<td class="spacerCell"></td>
+
+<td class="chartCell" style="width:60px;font-weight:bold"><mdrtb:message code="mdrtb.xperts" text="GeneXperts"/></td>
+<td class="chartCell" style="width:60px;font-weight:bold"><mdrtb:message code="mdrtb.hains" text="HAINS"/></td>
+
 <td class="spacerCell"></td>
 <c:forEach var="drugType" items="${model.chart.drugTypes}">
 	<td class="chartCell" style="width:30px;vertical-align:top;font-weight:bold"><mdrtb:format obj="${drugType}" /></td>
@@ -86,12 +95,31 @@
 				</table>
 			</c:if></td> 
 			
+			<!--  COMMENTED OUT FOR TAJIKISTAN -->
 			<td class="chartCell" style="font-size:60%">
 			<c:if test="${!empty component.specimen && !empty component.specimen.cultures}">
 				<mdrtb:germCell cultures="${component.specimen.cultures}"/>
 			</c:if>
-			</td>
-	
+			</td> -->
+			
+			<td class="spacerCell">&nbsp;</td>
+			
+			<td class="chartCell">
+			<c:if test="${!empty component.specimen && !empty component.specimen.xperts}">
+				<table style="padding:0px; border:0px; margin0px; width:100%">
+				<tr>
+					<mdrtb:xpertCell xperts="${component.specimen.xperts}" parameters="&patientProgramId=${patientProgramId}" style="text-align:center;font-style:bold;padding:0px;border:0px;margin:0px;"/>
+				</tr>
+				</table>
+			</c:if></td> 
+			
+			<td class="chartCell"><c:if test="${!empty component.specimen && !empty component.specimen.HAINs}">
+				<table style="padding:0px; border:0px; margin0px; width:100%">
+				<tr>
+					<mdrtb:hainCell hains="${component.specimen.HAINs}" parameters="&patientProgramId=${patientProgramId}" style="text-align:center;font-style:bold;padding:0px;border:0px;margin:0px;"/>
+				</tr>
+				</table>
+			</c:if></td>
 			<td class="spacerCell">&nbsp;</td>
 	
 			<!--  dsts -->

@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<!-- See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
+		documentation on this file. See http://www.liquibase.org/manual/home#available_database_refactorings 
+		for a list of supported elements and attributes -->
+
+	<!-- Uncomment the changeset below if you want to make the Item class persistable, 
+		see also Item and MdrtbDaoTest -->
+	<changeSet id="mdrtb-20230926" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="report_data" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the report_data table
+		</comment>
+		<createTable tableName="report_data">
+			<column name="report_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="location_id" type="int" />
+			<column name="report_name" type="varchar(255)" />
+			<column name="description" type="varchar(255)" />
+			<column name="year" type="int" />
+			<column name="quarter" type="int" />
+			<column name="month" type="int" />
+			<column name="report_type" type="varchar(50)" />
+			<column name="report_status" type="varchar(50)" />
+			<column defaultValueNumeric="0" name="creator" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column name="voided" defaultValueBoolean="false"
+				type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="voided_by" type="int" />
+			<column name="date_voided" type="datetime" />
+			<column name="void_reason" type="varchar(255)" />
+			<column name="table_data" type="longtext" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			constraintName="report_data_location_fk" baseTableName="report_data"
+			baseColumnNames="location_id" referencedTableName="location"
+			referencedColumnNames="location_id" />
+		<addForeignKeyConstraint
+			constraintName="report_data_creator_fk" baseTableName="report_data"
+			baseColumnNames="creator" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint
+			constraintName="report_data_changed_by_fk"
+			baseTableName="report_data" baseColumnNames="changed_by"
+			referencedTableName="users" referencedColumnNames="user_id" />
+		<addForeignKeyConstraint
+			constraintName="report_data_voided_by_fk" baseTableName="report_data"
+			baseColumnNames="voided_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+
+	</changeSet>
+
+	<changeSet id="labtest.-2018-05-08-1" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="labtest_type" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the labtest_test_type table
+		</comment>
+		<createTable tableName="labtest_type">
+			<column name="test_type_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" defaultValue="" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="short_name" type="varchar(20)" />
+			<column name="test_group" type="varchar(20)">
+				<!-- Name of the group that this test type belongs to. For example, Radiology, Bacteriology. This is an Enumeration in Object
+					model -->
+				<constraints nullable="false" />
+			</column>
+			<column defaultValueBoolean="true" name="requires_specimen" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="reference_concept_id" type="int">
+				<!-- Concept ID with which this test type maps to. Ideally, the class of this concept should be "Test" -->
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValueNumeric="0" name="creator" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column defaultValueBoolean="false" name="retired" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="retired_by" type="int" />
+			<column name="date_retired" type="datetime" />
+			<column name="retire_reason" type="varchar(255)" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="labtest_type_creator_fk"
+			baseTableName="labtest_type" baseColumnNames="creator" referencedTableName="users" referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_type_reference_concept_fk"
+			baseTableName="labtest_type" baseColumnNames="reference_concept_id" referencedTableName="concept"
+			referencedColumnNames="concept_id" />
+		<addForeignKeyConstraint constraintName="labtest_type_changed_by_fk"
+			baseTableName="labtest_type" baseColumnNames="changed_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_type_retired_by_fk"
+			baseTableName="labtest_type" baseColumnNames="retired_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+	</changeSet>
+
+	<changeSet id="labtest-2018-05-08-2" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="labtest_attribute_type" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the labtest_attribute_type table
+		</comment>
+		<createTable tableName="labtest_attribute_type">
+			<column name="test_attribute_type_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="test_type_id" type="int">
+				<!-- Each attribute type belongs to a test type -->
+				<constraints nullable="false" />
+			</column>
+			<column name="name" defaultValue="" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="datatype" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="min_occurs" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_occurs" type="int" />
+			<column name="datatype_config" type="text" />
+			<column name="handler_config" type="text" />
+			<column name="sort_weight" type="double" />
+			<column name="description" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="creator" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column name="retired" defaultValueBoolean="false" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="retired_by" type="int" />
+			<column name="date_retired" type="datetime" />
+			<column name="retire_reason" type="varchar(255)" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="labtest_attribute_type_test_type_fk"
+			baseTableName="labtest_attribute_type" baseColumnNames="test_type_id" referencedTableName="labtest_type"
+			referencedColumnNames="test_type_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_type_creator_fk"
+			baseTableName="labtest_attribute_type" baseColumnNames="creator" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_type_changed_by_fk"
+			baseTableName="labtest_attribute_type" baseColumnNames="changed_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_type_retired_by_fk"
+			baseTableName="labtest_attribute_type" baseColumnNames="retired_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+	</changeSet>
+
+	<changeSet id="labtest-2018-05-08-3" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="labtest_test" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the labtest_test table
+		</comment>
+		<createTable tableName="labtest_test">
+			<column name="test_order_id" type="int">
+				<!-- A lab test has one-to-one mapping with orders -->
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="test_type_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="lab_reference_number" type="varchar(255)" />
+			<column name="creator" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column name="voided" defaultValueBoolean="false" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="voided_by" type="int" />
+			<column name="date_voided" type="datetime" />
+			<column name="void_reason" type="varchar(255)" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="labtest_test_orders_fk"
+			baseTableName="labtest_test" baseColumnNames="test_order_id" referencedTableName="orders"
+			referencedColumnNames="order_id" />
+		<addForeignKeyConstraint constraintName="labtest_test_type_fk"
+			baseTableName="labtest_test" baseColumnNames="test_type_id" referencedTableName="labtest_type"
+			referencedColumnNames="test_type_id" />
+		<addForeignKeyConstraint constraintName="labtest_test_creator_fk"
+			baseTableName="labtest_test" baseColumnNames="creator" referencedTableName="users" referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_test_changed_by_fk"
+			baseTableName="labtest_test" baseColumnNames="changed_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_test_voided_by_fk"
+			baseTableName="labtest_test" baseColumnNames="voided_by" referencedTableName="users" referencedColumnNames="user_id" />
+	</changeSet>
+
+	<changeSet id="labtest-2018-05-08-4" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="labtest_attribute" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the labtest_attribute table
+		</comment>
+		<createTable tableName="labtest_attribute">
+			<column name="test_attribute_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="test_order_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="attribute_type_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="value_reference" type="varchar(255)" />
+			<column name="creator" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column name="voided" defaultValueBoolean="false" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="voided_by" type="int" />
+			<column name="date_voided" type="datetime" />
+			<column name="void_reason" type="varchar(255)" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="labtest_attribute_test_fk"
+			baseTableName="labtest_attribute" baseColumnNames="test_order_id" referencedTableName="labtest_test"
+			referencedColumnNames="test_order_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_attribute_type_fk"
+			baseTableName="labtest_attribute" baseColumnNames="attribute_type_id"
+			referencedTableName="labtest_attribute_type" referencedColumnNames="test_attribute_type_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_creator_fk"
+			baseTableName="labtest_attribute" baseColumnNames="creator" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_changed_by_fk"
+			baseTableName="labtest_attribute" baseColumnNames="changed_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_attribute_voided_by_fk"
+			baseTableName="labtest_attribute" baseColumnNames="voided_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+	</changeSet>
+
+	<changeSet id="labtest-2018-05-08-5" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="labtest_sample" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the labtest_sample table
+		</comment>
+		<createTable tableName="labtest_sample">
+			<!-- This column is renamed to test_sample_id in later changeset -->
+			<column name="test_attribute_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="test_order_id" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="specimen_type" type="int">
+				<!-- Concept representing the name of the specimen, like "Sputum", "Blood", "Bone Marrow", etc. -->
+				<constraints nullable="false" />
+			</column>
+			<column name="specimen_site" type="int">
+				<!-- Concept representing the body part where the sample was collected from -->
+			</column>
+			<column name="is_expirable" defaultValueBoolean="true" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="expiry_date" type="datetime" />
+			<column name="lab_sample_identifier" type="varchar(255)" />
+			<column name="collector" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="status" type="varchar(50)" />
+			<column name="comments" type="varchar(255)" />
+			<column name="creator" defaultValueNumeric="0" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="date_created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="changed_by" type="int" />
+			<column name="date_changed" type="datetime" />
+			<column name="voided" defaultValueBoolean="false" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="voided_by" type="int" />
+			<column name="date_voided" type="datetime" />
+			<column name="void_reason" type="varchar(255)" />
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="labtest_sample_test_fk"
+			baseTableName="labtest_sample" baseColumnNames="test_order_id" referencedTableName="labtest_test"
+			referencedColumnNames="test_order_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_specimen_type_fk"
+			baseTableName="labtest_sample" baseColumnNames="specimen_type" referencedTableName="concept"
+			referencedColumnNames="concept_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_specimen_site_fk"
+			baseTableName="labtest_sample" baseColumnNames="specimen_site" referencedTableName="concept"
+			referencedColumnNames="concept_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_collector_fk"
+			baseTableName="labtest_sample" baseColumnNames="collector" referencedTableName="provider"
+			referencedColumnNames="provider_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_creator_fk"
+			baseTableName="labtest_sample" baseColumnNames="creator" referencedTableName="users" referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_changed_by_fk"
+			baseTableName="labtest_sample" baseColumnNames="changed_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+		<addForeignKeyConstraint constraintName="labtest_sample_voided_by_fk"
+			baseTableName="labtest_sample" baseColumnNames="voided_by" referencedTableName="users"
+			referencedColumnNames="user_id" />
+	</changeSet>
+
+	<!-- Adding missing column in labtest_attribute_type table -->
+	<changeSet id="labtest-2018-07-12-1" author="shujaat">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_attribute_type" columnName="preferred_handler" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_attribute_type">
+			<column name="preferred_handler" type="varchar(255)">
+			</column>
+		</addColumn>
+
+	</changeSet>
+
+	<!-- Renaming the primary key in labtest_sample table -->
+	<changeSet id="labtest-2018-07-16-1" author="tahira.niazi">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_sample" columnName="test_sample_id" />
+			</not>
+		</preConditions>
+		<renameColumn tableName="labtest_sample" oldColumnName="test_attribute_id"
+			newColumnName="test_sample_id" columnDataType="int" />
+	</changeSet>
+
+	<!-- Adding missing columns in labtest_sample table -->
+	<changeSet id="labtest-2018-08-07-1" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_sample" columnName="collection_date" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_sample">
+			<column name="collection_date" type="datetime" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-08-07-2" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_sample" columnName="processed_date" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_sample">
+			<column name="processed_date" type="datetime" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-08-07-3" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_sample" columnName="quantity" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_sample">
+			<column name="quantity" type="double" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-08-07-4" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_sample" columnName="units" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_sample">
+			<column name="units" type="varchar(255)" />
+		</addColumn>
+	</changeSet>
+
+	<!-- Inserting mandatory concept and (for) Unknwon test type in labtest_type table -->
+	<changeSet id="labtest-2018-08-07-5" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">select count(*) from concept where short_name = 'UNKNOWN LAB TEST TYPE'</sqlCheck>
+		</preConditions>
+		<insert tableName="concept">
+			<column name="concept_id">0</column>
+			<column name="short_name">UNKNOWN LAB TEST TYPE</column>
+			<column name="description">Assigned to laboratory tests which are not known, for example if respective
+				information is purged. This
+				is inserted by, and used in labtest module
+			</column>
+			<column name="datatype_id">4</column>
+			<column name="class_id">8</column>
+			<column name="creator">1</column>
+			<column name="retired">0</column>
+			<column name="date_created">2018-08-07 12:00:00</column>
+			<column name="uuid">b095450e-9ad0-11e8-844c-448a5b471032</column>
+		</insert>
+	</changeSet>
+	<changeSet id="labtest-2018-08-07-6" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<!-- Execute only when the above is successful -->
+			<changeSetExecuted id="labtest-2018-08-07-5" author="owais.hussain" changeLogFile="liquibase.xml" />
+			<sqlCheck expectedResult="0">select count(*) from labtest_type where name='Unknown Test Type'</sqlCheck>
+		</preConditions>
+		<insert tableName="labtest_type">
+			<column name="test_type_id">0</column>
+			<column name="name">Unknown Test Type</column>
+			<column name="short_name">UNKNOWN</column>
+			<column name="test_group">OTHER</column>
+			<column name="requires_specimen">0</column>
+			<!-- Temporarily store 1 as concept ID, later assign the correct one via SQL -->
+			<column name="reference_concept_id">1</column>
+			<column name="description">Used when Test Type is not known. For example when actual test type is purged</column>
+			<column name="creator">1</column>
+			<column name="retired">0</column>
+			<column name="date_created">2018-08-07 12:00:00</column>
+			<column name="uuid">ee9b140e-9a29-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<sql>
+			UPDATE labtest_type SET reference_concept_id=(SELECT concept_id FROM concept WHERE
+			uuid='b095450e-9ad0-11e8-844c-448a5b471032')
+			<comment>This command sets the correct concept to reference, because there was no straight way to fetch the last
+				autoincrement ID of the concept inserted in changeset # labtest-2018-08-07-5
+			</comment>
+		</sql>
+	</changeSet>
+
+	<changeSet id="labtest-2018-08-07-7" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">select count(*) from privilege where privilege like '%labtest%'</sqlCheck>
+		</preConditions>
+		<insert tableName="privilege">
+			<column name="privilege">Add labtest Metadata</column>
+			<column name="description">Access to create new LabTest and LabTestAttributeType objects</column>
+			<column name="uuid">774f26c5-9a3e-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Edit labtest Metadata</column>
+			<column name="description">Access to change existing LabTest and LabTestAttributeType objects</column>
+			<column name="uuid">f492181f-9a3e-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Delete labtest Metadata</column>
+			<column name="description">Access to delete or retire LabTest and LabTestAttributeType objects</column>
+			<column name="uuid">fa0025da-9a3e-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">View labtest Metadata</column>
+			<column name="description">Access to view LabTest and LabTestAttributeType objects</column>
+			<column name="uuid">fec867c9-9a3e-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Add labtest Samples</column>
+			<column name="description">Access to create new LabTestSample objects</column>
+			<column name="uuid">0ca672e1-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Edit labtest Samples</column>
+			<column name="description">Access to change new LabTestSample objects</column>
+			<column name="uuid">0ca6734e-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Delete labtest Samples</column>
+			<column name="description">Access to delete or void LabTestSample objects</column>
+			<column name="uuid">0ca67391-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">View labtest Samples</column>
+			<column name="description">Access to view LabTestSample objects</column>
+			<column name="uuid">0ca673e9-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Add labtest Orders</column>
+			<column name="description">Access to create new LabTest objects</column>
+			<column name="uuid">448289f0-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Edit labtest Orders</column>
+			<column name="description">Access to change new LabTest objects</column>
+			<column name="uuid">44828a6b-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Delete labtest Orders</column>
+			<column name="description">Access to delete or void LabTest objects</column>
+			<column name="uuid">44828a80-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">View labtest Orders</column>
+			<column name="description">Access to view LabTest objects</column>
+			<column name="uuid">44828a9c-9a3f-11e8-a296-40b034c3cfee</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Add labtest results</column>
+			<column name="description">Access to add LabResult objects</column>
+			<column name="uuid">f8eaa25f-033a-4b2b-b23a-55295b7890bf</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Edit labtest results</column>
+			<column name="description">Access to edit LabResult objects</column>
+			<column name="uuid">3a0d03bb-6649-4a51-fbe9-689edd3499c7</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">View labtest results</column>
+			<column name="description">Access to view LabResult objects</column>
+			<column name="uuid">55ef129a-6439-44c4-f3b6-466c19732433</column>
+		</insert>
+		<insert tableName="privilege">
+			<column name="privilege">Delete labtest results</column>
+			<column name="description">Access to delete LabResult objects</column>
+			<column name="uuid">de85c1fa-ab3c-4141-b381-45d90b5f7634</column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="labtest-2018-08-16-2" author="tahira.niazi">
+		<preConditions onFail="MARK_RAN">
+			<columnExists tableName="labtest_sample" columnName="test_sample_id" />
+		</preConditions>
+		<comment>Adding auto increment property to labtest_sample.test_sample_id</comment>
+		<addAutoIncrement tableName="labtest_sample" columnName="test_sample_id" columnDataType="int" />
+	</changeSet>
+	<changeSet id="labtest-2018-08-16-3" author="mahmed14">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_test" columnName="instructions" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_test">
+			<column name="instructions" type="varchar(512)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-08-16-4" author="mahmed14">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_test" columnName="report_file_path" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_test">
+			<column name="report_file_path" type="varchar(1024)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-09-05-5" author="shujaat.ali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_test" columnName="result_comments" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_test">
+			<column name="result_comments" type="varchar(1024)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-09-24-6" author="shujaat.ali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_attribute_type" columnName="hint" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_attribute_type">
+			<column name="hint" type="varchar(1024)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-10-2-8" author="shujaat.ali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_attribute_type" columnName="group_name" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_attribute_type">
+			<column name="group_name" type="varchar(255)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="labtest-2018-2018-11-27-9" author="shujaat.ali">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_attribute_type" columnName="multiset_name" />
+			</not>
+		</preConditions>
+		<addColumn tableName="labtest_attribute_type">
+			<column name="multiset_name" type="varchar(255)" />
+		</addColumn>
+	</changeSet>
+
+   <!--
+	<changeSet author="shujaat.ali" id="labtest-2019-2019-9-4-10">
+	    <update tableName="role_privilege">
+	        <column name="privilege" value='Add labtest Results'/>
+	        <where>privilege='Add labtest results'</where>
+	    </update>
+    </changeSet> -->
+
+    <changeSet author="shujaat.ali" id="labtest-2019-2019-9-5-11">
+		<sql>
+			SET foreign_key_checks = 0;
+			UPDATE privilege p LEFT JOIN role_privilege rp ON p.privilege = rp.privilege
+			SET p.privilege = 'Add LabTest Results' , rp.privilege ='Add LabTest Results'
+			WHERE p.privilege ='Add LabTest results';
+			SET foreign_key_checks = 1;
+		</sql>
+	</changeSet>
+
+	   <changeSet author="shujaat.ali" id="labtest-2019-2019-9-5-12">
+		<sql>
+			SET foreign_key_checks = 0;
+			UPDATE privilege p LEFT JOIN role_privilege rp ON p.privilege = rp.privilege
+			SET p.privilege = 'View LabTest Results' , rp.privilege ='View LabTest Results'
+			WHERE p.privilege ='View LabTest results';
+			SET foreign_key_checks = 1;
+		</sql>
+	</changeSet>
+
+	   <changeSet author="shujaat.ali" id="labtest-2019-2019-9-5-13">
+		<sql>
+			SET foreign_key_checks = 0;
+			UPDATE privilege p LEFT JOIN role_privilege rp ON p.privilege = rp.privilege
+			SET p.privilege = 'Edit LabTest Results' , rp.privilege ='Edit LabTest Results'
+			WHERE p.privilege ='Edit LabTest results';
+			SET foreign_key_checks = 1;
+		</sql>
+	</changeSet>
+
+	<changeSet author="shujaat.ali" id="labtest-2019-2019-9-5-14">
+		<sql>
+			SET foreign_key_checks = 0;
+			UPDATE privilege p LEFT JOIN role_privilege rp ON p.privilege = rp.privilege
+			SET p.privilege = 'Delete LabTest Results' , rp.privilege ='Delete LabTest Results'
+			WHERE p.privilege ='Delete LabTest results';
+			SET foreign_key_checks = 1;
+		</sql>
+	</changeSet>
+
+	<changeSet id="labtest-2020-10-15-1" author="tahira.niazi">
+		<dropNotNullConstraint columnDataType="text"
+            columnName="description" tableName="labtest_attribute_type"/>
+	</changeSet>
+
+	<changeSet id="labtest-2026-08-11" author="owais.hussain">
+		<comment>Correcting LabTest capitalization in lab test privileges and role mappings</comment>
+		<sql>
+			SET foreign_key_checks = 0;
+			UPDATE privilege p LEFT JOIN role_privilege rp ON p.privilege = rp.privilege
+			SET p.privilege = REPLACE(p.privilege, 'labtest', 'LabTest'),
+				rp.privilege = REPLACE(rp.privilege, 'labtest', 'LabTest')
+			WHERE p.privilege IN (
+				'Add labtest Metadata', 'Edit labtest Metadata', 'View labtest Metadata', 'Delete labtest Metadata',
+				'Add labtest Samples', 'Edit labtest Samples', 'View labtest Samples', 'Delete labtest Samples',
+				'Add labtest Orders', 'Edit labtest Orders', 'View labtest Orders', 'Delete labtest Orders'
+			);
+			SET foreign_key_checks = 1;
+		</sql>
+	</changeSet>
+
+	<!--
+		Localised UI strings for this module. Historically these lived only in the
+		messages*.properties bundles that OpenMRS loads into its DefaultMessageSourceService.
+		They are now mirrored into this table so that translations can be corrected in a running
+		system without repackaging the omod. MdrtbActivator seeds any rows that are missing
+		(it never overwrites rows that already exist) once this changeset has been applied, and
+		MdrtbService.getMessage() serves every lookup from an in-memory cache over this table.
+
+		'code' is capped at 190 characters so that the composite primary key stays inside the
+		767 byte per-column index limit of InnoDB's COMPACT/REDUNDANT row formats on utf8mb4
+		(190 * 4 = 760). The longest key currently shipped is 61 characters.
+	-->
+	<changeSet id="mdrtb-2026-08-02-message-properties" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<tableExists tableName="message_properties" />
+			</not>
+		</preConditions>
+		<comment>
+			Creating the message_properties table
+		</comment>
+		<createTable tableName="message_properties">
+			<column name="lang" type="varchar(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="code" type="varchar(190)">
+				<constraints nullable="false" />
+			</column>
+			<column name="message" type="text" />
+		</createTable>
+
+		<addPrimaryKey constraintName="message_properties_pk"
+			tableName="message_properties" columnNames="lang, code" />
+	</changeSet>
+
+	<!--
+		Lab test orders in this deployment are persisted as plain org.openmrs.Order, never as
+		org.openmrs.TestOrder: commonlab_migrations.sql and the ETL job both insert lab orders into
+		`orders` with order_type_id = 3 and never write a matching `test_order` row.
+		As long as the Test Order type carries the core default 'org.openmrs.TestOrder', every lab
+		test order fails with "The java type of an order must match that set on associated order
+		type". Aligning the order type with the class this module actually creates fixes it.
+		Consequence: the `test_order` table stays empty
+	-->
+	<changeSet id="mdrtb-2026-08-13-test-order-java-class" author="owais.hussain">
+		<comment>
+			Align order_type.java_class_name for 'Test Order' with org.openmrs.Order, the class this
+			module persists lab test orders as.
+		</comment>
+		<sql>
+			UPDATE order_type SET java_class_name = 'org.openmrs.Order' WHERE name = 'Test Order';
+		</sql>
+	</changeSet>
+
+	<!--
+		A LabTest had no link to the TB program episode it belongs to. The only program marker in
+		the lab path was the PATIENT_PROGRAM_ID obs on the order's encounter: an unconstrained
+		numeric obs holding an unenforced pointer into patient_program, so nothing stopped it going
+		stale or pointing at a row that no longer exists.
+
+		MdrtbServiceImpl.getSmearForms and its five siblings therefore could not filter lab tests by
+		program at all, and returned every common lab test the patient has ever had, across every
+		episode. On a re-treatment patient that puts the first episode's results on the second
+		episode's TB03.
+
+		patient_program_id is nullable on purpose: rows predating this column have no program until
+		the backfill runs, and the foreign key means a row whose program cannot be resolved stays
+		NULL rather than carrying a bad pointer. Counting those NULLs is how we size what the
+		backfill could not resolve.
+	-->
+	<changeSet id="mdrtb-2026-09-01-patient-program" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="labtest_test" columnName="patient_program_id" />
+			</not>
+		</preConditions>
+		<comment>
+			Links the labtest_test to the respective patient_program_id to identify the set of tests which fell under that program
+		</comment>
+		<addColumn tableName="labtest_test">
+			<column name="patient_program_id" type="int" />
+		</addColumn>
+		<addForeignKeyConstraint constraintName="labtest_test_patient_program_fk"
+			baseTableName="labtest_test" baseColumnNames="patient_program_id"
+			referencedTableName="patient_program" referencedColumnNames="patient_program_id" />
+		<createIndex tableName="labtest_test" indexName="labtest_test_patient_program_idx">
+			<column name="patient_program_id" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet id="mdrtb-2026-10-19-end-of-treatment-encounter-type" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="encounter_type" />
+		</preConditions>
+		<insert tableName="encounter_type">
+			<column name="name">End of Treatment</column>
+			<column name="description">End of Treatment</column>
+			<column name="creator">1</column>
+			<column name="date_created">2026-10-19 00:00:00</column>
+			<column name="retired">0</column>
+			<column name="uuid">6159db06-cb90-11f1-b723-57d5294d0531</column>
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

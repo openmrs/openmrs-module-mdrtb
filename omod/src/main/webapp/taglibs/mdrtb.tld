@@ -10,6 +10,38 @@
 	<short-name>mdrtb</short-name>
 
 	<tag>
+		<description>Resolves MDR-TB messages from the API message bundles.</description>
+		<name>message</name>
+		<tag-class>org.openmrs.module.mdrtb.web.taglib.MessageTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>code</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>text</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>arguments</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>javaScriptEscape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<description>
 			Regimen History Table
 		</description>
@@ -226,6 +258,74 @@
 	<body-content>JSP</body-content>
 	<attribute>
 		<name>cultures</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>parameters</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>style</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>clazz</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+	
+<tag>
+	<description>
+		Renders a xpert cell for display in the patient chart
+	</description>
+	<name>xpertCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.XpertCellTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>xperts</name>
+		<required>true</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>parameters</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>style</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>clazz</name>
+		<required>false</required> 
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>showTooltip</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+</tag>
+
+<tag>
+	<description>
+		Renders a HAIN cell for display in the patient chart
+	</description>
+	<name>hainCell</name>
+	<tag-class>org.openmrs.module.mdrtb.web.taglib.patientchart.HAINCellTag</tag-class>
+	<body-content>JSP</body-content>
+	<attribute>
+		<name>hains</name>
 		<required>true</required> 
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>

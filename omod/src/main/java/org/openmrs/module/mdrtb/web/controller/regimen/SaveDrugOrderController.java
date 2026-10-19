@@ -10,12 +10,12 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.DrugOrder;
-import org.openmrs.User;
+import org.openmrs.OrderType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.DrugEditor;
-import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,89 +33,49 @@ public class SaveDrugOrderController {
 	protected static final Log log = LogFactory.getLog(SaveDrugOrderController.class);
 	
 	@InitBinder
-	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		DateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
-    	binder.registerCustomEditor(Concept.class, new ConceptEditor());
-    	binder.registerCustomEditor(Drug.class, new DrugEditor());
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
+		binder.registerCustomEditor(Concept.class, new ConceptEditor());
+		binder.registerCustomEditor(Drug.class, new DrugEditor());
 	}
-    
-    @RequestMapping("/module/mdrtb/regimen/saveDrugOrder")
-    public String saveRegimen(
-    		@RequestParam(required=true, value="patientId") Integer patientId,
-    		@RequestParam(required=true, value="patientProgramId") Integer patientProgramId,
-    		@RequestParam(required=false, value="type") String type,
-    		@RequestParam(required=false, value="orderId") Integer orderId,
-    		@RequestParam(required=true, value="generic") Concept generic,
-    		@RequestParam(required=false, value="drug") Drug drug,
-    		@RequestParam(required=false, value="dose") Double dose,
-    		@RequestParam(required=false, value="units") String units,
-    		@RequestParam(required=false, value="frequency") String frequency,
-    		@RequestParam(required=false, value="perDay") String perDay,
-    		@RequestParam(required=false, value="perWeek") String perWeek,
-    		@RequestParam(required=false, value="instructions") String instructions,
-    		@RequestParam(required=true, value="startDate") Date changeDate,
-    		@RequestParam(required=false, value="autoExpireDate") Date autoExpireDate,
-    		@RequestParam(required=false, value="discontinuedDate") Date discontinuedDate,
-    		@RequestParam(required=false, value="discontinuedReason") Concept discontinuedReason,
-    		HttpServletRequest request, ModelMap model) throws Exception {
-    	
-    	User user = Context.getAuthenticatedUser();
-    	
-    	// TODO: Validate here
-    	
+	
+	@RequestMapping("/module/mdrtb/regimen/saveDrugOrder")
+	public String saveRegimen(@RequestParam(required = true, value = "patientId") Integer patientId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "type") String type,
+	        @RequestParam(required = false, value = "orderId") Integer orderId,
+	        @RequestParam(required = true, value = "generic") Concept generic,
+	        @RequestParam(required = false, value = "drug") Drug drug,
+	        @RequestParam(required = false, value = "dose") Double dose,
+	        @RequestParam(required = false, value = "units") String units,
+	        @RequestParam(required = false, value = "frequency") String frequency,
+	        @RequestParam(required = false, value = "perDay") String perDay,
+	        @RequestParam(required = false, value = "perWeek") String perWeek,
+	        @RequestParam(required = false, value = "instructions") String instructions,
+	        @RequestParam(required = true, value = "startDate") Date changeDate,
+	        @RequestParam(required = false, value = "autoExpireDate") Date autoExpireDate,
+	        @RequestParam(required = false, value = "discontinuedDate") Date discontinuedDate,
+	        @RequestParam(required = false, value = "discontinuedReason") Concept discontinuedReason,
+	        HttpServletRequest request, ModelMap model) {
+		
 		DrugOrder drugOrder = null;
 		if (ObjectUtil.isNull(orderId)) {
 			drugOrder = new DrugOrder();
 			drugOrder.setPatient(Context.getPatientService().getPatient(patientId));
-			drugOrder.setOrderType(Context.getOrderService().getOrderType(OpenmrsConstants.ORDERTYPE_DRUG));
+			drugOrder.setOrderType(Context.getOrderService().getOrderTypeByUuid(OrderType.DRUG_ORDER_TYPE_UUID));
+		} else {
+			drugOrder = (DrugOrder) Context.getOrderService().getOrder(orderId);
 		}
-		else {
-			drugOrder = Context.getOrderService().getOrder(orderId, DrugOrder.class);
+		String durationUnits = "DAYS";
+		if (ObjectUtil.notNull(perWeek)) {
+			durationUnits = "WEEKS";
 		}
-		drugOrder.setConcept(generic);
-		drugOrder.setDrug(drug);
-		drugOrder.setDose(dose);
-		drugOrder.setUnits(units);
-		if (ObjectUtil.isNull(frequency)) {
-			frequency = "";
-			String separator = "";
-			if (ObjectUtil.notNull(perDay)) {
-				frequency += perDay + "/day";
-				separator = " x ";
-			}
-			if (ObjectUtil.notNull(perWeek)) {
-				frequency += separator + perWeek + " days/week";
-			}
-		}
-		drugOrder.setFrequency(frequency);
-		drugOrder.setInstructions(instructions);
-		drugOrder.setStartDate(changeDate);
-		drugOrder.setAutoExpireDate(autoExpireDate);
+		drugOrder = MdrtbUtil.updateDrugOrder(drugOrder, generic, drug, dose, units, durationUnits, frequency, instructions,
+		    changeDate, autoExpireDate, discontinuedDate, discontinuedReason);
 		
-		if (drugOrder.getDiscontinued() == Boolean.TRUE) { // If originally was discontinued, but no longer, null out fields
-			if (discontinuedDate == null) {
-				drugOrder.setDiscontinued(false);
-				drugOrder.setDiscontinuedDate(null);
-				drugOrder.setDiscontinuedBy(null);
-				drugOrder.setDiscontinuedReason(null);
-			}
-			else {
-				drugOrder.setDiscontinuedDate(discontinuedDate);
-				drugOrder.setDiscontinuedReason(discontinuedReason);
-			}
-		}
-		else {
-			if (discontinuedDate != null) {
-				drugOrder.setDiscontinued(true);
-				drugOrder.setDiscontinuedDate(discontinuedDate);
-				drugOrder.setDiscontinuedBy(user);
-				drugOrder.setDiscontinuedReason(discontinuedReason);
-			}
-		}
-
-		Context.getOrderService().saveOrder(drugOrder);
-    	return "redirect:/module/mdrtb/regimen/manageDrugOrders.form?patientId="+patientId + "&patientProgramId="+patientProgramId;
-    }    
+		return "redirect:/module/mdrtb/regimen/manageDrugOrders.form?patientId=" + patientId + "&patientProgramId="
+		        + patientProgramId;
+	}
 }

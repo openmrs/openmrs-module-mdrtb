@@ -36,6 +36,8 @@ import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
+import org.openmrs.module.mdrtb.api.MdrtbService;
+import org.openmrs.module.mdrtb.api.MessagePropertyService;
 
 /**
  * WHO Form 05 Report
@@ -46,23 +48,24 @@ public class WHOForm07 implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return Context.getMessageSourceService().getMessage("mdrtb.form07");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.form07");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return Context.getMessageSourceService().getMessage("mdrtb.form07.title");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.form07.title");
 	}
 	
 	/**
 	 * @see ReportSpecification#getParameters()
 	 */
 	public List<Parameter> getParameters() {
-		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
-		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
+		List<Parameter> l = new ArrayList<>();
+		l.add(new Parameter("location", Context.getService(MessagePropertyService.class).getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getService(MessagePropertyService.class).getMessage("mdrtb.yearOfTreatmentStart"),
+		        Integer.class));
 		return l;
 	}
 	
@@ -70,9 +73,10 @@ public class WHOForm07 implements ReportSpecification {
 	 * @see ReportSpecification#getRenderingModes()
 	 */
 	public List<RenderingMode> getRenderingModes() {
-		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm07" + 
-			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
+		List<RenderingMode> l = new ArrayList<>();
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm07"
+		        + (StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "")
+		        + ".html"));
 		return l;
 	}
 	
@@ -88,7 +92,8 @@ public class WHOForm07 implements ReportSpecification {
 			context.addParameterValue("endDate", DateUtil.getDateTime(year, 12, 31));
 		}
 		catch (Exception e) {
-			throw new RuntimeException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAYear"));
+			throw new RuntimeException(Context.getService(MessagePropertyService.class).getMessage(
+			    "mdrtb.error.pleaseEnterAYear"));
 		}
 		return context;
 	}
@@ -96,23 +101,24 @@ public class WHOForm07 implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ReportData evaluateReport(EvaluationContext context) {
 		
 		ReportDefinition report = new ReportDefinition();
 		
 		Location location = (Location) context.getParameterValue("location");
-		Date startDate = (Date)context.getParameterValue("startDate");
-		Date endDate = (Date)context.getParameterValue("endDate");
+		Date startDate = (Date) context.getParameterValue("startDate");
+		Date endDate = (Date) context.getParameterValue("endDate");
 		
 		// Base Cohort is confirmed mdr patients, in program, who started treatment during year, optionally at location
-		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
-		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
+		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<>();
+		baseCohortDefs.put("confirmedMdr",
+		    new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
 			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			if (locationFilter != null) {
 				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}	
+			}
 		}
 		CohortDefinition baseCohort = ReportUtil.getCompositionCohort(baseCohortDefs, "AND");
 		report.setBaseCohortDefinition(baseCohort, null);
@@ -132,17 +138,17 @@ public class WHOForm07 implements ReportSpecification {
 		for (String key : columns.keySet()) {
 			dsd.addColumn(key, columns.get(key), null);
 		}
-		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);	
+		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);
 		
 		report.addDataSetDefinition("Treatment results", dsd, null);
 		
 		ReportData data;
-        try {
-	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
-        }
-        catch (EvaluationException e) {
-        	throw new MdrtbAPIException("Unable to evaluate WHO Form 7 report", e);
-        }
+		try {
+			data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		}
+		catch (EvaluationException e) {
+			throw new MdrtbAPIException("Unable to evaluate WHO Form 7 report", e);
+		}
 		return data;
 	}
 }

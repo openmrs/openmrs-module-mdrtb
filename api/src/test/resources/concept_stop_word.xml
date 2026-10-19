@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <concept_stop_word concept_stop_word_id="1" word="A" locale="en" uuid="f5f45540-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="2" word="AND" locale="en" uuid="f5f469ae-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="3" word="AT" locale="en" uuid="f5f47070-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="4" word="BUT" locale="en" uuid="f5f476c4-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="5" word="BY" locale="en" uuid="f5f47d04-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="6" word="FOR" locale="en" uuid="f5f4834e-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="7" word="HAS" locale="en" uuid="f5f48a24-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="8" word="OF" locale="en" uuid="f5f49064-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="9" word="THE" locale="en" uuid="f5f496ae-e2a7-11df-87ae-18a905e044dc"/>
+    <concept_stop_word concept_stop_word_id="10" word="TO" locale="en" uuid="f5f49cda-e2a7-11df-87ae-18a905e044dc"/>
+</dataset>

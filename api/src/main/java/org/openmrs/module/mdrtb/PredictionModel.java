@@ -16,26 +16,30 @@ public class PredictionModel {
 	public static final double intercept = -4.56350;
 	
 	public enum RiskFactor {
-
-		Male("Male", 0.06011),
-		HivPositive("HIV Positive", -0.27236),
-		PreviousTreatment("Previous Treatment", 1.39232),
-		SmearPositive("Smear Positive", 0.54125),
-		KnownHouseholdContact("Known TB Contact", 0.23557);
+		Male("Male", 0.06011), HivPositive("HIV Positive", -0.27236), PreviousTreatment("Previous Treatment", 1.39232), SmearPositive(
+		        "Smear Positive", 0.54125), KnownHouseholdContact("Known TB Contact", 0.23557);
 		
-		private double coefficient;
-		private String name;
-		RiskFactor(String name, double coefficient) { 
+		private final double coefficient;
+		
+		private final String name;
+		
+		RiskFactor(String name, double coefficient) {
 			this.name = name;
-			this.coefficient = coefficient; 
+			this.coefficient = coefficient;
 		}
-		public String getName() { return name; }
-		public double getCoefficient() { return coefficient; }
-	};
-    
+		
+		public String getName() {
+			return name;
+		}
+		
+		public double getCoefficient() {
+			return coefficient;
+		}
+	}
+	
 	public static Map<RiskFactor, Boolean> getRiskFactors(Patient p) {
 		
-		Map<RiskFactor, Boolean> m = new HashMap<RiskFactor, Boolean>();
+		Map<RiskFactor, Boolean> m = new HashMap<>();
 		
 		m.put(RiskFactor.Male, "M".equals(p.getGender()));
 		m.put(RiskFactor.HivPositive, hasAnyObsValue(p, 3753, 703)); // HIV Status = Positive
@@ -60,52 +64,53 @@ public class PredictionModel {
 		}
 		double v = 100 / (1 + Math.exp(-1 * z));
 		log.debug("Result = " + v);
-		BigDecimal bd = new BigDecimal(v);
-	    bd = bd.setScale(numDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bd = BigDecimal.valueOf(v);
+		bd = bd.setScale(numDecimalPlaces, BigDecimal.ROUND_HALF_UP);
 		return bd.doubleValue();
 	}
 	
 	/**
-	 * If valueConceptIds exist, check against them.  Otherwise, just check that the question has any obs values
+	 * If valueConceptIds exist, check against them. Otherwise, just check that the question has any
+	 * obs values
 	 */
-	public static boolean hasAnyObsValue(Patient p, Integer conceptId, Integer...valueConceptIds) {
-    	StringBuilder q = new StringBuilder();
-    	q.append("select 	count(*) ");
-    	q.append("from 		patient p, obs o ");
-    	q.append("where 	p.patient_id = o.person_id ");
-    	q.append("and	 	o.person_id = " + p.getPersonId() + " ");
-    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
-    	q.append("and		o.concept_id = " + conceptId + " ");
-    	if (valueConceptIds != null && valueConceptIds.length > 0) {
-	    	q.append("and o.value_coded in (");
-			for (int i=0; i<valueConceptIds.length; i++) {
+	public static boolean hasAnyObsValue(Patient p, Integer conceptId, Integer... valueConceptIds) {
+		StringBuilder q = new StringBuilder();
+		q.append("select count(*) ");
+		q.append("from patient p, obs o ");
+		q.append("where p.patient_id = o.person_id ");
+		q.append("and o.person_id = " + p.getPersonId() + " ");
+		q.append("and p.voided = 0 and o.voided = 0 ");
+		q.append("and o.concept_id = " + conceptId + " ");
+		if (valueConceptIds != null && valueConceptIds.length > 0) {
+			q.append("and o.value_coded in (");
+			for (int i = 0; i < valueConceptIds.length; i++) {
 				q.append(valueConceptIds[i]);
-				if ((i+1)<valueConceptIds.length) {
+				if ((i + 1) < valueConceptIds.length) {
 					q.append(",");
 				}
-			}	
-	    	q.append(") ");
-    	}
-    	return !"0".equals(Context.getAdministrationService().executeSQL(q.toString(), true).get(0).get(0).toString());
+			}
+			q.append(") ");
+		}
+		return !"0".equals(Context.getAdministrationService().executeSQL(q.toString(), true).get(0).get(0).toString());
 	}
-
+	
 	/**
-	 * If valueConceptIds exist, check against them.  Otherwise, just check that the question has any obs values
+	 * If valueConceptIds exist, check against them. Otherwise, just check that the question has any
+	 * obs values
 	 */
 	public static boolean hasBooleanObsValue(Patient p, Integer conceptId, boolean valueBoolean) {
-    	StringBuilder q = new StringBuilder();
-    	q.append("select 	count(*) ");
-    	q.append("from 		patient p, obs o ");
-    	q.append("where 	p.patient_id = o.person_id ");
-    	q.append("and	 	o.person_id = " + p.getPersonId() + " ");
-    	q.append("and	 	p.voided = 0 and o.voided = 0 ");
-    	q.append("and		o.concept_id = " + conceptId + " ");
-    	if (valueBoolean) {
-    		q.append("and		(o.value_numeric = 1 or o.value_coded in (1065,2257))");
-    	}
-    	else {
-    		q.append("and		(o.value_numeric = 0 or o.value_coded in (1066,2258))");
-    	}
-    	return !"0".equals(Context.getAdministrationService().executeSQL(q.toString(), true).get(0).get(0).toString());
+		StringBuilder q = new StringBuilder();
+		q.append("select count(*) ");
+		q.append("from patient p, obs o ");
+		q.append("where p.patient_id = o.person_id ");
+		q.append("and o.person_id = " + p.getPersonId() + " ");
+		q.append("and p.voided = 0 and o.voided = 0 ");
+		q.append("and o.concept_id = " + conceptId + " ");
+		if (valueBoolean) {
+			q.append("and (o.value_numeric = 1 or o.value_coded in (1065,2257))");
+		} else {
+			q.append("and (o.value_numeric = 0 or o.value_coded in (1066,2258))");
+		}
+		return !"0".equals(Context.getAdministrationService().executeSQL(q.toString(), true).get(0).get(0).toString());
 	}
 }

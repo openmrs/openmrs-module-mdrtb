@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!--
+        In the real deployment, webModuleApplicationContext.xml is a child of the main service
+        context, so MainSubResourceController's "@Autowired RestService" resolves via the parent
+        context's module service registration. In a flat integration-test context there is no
+        parent/child split, so we must expose restService/restHelperService as direct beans
+        (not through TransactionProxyFactoryBean, whose getObjectType() returns null before
+        the target is initialized, making type-based @Autowired lookup fail).
+    -->
+
+    <bean id="openmrsClassScanner"
+          class="org.openmrs.module.webservices.rest.web.OpenmrsClassScanner"
+          factory-method="getInstance"/>
+
+    <bean id="restHelperService"
+          class="org.openmrs.module.webservices.rest.web.api.impl.RestHelperServiceImpl">
+        <property name="sessionFactory" ref="dbSessionFactory"/>
+    </bean>
+
+    <bean id="restService"
+          class="org.openmrs.module.webservices.rest.web.api.impl.RestServiceImpl">
+        <property name="restHelperService" ref="restHelperService"/>
+        <property name="openmrsClassScanner" ref="openmrsClassScanner"/>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.webservices.rest.web.api.RestService</value>
+                <ref bean="restService"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.webservices.rest.web.api.RestHelperService</value>
+                <ref bean="restHelperService"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- RestInit needs XStreamMarshaller; DynamicBeanConfiguration needs these message converters -->
+    <bean id="xStreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller"/>
+
+    <bean id="xmlMarshallingHttpMessageConverter"
+          class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+        <property name="marshaller" ref="xStreamMarshaller"/>
+        <property name="unmarshaller" ref="xStreamMarshaller"/>
+    </bean>
+
+    <bean id="jsonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter"/>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/>
+    </bean>
+
+</beans>

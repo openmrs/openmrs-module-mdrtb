@@ -24,12 +24,12 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.regimen.Regimen;
 import org.openmrs.module.mdrtb.regimen.RegimenChange;
 import org.openmrs.module.mdrtb.regimen.RegimenHistory;
 import org.openmrs.module.mdrtb.regimen.RegimenType;
 import org.openmrs.module.mdrtb.regimen.RegimenUtils;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.common.ObjectUtil;
 
 public class Functions {
@@ -72,7 +72,7 @@ public class Functions {
 	 * @return a List of Objects, ordered in the reverse of their original order
 	 */
 	public static <T> List<T> reverse(Collection<T> collection) {
-		List<T> l = new ArrayList<T>(collection);
+		List<T> l = new ArrayList<>(collection);
 		Collections.reverse(l);
 		return l;
 	}
@@ -80,9 +80,9 @@ public class Functions {
 	/**
 	 * @return a List of Objects, ordered in their natural order
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T extends Comparable> List<T> sort(Collection<T> collection) {
-		List<T> l = new ArrayList<T>(collection);
+		List<T> l = new ArrayList<>(collection);
 		Collections.sort(l);
 		return l;
 	}
@@ -104,8 +104,8 @@ public class Functions {
 	/**
 	 * @return the comparison result between the two passed objects
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Comparable>int compare(T c1, T c2) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T extends Comparable> int compare(T c1, T c2) {
 		return c1.compareTo(c2);
 	}
 	
@@ -144,7 +144,7 @@ public class Functions {
 			return null;
 		}
 		try {
-			return new SimpleDateFormat(format,Context.getLocale()).parse(s.toString());
+			return new SimpleDateFormat(format, Context.getLocale()).parse(s);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -155,16 +155,16 @@ public class Functions {
 	 * @return the matching Concept
 	 */
 	public static Concept getConcept(String lookup) {
-		return Context.getService(MdrtbService.class).findMatchingConcept(lookup);
+		return Context.getService(MdrtbService.class).getConcept(lookup);
 	}
 	
 	/**
 	 * @return the matching drug (may be a reference to drug by id or name)
 	 */
 	public static Drug getDrug(String lookup) {
-		return Context.getConceptService().getDrugByNameOrId(lookup);
+		return Context.getConceptService().getDrug(lookup);
 	}
- 	
+	
 	/**
 	 * @return a List of Drugs who are in the set matching the passed conceptSet
 	 */
@@ -192,7 +192,7 @@ public class Functions {
 	}
 	
 	public static List<Concept> answersToQuestion(String question) {
-		List<Concept> ret = new ArrayList<Concept>();
+		List<Concept> ret = new ArrayList<>();
 		Concept c = Context.getService(MdrtbService.class).getConcept(question);
 		if (c != null) {
 			for (ConceptAnswer ca : c.getAnswers()) {
@@ -201,5 +201,4 @@ public class Functions {
 		}
 		return ret;
 	}
-	
 }

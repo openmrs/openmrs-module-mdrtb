@@ -12,55 +12,47 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 
 public class GetLatestEnrollmentDateRule implements Rule {
-    
-    /**
-     * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
-     *      java.util.Map)
-     */
-    public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
-        
-        Result lastProgram = context.read(patient.getId(), context.getLogicDataSource("pihprogram"), "MDR-TB PROGRAM");
-        return lastProgram;
-        
-    }
-    
-    // TODO: do we need to implement this?
-    public Result eval(LogicContext arg0, Integer arg1, Map<String, Object> arg2) throws LogicException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    /**
-     * @see org.openmrs.logic.Rule#getChildRules()
-     */
-    public String[] getDependencies() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /**
-     * @see org.openmrs.logic.Rule#getDefaultDatatype()
-     */
-    public Datatype getDefaultDatatype() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /**
-     * @see org.openmrs.logic.Rule#getParameterList()
-     */
-    public Set<RuleParameterInfo> getParameterList() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /**
-     * @see org.openmrs.logic.Rule#getTTL()
-     */
-    public int getTTL() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
+	
+	/**
+	 * @see Rule#eval(LogicContext, Patient, Map)
+	 */
+	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
+		
+		return context.read(patient.getId(), context.getLogicDataSource("pihprogram"), "MDR-TB PROGRAM");
+		
+	}
+	
+	@Deprecated
+	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+		return context.read(patientId, context.getLogicDataSource("pihprogram"), "MDR-TB PROGRAM");
+	}
+	
+	/**
+	 * @see Rule#getChildRules()
+	 */
+	public String[] getDependencies() {
+		return null;
+	}
+	
+	/**
+	 * @see Rule#getDefaultDatatype()
+	 */
+	public Datatype getDefaultDatatype() {
+		return null;
+	}
+	
+	/**
+	 * @see Rule#getParameterList()
+	 */
+	public Set<RuleParameterInfo> getParameterList() {
+		return null;
+	}
+	
+	/**
+	 * @see Rule#getTTL()
+	 */
+	public int getTTL() {
+		return 0;
+	}
+	
 }

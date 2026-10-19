@@ -5,22 +5,23 @@
 		<c:if test="${empty type || type == group.key}">
 			<c:set var="regimen" value="${group.value.activeRegimen}"/>
 			<tr>
-				<td class="groupStyle" colspan="8" style="margin-top:5px;"><spring:message code="mdrtb.treatment.${group.key}"/></td>
+				<td class="groupStyle" colspan="8" style="margin-top:5px;"><mdrtb:message code="mdrtb.treatment.${group.key}"/></td>
 			</tr>
 			<c:choose>
 				<c:when test="${empty regimen.drugOrders && empty group.value.futureDrugOrders}">
-					<tr><td class="cellStyle" style="padding-left:10px;" colspan="8"><spring:message code="mdrtb.none"/></td></tr>
+					<tr><td class="cellStyle" style="padding-left:10px;" colspan="8"><mdrtb:message code="mdrtb.none"/></td></tr>
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<th class="headerStyle"><spring:message code="mdrtb.drug" text="Drug"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.formulation" text="Formulation"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.dose" text="Dose"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.frequency" text="Frequency"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.startdate" text="Start Date"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.scheduledStopDate" text="Scheduled Stop Date"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.instructions" text="Instructions"/></th>
-						<th class="headerStyle"><spring:message code="mdrtb.alerts" text="Alerts"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.drug" text="Drug"/></th>
+						<!-- COMMENTED FOR TAJIKISTAN -->
+						<!-- <th class="headerStyle"><mdrtb:message code="mdrtb.formulation" text="Formulation"/></th> -->
+						<th class="headerStyle"><mdrtb:message code="mdrtb.dose" text="Dose"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.frequency" text="Frequency"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.startdate" text="Start Date"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.scheduledStopDate" text="Scheduled Stop Date"/></th>
+						<th class="headerStyle"><mdrtb:message code="general.instructions" text="Instructions"/></th>
+						<th class="headerStyle"><mdrtb:message code="mdrtb.alerts" text="Alerts"/></th>
 					</tr>
 					<c:forEach items="${openmrs:sort(group.value.futureDrugOrders, 'startDate', true)}" var="drugOrder">
 						<tr>
@@ -29,7 +30,8 @@
 									${drugOrder.concept.name.name}
 								</a>
 							</td>
-							<td class="cellStyle future">${drugOrder.drug.name}</td>
+							<!--  COMMENTED FOR TAJIKISTAN -->
+							<!-- <td class="cellStyle future">${drugOrder.drug.name}</td> -->
 							<td class="cellStyle future">
 								<c:if test="${!empty drugOrder.dose}">
 									${drugOrder.dose} ${drugOrder.units}
@@ -49,7 +51,8 @@
 									${drugOrder.concept.name.name}
 								</a>
 							</td>
-							<td class="cellStyle">${drugOrder.drug.name}</td>
+							<!--  COMMENTED FOR TAJIKISTAN -->
+							<!-- <td class="cellStyle">${drugOrder.drug.name}</td> -->
 							<td class="cellStyle">
 								<c:if test="${!empty drugOrder.dose}">
 									${drugOrder.dose} ${drugOrder.units}

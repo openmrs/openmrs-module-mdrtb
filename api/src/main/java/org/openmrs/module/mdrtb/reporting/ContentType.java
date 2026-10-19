@@ -18,13 +18,11 @@ package org.openmrs.module.mdrtb.reporting;
  */
 public enum ContentType {
 	
-	EXCEL("xls", "application/vnd.ms-excel"),
-	HTML("html", "text/html"),
-	XML("xml", "text/xml"),
-	CSV("csv", "text/csv"),
-	TEXT("text", "text/plain");
+	EXCEL("xls", "application/vnd.ms-excel"), HTML("html", "text/html"), XML("xml", "text/xml"), CSV("csv", "text/csv"), TEXT(
+	        "text", "text/plain");
 	
 	private final String extension;
+	
 	private final String contentType;
 	
 	ContentType(String extension, String contentType) {
@@ -32,14 +30,14 @@ public enum ContentType {
 		this.contentType = contentType;
 		
 	}
-
+	
 	/**
 	 * @return the extension
 	 */
 	public String getExtension() {
 		return extension;
 	}
-
+	
 	/**
 	 * @return the contentType
 	 */

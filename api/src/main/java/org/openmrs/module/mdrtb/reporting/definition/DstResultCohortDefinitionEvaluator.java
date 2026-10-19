@@ -24,8 +24,8 @@ import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mdrtb.MdrtbConcepts;
 import org.openmrs.module.mdrtb.MdrtbConstants.TbClassification;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.reporting.MdrtbQueryService;
-import org.openmrs.module.mdrtb.service.MdrtbService;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
@@ -34,72 +34,72 @@ import org.openmrs.module.reporting.evaluation.EvaluationContext;
 /**
  * Evaluates an DstResultCohortDefinition and produces a Cohort
  */
-@Handler(supports={DstResultCohortDefinition.class})
+@Handler(supports = { DstResultCohortDefinition.class })
 public class DstResultCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
-
+	
 	/**
 	 * Default Constructor
 	 */
-	public DstResultCohortDefinitionEvaluator() {}
+	public DstResultCohortDefinitionEvaluator() {
+	}
 	
 	/**
-     * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
-     * @should return confirmed poly-resistance patients for the period
-     * @should return confirmed mdrtb patients for the period
-     * @should return confirmed xdrtb patients for the period
-     */
-    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
-    	
-    	DstResultCohortDefinition cd = (DstResultCohortDefinition) cohortDefinition;
-    	Cohort c = null;
-    	
+	 * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
+	 * @should return confirmed poly-resistance patients for the period
+	 * @should return confirmed mdrtb patients for the period
+	 * @should return confirmed xdrtb patients for the period
+	 */
+	public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+		
+		DstResultCohortDefinition cd = (DstResultCohortDefinition) cohortDefinition;
+		Cohort c = null;
+		
 		Date sd = cd.getMinResultDate();
 		Date ed = cd.getMaxResultDate();
-    	
+		
 		if (cd.getTbClassification() == TbClassification.POLY_RESISTANT_TB) {
 			// find any patients that have been resistant to two or mor drugs
 			c = MdrtbQueryService.getPatientsResistantToNumberOfDrugs(context, sd, ed, 2);
 		}
 		
-    	if (cd.getTbClassification() == TbClassification.MDR_TB || cd.getTbClassification() == TbClassification.XDR_TB) {
-
-    		// Must be resistant to INH
-    		Concept inh = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID); 
-    		c = MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, inh);
-	    	
-	    	// Must be resistant to RIF
-	    	Concept rif = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN);
-	    	c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, rif));
-	    	
-	    	if (cd.getTbClassification() == TbClassification.XDR_TB) {
-	    		
-	    		// Must be resistant to at least one fluoroquinolone
-	    		Concept quinoloneSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.QUINOLONES);
-	    		List<Concept> quinolones = new ArrayList<Concept>();
-	    		for (ConceptSet set : quinoloneSet.getConceptSets()) {
-	    			quinolones.add(set.getConcept());
-	    		}
-	    		Concept[] quins = quinolones.toArray(new Concept[quinolones.size()]);
-	    		c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, quins));
-	    		
-	    		// Must be resistant to at least one of capreomycin, kanamycin, and amikacin
-	    		Concept cap = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAPREOMYCIN);
-	    		Concept kan = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.KANAMYCIN);
-	    		Concept amk = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AMIKACIN);
-	    		c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, cap, kan, amk));
-	    	}
-    	}
-    	
-    	if (cd.getSpecificProfile() != null) {
-    		Cohort profileCohort = MdrtbQueryService.getCohortWithResistanceProfile(context, ed, cd.getSpecificProfile());
-    		if (c == null) {
-    			c = profileCohort;
-    		}
-    		else {
-    			c = Cohort.union(c, profileCohort);
-    		}
-    	}
-    	
-    	return new EvaluatedCohort(c, cohortDefinition, context);
-    }
+		if (cd.getTbClassification() == TbClassification.MDR_TB || cd.getTbClassification() == TbClassification.XDR_TB) {
+			
+			// Must be resistant to INH
+			Concept inh = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.ISONIAZID);
+			c = MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, inh);
+			
+			// Must be resistant to RIF
+			Concept rif = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.RIFAMPICIN);
+			c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, rif));
+			
+			if (cd.getTbClassification() == TbClassification.XDR_TB) {
+				
+				// Must be resistant to at least one fluoroquinolone
+				Concept quinoloneSet = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.QUINOLONES);
+				List<Concept> quinolones = new ArrayList<>();
+				for (ConceptSet set : quinoloneSet.getConceptSets()) {
+					quinolones.add(set.getConcept());
+				}
+				Concept[] quins = quinolones.toArray(new Concept[quinolones.size()]);
+				c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, quins));
+				
+				// Must be resistant to at least one of capreomycin, kanamycin, and amikacin
+				Concept cap = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.CAPREOMYCIN);
+				Concept kan = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.KANAMYCIN);
+				Concept amk = Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.AMIKACIN);
+				c = Cohort.intersect(c, MdrtbQueryService.getPatientsResistantToAnyDrugs(context, sd, ed, cap, kan, amk));
+			}
+		}
+		
+		if (cd.getSpecificProfile() != null) {
+			Cohort profileCohort = MdrtbQueryService.getCohortWithResistanceProfile(context, ed, cd.getSpecificProfile());
+			if (c == null) {
+				c = profileCohort;
+			} else {
+				c = Cohort.union(c, profileCohort);
+			}
+		}
+		
+		return new EvaluatedCohort(c, cohortDefinition, context);
+	}
 }

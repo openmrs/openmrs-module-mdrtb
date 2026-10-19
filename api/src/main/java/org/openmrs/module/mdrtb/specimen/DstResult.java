@@ -1,44 +1,90 @@
 package org.openmrs.module.mdrtb.specimen;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 
-/**
- * Interface that defines how to interaction with a DST result
- * 
- * An implementation of this interface will help us encapsulate the 
- * the messiness of storing the smear data in obsgroups
- */
-public interface DstResult extends Comparable<DstResult>{
-
-	/**
-	 * Data points this interface provides get/set access to:
-	 * 
-	 * drug: the drug this test refers to
-	 * concentration: the concentration of the drug
-	 * colonies: the colonies present (after testing?)
-	 * result: coded result of the test
-	 * 
-	 * Data points this interface provides get access to:
-	 * test: the actual object that stores the data this interface is providing access to (i.e., in our current implementation, the dst result obsgroup)
-	 * id: the id used to reference the test (i.e., in our current implementation, the obs_id of the dst result obsgroup for this test)
-	 * 
-	 */
+public class DstResult implements Comparable<DstResult> {
 	
-	public Object getDstResult();
-	public String getId(); 
+	protected final Log log = LogFactory.getLog(getClass());
 	
-	public Concept getDrug();
-	public void setDrug(Concept drug);
+	private Concept drug;
 	
-	public Double getConcentration();
-	public void setConcentration(Double concentration);
+	private Concept result;
 	
-	public Concept getResult();
-	public void setResult(Concept result);
+	private Integer colonies;
 	
-	public Integer getColonies();
-	public void setColonies(Integer colonies);
-
-    public void copyMembersFrom(DstResult source);
+	private Double concentration;
 	
+	public DstResult(Concept drug, Concept result) {
+		setDrug(drug);
+		setResult(result);
+	}
+	
+	public DstResult(Concept drug, Concept result, Integer colonies, Double concentration) {
+		setDrug(drug);
+		setResult(result);
+		this.colonies = colonies;
+		this.concentration = concentration;
+	}
+	
+	public Concept getDrug() {
+		return drug;
+	}
+	
+	public void setDrug(Concept drug) {
+		this.drug = drug;
+	}
+	
+	public Integer getColonies() {
+		return colonies;
+	}
+	
+	public Double getConcentration() {
+		return concentration;
+	}
+	
+	public Concept getResult() {
+		return result;
+	}
+	
+	public void setResult(Concept result) {
+		this.result = result;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((drug == null) ? 0 : drug.hashCode());
+		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DstResult other = (DstResult) obj;
+		if (drug == null) {
+			if (other.drug != null)
+				return false;
+		} else if (!drug.equals(other.drug))
+			return false;
+		if (result == null) {
+			if (other.result != null)
+				return false;
+		} else if (!result.equals(other.result))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public int compareTo(DstResult o) {
+		return 0;
+	}
 }

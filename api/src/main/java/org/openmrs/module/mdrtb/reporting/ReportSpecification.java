@@ -47,8 +47,9 @@ public interface ReportSpecification {
 	public List<RenderingMode> getRenderingModes();
 	
 	/**
-	 * This method should be used to validate the input parameters and transform them into whatever parameters
-	 * are required by the various definitions which will be used by the report
+	 * This method should be used to validate the input parameters and transform them into whatever
+	 * parameters are required by the various definitions which will be used by the report
+	 * 
 	 * @return the EvaluationContext to use for the report.
 	 */
 	public EvaluationContext validateAndCreateContext(Map<String, Object> parameters);

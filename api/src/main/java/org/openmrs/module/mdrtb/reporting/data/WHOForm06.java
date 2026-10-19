@@ -23,7 +23,8 @@ import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
-
+import org.openmrs.module.mdrtb.api.MdrtbService;
+import org.openmrs.module.mdrtb.api.MessagePropertyService;
 
 public class WHOForm06 implements ReportSpecification {
 	
@@ -31,24 +32,24 @@ public class WHOForm06 implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return Context.getMessageSourceService().getMessage("mdrtb.form06");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.form06");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return Context.getMessageSourceService().getMessage("mdrtb.form06.title");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.form06.title");
 	}
 	
 	/**
 	 * @see ReportSpecification#getParameters()
 	 */
 	public List<Parameter> getParameters() {
-		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location", Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
-		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.year"), Integer.class));
-		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarter"), Integer.class));
+		List<Parameter> l = new ArrayList<>();
+		l.add(new Parameter("location", Context.getService(MessagePropertyService.class).getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getService(MessagePropertyService.class).getMessage("mdrtb.year"), Integer.class));
+		l.add(new Parameter("quarter", Context.getService(MessagePropertyService.class).getMessage("mdrtb.quarter"), Integer.class));
 		return l;
 	}
 	
@@ -56,9 +57,10 @@ public class WHOForm06 implements ReportSpecification {
 	 * @see ReportSpecification#getRenderingModes()
 	 */
 	public List<RenderingMode> getRenderingModes() {
-		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm06" + 
-			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
+		List<RenderingMode> l = new ArrayList<>();
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/WHOForm06"
+		        + (StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "")
+		        + ".html"));
 		return l;
 	}
 	
@@ -68,10 +70,11 @@ public class WHOForm06 implements ReportSpecification {
 	public EvaluationContext validateAndCreateContext(Map<String, Object> parameters) {
 		
 		EvaluationContext context = ReportUtil.constructContext(parameters);
-		Integer year = (Integer)parameters.get("year");
-		Integer quarter = (Integer)parameters.get("quarter");
+		Integer year = (Integer) parameters.get("year");
+		Integer quarter = (Integer) parameters.get("quarter");
 		if (quarter == null) {
-			throw new IllegalArgumentException(Context.getMessageSourceService().getMessage("mdrtb.error.pleaseEnterAQuarter"));
+			throw new IllegalArgumentException(Context.getService(MessagePropertyService.class).getMessage(
+			    "mdrtb.error.pleaseEnterAQuarter"));
 		}
 		context.getParameterValues().putAll(ReportUtil.getPeriodDates(year, quarter, null));
 		return context;
@@ -80,24 +83,25 @@ public class WHOForm06 implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-    @SuppressWarnings("unchecked")
-    public ReportData evaluateReport(EvaluationContext context) {
-
-    	ReportDefinition report = new ReportDefinition();
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ReportData evaluateReport(EvaluationContext context) {
+		
+		ReportDefinition report = new ReportDefinition();
 		
 		Location location = (Location) context.getParameterValue("location");
-		Date startDate = (Date)context.getParameterValue("startDate");
-		Date endDate = (Date)context.getParameterValue("endDate");
+		Date startDate = (Date) context.getParameterValue("startDate");
+		Date endDate = (Date) context.getParameterValue("endDate");
 		
 		// Base Cohort is confirmed mdr patients, in program, who started treatment during the quarter, optionally at location
-		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
-		baseCohortDefs.put("confirmedMdr", new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
+		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<>();
+		baseCohortDefs.put("confirmedMdr",
+		    new Mapped(Cohorts.getConfirmedMdrInProgramAndStartedTreatmentFilter(startDate, endDate), null));
 		baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
 			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
 			if (locationFilter != null) {
 				baseCohortDefs.put("location", new Mapped(locationFilter, null));
-			}	
+			}
 		}
 		CohortDefinition baseCohort = ReportUtil.getCompositionCohort(baseCohortDefs, "AND");
 		report.setBaseCohortDefinition(baseCohort, null);
@@ -109,23 +113,32 @@ public class WHOForm06 implements ReportSpecification {
 		
 		// now get all the outcome state cohort filters, which we are going to use to create the other filters
 		Map<String, CohortDefinition> outcomes = ReportUtil.getMdrtbOutcomesFilterSet(startDate, endDate);
-
+		
 		// get all the patients who had an outcome within 6 months from treatment start
-		CohortDefinition programClosedAfterTreatmentStart = Cohorts.getProgramClosedAfterTreatmentStartedFilter(startDate, endDate, 6);
+		CohortDefinition programClosedAfterTreatmentStart = Cohorts.getProgramClosedAfterTreatmentStartedFilter(startDate,
+		    endDate, 6);
 		
 		// create the died, defaulted, and transferred out rows
-		dsd.addColumn("Died", ReportUtil.getCompositionCohort("AND", outcomes.get("Died"), programClosedAfterTreatmentStart), null);
-		dsd.addColumn("Defaulted", ReportUtil.getCompositionCohort("AND", outcomes.get("Defaulted"), programClosedAfterTreatmentStart), null);
-		dsd.addColumn("TransferredOut", ReportUtil.getCompositionCohort("AND", outcomes.get("TransferredOut"), programClosedAfterTreatmentStart), null);
+		dsd.addColumn("Died",
+		    ReportUtil.getCompositionCohort("AND", outcomes.get("Died"), programClosedAfterTreatmentStart), null);
+		dsd.addColumn("Defaulted",
+		    ReportUtil.getCompositionCohort("AND", outcomes.get("Defaulted"), programClosedAfterTreatmentStart), null);
+		dsd.addColumn("TransferredOut",
+		    ReportUtil.getCompositionCohort("AND", outcomes.get("TransferredOut"), programClosedAfterTreatmentStart), null);
 		
 		// create an "other" row to capture any other outcomes that may have occurred (technically, this should always be 0, because a patient couldn't have failed or be cured within 6 mths)
-		dsd.addColumn("Other", ReportUtil.getCompositionCohort("AND", outcomes.get("Failed"), outcomes.get("Cured"), 
-			outcomes.get("TreatmentCompleted"), programClosedAfterTreatmentStart), null);
+		dsd.addColumn(
+		    "Other",
+		    ReportUtil.getCompositionCohort("AND", outcomes.get("Failed"), outcomes.get("Cured"),
+		        outcomes.get("TreatmentCompleted"), programClosedAfterTreatmentStart), null);
 		
 		// get the patients that have positive, negative, and unknown bacteriology results
-		CohortDefinition positiveResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6, Result.POSITIVE);
-		CohortDefinition negativeResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6, Result.NEGATIVE);
-		CohortDefinition unknownResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6, Result.UNKNOWN);
+		CohortDefinition positiveResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6,
+		    Result.POSITIVE);
+		CohortDefinition negativeResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6,
+		    Result.NEGATIVE);
+		CohortDefinition unknownResult = Cohorts.getMdrtbBacResultAfterTreatmentStart(startDate, endDate, 5, 6,
+		    Result.UNKNOWN);
 		
 		// now create these rows by subtracting any that had an outcome within six months of treatment start
 		dsd.addColumn("Negative", ReportUtil.minus(negativeResult, programClosedAfterTreatmentStart), null);
@@ -135,13 +148,12 @@ public class WHOForm06 implements ReportSpecification {
 		report.addDataSetDefinition("sixMonthStatus", dsd, null);
 		
 		ReportData data;
-        try {
-	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
-        }
-        catch (EvaluationException e) {
-        	throw new MdrtbAPIException("Unable to evaluate WHO Form 6 report", e);
-        }
+		try {
+			data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		}
+		catch (EvaluationException e) {
+			throw new MdrtbAPIException("Unable to evaluate WHO Form 6 report", e);
+		}
 		return data;
-    }
-    	
- }
+	}
+}

@@ -27,59 +27,59 @@
 <!-- START LEFT-HAND COLUMN -->
 <div id="leftColumn" style="float: left; width:49%;  padding:0px 4px 4px 4px">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.intakeVisit" text="Intake Visit"/></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0" cellspacing="0" border="0">
 <c:forEach var="encounterStatus" items="${visits.intakeVisits.value}">
 <tr>
 <td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}" format="${_dateFormatDisplay}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}</td>
-<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
-<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><spring:message code="mdrtb.delete" text="Delete"/></a></td>
+<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><mdrtb:message code="mdrtb.view" text="View"/></a></td>
+<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<mdrtb:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><mdrtb:message code="mdrtb.delete" text="Delete"/></a></td>
 </tr>
 </c:forEach>
 </table>
 <br/>
 <c:if test="${empty visits.intakeVisits.value}">
-<button onclick="window.location='${pageContext.request.contextPath}${visits.newIntakeVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newIntakeVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><mdrtb:message code="mdrtb.addIntakeVisit" text="Add Intake Visit"/></button>
 </c:if>
 </div>
 
 <br/>
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.followUpVisits" text="Follow Up Visits"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.followupForm" text="Follow Up Visits"/></b>
 <div class="box" style="margin:0px">
 <table cellpadding="0" cellspacing="0" border="0">
 <c:forEach var="encounterStatus" items="${visits.followUpVisits.value}">
 <tr>
 <td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}" format="${_dateFormatDisplay}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}</td>
-<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
-<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><spring:message code="mdrtb.delete" text="Delete"/></a></td>
+<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><mdrtb:message code="mdrtb.view" text="View"/></a></td>
+<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<mdrtb:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><mdrtb:message code="mdrtb.delete" text="Delete"/></a></td>
 </tr>
 </c:forEach>
 </table>
 <br/>
-<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><mdrtb:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </div>
 
 <br/>
 
 <c:if test="${fn:length(visits.scheduledFollowUpVisits.value) > 0}">
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.scheduledFollowUpVisits" text="Future Follow-up Visits Scheduled"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.scheduledFollowUpVisits" text="Future Follow-up Visits Scheduled"/></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0" border="0">
 <c:forEach var="encounterStatus" items="${visits.scheduledFollowUpVisits.value}">
 <tr>
 <td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}" format="${_dateFormatDisplay}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}</td>
-<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><spring:message code="mdrtb.view" text="View"/></a></td>
-<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><spring:message code="mdrtb.delete" text="Delete"/></a></td>
+<td><a href="${pageContext.request.contextPath}${encounterStatus.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}"><mdrtb:message code="mdrtb.view" text="View"/></a></td>
+<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<mdrtb:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><mdrtb:message code="mdrtb.delete" text="Delete"/></a></td>
 </tr>
 </c:forEach>
 </table>
 <br/>
-<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><spring:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
+<button onclick="window.location='${pageContext.request.contextPath}${visits.newFollowUpVisit.link}&returnUrl=${pageContext.request.contextPath}/module/mdrtb/visits/visits.form%3FpatientProgramId=${patientProgramId}'"><mdrtb:message code="mdrtb.addFollowUpVisit" text="Add Follow-up Visit"/></button>
 </div>
 </c:if>
 
@@ -91,15 +91,15 @@
 
 <div id="rightColumn" style="float:right; width:49%; padding:0px 4px 4px 4px">
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.specimenCollections" text="Specimen Collections"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.specimenCollections" text="Specimen Collections"/></b>
 <div class="box" style="margin:0px">
 <table cellspacing="0" cellpadding="0" border="0">
 <c:forEach var="encounterStatus" items="${visits.specimenCollectionVisits.value}">
 <tr>
 <td><a href="${pageContext.request.contextPath}${encounterStatus.link}"><openmrs:formatDate date="${encounterStatus.value.encounterDatetime}" format="${_dateFormatDisplay}"/></a>
  - ${encounterStatus.value.location.displayString} - ${encounterStatus.value.provider.personName}</td>
-<td><a href="${pageContext.request.contextPath}${encounterStatus.link}"><spring:message code="mdrtb.view" text="View"/></a></td>
-<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<spring:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><spring:message code="mdrtb.delete" text="Delete"/></a></td>
+<td><a href="${pageContext.request.contextPath}${encounterStatus.link}"><mdrtb:message code="mdrtb.view" text="View"/></a></td>
+<td><a href="delete.form?visitId=${encounterStatus.value.id}&patientProgramId=${patientProgramId}" onclick="return confirm('<mdrtb:message code="mdrtb.confirmDeleteVisit" text="Are you sure you want to delete this visit?"/>')"><mdrtb:message code="mdrtb.delete" text="Delete"/></a></td>
 </tr>
 </c:forEach>
 </table>

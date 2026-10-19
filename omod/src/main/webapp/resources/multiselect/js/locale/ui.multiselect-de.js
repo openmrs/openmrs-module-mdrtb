@@ -5,13 +5,13 @@
  */
 
 $.extend($.ui.multiselect.locale, {
-	addAll:'Alle hinzufügen',
+	addAll:'Alle hinzuf≈∏gen',
 	removeAll:'Alle entfernen',
-	itemsCount:'#{count} Elemente gewählt',
+	itemsCount:'#{count} Elemente gew≈†hlt',
 	itemsTotal:'#{count} Elemente gesamt',
 	busy:'Bitte warten...',
-	errorDataFormat:"Option kann nicht hinzugefügt werden. Unbekanntes Datenformat.",
-	errorInsertNode:"Es gab ein Problem beim hinzufügen des Elements:\n\n\t[#{key}] => #{value}\n\nDer Vorgang wurde abgebrochen.",
-	errorReadonly:"Die Option #{option} ist schreibgeschützt",
+	errorDataFormat:"Option kann nicht hinzugef≈∏gt werden. Unbekanntes Datenformat.",
+	errorInsertNode:"Es gab ein Problem beim hinzuf≈∏gen des Elements:\n\n\t[#{key}] => #{value}\n\nDer Vorgang wurde abgebrochen.",
+	errorReadonly:"Die Option #{option} ist schreibgesch≈∏tzt",
 	errorRequest:"Entschuldigung! Es scheint ein Problem mit dem entfernten Aufruf zu geben. (Typ: #{status})"
 });

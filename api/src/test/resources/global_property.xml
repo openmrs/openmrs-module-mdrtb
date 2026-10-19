@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <global_property property="adminui.mandatory" property_value="false" description="true/false whether or not the adminui module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="3dcdf6f1-abab-4eb1-89c2-ef8b1b1a9688"/>
+    <global_property property="adminui.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the adminui module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="0f2122cc-6718-4b39-b54c-15f665ab24e8"/>
+    <global_property property="allergy.allergen.ConceptClasses" property_value="Drug,MedSet" description="A comma-separated list of the allowed concept classes for the allergen field of the allergy dialog" uuid="eaf3f161-3752-412e-9a88-7bba5b702345"/>
+    <global_property property="allergy.concept.allergen.drug" property_value="162552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the drug allergens concept" uuid="73901ac7-58af-4af7-ba24-84d4fa6cc5b9"/>
+    <global_property property="allergy.concept.allergen.environment" property_value="162554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the environment allergens concept" uuid="11df86f4-9ac9-4ef0-9c27-794b6e80ac30"/>
+    <global_property property="allergy.concept.allergen.food" property_value="162553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the food allergens concept" uuid="7a5d3497-9451-43e3-9875-577401e7e3e8"/>
+    <global_property property="allergy.concept.otherNonCoded" property_value="5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the allergy other non coded concept" uuid="e58daa38-3811-44b1-b46e-576c33ef15c0"/>
+    <global_property property="allergy.concept.reactions" property_value="162555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the allergy reactions concept" uuid="b31775b0-c9f7-4182-b5b3-8215057d0c36"/>
+    <global_property property="allergy.concept.severity.mild" property_value="1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the MILD severity concept" uuid="9cfc01ef-aed3-429f-afd7-5f5a85c1a8ee"/>
+    <global_property property="allergy.concept.severity.moderate" property_value="1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the MODERATE severity concept" uuid="48acac7b-3eb4-4aff-ae1b-19ce279ca7b6"/>
+    <global_property property="allergy.concept.severity.severe" property_value="1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the SEVERE severity concept" uuid="4fa87d11-8875-49d1-87d2-2750397670af"/>
+    <global_property property="allergy.concept.unknown" property_value="1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" description="UUID for the allergy unknown concept" uuid="7e0827a8-d31b-4977-9b9a-fd8c2e2725f2"/>
+    <global_property property="allergy.reaction.ConceptClasses" property_value="Symptom" description="A comma-separated list of the allowed concept classes for the reaction field of the allergy dialog" uuid="5362e179-b305-4f3d-a689-1171cfcd5cbc"/>
+    <global_property property="allergyui.mandatory" property_value="false" description="true/false whether or not the allergyui module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="f33f1a1d-331d-4784-a0ed-732a71243d41"/>
+    <global_property property="allergyui.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the allergyui module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="6df48cb5-23f4-4f06-9490-ba551512d9a1"/>
+    <global_property property="appframework.mandatory" property_value="false" description="true/false whether or not the appframework module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="a8de4d4e-a7e0-42ad-a741-a495a6eaae5c"/>
+    <global_property property="appframework.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the appframework module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="f4d7ae7d-159d-4bfb-8de7-6644b987bf8a"/>
+    <global_property property="application.name" property_value="OpenMRS" description="The name of this application, as presented to the user, for example on the login and welcome pages." uuid="e7681fbd-f513-40a2-bfdc-0c81c43842f4"/>
+    <global_property property="appui.mandatory" property_value="false" description="true/false whether or not the appui module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="cd203340-a352-4059-bf54-fac20536e5e7"/>
+    <global_property property="appui.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the appui module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="40b8926f-a9d1-4881-a5a0-b91257bdfe94"/>
+    <global_property property="calculation.mandatory" property_value="false" description="true/false whether or not the calculation module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="d5f23d07-100b-425a-8124-ee81f15f6b13"/>
+    <global_property property="calculation.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the calculation module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="e4c78b8b-9e30-4ea7-b6de-41909d27cbd3"/>
+    <global_property property="concept.defaultConceptMapType" property_value="NARROWER-THAN" description="Default concept map type which is used when no other is set" uuid="568e3a0f-77b2-4c9b-9509-d48dbc7c0957"/>
+    <global_property property="conceptDrug.dosageForm.conceptClasses" description="A comma-separated list of the allowed concept classes for the dosage form field of the concept drug management form." uuid="82290e93-eab7-40a3-8442-5169a9f2cacf"/>
+    <global_property property="conceptDrug.route.conceptClasses" description="A comma-separated list of the allowed concept classes for the route field of the concept drug management form." uuid="3ce0bad3-09e2-4aac-8359-abed0fc69490"/>
+    <global_property property="concepts.locked" property_value="false" description="if true, do not allow editing concepts" uuid="edeaadd0-3ecf-4f80-86c9-a11634cab259" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="concept_map_type_management.enable" property_value="false" description="Enables or disables management of concept map types" uuid="29b994cf-b5b6-4b08-8308-b0fbeb066407" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="conditionList.endReasonConceptSetUuid" description="UUID of end reason concept set" uuid="45534c3f-3c7c-474a-9691-b65659489f50"/>
+    <global_property property="conditionList.nonCodedUuid" description="UUID of non coded concept" uuid="7b9ebabf-806b-4bb9-9fe9-d38b8b276b9f"/>
+    <global_property property="coreapps.conceptStickyNote" property_value="CIEL:165095" description="Mapping of the concept used for the Sticky Note. In the form of SOURCE:CODE." uuid="8d7992cb-0a0d-4751-84d2-367eb2ba3f55"/>
+    <global_property property="coreapps.conditionListClasses" property_value="8d4918b0-c2cc-11de-8d13-0010c6dffd0f" description="List of concept uuid's which limits the answers for condition list" uuid="c30bd1b5-a865-414d-95b9-6178ed2d6a12"/>
+    <global_property property="coreapps.dashboardUrl" property_value="/coreapps/clinicianfacing/patient.page?patientId={{patientId}}" description="Allows one to override the default dashboard url" uuid="248751a4-dd75-45ed-8445-bd78cefcb89a"/>
+    <global_property property="coreapps.deceasedDateUsingTime" property_value="false" description="Deceased date using time component or only date." uuid="6377d13c-aab2-47db-8a6c-ff8d1a3dddd3"/>
+    <global_property property="coreapps.defaultPatientIdentifierLocation" description="When adding a new patient identifier via the patient dashboard, the location to use if not specified (and the identifier type requires a location)" uuid="7e9a8cdc-a8be-47d8-98cd-f23559fb2e9c"/>
+    <global_property property="coreapps.mandatory" property_value="false" description="true/false whether or not the coreapps module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="20c4db85-54c8-4b7e-a021-a107ebea96e2"/>
+    <global_property property="coreapps.patientDashboardEncounterCount" property_value="100" description="Maximum number of encounters to be loaded and displayed at once on the patient dashboard." uuid="457050e4-9fc0-445f-ae66-7136de36e927"/>
+    <global_property property="coreapps.recentDiagnosisPeriodInDays" description="Number of days to consider diagnosis as recent" uuid="e31a8f1e-c0f4-448a-99ef-c0339c20181d"/>
+    <global_property property="coreapps.searchDelayLong" property_value="1000" description="Time, in milliseconds, that the patient search waits for an additional keystroke if only 1 or 2 characters have been entered" uuid="3ca7410e-cba1-413e-8368-e342f50a0824"/>
+    <global_property property="coreapps.searchDelayShort" property_value="300" description="Default time, in milliseconds, that the patient search waits for an additional keystroke before performed a search" uuid="a23605ae-a527-4765-ab6d-4d3837317581"/>
+    <global_property property="coreapps.showVisitTypeOnPatientHeaderSection" property_value="false" description="On the active status and patient header sections, display inpatient/outpatient (based on whether
+            a visit has an admission encounter) or the associated visit type." uuid="0ab8f73b-7378-47ba-9729-a2d3744741ca"/>
+    <global_property property="coreapps.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the coreapps module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="e495da48-f09d-4aad-b3d9-0065ad2878b2"/>
+    <global_property property="coreapps.transferEncounterUuid" description="Set encounter uuid if you would like to create a transfer encounter when visit type is changed" uuid="77e5d087-9a93-4901-b98f-0e2c1c516295"/>
+    <global_property property="coreapps.visitsPageUrl" property_value="/coreapps/patientdashboard/patientDashboard.page?patientId={{patientId}}#visits" description="Allows one to override the default general patient visits page" uuid="dc86eebe-0bff-4d3b-a98a-ec18b52f2424"/>
+    <global_property property="coreapps.visitsPageWithSpecificVisitUrl" property_value="/coreapps/patientdashboard/patientDashboard.page?patientId={{patientId}}&amp;visitId={{visit.id}}#" description="Allows one to override the default page that displays the details of a specific patient visit" uuid="be65ac4d-22da-486a-9235-8524ebe6dc3e"/>
+    <global_property property="coreapps.visitTypeColors" uuid="fea61d7e-fc07-4401-ac3c-78ff5c747bf6"/>
+    <global_property property="dashboard.encounters.maximumNumberToShow" property_value="3" description="An integer which, if specified, would determine the maximum number of encounters to display on the encounter tab of the patient dashboard." uuid="f8b9de03-d4cf-420c-805b-e216f7735c2f"/>
+    <global_property property="dashboard.encounters.providerDisplayRoles" description="A comma-separated list of encounter roles (by name or id). Providers with these roles in an encounter will be displayed on the encounter tab of the patient dashboard." uuid="8a5fe900-f468-44a1-a92b-844766e863a6"/>
+    <global_property property="dashboard.encounters.showEditLink" property_value="true" description="true/false whether or not to show the 'Edit Encounter' link on the patient dashboard" uuid="1c3728bc-eb24-411b-adaf-960c6e2cf78c" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="dashboard.encounters.showEmptyFields" property_value="true" description="true/false whether or not to show empty fields on the 'View Encounter' window" uuid="26f8a463-dbc3-4398-a224-ed3f8fbd2e37" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="dashboard.encounters.showViewLink" property_value="true" description="true/false whether or not to show the 'View Encounter' link on the patient dashboard" uuid="3ba232cb-c046-41b0-9ef7-38bece3a9520" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="dashboard.encounters.usePages" property_value="smart" description="true/false/smart on how to show the pages on the 'View Encounter' window.  'smart' means that if &amp;gt; 50% of the fields have page numbers defined, show data in pages" uuid="042ff68c-a802-4e13-b4d2-195fc2ce776f"/>
+    <global_property property="dashboard.formEntry.maximumNumberEncountersToShow" description="Allows one to limit the number of encounters shown on the form entry tab of the patient dashboard specifically" uuid="26e0a48b-d44f-4301-a21c-3bf3c0da9320"/>
+    <global_property property="dashboard.header.programs_to_show" description="List of programs to show Enrollment details of in the patient header. (Should be an ordered comma-separated list of program_ids or names.)" uuid="b03b7a65-001e-4280-9b0e-c37ff229db96"/>
+    <global_property property="dashboard.header.workflows_to_show" description="List of programs to show Enrollment details of in the patient header. List of workflows to show current status of in the patient header. These will only be displayed if they belong to a program listed above. (Should be a comma-separated list of program_workflow_ids.)" uuid="81839be8-43cb-43fd-b1ba-7905d0bb85e9"/>
+    <global_property property="dashboard.metadata.caseConversion" description="Indicates which type automatic case conversion is applied to program/workflow/state in the patient dashboard. Valid values: lowercase, uppercase, capitalize. If empty no conversion is applied." uuid="9c2e3714-9885-46e2-928c-1a5ec7a8ca28"/>
+    <global_property property="dashboard.overview.showConcepts" description="Comma delimited list of concepts ids to show on the patient dashboard overview tab" uuid="d84d155b-a2cc-439e-a4a3-ab8a8363bd9f"/>
+    <global_property property="dashboard.regimen.displayDrugSetIds" property_value="ANTIRETROVIRAL DRUGS,TUBERCULOSIS TREATMENT DRUGS" description="Drug sets that appear on the Patient Dashboard Regimen tab. Comma separated list of name of concepts that are defined as drug sets." uuid="263d4083-3c2c-499b-98d7-53bd83f9b7de"/>
+    <global_property property="dashboard.regimen.displayFrequencies" property_value="7 days/week,6 days/week,5 days/week,4 days/week,3 days/week,2 days/week,1 days/week" description="Frequency of a drug order that appear on the Patient Dashboard. Comma separated list of name of concepts that are defined as drug frequencies." uuid="69142fe9-886d-4a2f-839e-81f590f4595a"/>
+    <global_property property="dashboard.relationships.show_types" description="Types of relationships separated by commas.  Doctor/Patient,Parent/Child" uuid="f21c41a3-d997-46df-8656-366f51299539"/>
+    <global_property property="dashboard.showPatientName" property_value="false" description="Whether or not to display the patient name in the patient dashboard title. Note that enabling this could be security risk if multiple users operate on the same computer." uuid="397a09b8-3fd4-49d9-898c-6c4d2f75a032" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="dataexchange.mandatory" property_value="false" description="true/false whether or not the dataexchange module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="1fb83778-318f-49eb-8759-3ed9b3f04635"/>
+    <global_property property="dataexchange.started" property_value="false" description="DO NOT MODIFY. true/false whether or not the dataexchange module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="72a95616-30e4-4cb2-b16e-7b358c654fa5"/>
+    <global_property property="datePicker.weekStart" property_value="0" description="First day of the week in the date picker. Domingo/Dimanche/Sunday:0  Lunes/Lundi/Monday:1" uuid="d0352c10-93d4-4f6e-a845-439ccab5f598"/>
+    <global_property property="default_locale" property_value="en" description="Specifies the default locale. You can specify both the language code(ISO-639) and the country code(ISO-3166), e.g. 'en_GB' or just country: e.g. 'en'" uuid="a152b28a-08dd-438f-a9d4-e409b95c1add"/>
+    <global_property property="default_location" property_value="Unknown Location" description="The name of the location to use as a system default" uuid="8dc531c6-f132-4ae0-ac33-0feb276e50b0"/>
+    <global_property property="default_theme" description="Default theme for users.  OpenMRS ships with themes of 'green', 'orange', 'purple', and 'legacy'" uuid="4733581d-d84e-4373-b019-9e4d3ee552e6"/>
+    <global_property property="drugOrder.drugOther" description="Specifies the uuid of the concept which represents drug other non coded" uuid="4fe96ffd-c390-4167-92aa-3a9c54057430"/>
+    <global_property property="drugOrder.requireDrug" property_value="false" description="Set to value true if you need to specify a formulation(Drug) when creating a drug order." uuid="ea3b521f-4eb7-441c-bfaf-5ac523c2fe0c"/>
+    <global_property property="drugOrder.requireOutpatientQuantity" property_value="true" description="true/false whether to require quantity, quantityUnits, and numRefills for outpatient drug orders" uuid="8b9e5f86-7c17-4c4e-ae46-0afca4fc977a"/>
+    <global_property property="emr.encounterMatcher" description="Class name of a custom encounter matcher (e.g. org.openmrs.module.example.customEncounterMatcher)" uuid="c0ea9570-e325-4e24-b31b-82d8f23aa6e8"/>
+    <global_property property="emrapi.conceptSourcesForDiagnosisSearch" property_value="ICD-10-WHO" description="Specifies comma separated list of reference term source names to be used for diagnosis and condition search" uuid="b911b5da-2897-4f4a-86fb-532dde2b55f3"/>
+    <global_property property="emrapi.EmrApiVisitAssignmentHandler.adjustEncounterTimeOfDayIfNecessary" property_value="false" description="If true, and a visit is found on the same day but the encounter is not within that timeframe will adjust the encounter time as needed" uuid="0efa661c-d187-4703-8ec5-3e27b3e3783f"/>
+    <global_property property="emrapi.EmrApiVisitAssignmentHandler.encounterTypeToNewVisitTypeMap" description="Specifies the mapping of encounter types to new visit types for more see https://wiki.openmrs.org/x/vgF4Aw" uuid="c05aec77-76c7-4c29-b9a0-d98f4edf9cc4"/>
+    <global_property property="emrapi.lastViewedPatientSizeLimit" property_value="50" description="Specifies the system wide number of patients to store as last viewed for a single user,
+            defaults to 50 if not specified" uuid="d75f392c-bbcc-4527-9fbf-28b3f297550a"/>
+    <global_property property="emrapi.mandatory" property_value="false" description="true/false whether or not the emrapi module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="150ec73d-a7d6-429a-835a-d661be069e5f"/>
+    <global_property property="emrapi.nonDiagnosisConceptSets" description="UUIDs or mapping of non diagnosis concept sets" uuid="7a4eb1a6-f669-483b-8dc4-bcf3ee625d42"/>
+    <global_property property="emrapi.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the emrapi module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="67dd83a9-7954-4afe-bf87-915e5d095969"/>
+    <global_property property="emrapi.suppressedDiagnosisConcepts" description="UUIDs or mappings of suppressed diagnosis concepts" uuid="a7455528-657a-4f51-abbf-0dff66fee1cc"/>
+    <global_property property="emrapi.useLegacyDiagnosisService" property_value="false" description="When running Core 2.2+, use the legacy diagnosis service instead of the new one provided to work with the new diagnosis model" uuid="d61290ca-e7f8-4f0a-b978-1dc144b3ebe3"/>
+    <global_property property="encounterForm.obsSortOrder" property_value="number" description="The sort order for the obs listed on the encounter edit form.  'number' sorts on the associated numbering from the form schema.  'weight' sorts on the order displayed in the form schema." uuid="fc3671ef-c777-4878-87a7-977b59d5669a"/>
+    <global_property property="EncounterType.encounterTypes.locked" property_value="false" description="saving, retiring or deleting an Encounter Type is not permitted, if true" uuid="999c7e01-c3bc-44b7-800d-42fa489fec7b" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="event.mandatory" property_value="false" description="true/false whether or not the event module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="7b61cef8-836e-495c-807e-41293c6a44ad"/>
+    <global_property property="event.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the event module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="3c60877b-20ca-4096-bccd-ddbc5a5d4c73"/>
+    <global_property property="fhir2.administeringEncounterRoleUuid" property_value="546cce2d-6d58-4097-ba92-206c1a2a0462" description="Set administering encounter role uuid" uuid="e525b32f-e687-4546-95b2-6ddf31edf2c6"/>
+    <global_property property="fhir2.immunizationsEncounterTypeUuid" property_value="29c02aff-9a93-46c9-bf6f-48b552fcb1fa" description="Set immunizations encounter type uuid" uuid="58702bef-a9ac-4065-8ded-82eec7110cd1"/>
+    <global_property property="fhir2.locationContactPointAttributeTypeUuid" property_value="abcde432-1691-11df-97a5-7038c432abcd" description="Set location attribute type uuid" uuid="835235e9-01d8-4958-b80a-22589df1427d"/>
+    <global_property property="fhir2.mandatory" property_value="false" description="true/false whether or not the fhir2 module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="5423593a-79b8-48fe-8475-9f7affcf1576"/>
+    <global_property property="fhir2.narrativesOverridePropertyFile" description="Path of narrative override properties file" uuid="6193dae1-0bd0-4d34-926f-31dd2fd68ccc"/>
+    <global_property property="fhir2.paging.default" property_value="10" description="Set default page size" uuid="ccfe521a-d4d8-4221-a852-7179def64b78"/>
+    <global_property property="fhir2.paging.maximum" property_value="100" description="Set maximum page size" uuid="7e4829a4-e3aa-4615-b5cb-b7e67e1fec43"/>
+    <global_property property="fhir2.personAttributeTypeUuid" property_value="14d4f066-15f5-102d-96e4-000c29c2a5d7" description="Set person attribute type uuid" uuid="c75ab037-2815-4453-b6c1-83939b6e89b0"/>
+    <global_property property="fhir2.personContactPointAttributeTypeUuid" property_value="14d4f066-15f5-102d-96e4-000c29c2a5d7" description="Set person attribute type uuid" uuid="05894075-bcf2-40b4-9242-58d7ff6363bb"/>
+    <global_property property="fhir2.providerContactPointAttributeTypeUuid" property_value="5021b1a1-e7f6-44b4-ba02-da2f2bcf8718" description="Set provider attribute type uuid" uuid="19829ac1-1e2c-4a10-8250-11812e8f09f2"/>
+    <global_property property="fhir2.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the fhir2 module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="53c73e92-75f0-4952-80b5-d0e52faba694"/>
+    <global_property property="fhir2.uriPrefix" description="Prefix for the FHIR server in case this cannot be automatically detected" uuid="241ba3b4-7f76-4cd2-91a2-6191ffc47247"/>
+    <global_property property="FormEntry.enableDashboardTab" property_value="true" description="true/false whether or not to show a Form Entry tab on the patient dashboard" uuid="0d252df1-aaf4-4981-8c0a-d2ce53787b60" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="FormEntry.enableOnEncounterTab" property_value="false" description="true/false whether or not to show a Enter Form button on the encounters tab of the patient dashboard" uuid="090f38fa-dd24-4ee3-985d-9fac0bc62ccb" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="formentryapp.mandatory" property_value="false" description="true/false whether or not the formentryapp module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="d2e03c47-8e2d-4514-98a1-2abf99df03b2"/>
+    <global_property property="formentryapp.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the formentryapp module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="298fc505-2d43-4411-9f06-ce951f5f5fc2"/>
+    <global_property property="forms.locked" property_value="false" description="Set to a value of true if you do not want any changes to be made on forms, else set to false." uuid="3c20dd4d-04e7-4a41-aa24-da61bb90d169"/>
+    <global_property property="graph.color.absolute" property_value="rgb(20,20,20)" description="Color of the 'invalid' section of numeric graphs on the patient dashboard." uuid="be51a832-ad5b-470c-9a4d-6faf116df6dc"/>
+    <global_property property="graph.color.critical" property_value="rgb(200,0,0)" description="Color of the 'critical' section of numeric graphs on the patient dashboard." uuid="685f48e8-1f69-4ad7-8534-00400047d763"/>
+    <global_property property="graph.color.normal" property_value="rgb(255,126,0)" description="Color of the 'normal' section of numeric graphs on the patient dashboard." uuid="f96c8671-0d6c-4467-b587-0ae50cc4ae56"/>
+    <global_property property="gzip.enabled" property_value="false" description="Set to 'true' to turn on OpenMRS's gzip filter, and have the webapp compress data before sending it to any client that supports it. Generally use this if you are running Tomcat standalone. If you are running Tomcat behind Apache, then you'd want to use Apache to do gzip compression." uuid="499e2875-5a0b-49c0-8263-b21c3b484cd6" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="hl7_archive.dir" property_value="hl7_archives" description="The default name or absolute path for the folder where to write the hl7_in_archives." uuid="8993648a-375c-452f-bcd6-0ff8707cb0eb"/>
+    <global_property property="hl7_processor.ignore_missing_patient_non_local" property_value="false" description="If true, hl7 messages for patients that are not found and are non-local will silently be dropped/ignored" uuid="b1ede925-6265-4257-a5ed-dbd2419c20ed" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="host.url" description="The URL to redirect to after requesting for a password reset. Always provide a place holder in this url with name {activationKey}, it will get substituted by the actual activation key." uuid="256fbf7d-546f-49f3-9cd0-566d7f4ff1db"/>
+    <global_property property="htmlformentry.archiveDir" property_value="htmlformentry/archive/%Y/%m" description="Used to specify the directory used to serialize data as a blob submitted via html forms before propagation to the database.
+If a relative is specified then the directory is created in the default application data directory otherwise the absolute
+path is used.The %Y and %M are replaced with 4 digit year and 2 digit month respectively. If this property is empty nothing then nothing is saved." uuid="e2bdec36-90ea-4d87-a10f-e0e740e369c1"/>
+    <global_property property="htmlformentry.archiveHtmlForms" property_value="False" description="Set to True if you want to archive the submitted html forms and False otherwise" uuid="5365ec3b-a592-4cb5-9451-133537137142"/>
+    <global_property property="htmlformentry.dateFormat" description="Always display dates in HTML Forms in this (Java) date format." uuid="a885efdc-89e4-46da-b8db-782c3eaf3b9b"/>
+    <global_property property="htmlformentry.datePickerYearsRange" property_value="110,20" description="datePickerYearsRange parameter can be  set here Eg:'110,20' meaning that the possible years that appear in the datepicker dropdown range from  20 years past the current year, and 110 years prior to the current year." uuid="bd593c70-5bbf-4a4b-bb12-fd1457b0e20f"/>
+    <global_property property="htmlformentry.mandatory" property_value="false" description="true/false whether or not the htmlformentry module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="f9024c1a-bfec-46a5-b494-67ad837ddad7"/>
+    <global_property property="htmlformentry.showDateFormat" property_value="true" description="Set to true if you want static text for the date format to be displayed next to date widgets, else set to false." uuid="8befa8c8-02a6-4068-9926-494ec01fc06d"/>
+    <global_property property="htmlformentry.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the htmlformentry module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="bc8a6d55-bfd3-438d-a966-96b87e42cd0c"/>
+    <global_property property="htmlformentry.timeFormat" property_value="HH:mm" description="Always display times in HTML Forms in this (Java) date format." uuid="532f42ba-46e7-4b8a-834e-21b08ec1d534"/>
+    <global_property property="htmlformentryui.customPrintPageName" description="If overriding htmlformentryui print button behavior, PageName to use in ui.pageLink() built href value" uuid="d5044994-f8b9-46e8-ad5d-0a5a260f6f7c"/>
+    <global_property property="htmlformentryui.customPrintProvider" description="If overriding htmlformentryui print button behavior, artifactId or base route of provider overriding functionality" uuid="3077e05e-4117-4b72-8263-21526047eb9b"/>
+    <global_property property="htmlformentryui.customPrintTarget" property_value="_self" description="If overriding htmlformentryui print button behavior, URL target value (e.g. _self, _blank)" uuid="3082de24-e59a-456f-a450-f20064f3a1a6"/>
+    <global_property property="htmlformentryui.mandatory" property_value="false" description="true/false whether or not the htmlformentryui module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="fb591fbb-a90c-4b43-a742-c095abf8de10"/>
+    <global_property property="htmlformentryui.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the htmlformentryui module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="33ad983c-9aea-40f3-94df-99427c707b86"/>
+    <global_property property="htmlwidgets.mandatory" property_value="false" description="true/false whether or not the htmlwidgets module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="403cccc0-03be-4525-8df8-470e940cf4d6"/>
+    <global_property property="htmlwidgets.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the htmlwidgets module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="9e1c52b2-204a-45b3-b012-fd2c808c8539"/>
+    <global_property property="idgen.mandatory" property_value="false" description="true/false whether or not the idgen module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="5895282b-7a56-45c4-a1f7-dfff6e496951"/>
+    <global_property property="idgen.prefixLocationAttributeType" description="Name of LocationAttribute type for PatientIdentifier Prefixes." uuid="478bfdbe-17fd-446c-8286-3d5d8aca39bc"/>
+    <global_property property="idgen.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the idgen module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="00ff449f-5fae-4d91-b941-d87d8d343cfc"/>
+    <global_property property="layout.address.format" property_value="" description="XML description of address formats" uuid="d506f19e-1220-4fda-802c-326870fe64c2"/>
+    <global_property property="layout.name.format" property_value="short" description="Format in which to display the person names.  Valid values are short, long" uuid="5d64f396-f660-4ff5-9e03-e120bddc4591"/>
+    <global_property property="legacyui.enableExitFromCare" property_value="false" description="true/false whether or not to show the Exit / Resume Care button on the patient dashboard" uuid="c99c7643-f58e-414f-bd42-e5ae38e6baf1"/>
+    <global_property property="legacyui.mandatory" property_value="false" description="true/false whether or not the legacyui module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="9d37c3a7-369f-4bdd-ade0-cd6802855502"/>
+    <global_property property="legacyui.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the legacyui module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="e15b5ba9-9ec6-49c3-9a40-217695a75e4e"/>
+    <global_property property="locale.allowed.list" property_value="en, ru, tj" description="Comma delimited list of locales allowed for use on system" uuid="ed779482-9150-4c4e-9124-561db7bcb420"/>
+    <global_property property="location.field.style" property_value="default" description="Type of widget to use for location fields" uuid="4910b45c-0f32-4d6b-bc0b-9c5a80a2f8eb"/>
+    <global_property property="log.layout" property_value="%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n" description="A log layout pattern which is used by the OpenMRS file appender." uuid="bb444578-e5bf-43b0-8b50-907165321ee8"/>
+    <global_property property="log.level" property_value="org.openmrs.api:info" description="Logging levels for log4j2.xml. Valid format is class:level,class:level. If class not specified, 'org.openmrs.api' presumed. Valid levels are trace, debug, info, warn, error or fatal" uuid="089162f3-038f-45f5-a045-4584e4e8c877"/>
+    <global_property property="log.location" description="A directory where the OpenMRS log file appender is stored. The log file name is 'openmrs.log'." uuid="1940b15e-cc1c-4b85-9bac-6897415f99bc"/>
+    <global_property property="logic.default.ruleClassDirectory" property_value="logic/class" description="Default folder where compiled rule will be stored" uuid="81a725d0-c51d-411d-b42a-d7b5be8a0b3d"/>
+    <global_property property="logic.default.ruleJavaDirectory" property_value="logic/sources" description="Default folder where rule's java file will be stored" uuid="e4e82d9e-b963-4e26-9f98-2741d915a4c5"/>
+    <global_property property="logic.defaultTokens.conceptClasses" description="When registering default tokens for logic, if you specify a comma-separated list of concept class names here, only concepts of those classes will have tokens registered. If you leave this blank, all classes will have tokens registered for their concepts." uuid="4a76b756-cac5-498d-8a1d-104f5e38e947"/>
+    <global_property property="logic.mandatory" property_value="false" description="true/false whether or not the logic module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="7c098ed0-db88-42bf-a65d-2c7a122955b4"/>
+    <global_property property="logic.started" property_value="false" description="DO NOT MODIFY. true/false whether or not the logic module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="c87bac92-658e-4146-8583-abcbf9ac170e"/>
+    <global_property property="login.url" property_value="login.htm" description="Responsible for defining the Authentication URL" uuid="54f496dd-b6a3-4dfa-8cc1-65f79b1b8015"/>
+    <global_property property="mail.debug" property_value="false" description="true/false whether to print debugging information during mailing" uuid="b5a07cb7-fbcb-4bc8-8489-70376577f4cf"/>
+    <global_property property="mail.default_content_type" property_value="text/plain" description="Content type to append to the mail messages" uuid="e4229af5-604a-4853-891c-df434d35f74d"/>
+    <global_property property="mail.from" property_value="info@openmrs.org" description="Email address to use as the default from address" uuid="9618cc7b-27cf-4677-acb5-b47c4f0629ea"/>
+    <global_property property="mail.password" property_value="test" description="Password for the SMTP user (if smtp_auth is enabled)" uuid="e48b2aa7-f360-481b-a604-383668abd27a"/>
+    <global_property property="mail.smtp.starttls.enable" property_value="false" description="Set to true to enable TLS encryption, else set to false" uuid="ca2a6d7d-9387-42cd-b845-4eccecd2a606"/>
+    <global_property property="mail.smtp_auth" property_value="false" description="true/false whether the smtp host requires authentication" uuid="cec5bf48-dcea-45e8-aa07-03f2addbf553"/>
+    <global_property property="mail.smtp_host" property_value="localhost" description="SMTP host name" uuid="7f26cfaa-9e8c-4fb9-a561-fe84e2c21983"/>
+    <global_property property="mail.smtp_port" property_value="25" description="SMTP port" uuid="17114e64-67c8-441d-9d37-4da26fe8f0d1"/>
+    <global_property property="mail.transport_protocol" property_value="smtp" description="Transport protocol for the messaging engine. Valid values: smtp" uuid="814e6dd6-192c-458d-afa5-c8079258600f"/>
+    <global_property property="mail.user" property_value="test" description="Username of the SMTP user (if smtp_auth is enabled)" uuid="99045648-3319-495a-80f0-dde97405154c"/>
+    <global_property property="metadatamapping.addLocalMappings" description="Specifies whether the concept mappings to the local dictionary should be created when exporting concepts" uuid="d1abb136-82f3-4832-8aa7-7af1065ae4a6"/>
+    <global_property property="metadatamapping.mandatory" property_value="false" description="true/false whether or not the metadatamapping module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="08d7cfc4-cb52-4009-9bef-f0809161790e"/>
+    <global_property property="metadatamapping.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the metadatamapping module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="f4260f19-d931-422a-84f5-9dfa418de2ed"/>
+    <global_property property="metadatasharing.enableOnTheFlyPackages" property_value="false" description="Specifies whether metadata packages can be exported on the fly" uuid="a043180b-eae1-405c-8c96-9b3261652841"/>
+    <global_property property="metadatasharing.mandatory" property_value="false" description="true/false whether or not the metadatasharing module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="f9c28731-c287-4269-a6f3-f23deeaddbd3"/>
+    <global_property property="metadatasharing.persistIdsForClasses" description="A comma separated list of class package/names that denotes classes to try and persist ids for. Common options: org.openmrs.Concept,org.openmrs.Form,org.openmrs.ConceptDatatype,org.openmrs.ConceptClass,org.openmrs.EncounterType,org.openmrs.IdentifierType,org.openmrs.RelationshipType,org.openmrs.Location" uuid="69a392a2-8895-4764-a193-efac0f2d2fa0"/>
+    <global_property property="metadatasharing.preferredConceptSourceIds" description="Comma-separated list of concept source Ids for preferred sources, in case an incoming concept has duplicate mappings to any of these sources, no confirmation will be required unless its datatype or concept class differs from that of the existing concept" uuid="410db264-fc79-4ecc-a4c0-1f1476698f24"/>
+    <global_property property="metadatasharing.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the metadatasharing module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="fd36680c-9a4c-4546-839f-a3ae45f826a0"/>
+    <global_property property="metadatasharing.webservicesKey" description="Key to grant access to remote systems to consume module webservices RESTfully" uuid="7ac59e9e-e06c-4c2b-a9e7-7abacfca2ce2"/>
+    <global_property property="minSearchCharacters" property_value="2" description="Number of characters user must input before searching is started." uuid="c584e421-cd40-4ffd-9943-d4ef1ef75eb0"/>
+    <global_property property="module_repository_folder" property_value="modules" description="Name of the folder in which to store the modules" uuid="1f3763b2-fd77-4056-90e4-212b871ff305"/>
+    <global_property property="newPatientForm.relationships" description="Comma separated list of the RelationshipTypes to show on the new/short patient form.  The list is defined like '3a, 4b, 7a'.  The number is the RelationshipTypeId and the 'a' vs 'b' part is which side of the relationship is filled in by the user." uuid="f5ce96ed-6463-4cd1-a020-3792d44963b3"/>
+    <global_property property="new_patient_form.showRelationships" property_value="false" description="true/false whether or not to show the relationship editor on the addPatient.htm screen" uuid="6e5994b3-520d-4caf-a9fb-d61b19562523" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="obs.complex_obs_dir" property_value="complex_obs" description="Default directory for storing complex obs." uuid="4e3ca595-2506-4548-be8b-5d18223918b3"/>
+    <global_property property="order.drugDispensingUnitsConceptUuid" description="Specifies the uuid of the concept set where its members represent the possible drug dispensing units" uuid="38aac0e9-c759-4d19-ae54-24290e263c58"/>
+    <global_property property="order.drugDosingUnitsConceptUuid" description="Specifies the uuid of the concept set where its members represent the possible drug dosing units" uuid="dad63678-79df-4e35-b71d-4d1a48dc6911"/>
+    <global_property property="order.drugRoutesConceptUuid" description="Specifies the uuid of the concept set where its members represent the possible drug routes" uuid="c01d7641-125d-459e-8116-71366e8cdf7d"/>
+    <global_property property="order.durationUnitsConceptUuid" description="Specifies the uuid of the concept set where its members represent the possible duration units" uuid="b28c2607-688e-4edd-a850-9c8cbacb57a6"/>
+    <global_property property="order.nextOrderNumberSeed" property_value="1" description="The next order number available for assignment" uuid="1740c7ef-0630-425f-bbc6-15979cb59cde"/>
+    <global_property property="order.orderNumberGeneratorBeanId" description="Specifies spring bean id of the order generator to use when assigning order numbers" uuid="a75b7de3-91b7-4b50-89a8-428f1335cad9"/>
+    <global_property property="order.testSpecimenSourcesConceptUuid" description="Specifies the uuid of the concept set where its members represent the possible test specimen sources" uuid="feec06fa-62b5-4d51-bd8e-4f081bf555e2"/>
+    <global_property property="owa.appBaseUrl" description="The base URL from where the Open Web Apps are hosted" uuid="677727ea-f881-4b08-9287-3bd247b77d14"/>
+    <global_property property="owa.appFolderPath" property_value="C:\Users\owais\Application Data\OpenMRS\owa" description="The default location where the apps are stored on disk" uuid="d4ca065f-3894-4849-a390-37e6e9bfdf04"/>
+    <global_property property="owa.appStoreUrl" property_value="http://modules.openmrs.org" description="The default URL for the OpenMRS appstore" uuid="c9abe7fb-ad12-4101-a510-fe545b19951b"/>
+    <global_property property="owa.mandatory" property_value="false" description="true/false whether or not the owa module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="2ec49207-b096-4681-953c-82bc4ea9dd2e"/>
+    <global_property property="owa.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the owa module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="9d757cb6-d9e1-4280-a755-b1e9be2447fc"/>
+    <global_property property="patient.defaultPatientIdentifierValidator" property_value="org.openmrs.patient.impl.LuhnIdentifierValidator" description="This property sets the default patient identifier validator.  The default validator is only used in a handful of (mostly legacy) instances.  For example, it's used to generate the isValidCheckDigit calculated column and to append the string to the name of the default validator on the editPatientIdentifierType form." uuid="04762247-6d55-48d3-a2ad-36b40b29035e"/>
+    <global_property property="patient.headerAttributeTypes" description="A comma delimited list of PersonAttributeType names that will be shown on the patient dashboard" uuid="4609457a-9d21-4ec2-80ce-c83a200cbd00"/>
+    <global_property property="patient.identifierPrefix" description="This property is only used if patient.identifierRegex is empty.  The string here is prepended to the sql indentifier search string." uuid="8d9239b3-06d1-465a-aae1-da73018bb9db"/>
+    <global_property property="patient.identifierRegex" description="WARNING: Using this search property can cause a drop in mysql performance with large patient sets.  A MySQL regular expression for the patient identifier search strings.  The @SEARCH@ string is replaced at runtime with the user's search string.  An empty regex will cause a simply 'like' sql search to be used. Example: ^0*@SEARCH@([A-Z]+-[0-9])?$" uuid="a62944ef-6a15-42f6-9257-f99fb2c8c0ad"/>
+    <global_property property="patient.identifierSearchPattern" description="If this is empty, the regex or suffix/prefix search is used.  Comma separated list of identifiers to check.  Allows for faster searching of multiple options rather than the slow regex. e.g. @SEARCH@,0@SEARCH@,@SEARCH-1@-@CHECKDIGIT@,0@SEARCH-1@-@CHECKDIGIT@ would turn a request..." uuid="b1489289-c8be-4235-b219-09e81ffbe7b1"/>
+    <global_property property="patient.identifierSuffix" description="This property is only used if patient.identifierRegex is empty.  The string here is prepended to the sql indentifier search string." uuid="6df515d8-297c-437e-94c6-2858c3c955ee"/>
+    <global_property property="patient.listingAttributeTypes" description="A comma delimited list of PersonAttributeType names that should be displayed for patients in _lists_" uuid="e2057b0f-12c6-4a78-945d-0b08181f7977"/>
+    <global_property property="patient.nameValidationRegex" description="Names of the patients must pass this regex. Eg : ^[a-zA-Z \\-]+$ contains only english alphabet letters, spaces, and hyphens. A value of .* or the empty string means no validation is done." uuid="33215153-23f5-4e00-967b-243b81017851"/>
+    <global_property property="patient.viewingAttributeTypes" description="A comma delimited list of PersonAttributeType names that should be displayed for patients when _viewing individually_" uuid="5805e57f-8f9a-4f3c-a0b1-a02a2504ef72"/>
+    <global_property property="patientIdentifierSearch.matchMode" property_value="EXACT" description="Specifies how patient identifiers are matched while searching for a patient. Valid values are 'EXACT, 'ANYWHERE' or 'START'. Defaults to 'EXACT' if missing or invalid value is present." uuid="f57be38c-490d-452e-9a52-1e7450fe7b61"/>
+    <global_property property="patientIdentifierTypes.locked" property_value="false" description="Set to a value of true if you do not want allow editing patient identifier types, else set to false." uuid="1a799da5-986c-47f8-9685-b95cc5932dd5"/>
+    <global_property property="patientSearch.matchMode" property_value="START" description="Specifies how patient names are matched while searching patient. Valid values are 'ANYWHERE' or 'START'. Defaults to start if missing or invalid value is present." uuid="43c4f838-51c1-495b-b474-b597b1fca708"/>
+    <global_property property="patient_identifier.importantTypes" description="A comma delimited list of PatientIdentifier names : PatientIdentifier locations that will be displayed on the patient dashboard.  E.g.: TRACnet ID:Rwanda,ELDID:Kenya" uuid="782440dd-ab92-4c9b-aa5e-28a9734917a3"/>
+    <global_property property="person.attributeSearchMatchMode" property_value="EXACT" description="Specifies how person attributes are matched while searching person. Valid values are 'ANYWHERE' or 'EXACT'. Defaults to exact if missing or invalid value is present." uuid="638d4774-7867-4cb4-a8a7-e67d962636a9"/>
+    <global_property property="person.searchMaxResults" property_value="1000" description="The maximum number of results returned by patient searches" uuid="6637deaf-0024-46bb-b999-e6d8c892e357"/>
+    <global_property property="personAttributeTypes.locked" property_value="false" description="Set to a value of true if you do not want allow editing person attribute types, else set to false." uuid="a9ba4279-7ce0-4638-b4e0-86745c189375"/>
+    <global_property property="provider.unknownProviderUuid" description="Specifies the uuid of the Unknown Provider account" uuid="d50ba61e-31ad-4d11-a674-49efca9c8b25"/>
+    <global_property property="providermanagement.addressWidget" property_value="personAddress" description="Address widget to use throughout the module" uuid="1cc1497d-66dd-4313-ba01-810a744f1538"/>
+    <global_property property="providermanagement.advancedSearchPersonAttributeType" description="Person attribute type, specified by uuid, to use as a search field on the advanced search page" uuid="13bc7442-f4ed-4a27-897d-612a92197c5c"/>
+    <global_property property="providermanagement.historicalPatientListDisplayFields" property_value="Identifier:patient.patientIdentifier.identifier|Given Name:patient.personName.givenName|Family Name:patient.personName.familyName|Age:patient.age|Gender:patient.gender|Start Date:relationship.startDate|End Date:relationship.endDate" description="Fields to display in the historical patient lists; specified as a pipe-delimited list of label/field pairs" uuid="af40b596-6c9f-40e8-bc46-6b530943f553"/>
+    <global_property property="providermanagement.historicalProviderListDisplayFields" property_value="Identifier:provider.identifier|Given Name:provider.person.personName.givenName|Family Name:provider.person.personName.familyName|Role:provider.providerRole|Gender:provider.person.gender|Start Date:relationship.startDate|End Date:relationship.endDate" description="Fields to display in the historical provider lists; specified as a pipe-delimited list of label/field pairs" uuid="76d4a5a5-12b8-42ff-bbed-8566f4114560"/>
+    <global_property property="providermanagement.locationTag" description="Indicates the Health Facility location to which a provider could be assigned to." uuid="f910dfde-9c6a-4258-8c59-ecbb601483d3"/>
+    <global_property property="providermanagement.mandatory" property_value="false" description="true/false whether or not the providermanagement module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="a445f263-e8eb-49ef-94a4-7d13607427a5"/>
+    <global_property property="providermanagement.patientListDisplayFields" property_value="Identifier:patient.patientIdentifier.identifier|Given Name:patient.personName.givenName|Family Name:patient.personName.familyName|Age:patient.age|Gender:patient.gender|Start Date:relationship.startDate" description="Fields to display in the patient lists; specified as a pipe-delimited list of label/field pairs" uuid="95e116e3-5765-460f-9eb0-264b02fe230b"/>
+    <global_property property="providermanagement.patientSearchDisplayFields" property_value="Identifier:patient.patientIdentifier.identifier|Given Name:patient.personName.givenName|Family Name:patient.personName.familyName|Age:patient.age|Gender:patient.gender" description="Fields to display in the patient search results; specified as a pipe-delimited list of label/field pairs" uuid="db52d821-a2aa-4807-9691-c3e6774c9afb"/>
+    <global_property property="providermanagement.personAttributeTypes" description="Person attributes to display on the provider dashboard; specified as a pipe-delimited list of person attribute type uuids" uuid="5a9d2d3f-6bdc-4303-873a-d054e7827653"/>
+    <global_property property="providermanagement.personSearchDisplayFields" property_value="Given Name:person.personName.givenName|Family Name:person.personName.familyName|Age:person.age|Gender:person.gender" description="Fields to display in the person search results; specified as a pipe-delimited list of label/field pairs" uuid="d3b28026-d67a-4007-beb8-9e5bf67b08fd"/>
+    <global_property property="providermanagement.providerListDisplayFields" property_value="Identifier:provider.identifier|Given Name:provider.person.personName.givenName|Family Name:provider.person.personName.familyName|Role:provider.providerRole|Gender:provider.person.gender|Start Date:relationship.startDate" description="Fields to display in the provider lists; specified as a pipe-delimited list of label/field pairs" uuid="05ae99e6-833d-45d1-8158-fb224a676a24"/>
+    <global_property property="providermanagement.providerSearchDisplayFields" property_value="Identifier:provider.identifier|Given Name:provider.person.personName.givenName|Family Name:provider.person.personName.familyName|Role:provider.providerRole|Gender:provider.person.gender" description="Fields to display in the provider search results; specified as a pipe-delimited list of label/field pairs" uuid="97b440c1-d4f9-47ac-895e-9352b45ac9a4"/>
+    <global_property property="providermanagement.restrictedRoles" description="Comma delimited list of UUIDs indicating the only Provider Roles to be available via the UI." uuid="eaf731f6-9f70-4b31-8113-cf00255f618b"/>
+    <global_property property="providermanagement.restrictSearchToProvidersWithProviderRoles" property_value="false" description="True/false whether to restrict providers to those with roles" uuid="2971d413-96b7-4439-830a-9c0202196e11"/>
+    <global_property property="providermanagement.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the providermanagement module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="7d56e6ae-d4dd-451d-9af4-e04a60702594"/>
+    <global_property property="providerSearch.matchMode" property_value="EXACT" description="Specifies how provider identifiers are matched while searching for providers. Valid values are START,EXACT, END or ANYWHERE" uuid="87cf37be-07a6-4650-b644-df9926bf1e01"/>
+    <global_property property="referenceapplication.mandatory" property_value="false" description="true/false whether or not the referenceapplication module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="c0ef0f1d-f630-4885-bc40-72282ea1e74f"/>
+    <global_property property="referenceapplication.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the referenceapplication module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="ff09beb3-7c5c-4855-baaa-5d8063420573"/>
+    <global_property property="report.deleteReportsAgeInHours" property_value="72" description="Reports that are not explicitly saved are deleted automatically when they are this many hours old. (Values less than or equal to zero means do not delete automatically)" uuid="43fe99bd-65ff-486e-882b-8f6dafb946c4"/>
+    <global_property property="reporting.dataEvaluationBatchSize" property_value="-1" description="This determines whether to run evaluators for Data in batches and what the size of those batches should be.A value of less than or equal to 0 indicates that no batching is desired." uuid="14267621-c9aa-4034-89c3-300273972a15"/>
+    <global_property property="reporting.defaultDateFormat" property_value="dd/MMM/yyyy" description="Default date format to use when formatting report data" uuid="7a7a54aa-d436-4fa6-b7b3-83152be398a5"/>
+    <global_property property="reporting.defaultLocale" property_value="en" description="Default locale to use when formatting report data" uuid="01393ea9-9af9-4977-bacc-48b986d835b8"/>
+    <global_property property="reporting.evaluationLoggerEnabled" property_value="false" description="If false, will disable the built in use of the evaluation logger to log evaluation information for performance diagnostics" uuid="a94a2e81-442d-4842-a6cb-bf52ae74e449"/>
+    <global_property property="reporting.includeDataExportsAsDataSetDefinitions" property_value="false" description="If reportingcompatibility is installed, this indicates whether data exports should be exposed as Dataset Definitions" uuid="1b448ede-ed42-434b-a5f0-e317a746a1c6"/>
+    <global_property property="reporting.loadReportsFromConfigurationAtStartup" property_value="false" description="If true, this will automatically load reports defined by report descriptors in .OpenMRS/configuration/reports/reportdescriptors at startup" uuid="d2db2603-d64a-4a84-b35f-2d1ff1403179"/>
+    <global_property property="reporting.mandatory" property_value="false" description="true/false whether or not the reporting module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="c5a89b18-09e0-4430-9f5f-720f8b282aea"/>
+    <global_property property="reporting.maxCachedReports" property_value="10" description="The maximum number of reports whose underlying data and output should be kept in the cache at any one time" uuid="f6cf9e29-b21f-4d06-b9b5-8fc1fa7f14a6"/>
+    <global_property property="reporting.maxReportsToRun" property_value="1" description="The maximum number of reports that should be processed at any one time" uuid="f1463ee9-45be-4c2e-9fb7-807113d14ac3"/>
+    <global_property property="reporting.preferredIdentifierTypes" description="Pipe-separated list of patient identifier type names, which should be displayed on default patient datasets" uuid="ee0b890e-4d9a-4980-8919-547f0f155d7b"/>
+    <global_property property="reporting.runReportCohortFilterMode" property_value="showIfNull" description="Supports the values hide,showIfNull,show which determine whether the cohort selector should be available in the run report page" uuid="65846727-9b31-4645-8abd-e6a663edf31c"/>
+    <global_property property="reporting.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the reporting module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="41aa2bb4-6550-48a9-ac79-e06bc42560b4"/>
+    <global_property property="reporting.testPatientsCohortDefinition" description="Points to a cohort definition representing all test/fake patients that you want to exclude from all queries and reports. You may set this to the UUID of a saved cohort definition, or to library:keyInADefinitionLibrary" uuid="57580a19-2de8-45a7-8b99-c9215fa7ec0a"/>
+    <global_property property="reportProblem.url" property_value="http://errors.openmrs.org/scrap" description="The openmrs url where to submit bug reports" uuid="9bb8a464-69cc-4ae1-b8dc-03d926161350"/>
+    <global_property property="scheduler.password" property_value="test" description="Password for the OpenMRS user that will perform the scheduler activities" uuid="f2f53ffd-c0c7-4123-bb7e-cfbd61ea1dcf"/>
+    <global_property property="scheduler.username" property_value="admin" description="Username for the OpenMRS user that will perform the scheduler activities" uuid="00dc0a29-3fa0-4a36-aa07-7f40ae7645d0"/>
+    <global_property property="search.caseSensitiveDatabaseStringComparison" property_value="false" description="Indicates whether database string comparison is case sensitive or not. Setting this to false for MySQL with a case insensitive collation improves search performance." uuid="89272e39-8689-4428-8c2c-11ec2273f159"/>
+    <global_property property="search.indexVersion" property_value="7" description="Indicates the index version. If it is blank, the index needs to be rebuilt." uuid="b3b885c5-d0f1-4ff1-93b0-995a331f128b"/>
+    <global_property property="searchWidget.batchSize" property_value="200" description="The maximum number of search results that are returned by an ajax call" uuid="39a2b99f-9f6a-4d7f-9857-8d4031f248cb"/>
+    <global_property property="searchWidget.dateDisplayFormat" description="Date display format to be used to display the date somewhere in the UI i.e the search widgets and autocompletes" uuid="403c8cb8-4ea0-47ff-b296-d3c2acbbc10c"/>
+    <global_property property="searchWidget.maximumResults" property_value="2000" description="Specifies the maximum number of results to return from a single search in the search widgets" uuid="696452cf-0171-4755-9b64-912d5080a79c"/>
+    <global_property property="searchWidget.runInSerialMode" property_value="false" description="Specifies whether the search widgets should make ajax requests in serial or parallel order, a value of true is appropriate for implementations running on a slow network connection and vice versa" uuid="3ef448c6-3625-40df-8cba-d5bb0e92eaee" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="searchWidget.searchDelayInterval" property_value="300" description="Specifies time interval in milliseconds when searching, between keyboard keyup event and triggering the search off, should be higher if most users are slow when typing so as to minimise the load on the server" uuid="7668f58f-5178-46c4-ba8f-30ab409665b6"/>
+    <global_property property="security.allowedFailedLoginsBeforeLockout" property_value="7" description="Maximum number of failed logins allowed after which username is locked out" uuid="6ab3a5b8-dd9e-4f97-ab14-117e04c8a401"/>
+    <global_property property="security.passwordCannotMatchUsername" property_value="true" description="Configure whether passwords must not match user's username or system id" uuid="2dc79f65-ec53-4349-b9ec-82340cfbc1ca" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="security.passwordCustomRegex" description="Configure a custom regular expression that a password must match" uuid="0e86a20d-e25c-47b3-bace-438f40a1be9c"/>
+    <global_property property="security.passwordMinimumLength" property_value="8" description="Configure the minimum length required of all passwords" uuid="5ff5841d-fa50-4532-8205-1808927b9259"/>
+    <global_property property="security.passwordRequiresDigit" property_value="true" description="Configure whether passwords must contain at least one digit" uuid="5431d53a-f6ca-4af5-9840-06a73ef14de1" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="security.passwordRequiresNonDigit" property_value="true" description="Configure whether passwords must contain at least one non-digit" uuid="50b7640d-b2c8-4bf4-81d4-730323df9dd3" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="security.passwordRequiresUpperAndLowerCase" property_value="true" description="Configure whether passwords must contain both upper and lower case characters" uuid="7ffcb927-1341-4113-b2ed-df9a35801a55" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="security.validTime" property_value="600000" description="Specifies the duration of time in seconds for which a password reset token is valid, the default value is 10 minutes and the allowed values range from 1 minute to 12hrs" uuid="28764d15-f64a-49e0-807f-a309f9a99f41"/>
+    <global_property property="serialization.xstream.mandatory" property_value="false" description="true/false whether or not the serialization.xstream module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="54425ca1-59ba-4c99-bc0c-c9a9cf4f763d"/>
+    <global_property property="serialization.xstream.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the serialization.xstream module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="c5033227-1df7-4564-9021-9dc5593a4f44"/>
+    <global_property property="timezone.conversions" property_value="false" description="When set to true dates are sent from the server to the client as UTC dates and parsed from the client to the server as holding the client timezone information." uuid="90fd87ba-bdea-457f-8784-51f5e233e9db"/>
+    <global_property property="uicommons.mandatory" property_value="false" description="true/false whether or not the uicommons module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="104045b5-6d4e-49d3-b503-42b91de4406b"/>
+    <global_property property="uicommons.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the uicommons module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="e7586a95-0b16-4540-b54d-9542593e0615"/>
+    <global_property property="uiframework.client.timezone" property_value="clientTimezone" description="The name of the user property that save the client timezone." uuid="d519ddd4-3b54-4ea6-9085-48efed00461d"/>
+    <global_property property="uiframework.formatter.dateAndTimeFormat" property_value="dd.MMM.yyyy, HH:mm:ss" description="Format used by UiUtils.format for dates that have a time component" uuid="93f36bdd-064b-48d6-9e4e-e763bbc9d2b6"/>
+    <global_property property="uiframework.formatter.dateFormat" property_value="dd.MMM.yyyy" description="Format used by UiUtils.format for dates that do not have a time component" uuid="c678f54b-ba66-44e1-b711-e81b285abadd"/>
+    <global_property property="uiframework.formatter.JSdateAndTimeFormat" property_value="DD.MMM.YYYY, HH:mm:ss" description="Format used by Javascript functions for dates that have a time component" uuid="3bdb4433-2af2-4575-8f98-b9153487f036"/>
+    <global_property property="uiframework.formatter.JSdateFormat" property_value="DD.MMM.YYYY" description="Format used by Javascript for dates that do not have a time component" uuid="57bbb72e-5ac9-4f5b-9f77-11f25c57b0af"/>
+    <global_property property="uiframework.formatter.timeFormat" property_value="HH:mm:ss" description="Format used by UiUtils.format for time only." uuid="ad53de1b-4291-452f-bc47-731e74364b85"/>
+    <global_property property="uiframework.mandatory" property_value="false" description="true/false whether or not the uiframework module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="086193a5-330e-4572-92bd-d028ab36f8db"/>
+    <global_property property="uiframework.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the uiframework module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="fac0a7cc-bc58-4ecc-8148-da6010940737"/>
+    <global_property property="uilibrary.mandatory" property_value="false" description="true/false whether or not the uilibrary module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="03a5c13f-d9e9-403d-b783-f7822c9e85c0"/>
+    <global_property property="uilibrary.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the uilibrary module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="43dc0469-37c2-4c31-b797-84c47a70d67f"/>
+    <global_property property="user.headerAttributeTypes" description="A comma delimited list of PersonAttributeType names that will be shown on the user dashboard. (not used in v1.5)" uuid="4f3f5fea-30eb-4e83-b7ae-9ae8704c09e0"/>
+    <global_property property="user.listingAttributeTypes" description="A comma delimited list of PersonAttributeType names that should be displayed for users in _lists_" uuid="ecf4f41a-6690-460e-b765-616b10260a02"/>
+    <global_property property="user.requireEmailAsUsername" property_value="false" description="Indicates whether a username must be a valid e-mail or not." uuid="01bc73a8-08c0-4723-9358-9d02df17a93c" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="user.viewingAttributeTypes" description="A comma delimited list of PersonAttributeType names that should be displayed for users when _viewing individually_" uuid="14f1663b-19b3-44b2-bf8a-c30431e19598"/>
+    <global_property property="use_patient_attribute.healthCenter" property_value="false" description="Indicates whether or not the 'health center' attribute is shown when viewing/searching for patients" uuid="7dea235a-3efd-40f3-9b3d-e64042043013" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="use_patient_attribute.mothersName" property_value="false" description="Indicates whether or not mother's name is able to be added/viewed for a patient" uuid="0ffb5e2b-9671-41e6-a504-88d02a24ccba" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="validation.disable" property_value="false" description="Disables validation of OpenMRS Objects. Only takes affect on next restart. Warning: only do this is you know what you are doing!" uuid="346a9dc0-5f6a-462d-9065-85bcc7b62203"/>
+    <global_property property="visits.allowOverlappingVisits" property_value="true" description="true/false whether or not to allow visits of a given patient to overlap" uuid="e0376867-c667-4c81-b82f-f65ec7bfd5c7" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="visits.assignmentHandler" property_value="org.openmrs.module.emrapi.adt.EmrApiVisitAssignmentHandler" description="Set to the name of the class responsible for assigning encounters to visits." uuid="c90dd1db-0611-451a-94c4-ac4b0f44035d"/>
+    <global_property property="visits.autoCloseVisitType" description="comma-separated list of the visit type(s) to automatically close" uuid="7abb62f4-81a6-4145-ac0d-f01034d666ce"/>
+    <global_property property="visits.enabled" property_value="true" description="Set to true to enable the Visits feature. This will replace the 'Encounters' tab with a 'Visits' tab on the dashboard." uuid="9c594c46-482d-48b3-9643-05641111fc9f" datatype="org.openmrs.customdatatype.datatype.BooleanDatatype"/>
+    <global_property property="visits.encounterTypeToVisitTypeMapping" description="Specifies how encounter types are mapped to visit types when automatically assigning encounters to visits. e.g 1:1, 2:1, 3:2 in the format encounterTypeId:visitTypeId or encounterTypeUuid:visitTypeUuid or a combination of encounter/visit type uuids and ids e.g 1:759799ab-c9a5-435e-b671-77773ada74e4" uuid="c84f289c-3869-4683-9b14-ebc47c374212"/>
+    <global_property property="webservices.rest.allowedips" description="A comma-separate list of IP addresses that are allowed to access the web services. An empty string allows everyone to access all ws. 
+        IPs can be declared with bit masks e.g. 10.0.0.0/30 matches 10.0.0.0 - 10.0.0.3 and 10.0.0.0/24 matches 10.0.0.0 - 10.0.0.255." uuid="004443d7-46df-48f7-a98d-ecff289a20c3"/>
+    <global_property property="webservices.rest.mandatory" property_value="false" description="true/false whether or not the webservices.rest module MUST start when openmrs starts.  This is used to make sure that mission critical modules are always running if openmrs is running." uuid="91f06740-a946-48c7-80cd-0ddb62933a5b"/>
+    <global_property property="webservices.rest.maxResultsAbsolute" property_value="100" description="The absolute max results limit. If the client requests a larger number of results, then will get an error" uuid="b821d6d8-adb8-4a37-988d-cbe81ad3a04e"/>
+    <global_property property="webservices.rest.maxResultsDefault" property_value="50" description="The default max results limit if the user does not provide a maximum when making the web service call." uuid="1907cb0b-2962-43c2-b5d5-8dd5639559b5"/>
+    <global_property property="webservices.rest.quietDocs" property_value="true" description="If the value of this setting is true, then nothing is logged while the Swagger specification is being generated." uuid="639f0ca1-ef60-4a75-b27a-90226f9ae863"/>
+    <global_property property="webservices.rest.started" property_value="true" description="DO NOT MODIFY. true/false whether or not the webservices.rest module has been started.  This is used to make sure modules that were running  prior to a restart are started again" uuid="0d03cab2-c473-4e81-9a9e-f260d4fc297a"/>
+    <global_property property="webservices.rest.uriPrefix" description="The URI prefix through which clients consuming web services will connect to the web application, should be of the form http://{ipAddress}:{port}/{contextPath}" uuid="433c7e7d-2ffd-4e8f-abfd-517ac0660193"/>
+
+
+	<!-- Global properties -->
+	<!-- 
+    <global_property property="addresshierarchy.addressToEntryMapUpdaterLastStartTime" description="" uuid="813b96f2-c1d2-4393-be02-cc49bf7624aa"/>
+    <global_property property="addresshierarchy.allowFreetext" property_value="true" description="" uuid="ca878ac6-16e0-416d-8ed8-5266f40182c3"/>
+    <global_property property="addresshierarchy.database_version" property_value="2.10.0" description="" uuid="3a43758d-b0c4-40e8-ac09-8863a8f2d418"/>
+    <global_property property="addresshierarchy.enableOverrideOfAddressPortlet" property_value="true" description="" uuid="52af2133-e301-4cd1-bb9c-d4906ace151b"/>
+    <global_property property="addresshierarchy.initializeAddressHierarchyCacheOnStartup" property_value="true" description="" uuid="8d755ff0-c7a8-462a-9e9a-54d74c42a58c"/>
+    <global_property property="addresshierarchy.mandatory" property_value="false" description="" uuid="83f7d4b3-fe56-43bf-9598-a77eed7a0762"/>
+    <global_property property="addresshierarchy.soundexProcessor" description="" uuid="51817d1e-75e9-4b3d-86c5-9dde26833546"/>
+    <global_property property="addresshierarchy.started" property_value="true" description="" uuid="a198ff07-d1a6-4ba9-9449-f4c6f0992fb5"/>
+    <global_property property="application.name" property_value="OpenMRS" description="" uuid="a5af71ae-84f9-4fee-92f5-7f08b2a480f2"/>
+    <global_property property="autoCloseVisits.visitType" description="" uuid="1421c404-70ec-4ad1-bc8d-420e9efc025a"/>
+    <global_property property="calculation.mandatory" property_value="false" description="" uuid="2a9c33db-daa1-4d5a-bc99-7a91c13b3796"/>
+    <global_property property="calculation.started" property_value="true" description="" uuid="c25dd58d-fa44-40c0-8b36-91b95c74555e"/>
+    <global_property property="concept.caseSensitiveNamesInConceptNameTable" property_value="true" description="" uuid="9b46c148-3318-4a81-9f82-f00ca6bf6f6e"/>
+    <global_property property="concept.causeOfDeath" property_value="290" description="" uuid="016250c4-7dca-40a9-8a2e-f422a51d5071"/>
+    <global_property property="concept.cd4_count" property_value="103" description="" uuid="09c29636-3765-4592-a8e6-cd6ef44c9ead"/>
+    <global_property property="concept.defaultConceptMapType" property_value="NARROWER-THAN" description="" uuid="298bca8d-5ff5-4acd-b6e6-e0f9245e5eef"/>
+    <global_property property="concept.false" property_value="2" description="" uuid="98745009-b1d0-4252-bef6-0e51b4427f1b"/>
+    <global_property property="concept.height" property_value="248" description="" uuid="70020250-8bf7-42fd-8d72-0429ec274cfe"/>
+    <global_property property="concept.medicalRecordObservations" property_value="1238" description="" uuid="6a867716-3f0e-4783-b46f-aeb36461a089"/>
+    <global_property property="concept.none" property_value="5" description="" uuid="fb96df51-37fd-4c67-a470-2e11517a7b51"/>
+    <global_property property="concept.otherNonCoded" property_value="19" description="" uuid="35644df2-e5bc-4010-9c17-7f95ea71a2d8"/>
+    <global_property property="concept.patientDied" property_value="25" description="" uuid="d975ba9a-a393-4d33-a887-1c1276f66a89"/>
+    <global_property property="concept.problemList" property_value="1284" description="" uuid="bdfe204c-c076-470f-8b62-825c64974995"/>
+    <global_property property="concept.reasonExitedCare" description="" uuid="4e29e570-6fe8-4be4-8e24-70fe76dfde74"/>
+    <global_property property="concept.reasonOrderStopped" property_value="184" description="" uuid="2f3a01e1-6777-4b64-8737-9a8f4f89d6cf"/>
+    <global_property property="concept.true" property_value="1" description="" uuid="c6704384-4a75-4798-817e-b80d75b5c6d9"/>
+    <global_property property="concept.weight" property_value="168" description="" uuid="25ddd7e8-0d67-477e-860d-2e84ce9931d2"/>
+    <global_property property="conceptDrug.dosageForm.conceptClasses" description="" uuid="21385d20-b7c7-4199-b682-6c85c02c10f9"/>
+    <global_property property="conceptDrug.route.conceptClasses" description="" uuid="af49d90b-a8c0-4518-aaa2-9ecebbb35e0f"/>
+    <global_property property="concepts.locked" property_value="false" description="" uuid="1324d1c4-fb52-4668-a9b4-00089538323f"/>
+    <global_property property="concept_map_type_management.enable" property_value="false" description="" uuid="542e22dd-b447-4852-95b7-8a5f1f5ae552"/>
+    <global_property property="dashboard.encounters.maximumNumberToShow" description="" uuid="92972c15-7233-4c16-8997-dac3c974216a"/>
+    <global_property property="dashboard.encounters.providerDisplayRoles" description="" uuid="c80266ee-cd22-4f9b-bbd5-8c8671464bb4"/>
+    <global_property property="dashboard.encounters.showEditLink" property_value="true" description="" uuid="844d2084-0991-4285-9681-1f67924a3172"/>
+    <global_property property="dashboard.encounters.showEmptyFields" property_value="true" description="" uuid="20e54f91-8013-4729-9bd8-6e3109839046"/>
+    <global_property property="dashboard.encounters.showViewLink" property_value="true" description="" uuid="b8baf102-df50-4b33-a615-9ced10477f07"/>
+    <global_property property="dashboard.encounters.usePages" property_value="smart" description="" uuid="c529e725-ee0c-490c-b0c7-d4b240506ea7"/>
+    <global_property property="dashboard.header.programs_to_show" description="" uuid="e7d7da79-fe4a-4dc8-86e7-53f88f81965f"/>
+    <global_property property="dashboard.header.workflows_to_show" description="" uuid="31da566d-0f76-49fe-aaa6-64e9573c3cd9"/>
+    <global_property property="dashboard.overview.showConcepts" description="" uuid="02eceea9-0171-4556-b07f-2d576ec653d8"/>
+    <global_property property="dashboard.regimen.displayDrugSetIds" property_value="ANTIRETROVIRAL DRUGS,TUBERCULOSIS DRUGS" description="" uuid="9366f838-61be-42bf-a3f1-5416c5d19fff"/>
+    <global_property property="dashboard.regimen.displayFrequencies" property_value="7 days/week,6 days/week,5 days/week,4 days/week,3 days/week,2 days/week,1 days/week" description="" uuid="4124ca07-2444-407e-bf72-a0cb829b795b"/>
+    <global_property property="dashboard.regimen.standardRegimens" property_value="NO_VALUE" description="" uuid="2353e1fd-cb4c-4d11-8957-35367897d7ad"/>
+    <global_property property="dashboard.relationships.show_types" description="" uuid="a64485b5-b51a-44a7-87cf-b7c928b40863"/>
+    <global_property property="dashboard.showPatientName" property_value="false" description="" uuid="3bb112d0-ff6e-4992-a403-d0b32e5471fd"/>
+    <global_property property="default_locale" property_value="ru" description="" uuid="e7e67536-6cb5-4613-b973-f3083e4ea1e6"/>
+    <global_property property="default_location" property_value="Unknown Location" description="" uuid="ced4f644-4ea1-45da-a280-1ef549904073"/>
+    <global_property property="default_theme" property_value="green" description="" uuid="e654a833-6a10-47eb-bb5d-52d8e70ae4cb"/>
+    <global_property property="encounterForm.obsSortOrder" property_value="number" description="" uuid="2685fba1-1b67-4118-8531-c7ca938113f5"/>
+    <global_property property="formentry.database_version" property_value="2.7" description="" uuid="81581981-3b38-48ea-894f-31174d3c8d29"/>
+    <global_property property="FormEntry.enableDashboardTab" property_value="true" description="" uuid="e14ebbfa-2dd5-4f2f-8aad-c96a9bef7898"/>
+    <global_property property="FormEntry.enableOnEncounterTab" property_value="false" description="" uuid="be093976-331c-450a-8a66-5cdf03c36bd6"/>
+    <global_property property="formentry.infopath_server_url" description="" uuid="7718ac24-8283-4c48-bbee-74ee716281b6"/>
+    <global_property property="formentry.infopath_taskpane.relationship_sort_order" description="" uuid="14eccd54-b0c6-4c5b-8d4b-d908b8fbffe9"/>
+    <global_property property="formentry.infopath_taskpane.showAllUsersOnLoad" property_value="true" description="" uuid="0d3fc89f-97ea-4785-8b8c-5ba61bd2b986"/>
+    <global_property property="formentry.infopath_taskpane_caption" property_value="Welcome!" description="" uuid="f61ac811-c3e5-4d86-b488-d7b2d8b0afe5"/>
+    <global_property property="formentry.infopath_taskpane_keepalive_min" description="" uuid="b1168159-ca22-44d3-895c-888cc7fc8d59"/>
+    <global_property property="formentry.infopath_taskpane_refresh_sec" description="" uuid="ecfda7cd-60ba-4941-be09-8b731ace6aef"/>
+    <global_property property="formentry.patientForms.goBackOnEntry" property_value="false" description="" uuid="5bcc167a-ffa6-4d73-ad1e-d945de532dae"/>
+    <global_property property="formentry.queue_archive_dir" property_value="formentry/archive/%Y/%M" description="" uuid="3fda3fe2-f132-4d09-bb80-e6bbcf7ca484"/>
+    <global_property property="formentry.queue_dir" property_value="formentry/queue" description="" uuid="888447a8-8b2b-499f-99b3-c0706eb1ff50"/>
+    <global_property property="graph.color.absolute" property_value="rgb(20,20,20)" description="" uuid="d292319c-eb82-4316-aa07-3805f0e93d91"/>
+    <global_property property="graph.color.critical" property_value="rgb(200,0,0)" description="" uuid="6b5f36fc-2fbc-47b3-965e-b37bf3cf3330"/>
+    <global_property property="graph.color.normal" property_value="rgb(255,126,0)" description="" uuid="1c8043bf-074a-4ecd-bf27-f50f4ab94ffb"/>
+    <global_property property="gzip.enabled" property_value="false" description="" uuid="859d3fcd-ccf3-4cb6-9581-e4dbf849b6ed"/>
+    <global_property property="hl7_archive.dir" property_value="hl7_archives" description="" uuid="a48663ae-2778-412b-974c-c6668fe64554"/>
+    <global_property property="hl7_processor.ignore_missing_patient_non_local" property_value="false" description="" uuid="cda834bf-2b39-4aeb-af44-40a8b8dcb255"/>
+    <global_property property="htmlformentry.database_version" property_value="1.2.0" description="" uuid="9e48fe31-6fc6-43b5-932e-c4b3d7ba71af"/>
+    <global_property property="htmlformentry.dateFormat" description="" uuid="152342f5-8698-42f1-b807-b912af8149c7"/>
+    <global_property property="htmlformentry.mandatory" property_value="false" description="" uuid="be2cd7a6-0e1c-4e5b-9807-5123a80f9ccc"/>
+    <global_property property="htmlformentry.showDateFormat" property_value="true" description="" uuid="709c4b91-85ed-4d58-945f-d79b20f952b7"/>
+    <global_property property="htmlformentry.started" property_value="true" description="" uuid="9c676ed8-2d05-4717-899a-31a675144dea"/>
+    <global_property property="htmlformentry19ext.mandatory" property_value="false" description="" uuid="0e3d5b7d-99a2-427b-b3d6-4f8f38ef8f78"/>
+    <global_property property="htmlformentry19ext.started" property_value="true" description="" uuid="f66cb463-71fe-4932-bdaf-cdcb3fb067ce"/>
+    <global_property property="htmlformflowsheet.addAnotherButtonPosition" property_value="top" description="" uuid="f3319b09-9cd2-451a-8c4b-b2a0e3aca708"/>
+    <global_property property="htmlformflowsheet.configuration" description="" uuid="c0b01399-2e84-417e-ae74-751f2a77a692"/>
+    <global_property property="htmlformflowsheet.drugDiscontinueReason" description="" uuid="8cf3cba3-dc2b-44ed-a117-211ae1f345a7"/>
+    <global_property property="htmlformflowsheet.encountersChronology" property_value="desc" description="" uuid="1d34bc35-2a65-41f3-a961-69067db57674"/>
+    <global_property property="htmlformflowsheet.links" description="" uuid="0e961c58-b450-44e5-ae3c-1944c4ce9ae5"/>
+    <global_property property="htmlformflowsheet.mandatory" property_value="false" description="" uuid="55066d37-5c0f-4337-8679-bccdc9ddf41a"/>
+    <global_property property="htmlformflowsheet.patientChartFormIds" description="" uuid="d69fa088-eed3-4fed-ba67-8af0dd383dbf"/>
+    <global_property property="htmlformflowsheet.programConfigurationMap" property_value="{}" description="" uuid="e3667cce-c1ad-4601-b170-0fea43bd1479"/>
+    <global_property property="htmlformflowsheet.showMdrtbCatIVLink" property_value="false" description="" uuid="bb7ce11d-db9f-4503-9ec8-9a697f6f1ab3"/>
+    <global_property property="htmlformflowsheet.started" property_value="true" description="" uuid="c2024006-c827-493c-a00a-7802d8e2d03a"/>
+    <global_property property="htmlwidgets.mandatory" property_value="false" description="" uuid="a3bda5ca-d4dc-4d30-a126-d67290a732f8"/>
+    <global_property property="htmlwidgets.started" property_value="true" description="" uuid="9c703fbf-1638-42d6-b6e1-a7ec69093794"/>
+    <global_property property="implementation_id" property_value="AT101" description="" uuid="28163126-5521-476f-89c9-ede414ecbbf3"/>
+    <global_property property="layout.address.format" property_value="org.openmrs.layout.web.address.AddressTemplate" description="" uuid="d1f0ac3a-26ca-4241-bc32-98e4958973df"/>
+    <global_property property="layout.name.format" property_value="short" description="" uuid="e2a401de-df2c-4c71-9476-60a5f80cbb9d"/>
+    <global_property property="locale.allowed.list" property_value="en, es, fr, it, pt, ru, tj" description="" uuid="439e9395-26a6-4aeb-ab25-dab3f808bea0"/>
+    <global_property property="location.field.style" property_value="tree" description="" uuid="f3f5662e-1c25-4835-a00b-a0e169907fcc"/>
+    <global_property property="log.level" property_value="org.openmrs.api:info" description="" uuid="9c85e7be-a582-4318-909c-f445278ccc08"/>
+    <global_property property="log.level.openmrs" property_value="info" description="" uuid="2134bc5e-86fd-444c-ba0a-a75c1be71be9"/>
+    <global_property property="logic.database_version" property_value="1.4" description="" uuid="36757a27-8f7e-4e2b-a4df-45634b4866c4"/>
+    <global_property property="logic.default.ruleClassDirectory" property_value="logic/class" description="" uuid="2bb9c016-f02e-4be4-b978-7d71303a0e97"/>
+    <global_property property="logic.default.ruleJavaDirectory" property_value="logic/sources" description="" uuid="cf1e8454-961b-4862-bef2-d7376507086c"/>
+    <global_property property="logic.defaultTokens.conceptClasses" description="" uuid="1fd4e94c-b513-4e2f-9677-92554eea2c6d"/>
+    <global_property property="logic.mandatory" property_value="false" description="" uuid="e20aefdf-9fed-4e33-b7e2-e2069221f23f"/>
+    <global_property property="logic.started" property_value="true" description="" uuid="62d1d9aa-5fa4-4fae-937c-2ab30a9e67ef"/>
+    <global_property property="mail.debug" property_value="false" description="" uuid="9add0a50-689a-4417-939a-69f9415c6c7f"/>
+    <global_property property="mail.default_content_type" property_value="text/plain" description="" uuid="5f1cc5d0-fa4d-4ece-9138-44bb5132881e"/>
+    <global_property property="mail.from" property_value="info@openmrs.org" description="" uuid="2df6ac39-6866-477b-9fa4-53db1adcf18f"/>
+    <global_property property="mail.password" property_value="test" description="" uuid="f167910d-b1d7-4654-9a16-6d10cfb28467"/>
+    <global_property property="mail.smtp_auth" property_value="false" description="" uuid="77bb0a20-ecd9-4216-8906-52e8059bb2ba"/>
+    <global_property property="mail.smtp_host" property_value="localhost" description="" uuid="a9aab81f-540a-405f-8c00-1abecf6fec01"/>
+    <global_property property="mail.smtp_port" property_value="25" description="" uuid="01e2c785-1ff8-48b1-8a89-269bcc1507bf"/>
+    <global_property property="mail.transport_protocol" property_value="smtp" description="" uuid="31debf1f-a940-47ab-a5de-366008ae9103"/>
+    <global_property property="mail.user" property_value="test" description="" uuid="a441e211-e47a-4ecd-bb60-7f74173fd90e"/>
+    <global_property property="mdrtb.afterDefault1.conceptId" property_value="14" description="" uuid="7293a44f-e333-4b4d-9eda-42e858634930"/>
+    <global_property property="mdrtb.afterDefault2.conceptId" property_value="431" description="" uuid="9c8b812a-f612-4db9-91df-accb91464114"/>
+    <global_property property="mdrtb.afterFailure1.conceptId" property_value="17" description="" uuid="8694f392-19cc-46cc-9c54-7d8d44c91816"/>
+    <global_property property="mdrtb.afterFailure2.conceptId" property_value="16" description="" uuid="8cbba654-2d69-4771-9dd9-7cff8cc3ff61"/>
+    <global_property property="mdrtb.afterRelapse1.conceptId" property_value="20" description="" uuid="583afef0-352a-4b80-a7f5-d1015a0bd6ae"/>
+    <global_property property="mdrtb.afterRelapse2.conceptId" property_value="430" description="" uuid="4b547206-e0f0-4b63-9f3b-e6939a9c2b9c"/>
+    <global_property property="mdrtb.birt_report_list" description="" uuid="e4a534af-b5ad-4e6a-ad30-397902c7abc2"/>
+    <global_property property="mdrtb.colorMap" property_value="CONTAMINATED:lightgrey|UNSATISFACTORY SAMPLE:lightgrey|MODERATELY POSITIVE:lightcoral|STRONGLY POSITIVE:lightcoral|WEAKLY POSITIVE:lightcoral|WAITING FOR TEST RESULTS:lightgrey|SCANTY:khaki|NEGATIVE:lightgreen|POSITIVE:lightcoral|SUSCEPTIBLE TO TUBERCULOSIS DRUG:lightgreen|INDETERMINATE TO TUBERCULOSIS DRUG:khaki|RESISTANT TO TUBERCULOSIS DRUG:lightcoral|NONE:none" description="" uuid="7246d21b-f3f7-43e6-a154-4ccc4e6faa83"/>
+    <global_property property="mdrtb.culture.formId" property_value="12" description="" uuid="c097d3d9-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.culturelabs" property_value="264|263||202|3|201|200|2|85|199" description="" uuid="f27d36d7-4460-4d19-8515-ffa1c194b4ab"/>
+    <global_property property="mdrtb.database_version" property_value="1.0.0" description="" uuid="d15724c1-0ef4-4171-ba0f-6c8849e67c88"/>
+    <global_property property="mdrtb.defaultDstDrugs" property_value="ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN" description="" uuid="29c042c5-b527-4058-bc7a-1f30695e8b9f"/>
+    <global_property property="mdrtb.dst.formId" property_value="11" description="" uuid="c097dc00-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.findPatientNumResults" property_value="20" description="" uuid="2bb9984c-5d10-4b5f-894b-17dda35fee41"/>
+    <global_property property="mdrtb.fixedIdentifierLocation" description="" uuid="4e7eae01-f3c8-4508-9f6e-cb2c4dc328a4"/>
+    <global_property property="mdrtb.encounterType.form89" property_value="Form 89" description="" uuid="4fab5192-396d-4731-ad7d-2f21aae7eb03"/>
+    <global_property property="mdrtb.formIdToAttachToBacteriologyEntry" description="" uuid="cbe1ff33-d818-4aee-b54a-35588d71a6e4"/>
+    <global_property property="mdrtb.hain.formId" property_value="15" description="" uuid="c097da8b-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.intake_encounter_type" property_value="TB03" description="" uuid="509ccaec-5d71-4759-9ef8-4a3fdaf654bc"/>
+    <global_property property="mdrtb.lab_entry_ids" property_value="355|356|357|358|359|360|361|362|363" description="" uuid="6a2b013c-a380-11e7-b650-782bcb563a1c"/>
+    <global_property property="mdrtb.mdrIdentifierType" property_value="Регистрационный номер МЛУ" description="" uuid="57d5e3af-94df-4be4-ae56-65575bacac61"/>
+    <global_property property="mdrtb.mdrtbIntake_encounter_type" property_value="TB03u - MDR" description="" uuid="734a76b8-0254-426f-bbfb-77f3ec580bbc"/>
+    <global_property property="mdrtb.mdrtb_forms_list" description="" uuid="7664ecfc-9aac-4a7f-89a7-ec4ae7e52013"/>
+    <global_property property="mdrtb.new.conceptId" property_value="18" description="" uuid="c8be1060-399a-4d1b-9558-47305c1a230c"/>
+    <global_property property="mdrtb.other.conceptId" property_value="19" description="" uuid="44cf4683-abab-497d-bfbe-062d53165610"/>
+    <global_property property="mdrtb.outcome.cured.conceptId" property_value="26" description="" uuid="650ca788-aaa3-4150-abb7-43b12c023d40"/>
+    <global_property property="mdrtb.outcome.died.conceptId" property_value="25" description="" uuid="9e8dcd70-4e9f-4f49-bcee-7ff0ec9531af"/>
+    <global_property property="mdrtb.outcome.ltfu.conceptId" property_value="29" description="" uuid="27fac2ac-2488-4327-8b92-52f5ed755b2e"/>
+    <global_property property="mdrtb.outcome.transferout.conceptId" property_value="23" description="" uuid="92980594-bec9-43d2-a66b-b2d589803f44"/>
+    <global_property property="mdrtb.outcome.txCompleted.conceptId" property_value="28" description="" uuid="e7297844-396e-4a7c-bdc5-999f60787a9f"/>
+    <global_property property="mdrtb.outcome.txFailure.conceptId" property_value="27" description="" uuid="b4a65f42-4941-4cc3-8563-1cc277776118"/>
+    <global_property property="mdrtb.patient_identifier_type_list" description="" uuid="ba8be54a-d2c6-4a07-be3d-24959257c740"/>
+    <global_property property="mdrtb.primaryPatientIdentifierType" property_value="Регистрационный номер Дотc" description="" uuid="9defea99-bf6e-42b2-9a6b-4b28da0ff08d"/>
+    <global_property property="mdrtb.program_name" property_value="MDR-TB PROGRAM" description="" uuid="e0e8f641-6a4d-4e22-9e9c-7c1787da22d1"/>
+    <global_property property="mdrtb.smear.formId" property_value="8" description="" uuid="c097d78d-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtb.specimenReports.daysSinceCulture" property_value="14" description="" uuid="03fa58d5-47b2-46c5-b542-a6f5f087cb28"/>
+    <global_property property="mdrtb.specimenReports.daysSinceSmear" property_value="14" description="" uuid="a3a0f066-caae-4880-86cf-ed3507b7dd4c"/>
+    <global_property property="mdrtb.specimenReports.defaultLabId" property_value="47" description="" uuid="76712eb4-5dbe-46a2-96ba-48ba7ae9d803"/>
+    <global_property property="mdrtb.specimen_collection_encounter_type" property_value="Specimen Collection" description="" uuid="56dae2cf-7d0a-4d9e-8f25-8a1ba8146e4c"/>
+    <global_property property="mdrtb.started" property_value="true" description="" uuid="cea05a1b-a151-4ae9-8bfd-2140b9c5a385"/>
+    <global_property property="mdrtb.test_result_encounter_type_bacteriology" description="" uuid="a5e85d3e-e852-40a2-8666-7ed5d0fb29f5"/>
+    <global_property property="mdrtb.test_result_encounter_type_DST" description="" uuid="e77937d5-de5e-45c2-a415-8e8aec443099"/>
+    <global_property property="mdrtb.transferIn.conceptId" property_value="15" description="" uuid="c39ac124-05f8-4b35-a192-2c87bd619f76"/>
+    <global_property property="mdrtb.transfer_in_encounter_type" property_value="Transfer In" description="" uuid="54e1a70b-3cf1-4f76-acd2-9a360b79cb99"/>
+    <global_property property="mdrtb.transfer_out_encounter_type" property_value="Transfer Out" description="" uuid="777ba867-401b-4564-bad2-db9d27324883"/>
+    <global_property property="mdrtb.xpert.formId" property_value="14" description="" uuid="c097d922-b33c-11e7-9f2c-782bcb563a1c"/>
+    <global_property property="mdrtbtajikistan.mandatory" property_value="false" description="" uuid="d59997d5-646a-44df-9df2-9e982aa3cc67"/>
+    <global_property property="mdrtbtajikistan.started" property_value="true" description="" uuid="86479609-7b3e-41fe-9a5f-9b09b1cdcc90"/>
+    <global_property property="metadatamapping.addLocalMappings" description="" uuid="658ed56f-640e-46b8-b2b2-5b005ac5cfe3"/>
+    <global_property property="metadatamapping.mandatory" property_value="false" description="" uuid="ee8be1d6-88d3-49de-9bcd-16f56c5b91e6"/>
+    <global_property property="metadatamapping.started" property_value="true" description="" uuid="9ebde538-34d5-4b9b-af22-76c27b1a360c"/>
+    <global_property property="metadatasharing.configured" property_value="true" description="" uuid="6dcfd298-3732-4502-9e5e-7ac9bd394f26"/>
+    <global_property property="metadatasharing.database_version" property_value="1.0" description="" uuid="01efcd83-36a9-4e1b-81e2-1b1497995295"/>
+    <global_property property="metadatasharing.enableOnTheFlyPackages" property_value="false" description="" uuid="4ace8e95-b530-4988-b5e0-61fe94e50112"/>
+    <global_property property="metadatasharing.mandatory" property_value="false" description="" uuid="f362c6fd-a3dd-4668-9084-8e70277a5fa6"/>
+    <global_property property="metadatasharing.notify" property_value="false" description="" uuid="7caa6e0e-f2ab-49c4-a6b6-b1dd5f7dbfdd"/>
+    <global_property property="metadatasharing.persistIdsForClasses" description="" uuid="1b80ee90-036b-4b70-bc93-b180baae9f42"/>
+    <global_property property="metadatasharing.preferredConceptSourceIds" description="" uuid="244c0cbc-6031-4d09-83d7-84f8e600e8a5"/>
+    <global_property property="metadatasharing.started" property_value="true" description="" uuid="a6aed0ed-fb12-4f6c-88c1-d20b3b97a0b0"/>
+    <global_property property="metadatasharing.systemConceptSource" property_value="0c959f37-1c76-41ee-af79-2591577ffd24" description="" uuid="589e1d23-abdd-4cab-834d-7556874f345a"/>
+    <global_property property="metadatasharing.urlPrefix" description="" uuid="92fe7030-50ce-4c51-abf5-a2d4dac3933c"/>
+    <global_property property="metadatasharing.webservicesKey" description="" uuid="af8e3d0e-db13-442f-b761-5b6bea453982"/>
+    <global_property property="minSearchCharacters" property_value="2" description="" uuid="1a3ad91e-73d1-46ff-843a-401049b96bf8"/>
+    <global_property property="module_repository_folder" property_value="modules" description="" uuid="2737e54e-310d-478d-a29e-b8cf59e0c11b"/>
+    <global_property property="newPatientForm.relationships" description="" uuid="0ad522c3-6f5f-48f5-a6b1-f607da57e16e"/>
+    <global_property property="new_patient_form.showRelationships" property_value="false" description="" uuid="65f09f8d-03e2-4762-bf5d-76b00883f8df"/>
+    <global_property property="obs.complex_obs_dir" property_value="complex_obs" description="" uuid="2426a51c-41b1-4af6-ac39-cb5a38e55ebd"/>
+    <global_property property="patient.defaultPatientIdentifierValidator" property_value="org.openmrs.patient.impl.LuhnIdentifierValidator" description="" uuid="a2f08af6-6cf3-4f83-98bd-aee03217e8e8"/>
+    <global_property property="patient.headerAttributeTypes" description="" uuid="d1d2add0-58d9-45a1-9058-c51186962e27"/>
+    <global_property property="patient.identifierPrefix" description="" uuid="4b9eb034-8ca9-457d-b01c-812f7e41a5d6"/>
+    <global_property property="patient.identifierRegex" description="" uuid="085c6947-ccd6-425a-a1b7-e3d9e48dabeb"/>
+    <global_property property="patient.identifierSearchPattern" description="" uuid="487d038e-8103-472e-a26d-b8f4218413bc"/>
+    <global_property property="patient.identifierSuffix" description="" uuid="a711c363-4383-467b-b706-88db23ef87dc"/>
+    <global_property property="patient.listingAttributeTypes" description="" uuid="2805cddf-2534-4359-bddf-6bedbfce7a81"/>
+    <global_property property="patient.nameValidationRegex" property_value="^[a-zA-Z \-]+$" description="" uuid="45a4a4e6-2702-4c3f-bfb4-6de9e20e0164"/>
+    <global_property property="patient.viewingAttributeTypes" description="" uuid="7bfd5c9f-66f2-4d3a-a1ba-7b7c5ba00975"/>
+    <global_property property="patientflags.database_version" property_value="1.2.10" description="" uuid="d43b00b6-292a-4141-ae4d-ff0fbbeb3e86"/>
+    <global_property property="patientflags.mandatory" property_value="false" description="" uuid="1214f219-3732-4b0c-86ca-d96aad33d607"/>
+    <global_property property="patientflags.patientHeaderDisplay" property_value="true" description="" uuid="7eb9f71b-2c5c-4b2f-9786-18ca3b53b1df"/>
+    <global_property property="patientflags.patientOverviewDisplay" property_value="true" description="" uuid="99e887bc-6889-4b23-9e57-b02453731770"/>
+    <global_property property="patientflags.started" property_value="true" description="" uuid="1c6fd70a-5ce9-4217-b1be-27407a445c03"/>
+    <global_property property="patientflags.username" property_value="admin" description="" uuid="340ff47c-fc5b-42fc-8945-599c23f90b36"/>
+    <global_property property="patientSearch.matchMode" property_value="START" description="" uuid="39a5184a-5cac-4e83-beea-ddfdd7982865"/>
+    <global_property property="patient_identifier.importantTypes" description="" uuid="70841753-3120-4171-b270-e636b5d94ffc"/>
+    <global_property property="person.searchMaxResults" property_value="1000" description="" uuid="2f1a72c1-378d-4895-a7f8-e7b5f5c4639d"/>
+    <global_property property="programlocation.database_version" property_value="0.0.1" description="" uuid="41dba2be-11c4-48f2-bc0a-bc57bd0f79ee"/>
+    <global_property property="programlocation.started" property_value="false" description="" uuid="41c24999-c59b-4330-b136-305027f973c8"/>
+    <global_property property="report.deleteReportsAgeInHours" property_value="72" description="" uuid="b9868af7-6180-4eac-b431-73545d090894"/>
+    <global_property property="report.xmlMacros" description="" uuid="3df733fb-73ee-4fd3-a2ca-8796a9c17788"/>
+    <global_property property="reporting.database_version" property_value="0.4.1" description="" uuid="c2499703-dca4-451e-b686-e2217cce9b32"/>
+    <global_property property="reporting.includeDataExportsAsDataSetDefinitions" property_value="false" description="" uuid="5cb0d517-c20d-4659-b5ce-7f941de9ea34"/>
+    <global_property property="reporting.mandatory" property_value="false" description="" uuid="0e90dc7f-9fe2-4964-8bb7-263cf117e1c4"/>
+    <global_property property="reporting.maxCachedReports" property_value="10" description="" uuid="5e77a717-9bfd-485f-ad85-59062b7d27a2"/>
+    <global_property property="reporting.maxReportsToRun" property_value="1" description="" uuid="8614eb3c-d691-4547-9347-e05a401ce42d"/>
+    <global_property property="reporting.preferredIdentifierTypes" description="" uuid="2bb6be19-0c14-4347-82b1-150c0c63368e"/>
+    <global_property property="reporting.runReportCohortFilterMode" property_value="showIfNull" description="" uuid="6aac2913-3838-4bad-9b37-ef49413a7042"/>
+    <global_property property="reporting.started" property_value="true" description="" uuid="0e8168d6-adcd-4f5a-8adc-d96acb83b99b"/>
+    <global_property property="reportingcompatibility.data_export_batch_size" property_value="7500" description="" uuid="1acdf434-f06a-4fc0-8a51-a95d7a8c8aa4"/>
+    <global_property property="reportingcompatibility.mandatory" property_value="false" description="" uuid="aa3e4572-8138-4e3c-8f34-f433def3d815"/>
+    <global_property property="reportingcompatibility.patientLinkUrl" property_value="patientDashboard.form" description="" uuid="e90d3175-e8a5-4f5a-ab6e-64f4af2a5532"/>
+    <global_property property="reportingcompatibility.started" property_value="true" description="" uuid="979460e2-8a06-4f9d-803c-618454b7c09a"/>
+    <global_property property="reportProblem.url" property_value="http://errors.openmrs.org/scrap" description="" uuid="aa8cfbfe-c844-4820-bb5e-963c8fa69d42"/>
+    <global_property property="rolebasedhomepage.database_version" property_value="1.0" description="" uuid="5d4cffe7-30c2-4391-8ba2-0cf0c67ab5c4"/>
+    <global_property property="rolebasedhomepage.defaultHomePage" property_value="module/rolebasedhomepage/defaultHomepage.htm" description="" uuid="df61b60e-1353-4382-b91c-7bdacdf2c787"/>
+    <global_property property="scheduler.password" property_value="Admin1234" description="" uuid="d2164774-6f04-4021-ad4a-666981384f64"/>
+    <global_property property="scheduler.username" property_value="admin" description="" uuid="c19f9c7c-c70b-46da-935c-3f890901cc65"/>
+    <global_property property="searchWidget.batchSize" property_value="200" description="" uuid="7186cf16-3a1b-4786-ad79-2d2d9c94ce14"/>
+    <global_property property="searchWidget.maximumResults" property_value="2000" description="" uuid="627776a2-0c78-4910-9fc3-6fbdd6922c7d"/>
+    <global_property property="searchWidget.runInSerialMode" property_value="false" description="" uuid="dbd8af6a-418f-404f-9b67-2a2ff3ff18a5"/>
+    <global_property property="searchWidget.searchDelayInterval" property_value="400" description="" uuid="c10201b1-6b61-45b5-81ea-dd74d03809b3"/>
+    <global_property property="security.passwordCannotMatchUsername" property_value="true" description="" uuid="c1ecc03e-faf8-4366-aff5-76d0b225db09"/>
+    <global_property property="security.passwordCustomRegex" description="" uuid="6da6e304-d64a-48b6-b577-57e8ad867bc7"/>
+    <global_property property="security.passwordMinimumLength" property_value="8" description="" uuid="fc7eadaa-0c50-475f-ac2a-43b292427292"/>
+    <global_property property="security.passwordRequiresDigit" property_value="true" description="" uuid="d9e266d7-9512-44eb-9111-50c212479eed"/>
+    <global_property property="security.passwordRequiresNonDigit" property_value="true" description="" uuid="11b7cda5-57b8-4d24-8441-9e71494a675b"/>
+    <global_property property="security.passwordRequiresUpperAndLowerCase" property_value="true" description="" uuid="8467c9bc-3272-46e5-b2e0-e5297cfdefc5"/>
+    <global_property property="serialization.xstream.mandatory" property_value="false" description="" uuid="864a4ec6-7742-4691-81e8-a9fc125b6674"/>
+    <global_property property="serialization.xstream.started" property_value="true" description="" uuid="639df1cf-f683-4cce-b45d-bc726ec48e80"/>
+    <global_property property="user.headerAttributeTypes" description="" uuid="9bfca1e6-b9cf-48e2-ab88-0c96d453a013"/>
+    <global_property property="user.listingAttributeTypes" description="" uuid="f1208b81-4390-49b7-b60f-513f3cd25ed7"/>
+    <global_property property="user.viewingAttributeTypes" description="" uuid="5cafacdb-add0-468f-9cdd-96222568636e"/>
+    <global_property property="use_patient_attribute.healthCenter" property_value="false" description="" uuid="7b993531-f6e0-427f-9407-95d8350658f0"/>
+    <global_property property="use_patient_attribute.mothersName" property_value="false" description="" uuid="553320df-0c30-4162-a9df-8e4e1de1d499"/>
+    <global_property property="visits.assignmentHandler" property_value="org.openmrs.api.handler.ExistingVisitAssignmentHandler" description="" uuid="b9a33474-99f7-4a3d-addf-ff1aefa57b00"/>
+    <global_property property="visits.enabled" property_value="true" description="" uuid="c871774b-edeb-48fa-805b-c906cc611b02"/>
+    <global_property property="visits.encounterTypeToVisitTypeMapping" description="" uuid="0b899be1-71d7-4709-a6e0-5465f4072e4c"/>
+    <global_property property="webservices.rest.allowedips" description="" uuid="fcc8f88f-c707-472d-8312-b30d31b26aee"/>
+    <global_property property="webservices.rest.mandatory" property_value="false" description="" uuid="881a5708-29a9-4dcc-aabd-c6b0640ad019"/>
+    <global_property property="webservices.rest.maxResultsAbsolute" property_value="100" description="" uuid="ae24c2c4-3ce6-41b1-a460-601ce11a5314"/>
+    <global_property property="webservices.rest.maxResultsDefault" property_value="50" description="" uuid="387ef44f-92f5-4269-af27-e5b77e0c4197"/>
+    <global_property property="webservices.rest.started" property_value="true" description="" uuid="be770980-4bc4-4997-a1ba-062fd658513b"/>
+    <global_property property="webservices.rest.uriPrefix" description="" uuid="2e123ff4-cde8-4039-8f5e-6bb513f71410"/>
+    <global_property property="xforms.allowBindEdit" property_value="false" description="" uuid="463f55fa-94ea-4dbb-bf49-c6c49c991e97"/>
+    <global_property property="xforms.archive_dir" property_value="xforms/archive/%Y/%M" description="" uuid="5ae8656b-ada7-4e5b-8971-66dc0e121f33"/>
+    <global_property property="xforms.autoGeneratePatientIdentifier" property_value="false" description="" uuid="b784542f-818c-44e3-a040-808faf231d39"/>
+    <global_property property="xforms.cohortSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultCohortSerializer" description="" uuid="8ef50921-d3b1-4b40-a4d6-284183e77daf"/>
+    <global_property property="xforms.complexobs_dir" property_value="xforms/complexobs" description="" uuid="729d22cf-89f3-42cc-9f8d-e4fe66b927b5"/>
+    <global_property property="xforms.database_version" property_value="3.7.9" description="" uuid="69d32320-a6cb-454f-a0d2-e2e1e66f5483"/>
+    <global_property property="xforms.dateDisplayFormat" property_value="dd/MM/yyyy" description="" uuid="0841dcc0-09ed-47be-ae16-99ad931d8df2"/>
+    <global_property property="xforms.dateSubmitFormat" property_value="yyyy-MM-dd" description="" uuid="e95b1cb7-edda-4a6f-a869-b240a58f91d1"/>
+    <global_property property="xforms.dateTimeDisplayFormat" property_value="dd/MM/yyyy hh:mm a" description="" uuid="f5c48bf1-96e2-4974-a3c2-186fab10562e"/>
+    <global_property property="xforms.dateTimeSubmitFormat" property_value="yyyy-MM-dd'T'HH:mm:ssZ" description="" uuid="fbefa24a-91c3-49e4-bc9b-b016c0a67de6"/>
+    <global_property property="xforms.decimalSeparators" property_value="en:.;fr:.;es:,;it:.;pt:." description="" uuid="e95f539a-3b30-43a0-9312-43d70c71b5eb"/>
+    <global_property property="xforms.defaultFontFamily" property_value="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" description="" uuid="a5a60a5a-fad4-4a56-a461-4c473ae4f6e8"/>
+    <global_property property="xforms.defaultFontSize" property_value="16" description="" uuid="c18df432-2ec1-45b7-b340-04df38b7f32d"/>
+    <global_property property="xforms.encounterDateIncludesTime" property_value="false" description="" uuid="dbc3efb8-d49d-4d76-b33e-7136d3c41eff"/>
+    <global_property property="xforms.error_dir" property_value="xforms/error" description="" uuid="3257f9ce-a9ae-47c2-9872-ba9bbf36ab5f"/>
+    <global_property property="xforms.includeUsersInXformsDownload" property_value="true" description="" uuid="7a54bece-fd0f-4577-ad01-1b63e1a36e8e"/>
+    <global_property property="xforms.isRemoteFormEntry" property_value="false" description="" uuid="76fd833e-cca5-49d6-b6d2-8e3fc5ac43a5"/>
+    <global_property property="xforms.localeList" property_value="en:English,fr:French,es:Spanish,it:Italian,pt:Portuguese,ru:Russian,tj:Tajik" description="" uuid="0e950a4c-8dca-4e89-b39e-fd1b3cd5449e"/>
+    <global_property property="xforms.mandatory" property_value="false" description="" uuid="5a1b15ea-aff4-4df7-956e-8d5d60db2057"/>
+    <global_property property="xforms.multiSelectAppearance" property_value="full" description="" uuid="25e0c4fa-d161-44df-848e-4e83ba913464"/>
+    <global_property property="xforms.newPatientFormId" description="" uuid="db2738fc-9fd9-4660-9395-b4de888f075e"/>
+    <global_property property="xforms.new_patient_identifier_type_id" property_value="1" description="" uuid="03d248fd-a17c-417e-ac7b-973ccf1a8009"/>
+    <global_property property="xforms.overwriteValidationsOnRefresh" property_value="false" description="" uuid="99a02ef2-9e1f-46cb-9ad8-128a162127b6"/>
+    <global_property property="xforms.patientDownloadCohort" description="" uuid="efe17c53-4de3-483d-a0b4-761675390aa9"/>
+    <global_property property="xforms.patientRegEncounterFormId" property_value="0" description="" uuid="b7779e98-c292-496d-bb97-8493fe1dd4f4"/>
+    <global_property property="xforms.patientSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultPatientSerializer" description="" uuid="b92fe14d-0721-4458-bb39-78c2f8d0d176"/>
+    <global_property property="xforms.preferredConceptSource" description="" uuid="af648927-29d5-4c02-bc79-29a25fb0c2e6"/>
+    <global_property property="xforms.queue_dir" property_value="xforms/queue" description="" uuid="f573cb11-9eb8-47f9-95ae-146ce903c19b"/>
+    <global_property property="xforms.rejectExistingPatientCreation" property_value="true" description="" uuid="b51ef31c-2ead-42a8-9042-850ebc7e716b"/>
+    <global_property property="xforms.savedSearchSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultSavedSearchSerializer" description="" uuid="d7e57960-6ac3-4bcc-8d33-c8cd7398fcee"/>
+    <global_property property="xforms.saveFormat" property_value="purcforms" description="" uuid="7aac965f-30b6-43a7-8557-e4a77acf84c5"/>
+    <global_property property="xforms.searchNewPatientAfterFormSubmission" property_value="true" description="" uuid="93d3f03c-f1a3-4160-a38f-715131e93b17"/>
+    <global_property property="xforms.setDefaultLocation" property_value="false" description="" uuid="7ae633c4-8407-457d-8a54-b6efc1f27483"/>
+    <global_property property="xforms.setDefaultProvider" property_value="false" description="" uuid="1a1c76a3-8424-44fc-a990-3696c231066c"/>
+    <global_property property="xforms.showDesignSurfaceTab" property_value="true" description="" uuid="29c0d0a4-2ec7-495a-b66e-c3802fd0c89a"/>
+    <global_property property="xforms.showJavaScriptTab" property_value="false" description="" uuid="746ce980-b0ca-4774-af1d-f5f366cc8df0"/>
+    <global_property property="xforms.showLanguageTab" property_value="false" description="" uuid="9d72fac7-9279-489a-87dd-387f49be2fe3"/>
+    <global_property property="xforms.showLayoutXmlTab" property_value="false" description="" uuid="dedd4e90-85a3-413e-90cf-b8d400df84e5"/>
+    <global_property property="xforms.showModelXmlTab" property_value="false" description="" uuid="b60ca187-43a3-48db-9ed0-3ddac80870c8"/>
+    <global_property property="xforms.showOfflineFormDesigner" property_value="false" description="" uuid="a20ff99d-2f22-4a0d-b355-0ac046af235a"/>
+    <global_property property="xforms.showPreviewTab" property_value="true" description="" uuid="4b63fcc6-c7ff-4e3d-a824-082491a76925"/>
+    <global_property property="xforms.showSubmitSuccessMsg" property_value="false" description="" uuid="f40c7577-36c4-4c41-9072-767420db8604"/>
+    <global_property property="xforms.showXformsSourceTab" property_value="false" description="" uuid="79846d49-d269-48fe-80ff-497b9ccb38e9"/>
+    <global_property property="xforms.singleSelectAppearance" property_value="minimal" description="" uuid="7ed12f88-afa7-451d-b225-60cd0ac49cc0"/>
+    <global_property property="xforms.smsFieldSepChar" property_value="=" description="" uuid="1ce2a25d-49b1-42cf-9353-e8a1a519ace7"/>
+    <global_property property="xforms.smsSendFailureReports" property_value="true" description="" uuid="c5aafaa5-6d49-4f7c-9398-91cfad3e7720"/>
+    <global_property property="xforms.smsSendSuccessReports" property_value="true" description="" uuid="019d62da-56b7-4213-8acd-84e63da97994"/>
+    <global_property property="xforms.started" property_value="true" description="" uuid="83e8cb73-7210-4689-b2ec-0e55dbc6f34b"/>
+    <global_property property="xforms.timeDisplayFormat" property_value="hh:mm a" description="" uuid="1a40db4f-043f-4417-a270-6f68690a6ccf"/>
+    <global_property property="xforms.timeSubmitFormat" property_value="HH:mm:ss" description="" uuid="171c5958-29a7-43dd-b537-90a60daad1c1"/>
+    <global_property property="xforms.undoRedoBufferSize" property_value="-1" description="" uuid="dfd70d48-90f5-453a-bf50-6adb73652a68"/>
+    <global_property property="xforms.useConceptIdAsHint" property_value="false" description="" uuid="32eb13a0-022a-4d72-b79a-dc2cf771e90c"/>
+    <global_property property="xforms.useEncounterXform" property_value="true" description="" uuid="81eb8fbc-7fac-4c44-9d1f-e5329bf253c6"/>
+    <global_property property="xforms.usePatientXform" property_value="false" description="" uuid="30509311-1731-4b94-a14c-29a54c246b82"/>
+    <global_property property="xforms.userSerializer" property_value="org.openmrs.module.xforms.serialization.DefaultUserSerializer" description="" uuid="bb1c7ae0-fdd8-4a6b-a569-f28add361821"/>
+    <global_property property="xforms.useStoredXform" property_value="true" description="" uuid="09545871-e4d0-4940-b38f-d5ded57fa2b3"/>
+    <global_property property="xforms.xformDownloadFolder" description="" uuid="dc10ade5-5090-4eba-a6c4-06d83ce79427"/>
+    <global_property property="xforms.xformSerializer" property_value="org.fcitmuk.epihandy.EpihandyXformSerializer" description="" uuid="5bcf5d9d-af9e-4685-8ae2-ce2359aef4dc"/>
+    <global_property property="xforms.xformUploadFolder" description="" uuid="dee6f298-e718-46dc-9986-8372496828c6"/>
+	 -->
+
+</dataset>

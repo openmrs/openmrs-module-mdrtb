@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.openmrs.Cohort;
 import org.openmrs.annotation.Handler;
+import org.openmrs.module.mdrtb.MdrtbUtil;
 import org.openmrs.module.reporting.common.Localized;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
@@ -45,17 +46,16 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 	public void outputColumnValue(Writer w, String name, Object colValue) throws IOException {
 		if (colValue != null) {
 			if (colValue instanceof Cohort) {
-				Cohort c = (Cohort)colValue;
+				Cohort c = (Cohort) colValue;
 				if (c.isEmpty()) {
-					w.write(""+c.size());
-				}
-				else {
+					w.write("" + c.size());
+				} else {
 					String n = URLEncoder.encode(name, "UTF-8");
-					String url = "viewCohort.htm?title="+n+"&patientIds=" + c.getCommaSeparatedPatientIds();
+					String url = "viewCohort.htm?title=" + n + "&patientIds="
+					        + MdrtbUtil.getCohortCommaSeparatedPatientIds(c);
 					w.write("<a href=\"" + url + "\" target=\"_blank\">" + c.size() + "</a>");
 				}
-			}
-			else {
+			} else {
 				w.write(colValue.toString());
 			}
 		}
@@ -77,14 +77,14 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 			w.write("<table id=\"preview-dataset-" + key + "\" class=\"preview-dataset\" border=1><tr>");
 			DataSet dataset = results.getDataSets().get(key);
 			List<DataSetColumn> columns = dataset.getMetaData().getColumns();
-
+			
 			if (dataset instanceof MapDataSet) {
 				DataSetRow data = dataset.iterator().next();
 				if (dataset.getDefinition() instanceof CohortCrossTabDataSetDefinition) {
 					CohortCrossTabDataSetDefinition cdd = (CohortCrossTabDataSetDefinition) dataset.getDefinition();
 					
-					List<String> rows = new ArrayList<String>(cdd.getRows().keySet());
-					List<String> cols = new ArrayList<String>(cdd.getColumns().keySet());
+					List<String> rows = new ArrayList<>(cdd.getRows().keySet());
+					List<String> cols = new ArrayList<>(cdd.getColumns().keySet());
 					
 					if (rows.isEmpty()) {
 						for (String colName : cols) {
@@ -92,18 +92,16 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 							outputColumnValue(w, colName, data.getColumnValue(colName));
 							w.write("</td></tr>");
 						}
-					}
-					else if (cols.isEmpty()) {
+					} else if (cols.isEmpty()) {
 						for (String rowName : rows) {
 							w.write("<tr><td>" + rowName + ": </td><td>");
 							outputColumnValue(w, rowName, data.getColumnValue(rowName));
 							w.write("</td></tr>");
 						}
-					}
-					else {
+					} else {
 						w.write("<tr><td>&nbsp;</td>");
 						for (String colName : cols) {
-							w.write("<td>"+colName + "</td>");
+							w.write("<td>" + colName + "</td>");
 						}
 						w.write("</tr>");
 						for (String rowName : rows) {
@@ -117,21 +115,19 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 							w.write("</tr>");
 						}
 					}
-				}
-				else {
+				} else {
 					for (DataSetColumn column : columns) {
 						w.write("<tr><td>" + column.getLabel() + "<td>");
 						outputColumnValue(w, column.getLabel(), data.getColumnValue(column));
 						w.write("</td><td>");
 					}
 				}
-			}
-			else {
+			} else {
 				for (DataSetColumn column : columns) {
-					w.write("<th>"+column.getName()+"</th>");
+					w.write("<th>" + column.getName() + "</th>");
 				}
 				w.write("</tr>");
-
+				
 				for (DataSetRow row : dataset) {
 					w.write("<tr>");
 					for (DataSetColumn column : columns) {
@@ -145,7 +141,7 @@ public class PreviewReportRenderer extends SimpleHtmlReportRenderer {
 			w.write("</table>");
 		}
 		w.write("</body>");
-		w.write("</head>");		
+		w.write("</head>");
 		w.write("</html>");
 		w.flush();
 	}

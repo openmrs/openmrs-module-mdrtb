@@ -14,8 +14,7 @@
 					pageContext.setAttribute("qs", qs.substring(0, i));
 					pageContext.setAttribute("locales", org.openmrs.api.context.Context.getAdministrationService().getPresentationLocales());
 					pageContext.setAttribute("openmrsVersion", org.openmrs.util.OpenmrsConstants.OPENMRS_VERSION);
-					pageContext.setAttribute("databaseVersion", org.openmrs.util.OpenmrsConstants.DATABASE_VERSION);
-					pageContext.setAttribute("databaseVersionExpected", org.openmrs.util.OpenmrsConstants.DATABASE_VERSION_EXPECTED);
+					pageContext.setAttribute("databaseVersion", org.openmrs.util.OpenmrsConstants.DATABASE_NAME);
 					pageContext.setAttribute("locale", org.openmrs.api.context.Context.getLocale());
 				%> <c:forEach items="${locales}" var="loc" varStatus="status">
 				<%

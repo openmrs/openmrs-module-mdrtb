@@ -1,0 +1,126 @@
+package org.openmrs.module.mdrtb.form.custom;
+
+import org.openmrs.Concept;
+import org.openmrs.Encounter;
+import org.openmrs.Obs;
+import org.openmrs.Patient;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConcepts;
+import org.openmrs.module.mdrtb.MdrtbConstants;
+import org.openmrs.module.mdrtb.MdrtbUtil;
+import org.openmrs.module.mdrtb.api.MdrtbService;
+import org.openmrs.module.mdrtb.form.AbstractSimpleForm;
+
+public class DrugResistanceDuringTreatmentForm extends AbstractSimpleForm implements Comparable<DrugResistanceDuringTreatmentForm> {
+	
+	public DrugResistanceDuringTreatmentForm() {
+		super();
+		this.encounter.setEncounterType(MdrtbConstants.ET_DRUG_RESISTANCE_DURING_TREATMENT);
+	}
+	
+	public DrugResistanceDuringTreatmentForm(Patient patient) {
+		super(patient);
+		this.encounter.setEncounterType(MdrtbConstants.ET_DRUG_RESISTANCE_DURING_TREATMENT);
+	}
+	
+	public DrugResistanceDuringTreatmentForm(Encounter encounter) {
+		super(encounter);
+		
+	}
+	
+	public Concept getDrugResistanceDuringTreatment() {
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT), encounter);
+		
+		if (obs == null) {
+			return null;
+		} else {
+			return obs.getValueCoded();
+		}
+	}
+	
+	public void setDrugResistanceDuringTreatment(Concept res) {
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT), encounter);
+		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && res == null) {
+			return;
+		}
+		
+		// we only need to update this if this is a new obs or if the value has changed.
+		if (obs == null || obs.getValueCoded() == null || !obs.getValueCoded().equals(res)) {
+			
+			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
+			if (obs != null) {
+				obs.setVoided(true);
+				obs.setVoidReason("voided by MDRTB module");
+			}
+			
+			// now create the new Obs and add it to the encounter	
+			if (res != null) {
+				obs = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(
+				    MdrtbConcepts.DRUG_RESISTANCE_DURING_TREATMENT), encounter.getEncounterDatetime(),
+				        encounter.getLocation());
+				obs.setValueCoded(res);
+				encounter.addObs(obs);
+			}
+		}
+	}
+	
+	public Integer getPatientProgramId() {
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		
+		if (obs == null) {
+			return null;
+		} else {
+			return obs.getValueNumeric().intValue();
+		}
+	}
+	
+	public void setPatientProgramId(Integer id) {
+		Obs obs = MdrtbUtil.getObsFromEncounter(
+		    Context.getService(MdrtbService.class).getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID), encounter);
+		
+		// if this obs have not been created, and there is no data to add, do nothing
+		if (obs == null && id == null) {
+			return;
+		}
+		
+		// we only need to update this if this is a new obs or if the value has changed.
+		if (obs == null || obs.getValueNumeric() == null || obs.getValueNumeric().intValue() != id) {
+			
+			// void the existing obs if it exists
+			// (we have to do this manually because openmrs doesn't void obs when saved via encounters)
+			if (obs != null) {
+				obs.setVoided(true);
+				obs.setVoidReason("voided by MDRTB module");
+			}
+			
+			// now create the new Obs and add it to the encounter	
+			if (id != null) {
+				obs = new Obs(encounter.getPatient(), Context.getService(MdrtbService.class).getConcept(
+				    MdrtbConcepts.PATIENT_PROGRAM_ID), encounter.getEncounterDatetime(), encounter.getLocation());
+				obs.setValueNumeric(id.doubleValue());
+				encounter.addObs(obs);
+			}
+		}
+	}
+	
+	public int compareTo(DrugResistanceDuringTreatmentForm form) {
+		if (this.getEncounterDatetime() == null)
+			return 1;
+		if (form.getEncounterDatetime() == null)
+			return -1;
+		
+		return this.getEncounterDatetime().compareTo(form.getEncounterDatetime());
+	}
+	
+	public String getLink() {
+		return "/module/mdrtb/form/resistanceDuringTx.form?patientProgramId=" + getPatientProgramId() + "&encounterId="
+		        + getEncounter().getId();
+	}
+	
+}

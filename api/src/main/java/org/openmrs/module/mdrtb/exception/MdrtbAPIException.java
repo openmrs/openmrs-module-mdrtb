@@ -2,11 +2,10 @@ package org.openmrs.module.mdrtb.exception;
 
 import org.openmrs.api.APIException;
 
-
-public class MdrtbAPIException extends APIException{
-
-    private static final long serialVersionUID = 1L;
-
+public class MdrtbAPIException extends APIException {
+	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Default empty constructor. If at all possible, don't use this one, but use the
 	 * {@link #MdrtbAPIException(String)} constructor to specify a helpful message to the end user

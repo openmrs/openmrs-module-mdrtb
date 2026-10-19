@@ -1,0 +1,298 @@
+<%@ include file="/WEB-INF/view/module/mdrtb/include.jsp" %>
+
+<%@ include file="/WEB-INF/template/headerMinimal.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.dimensions.pack.js"/>
+<%-- <openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.js" /> --%>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/jquery.tooltip.css" />
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
+<script>
+$(document).ready(function(){
+	$('#oblast').val(${oblastSelected});
+	$('#district').val(${districtSelected});
+	$('#year').val(${yearSelected});
+	$('#quarter').val(${quarterSelected});
+	$('#month').val(${monthSelected});
+});
+
+function submitForm(url) {
+	var e = document.getElementById("oblast");
+	var val1 = e.options[e.selectedIndex].value;
+	var e = document.getElementById("district");
+	var val2 = e.options[e.selectedIndex].value;
+	var e = document.getElementById("facility");
+	var val3 = e.options[e.selectedIndex].value;
+	var year = document.getElementById("year").value;
+	var quarter = document.getElementById("quarter").value;
+	var month = document.getElementById("month").value;
+	if (val1=="") {
+		window.alert("Providing Oblast is mandatory");
+	}
+	var submitPath = "${pageContext.request.contextPath}/module/mdrtb/reporting/" + url + ".form?oblast="+val1+"&district="+val2+ "&facility="+val3+"&year="+year+"&quarter="+quarter+"&month="+month;
+	
+	window.location.replace(submitPath);
+}
+
+function fun1()
+{
+	var e = document.getElementById("oblast");
+	var val = e.options[e.selectedIndex].value;
+	var year = document.getElementById("year").value;
+	var quarter =  "\"" + document.getElementById("quarter").value +  "\"";
+	var month =  "\"" + document.getElementById("month").value +  "\"";
+	if(val!="")
+		window.location.replace("${pageContext.request.contextPath}/module/mdrtb/reporting/patientLists.form?ob="+val+"&yearSelected="+year+"&quarterSelected="+quarter+"&monthSelected="+month)
+}
+
+function fun2()
+{
+	var e = document.getElementById("oblast");
+	var val1 = e.options[e.selectedIndex].value;
+	var e = document.getElementById("district");
+	var val2 = e.options[e.selectedIndex].value;
+	var year = document.getElementById("year").value;
+	
+	var quarter = document.getElementById("quarter").value;
+	var month = document.getElementById("month").value;
+	if(val2!="")
+		window.location.replace("${pageContext.request.contextPath}/module/mdrtb/reporting/patientLists.form?loc="+val2+"&ob="+val1+"&yearSelected="+year+"&quarterSelected="+quarter+"&monthSelected="+month)
+}
+
+function fun3() {
+  	var e = document.getElementById("oblast");
+	var val1 = e.options[e.selectedIndex].value;
+	var e = document.getElementById("facility");
+	var val3 = e.options[e.selectedIndex].value;
+	if(val1 == 186) {
+		if(document.getElementById("facility").selectedIndex > 0) {
+			document.getElementById("district").selectedIndex = 0;
+		}
+	}
+	return;
+}
+</script>
+
+
+<a href="${pageContext.request.contextPath}/module/mdrtb/mdrtbIndex.form"><mdrtb:message code="mdrtb.back" text="Backu"/></a>
+<br/><br/>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.patientLists" text="Lists"/></b>
+<div class="box" style="margin:0px;">
+<br/>
+	<table>
+	<tr id="oblastDiv">
+			<td align="right"><mdrtb:message code="mdrtb.oblast" /></td>
+			<td><select name="oblast" id="oblast" onchange="fun1()">
+					<option value=""></option>
+					<c:forEach var="o" items="${oblasts}">
+						<option value="${o.id}">${o.name}</option>
+					</c:forEach>
+			</select></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr id="districtDiv">
+			<td align="right"><mdrtb:message code="mdrtb.district" /></td>
+			<td><select name="district" id="district" onchange="fun2()">
+					<option value=""></option>
+					<c:forEach var="dist" items="${districts}">
+						<option value="${dist.id}">${dist.name}</option>
+					</c:forEach>
+			</select></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr id="facilityDiv">
+			<td align="right"><mdrtb:message code="mdrtb.facility" /></td>
+			<td><select name="facility" id="facility" onchange="fun3()">
+					<option value=""></option>
+					<c:forEach var="f" items="${facilities}">
+						<option value="${f.id}">${f.name}</option>
+					</c:forEach>
+			</select></td>
+		<tr>
+		</table>
+			<br/>
+			<mdrtb:message code="mdrtb.year" />&nbsp;&nbsp;&nbsp;&nbsp;<input name="year" id="year" type="text" size="4"/><br/>
+			<mdrtb:message code="mdrtb.quarter" /><input name="quarter" id="quarter" type="text" size="7"/></td>
+			<mdrtb:message code="mdrtb.or" />&nbsp;<mdrtb:message code="mdrtb.month" />&nbsp;<input id="month" name="month" type="text" size="7"/>
+		    <br/><br/><br/><br/>
+		    
+		    <table>
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.allCasesEnrolled" /></td>
+		    <td><button onClick="submitForm('allCasesEnrolled');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.dotsCasesByRegistrationGroup" /></td>
+		    <td><button onClick="submitForm('dotsCasesByRegistrationGroup');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byDrugResistance" /></td>
+		    <td><button onClick="submitForm('byDrugResistance');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.dotsCasesByAnatomicalSite" /></td>
+		    <td><button onClick="submitForm('dotsCasesByAnatomicalSite');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.dotsPulmonaryCasesByRegisrationGroupAndBacStatus" /></td>
+		    <td><button onClick="submitForm('dotsPulmonaryCasesByRegisrationGroupAndBacStatus');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		  <!--   <tr>
+		    <td><mdrtb:message code="mdrtb.mdrXdrPatients" /></td>
+		    <td><button onClick="submitForm('mdrXdrPatients');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr> -->
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.drTbPatients" /></td>
+		    <td><button onClick="submitForm('drTbPatients');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <!-- <tr>
+		    <td><mdrtb:message code="mdrtb.mdrSuccessfulTreatmentOutcome" /></td>
+		    <td><button onClick="submitForm('mdrSuccessfulTreatmentOutcome');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr> -->
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.drTbPatientsSuccessfulTreatment" /></td>
+		    <td><button onClick="submitForm('drTbPatientsSuccessfulTreatment');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <!--  <tr>
+		    <td><mdrtb:message code="mdrtb.mdrXdrPatientsNoTreatment" /></td>
+		    <td><button onClick="submitForm('mdrXdrPatientsNoTreatment');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr> -->
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.drTbPatientsNoTreatment" /></td>
+		    <td><button onClick="submitForm('drTbPatientsNoTreatment');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.womenOfChildbearingAge" /></td>
+		    <td><button onClick="submitForm('womenOfChildbearingAge');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.menOfConscriptAge" /></td>
+		    <td><button onClick="submitForm('menOfConscriptAge');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <!-- <tr>
+		    <td><mdrtb:message code="mdrtb.detectedFromContact" /></td>
+		    <td><button onClick="submitForm('detectedFromContact');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr> -->
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withConcomitantDisease" /></td>
+		    <td><button onClick="submitForm('withConcomitantDisease');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		   <!--  <tr>
+		    <td><mdrtb:message code="mdrtb.withDiabetes" /></td>
+		    <td><button onClick="submitForm('withDiabetes');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withCancer" /></td>
+		    <td><button onClick="submitForm('withCancer');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withUlcer" /></td>
+		    <td><button onClick="submitForm('withUlcer');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withHypertension" /></td>
+		    <td><button onClick="submitForm('withHypertension');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withCOPD" /></td>
+		    <td><button onClick="submitForm('withCOPD');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withMentalDisorder" /></td>
+		    <td><button onClick="submitForm('withMentalDisorder');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withHIV" /></td>
+		    <td><button onClick="submitForm('withHIV');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withHepatitis" /></td>
+		    <td><button onClick="submitForm('withHepatitis');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withKidneyDisease" /></td>
+		    <td><button onClick="submitForm('withKidneyDisease');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.withOtherDisease" /></td>
+		    <td><button onClick="submitForm('withOtherDisease');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr> -->
+		    
+		     <tr>
+		    <td><mdrtb:message code="mdrtb.byDwelling" /></td>
+		    <td><button onClick="submitForm('byDwelling');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.bySocProfStatus" /></td>
+		    <td><button onClick="submitForm('bySocProfStatus');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byPopCategory" /></td>
+		    <td><button onClick="submitForm('byPopCategory');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byPlaceOfDetection" /></td>
+		    <td><button onClick="submitForm('byPlaceOfDetection');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byCircumstancesOfDetection" /></td>
+		    <td><button onClick="submitForm('byCircumstancesOfDetection');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byMethodOfDetection" /></td>
+		    <td><button onClick="submitForm('byMethodOfDetection');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    <tr>
+		    <td><mdrtb:message code="mdrtb.byPulmonaryLocation" /></td>
+		    <td><button onClick="submitForm('byPulmonaryLocation');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		     <tr>
+		    <td><mdrtb:message code="mdrtb.byExtraPulmonaryLocation" /></td>
+		    <td><button onClick="submitForm('byExtraPulmonaryLocation');"><mdrtb:message code="mdrtb.generate"/></button></td>
+		    </tr>
+		    
+		    </table>
+		    
+		   
+</div>
+
+<%@ include file="/WEB-INF/template/footer.jsp" %>

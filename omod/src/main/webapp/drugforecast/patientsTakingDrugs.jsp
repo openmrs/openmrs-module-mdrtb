@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%>
 <%@ include file="../mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
+
 <form method="post">
 	<h2>Count Patients Taking Drugs</h2>
 	
@@ -25,16 +27,6 @@
 			<td align="right">On date:</td>
 			<td><input name="onDate" type="text" size="10" onClick="showCalendar(this)"/></td>
 		</tr>
-<%--
-		<tr>
-			<td align="right">Method:</td>
-			<td>
-				<input type="radio" name="method" value="generic" checked="true"/>Generics
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="method" value="drug"/>Drug formulations
-			</td>
-		</tr>
---%>
 		<tr>
 			<td align="right"></td>
 			<td>&nbsp;<br/><input type="submit" value="Calculate"/></td>

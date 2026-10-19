@@ -23,17 +23,21 @@ import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.MdrtbConstants;
 
 public class MdrtbConceptTag extends BodyTagSupport {
 	
 	public static final long serialVersionUID = 1L;
 	
 	private Concept concept;
+	
 	private String nameTag;
+	
 	private String nameVar;
+	
 	private String mappingVar;
 	
-	public int doStartTag() throws JspException {
+	public int doStartTag() {
 		
 		ConceptName n = concept.getName();
 		
@@ -41,86 +45,85 @@ public class MdrtbConceptTag extends BodyTagSupport {
 			ConceptNameTag t = Context.getConceptService().getConceptNameTagByName(nameTag);
 			n = concept.findNameTaggedWith(t);
 		}
-
+		
 		if (nameVar != null) {
 			pageContext.setAttribute(nameVar, n);
 		}
 		
 		if (mappingVar != null) {
 			for (ConceptMap m : concept.getConceptMappings()) {
-				if (m.getSource().getName().equals("org.openmrs.module.mdrtb")) {
-					pageContext.setAttribute(mappingVar, m.getSourceCode());
+				if (m.getConceptReferenceTerm().getConceptSource().getName()
+				        .equals(MdrtbConstants.MDRTB_CONCEPT_MAPPING_CODE)) {
+					pageContext.setAttribute(mappingVar, m.getConceptReferenceTerm().getConceptSource());
 				}
 			}
 		}
 		return EVAL_BODY_BUFFERED;
 	}
 	
-    /**
-     * @see Tag#doEndTag()
+	/**
      */
-    public int doEndTag() throws JspException {
-        try {
-            if (getBodyContent() != null) {
-                getBodyContent().writeOut(getBodyContent().getEnclosingWriter());
-            }
-        }
-        catch(java.io.IOException e)
-        {
-            throw new JspTagException("IO Error: " + e.getMessage());
-        }
-        return EVAL_PAGE;
-    }
-
+	public int doEndTag() throws JspException {
+		try {
+			if (getBodyContent() != null) {
+				getBodyContent().writeOut(getBodyContent().getEnclosingWriter());
+			}
+		}
+		catch (java.io.IOException e) {
+			throw new JspTagException("IO Error: " + e.getMessage());
+		}
+		return EVAL_PAGE;
+	}
+	
 	/**
 	 * @return the nameTag
 	 */
 	public String getNameTag() {
 		return nameTag;
 	}
-
+	
 	/**
 	 * @param nameTag the nameTag to set
 	 */
 	public void setNameTag(String nameTag) {
 		this.nameTag = nameTag;
 	}
-
+	
 	/**
 	 * @return the nameVar
 	 */
 	public String getNameVar() {
 		return nameVar;
 	}
-
+	
 	/**
 	 * @param nameVar the nameVar to set
 	 */
 	public void setNameVar(String nameVar) {
 		this.nameVar = nameVar;
 	}
-
+	
 	/**
 	 * @return the concept
 	 */
 	public Concept getConcept() {
 		return concept;
 	}
-
+	
 	/**
 	 * @param concept the concept to set
 	 */
 	public void setConcept(Concept concept) {
 		this.concept = concept;
 	}
-
+	
 	/**
 	 * @return the mappingVar
 	 */
 	public String getMappingVar() {
 		return mappingVar;
 	}
-
+	
 	/**
 	 * @param mappingVar the mappingVar to set
 	 */

@@ -1,6 +1,9 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
+
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
 <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>
 
@@ -29,18 +32,19 @@
 		$j('#errorDisplay').html('');
 		
 		if (location == '') {
-			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noLocation' text='Please specify a location.'/></li>");
+			$j('#errorDisplay').append("<li><mdrtb:message code='mdrtb.specimen.errors.noLocation' text='Please specify a location.'/></li>");
 		}
 		if (provider == '') {
-			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noCollector' text='Please specify who collected this sample.'/></li>");
+			$j('#errorDisplay').append("<li><mdrtb:message code='mdrtb.specimen.errors.noCollector' text='Please specify who collected this sample.'/></li>");
 		}
 		if (lab == '') {
-			$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noLab' text='Please specify a laboratory.'/></li>");
+			$j('#errorDisplay').append("<li><mdrtb:message code='mdrtb.specimen.errors.noLab' text='Please specify a laboratory.'/></li>");
 		}
 
 		// check all the individual tests
 		for(i = 1; i <= numberOfTests; i++) {
 			var dateCollected = $j('#dateCollected' + i).val();
+			//var dateTested = $j('#dateTested' + i).val();
 			var identifier = $j('#identifier' + i).val();
 			var type = $j('#type' + i).val();
 			var appearance = $j('#appearance' + i).val();
@@ -49,11 +53,8 @@
 			// date collected is only required parameter (unless an entire row is blank)
 			if ((identifier != '' | type != '' | appearance !='' | result !='') &&
 				dateCollected == '') {
-					$j('#errorDisplay').append("<li><spring:message code='mdrtb.specimen.errors.noDateCollected' text='Please specify the date collected.'/></li>");
+					$j('#errorDisplay').append("<li><mdrtb:message code='mdrtb.specimen.errors.noDateCollected' text='Please specify the date collected.'/></li>");
 			}
-
-			// TODO: add validation of collection date;  we could use the openmrs:datePattern tag, and the
-			// parseSimpleDate library function in openmrs.js, but this will fail with localized patterns, like the French "(jj/mm/aaaa"	
 		}
 		
 		if ($j('#errorDisplay').html() == '') {
@@ -64,7 +65,7 @@
 
 </script>
 
-<b class="boxHeader"><spring:message code="mdrtb.add${testType}Results"/></b>
+<b class="boxHeader"><mdrtb:message code="mdrtb.add${testType}Results"/></b>
 <!-- display the proper header depending on whether we were adding a specimen, or a smear/culture -->
 
 <div class="box">
@@ -75,7 +76,9 @@
 
 <table>
 <tr>
-<th><spring:message code="mdrtb.locationCollected" text="Location Collected"/>:</th>
+<th>
+<!--<mdrtb:message code="mdrtb.locationCollected" text="Location Collected"/>-->
+</th>
 <td>
 <select id="location" name="location">
 <option value=""></option>
@@ -87,7 +90,7 @@
 </tr>
 
 <tr>
-<th><spring:message code="mdrtb.collectedBy" text="Collected By"/>:</th>
+<th><mdrtb:message code="mdrtb.collectedBy" text="Collected By"/>:</th>
 <td>
 <select id="provider" name="provider">
 <option value=""/>
@@ -99,7 +102,7 @@
 </tr>
 
 <tr>
-<th><spring:message code="mdrtb.lab" text="Lab"/>:</th>
+<th><mdrtb:message code="mdrtb.lab" text="Lab"/>:</th>
 <td><select id="lab" name="lab">
 <option value=""></option>
 <c:forEach var="location" items="${locations}">
@@ -113,11 +116,28 @@
 
 <table>
 <tr>
-<th><spring:message code="mdrtb.dateCollected" text="Date Collected"/>:</th>
-<th><spring:message code="mdrtb.sampleid" text="Sample ID"/>:</th>
-<th><spring:message code="mdrtb.sampleType" text="Sample Type"/>:</th>
-<th><spring:message code="mdrtb.appearance" text="Appearance"/>:</th>
-<th><spring:message code="mdrtb.result" text="Result"/>:</th>
+<th><mdrtb:message code="mdrtb.dateCollected" text="Date Collected"/>:</th>
+<th><mdrtb:message code="mdrtb.sampleid" text="Sample ID"/>:</th>
+<th><mdrtb:message code="mdrtb.sampleType" text="Sample Type"/>:</th>
+<th><mdrtb:message code="mdrtb.appearance" text="Appearance"/>:</th>
+<c:if test="${testType eq 'xpert' || testType eq 'hain' || testType eq 'smear' || testType eq 'culture'}" >
+<th><mdrtb:message code="mdrtb.dateCompleted" text="Date Completed"/>:</th>
+<th><mdrtb:message code="mdrtb.result" text="Result"/>:</th>
+</c:if>
+<c:if test="${testType eq 'xpert' || testType eq 'hain'}" >
+<th><mdrtb:message code="mdrtb.rifResult" text="RIF Resistance"/>:</th>
+
+<c:if test="${testType eq 'hain'}" >
+<th><mdrtb:message code="mdrtb.inhResult" text="INH Resistance"/>:</th>
+</c:if>
+<!-- 
+<c:if test="${testType eq 'xpert'}" >
+<th><mdrtb:message code="mdrtb.mtbBurden" text="MTB Burden"/>:</th>
+</c:if>
+
+<th><mdrtb:message code="mdrtb.errorCode" text="Error Code"/>:</th>
+-->
+</c:if>
 </tr>
 
 
@@ -144,14 +164,68 @@
 </select>
 </td>
 
+<c:if test="${testType eq 'xpert' || testType eq 'hain' || testType eq 'smear' || testType eq 'culture'}" >
+<td><openmrs_tag:dateField formFieldName="dateCompleted${i}" startValue=""/></td>
+</c:if>
+
+<c:if test="${testType eq 'smear' || testType eq 'culture'}">
 <td>
 <select id="result${i}" name="result${i}" class="result">
 <option value=""></option>
 <c:forEach var="result" items="${testType eq 'smear' ? smearResults : cultureResults}">
 <option value="${result.answerConcept.id}">${result.answerConcept.displayString}</option>
 </c:forEach>
-</td>
 </select>
+</td>
+</c:if>
+
+<c:if test="${testType eq 'xpert' || testType eq 'hain'}">
+<td>
+<select id="result${i}" name="result${i}" class="result">
+<option value=""></option>
+<c:forEach var="mtbResult" items="${mtbResults}">
+<option value="${mtbResult.answerConcept.id}">${mtbResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+
+<td>
+<select id="rifResult${i}" name="rifResult${i}">
+<option value=""></option>
+<c:forEach var="rifResult" items="${rifResults}">
+<option value="${rifResult.answerConcept.id}">${rifResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+
+<c:if test="${testType eq 'hain'}">
+<td>
+<select id="inhResult${i}" name="inhResult${i}">
+<option value=""></option>
+<c:forEach var="inhResult" items="${inhResults}">
+<option value="${inhResult.answerConcept.id}">${inhResult.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+</c:if>
+
+<!-- 
+<c:if test="${testType eq 'xpert'}">
+<td>
+<select id="mtbBurden${i}" name="mtbBurden${i}">
+<option value=""></option>
+<c:forEach var="mtbBurden" items="${xpertMtbBurdens}">
+<option value="${mtbBurden.answerConcept.id}">${mtbBurden.answerConcept.displayString}</option>
+</c:forEach>
+</select>
+</td>
+</c:if>
+
+<td>
+<input id="errorCode${i}" name="errorCode${i}" type="text" size="10"/>
+</td>
+ -->
+</c:if>
 
 </tr>
 </c:forEach>
@@ -159,7 +233,7 @@
 
 <br/>
 
-<button type="button" onclick="validateAndSubmit();" ><spring:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><spring:message code="mdrtb.cancel" text="Cancel"/></button></a>
+<button type="button" onclick="validateAndSubmit();" ><mdrtb:message code="mdrtb.save" text="Save"/></button><a style="text-decoration:none" href="${pageContext.request.contextPath}/module/mdrtb/specimen/specimen.form?patientId=${patientId}&patientProgramId=${patientProgramId}"><button type="button"><mdrtb:message code="mdrtb.cancel" text="Cancel"/></button></a>
 
 </form>
 </div>

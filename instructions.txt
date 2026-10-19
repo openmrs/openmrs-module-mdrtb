@@ -1,0 +1,12 @@
+This project is an Openmrs module
+The code in branch omrs2-upgrade-tjk-2.4 was working well on Openmrs version 2.4 with some bugs
+This is now being upgraded to work with Openmrs 2.8
+There used to be a dependency called commonlab module. That entire code has been copied into this project now. So all Lab-rated entities and services are from over there
+This module builds without any errors and omod file is created
+The task is to install and run it on the Openmrs
+Whatever changes you make, maintain a file called changes.txt and record there as if adding comments for Github
+You can access the test Database (openmrs_28) locally deployed at localhost:3306 using username root and password jingle94
+Follow examples from other modules in Openmnrs repositories
+The task will be considered complete when the resources are successfully called from this module's REST API
+You can build and deploy the module any number of times you want. The logs to read can be found at C:\Users\owais\AppData\Roaming\OpenMRS and C:\apache-tomcat-9\logs
+You can start/stop tomcat where Openmrs is deployed from here: C:\apache-tomcat-9\bin

@@ -51,16 +51,16 @@
 								<wgt:widget id="param-${p.name}" name="p.${p.name}" type="${p.type.name}" defaultValue="${parameters[p.name]}"/>
 								<br/><br/>
 							</c:forEach>
-							<b><spring:message code="mdrtb.outputFormat"/></b><br/>
+							<b><mdrtb:message code="mdrtb.outputFormat"/></b><br/>
 							<select name="format">
 								<c:forEach items="${report.renderingModes}" var="mode">
 									<option value="${mode.label}">${mode.label}</option>
 								</c:forEach>
-								<option value=""><spring:message code="mdrtb.preview"/></option>
+								<option value=""><mdrtb:message code="mdrtb.preview"/></option>
 							</select>
 							<br/><br/>
-							<input type="submit" id="actionButton" value="<spring:message code="mdrtb.run"/>" />
-							<input type="button" id="cancelButton" value="<spring:message code="mdrtb.close"/>" />
+							<input type="submit" id="actionButton" value="<mdrtb:message code="mdrtb.run"/>" />
+							<input type="button" id="cancelButton" value="<mdrtb:message code="mdrtb.close"/>" />
 						</form>
 					</td>
 					<td style="width:100%; white-space:nowrap; vertical-align:top;">

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+	<!-- Address hierarchy level -->
+    <address_hierarchy_level address_hierarchy_level_id="1" name="Country" address_field="COUNTRY" uuid="763acac2-e9ed-4ea7-b024-4d4260de722c" required="1"/>
+    <address_hierarchy_level address_hierarchy_level_id="2" name="Region" parent_level_id="1" address_field="REGION" uuid="95c667cc-c72a-44ef-85d3-6d76e1692e6a" required="0"/>
+    <address_hierarchy_level address_hierarchy_level_id="3" name="District or County" parent_level_id="2" address_field="COUNTY_DISTRICT" uuid="63934f87-ac03-415c-9b30-36a0d251882e" required="1"/>
+    <address_hierarchy_level address_hierarchy_level_id="4" name="City or Village" parent_level_id="2" address_field="CITY_VILLAGE" uuid="63934f87-ac03-415c-9b30-42a0d852144e" required="1"/>
+    <address_hierarchy_level address_hierarchy_level_id="6" name="Facility" parent_level_id="2" address_field="ADDRESS4" uuid="63934f87-ac03-415c-9b30-36a0d251882e" required="1"/>
+
+	<!-- Address hierarchy -->
+    <address_hierarchy_entry address_hierarchy_entry_id="1" name="Tajikistan" level_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c20"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="2" name="Scotland" level_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c21"/>
+
+    <address_hierarchy_entry address_hierarchy_entry_id="3" name="Dushanbe" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c22"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="4" name="Khatlon Region" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c23"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="5" name="Republican Subordination" level_id="2" parent_id="1" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c24"/>
+
+    <address_hierarchy_entry address_hierarchy_entry_id="6" name="Fayzobod District" level_id="3" parent_id="5" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c25"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="7" name="Nurobod District" level_id="3" parent_id="5" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+    
+    <address_hierarchy_entry address_hierarchy_entry_id="8" name="Fayzobod City" level_id="4" parent_id="6" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="9" name="Nurobod Town" level_id="4" parent_id="7" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+
+    <address_hierarchy_entry address_hierarchy_entry_id="10" name="Fayzobod Central Testing Lab" level_id="6" parent_id="6" uuid="4ca3512d-530b-4ee1-a7d6-41b86cb01c26"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="11" name="Fayzobod Government Hospital" level_id="6" parent_id="6" uuid="4ca3512d-530b-4ee1-a7f6-41b86cb01c26"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="12" name="Dushanbe General Hospital" level_id="6" parent_id="3" uuid="4ca3512d-530b-4ee1-c7d6-55b86cb01c98"/>
+
+    <address_hierarchy_entry address_hierarchy_entry_id="13" name="Ferdowsi District" level_id="3" parent_id="5" uuid="39e712e6-564d-11ed-b027-00ff10882c85"/>
+    <address_hierarchy_entry address_hierarchy_entry_id="14" name="Shah Mansur District" level_id="3" parent_id="5" uuid="416b5384-564d-11ed-b027-00ff10882c85"/>
+
+
+    <location_tag location_tag_id="1" name="Login Location" description="When a user logs in and chooses a session location, they may only choose one with this tag" creator="1" date_created="2022-11-13 14:40:08" retired="0" uuid="b8bbf83e-645f-451f-8efe-a0db56f09676"/>
+    <location_tag location_tag_id="2" name="TBD" description="To be discussed" creator="1" date_created="2022-11-18 12:51:58" retired="0" uuid="f70e303f-84d9-48a4-aa0c-1a6dc748b050"/>
+    <location_tag location_tag_id="3" name="DOTS Facility" creator="1" date_created="2022-11-18 17:06:25" retired="0" uuid="b9af9b6d-e69d-4d76-9fbb-dc3c4badce81"/>
+    <location_tag location_tag_id="4" name="MDRTB Facility" creator="1" date_created="2022-11-18 17:06:34" retired="0" uuid="7e56a2d3-2082-4dd1-8786-f77ab3a9e2ce"/>
+
+    <location_attribute_type location_attribute_type_id="1" name="LEVEL" description="The geographical hierarchy level of this location" datatype="org.openmrs.customdatatype.datatype.FreeTextDatatype" min_occurs="0" max_occurs="1" creator="1" date_created="2022-11-06 11:23:01" changed_by="1" date_changed="2022-11-18 12:42:53" retired="0" uuid="d35dd86d-a066-4a2d-9aec-ead3ae021fe4"/>
+
+	<!-- Locations - Regions -->
+	<location location_id="50" name="Dushanbe" description="The capital city, as well as region" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="508cb932-a65d-4f98-a5d7-a5eff3ae9dcb" />
+    <location_attribute location_attribute_id="1" location_id="50" attribute_type_id="1" value_reference="REGION" uuid="d66009e8-6251-4b82-b607-6225b7d19781" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="51" name="Districts of Republican Subordination" description="" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="2a7ac6d7-9824-4265-bfe1-01934af173d4" />
+    <location_attribute location_attribute_id="2" location_id="51" attribute_type_id="1" value_reference="REGION" uuid="28fbc634-eb74-4ed7-a0fc-139272f59b84" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="52" name="Khatlon" description="Khatlon region further divides into two sub-regions" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="874f272f-48f1-4d7d-bc1b-d47bb416c268" />
+    <location_attribute location_attribute_id="3" location_id="52" attribute_type_id="1" value_reference="REGION" uuid="f4e4fa14-94e3-449b-9755-45d45598b3e3" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="53" name="Other" description="Other option for locations free from hierarchy" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="fecef0bb-10ef-423b-b51a-385243994e29" />
+
+	<!-- Locations - Sub-regions -->
+	<location location_id="60" name="Bokhtar Subregion" description="" parent_location="52" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="c3109def-21b8-4218-8a69-abfbdadd4c6d" />
+    <location_attribute location_attribute_id="5" location_id="60" attribute_type_id="1" value_reference="SUBREGION" uuid="3d354e91-a46a-46ea-ab97-ff81a42d4222" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="61" name="Kulob Subregion" description="" parent_location="52" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="8200c347-8e18-4905-b306-c29bf9836132" />
+    <location_attribute location_attribute_id="6" location_id="61" attribute_type_id="1" value_reference="SUBREGION" uuid="7f4922c4-f937-4056-a1ce-b226be64a0ca" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+
+	<!-- Locations - Districts -->
+	<location location_id="70" name="Shohmansur" description="" parent_location="50" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="22bff0fa-0b02-49a1-abb7-4f5a4d22510a" />
+	<location location_id="71" name="Sino" description="" parent_location="50" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="752a0824-bf77-4a1f-8b78-af6541e2e02f" />
+	<location location_id="72" name="Firdavsi" description="" parent_location="50" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="a8b79619-206a-49c1-beef-8bc330b1078a" />
+	<location location_id="73" name="Vahdat" description="" parent_location="51" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="47aa483c-53e5-47c4-b9dd-16bd8ba36fc3" />
+	<location location_id="74" name="Tojikobod" description="" parent_location="51" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="54dcf648-5c34-4394-9482-b3c9d08d591e" />
+    <location_attribute location_attribute_id="7" location_id="74" attribute_type_id="1" value_reference="DISTRICT" uuid="e0e2d540-dff0-46c2-8e76-bb785020c6f5" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="75" name="Fayzobod" description="" parent_location="51" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="393ee1e4-01fc-4776-a7e8-bb590382f51f" />
+    <location_attribute location_attribute_id="8" location_id="75" attribute_type_id="1" value_reference="DISTRICT" uuid="41c64114-4973-47d3-b747-4c455b74c679" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="76" name="A. Jomi" description="" parent_location="60" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="a4d677a9-07dd-4422-be69-4075a4e14ce6" />
+	<location location_id="77" name="Panj" description="" parent_location="60" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="29694f47-b8b8-4c61-9c8f-b1b29003639d" />
+	<location location_id="78" name="Kulob City" description="" parent_location="61" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="56268aba-e995-455a-8287-296755668f5b" />
+	<location location_id="79" name="Muminobod" description="" parent_location="61" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="154eeccc-80fb-425c-9948-cd4e79260014" />
+
+	<location location_id="80" name="Shohmansur Facility" description="" parent_location="70" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="aaaabbbb-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="9" location_id="80" attribute_type_id="1" value_reference="FACILITY" uuid="bbbbbbbb-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="81" name="Sino Facility" description="" parent_location="71" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="aaaacccc-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="10" location_id="81" attribute_type_id="1" value_reference="FACILITY" uuid="ccccbbbb-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="82" name="Firdavsi Facility" description="" parent_location="72" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="aaaadddd-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="11" location_id="82" attribute_type_id="1" value_reference="FACILITY" uuid="ddddbbbb-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="83" name="Vahdat Facility" description="" parent_location="73" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="aaaaeeee-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="12" location_id="83" attribute_type_id="1" value_reference="FACILITY" uuid="eeeebbbb-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="84" name="Tojikobod Facility" description="" parent_location="74" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="aaaaffff-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="13" location_id="84" attribute_type_id="1" value_reference="FACILITY" uuid="ffffbbbb-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="85" name="Fayzobod Facility" description="" parent_location="75" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="bbbbaaaa-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="14" location_id="85" attribute_type_id="1" value_reference="FACILITY" uuid="ccccaaaa-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="86" name="A. Jomi Facility" description="" parent_location="76" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="bbbbbbbb-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="15" location_id="86" attribute_type_id="1" value_reference="FACILITY" uuid="ddddaaaa-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="87" name="Panj Facility" description="" parent_location="77" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="bbbbcccc-0b02-49a1-abb7-4f5a4d22510a" />
+    <location_attribute location_attribute_id="16" location_id="87" attribute_type_id="1" value_reference="FACILITY" uuid="eeeeaaaa-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<!-- Other (independent) -->
+	<location location_id="88" name="National Regional Lab" description="" parent_location="53" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="35b5b2e4-9e67-42cd-bd66-1114a5aa936a" />
+    <location_attribute location_attribute_id="17" location_id="88" attribute_type_id="1" value_reference="FACILITY" uuid="ffffaaaa-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+	<location location_id="89" name="National TB Centre" description="" parent_location="53" creator="1" country="Tajikistan" state_province="" date_created="2022-08-01 00:00:00.0" retired="false" uuid="d5a217ba-2eac-4af8-9f94-3627db8c04de" />
+    <location_attribute location_attribute_id="18" location_id="89" attribute_type_id="1" value_reference="FACILITY" uuid="ggggaaaa-0b02-49a1-abb7-4f5a4d22510a" creator="1" date_created="2022-11-06 11:24:45" voided="0"/>
+
+
+	<!-- Locations - Facilities -->
+	<location location_id="101" name="Hogwartz" description="Hogwarts School of Witchcraft and Wizardry" creator="1" state_province="Highlands of Scotland" country="Scotland" date_created="2022-08-01 00:00:00.0" retired="false" uuid="f08ba64b-ea57-4a41-b33c-9dfc59b0c6ff" />
+	<location location_id="102" name="Diagon Alley" description="A high street located in London for wizard world" state_province="London" country="England" creator="1" date_created="2022-08-20 00:00:00.0" retired="false" uuid="c9ae3a36-7466-4a56-8f06-3bfbc64fcde" />
+	<location location_id="103" name="The Leaky Cauldron" state_province="London" country="England" description="A dark pub and inn for wizards, located on the Diagon Alley, offering food, drinks and rooms" parent_location="102" creator="1" date_created="2022-08-22 00:00:00.0" retired="false" uuid="6f42abbc-caac-40ae-a94e-9e30ca15c125" />
+    <location location_id="200" name="Fayzobod Central Testing Lab" country="Tajikistan" state_province="Districts of Republican Subordination" county_district="Fayzobod" address4="Fayzobod Central Testing Lab" creator="1" date_created="2022-10-25 00:00:00" retired="0" uuid="f5fa1b29-5649-11ed-b027-00ff10882c85"/>
+    <location_attribute location_attribute_id="19" location_id="200" attribute_type_id="1" value_reference="FACILITY" uuid="a1b2c3d4-5649-11ed-b027-00ff10882c85" creator="1" date_created="2022-10-25 00:00:00" voided="0"/>
+    <location location_id="201" name="Dushanbe General Hospital" country="Tajikistan" state_province="Dushanbe" county_district="Ferdowsi District" address4="Dushanbe General Hospital" creator="1" date_created="2022-10-25 00:00:00" retired="false" uuid="ef6596b3-5649-11ed-b027-00ff10882c85"/>
+
+</dataset>

@@ -4,14 +4,15 @@
 <%@ taglib prefix="mdrtb" uri="/WEB-INF/view/module/mdrtb/taglibs/mdrtb.tld" %>
 <%@ taglib prefix="wgt" uri="/WEB-INF/view/module/htmlwidgets/resources/htmlwidgets.tld" %>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js"/>
+<openmrs:htmlInclude file="mdrtb.css"/>
+
+
 <!-- only show the headers if we are in edit mode (i.e,. we have an existing patient id) -->
 <c:if test="${! empty patientId && patientId != -1}">
 	<openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}"/>
-	<openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/>
+	<%-- <openmrs:portlet url="mdrtbSubheader" id="mdrtbSubheader" moduleId="mdrtb" patientId="${!empty patientId ? patientId : program.patient.id}" parameters="patientProgramId=${patientProgramId}"/> --%>
 </c:if>
-
-<!-- TODO: clean up above paths so they use dynamic reference -->
-<!-- TODO: add privileges? -->
 
 <!-- SPECIALIZED STYLES FOR THIS PAGE -->
 <style type="text/css">
@@ -19,7 +20,7 @@
 </style>
 
 <!-- JQUERY FOR THIS PAGE -->
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
 	var $j = jQuery.noConflict();	
 
@@ -70,11 +71,10 @@
 				$j('#voidReason').val('');
 			} 
 		});
-		
-
 	});
--->
+
 </script>
+
 <!-- END JQUERY -->
 
 <!-- START PAGE DIV -->
@@ -82,13 +82,13 @@
 
 <!--  EDIT/ADD PATIENT BOX -->
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.patientDetails" text="Patient Details"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.patientDetails" text="Patient Details"/></b>
 <div class="box" style="margin:0px;">
 
 <!--  DISPLAY ANY ERROR MESSAGES -->
 <c:if test="${fn:length(errors.allErrors) > 0}">
 	<c:forEach var="error" items="${errors.allErrors}">
-		<span class="error"><spring:message code="${error.code}"/></span><br/><br/>
+		<span class="error"><mdrtb:message code="${error.code}"/></span><br/><br/>
 	</c:forEach>
 	<br/>
 </c:if>
@@ -97,13 +97,15 @@
 <input type="hidden" name="successURL" value="${successURL}" />
 <input type=hidden name="patientId" value="${patientId}"/>
 <input type=hidden name="patientProgramId" value="${patientProgramId}"/>
+<input type=hidden name="add" value="${add}"/>
 
 <table style="padding:6px">
 
 <tr>
-<th style="headerCell"><spring:message code="mdrtb.name"/></th>
+<th style="headerCell"><mdrtb:message code="mdrtb.name"/></th>
 <td>
 <table cellspacing="0" cellpadding="0" border="0">
+
 <openmrs:portlet url="nameLayout" id="namePortlet" size="columnHeaders" parameters="layoutShowTable=false|layoutShowExtended=false" /></td>
 <spring:nestedPath path="patientCommand.patient.personName">
 <openmrs:portlet url="nameLayout" id="namePortlet" size="inOneRow" parameters="layoutMode=edit|layoutShowTable=false|layoutShowExtended=false" />
@@ -114,19 +116,41 @@
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
+
+<c:choose>
+<c:when test="${add eq '1' }">
 <tr>
-<th class="headerCell"><spring:message code="mdrtb.identifierNumbers"/></th>
+<th class="headerCell"><mdrtb:message code="mdrtb.identifierNumbers"/></th>
 <td>
 <table>
+<input name="identifierType" type="hidden" value="${mdrtbIdentifier.id}"/>
+<input name="identifierId" type="hidden" value=""/>
 <tr>
-<th><spring:message code="mdrtb.identifierType"/></th>
-<th><spring:message code="mdrtb.identifier"/></th>
-<c:if test="${showIdentifierLocationSelector}">
-	<th><spring:message code="mdrtb.identifierLocation"/></th>
-</c:if>
+<td>${mdrtbIdentifier.name}</td>
+<td><input name="identifierValue" type="text"></td>
 </tr>
+<tr>
 
-<c:forEach var="type" items="${patientIdentifierTypesAutoAssigned}">
+<td>
+<div style="display: none;">
+<mdrtb:message code="mdrtb.identifierLocation"/>
+</div>
+</td>
+
+<td>
+<div style="display: none;">
+<select name="identifierLocation">
+	<c:forEach var="location" items="${locations}">
+		<option value="${location.id}">${location.displayString}</option>
+	</c:forEach>
+	</select>
+</td>
+</div>
+</tr>
+</table>
+</c:when>
+<c:otherwise>
+<%-- <c:forEach var="type" items="${patientIdentifierTypesAutoAssigned}">
 <input name="identifierId" type="hidden" value="${! empty patientIdentifierMap[type.id] ? patientIdentifierMap[type.id].id : ''}"/>
 <input name="identifierType" type="hidden" value="${type.id}"/>
 <input name="identifierValue" type="hidden" value="${! empty patientIdentifierMap[type.id] ? patientIdentifierMap[type.id].identifier : ''}"/>
@@ -138,7 +162,7 @@
 		${patientIdentifierMap[type.id].identifier}
 	</c:when>
 	<c:otherwise>
-		(<spring:message code="mdrtb.willBeAutoAssigned" text="Will be auto-assigned"/>)
+		(<mdrtb:message code="mdrtb.willBeAutoAssigned" text="Will be auto-assigned"/>)
 	</c:otherwise>
 </c:choose>
 </td>
@@ -154,58 +178,65 @@
 </tr>
 </c:forEach>	
 
+
 <c:forEach var="type" items="${patientIdentifierTypes}">
 <input name="identifierId" type="hidden" value="${! empty patientIdentifierMap[type.id] ? patientIdentifierMap[type.id].id : ''}"/>
 <input name="identifierType" type="hidden" value="${type.id}"/>
 <tr>
 <td>${type.name}</td>
 <td><input name="identifierValue" type="text" value="${! empty patientIdentifierMap[type.id] ? patientIdentifierMap[type.id].identifier : ''}"/></td>
+<td>&nbsp;</td>
+</tr>
+
 <c:if test="${showIdentifierLocationSelector}">
+	<tr>
+	<td><mdrtb:message code="mdrtb.identifierLocation"/></td>
 	<td><select name="identifierLocation">
 	<option value=""/>
 	<c:forEach var="location" items="${locations}">
 		<option value="${location.id}" <c:if test="${location == patientIdentifierMap[type.id].location}">selected</c:if>>${location.displayString}</option>
 	</c:forEach>
-	</select>
+	</select></td>
+	</tr>
 </c:if>
-</td>
-</tr>
+
 </c:forEach>	
-</table>
-</td>
-</tr>
+ --%>
+</c:otherwise>
+</c:choose>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th class="headerCell"><spring:message code="mdrtb.address"/></th>
+<th class="headerCell"><mdrtb:message code="mdrtb.address"/></th>
 <td>
 <spring:nestedPath path="patientCommand.address">
 <openmrs:portlet url="addressLayout" id="addressPortlet" size="full" parameters="layoutMode=edit|layoutShowTable=true|layoutShowExtended=false" />
 </spring:nestedPath>
+
 </td>
 </tr>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th class="headerCell"><spring:message code="patientDashboard.demographics"/></th>
+<th class="headerCell"><mdrtb:message code="patientDashboard.demographics"/></th>
 <td>
 <table cellspacing="3" cellpadding="3">
 <tr>
-<td><spring:message code="mdrtb.gender"/></td>
+<td><mdrtb:message code="mdrtb.gender"/></td>
 <td>
 <openmrs:forEachRecord name="gender">
 <input type="radio" name="patient.gender" id="${record.key}" value="${record.key}" <c:if test="${record.key == patientCommand.patient.gender}">checked</c:if> />
-<label for="${record.key}"> <spring:message code="mdrtb.${record.value}"/> </label>
+<label for="${record.key}"> <mdrtb:message code="mdrtb.${record.value}"/> </label>
 </openmrs:forEachRecord>
 </td>
 </tr>
 <tr>
-<td><spring:message code="mdrtb.birthdate"/></td>
+<td><mdrtb:message code="mdrtb.birthdate"/></td>
 <td>
 <openmrs_tag:dateField formFieldName="patient.birthdate" startValue="${patientCommand.patient.birthdate}"/>
-<spring:message code="mdrtb.estimated"/>
+<mdrtb:message code="mdrtb.estimated"/>
 <input type="hidden" id="birthdateEstimated" name="patient.birthdateEstimated" value="${patientCommand.patient.birthdateEstimated}"/>
 <input type="checkbox" id="birthdateEstimatedCheckbox" name="birthdateEstimatedCheckbox" value="true" <c:if test="${patientCommand.patient.birthdateEstimated == true}">checked</c:if> />
 </td>
@@ -217,18 +248,18 @@
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th><spring:message code="mdrtb.deceased" text="Deceased"/></th>
+<th><mdrtb:message code="mdrtb.deceased" text="Deceased"/></th>
 <td>
 <input type="hidden" id="dead" name="patient.dead" value="${patientCommand.patient.dead}"/>
 <input type="checkbox" id="deadCheckbox" name="deadCheckbox" value="true" <c:if test="${patientCommand.patient.dead == true}">checked</c:if> />
 </td>
 </tr>
 <tr id="deathDateRow" <c:if test="${!patient.dead}">style="display:none"</c:if>>
-<th><spring:message code="mdrtb.deathDate"/></th>
+<th><mdrtb:message code="mdrtb.deathDate"/></th>
 <td><openmrs_tag:dateField formFieldName="patient.deathDate" startValue="${patientCommand.patient.deathDate}"/></td>
 </tr>
 <tr id="causeOfDeathRow" <c:if test="${!patientCommand.patient.dead}">style="display:none"</c:if>>
-<th><spring:message code="mdrtb.causeOfDeath"/></th>
+<th><mdrtb:message code="mdrtb.causeOfDeath"/></th>
 <td><wgt:widget id="causeOfDeath" name="patient.causeOfDeath" type="org.openmrs.Concept" object="${patientCommand.patient}" property="causeOfDeath"/></td>
 </tr>
 
@@ -237,12 +268,12 @@
 <openmrs:forEachDisplayAttributeType personType="patient" displayType="viewing" var="attrType">
 	<tr>
 		<th class="headerCell">
-		<spring:message code="PersonAttributeType.${fn:replace(attrType.name, ' ', '')}" text="${attrType.name}"/></th>
+		<mdrtb:message code="PersonAttributeType.${fn:replace(attrType.name, ' ', '')}" text="${attrType.name}"/></th>
 		<td class="inputCell">
 			<openmrs:fieldGen 
 					type="${attrType.format}" 
-					formFieldName="patient.attributeMap['${attrType.name}'].value"
-					val="${patientCommand.patient.attributeMap[attrType.name].hydratedObject}"
+					formFieldName="patient.attributeMap[${attrType.name}].value" 
+					val="${patientCommand.patient.attributeMap[attrType.name].hydratedObject}" 
 					parameters="optionHeader=[blank]|showAnswers=${attrType.foreignKey}" />
 		</td>
 	</tr>
@@ -251,7 +282,7 @@
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
 <tr>
-<th><spring:message code="general.voided"/></th>
+<th><mdrtb:message code="general.voided"/></th>
 <td>
 <input type="hidden" id="voided" name="patient.voided" value="${patientCommand.patient.voided}"/>
 <input type="checkbox" id="voidedCheckbox" name="voidedCheckbox" value="true" <c:if test="${patientCommand.patient.voided}">checked</c:if> />
@@ -259,15 +290,26 @@
 </tr>
 
 <tr id="voidReasonRow" <c:if test="${!patientCommand.patient.voided}">style="display:none"</c:if>>
-<th><spring:message code="general.voidReason"/></th>
+<th><mdrtb:message code="general.voidReason"/></th>
 <td><input id="voidReason" name="patient.voidReason" value="${patientCommand.patient.voidReason}"/></td>
 </tr>
 
 <tr height="5"><td colspan="2">&nbsp;</td></tr>
 
+<c:if test="${add ne '1' }">
+<tr>
+<th><mdrtb:message code="general.createdBy"/></th>
+<td>${patientCommand.patient.personCreator.person.personName.fullName} - ${patient.personDateCreated}</td>
+</tr>
+<tr>
+<th><mdrtb:message code="general.changedBy"/></th>
+<td>${patientCommand.patient.personChangedBy.person.personName.fullName} - ${patient.personDateChanged}</td>
+</tr>
+</c:if>
+
 <tr><td colspan="2">
-<button type="submit"><spring:message code="Patient.save" text="Save Patient"/></button>
-<button id="reset" type="reset"><spring:message code="general.cancel" text="Cancel"/></button></td></tr>
+<button type="submit"><mdrtb:message code="Patient.save" text="Save Patient"/></button>
+<button id="reset" type="reset"><mdrtb:message code="general.cancel" text="Cancel"/></button></td></tr>
 
 </table>
 

@@ -1,283 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module configVersion="1.0">
-	
-	<!-- Base Module Properties -->
-	<id>@MODULE_ID@</id>
-	<name>@MODULE_NAME@</name>
-	<version>@MODULE_VERSION@</version>
-	<package>@MODULE_PACKAGE@</package>
-	<author>Partners in Health</author>
-	<description>MDR TB Module</description>
-	<activator>org.openmrs.module.mdrtb.MdrtbActivator</activator>
-		
-	<updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 
-	<require_version>1.9.1</require_version>
-	
+<module configVersion="1.2">
+
+	<!-- Base Module Properties -->
+	<id>${project.parent.artifactId}</id>
+	<name>${project.parent.name}</name>
+	<version>${project.parent.version}</version>
+	<package>org.openmrs.module.mdrtb</package>
+	<author>Esquared Systems</author>
+	<description>${project.parent.description}</description>
+
+	<activator>org.openmrs.module.mdrtb.MdrtbActivator</activator>
+
+	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
+	<!-- /Base Module Properties -->
+
+	<require_version>2.4.0</require_version>
+
 	<require_modules>
-		<require_module version="0.7">org.openmrs.module.reporting</require_module>
+		<require_module version="2.0.0">org.openmrs.module.reporting</require_module>
+		<require_module version="2.10.0">org.openmrs.module.reportingcompatibility</require_module>
+		<require_module version="2.51.0">org.openmrs.module.webservices.rest</require_module>
+		<require_module version="2.21.0">org.openmrs.module.addresshierarchy</require_module>
 	</require_modules>
-		
-	<extension>
-		<point>org.openmrs.admin.list</point>
-		<class>org.openmrs.module.mdrtb.extension.html.AdminList</class>
-	</extension>
-	<extension>
-		<point>org.openmrs.patientDashboardTab</point>
-		<class>org.openmrs.module.mdrtb.extension.html.MdrtbPatientDashboardTabExt</class>
-	</extension>
+
+	<mappingFiles>
+		LabTestAttribute.hbm.xml
+	</mappingFiles>
+
+	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
 		<class>org.openmrs.module.mdrtb.extension.html.MdrtbGutterItem</class>
 	</extension>
 
-	<!--  AOP advice points -->
-	<advice>
-		<point>org.openmrs.api.ConceptService</point>
-		<class>org.openmrs.module.mdrtb.service.ConceptServiceAdvice</class>
-	</advice>
+	<!-- Administration section: MDR-TB home + lab test metadata management -->
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>org.openmrs.module.mdrtb.extension.html.AdminList</class>
+	</extension>
 
-	<!-- Global properties -->
+	<!-- "Lab Tests" tab on the legacy patient dashboard (patientLabTests portlet) -->
+	<extension>
+		<point>org.openmrs.patientDashboardTab</point>
+		<class>org.openmrs.module.mdrtb.extension.html.LabTestDashboardTabExt</class>
+	</extension>
 
-	<globalProperty>
-		<property>@MODULE_ID@.program_name</property>
-		<defaultValue>MDR-TB PROGRAM</defaultValue>
-		<description>
-			MDR-TB program name.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.roles_to_redirect_from_openmrs_homepage</property>
-		<defaultValue/>
-		<description>
-			Comma-separated list of role names. Any user in a role listed here will not be able to see the regular OpenMRS homepage.
-			That will redirect them to the MDR-TB homepage instead.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.patient_identifier_type_list</property>
-		<defaultValue/>
-		<description>
-			Pipe delimited list of all patient identifier types associated with the MDRTB program.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.birt_report_list</property>
-		<defaultValue/>
-		<description>
-			List all BIRT reports by name that correspond to the MDR-TB program.  Pipe delimited.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.database_version</property>
-		<defaultValue>1.0.0</defaultValue>
-		<description>The version trigger for the contents of sqldiff.xml
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.formIdToAttachToBacteriologyEntry</property>
-		<defaultValue/>
-		<description>If you would like for direct entry of a smear and culture to have a formId attached to the encounter, enter that here.  This is useful if you want direct smear entry to show up in the cat-iv treatment card.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.specimen_collection_encounter_type</property>
-		<defaultValue>Specimen Collection</defaultValue>
-		<description>Name of the specimen collection encounter type.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.intake_encounter_type</property>
-		<defaultValue>MDR-TB Intake</defaultValue>
-		<description>Name of the intake encounter type.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.follow_up_encounter_type</property>
-		<defaultValue>MDR-TB Follow Up</defaultValue>
-		<description>Name of the follow-up encounter type.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.defaultDstDrugs</property>
-		<defaultValue>ISONIAZID|RIFAMPICIN|ETHAMBUTOL|PYRAZINAMIDE|STREPTOMYCIN</defaultValue>
-		<description>The list of default drugs to display in the specimen "Add Dst" list</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.fixedIdentifierLocation</property>
-		<defaultValue></defaultValue>
-		<description>Takes as a parameter a location name.  If this property exists, when creating patient identifiers, the patient identifier location is set to this value (and setting the location is not presented to the user as an option).</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.colorMap</property>
-		<defaultValue>CONTAMINATED:lightgrey|UNSATISFACTORY SAMPLE:lightgrey|MODERATELY POSITIVE:lightcoral|STRONGLY POSITIVE:lightcoral|WEAKLY POSITIVE:lightcoral|WAITING FOR TEST RESULTS:lightgrey|SCANTY:khaki|NEGATIVE:lightgreen|POSITIVE:lightcoral|SUSCEPTIBLE TO TUBERCULOSIS DRUG:lightgreen|INTERMEDIATE TO TUBERCULOSIS DRUG:khaki|RESISTANT TO TUBERCULOSIS DRUG:lightcoral|NONE:none</defaultValue>
-		<description>Pipe-delimited list mapping concept ids or concept mappings to color names and/or hex codes for display in the patient chart and (potentially) elsewhere.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.primaryPatientIdentifierType</property>
-		<defaultValue/>
-		<description>The primary patient identifier to display for patients</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.findPatientNumResults</property>
-		<defaultValue>20</defaultValue>
-		<description>Number of results to display when searching for patient</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.specimenReports.daysSinceSmear</property>
-		<defaultValue>14</defaultValue>
-		<description>Stores the "days since smear" variable for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.specimenReports.daysSinceCulture</property>
-		<defaultValue>14</defaultValue>
-		<description>Stores the "days since culture" variable for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.specimenReports.defaultLabId</property>
-		<defaultValue>1</defaultValue>
-		<description>Stores the default lab ID for the specimen reports.  You should never need to modify this parameter here, as it is updated via the specimen reports UI.</description>
-	</globalProperty>
-	
-	
-	<globalProperty>
-		<property>@MODULE_ID@.treatment_supporter_person_attribute_type</property>
-		<defaultValue>Treatment Supporter</defaultValue>
-		<description>
-			LEGACY: The person attribute type that corresponds to being a treatment supporter/acompanateur/dots worker.
-		</description>
-	</globalProperty>	
-	<globalProperty>
-		<property>@MODULE_ID@.treatment_supporter_relationship_type</property>
-		<defaultValue>Treatment Supporter/Treatment Supportee</defaultValue>
-		<description>LEGACY: The relationship type used to describe the relationship from a treatment supporter (A) to a patient (B)
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.patient_contact_id_attribute_type</property>
-		<defaultValue>MDR-TB Patient Contact ID Number</defaultValue>
-		<description>LEGACY: The person attribute type corresponding to a patient contact's ID number.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.test_result_encounter_type_DST</property>
-		<defaultValue/>
-		<description>
-			LEGACY - Only used in 2.0 by migration script: This should be the name of the encounter type that you want to use for encounters wrapping DST results.
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.test_result_encounter_type_bacteriology</property>
-		<defaultValue/>
-		<description>
-			LEGACY - Only used in 2.0 by migration script: This should be the name of the encounter type that you want to use for encounters wrapping bacteriology (smear+culture) results.
-		</description>
-	</globalProperty>	
-	<globalProperty>
-		<property>@MODULE_ID@.mdrtb_forms_list</property>
-		<defaultValue/>
-		<description>
-			LEGACY - Only used in 2.0 by migration script: List all MDR-TB forms by name, pipe delimited.  These will appear in the form list on the MDR-TB home.
-		</description>
-	</globalProperty>
-	
-	<dwr>
-		<allow>
-			<create creator="new" javascript="MdrtbFindPatient">
-				<param name="class" value="org.openmrs.module.mdrtb.web.dwr.MdrtbFindPatient"/>
-				<include method="findPatients"/>
-				<include method="findPeople"/>
-				<include method="findAllPeople"/>
-			</create>		
-		</allow>
-		
-		<signatures>
-			<![CDATA[  ]]>
-		</signatures>	
-	</dwr>
+	<aware_of_modules>
+		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+	</aware_of_modules>
 
-	<!-- Internationalization -->
-	<!-- All message codes should start with ${project.parent.artifactId}. -->
+	<!-- Required Privileges -->
+	<privilege>
+		<name>Edit DOTS-MDR Data</name>
+		<description>Allows user to access Form Entry pages/functions</description>
+	</privilege>
+
+	<!-- Lab test privileges. Names must match the constants in MdrtbConfig, which
+	     the @Authorized annotations on LabTestService refer to. -->
+	<privilege>
+		<name>View LabTest Orders</name>
+		<description>Allows user to view lab test orders</description>
+	</privilege>
+	<privilege>
+		<name>Add LabTest Orders</name>
+		<description>Allows user to create lab test orders</description>
+	</privilege>
+	<privilege>
+		<name>Edit LabTest Orders</name>
+		<description>Allows user to edit lab test orders</description>
+	</privilege>
+	<privilege>
+		<name>Delete LabTest Orders</name>
+		<description>Allows user to void lab test orders</description>
+	</privilege>
+	<privilege>
+		<name>View LabTest Samples</name>
+		<description>Allows user to view lab test samples</description>
+	</privilege>
+	<privilege>
+		<name>Add LabTest Samples</name>
+		<description>Allows user to create lab test samples</description>
+	</privilege>
+	<privilege>
+		<name>Edit LabTest Samples</name>
+		<description>Allows user to edit lab test samples</description>
+	</privilege>
+	<privilege>
+		<name>Delete LabTest Samples</name>
+		<description>Allows user to void lab test samples</description>
+	</privilege>
+	<privilege>
+		<name>View LabTest Results</name>
+		<description>Allows user to view lab test results</description>
+	</privilege>
+	<privilege>
+		<name>Add LabTest Results</name>
+		<description>Allows user to enter lab test results</description>
+	</privilege>
+	<privilege>
+		<name>Edit LabTest Results</name>
+		<description>Allows user to edit lab test results</description>
+	</privilege>
+	<privilege>
+		<name>Delete LabTest Results</name>
+		<description>Allows user to void lab test results</description>
+	</privilege>
+	<privilege>
+		<name>View LabTest Metadata</name>
+		<description>Allows user to view lab test types and attribute types</description>
+	</privilege>
+	<privilege>
+		<name>Add LabTest Metadata</name>
+		<description>Allows user to create lab test types and attribute types</description>
+	</privilege>
+	<privilege>
+		<name>Edit LabTest Metadata</name>
+		<description>Allows user to edit lab test types and attribute types</description>
+	</privilege>
+	<privilege>
+		<name>Delete LabTest Metadata</name>
+		<description>Allows user to retire lab test types and attribute types</description>
+	</privilege>
+
+	<!-- Message bundles are supplied by the mdrtb-api dependency when the module is packaged. -->
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>
-	</messages>
-	<messages>
-		<lang>fr</lang>
-		<file>messages_fr.properties</file>
-	</messages>
-	<messages>
-		<lang>es</lang>
-		<file>messages_es.properties</file>
-	</messages>
-	<messages>
-		<lang>ht</lang>
-		<file>messages_ht.properties</file>
-	</messages>
-	<messages>
-		<lang>pt</lang>
-		<file>messages_pt.properties</file>
-	</messages>
-	<messages>
-		<lang>de</lang>
-		<file>messages_de.properties</file>
-	</messages>
-	<messages>
-		<lang>de</lang>
-		<file>messages_de.properties</file>
-	</messages>
-	<messages>
-		<lang>fa</lang>
-		<file>messages_fa.properties</file>
-	</messages>
-	<messages>
-		<lang>si</lang>
-		<file>messages_si.properties</file>
-	</messages>
-	<messages>
-		<lang>hi</lang>
-		<file>messages_hi.properties</file>
-	</messages>
-	<messages>
-		<lang>ar</lang>
-		<file>messages_ar.properties</file>
-	</messages>
-	<messages>
-		<lang>pl</lang>
-		<file>messages_pl.properties</file>
-	</messages>
-	<messages>
-		<lang>it</lang>
-		<file>messages_it.properties</file>
-	</messages>
-	<messages>
-		<lang>el</lang>
-		<file>messages_el.properties</file>
 	</messages>
 	<messages>
 		<lang>ru</lang>
 		<file>messages_ru.properties</file>
 	</messages>
 	<messages>
-		<lang>lt</lang>
-		<file>messages_lt.properties</file>
+		<lang>tj</lang>
+		<file>messages_tj.properties</file>
 	</messages>
-	<messages>
-		<lang>hy</lang>
-		<file>messages_hy.properties</file>
-	</messages>
-	<messages>
-		<lang>te</lang>
-		<file>messages_te.properties</file>
-	</messages>
-	<messages>
-		<lang>sw</lang>
-		<file>messages_sw.properties</file>
-	</messages>
-	<messages>
-		<lang>ku</lang>
-		<file>messages_ku.properties</file>
-	</messages>
-	<messages>
-		<lang>id_ID</lang>
-		<file>messages_id_ID.properties</file>
-	</messages>
-	<!-- /Internationalization -->
 
 </module>

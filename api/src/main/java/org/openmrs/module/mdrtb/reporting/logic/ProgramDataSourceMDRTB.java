@@ -30,66 +30,61 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.LogicUtil;
 
 /**
  * Hack which returns the latest MDRTB program enrollment date for all patients.
  */
 
 public class ProgramDataSourceMDRTB implements LogicDataSource {
-	
-	private static Log log = LogFactory.getLog(ProgramDataSourceMDRTB.class);
-	private static final Collection<String> keys = new ArrayList<String>();
 
-	/**
-	 * @see LogicDataSource#read(LogicContext, Cohort, .LogicCriteria)   
-	 */
+	private static Log log = LogFactory.getLog(ProgramDataSourceMDRTB.class);
+
+	private static final Collection<String> keys = new ArrayList<>();
+	
 	public Map<Integer, Result> read(LogicContext context, Cohort patients, LogicCriteria criteria) {
 		
 		log.info("read patient programs for " + patients.size() + " patients, criteria " + criteria);
-		Map<Integer, Result> resultSet = new HashMap<Integer, Result>();
+		Map<Integer, Result> resultSet = new HashMap<>();
 		Collection<PatientProgram> patientPrograms = getPatientPrograms(patients, criteria);
 		
 		for (PatientProgram patientProgram : patientPrograms) {
 			Integer personId = patientProgram.getPatient().getPersonId();
 			
 			Result result = new Result(patientProgram.getProgram().getConcept());
-            result.setResultDate(patientProgram.getDateEnrolled());
+			result.setResultDate(patientProgram.getDateEnrolled());
 
-			if (result != null) {
-				if (!resultSet.containsKey(personId)) {
-					resultSet.put(personId, result);
-				} 
-				else {
-				    Result oldResult = resultSet.get(personId);
-				    if (oldResult.getResultDate().before(result.getResultDate())){
-				        resultSet.remove(personId);
-				        resultSet.put(personId, result);
-				    }    
-				}
-			}
-		}
+            if (!resultSet.containsKey(personId)) {
+                resultSet.put(personId, result);
+            } else {
+                Result oldResult = resultSet.get(personId);
+                if (oldResult.getResultDate().before(result.getResultDate())) {
+                    resultSet.remove(personId);
+                    resultSet.put(personId, result);
+                }
+            }
+        }
 
-		LogicUtil.applyAggregators(resultSet, criteria, patients);
+		// TODO: investigate what this line does
+		// LogicUtil.applyAggregators(resultSet, criteria, patients);
 		return resultSet;
 	}
 	
 	/**
-	 * @see org.openmrs.logic.datasource.LogicDataSource#getDefaultTTL()
+	 * @see LogicDataSource#getDefaultTTL()
 	 */
 	public int getDefaultTTL() {
 		return 60 * 30; // 30 minutes
 	}
 	
 	/**
-	 * @see org.openmrs.logic.datasource.LogicDataSource#getKeys()
+	 * @see LogicDataSource#getKeys()
 	 */
 	public Collection<String> getKeys() {
 		return keys;
 	}
 	
 	/**
-	 * @see org.openmrs.logic.datasource.LogicDataSource#hasKey(java.lang.String)
+	 * @see LogicDataSource#hasKey(String)
 	 */
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
@@ -97,30 +92,24 @@ public class ProgramDataSourceMDRTB implements LogicDataSource {
 	
 	/**
 	 * Get the patient programs for the
-	 * 
-	 * @param patients
-	 * @param criteria
-	 * @return
-	 */
+	 *
+     */
 	public Collection<PatientProgram> getPatientPrograms(Cohort patients, LogicCriteria criteria) {
-		  Collection<PatientProgram> patientPrograms = new ArrayList<PatientProgram>();
-		  ProgramWorkflowService service = Context.getProgramWorkflowService();
-
-		      
-		      String token = criteria.getRootToken();
-    		  Program prog = service.getProgramByName(token);
-    		  List<Program> progList = new ArrayList<Program>();
-    		  progList.add(prog);
-    		  patientPrograms = service.getPatientPrograms(patients, progList);
-
-
+		Collection<PatientProgram> patientPrograms = new ArrayList<>();
+		ProgramWorkflowService service = Context.getProgramWorkflowService();
+		
+		String token = criteria.getRootToken();
+		Program prog = service.getProgramByName(token);
+		List<Program> progList = new ArrayList<>();
+		progList.add(prog);
+		patientPrograms = service.getPatientPrograms(patients, progList);
+		
 		//log.info("Patient programs: " + patientPrograms.size());
 		return patientPrograms;
 		
 	}
 	
-    
-    public void addKey(String key) {
-        getKeys().add(key);
-    }
+	public void addKey(String key) {
+		getKeys().add(key);
+	}
 }

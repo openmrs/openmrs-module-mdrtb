@@ -15,8 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mdrtb.lab.LabTest;
 import org.openmrs.module.mdrtb.MdrtbUtil;
-import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.api.LabTestService;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.specimen.Culture;
 import org.openmrs.module.mdrtb.specimen.CultureImpl;
 import org.openmrs.module.mdrtb.specimen.Dst;
@@ -28,6 +30,10 @@ import org.openmrs.module.mdrtb.specimen.SmearImpl;
 import org.openmrs.module.mdrtb.specimen.Specimen;
 import org.openmrs.module.mdrtb.specimen.SpecimenValidator;
 import org.openmrs.module.mdrtb.specimen.TestValidator;
+import org.openmrs.module.mdrtb.specimen.custom.HAIN;
+import org.openmrs.module.mdrtb.specimen.custom.HAINImpl;
+import org.openmrs.module.mdrtb.specimen.custom.Xpert;
+import org.openmrs.module.mdrtb.specimen.custom.XpertImpl;
 import org.openmrs.module.mdrtb.specimen.reporting.BacteriologyValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -57,20 +63,17 @@ public class SpecimenController extends AbstractSpecimenController {
 	
 	/**
 	 * Returns the smear that should be used to bind a form posting to
-	 * 
-	 * @param smearId
-	 * @param specimenId
-	 * @return
 	 */
 	@ModelAttribute("smear")
-	public Smear getSmear(@RequestParam(required = false, value="smearId") Integer smearId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+	public Smear getSmear(@RequestParam(required = false, value = "smearId") Integer smearId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		Smear smear = null;
 		
 		// only do something here if the smear id has been set
 		if (smearId != null) {
 			// smearId != -1 is means "this is a new smear"
 			if (smearId != -1) {
-				smear = Context.getService(MdrtbService.class).getSmear(smearId);
+				smear = Context.getService(MdrtbService.class).getSmear(Context.getObsService().getObs(smearId));
 			}
 			
 			// create the new smear if needed
@@ -78,27 +81,27 @@ public class SpecimenController extends AbstractSpecimenController {
 				smear = new SmearImpl();
 			}
 		}
-				
+		
 		// it's okay if we return null here, as this attribute is only used on a post
 		return smear;
 	}
 	
 	/**
 	 * Returns the culture that should be used to bind a form posting to
-	 * 
-	 * @param cultureId
-	 * @param specimenId
-	 * @return
 	 */
 	@ModelAttribute("culture")
-	public Culture getCulture(@RequestParam(required = false, value="cultureId") Integer cultureId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+	public Culture getCulture(@RequestParam(required = false, value = "cultureId") Integer cultureId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		Culture culture = null;
 		
 		// only do something here if the culture id has been set
 		if (cultureId != null) {
 			// cultureId != -1 is means "this is a new culture"
 			if (cultureId != -1) {
-				culture = Context.getService(MdrtbService.class).getCulture(cultureId);
+				// Expect a LabTest against this Id
+				LabTest labTest = Context.getService(LabTestService.class).getLabTest(cultureId);
+				culture = new CultureImpl(labTest);
+				// culture = Context.getService(MdrtbService.class).getCulture(cultureId);
 			}
 			
 			// create the new culture if needed
@@ -106,27 +109,27 @@ public class SpecimenController extends AbstractSpecimenController {
 				culture = new CultureImpl();
 			}
 		}
-				
+		
 		// it's okay if we return null here, as this attribute is only used on a post
 		return culture;
 	}
 	
 	/**
 	 * Returns the dst that should be used to bind a form posting to
-	 * 
-	 * @param dstId
-	 * @param specimenId
-	 * @return
 	 */
 	@ModelAttribute("dst")
-	public Dst getDst(@RequestParam(required = false, value="dstId") Integer dstId, @RequestParam(required = false, value="specimenId") Integer specimenId) {
+	public Dst getDst(@RequestParam(required = false, value = "dstId") Integer dstId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		Dst dst = null;
 		
 		// only do something here if the dst id has been set
 		if (dstId != null) {
 			// dstId != -1 is means "this is a new dst"
 			if (dstId != -1) {
-				dst = Context.getService(MdrtbService.class).getDst(dstId);
+				// Expect a LabTest against this Id
+				LabTest labTest = Context.getService(LabTestService.class).getLabTest(dstId);
+				dst = new DstImpl(labTest);
+				// culture = Context.getService(MdrtbService.class).getCulture(cultureId);
 			}
 			
 			// create the new dst if needed
@@ -134,32 +137,76 @@ public class SpecimenController extends AbstractSpecimenController {
 				dst = new DstImpl();
 			}
 		}
-				
+		
 		// it's okay if we return null here, as this attribute is only used on a post
 		return dst;
 	}
 	
+	/**
+	 * Returns the smear that should be used to bind a form posting to
+	 */
+	@ModelAttribute("xpert")
+	public Xpert getXpert(@RequestParam(required = false, value = "xpertId") Integer xpertId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
+		Xpert xpert = null;
+		
+		// only do something here if the smear id has been set
+		if (xpertId != null) {
+			// smearId != -1 is means "this is a new smear"
+			if (xpertId != -1) {
+				xpert = Context.getService(MdrtbService.class).getXpert(xpertId);
+			}
+			
+			// create the new xpert if needed
+			if (xpert == null) {
+				xpert = new XpertImpl();
+			}
+		}
+		
+		// it's okay if we return null here, as this attribute is only used on a post
+		return xpert;
+	}
+	
+	/**
+	 * Returns the smear that should be used to bind a form posting to
+	 */
+	@ModelAttribute("hain")
+	public HAIN getHAIN(@RequestParam(required = false, value = "hainId") Integer hainId,
+	        @RequestParam(required = false, value = "specimenId") Integer specimenId) {
+		HAIN hain = null;
+		
+		// only do something here if the hain id has been set
+		if (hainId != null) {
+			// hainId != -1 is means "this is a new hain"
+			if (hainId != -1) {
+				hain = Context.getService(MdrtbService.class).getHAIN(Context.getObsService().getObs(hainId));
+			}
+			
+			// create the new hain if needed
+			if (hain == null) {
+				hain = new HAINImpl();
+			}
+		}
+		
+		// it's okay if we return null here, as this attribute is only used on a post
+		return hain;
+	}
 	
 	/**
 	 * Returns the specimen that should be used to bind a form posting to
-	 * 
-	 * @param specimenId
-	 * @return
 	 */
 	@ModelAttribute("specimen")
-	public Specimen getSpecimen(@RequestParam(required = false, value="specimenId") Integer specimenId) {
+	public Specimen getSpecimen(@RequestParam(required = false, value = "specimenId") Integer specimenId) {
 		// for now, if no specimen is specified, default to the most recent specimen within the program
 		if (specimenId != null) {
-			return Context.getService(MdrtbService.class).getSpecimen(Context.getEncounterService().getEncounter(specimenId));
-		}
-		else {
+			return Context.getService(MdrtbService.class)
+			        .getSpecimen(Context.getEncounterService().getEncounter(specimenId));
+		} else {
 			return null;
 		}
 	}
-		
 	
-	@SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET) 
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showSpecimen(@RequestParam(required = false, value = "testId") String testId, ModelMap map) {
 		
 		// add the testId to the model map if there is one (this is used to make sure the proper detail page is shown after an edit)
@@ -173,44 +220,34 @@ public class SpecimenController extends AbstractSpecimenController {
 		return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 	}
 	
-	
-	/** 
+	/**
 	 * Handles the submission of a specimen form
-	 * 
-	 * @param specimen
-	 * @param specimenErrors
-	 * @param status
-	 * @param request
-	 * @param map
-	 * @param testId
-	 * @param scannedLabReport
-	 * @param removeScannedLabReports
-	 * @return
 	 */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST, params = "submissionType=specimen")
-	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult specimenErrors, 
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = false, value = "testId") Integer testId, 
-	                                  @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
-	                                  @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
-	                                  @RequestParam(required = false, value = "addScannedLabReportLocation") Location scannedLabReportLocation,
-	                                  @RequestParam(required = false, value = "removeScannedLabReport") String [] removeScannedLabReports) {
-    	
-    	
-    	for (Object e : specimenErrors.getFieldErrors()) {
-    		FieldError error = (FieldError) e;
-    	}
-
+	@SuppressWarnings("null")
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=specimen")
+	public ModelAndView processSubmit(@ModelAttribute("specimen") Specimen specimen, BindingResult specimenErrors,
+	        SessionStatus status, HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = false, value = "testId") Integer testId,
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "addScannedLabReport") MultipartFile scannedLabReport,
+	        @RequestParam(required = false, value = "addScannedLabReportLocation") Location scannedLabReportLocation,
+	        @RequestParam(required = false, value = "removeScannedLabReport") String[] removeScannedLabReports) {
+		
+		for (Object e : specimenErrors.getFieldErrors()) {
+			@SuppressWarnings("unused")
+			FieldError error = (FieldError) e;
+		}
+		
 		// validate
-    	if(specimen != null) {
-    		new SpecimenValidator().validate(specimen, specimenErrors);
-    	}
-    	
-    	// validate that a lab has been supplied if there's a scanned lab report
-    	if (scannedLabReport != null && !scannedLabReport.isEmpty() && scannedLabReportLocation == null) {
-    		specimenErrors.reject("mdrtb.specimen.errors.noLabForScannedLabReport", "Please specify a lab for this scanned lab report.");
-    	}
+		if (specimen != null) {
+			new SpecimenValidator().validate(specimen, specimenErrors);
+		}
+		
+		// validate that a lab has been supplied if there's a scanned lab report
+		if (scannedLabReport != null && !scannedLabReport.isEmpty() && scannedLabReportLocation == null) {
+			specimenErrors.reject("mdrtb.specimen.errors.noLabForScannedLabReport",
+			    "Please specify a lab for this scanned lab report.");
+		}
 		
 		if (specimenErrors.hasErrors()) {
 			map.put("testId", testId);
@@ -222,7 +259,7 @@ public class SpecimenController extends AbstractSpecimenController {
 		
 		// remove scanned lab reports if necessary
 		if (removeScannedLabReports != null) {
-			Set<String> removeScannedLabReportSet = new HashSet<String>(Arrays.asList(removeScannedLabReports));
+			Set<String> removeScannedLabReportSet = new HashSet<>(Arrays.asList(removeScannedLabReports));
 			
 			for (ScannedLabReport report : specimen.getScannedLabReports()) {
 				if (report.getId() != null && removeScannedLabReportSet.contains(report.getId())) {
@@ -231,108 +268,95 @@ public class SpecimenController extends AbstractSpecimenController {
 				}
 			}
 		}
-
-        // add any new scanned lab report
-        if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
-            // create the new result
-            ScannedLabReport report = specimen.addScannedLabReport();
-
-            report.setLab(scannedLabReportLocation);
-            report.setFile(scannedLabReport);
-        }
-
-        // save the actual update
+		
+		// save the actual update
 		Context.getService(MdrtbService.class).saveSpecimen(specimen);
+		
+		// add any new scanned lab report
+		if (scannedLabReport != null && !scannedLabReport.isEmpty()) {
+			// create the new result
+			ScannedLabReport report = specimen.addScannedLabReport();
 			
+			report.setLab(scannedLabReportLocation);
+			report.setFile(scannedLabReport);
+			
+			// need to save this explicitly for the obs handler to pick it up and handle it properly
+			Context.getService(MdrtbService.class).saveScannedLabReport(report);
+		}
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId + "&patientProgramId=" + patientProgramId, map);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimen.getId() + "&testId=" + testId
+		        + "&patientProgramId=" + patientProgramId, map);
 		
 	}
-    
-    /**
-     * Handles the submission of a smear form
-     *
-     * @param smear
-     * @param smearErrors
-     * @param status
-     * @param request
-     * @param map
-     * @param specimenId
-     * @param testId
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST, params = "submissionType=smear")
-	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult errors, 
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
-	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {	
-    	
-		// validate
-    	if(smear != null) {
-    		new BacteriologyValidator().validate(smear, errors);
-    	}
+	
+	/**
+	 * Handles the submission of a smear form
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=smear")
+	public ModelAndView processSubmit(@ModelAttribute("smear") Smear smear, BindingResult errors, SessionStatus status,
+	        HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = true, value = "specimenId") Integer specimenId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
-    	// if validation fails
-		if (errors.hasErrors()) {		
+		// validate
+		if (smear != null) {
+			new BacteriologyValidator().validate(smear, errors);
+		}
+		
+		// if validation fails
+		if (errors.hasErrors()) {
 			map.put("testId", smear.getId());
 			map.put("testType", smear.getTestType());
 			map.put("test", smear);
 			map.put("testErrors", errors);
-
+			
 			// override the testTypes parameter; we only want to create the add box for a smear in this case
-			Collection<String> testTypes = new LinkedList<String>();
+			Collection<String> testTypes = new LinkedList<>();
 			testTypes.add("smear");
-			map.put("testTypes", testTypes);			
+			map.put("testTypes", testTypes);
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-
-        // handle the case that this is a new smear
-        if (smear.getSpecimenId() == null) {
-            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-            smear = Context.getService(MdrtbService.class).createSmear(specimen, smear);
-        }
-
+		
+		// handle the case that this is a new smear
+		if (smear.getSpecimenId() == null) {
+			Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+			smear = Context.getService(MdrtbService.class).createSmear(specimen, smear);
+		}
+		
 		// save the actual update
 		Context.getService(MdrtbService.class).saveSmear(smear);
-			
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + smear.getId() + "&patientProgramId=" + patientProgramId, map);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + smear.getId()
+		        + "&patientProgramId=" + patientProgramId, map);
 		
 	}
-    
-    /**
-     * Handles the submission of a culture form
-     * 
-     * @param culture
-     * @param cultureErrors
-     * @param status
-     * @param request
-     * @param map
-     * @param specimenId
-     * @param testId
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST, params = "submissionType=culture")
+	
+	/**
+	 * Handles the submission of a culture form
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=culture")
 	public ModelAndView processSubmit(@ModelAttribute("culture") Culture culture, BindingResult errors,
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
-	                                  @RequestParam(required = true, value="patientProgramId") Integer patientProgramId) {
-	                     
-    	// validate
-    	if(culture != null) {
-            new BacteriologyValidator().validate(culture, errors);
-    	}
+	        SessionStatus status, HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = true, value = "specimenId") Integer specimenId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		
-    	// if validation fails
+		// validate
+		if (culture != null) {
+			new BacteriologyValidator().validate(culture, errors);
+		}
+		
+		// if validation fails
 		if (errors.hasErrors()) {
 			map.put("testId", culture.getId());
 			map.put("testType", culture.getTestType());
@@ -340,58 +364,49 @@ public class SpecimenController extends AbstractSpecimenController {
 			map.put("testErrors", errors);
 			
 			// override the testTypes parameter; we only want to create the add box for a culture in this case
-			Collection<String> testTypes = new LinkedList<String>();
+			Collection<String> testTypes = new LinkedList<>();
 			testTypes.add("culture");
 			map.put("testTypes", testTypes);
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-
-        // handle the case that this is a new culture
-        if (culture.getSpecimenId() == null) {
-            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-            culture = Context.getService(MdrtbService.class).createCulture(specimen, culture);
-        }
-
+		
+		// handle the case that this is a new culture
+		if (culture.getSpecimenId() == null) {
+			Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+			culture = Context.getService(MdrtbService.class).createCulture(specimen, culture);
+		}
+		
 		// save the actual update
 		Context.getService(MdrtbService.class).saveCulture(culture);
-			
+		
 		// clears the command object from the session
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + culture.getId() + "&patientProgramId=" + patientProgramId, map);
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + culture.getId()
+		        + "&patientProgramId=" + patientProgramId, map);
 		
 	}
-    
-    /**
-     * Handles the submission of a DST form
-     * 
-     * @param dst
-     * @param dstErrors
-     * @param status
-     * @param request
-     * @param map
-     * @param specimenId
-     * @param testId
-     * @param removeDstResults
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST, params = "submissionType=dst")
-	public ModelAndView processSubmit(@ModelAttribute("dst") Dst dst, BindingResult errors, 
-	                                  SessionStatus status, HttpServletRequest request, ModelMap map,
-	                                  @RequestParam(required = true, value="specimenId") Integer specimenId,
-	                                  @RequestParam(required = false, value = "testId") Integer testId, 
-	                                  @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId, 
-	                                  @RequestParam(required = false, value = "removeDstResult") String [] removeDstResults) {
-	 
-    	// validate
-    	if(dst != null) {
-    		new TestValidator().validate(dst, errors);
-    	}
+	
+	/**
+	 * Handles the submission of a DST form
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=dst")
+	public ModelAndView processSubmit(@ModelAttribute("dst") Dst dst, BindingResult errors, SessionStatus status,
+	        HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = true, value = "specimenId") Integer specimenId,
+	        @RequestParam(required = false, value = "testId") Integer testId,
+	        @RequestParam(required = false, value = "patientProgramId") Integer patientProgramId,
+	        @RequestParam(required = false, value = "removeDstResult") String[] removeDstResults) {
 		
-    	// if validation fails
+		// validate
+		if (dst != null) {
+			new TestValidator().validate(dst, errors);
+		}
+		
+		// if validation fails
 		if (errors.hasErrors()) {
 			map.put("testId", dst.getId());
 			map.put("testType", dst.getTestType());
@@ -399,26 +414,26 @@ public class SpecimenController extends AbstractSpecimenController {
 			map.put("testErrors", errors);
 			
 			// override the testTypes parameter; we only want to create the add box for a dst in this case
-			Collection<String> testTypes = new LinkedList<String>();
+			Collection<String> testTypes = new LinkedList<>();
 			testTypes.add("dst");
-			map.put("testTypes", testTypes);					
+			map.put("testTypes", testTypes);
 			
 			// hacky way to populate any add data, so that we save it and can redisplay it
-			List<String> addDstResultResult = new ArrayList<String>();
-			List<String> addDstResultConcentration = new ArrayList<String>();
-			List<String> addDstResultColonies = new ArrayList<String>();
-			List<String> addDstResultDrug = new ArrayList<String>();
+			List<String> addDstResultResult = new ArrayList<>();
+			List<String> addDstResultConcentration = new ArrayList<>();
+			List<String> addDstResultColonies = new ArrayList<>();
+			List<String> addDstResultDrug = new ArrayList<>();
 			
 			int i = 1;
-			while (i<30) {
+			while (i < 30) {
 				addDstResultColonies.add(request.getParameter("addDstResult" + i + ".colonies"));
 				addDstResultConcentration.add(request.getParameter("addDstResult" + i + ".concentration"));
 				addDstResultResult.add(request.getParameter("addDstResult" + i + ".result"));
 				addDstResultDrug.add(request.getParameter("addDstResult" + i + ".drug"));
-
+				
 				i++;
 			}
-
+			
 			map.put("addDstResultColonies", addDstResultColonies);
 			map.put("addDstResultConcentration", addDstResultConcentration);
 			map.put("addDstResultResult", addDstResultResult);
@@ -426,22 +441,22 @@ public class SpecimenController extends AbstractSpecimenController {
 			
 			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
 		}
-
-        // handle the case that this is a new dst
-        if (dst.getSpecimenId() == null) {
-            Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
-            dst = Context.getService(MdrtbService.class).createDst(specimen, dst);
-        }
-
+		
+		// handle the case that this is a new dst
+		if (dst.getSpecimenId() == null) {
+			Specimen specimen = Context.getService(MdrtbService.class).getSpecimen(specimenId);
+			dst = Context.getService(MdrtbService.class).createDst(specimen, dst);
+		}
+		
 		// hacky way to manually handle the addition of new dsts
-    	// note that we only add dsts that have a result and drug specified
+		// note that we only add dsts that have a result and drug specified
 		int i = 1;
-		while(i<=30) {
-			if(StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".result")) 
-				&& StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".drug")) )  {
+		while (i <= 30) {
+			if (StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".result"))
+			        && StringUtils.isNotEmpty(request.getParameter("addDstResult" + i + ".drug"))) {
 				// create the new result
 				DstResult dstResult = dst.addResult();
-			
+				
 				// pull the values from the request
 				String colonies = request.getParameter("addDstResult" + i + ".colonies");
 				String concentration = request.getParameter("addDstResult" + i + ".concentration");
@@ -450,10 +465,10 @@ public class SpecimenController extends AbstractSpecimenController {
 				
 				// assign them if they exist
 				if (StringUtils.isNotBlank(colonies)) {
-					dstResult.setColonies(Integer.valueOf(colonies));
+					// No longer in use
 				}
 				if (StringUtils.isNotBlank(concentration)) {
-					dstResult.setConcentration(Double.valueOf(concentration));
+					// No longer in use
 				}
 				// although the DstResult obj should handle it, still a good idea to set the result before the drug because of the wonky way result/drugs are stored
 				if (StringUtils.isNotBlank(resultType)) {
@@ -464,19 +479,19 @@ public class SpecimenController extends AbstractSpecimenController {
 				}
 			}
 			i++;
-		} 
-		 
+		}
+		
 		// remove dst results
-		if(removeDstResults != null) {
-			Set<String> removeDstResultSet = new HashSet<String>(Arrays.asList(removeDstResults));
+		if (removeDstResults != null) {
+			Set<String> removeDstResultSet = new HashSet<>(Arrays.asList(removeDstResults));
 			
-			for(DstResult result : dst.getResults()) {
-				if(result.getId() != null && removeDstResultSet.contains(result.getId())) {
+			for (DstResult result : dst.getResults()) {
+				if (result.getDrug().getId() != null && removeDstResultSet.contains(result.getDrug().getId().toString())) {
 					dst.removeResult(result);
 				}
 			}
 		}
-    	
+		
 		// save the actual update
 		Context.getService(MdrtbService.class).saveDst(dst);
 		
@@ -484,6 +499,90 @@ public class SpecimenController extends AbstractSpecimenController {
 		status.setComplete();
 		map.clear();
 		
-		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId() + "&patientProgramId=" + patientProgramId, map);	
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + dst.getId()
+		        + "&patientProgramId=" + patientProgramId, map);
+	}
+	
+	/**
+	 * Handles the submission of a xpert form
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=xpert")
+	public ModelAndView processSubmit(@ModelAttribute("xpert") Xpert xpert, BindingResult errors, SessionStatus status,
+	        HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = true, value = "specimenId") Integer specimenId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		
+		// validate
+		if (xpert != null) {
+			new TestValidator().validate(xpert, errors);
+		}
+		
+		// if validation fails
+		if (errors.hasErrors()) {
+			map.put("testId", xpert.getId());
+			map.put("testType", xpert.getTestType());
+			map.put("test", xpert);
+			map.put("testErrors", errors);
+			
+			// override the testTypes parameter; we only want to create the add box for a smear in this case
+			Collection<String> testTypes = new LinkedList<>();
+			testTypes.add("xpert");
+			map.put("testTypes", testTypes);
+			
+			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
+		}
+		
+		// save the actual update
+		Context.getService(MdrtbService.class).saveXpert(xpert);
+		
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + xpert.getId()
+		        + "&patientProgramId=" + patientProgramId, map);
+		
+	}
+	
+	/**
+	 * Handles the submission of a xpert form
+	 */
+	@RequestMapping(method = RequestMethod.POST, params = "submissionType=hain")
+	public ModelAndView processSubmit(@ModelAttribute("hain") HAIN hain, BindingResult errors, SessionStatus status,
+	        HttpServletRequest request, ModelMap map,
+	        @RequestParam(required = true, value = "specimenId") Integer specimenId,
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		
+		// validate
+		if (hain != null) {
+			new TestValidator().validate(hain, errors);
+		}
+		
+		// if validation fails
+		if (errors.hasErrors()) {
+			map.put("testId", hain.getId());
+			map.put("testType", hain.getTestType());
+			map.put("test", hain);
+			map.put("testErrors", errors);
+			
+			// override the testTypes parameter; we only want to create the add box for a smear in this case
+			Collection<String> testTypes = new LinkedList<>();
+			testTypes.add("hain");
+			map.put("testTypes", testTypes);
+			
+			return new ModelAndView("/module/mdrtb/specimen/specimen", map);
+		}
+		
+		// save the actual update
+		Context.getService(MdrtbService.class).saveHAIN(hain);
+		
+		// clears the command object from the session
+		status.setComplete();
+		map.clear();
+		
+		return new ModelAndView("redirect:specimen.form?specimenId=" + specimenId + "&testId=" + hain.getId()
+		        + "&patientProgramId=" + patientProgramId, map);
+		
 	}
 }

@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/view/module/mdrtb/include.jsp"%> 
 <%@ include file="/WEB-INF/view/module/mdrtb/mdrtbHeader.jsp"%>
 
+<openmrs:htmlInclude file="/moduleResources/mdrtb/mdrtb.css"/>
 <openmrs:htmlInclude file="/moduleResources/mdrtb/date_input.css""/>
 
 <openmrs:portlet url="mdrtbPatientHeader" id="mdrtbPatientHeader" moduleId="mdrtb" patientId="${obj.patient.patientId}"/>
@@ -145,7 +146,7 @@
 				 if (addressIdInQuestion > 0){   	
 						MdrtbContactsDWRService.updateAddress(contactIdInQuestion, addressIdInQuestion, popupAddressOneVal, popupAddressTwoVal, popupTownshipVal, popupCityVal, popupDistrictVal, popupRegionVal, popupPhoneVal, function(ret){
 										if (!ret) 
-											alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
+											alert("<mdrtb:message code="mdrtb.DWRfailedtoupdateaddress" />");
 										else {
 										
 											//TODO:  this is crap:
@@ -159,7 +160,7 @@
 				 	//create new address
 				 	MdrtbContactsDWRService.createNewAddress(contactIdInQuestion, popupAddressOneVal, popupAddressTwoVal, popupTownshipVal, popupCityVal, popupDistrictVal, popupRegionVal, popupPhoneVal, function(ret){
 										if (ret == null) {
-										alert("<spring:message code="mdrtb.DWRfailedtoupdateaddress" />");
+										alert("<mdrtb:message code="mdrtb.DWRfailedtoupdateaddress" />");
 										} else {
 											
 											//TODO: this is crap
@@ -207,14 +208,14 @@
 	    	
 	    	var spKnownMDR = document.getElementById("isKnownMdr_" + contactIdInQuestion);
 	    	if (popupKnownMDRVal == 0)
-	    		$j(spKnownMDR).html('<spring:message code="mdrtb.no" />');
+	    		$j(spKnownMDR).html('<mdrtb:message code="mdrtb.no" />');
 	    	else if (popupKnownMDRVal == 1)	
-	    		$j(spKnownMDR).html('<spring:message code="mdrtb.yes" />');
+	    		$j(spKnownMDR).html('<mdrtb:message code="mdrtb.yes" />');
 	    		
 	    	//DWR
 	    	MdrtbContactsDWRService.updateContact(${obj.patient.patientId}, contactIdInQuestion, relationshipIdInQuestion, popupRelationshipVal, popupGivenNameVal, popupFamilyNameVal, popupContactIdVal , popupKnownMDRVal, function(ret){
 							if (!ret)
-								alert("<spring:message code="mdrtb.DWRfailedtoupdatecontact" />");
+								alert("<mdrtb:message code="mdrtb.DWRfailedtoupdatecontact" />");
 							else {
 							
 								//TODO: this is crap
@@ -262,7 +263,7 @@
     $j(".resTableBodyLookup").html("<Br>");
     	var retString = "<br>"; 
     	if (savedRet.length > 0)
-    		retString += "<table class='findpatientpopup'><thead><Th><spring:message code="mdrtb.name" /></th><Th><spring:message code="mdrtb.surname" /></th><Th><spring:message code="mdrtb.birthdate" /></th><Th><spring:message code="mdrtb.healthcentervillage" /></th><Th><spring:message code="mdrtb.gender" /></th></thead><tbody id='findpatientpopupbody'>";
+    		retString += "<table class='findpatientpopup'><thead><Th><mdrtb:message code="mdrtb.name" /></th><Th><mdrtb:message code="mdrtb.surname" /></th><Th><mdrtb:message code="mdrtb.birthdate" /></th><Th><mdrtb:message code="mdrtb.healthcentervillage" /></th><Th><mdrtb:message code="mdrtb.gender" /></th></thead><tbody id='findpatientpopupbody'>";
     	for (var i = 0; i < savedRet.length; i++){
     		var thisPatient = savedRet[i];
     		retString += "<tr><td><span class='displayOff'>" + i + "</span>" + thisPatient.givenName + "</td><td>" + thisPatient.familyName + "</Td><td>" + thisPatient.birthdateString + "</td><Td>" + thisPatient.village + "</Td><td>" + thisPatient.gender + "</td></tr>";
@@ -330,7 +331,7 @@
 			var relationshipTypeParents = $j(newRelationshipType).parent();
 			var parent = relationshipTypeParents[0];
 			var newSpan = document.createElement("span");
-			$j(newSpan).html("<bR>* <spring:message code='mdrtb.choosearelationshiptype' />");
+			$j(newSpan).html("<bR>* <mdrtb:message code='mdrtb.choosearelationshiptype' />");
 			$j(newSpan).attr("style", "color:red");
 			if (newRelationshipType.value != null && (newRelationshipType.value == "" || newRelationshipType.value == null))
 				parent.appendChild(newSpan);
@@ -441,8 +442,8 @@
             strSimple += $j(this).siblings(".simple_popup_info").html();
             strSimple += "<Br><Br><table class='popupTable'><tr>";
             if (showSubmit == true)
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:doStuff(this)'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
+            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:doStuff(this)'><mdrtb:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
+            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><mdrtb:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
             strSimple += "<Br></div></div>";
             $j("body").append(strSimple);
             viewport.init(".simple_popup_div");
@@ -467,8 +468,8 @@
             strSimple += $j(this).siblings(".simple_popup_info").html();
             strSimple += "<Br><Br><table class='popupTable'><tr>";
             if (showSubmit == true)
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:doStuff(this)'><spring:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
-            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><spring:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
+            strSimple += "<td><p class='simple_close'>[ x ] <a href='#' onmouseup='javascript:doStuff(this)'><mdrtb:message code="mdrtb.submit" /></a>&nbsp;&nbsp;&nbsp;</p></td>";
+            strSimple += "<td><p class='simple_close'>[ x ] <a href='#'><mdrtb:message code="mdrtb.close" /></a><Br><br>&nbsp;</p></td></tr></table>";
             strSimple += "<Br></div></div>";
             $j("body").append(strSimple);
             viewport.init(".simple_popup_div");
@@ -504,7 +505,7 @@
    							alert("Error converting person to patient.  Check logs for DWR error");
    						} else {
    							var isPatientText = document.getElementById("isPatient_" + contactId);
-   							$j(isPatientText).html("<spring:message code="mdrtb.yes" />");
+   							$j(isPatientText).html("<mdrtb:message code="mdrtb.yes" />");
    							
    							var contactNameTD = document.getElementById("contactName_" + contactId);
    							var currentTDContents = contactNameTD.innerHTML;
@@ -527,7 +528,7 @@
     	$j(myDiv).addClass("displayOff");
 		
 		} else {
-			alert("<spring:message code="mdrtb.youmustgiveapatientidentifier" />");
+			alert("<mdrtb:message code="mdrtb.youmustgiveapatientidentifier" />");
     	}
     }
     
@@ -556,12 +557,12 @@
     		var divToShow = document.getElementById("nextVisitDivnextscheduledvisit");
     		MdrtbNextVisit.setNextVisitDate(newValTextbox.value,'${obj.patient.patientId}','${obj.location.locationId}', function(ret){
     			if (!ret){
-    				alert("<spring:message code='DWRfailedtosetnextvisit' />");
+    				alert("<mdrtb:message code='DWRfailedtosetnextvisit' />");
     			} else {
     				$j(divToShow).removeClass("displayOn");
 					$j(divToShow).addClass("displayOff");
 					var nextVisitMessage = document.getElementById("nextVisitMessage");
-					$j(nextVisitMessage).text("<spring:message code='mdrtb.successfullyupdated' />");
+					$j(nextVisitMessage).text("<mdrtb:message code='mdrtb.successfullyupdated' />");
     			}
 			});
     		
@@ -579,16 +580,16 @@
 			<c:if test="${obj.contacts != null}">
 			<table class="contactsTable">
 			<tr style="font-size:90%">
-				<th><spring:message code="mdrtb.delete" /></th>
-				<th><spring:message code="mdrtb.name" /></th>
-				<th><spring:message code="mdrtb.relationship" /></th>
-				<th><spring:message code="mdrtb.latesttestresult" /></th>
-				<th><spring:message code="mdrtb.address" /></th>
-				<th><spring:message code="mdrtb.patienttype" /></th>	
+				<th><mdrtb:message code="mdrtb.delete" /></th>
+				<th><mdrtb:message code="mdrtb.name" /></th>
+				<th><mdrtb:message code="mdrtb.relationship" /></th>
+				<th><mdrtb:message code="mdrtb.latesttestresult" /></th>
+				<th><mdrtb:message code="mdrtb.address" /></th>
+				<th><mdrtb:message code="mdrtb.patienttype" /></th>	
 				<th></th>
 			</tr>
 			<c:if test="${empty obj.contacts}">
-				<tr><td colspan="7" style="text-align:center"><i><spring:message code="mdrtb.none" /></i></td></tr>
+				<tr><td colspan="7" style="text-align:center"><i><mdrtb:message code="mdrtb.none" /></i></td></tr>
 			</c:if>
 			<c:forEach items="${obj.contacts}" var="contact" varStatus="varStatus">
 				<c:set var="rowClass" scope="page">
@@ -634,7 +635,7 @@
 							<input type="hidden" name="testResultAction_${contact.person.personId}" id="testResultAction_${contact.person.personId}" value="0" />
 							<input type="hidden" name="hiddentestResult_${contact.person.personId}" id="hiddentestResult_${contact.person.personId}" value="${contact.testResult.valueCoded.conceptId}">
 						<table>
-						<tr><td><spring:message code="mdrtb.result" /></td><td>
+						<tr><td><mdrtb:message code="mdrtb.result" /></td><td>
 							<select class="disabledTwo" disabled="true" name="testResult_${contact.person.personId}" id="testResult_${contact.person.personId}" >
 								<option value=""></option>
 								<c:forEach items="${testResultResponses}" var="result" varStatus="varStatus">
@@ -645,12 +646,12 @@
 							</select>
 							
 						</td></tr>
-						<Tr><td><spring:message code="mdrtb.datelowercase" /></td><td>
+						<Tr><td><mdrtb:message code="mdrtb.datelowercase" /></td><td>
 							<input type="hidden" name="hiddentestResultDate_${contact.person.personId}" id="hiddentestResultDate_${contact.person.personId}" value="<openmrs:formatDate date="${contact.testResult.valueDatetime}" format="${dateFormat}" />" />
 							
 							<input  class="disabledTwo" disabled="true" type="text" style="width:90px"  name="testResultDate_${contact.person.personId}" id="testResultDate_${contact.person.personId}" value="<openmrs:formatDate date="${contact.testResult.valueDatetime}" format="${dateFormat}" />"/>
 						</td></tr>	
-						<Tr><td><spring:message code="mdrtb.typelowercase" /></td><td>
+						<Tr><td><mdrtb:message code="mdrtb.typelowercase" /></td><td>
 							<input type="hidden" name="hiddentestResultType_${contact.person.personId}" id="hiddentestResultType_${contact.person.personId}" value="${contact.testType.valueCoded.conceptId}" />
 							
 							<select  class="disabledTwo" disabled="true" name="testResultType_${contact.person.personId}" id="testResultType_${contact.person.personId}">
@@ -665,11 +666,11 @@
 						</td></tr>
 						<tr><td></td><td>
 							<c:if test="${!empty contact.testResult}">
-							<a href="#" onClick="javascript:editTest(${contact.person.personId});return false;"><spring:message code="mdrtb.editthistest" /></a><Br>
+							<a href="#" onClick="javascript:editTest(${contact.person.personId});return false;"><mdrtb:message code="mdrtb.editthistest" /></a><Br>
 							</c:if>
-							<a href="#" onClick="javascript:addNewTest(${contact.person.personId});return false;"><spring:message code="mdrtb.addnewtest" /></a><Br>
+							<a href="#" onClick="javascript:addNewTest(${contact.person.personId});return false;"><mdrtb:message code="mdrtb.addnewtest" /></a><Br>
 							<c:if test="${!empty contact.testResult}">
-								<a href="#" onClick="javascript:deleteThisTest(${contact.person.personId});return false;"><spring:message code="mdrtb.deletethistest" /></a><Br>
+								<a href="#" onClick="javascript:deleteThisTest(${contact.person.personId});return false;"><mdrtb:message code="mdrtb.deletethistest" /></a><Br>
 							</c:if>
 						</td></tr></table>
 					
@@ -684,13 +685,13 @@
 						<Br><span id="spPhone_${contact.person.personId}">${contact.phone.valueText} &nbsp;</span>
 						</td></tr>
 						<tr><td style="vertical-align:bottom">
-						<a href="#" id="editAddress_${contact.person.personId}" class="simple_popup" onClick="javascript:doStuffAction = 1;contactIdInQuestion=${contact.person.personId}<c:if test="${!empty contact.address.personAddressId}">;addressIdInQuestion=${contact.address.personAddressId}</c:if>;return false;"><spring:message code="mdrtb.editaddress" /></a>
+						<a href="#" id="editAddress_${contact.person.personId}" class="simple_popup" onClick="javascript:doStuffAction = 1;contactIdInQuestion=${contact.person.personId}<c:if test="${!empty contact.address.personAddressId}">;addressIdInQuestion=${contact.address.personAddressId}</c:if>;return false;"><mdrtb:message code="mdrtb.editaddress" /></a>
 													<div class="simple_popup_info">
 														<input type="hidden" id="popupContactId" value="${contact.person.personId}">
 														<table>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.address1" />
+																	<mdrtb:message code="mdrtb.address1" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupAddressOne_${contact.person.personId}" id="popupAddressOne_${contact.person.personId}" value="${contact.address.address1}" onblur="javascript:setValue(this)">
@@ -698,7 +699,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.address2" />
+																	<mdrtb:message code="mdrtb.address2" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupAddressTwo_${contact.person.personId}" id="popupAddressTwo_${contact.person.personId}" value="${contact.address.address2}" onblur="javascript:setValue(this)">
@@ -706,7 +707,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.townshipdivision" />
+																	<mdrtb:message code="mdrtb.townshipdivision" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupTownship_${contact.person.personId}" id="popupTownship_${contact.person.personId}" value="${contact.address.townshipDivision}" onblur="javascript:setValue(this)">
@@ -714,7 +715,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.cityvillage" />
+																	<mdrtb:message code="mdrtb.cityvillage" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupCity_${contact.person.personId}" id="popupCity_${contact.person.personId}" value="${contact.address.cityVillage}" onblur="javascript:setValue(this)">
@@ -722,7 +723,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.district" />
+																	<mdrtb:message code="mdrtb.district" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupDistrict_${contact.person.personId}" id="popupDistrict_${contact.person.personId}" value="${contact.address.countyDistrict}" onblur="javascript:setValue(this)">
@@ -730,7 +731,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.region" />
+																	<mdrtb:message code="mdrtb.region" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupRegion_${contact.person.personId}" id="popupRegion_${contact.person.personId}" value="${contact.address.region}" onblur="javascript:setValue(this)">
@@ -738,7 +739,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.phone" />
+																	<mdrtb:message code="mdrtb.phone" />
 																	
 																</Td>
 																<Td>
@@ -753,38 +754,38 @@
 						<table>
 							<c:if test="${!empty contact.isTBPatient}">
 								<c:if test="${contact.isTBPatient}">
-									<Tr><Td><spring:message code="mdrtb.istbpatient" /></Td><td><spring:message code="mdrtb.yes" /></td></Tr>
+									<Tr><Td><mdrtb:message code="mdrtb.istbpatient" /></Td><td><mdrtb:message code="mdrtb.yes" /></td></Tr>
 								</c:if>
 								<c:if test="${contact.isTBPatient == false}">
-									<tr><Td><spring:message code="mdrtb.istbpatient" /></Td><td><spring:message code="mdrtb.no" /></td></tr>
+									<tr><Td><mdrtb:message code="mdrtb.istbpatient" /></Td><td><mdrtb:message code="mdrtb.no" /></td></tr>
 								</c:if>
 							</c:if>
 							<c:if test="${!empty contact.isPatient}">
 								<c:if test="${contact.isPatient}">
-									<tr><td><spring:message code="mdrtb.ispatient" /></td><td><spring:message code="mdrtb.yes" /></td></tr>
+									<tr><td><mdrtb:message code="mdrtb.ispatient" /></td><td><mdrtb:message code="mdrtb.yes" /></td></tr>
 								</c:if>
 								<c:if test="${contact.isPatient == false}">
-									<tr><td><spring:message code="mdrtb.ispatient" /></td><td id="isPatient_${contact.person.personId}"><spring:message code="mdrtb.no" /></td></tr>
+									<tr><td><mdrtb:message code="mdrtb.ispatient" /></td><td id="isPatient_${contact.person.personId}"><mdrtb:message code="mdrtb.no" /></td></tr>
 								</c:if>
 							</c:if>
 							<c:if test="${!empty contact.knownMdrtbContact}">
 								<c:if test="${contact.knownMdrtbContact.valueNumeric == 0}">
-									<tr><td><spring:message code="mdrtb.knownmdr" />?</td><td id="isKnownMdr_${contact.person.personId}"><spring:message code="mdrtb.no" /></td></tr>
+									<tr><td><mdrtb:message code="mdrtb.knownmdr" />?</td><td id="isKnownMdr_${contact.person.personId}"><mdrtb:message code="mdrtb.no" /></td></tr>
 								</c:if>
 								<c:if test="${contact.knownMdrtbContact.valueNumeric == 1}">
-									<tr><td><spring:message code="mdrtb.knownmdr" />?</td><td id="isKnownMdr_${contact.person.personId}"><spring:message code="mdrtb.yes" /></td></tr>
+									<tr><td><mdrtb:message code="mdrtb.knownmdr" />?</td><td id="isKnownMdr_${contact.person.personId}"><mdrtb:message code="mdrtb.yes" /></td></tr>
 								</c:if>
 							</c:if>
 						</table>
 					</td>
 					<td>
-						<a href="#" class="simple_popup" id="editContact_${contact.person.personId}" onClick="javascript:doStuffAction = 2; contactIdInQuestion = ${contact.person.personId};relationshipIdInQuestion = ${contact.relationship.relationshipId}; return false;"><spring:message code="mdrtb.editthiscontact" /></a>
+						<a href="#" class="simple_popup" id="editContact_${contact.person.personId}" onClick="javascript:doStuffAction = 2; contactIdInQuestion = ${contact.person.personId};relationshipIdInQuestion = ${contact.relationship.relationshipId}; return false;"><mdrtb:message code="mdrtb.editthiscontact" /></a>
 													<div class="simple_popup_info">
 														<input type="hidden" id="popupContactId" value="${contact.person.personId}">
 														<table>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.givenname" />
+																	<mdrtb:message code="mdrtb.givenname" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupGivenName_${contact.person.personId}" id="popupGivenName_${contact.person.personId}" value="${contact.person.givenName}" onblur="javascript:setValue(this)">
@@ -792,7 +793,7 @@
 															</tr>
 															<tr>
 																<Td>
-																	<spring:message code="mdrtb.familyname" />
+																	<mdrtb:message code="mdrtb.familyname" />
 																</Td>
 																<Td>
 																	<input type="text" name="popupFamilyName_${contact.person.personId}" id="popupFamilyName_${contact.person.personId}" value="${contact.person.familyName}" onblur="javascript:setValue(this)">
@@ -800,7 +801,7 @@
 															</tr>
 															<tr>
 																<Td colspan="2">
-																	<spring:message code="mdrtb.relationship" />
+																	<mdrtb:message code="mdrtb.relationship" />
 																</Td>
 																
 															</tr>
@@ -827,11 +828,11 @@
 																</Td>
 															</Tr>
 															<Tr>
-																<td><spring:message code="mdrtb.contactidentifier" /></td>
+																<td><mdrtb:message code="mdrtb.contactidentifier" /></td>
 																<td><input type="text" value="${contact.mdrtbContactId.value}" id="popupContactId_${contact.person.personId}" name="popupContactId_${contact.person.personId}" onblur="javascript:setValue(this)"></td>
 															</Tr>
 															<tr>
-																<td><spring:message code="mdrtb.knownmdr" /></td>
+																<td><mdrtb:message code="mdrtb.knownmdr" /></td>
 																<td>
 																	<select  name="popupKnownMDR_${contact.person.personId}" id="popupKnownMDR_${contact.person.personId}" onblur="javascript:setValue(this)">
 																		<option value=""></option>
@@ -841,14 +842,14 @@
 																				SELECTED
 																			</c:if>
 																			</c:if>
-																		><spring:message code="mdrtb.no" /></option>
+																		><mdrtb:message code="mdrtb.no" /></option>
 																		<option value="1"
 																			<c:if test="${!empty contact.knownMdrtbContact}">
 																			<c:if test="${contact.knownMdrtbContact.valueNumeric == 1}">
 																				SELECTED
 																			</c:if>
 																			</c:if>
-																		><spring:message code="mdrtb.yes" /></option>
+																		><mdrtb:message code="mdrtb.yes" /></option>
 																	</select>
 																
 																</td>
@@ -859,12 +860,12 @@
 						<c:if test="${!empty contact.isPatient}">
 							<c:if test="${!contact.isPatient}">	
 							<div id="addNewPatientLink_${contact.person.personId}">
-							<Br><a href="#" onClick="javascript:showMakePatientDiv('makePatient_${contact.person.personId}');return false;"><spring:message code="mdrtb.makethiscontactapatient" /></a><bR>
+							<Br><a href="#" onClick="javascript:showMakePatientDiv('makePatient_${contact.person.personId}');return false;"><mdrtb:message code="mdrtb.makethiscontactapatient" /></a><bR>
 								<div id="makePatient_${contact.person.personId}" class="displayOff">
 									<br>
-									<spring:message code="mdrtb.patientidentifier" />:<br>
+									<mdrtb:message code="mdrtb.patientidentifier" />:<br>
 									<input type="text" id="makePatientId_${contact.person.personId}" value="">&nbsp;&nbsp;
-									<Br><spring:message code="mdrtb.patientidentifiertype" />:<br>
+									<Br><mdrtb:message code="mdrtb.patientidentifiertype" />:<br>
 									<select  id="newPatientIdentiferType_${contact.person.personId}">
 											<option value=""></option>
 											<c:forEach items="${patientIdentifierTypes}" var="type" varStatus="varStatus">
@@ -873,8 +874,8 @@
 											>${type.name}</option>	
 											</c:forEach>
 									</select>
-									<input type="button" value="<spring:message code="mdrtb.save" />" onClick="makePatient(${contact.person.personId},${contact.relationship.relationshipId},'addNewPatientLink_${contact.person.personId}', 'makePatientId_${contact.person.personId}', 'newPatientIdentiferType_${contact.person.personId}')">
-									<input type="button" value="<spring:message code="mdrtb.cancel" />" onClick="cancelMakePatient('makePatient_${contact.person.personId}', 'makePatientId_${contact.person.personId}')">
+									<input type="button" value="<mdrtb:message code="mdrtb.save" />" onClick="makePatient(${contact.person.personId},${contact.relationship.relationshipId},'addNewPatientLink_${contact.person.personId}', 'makePatientId_${contact.person.personId}', 'newPatientIdentiferType_${contact.person.personId}')">
+									<input type="button" value="<mdrtb:message code="mdrtb.cancel" />" onClick="cancelMakePatient('makePatient_${contact.person.personId}', 'makePatientId_${contact.person.personId}')">
 								</div>
 							</div>	
 							</c:if>
@@ -884,7 +885,7 @@
 			</c:forEach>
 			</table>
 			</c:if>
-			<bR><a style="font-size:120%;" href="#" onClick="addNewContact();return false;"><spring:message code="mdrtb.addnewcontact" /></a><Br><Br>
+			<bR><a style="font-size:120%;" href="#" onClick="addNewContact();return false;"><mdrtb:message code="mdrtb.addnewcontact" /></a><Br><Br>
 			<br>
 			<table id="newPeople" class="regTable">
 				<tbody id="newPeopleBody">
@@ -899,12 +900,12 @@
 <div id="newRowTemplateDisplayDiv" style="display:none">
 		<table id="newRowTemplateTable">
 			<tr id="newHeaderTemplate">
-				<th><spring:message code="mdrtb.givenname" /></th>
-				<Th><spring:message code="mdrtb.familyname" /></Th>
-				<th><spring:message code="mdrtb.gender" /></th>
-				<th><spring:message code="mdrtb.relationship" /></th>
-				<Th><spring:message code="mdrtb.contactidentifier" /></Th>
-				<Th><spring:message code="mdrtb.knownmdr" /></Th>
+				<th><mdrtb:message code="mdrtb.givenname" /></th>
+				<Th><mdrtb:message code="mdrtb.familyname" /></Th>
+				<th><mdrtb:message code="mdrtb.gender" /></th>
+				<th><mdrtb:message code="mdrtb.relationship" /></th>
+				<Th><mdrtb:message code="mdrtb.contactidentifier" /></Th>
+				<Th><mdrtb:message code="mdrtb.knownmdr" /></Th>
 				<th></th>
 			</tr>
 			<Tr id="newRowTemplate">
@@ -919,8 +920,8 @@
 				<td>
 					<select id="newGender_" name="newGender_" value="">
 						<option value=""></option>
-						<option value="M"><spring:message code="mdrtb.male" /></option>
-						<option value="F"><spring:message code="mdrtb.female" /></option>
+						<option value="M"><mdrtb:message code="mdrtb.male" /></option>
+						<option value="F"><mdrtb:message code="mdrtb.female" /></option>
 					</select>
 				</td>
 				<td>
@@ -938,30 +939,30 @@
 				<td>
 					<select  name="newKnownMDR_" id="newKnownMDR_">
 						<option value=""></option>
-						<option value="0"><spring:message code="mdrtb.no" /></option>
-						<option value="1"><spring:message code="mdrtb.yes" /></option>
+						<option value="0"><mdrtb:message code="mdrtb.no" /></option>
+						<option value="1"><mdrtb:message code="mdrtb.yes" /></option>
 					</select>
 				</td>
 				<td style="vertical-align:center">
-					<a href="#" class="simple_popup" onClick="javascript:showSubmit=false;javascript:return false;"><spring:message code="mdrtb.findapersoninopenmrs" /></a>
+					<a href="#" class="simple_popup" onClick="javascript:showSubmit=false;javascript:return false;"><mdrtb:message code="mdrtb.findapersoninopenmrs" /></a>
 							<div class="simple_popup_info">
 								<br>
-									<spring:message code="mdrtb.findapersoninopenmrs" /> : <Br><Br><input type="text" id="patientLookupPopup" value="" onkeyup="javascript:loadPatients(this);"/><br>
+									<mdrtb:message code="mdrtb.findapersoninopenmrs" /> : <Br><Br><input type="text" id="patientLookupPopup" value="" onkeyup="javascript:loadPatients(this);"/><br>
 									<div class="resTableBodyLookup">
 										<Br>
 									</div>
 									
 								<br>	
 							</div>
-					<br><a href="#" onClick="javascript:remove(this.parentNode.parentNode)"><spring:message code="mdrtb.cancellowercase" /></a>
+					<br><a href="#" onClick="javascript:remove(this.parentNode.parentNode)"><mdrtb:message code="mdrtb.cancellowercase" /></a>
 				</td>
 			</Tr>
 		</table>
 	</div>
 		
-	<input type="submit" name="submit" value="<spring:message code="mdrtb.save" />" >
+	<input type="submit" name="submit" value="<mdrtb:message code="mdrtb.save" />" >
 	<input type='hidden' id='patientId' name='patientId' value='${obj.patient.patientId}'>
-	<input type="submit" name="submit" value="<spring:message code="mdrtb.done" />">
+	<input type="submit" name="submit" value="<mdrtb:message code="mdrtb.done" />">
 	
 </form>
 <br>

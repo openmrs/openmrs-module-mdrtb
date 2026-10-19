@@ -12,47 +12,51 @@
 	
 	
 	<div id="createPatient">
-		<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="mdrtb.enrollNewPatient"/></b>
+		<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;">
+				<mdrtb:message code="mdrtb.enrollNewPatient"/>
+		</b>
 		<div class="box" style="padding: 15px 15px 15px 15px;">
-			<spring:message code="mdrtb.search.instructions"/> <br/><br/>
+			<mdrtb:message code="mdrtb.search.instructions"/> <br/><br/>
 			
 			<form method="get" action="${model.postURL}" onSubmit="return validateForm()">
+			<!-- <form method="get" action="${pageContext.request.contextPath}/admin/patients/newPatient.form" onSubmit="return validateForm()">-->
 			<input type="hidden" name="successURL" value="${model.successURL}" />
 				<table>
 					<tr>
-						<td><spring:message code="mdrtb.name"/></td>
+						<td><mdrtb:message code="mdrtb.name"/></td>
 						<td>
 							<input type="text" name="addName" id="personName" size="40" onKeyUp="clearError('name')" />
-							<span class="error" id="nameError"><spring:message code="Person.name.required"/></span>
+							<span class="error" id="nameError"><mdrtb:message code="Person.name.required"/></span>
 						</td>
 					</tr>
 					<tr>
-						<td><spring:message code="mdrtb.birthdate"/><br/><i style="font-weight: normal; font-size: 0.8em;">(<spring:message code="general.format"/>: <openmrs:datePattern />)</i></td>
+						<td><mdrtb:message code="mdrtb.birthdate"/><br/><i style="font-weight: normal; font-size: 0.8em;">(<mdrtb:message code="general.format"/>: <openmrs:datePattern />)</i></td>
 						<td valign="top">
 							<input type="text" name="addBirthdate" id="birthdate" size="10" value="" onFocus="showCalendar(this)" onKeyUp="clearError('birthdate')"/>
-							<spring:message code="mdrtb.or"/> <spring:message code="mdrtb.age"/>
+							<mdrtb:message code="mdrtb.or"/> <mdrtb:message code="mdrtb.age"/>
 							<input type="text" name="addAge" id="age" size="5" value="" onKeyUp="clearError('birthdate')" />
-							<span class="error" id="birthdateError"><spring:message code="Person.birthdate.required"/></span>
+							<span class="error" id="birthdateError"><mdrtb:message code="Person.birthdate.required"/></span>
 						</td>
 					</tr>
 					<tr>
-						<td><spring:message code="mdrtb.gender"/></td>
+						<td><mdrtb:message code="mdrtb.gender"/></td>
 						<td>
 							<openmrs:forEachRecord name="gender">
-								<input type="radio" name="addGender" id="gender-${record.key}" value="${record.key}"  onClick="clearError('gender')" /><label for="gender-${record.key}"> <spring:message code="Patient.gender.${record.value}"/> </label>
+								<input type="radio" name="addGender" id="gender-${record.key}" value="${record.key}"  onClick="clearError('gender')" /><label for="gender-${record.key}"> <mdrtb:message code="Patient.gender.${record.value}"/> </label>
 							</openmrs:forEachRecord>
-							<span class="error" id="genderError"><spring:message code="Person.gender.required"/></span>
+							<span class="error" id="genderError"><mdrtb:message code="Person.gender.required"/></span>
 						</td>
 					</tr>
 					<tr>
 						<td></td>
 						<td>
-							<input type="submit" value='<spring:message code="mdrtb.enrollNewPatient"/>'/>
+							<input type="submit" value='<mdrtb:message code="mdrtb.enrollNewPatient"/>'/>
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" name="personType" value="${model.personType}"/>
 				<input type="hidden" name="viewType" value="${model.viewType}"/>
+				<input type="hidden" name="add" value="${model.add}"/>
 			</form>
 		</div>
 		

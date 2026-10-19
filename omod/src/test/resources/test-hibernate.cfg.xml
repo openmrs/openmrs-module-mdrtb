@@ -5,6 +5,10 @@
 
 <hibernate-configuration>
 	<session-factory>
-		${hbmConfig}
+		<mapping resource="LabTestAttribute.hbm.xml"/>
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTest" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestAttributeType" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestSample" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestType" />
 	</session-factory>
 </hibernate-configuration>

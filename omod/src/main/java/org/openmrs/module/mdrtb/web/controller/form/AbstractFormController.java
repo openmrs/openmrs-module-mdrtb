@@ -11,8 +11,9 @@ import org.openmrs.ConceptAnswer;
 import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mdrtb.service.MdrtbService;
+import org.openmrs.module.mdrtb.api.MdrtbService;
 import org.openmrs.module.mdrtb.program.MdrtbPatientProgram;
+import org.openmrs.module.mdrtb.program.TbPatientProgram;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PersonEditor;
@@ -22,16 +23,15 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 public class AbstractFormController {
 	
 	@InitBinder
-	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+	public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
 		
 		//bind dates
 		SimpleDateFormat dateFormat = Context.getDateFormat();
-    	dateFormat.setLenient(false);
-    	binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,true, 10));
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true, 10));
 		
 		// register binders 
 		binder.registerCustomEditor(Location.class, new LocationEditor());
@@ -46,8 +46,15 @@ public class AbstractFormController {
 	}
 	
 	@ModelAttribute("program")
-	public MdrtbPatientProgram getPatientProgram(@RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+	public MdrtbPatientProgram getPatientProgram(
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
 		return Context.getService(MdrtbService.class).getMdrtbPatientProgram(patientProgramId);
+	}
+	
+	@ModelAttribute("tbProgram")
+	public TbPatientProgram getTbPatientProgram(
+	        @RequestParam(required = true, value = "patientProgramId") Integer patientProgramId) {
+		return Context.getService(MdrtbService.class).getTbPatientProgram(patientProgramId);
 	}
 	
 	@ModelAttribute("returnUrl")
@@ -69,5 +76,5 @@ public class AbstractFormController {
 	public Collection<ConceptAnswer> getAnatomicalSites() {
 		return Context.getService(MdrtbService.class).getPossibleAnatomicalSites();
 	}
-
+	
 }

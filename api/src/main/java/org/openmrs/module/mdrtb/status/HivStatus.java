@@ -1,12 +1,10 @@
 package org.openmrs.module.mdrtb.status;
 
-
-
 public class HivStatus extends Status {
-
+	
 	public HivStatus() {
 	}
-
+	
 	public StatusItem getHivStatus() {
 		return getItem("hivStatus");
 	}

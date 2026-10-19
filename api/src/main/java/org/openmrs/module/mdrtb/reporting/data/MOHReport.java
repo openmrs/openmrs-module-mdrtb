@@ -61,7 +61,7 @@ public class MOHReport implements ReportSpecification {
 	 * @see ReportSpecification#getParameters()
 	 */
 	public List<Parameter> getParameters() {
-		List<Parameter> l = new ArrayList<Parameter>();
+		List<Parameter> l = new ArrayList<>();
 		l.add(new Parameter("location", translate("location"), Location.class));
 		l.add(new Parameter("year", translate("year"), Integer.class));
 		l.add(new Parameter("quarter", translate("quarter"), Integer.class));
@@ -73,7 +73,7 @@ public class MOHReport implements ReportSpecification {
 	 * @see ReportSpecification#getRenderingModes()
 	 */
 	public List<RenderingMode> getRenderingModes() {
-		List<RenderingMode> l = new ArrayList<RenderingMode>();
+		List<RenderingMode> l = new ArrayList<>();
 		return l;
 	}
 	
@@ -95,11 +95,11 @@ public class MOHReport implements ReportSpecification {
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
 	public ReportData evaluateReport(EvaluationContext context) {
-
+		
 		Location location = (Location) context.getParameterValue("location");
-		Date startDate = (Date)context.getParameterValue("startDate");
-		Date endDate = (Date)context.getParameterValue("endDate");
-
+		Date startDate = (Date) context.getParameterValue("startDate");
+		Date endDate = (Date) context.getParameterValue("endDate");
+		
 		CohortDefinition inProgram = Cohorts.getInMdrProgramEverDuring(startDate, endDate);
 		CohortDefinition atLocation = (location == null ? null : Cohorts.getLocationFilter(location, startDate, endDate));
 		CohortDefinition newlyHospitalized = Cohorts.getNewlyHospitalizedDuringPeriod(startDate, endDate);
@@ -111,10 +111,9 @@ public class MOHReport implements ReportSpecification {
 		CohortDefinition abandoned = Cohorts.getDefaultedDuringFilter(startDate, endDate);
 		CohortDefinition died = Cohorts.getDiedDuringFilter(startDate, endDate);
 		
-		// TODO: figure out what obs to look for here--see ticket HATB-358
 		CohortDefinition newlyHivPositive = Cohorts.getNewlyHivPositive(startDate, endDate);
 		CohortDefinition everHivPositive = Cohorts.getHivPositiveDuring(null, endDate);
-	
+		
 		CohortDefinition transferredIn = Cohorts.getTransferredInDuring(startDate, endDate);
 		CohortDefinition controlSmearNegative = Cohorts.getAllSmearNegativeDuring(startDate, endDate);
 		CohortDefinition controlSmearPositive = Cohorts.getAnySmearPositiveDuring(startDate, endDate);
@@ -128,7 +127,7 @@ public class MOHReport implements ReportSpecification {
 		CohortDefinition curedTx = Cohorts.getCuredDuringFilter(startDate, endDate);
 		CohortDefinition failedTx = Cohorts.getFailedDuringFilter(startDate, endDate);
 		CohortDefinition relapsedTx = Cohorts.getRelapsedDuringFilter(startDate, endDate);
-
+		
 		ReportDefinition report = new ReportDefinition();
 		report.setBaseCohortDefinition(ReportUtil.getCompositionCohort("AND", inProgram, atLocation), null);
 		
@@ -167,12 +166,12 @@ public class MOHReport implements ReportSpecification {
 		}
 		
 		ReportData data;
-        try {
-	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
-        }
-        catch (EvaluationException e) {
-	       throw new MdrtbAPIException("Unable to evaluate MOH Report", e);
-        }
+		try {
+			data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		}
+		catch (EvaluationException e) {
+			throw new MdrtbAPIException("Unable to evaluate MOH Report", e);
+		}
 		return data;
 	}
 	
@@ -180,6 +179,6 @@ public class MOHReport implements ReportSpecification {
 	 * Utility method to translate the report indicators
 	 */
 	private static String translate(String key) {
-		return MessageUtil.translate("mdrtb.indicatorReport."+key);
+		return MessageUtil.translate("mdrtb.indicatorReport." + key);
 	}
 }

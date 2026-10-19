@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!--
+		<mapping resource="FacilityDataFormSchema.hbm.xml"/>
+		<mapping resource="FacilityDataFormSection.hbm.xml"/>
+		<mapping resource="FacilityDataQuestion.hbm.xml"/>
+		<mapping resource="FacilityDataValue.hbm.xml"/>
+		-->
+
+		<mapping resource="LabTestAttribute.hbm.xml"/>
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTest" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestAttributeType" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestSample" />
+		<mapping class="org.openmrs.module.mdrtb.lab.LabTestType" />
+
+	</session-factory>
+</hibernate-configuration>

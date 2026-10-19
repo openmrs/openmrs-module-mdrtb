@@ -1,12 +1,5 @@
-/**
-table,div,td, thead,tbody {
-border-collapse: collapse;
-}
-*/
-
 table,div,td,thead,tbody {
-	padding: 0px;
-	margin: 0px;
+	border-color: #1AAC9B
 }
 
 input {
@@ -17,6 +10,17 @@ p {
 	line-height: 100%;
 	margin: 1%;
 }	
+
+
+.boxHeader,.boxRed,.boxHeaderRed,.boxExited,.boxHeaderExited {
+	border: 1px solid #1AAC9B;
+	width: 99%;
+	padding: 1px 1px 1px 1px;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 
 .boxDisplay {
 	border: 1px solid black;
@@ -107,6 +111,7 @@ table.patientTable {
 	border-width: 1px;
 	border-spacing: 20px;
 	border-style: solid;
+	border-color: #1AAC9B;
 	border-collapse: collapse;
 	background-color: white;
 }
@@ -141,6 +146,7 @@ table.patientTable tr {
 	padding:0px;
 	border-style: solid;
 	border-color: white;
+	background-color: #1AAC9B;	
 }
 
 
@@ -149,6 +155,7 @@ table.patientTable tr {
 	padding:0px;
 	border-style: solid;
 	border-color: white;
+	background-color: #1AAC9B;
 	border-collapse: collapse;
 }
 
@@ -261,6 +268,29 @@ a.widgetLinks:link {
 	padding:5px;
 	border:thin solid white;
 }
+
+
+
+.indexInner{
+border: 1px solid #1AAC9B;
+border-collapse:collapse;
+
+}
+
+.indexInner td{
+	padding: 15px 15px 15px 15px;
+	border:none;
+	}
+	
+
+	
+.boxHeaderTwo {
+	position:absolue;
+	background-color:#1AAC9B;
+	padding: 0px 3px 3px 3px;
+	text-align: center;
+	color:white;
+}
 	
 .activeRegimenRow {
 	background-color: #FFFF99;
@@ -326,6 +356,7 @@ a.widgetLinks:link {
 	padding:5px 5px 5px 5px;
 	border:thin solid grey;
 	text-align: left;
+	/*background-color:#1AAC9B;*/
 	font-size:90%;
 	background-color:lightgrey;
 	}

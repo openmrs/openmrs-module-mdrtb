@@ -35,6 +35,8 @@ import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
+import org.openmrs.module.mdrtb.api.MdrtbService;
+import org.openmrs.module.mdrtb.api.MessagePropertyService;
 
 /**
  * Outcome Report which reports on patient outcome by registration group
@@ -45,25 +47,26 @@ public class OutcomeReport implements ReportSpecification {
 	 * @see ReportSpecification#getName()
 	 */
 	public String getName() {
-		return Context.getMessageSourceService().getMessage("mdrtb.outcomeReport");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.outcomeReport");
 	}
 	
 	/**
 	 * @see ReportSpecification#getDescription()
 	 */
 	public String getDescription() {
-		return Context.getMessageSourceService().getMessage("mdrtb.outcomeReport.title");
+		return Context.getService(MessagePropertyService.class).getMessage("mdrtb.outcomeReport.title");
 	}
 	
 	/**
 	 * @see ReportSpecification#getParameters()
 	 */
 	public List<Parameter> getParameters() {
-		List<Parameter> l = new ArrayList<Parameter>();
-		l.add(new Parameter("location",  Context.getMessageSourceService().getMessage("mdrtb.facility"), Location.class));
-		l.add(new Parameter("year", Context.getMessageSourceService().getMessage("mdrtb.yearOfTreatmentStart"), Integer.class));
-		l.add(new Parameter("quarter", Context.getMessageSourceService().getMessage("mdrtb.quarterOptional"), Integer.class));
-		l.add(new Parameter("month", Context.getMessageSourceService().getMessage("mdrtb.monthOptional"), Integer.class));
+		List<Parameter> l = new ArrayList<>();
+		l.add(new Parameter("location", Context.getService(MessagePropertyService.class).getMessage("mdrtb.facility"), Location.class));
+		l.add(new Parameter("year", Context.getService(MessagePropertyService.class).getMessage("mdrtb.yearOfTreatmentStart"),
+		        Integer.class));
+		l.add(new Parameter("quarter", Context.getService(MessagePropertyService.class).getMessage("mdrtb.quarterOptional"), Integer.class));
+		l.add(new Parameter("month", Context.getService(MessagePropertyService.class).getMessage("mdrtb.monthOptional"), Integer.class));
 		return l;
 	}
 	
@@ -71,9 +74,10 @@ public class OutcomeReport implements ReportSpecification {
 	 * @see ReportSpecification#getRenderingModes()
 	 */
 	public List<RenderingMode> getRenderingModes() {
-		List<RenderingMode> l = new ArrayList<RenderingMode>();
-		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/OutcomeReport" + 
-			(StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "") + ".html"));
+		List<RenderingMode> l = new ArrayList<>();
+		l.add(ReportUtil.renderingModeFromResource("HTML", "org/openmrs/module/mdrtb/reporting/data/output/OutcomeReport"
+		        + (StringUtils.isNotBlank(Context.getLocale().getLanguage()) ? "_" + Context.getLocale().getLanguage() : "")
+		        + ".html"));
 		return l;
 	}
 	
@@ -94,17 +98,17 @@ public class OutcomeReport implements ReportSpecification {
 	/**
 	 * ReportSpecification#evaluateReport(EvaluationContext)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ReportData evaluateReport(EvaluationContext context) {
 		
 		ReportDefinition report = new ReportDefinition();
 		
 		Location location = (Location) context.getParameterValue("location");
-		Date startDate = (Date)context.getParameterValue("startDate");
-		Date endDate = (Date)context.getParameterValue("endDate");
+		Date startDate = (Date) context.getParameterValue("startDate");
+		Date endDate = (Date) context.getParameterValue("endDate");
 		
 		// Base Cohort is patients who started treatment during year, optionally at location
-		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<String, Mapped<? extends CohortDefinition>>();
+		Map<String, Mapped<? extends CohortDefinition>> baseCohortDefs = new LinkedHashMap<>();
 		baseCohortDefs.put("startedTreatment", new Mapped(Cohorts.getStartedTreatmentFilter(startDate, endDate), null));
 		if (location != null) {
 			CohortDefinition locationFilter = Cohorts.getLocationFilter(location, startDate, endDate);
@@ -130,17 +134,17 @@ public class OutcomeReport implements ReportSpecification {
 		for (String key : columns.keySet()) {
 			dsd.addColumn(key, columns.get(key), null);
 		}
-		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);	
+		dsd.addColumn("Total", ReportUtil.getCompositionCohort(dsd.getColumns(), "OR"), null);
 		
 		report.addDataSetDefinition("Treatment results", dsd, null);
 		
 		ReportData data;
-        try {
-	        data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
-        }
-        catch (EvaluationException e) {
-        	throw new MdrtbAPIException("Unable to evaluate Outcomes report", e);
-        }
+		try {
+			data = Context.getService(ReportDefinitionService.class).evaluate(report, context);
+		}
+		catch (EvaluationException e) {
+			throw new MdrtbAPIException("Unable to evaluate Outcomes report", e);
+		}
 		return data;
 	}
 }

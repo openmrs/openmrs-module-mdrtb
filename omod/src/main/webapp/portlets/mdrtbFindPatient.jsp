@@ -21,32 +21,31 @@
 	$j(document).ready(function(){
 		$j('#results').css('display','none');
 		$j('#searchBox').val('');
-		$j('#searchBox').keyup(function(event){
-			$j('#results').hide();
-			if (event.keyCode == 13 ) { // User pressed enter key.
-				$j('#mdrtbFindPatientSearchButton').click();
-			}
-		});
-		$j('#mdrtbFindPatientSearchButton').click(function(){
-			if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
-				includeRet = true;
-			}
-			var onlyMdrTb = false;
-			if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
-				onlyMdrTb =true;				
-			}
-			console.log("onlyMdrTb=" + onlyMdrTb);
-			MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
-				from = 0; 
-				to = jumps-1; 
-				if (ret.length <= to) {
-					to = ret.length -1;
+		$j('#searchBox').keyup(function(){
+			if ($j('#searchBox').val().length > 2){
+				if ($j('#includeRetired:checked').val() != null && $j('#includeRetired:checked').val() == 'on') {
+					includeRet = true;
 				}
-	   			savedRet = ret; 
-	   			retSize = ret.length;
-	   			drawTable(savedRet);
-	   		});
-   		});	
+				var onlyMdrTb = false;
+				if ($j('#onlyMdrtbPatients:checked').val() != null && $j('#onlyMdrtbPatients:checked').val() == 'true') {
+					onlyMdrTb =true;				
+				}
+				console.log("onlyMdrTb=" + onlyMdrTb);
+				MdrtbFindPatient.findPatients($j('#searchBox').val(), false, onlyMdrTb, function(ret){
+					from = 0; 
+					to = jumps-1; 
+					if (ret.length <= to) {
+						to = ret.length -1;
+					}
+					savedRet = ret; 
+					retSize = ret.length;
+					drawTable(savedRet);
+				});
+			}
+			else {
+				$j('#results').hide();
+			}
+		});		
  	});
 	
 	function addRowEventsFindPatient(){
@@ -79,7 +78,8 @@
 	   			$j('#searchBox').val('');
 	   		</c:when>
 	   		<c:otherwise>
-	   			window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=' + input;
+	   			window.location='${pageContext.request.contextPath}/module/mdrtb/program/enrollment.form?patientId=' + input;
+	   			// window.location='${pageContext.request.contextPath}/module/mdrtb/dashboard/dashboard.form?patientId=' + input;
 	   		</c:otherwise>
 	   	</c:choose>
 	}
@@ -163,6 +163,10 @@
 									if (patient.patientId != null && patient.patientId != "NaN")
 										return patient.identifier;
 								},
+								/* function(patient) {
+									if (patient.patientId != null && patient.patientId != "NaN")
+										return patient.address.countyDistrict;
+								}, */
 								//first name 
 								function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN"){
@@ -172,10 +176,10 @@
 								 	      }
 							  		},
 							  	//middle name
-								function(patient) { 
+								/* function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN")
 										return  patient.middleName;
-							  		},
+							  		}, */
 							  	//family name
 							  	function(patient) { 
 										if (patient.patientId != null && patient.patientId != "NaN")
@@ -223,8 +227,10 @@
 								},
 								function(patient) {
 									if (patient.patientId != null && patient.patientId != "NaN"){
-										if (patient.birthdate != "" && patient.birthdate != "Unknown")
-										return getDateString(patient.birthdate);
+										if (patient.birthdate != "" && patient.birthdate != "Unknown") {
+											//return getDateString(patient.birthdate);
+											return patient.dateOfBirth;
+										}
 									} 	
 								}
 								<c:if test ="${!empty useHealthCenter}">
@@ -243,28 +249,29 @@
 								];
 							var cellFuncsHeader = [
 							function() {return " "},
-							function() {return "<b><spring:message code='mdrtb.Identifier'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.first'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.middle'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.last'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.age'/></b>"},
-							function() {return "<b><spring:message code='mdrtb.gender'/></b>"},
+							function() {return "<b><mdrtb:message code='mdrtb.Identifier'/></b>"},
+							/* function() {return "<b><mdrtb:message code='mdrtb.district'/></b>"}, */
+							function() {return "<b><mdrtb:message code='mdrtb.first'/></b>"},
+							/* function() {return "<b><mdrtb:message code='mdrtb.middle'/></b>"}, */
+							function() {return "<b><mdrtb:message code='mdrtb.last'/></b>"},
+							function() {return "<b><mdrtb:message code='mdrtb.age'/></b>"},
+							function() {return "<b><mdrtb:message code='mdrtb.gender'/></b>"},
 							<c:if test ="${!empty useTribe}">
 								<c:if test ="${useTribe}">
-									function() {return "<b><spring:message code='mdrtb.tribe'/></b>"},
+									function() {return "<b><mdrtb:message code='mdrtb.tribe'/></b>"},
 								</c:if>
 							</c:if>	
 							<c:if test ="${!empty useMothersName}">
 								<c:if test ="${useMothersName}">
-									function() {return "<b><spring:message code='mdrtb.mothersname'/></b>"},
+									function() {return "<b><mdrtb:message code='mdrtb.mothersname'/></b>"},
 								</c:if>
 							</c:if>	
 							function() {return " "},
-							function() {return '<b><spring:message code="mdrtb.birthdate"/></b>'}
+							function() {return '<b><mdrtb:message code="mdrtb.birthdate"/></b>'}
 							
 							<c:if test ="${!empty useHealthCenter}">
 								<c:if test ="${useHealthCenter}">		
-									,function() {return "<b><spring:message code='mdrtb.healthcenter'/></b>"}
+									,function() {return "<b><mdrtb:message code='mdrtb.healthcenter'/></b>"}
 								</c:if>
 							</c:if>
 							];
@@ -299,7 +306,7 @@
    								 		var cellFucsNoRecords = [function(){
    								 		var sb = document.getElementById("searchBox");
    								 		var searchText = sb.value;
-   								 		return "<div><Br>&nbsp;&nbsp;&nbsp;<spring:message code="mdrtb.nopatientsfound"/> <i>"+searchText+"</i>.</div>";
+   								 		return "<div><Br>&nbsp;&nbsp;&nbsp;<mdrtb:message code="mdrtb.nopatientsfound"/> <i>"+searchText+"</i>.</div>";
    								 		}];
    								 		DWRUtil.addRows('resTableBody', ["nopatient"], cellFucsNoRecords,  {escapeHtml:false} );
    								 		
@@ -330,7 +337,7 @@
 			
 			td = trs[0].getElementsByTagName('td')[0];
 			var fromTmp = from + 1;
-			var nextN = "&nbsp;&nbsp;&nbsp;" + fromTmp + " <spring:message code="mdrtb.to"/> " + toTmp +" <spring:message code="mdrtb.of"/> " + savedRet.length;
+			var nextN = "&nbsp;&nbsp;&nbsp;" + fromTmp + " <mdrtb:message code="mdrtb.to"/> " + toTmp +" <mdrtb:message code="mdrtb.of"/> " + savedRet.length;
 			
 									var lastP = jumps;
 									if (savedRet.length > toTmp){
@@ -339,14 +346,14 @@
 									}
 									var pipeTest = 0;
 									if (savedRet.length > jumps && toTmp != savedRet.length){
-									nextN = "<a href='javascript:next()'><spring:message code="mdrtb.next"/> " + lastP + "</a>&nbsp;&nbsp;"+nextN;
+									nextN = "<a href='javascript:next()'><mdrtb:message code="mdrtb.next"/> " + lastP + "</a>&nbsp;&nbsp;"+nextN;
 									pipeTest = 1;
 									}
 									if (fromTmp > 1){
 									if (pipeTest == 1)
-									nextN = "<a href='javascript:previous()'><spring:message code="mdrtb.previous"/> "+jumps+"</a>&nbsp;|&nbsp;" + nextN;
+									nextN = "<a href='javascript:previous()'><mdrtb:message code="mdrtb.previous"/> "+jumps+"</a>&nbsp;|&nbsp;" + nextN;
 									else
-									nextN = "<a href='javascript:previous()'><spring:message code="mdrtb.previous"/> "+jumps+"</a>&nbsp;&nbsp;" + nextN;
+									nextN = "<a href='javascript:previous()'><mdrtb:message code="mdrtb.previous"/> "+jumps+"</a>&nbsp;&nbsp;" + nextN;
 									}
 			td.innerHTML = nextN;
 		}
@@ -431,14 +438,14 @@ function useMdrtbLoadingMessage(message) {
 					<tr>
 						<td style="width:70%;">
 							<c:choose>
-								<c:when test="${!empty model.labelCode}"><span style="font-weight:bold"><spring:message code="${model.labelCode}"/></span></c:when>
-								<c:otherwise><span style="font-weight:bold"><spring:message code="Patient.find"/></span></c:otherwise>
+								<c:when test="${!empty model.labelCode}"><span style="font-weight:bold"><mdrtb:message code="${model.labelCode}"/></span></c:when>
+								<c:otherwise><span style="font-weight:bold"><mdrtb:message code="Patient.find"/></span></c:otherwise>
 							</c:choose>
 							<input type="text" value="" id="searchBox" name="searchBox">
-							<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+<%-- 							<input type="button" id="mdrtbFindPatientSearchButton" value="<mdrtb:message code="general.searchButton"/>"/> --%>
 						</td>	
 						<td>
-							<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/>
+							<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><mdrtb:message code="mdrtb.onlyMdrTbPatients"/>
 						</td>	
 					</tr>
 				</table>
@@ -454,21 +461,21 @@ function useMdrtbLoadingMessage(message) {
 		<c:otherwise>
 			<div id="findPatient">
 				
-				<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><spring:message code="Patient.find" /></b>
+				<b class="boxHeader" style="padding-left: 15px; padding-right: 15px;"><mdrtb:message code="Patient.find" /></b>
 				<div class="box" style="padding: 15px 15px 15px 15px;">
 					<table>
 						<tr>
 							<td style="width:70%;">
 								<c:choose>
-									<c:when test="${!empty model.labelCode}"><spring:message code="${model.labelCode}"/></c:when>
-									<c:otherwise><spring:message code="Patient.find"/></c:otherwise>
+									<c:when test="${!empty model.labelCode}"><mdrtb:message code="${model.labelCode}"/></c:when>
+									<c:otherwise><mdrtb:message code="Patient.find"/></c:otherwise>
 								</c:choose>
 								<input type="text" value="" id="searchBox" name="searchBox">
-								<input type="button" id="mdrtbFindPatientSearchButton" value="<spring:message code="general.searchButton"/>"/>
+								<input type="button" id="mdrtbFindPatientSearchButton" value="<mdrtb:message code="general.searchButton"/>"/>
 								&nbsp;&nbsp;
 							</td>
 							<td>	
-								<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><spring:message code="mdrtb.onlyMdrTbPatients"/> 
+								<input type="checkbox" name="onlyMdrtbPatients" id="onlyMdrtbPatients" checked value="true"/><mdrtb:message code="mdrtb.onlyMdrTbPatients"/> 
 							</td>	
 						</tr>
 					</table>	
@@ -488,7 +495,7 @@ function useMdrtbLoadingMessage(message) {
 </c:if>
 <script>
  function init() {
- useMdrtbLoadingMessage('<spring:message code="mdrtb.loadingmessage"/>');
+ useMdrtbLoadingMessage('<mdrtb:message code="mdrtb.loadingmessage"/>');
  }
  window.onload=init;
 </script>

@@ -6,15 +6,15 @@
 	#content td {padding-left:4px; padding-right:4px; padding-top:2px; padding-bottom:2px; vertical-align:top}
 </style>
 
-<b class="boxHeader" style="margin:0px"><spring:message code="mdrtb.resistanceProfiles" text="Resistance Profiles"/></b>
+<b class="boxHeader" style="margin:0px"><mdrtb:message code="mdrtb.resistanceProfiles" text="Resistance Profiles"/></b>
 <div class="box" style="margin:0px;">
 
 <table cellpadding="0" cellspacing="0" border="0">
 
 <tr>
-	<td class="tableCell" style="font-weight:bold"><nobr><u><spring:message code="mdrtb.patient" text="Patient"/></u></nobr></td>
-	<td class="tableCell" style="font-weight:bold"><nobr><u><spring:message code="mdrtb.enrollment.date" text="Enrollment Date"/></u></nobr></td>
-	<td class="tableCell" style="font-weight:bold"><nobr><u><spring:message code="mdrtb.resistanceProfile" text="Resistance Profile"/></u></nobr></td>
+	<td class="tableCell" style="font-weight:bold"><nobr><u><mdrtb:message code="mdrtb.patient" text="Patient"/></u></nobr></td>
+	<td class="tableCell" style="font-weight:bold"><nobr><u><mdrtb:message code="mdrtb.enrollment.date" text="Enrollment Date"/></u></nobr></td>
+	<td class="tableCell" style="font-weight:bold"><nobr><u><mdrtb:message code="mdrtb.resistanceProfile" text="Resistance Profile"/></u></nobr></td>
 	<td width="99%">&nbsp;</td>
 </tr>
 

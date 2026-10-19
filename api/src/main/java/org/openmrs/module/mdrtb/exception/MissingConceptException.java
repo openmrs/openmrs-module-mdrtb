@@ -1,12 +1,13 @@
 package org.openmrs.module.mdrtb.exception;
 
-
 public class MissingConceptException extends MdrtbAPIException {
-
-    private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Default empty constructor. If at all possible, don't use this one, but use the
-	 * {@link #MissingConceptException(String)} constructor to specify a helpful message to the end user
+	 * {@link #MissingConceptException(String)} constructor to specify a helpful message to the end
+	 * user
 	 */
 	public MissingConceptException() {
 	}
@@ -33,9 +34,9 @@ public class MissingConceptException extends MdrtbAPIException {
 	}
 	
 	/**
-	 * Constructor used to simply chain a parent exception cause to an MissingConceptException. Preference
-	 * should be given to the {@link #MissingConceptException(String, Throwable)} constructor if at all
-	 * possible instead of this one.
+	 * Constructor used to simply chain a parent exception cause to an MissingConceptException.
+	 * Preference should be given to the {@link #MissingConceptException(String, Throwable)}
+	 * constructor if at all possible instead of this one.
 	 * 
 	 * @param cause the parent exception cause that this MissingConceptException is wrapping around
 	 */
