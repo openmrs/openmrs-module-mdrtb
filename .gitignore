@@ -21,3 +21,4 @@ omod/target/*
 test/target/*
 test/settings/*
 /.settings
+.DS_Store

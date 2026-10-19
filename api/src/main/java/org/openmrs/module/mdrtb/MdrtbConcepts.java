@@ -216,7 +216,7 @@ public class MdrtbConcepts {
 	// Lab Results
 	public static final String STRONGLY_POSITIVE = "31b4a240-0370-102d-b0e3-001ec94a0cc1"; // STRONGLY POSITIVE
 	
-	public static final String MODERATELY_POSITIVE = "31b4a16e-0370-102d-b0e3-001ec94a0cc1"; // MODERATELY POSITIVE
+	public static final String MODERATELY_POSITIVE = "488b58ff-64f5-4f8a-8979-fa79940b1594"; // MODERATELY POSITIVE
 	
 	public static final String WEAKLY_POSITIVE = "31b4a312-0370-102d-b0e3-001ec94a0cc1"; // WEAKLY POSITIVE
 	
@@ -344,7 +344,7 @@ public class MdrtbConcepts {
 	public static final String AMBULATORY = "31b66f1c-0370-102d-b0e3-001ec94a0cc1"; // AMBULATORY // legacy, has been retired
 	
 	// Other
-	public static final String UNKNOWN = "31b2810e-0370-102d-b0e3-001ec94a0cc1"; // UNKNOWN
+	public static final String UNKNOWN = "cf82933b-3f3f-45e7-a5ab-5d31aaee3da3"; // UNKNOWN
 	
 	public static final String CLINICIAN_NOTES = "31b474e6-0370-102d-b0e3-001ec94a0cc1"; // CLINICIAN NOTES
 	
