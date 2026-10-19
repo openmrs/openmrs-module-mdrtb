@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>mdrtb</id>
 	<name>MDRTB</name>
-	<version>1.5.2</version>
+	<version>1.6.1</version>
 	<package>org.openmrs.module.mdrtb</package>
 	<author>Esquared Systems</author>
 	<description>MDRTB Module</description>

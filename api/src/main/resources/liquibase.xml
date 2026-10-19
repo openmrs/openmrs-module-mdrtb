@@ -810,4 +810,18 @@
 		</createIndex>
 	</changeSet>
 
+	<changeSet id="mdrtb-2026-10-19-end-of-treatment-encounter-type" author="owais.hussain">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="encounter_type" />
+		</preConditions>
+		<insert tableName="encounter_type">
+			<column name="name">End of Treatment</column>
+			<column name="description">End of Treatment</column>
+			<column name="creator">1</column>
+			<column name="date_created">2026-10-19 00:00:00</column>
+			<column name="retired">0</column>
+			<column name="uuid">6159db06-cb90-11f1-b723-57d5294d0531</column>
+		</insert>
+	</changeSet>
+
 </databaseChangeLog>

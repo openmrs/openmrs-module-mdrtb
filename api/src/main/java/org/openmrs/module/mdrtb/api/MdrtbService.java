@@ -857,6 +857,24 @@ public interface MdrtbService extends OpenmrsService {
 	@Transactional(readOnly = true)
 	List<TransferOutForm> getTransferOutFormsFilledForPatient(Patient patient);
 	
+	/**
+	 * End of Treatment forms attached to the given patient program (via the PATIENT_PROGRAM_ID
+	 * obs). Normally there is at most one per program; a list is returned so callers can detect
+	 * duplicates.
+	 */
+	@Authorized(MdrtbConfig.MODULE_PRIVILEGE)
+	@Transactional(readOnly = true)
+	List<EndOfTreatmentForm> getEndOfTreatmentFormsForProgram(Patient patient, Integer patientProgramId);
+	
+	/**
+	 * End of Treatment forms whose encounter date falls in the given period (year + quarter/month)
+	 * and, if given, in one of the locations. Used by the End of Treatment report.
+	 */
+	@Authorized(MdrtbConfig.MODULE_PRIVILEGE)
+	@Transactional(readOnly = true)
+	List<EndOfTreatmentForm> getEndOfTreatmentFormsFilled(List<Location> locations, Integer year, Integer quarter,
+	        Integer month, Integer month2);
+	
 	@Authorized(MdrtbConfig.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
 	List<TB03uForm> getTB03uFormsWithTreatmentStartedDuring(List<Location> locations, Integer year, Integer quarter,

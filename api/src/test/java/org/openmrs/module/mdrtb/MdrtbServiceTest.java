@@ -518,6 +518,20 @@ public class MdrtbServiceTest extends MdrtbTestBase {
 	}
 	
 	@Test
+	public final void testGetEndOfTreatmentFormsForProgram() {
+		// TODO (EoT): seed an End of Treatment encounter for program 10001 and assert it is returned
+		// (and that one linked to another program is not).
+		assertNotNull(service.getEndOfTreatmentFormsForProgram(harry, 10001));
+	}
+	
+	@Test
+	public final void testGetEndOfTreatmentFormsFilled() {
+		// TODO (EoT report): seed End of Treatment encounters inside and outside the period and
+		// assert only the ones inside are returned.
+		assertNotNull(service.getEndOfTreatmentFormsFilled(Arrays.asList(hogwarts), 2022, 3, null, null));
+	}
+	
+	@Test
 	public final void testGetPossibleDOTSClassificationsAccordingToPreviousDrugUse() {
 		assertNotNull(service.getPossibleDOTSClassificationsAccordingToPreviousDrugUse());
 	}

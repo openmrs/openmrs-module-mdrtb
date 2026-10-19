@@ -81,6 +81,8 @@ public class MdrtbActivatorTest extends BaseModuleContextSensitiveTest {
 		assertEquals("Transfer Out", administrationService.getGlobalProperty(MdrtbConstants.GP_ENCOUNTER_TYPE_TRANSFER_OUT));
 		assertEquals("Specimen Collection",
 		    administrationService.getGlobalProperty(MdrtbConstants.GP_ENCOUNTER_TYPE_SPECIMEN_COLLECTION));
+		assertEquals("End of Treatment",
+		    administrationService.getGlobalProperty(MdrtbConstants.GP_ENCOUNTER_TYPE_END_OF_TREATMENT));
 		
 		// Lab result form ids
 		assertEquals("8", administrationService.getGlobalProperty(MdrtbConstants.GP_SMEAR_FORM_ID));

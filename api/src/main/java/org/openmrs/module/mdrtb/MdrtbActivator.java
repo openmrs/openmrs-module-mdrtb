@@ -236,6 +236,8 @@ public class MdrtbActivator extends BaseModuleActivator {
 		    "Name of the encounter type used for transfer out encounters.");
 		setGlobalProperty(service, MdrtbConstants.GP_ENCOUNTER_TYPE_SPECIMEN_COLLECTION, "Specimen Collection",
 		    "Name of the encounter type used for specimen collection encounters.");
+		setGlobalProperty(service, MdrtbConstants.GP_ENCOUNTER_TYPE_END_OF_TREATMENT, "End of Treatment",
+		    "Name of the encounter type used for End of Treatment encounters.");
 		
 		// ---------- Lab result form ids ----------
 		setGlobalProperty(service, MdrtbConstants.GP_SMEAR_FORM_ID, "8", "Form id of the Smear lab result form.");

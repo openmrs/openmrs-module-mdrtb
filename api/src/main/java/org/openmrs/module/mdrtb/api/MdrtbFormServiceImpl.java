@@ -26,6 +26,7 @@ import org.openmrs.module.mdrtb.MdrtbConstants;
 import org.openmrs.module.mdrtb.exception.MdrtbAPIException;
 import org.openmrs.module.mdrtb.form.custom.AdverseEventsForm;
 import org.openmrs.module.mdrtb.form.custom.DrugResistanceDuringTreatmentForm;
+import org.openmrs.module.mdrtb.form.custom.EndOfTreatmentForm;
 import org.openmrs.module.mdrtb.form.custom.Form89;
 import org.openmrs.module.mdrtb.form.custom.RegimenForm;
 import org.openmrs.module.mdrtb.form.custom.TB03Form;
@@ -308,5 +309,64 @@ public class MdrtbFormServiceImpl extends BaseOpenmrsService {
 	public TransferOutForm processTransferOutForm(TransferOutForm transferOutForm) {
 		Context.getEncounterService().saveEncounter(transferOutForm.getEncounter());
 		return transferOutForm;
+	}
+	
+	/**
+	 * Process the {@link EndOfTreatmentForm} for DOTS-TB and MDR-TB patients. The form must belong
+	 * to a patient program, and that program must already have its intake form: TB03 for the DOTS
+	 * program, TB03u for the MDR-TB program. Otherwise nothing is saved and an exception is thrown.
+	 */
+	public EndOfTreatmentForm processEndOfTreatmentForm(EndOfTreatmentForm eotForm) throws MdrtbAPIException {
+		// Should have encounter property
+		if (eotForm.getEncounter() == null) {
+			throw new MdrtbAPIException("Encounter property not found!");
+		}
+		// Should have location property
+		if (eotForm.getEncounter().getLocation() == null) {
+			throw new MdrtbAPIException("Location not attached with Encounter!");
+		}
+		// Should belong to a patient program
+		Integer patientProgramId = eotForm.getPatientProgramId();
+		if (patientProgramId == null) {
+			throw new MdrtbAPIException("Patient Program not attached with End of Treatment form!");
+		}
+		PatientProgram patientProgram = Context.getProgramWorkflowService().getPatientProgram(patientProgramId);
+		if (patientProgram == null) {
+			throw new MdrtbAPIException("Patient Program not found: " + patientProgramId);
+		}
+		// The program must be this patient's program
+		Patient patient = patientProgram.getPatient();
+		if (eotForm.getPatient() != null && !eotForm.getPatient().equals(patient)) {
+			throw new MdrtbAPIException("Patient Program does not belong to the patient of this End of Treatment form!");
+		}
+		// TB03 (DOTS) or TB03u (MDR-TB) must exist before treatment can be ended
+		MdrtbService mdrtbService = Context.getService(MdrtbService.class);
+		Concept mdrtbProgramConcept = mdrtbService.getConcept(MdrtbConcepts.MDR_TB_PROGRAM);
+		if (patientProgram.getProgram().getConcept().equals(mdrtbProgramConcept)) {
+			// TODO (EoT): only TB03u - MDR is checked, as specified. Confirm whether an XDR patient
+			// (TB03u - XDR encounter, MdrtbConstants.ET_TB03U_XDRTB_INTAKE) must also be accepted.
+			if (mdrtbService.getTB03uFormsForProgram(patient, patientProgramId).isEmpty()) {
+				throw new MdrtbAPIException("TB03u form must be filled before the End of Treatment form!");
+			}
+		} else {
+			if (mdrtbService.getTB03FormsForProgram(patient, patientProgramId).isEmpty()) {
+				throw new MdrtbAPIException("TB03 form must be filled before the End of Treatment form!");
+			}
+		}
+		// TODO (EoT): decide whether a second End of Treatment form for the same program is allowed.
+		// If not, reject when getEndOfTreatmentFormsForProgram(patient, patientProgramId) already
+		// contains a different encounter (an update of the same encounter must still pass).
+		
+		// TODO (EoT fields): clear dependent fields here once fields exist (e.g. "other" free text
+		// when the coded answer is not "Other"), as processTB03Form does for otherCauseOfDeath.
+		
+		// TODO (EoT fields): if the form records a treatment outcome, agree first whether it must
+		// match / update the TB03 (or TB03u) outcome and the program workflow state. Do NOT copy the
+		// workflow code from processTB03Form until that is agreed - it closes the patient program
+		// and can mark the patient as dead.
+		
+		// Save the actual update
+		Context.getEncounterService().saveEncounter(eotForm.getEncounter());
+		return eotForm;
 	}
 }

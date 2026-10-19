@@ -2119,6 +2119,50 @@ public class MdrtbServiceImpl extends BaseOpenmrsService implements MdrtbService
 		return forms;
 	}
 	
+	public List<EndOfTreatmentForm> getEndOfTreatmentFormsForProgram(Patient patient, Integer patientProgramId) {
+		ArrayList<EndOfTreatmentForm> forms = new ArrayList<>();
+		ArrayList<EncounterType> typeList = new ArrayList<>();
+		typeList.add(MdrtbConstants.ET_END_OF_TREATMENT);
+		Concept idConcept = getConcept(MdrtbConcepts.PATIENT_PROGRAM_ID);
+		List<Encounter> temp = getEncountersByPatientAndTypes(patient, typeList);
+		for (Encounter e : temp) {
+			Obs idObs = MdrtbUtil.getObsFromEncounter(idConcept, e);
+			if (idObs != null && idObs.getValueNumeric() != null
+					&& idObs.getValueNumeric().intValue() == patientProgramId) {
+				forms.add(new EndOfTreatmentForm(e));
+			}
+		}
+		return forms;
+	}
+	
+	public List<EndOfTreatmentForm> getEndOfTreatmentFormsFilled(List<Location> locations, Integer year, Integer quarter,
+	                                                             Integer month, Integer month2) {
+		ArrayList<EndOfTreatmentForm> forms = new ArrayList<>();
+		Map<String, Date> dateMap = ReportUtil.getPeriodDates(year, quarter, month, month2);
+		Date startDate = (dateMap.get("startDate"));
+		Date endDate = (dateMap.get("endDate"));
+		ArrayList<EncounterType> typeList = new ArrayList<>();
+		typeList.add(MdrtbConstants.ET_END_OF_TREATMENT);
+		List<Encounter> temp;
+		if (locations == null || locations.isEmpty()) {
+			temp = getEncounters(null, null, startDate, endDate, typeList);
+			for (Encounter e : temp) {
+				forms.add(new EndOfTreatmentForm(e));
+			}
+		} else {
+			for (Location l : locations) {
+				temp = getEncounters(null, l, startDate, endDate, typeList);
+				for (Encounter e : temp) {
+					forms.add(new EndOfTreatmentForm(e));
+				}
+			}
+		}
+		// TODO (EoT report): confirm with the report owner which date defines "in the period" -
+		// the encounter date (used here, same as Transfer Out) or the End of Treatment date field
+		// once it exists. Change this before the report goes live if it is the latter.
+		return forms;
+	}
+	
 	public TB03uForm getTB03uFormForProgram(Patient p, Integer patientProgId) {
 		TB03uForm form = null;
 		ArrayList<EncounterType> typeList = new ArrayList<>();

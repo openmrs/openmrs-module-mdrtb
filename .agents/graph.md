@@ -2,7 +2,7 @@
 # Java OpenMRS module(Maven). Packaged as modules/mdrtb-x.y.z.omod. Requires OpenMRS ≥2.3.1.
 # Shared facts (domain model, concept/encounter-type/identifier UUIDs, topology): ../.agents/graph.md
 # Usage + notation legend + maintenance rules: ../.agents/instructions.md
-# Last updated: 2026-09-15 (mdrtb/yellowcard resource)
+# Last updated: 2026-10-19 (mdrtb/endoftreatment resource, scaffold only)
 
 ## § MODULE LAYOUT
 ```
@@ -38,6 +38,17 @@ mdrtb/tb03 / mdrtb/tb03/{uuid}
 mdrtb/tb03u / mdrtb/tb03u/{uuid}
 mdrtb/form89 / mdrtb/form89/{uuid}
 mdrtb/transferout / mdrtb/transferout/{uuid}
+mdrtb/endoftreatment / mdrtb/endoftreatment/{uuid}   # End of Treatment form; ?q={patientUuid}; POST needs patientProgramUuid
+    # SCAFFOLD ONLY (2026-10-19): fields pending -> grep "TODO (EoT" for every place a field must be added
+    # chain: EndOfTreatmentForm (api form/custom) -> SimpleEndOfTreatmentForm (dto) -> EndOfTreatmentFormResourceController
+    #        legacy EndOfTreatmentFormController (controller/form, /module/mdrtb/form/endOfTreatment.form, NO JSP on purpose)
+    # save: MdrtbFormServiceImpl.processEndOfTreatmentForm -> rejects if no location / no program / program of
+    #       another patient / no TB03 (DOTS) / no TB03u-MDR (MDR-TB). Does NOT touch program workflow or patient.dead.
+    # getters: MdrtbService.getEndOfTreatmentFormsForProgram(patient, ppId), getEndOfTreatmentFormsFilled(locs, period)
+    # report: EndOfTreatmentData (api reporting/custom) exists; DTO + mdrtb/endoftreatmentreport resource NOT yet created
+    # OPEN: XDR (TB03u - XDR) accepted?  duplicate EoT per program allowed?  outcome sync with TB03/TB03u?
+    # TESTS: api EndOfTreatmentDataTest (runs), EndOfTreatmentFormProcessTest (@Ignore), MdrtbServiceTest 2 smoke;
+    #        omod EndOfTreatmentFormResourceControllerTest (@Ignore)
 mdrtb/drugresistance / mdrtb/drugresistance/{uuid}
 mdrtb/adverseevents / mdrtb/adverseevents/{uuid}
 mdrtb/regimen / mdrtb/regimen/{uuid}
@@ -73,6 +84,7 @@ mdrtb.encounterType.specimenCollection
 mdrtb.encounterType.labResult
 mdrtb.encounterType.resistanceDuringTreatment
 mdrtb.encounterType.pvRegimen
+mdrtb.encounterType.endOfTreatment   # default "End of Treatment" (MdrtbActivator) -> MdrtbConstants.ET_END_OF_TREATMENT
 mdrtb.dst.formId
 mdrtb.hain.formId
 mdrtb.culture.formId

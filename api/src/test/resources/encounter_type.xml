@@ -20,4 +20,5 @@
     <encounter_type encounter_type_id="18" name="PV Regimen" description="Change in PV Regimen" creator="1" date_created="2018-01-14 17:51:03" retired="0" uuid="99f4f9d8-b23f-4406-bb03-03e1237634aa" edit_privilege="Edit Encounters" view_privilege="View Encounters"/>
     <encounter_type encounter_type_id="19" name="Adverse Event" description="Adverse Event" creator="1" date_created="2018-02-17 16:47:24" retired="0" uuid="bfa6ef9f-a8fe-4bd3-ab8c-ec6bbfc85457" edit_privilege="Edit Encounters" view_privilege="View Encounters"/>
     <encounter_type encounter_type_id="20" name="Drug Order" description="Created to attach with Orders for Openmrs 2x." creator="1" date_created="2022-11-22 17:58:22" retired="0" uuid="59a35f23-6a65-11ed-bb42-00ff10882c85" edit_privilege="Edit Encounters" view_privilege="View Encounters"/>
+    <encounter_type encounter_type_id="21" name="End of Treatment" description="End of Treatment" creator="1" date_created="2026-10-19 00:00:00" retired="0" uuid="6159db06-cb90-11f1-b723-57d5294d0531" edit_privilege="Edit Encounters" view_privilege="View Encounters"/>
 </dataset>

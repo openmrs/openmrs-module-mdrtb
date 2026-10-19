@@ -149,6 +149,8 @@ public class MdrtbConstants {
 	
 	public static final String GP_ENCOUNTER_TYPE_PV_REGIMEN = "mdrtb.encounterType.pvRegimen";
 	
+	public static final String GP_ENCOUNTER_TYPE_END_OF_TREATMENT = "mdrtb.encounterType.endOfTreatment";
+	
 	@Deprecated
 	public static final String GP_TREATMENT_SUPPORTER_PERSON_ATTRIBUTE_TYPE = "mdrtb.treatmentSupporterPersonAttributeType";
 	
@@ -232,6 +234,9 @@ public class MdrtbConstants {
 	
 	public static EncounterType ET_PV_REGIMEN = Context.getEncounterService().getEncounterType(
 	    Context.getAdministrationService().getGlobalProperty(GP_ENCOUNTER_TYPE_PV_REGIMEN));
+	
+	public static EncounterType ET_END_OF_TREATMENT = Context.getEncounterService().getEncounterType(
+	    Context.getAdministrationService().getGlobalProperty(GP_ENCOUNTER_TYPE_END_OF_TREATMENT));
 	
 	/** END - Encounter Types **/
 }
